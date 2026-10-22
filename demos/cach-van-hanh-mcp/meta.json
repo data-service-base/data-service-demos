@@ -1,0 +1,21 @@
+{
+  "slug": "cach-van-hanh-mcp",
+  "title": "Cách vận hành MCP",
+  "type": "dashboard",
+  "industry": "Chung",
+  "department": "Chung",
+  "description": "MCP",
+  "tools": [
+    "HTML"
+  ],
+  "source": "",
+  "source_repo": "",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "updated": "2026-10-22T10:30:25.279Z",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "MCP"
+  ]
+}
