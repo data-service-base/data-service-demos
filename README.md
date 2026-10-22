@@ -44,7 +44,17 @@ catalog.json      sinh tự động, không sửa tay
 | data | có | `demo` (số liệu giả). Kho này **không nhận dữ liệu thật của khách** |
 | source, source_repo | tuỳ chọn | link gốc nếu demo chuyển từ nơi khác về |
 
-## Thêm demo mới
+## Đăng demo bằng giao diện (không cần lệnh)
+
+Mở `https://<org>.github.io/data-service-demos/upload.html` (nút **+ Đăng demo** trên trang kho):
+
+1. Dán GitHub token một lần (trang có hướng dẫn tạo token, quyền **Contents: Read and write** cho repo này).
+2. Kéo thả file HTML, kiểm tra tên, ngành, phòng ban.
+3. Bấm **Deploy**. Trang commit file vào `demos/<slug>/`, GitHub Actions (`.github/workflows/pages.yml`) chụp thumb và build lại kho, khoảng 1–2 phút sau trang hiện link để copy.
+
+Đăng lại cùng tên đường dẫn là cập nhật demo cũ, link giữ nguyên.
+
+## Thêm demo mới bằng lệnh
 
 ```
 python3 scripts/new_demo.py ~/Downloads/bao-cao.html --slug fnb-doanh-thu-chuoi \

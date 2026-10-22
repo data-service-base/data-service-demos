@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đăng demo · Kho demo Data Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1F4D; --ink2:#41557F; --mute:#7C8BAA; --line:#DCE5F3; --bg:#F3F6FB; --panel:#FFFFFF;
+  --brand:#1A56DB; --brand2:#0E3BA8; --tint:#E7EFFD; --ok:#0F9D6B; --okbg:#E3F6EE; --warn:#B4540A; --warnbg:#FFF3E3; --bad:#C2263F; --badbg:#FDE8EC;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#EAF1FF; --ink2:#B7C6E6; --mute:#8193B8; --line:#22325A; --bg:#0A1430; --panel:#101D42;
+  --brand:#5B9BFF; --brand2:#8CB8FF; --tint:#16295A; --ok:#3FD49B; --okbg:#0F3328; --warn:#F2A65A; --warnbg:#3A2711; --bad:#FF7A90; --badbg:#3D1520; color-scheme:dark;}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--brand)}
+.wrap{max-width:880px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right,0px)) 60px max(16px,env(safe-area-inset-left,0px))}
+header{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+header h1{margin:0;font:700 30px/1.15 "Be Vietnam Pro",sans-serif;letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--ink2);max-width:60ch}
+header .back{margin-left:auto;font-weight:600;text-decoration:none}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+.step[hidden]{display:none}
+.step-h{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.step-h b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--tint);color:var(--brand2);font-size:14px;flex:none}
+.step-h h2{margin:0;font:600 18px/1.2 "Be Vietnam Pro",sans-serif}
+.step-h .side{margin-left:auto;font-size:14px;color:var(--ink2);display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.step.done .step-h{margin-bottom:0}
+.step.done .step-h b{background:var(--okbg);color:var(--ok)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.full{grid-column:1/-1}
+label,.lbl{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.hint{font-weight:400;color:var(--mute);font-size:13px}
+input[type=text],input[type=password],textarea,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:64px;resize:vertical}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,.drop:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row input{flex:1;min-width:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.p{background:var(--brand);color:#fff}
+.btn.p:hover{filter:brightness(1.08)}
+.btn.s{background:none;border-color:var(--line);color:var(--ink2)}
+.btn.s:hover{background:var(--tint)}
+.btn.big{padding:13px 22px;font-size:15px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.linkbtn{all:unset;cursor:pointer;color:var(--brand);font-weight:600;font-size:14px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--ink2);margin:0}
+.chk input{margin-top:3px;accent-color:var(--brand)}
+details{margin-top:12px;font-size:14px;color:var(--ink2)}
+summary{cursor:pointer;font-weight:600;color:var(--brand)}
+details ol{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+code{font-size:13px;background:var(--tint);padding:1px 6px;border-radius:5px;word-break:break-all}
+.drop{border:1.5px dashed var(--brand);border-radius:12px;padding:26px 16px;text-align:center;background:var(--tint);color:var(--ink2);cursor:pointer}
+.drop.over{background:var(--panel)}
+.drop strong{color:var(--ink)}
+.files{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.files li{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.files .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.files .sz{color:var(--mute);font-weight:400;margin-left:6px}
+.files .main{font-size:12px;font-weight:600;color:var(--ok);border:1px solid currentColor;border-radius:6px;padding:1px 7px}
+.files button{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2)}
+.files button.x{color:var(--bad)}
+.urlprev{margin-top:6px;font-size:13px;color:var(--mute);word-break:break-all}
+.urlprev b{color:var(--ink)}
+.box{padding:12px 14px;border-radius:10px;font-size:14px}
+.box[hidden]{display:none}
+.box.warn{background:var(--warnbg);color:var(--ink)}
+.box.bad{background:var(--badbg);color:var(--ink)}
+.box.ok{background:var(--okbg);color:var(--ink)}
+.box ul{margin:6px 0 0;padding-left:18px}
+.foot{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.foot .err{color:var(--bad);font-size:14px;font-weight:500;margin-right:auto}
+.prog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.prog li{display:flex;gap:12px;align-items:center;color:var(--mute)}
+.prog li .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:12px;font-weight:700}
+.prog li.run{color:var(--ink)}
+.prog li.run .dot{border-color:var(--brand);border-top-color:transparent;animation:sp .8s linear infinite}
+.prog li.ok{color:var(--ink)}
+.prog li.ok .dot{border-color:var(--ok);background:var(--ok);color:var(--panel)}
+.prog li.ok .dot::after{content:"✓"}
+.prog li.bad{color:var(--bad)}
+.prog li.bad .dot{border-color:var(--bad);color:var(--bad)}
+.prog li.bad .dot::after{content:"!"}
+.prog small{color:var(--mute);margin-left:4px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.result{margin-top:18px;padding:16px;border-radius:12px;background:var(--okbg)}
+.result[hidden]{display:none}
+.result .lbl{margin-bottom:8px}
+.result input{font-weight:600;background:var(--panel)}
+.result .row{margin-top:10px}
+@media (max-width:640px){.grid{grid-template-columns:1fr}header .back{margin-left:0}.step{padding:16px}}
+@media (prefers-reduced-motion:reduce){.prog li.run .dot{animation:none;border-top-color:var(--brand)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1>Đăng demo</h1><p>Thả file HTML, bấm Deploy, khoảng 1–2 phút sau có link xem demo trên GitHub Pages để gửi khách.</p></div>
+    <a class="back" href="./">← Về kho demo</a>
+  </header>
+
+  <!-- 1. GitHub -->
+  <section class="step" id="s1" aria-labelledby="s1h">
+    <div class="step-h"><b>1</b><h2 id="s1h">Kết nối GitHub</h2><div class="side" id="s1side"></div></div>
+    <div id="s1body">
+      <label for="tok">GitHub token <span class="hint">(chỉ dùng trên trình duyệt này để đẩy file lên repo <span id="repoName"></span>)</span></label>
+      <div class="row">
+        <input type="password" id="tok" autocomplete="off" spellcheck="false" placeholder="github_pat_… hoặc ghp_…">
+        <button class="btn p" type="button" id="connect">Kết nối</button>
+      </div>
+      <div class="row" style="margin-top:10px"><label class="chk"><input type="checkbox" id="remember" checked> Nhớ token trên máy này</label></div>
+      <div class="box bad" id="s1err" hidden style="margin-top:10px"></div>
+      <details>
+        <summary>Cách lấy token (làm một lần, khoảng 1 phút)</summary>
+        <ol>
+          <li>Mở <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+          <li><b>Token name</b>: <code>kho-demo</code>. <b>Expiration</b>: 90 ngày hoặc lâu hơn.</li>
+          <li><b>Resource owner</b>: chọn organization <code id="ownerName">data-service-base</code>.</li>
+          <li><b>Repository access</b>: <i>Only select repositories</i> → chọn <code id="repoName2">data-service-demos</code>.</li>
+          <li><b>Permissions → Repository permissions</b>: <b>Contents</b> = <i>Read and write</i>. Thêm <b>Actions</b> = <i>Read-only</i> để trang báo lỗi build nếu có.</li>
+          <li>Bấm <b>Generate token</b>, copy và dán vào ô trên.</li>
+        </ol>
+        <p style="margin:10px 0 0">Nếu GitHub báo token đang chờ duyệt, chủ organization vào <b>Settings → Personal access tokens → Pending requests</b> để duyệt.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- 2. Demo -->
+  <form class="step" id="s2" aria-labelledby="s2h" novalidate>
+    <div class="step-h"><b>2</b><h2 id="s2h">Thông tin demo</h2></div>
+    <div class="grid">
+      <div class="full">
+        <span class="lbl">File HTML <span class="hint">(bộ nhiều trang thì chọn tất cả file cùng lúc)</span></span>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Chọn file HTML"><strong>Kéo thả file .html vào đây</strong> hoặc bấm để chọn</div>
+        <input type="file" id="file" accept=".html,.htm,text/html" multiple hidden>
+        <ul class="files" id="files"></ul>
+      </div>
+      <div class="full">
+        <label for="title">Tên báo cáo</label>
+        <input type="text" id="title" maxlength="140" placeholder="VD: Dashboard tồn kho & chi phí sản xuất">
+      </div>
+      <div class="full">
+        <label for="slug">Tên đường dẫn <span class="hint">(chữ thường không dấu, gạch ngang; đã gửi link cho khách thì đừng đổi)</span></label>
+        <input type="text" id="slug" maxlength="60" autocomplete="off" spellcheck="false" placeholder="vd: san-xuat-ton-kho">
+        <div class="urlprev" id="urlprev"></div>
+      </div>
+      <div>
+        <label for="industry">Ngành</label>
+        <input type="text" id="industry" list="dlInd" placeholder="Chọn hoặc gõ">
+        <datalist id="dlInd"></datalist>
+      </div>
+      <div>
+        <label for="department">Phòng ban</label>
+        <input type="text" id="department" list="dlDep" placeholder="Chọn hoặc gõ">
+        <datalist id="dlDep"></datalist>
+      </div>
+      <div>
+        <label for="type">Loại</label>
+        <select id="type"><option value="dashboard">dashboard</option><option value="proposal">proposal</option><option value="deck">deck</option><option value="tool">tool</option></select>
+      </div>
+      <div>
+        <label for="author">Người làm</label>
+        <input type="text" id="author" maxlength="60">
+      </div>
+      <div class="full">
+        <label for="desc">Mô tả <span class="hint">(1–2 câu: báo cáo trả lời câu hỏi gì)</span></label>
+        <textarea id="desc" maxlength="400"></textarea>
+      </div>
+      <div class="full">
+        <label for="tags">Từ khoá <span class="hint">(cách nhau bằng dấu phẩy, giúp tìm kiếm)</span></label>
+        <input type="text" id="tags" placeholder="tồn kho, chi phí, đơn hàng">
+      </div>
+      <div class="full box warn" id="exists" hidden></div>
+      <div class="full box warn" id="pii" hidden></div>
+    </div>
+    <div class="foot">
+      <span class="err" id="err" role="alert"></span>
+      <button class="btn p big" type="submit" id="deploy" disabled>Deploy</button>
+    </div>
+  </form>
+
+  <!-- 3. Deploy -->
+  <section class="step" id="s3" aria-labelledby="s3h" hidden>
+    <div class="step-h"><b>3</b><h2 id="s3h">Deploy</h2></div>
+    <ol class="prog" id="prog">
+      <li id="p1"><span class="dot"></span>Đẩy file lên GitHub</li>
+      <li id="p2"><span class="dot"></span>GitHub build trang <small id="p2t"></small></li>
+      <li id="p3"><span class="dot"></span>Link đã chạy</li>
+    </ol>
+    <div class="box bad" id="s3err" hidden style="margin-top:14px"></div>
+    <div class="result" id="result" hidden>
+      <span class="lbl">Link xem demo</span>
+      <div class="row"><input type="text" id="link" readonly aria-label="Link xem demo"><button class="btn p" type="button" id="copy">Copy link</button></div>
+      <div class="row"><a class="btn s" id="open" target="_blank" rel="noopener">Mở demo</a><a class="btn s" id="code" target="_blank" rel="noopener">Xem code trên GitHub</a><button class="btn s" type="button" id="again">Đăng demo khác</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+const API = "https://api.github.com";
+const INDUSTRIES = ["General","FnB","Sản xuất","Xây dựng","BĐS - CĐT - Nhà thầu","Vận tải","Thời trang","Cao su"];
+const DEPARTMENTS = ["All","Kinh doanh","Tài chính","HR","Vận hành","MKT","Supply Chain","Chăm sóc khách hàng"];
+const MAX_BYTES = 20*1024*1024;
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const TK = "kho-demo-gh-token";
+
+const cfg = { owner:"", repo:"", branch:"main", pages:"" };
+let token = "", me = null, existing = null, slugTouched = false, busy = false;
+const files = [];   // {name, size, file}
+let mainName = null;
+
+/* ---------- helpers ---------- */
+const norm = s => (s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/g,"d").replace(/Đ/g,"D").toLowerCase();
+const slugify = s => norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60).replace(/-+$/,"");
+const fmtSize = b => b<1048576 ? Math.max(1,Math.round(b/1024))+" KB" : (b/1048576).toFixed(1)+" MB";
+const store = { get(){ try{ return localStorage.getItem(TK)||""; }catch(e){ return ""; } },
+  set(v){ try{ v ? localStorage.setItem(TK,v) : localStorage.removeItem(TK); }catch(e){} } };
+function b64(buf){ const u=new Uint8Array(buf); let s=""; for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); }
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const encPath = p => p.split("/").map(encodeURIComponent).join("/");
+
+async function gh(path, opts){
+  opts = opts||{};
+  const headers = {"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","Authorization":"Bearer "+token};
+  if(opts.body) headers["Content-Type"]="application/json";
+  const r = await fetch(API+path, {method:opts.method||"GET", headers, body:opts.body?JSON.stringify(opts.body):undefined, cache:"no-store"});
+  if(r.status===204) return null;
+  const j = await r.json().catch(()=>null);
+  if(!r.ok){ const e=new Error((j&&j.message)||("HTTP "+r.status)); e.status=r.status; throw e; }
+  return j;
+}
+const R = () => "/repos/"+cfg.owner+"/"+cfg.repo;
+const pagesBase = () => cfg.pages || ("https://"+cfg.owner.toLowerCase()+".github.io/"+cfg.repo+"/");
+const demoUrl = slug => pagesBase().replace(/\/?$/,"/")+"demos/"+slug+"/";
+
+/* ---------- config: repo from the Pages address, else kho.config.json ---------- */
+async function loadConfig(){
+  const h=location.hostname.match(/^([^.]+)\.github\.io$/i), seg=location.pathname.split("/").filter(Boolean);
+  if(h && seg.length && !/\.html?$/i.test(seg[0])){ cfg.owner=h[1]; cfg.repo=seg[0]; cfg.pages=location.origin+"/"+seg[0]+"/"; }
+  try{
+    const c = await (await fetch("kho.config.json",{cache:"no-store"})).json();
+    const m = (c.repo||"").match(/github\.com\/([^\/]+)\/([^\/#?]+)/i);
+    if(m && !cfg.owner){ cfg.owner=m[1]; cfg.repo=m[2].replace(/\.git$/,""); }
+    if(c.repo_branch) cfg.branch=c.repo_branch;
+  }catch(e){}
+  $("repoName").textContent = cfg.owner ? cfg.owner+"/"+cfg.repo : "";
+  if(cfg.owner){ $("ownerName").textContent=cfg.owner; $("repoName2").textContent=cfg.repo; }
+  try{
+    const cat = await (await fetch("catalog.json",{cache:"no-store"})).json();
+    const items = cat.items||[];
+    fill("dlInd", [...INDUSTRIES, ...items.map(i=>i.industry)]);
+    fill("dlDep", [...DEPARTMENTS, ...items.map(i=>i.department)]);
+  }catch(e){ fill("dlInd",INDUSTRIES); fill("dlDep",DEPARTMENTS); }
+}
+function fill(id, list){ const dl=$(id); dl.textContent=""; [...new Set(list.filter(Boolean))].forEach(v=>{ const o=document.createElement("option"); o.value=v; dl.append(o); }); }
+
+/* ---------- 1. connect ---------- */
+async function connect(t, silent){
+  token = (t||"").trim();
+  $("s1err").hidden=true;
+  if(!token){ if(!silent) showErr1("Dán GitHub token vào ô trên."); return; }
+  if(!cfg.owner){ showErr1("Không xác định được repo. Điền \"repo\" trong kho.config.json."); return; }
+  $("connect").disabled=true; $("connect").textContent="Đang kiểm tra…";
+  try{
+    me = await gh("/user");
+    const repo = await gh(R());
+    if(repo.permissions && repo.permissions.push===false) throw Object.assign(new Error("no-push"),{status:403});
+    if(repo.default_branch && !cfg.branch) cfg.branch=repo.default_branch;
+    if(!cfg.pages){ try{ const p=await gh(R()+"/pages"); if(p&&p.html_url) cfg.pages=p.html_url; }catch(e){} }
+    if($("remember").checked) store.set(token); else store.set("");
+    $("s1").classList.add("done"); $("s1body").hidden=true;
+    const side=$("s1side"); side.textContent="";
+    side.append("Đã kết nối: "+(me.name||me.login)+" (@"+me.login+")");
+    const out=document.createElement("button"); out.type="button"; out.className="linkbtn"; out.textContent="Đổi token";
+    out.onclick=disconnect; side.append(out);
+    if(!$("author").value) $("author").value = me.name||me.login;
+    updateReady(); updateUrl();
+  }catch(e){
+    token=""; me=null;
+    if(e.status===401) store.set("");
+    showErr1(e.status===401 ? "Token không đúng hoặc đã hết hạn. Tạo token mới theo hướng dẫn bên dưới."
+      : e.status===404 ? "Token chưa được cấp quyền vào repo "+cfg.owner+"/"+cfg.repo+". Kiểm tra mục Repository access khi tạo token, hoặc token đang chờ chủ organization duyệt."
+      : e.status===403 ? "Tài khoản chưa có quyền ghi vào repo. Nhờ chủ organization cấp quyền Write."
+      : "Chưa kết nối được GitHub ("+e.message+"). Kiểm tra mạng rồi thử lại.");
+  }finally{ $("connect").disabled=false; $("connect").textContent="Kết nối"; }
+}
+function showErr1(t){ $("s1err").textContent=t; $("s1err").hidden=false; $("s1body").hidden=false; }
+function disconnect(){ token=""; me=null; store.set(""); $("tok").value=""; $("s1").classList.remove("done"); $("s1body").hidden=false; $("s1side").textContent=""; updateReady(); $("tok").focus(); }
+$("connect").onclick=()=>connect($("tok").value);
+$("tok").addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); connect($("tok").value); } });
+
+/* ---------- 2. files ---------- */
+function addFiles(list){
+  const skipped=[];
+  [...list].forEach(f=>{
+    if(!/\.html?$/i.test(f.name)){ skipped.push(f.name+" (không phải .html)"); return; }
+    if(f.size>MAX_BYTES){ skipped.push(f.name+" (lớn hơn 20 MB)"); return; }
+    const i=files.findIndex(x=>x.name.toLowerCase()===f.name.toLowerCase());
+    const it={name:f.name,size:f.size,file:f};
+    if(i>=0) files[i]=it; else files.push(it);
+  });
+  $("err").textContent = skipped.length ? "Đã bỏ qua: "+skipped.join("; ") : "";
+  $("file").value="";
+  renderFiles(); inspect();
+}
+function fixMain(){
+  if(mainName && files.some(f=>f.name===mainName)) return;
+  mainName=(files.find(f=>/^index\.html?$/i.test(f.name))||files[0]||{}).name||null;
+}
+function renderFiles(){
+  fixMain();
+  const ul=$("files"); ul.textContent="";
+  files.forEach((f,i)=>{
+    const li=document.createElement("li");
+    const nm=document.createElement("span"); nm.className="nm"; nm.textContent=f.name;
+    const sz=document.createElement("span"); sz.className="sz"; sz.textContent=fmtSize(f.size); nm.append(sz);
+    li.append(nm);
+    if(files.length>1){
+      if(f.name===mainName){ const m=document.createElement("span"); m.className="main"; m.textContent="Trang mở đầu"; li.append(m); }
+      else{ const b=document.createElement("button"); b.type="button"; b.textContent="Đặt làm trang mở đầu"; b.onclick=()=>{ mainName=f.name; renderFiles(); }; li.append(b); }
+    }
+    const x=document.createElement("button"); x.type="button"; x.className="x"; x.textContent="Bỏ"; x.setAttribute("aria-label","Bỏ "+f.name);
+    x.onclick=()=>{ files.splice(i,1); renderFiles(); inspect(); }; li.append(x);
+    ul.append(li);
+  });
+  updateReady();
+}
+const drop=$("drop");
+drop.onclick=()=>$("file").click();
+drop.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); $("file").click(); } };
+$("file").onchange=e=>addFiles(e.target.files);
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{ e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop",e=>addFiles(e.dataTransfer.files));
+
+/* read the main page: fill title/description, warn about data that looks real */
+async function inspect(){
+  const pii=$("pii"); pii.hidden=true; pii.textContent="";
+  if(!files.length) return;
+  fixMain();
+  const main=files.find(f=>f.name===mainName);
+  const texts=await Promise.all(files.map(f=>f.file.text()));
+  const doc=new DOMParser().parseFromString(texts[files.indexOf(main)]||"","text/html");
+  const clean=t=>(t||"").replace(/\s+/g," ").trim();
+  let title=clean(doc.title); const h1=clean((doc.querySelector("h1")||{}).textContent);
+  if(!title || /^(index|document|untitled|dashboard|report|bao cao|home)$/i.test(norm(title))) title=h1||title;
+  if(!title) title=main.name.replace(/\.html?$/i,"").replace(/[_-]+/g," ");
+  title=title.split(/\s[|–—]\s/)[0].slice(0,140);
+  if(!$("title").value.trim()){ $("title").value=title; syncSlug(); }
+  const m=doc.querySelector('meta[name="description"]');
+  if(!$("desc").value.trim() && m && m.content) $("desc").value=clean(m.content).slice(0,300);
+  // giống scripts/check_demo.py
+  const all=texts.join("\n");
+  const emails=[...new Set(all.match(/[\w.+-]+@[\w-]+\.[a-z]{2,}(?:\.[a-z]{2,})?/gi)||[])].filter(x=>!/\.(png|jpe?g|svg|gif|webp)$/i.test(x));
+  const phones=[...new Set(all.match(/(?<![#\w.])(?:\+84|0)\d{2,3}[ .]?\d{3}[ .]?\d{3,4}(?![\d.])/g)||[])];
+  if(emails.length||phones.length){
+    pii.append("File có "+emails.length+" email và "+phones.length+" số điện thoại. Link GitHub Pages ai có link cũng mở được, nên chỉ đăng số liệu giả. Ví dụ:");
+    const ul=document.createElement("ul");
+    [...emails.slice(0,4),...phones.slice(0,4)].forEach(x=>{ const li=document.createElement("li"); li.textContent=x; ul.append(li); });
+    pii.append(ul);
+    const lb=document.createElement("label"); lb.className="chk"; lb.style.marginTop="8px";
+    const cb=document.createElement("input"); cb.type="checkbox"; cb.id="piiOk"; cb.onchange=updateReady;
+    lb.append(cb," Tôi đã kiểm tra, đây là số liệu giả"); pii.append(lb);
+    pii.hidden=false;
+  }
+  updateReady();
+}
+
+/* slug + existing demo check */
+function syncSlug(){ if(slugTouched) return; $("slug").value=slugify($("title").value); updateUrl(); }
+$("title").addEventListener("input",syncSlug);
+$("slug").addEventListener("input",()=>{ slugTouched=true; updateUrl(); });
+$("slug").addEventListener("blur",()=>{ const v=slugify($("slug").value); if(v!==$("slug").value){ $("slug").value=v; updateUrl(); } });
+let ut, checkSeq=0;
+function updateUrl(){
+  const s=$("slug").value.trim(), p=$("urlprev"); p.textContent="";
+  existing=null; $("exists").hidden=true;
+  if(!s){ p.textContent="Tự tạo từ tên báo cáo."; updateReady(); return; }
+  if(!SLUG_RE.test(s)){ p.textContent="Chỉ dùng chữ thường không dấu, số và dấu gạch ngang."; updateReady(); return; }
+  p.append("Link: "); const b=document.createElement("b"); b.textContent=demoUrl(s); p.append(b);
+  clearTimeout(ut); ut=setTimeout(()=>checkExisting(s),400);
+  updateReady();
+}
+async function checkExisting(s){
+  if(!token) return;
+  const seq=++checkSeq;
+  try{
+    const list=await gh(R()+"/contents/demos/"+encodeURIComponent(s)+"?ref="+encodeURIComponent(cfg.branch));
+    if(seq!==checkSeq) return;
+    let meta={};
+    const mf=Array.isArray(list)&&list.find(x=>x.name==="meta.json");
+    if(mf){ try{ const j=await gh(R()+"/contents/"+encPath(mf.path)+"?ref="+encodeURIComponent(cfg.branch)); meta=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,""))))); }catch(e){} }
+    if(seq!==checkSeq) return;
+    existing={meta, files:Array.isArray(list)?list.map(x=>x.name):[]};
+    const ex=$("exists"); ex.textContent="";
+    ex.append("Đã có demo dùng tên này: \""+(meta.title||s)+"\". Deploy sẽ cập nhật demo đó (link giữ nguyên). Muốn tạo demo mới thì đổi tên đường dẫn.");
+    const lb=document.createElement("label"); lb.className="chk"; lb.style.marginTop="8px";
+    const cb=document.createElement("input"); cb.type="checkbox"; cb.id="overOk"; cb.onchange=updateReady;
+    lb.append(cb," Cập nhật demo đã có"); ex.append(lb);
+    ex.hidden=false;
+    ["industry","department","desc","tags"].forEach(k=>{ const v=k==="desc"?meta.description:k==="tags"?(meta.tags||[]).join(", "):meta[k]; if(v && !$(k).value.trim()) $(k).value=v; });
+    if(meta.type) $("type").value=meta.type;
+  }catch(e){ if(seq===checkSeq && e.status!==404) $("urlprev").append(" (chưa kiểm tra được tên trùng)"); }
+  updateReady();
+}
+
+function updateReady(){
+  const s=$("slug").value.trim();
+  const ok = token && files.length && $("title").value.trim() && SLUG_RE.test(s)
+    && $("industry").value.trim() && $("department").value.trim()
+    && ($("pii").hidden || ($("piiOk")&&$("piiOk").checked))
+    && (!existing || ($("overOk")&&$("overOk").checked));
+  $("deploy").disabled = busy || !ok;
+}
+["title","industry","department"].forEach(id=>$(id).addEventListener("input",updateReady));
+
+/* ---------- 3. deploy: one commit with every file, then wait for Pages ---------- */
+$("s2").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if($("deploy").disabled) return;
+  const slug=$("slug").value.trim(), now=new Date().toISOString();
+  const prev=(existing&&existing.meta)||{};
+  const meta={ slug, title:$("title").value.trim(), type:$("type").value, industry:$("industry").value.trim(),
+    department:$("department").value.trim(), description:$("desc").value.trim(), tools:prev.tools||["HTML"],
+    source:prev.source||"", source_repo:prev.source_repo||"", author:$("author").value.trim(),
+    added:prev.added||now.slice(0,10), updated:now, status:"demo", data:"demo",
+    tags:$("tags").value.split(",").map(t=>t.trim()).filter(Boolean) };
+  busy=true; updateReady(); $("deploy").textContent="Đang deploy…";
+  $("s3").hidden=false; $("result").hidden=true; $("s3err").hidden=true;
+  ["p1","p2","p3"].forEach(id=>$(id).className=""); $("p2t").textContent="";
+  $("s3").scrollIntoView({behavior:"smooth",block:"start"});
+  const base="demos/"+slug+"/";
+  let sha;
+  try{
+    $("p1").className="run";
+    // một file: luôn thành index.html. Bộ nhiều trang: giữ tên file, thêm index.html chuyển tới trang mở đầu nếu thiếu.
+    const out=[];
+    if(files.length===1) out.push({path:base+"index.html", file:files[0].file});
+    else{
+      files.forEach(f=>out.push({path:base+f.name, file:f.file}));
+      if(!files.some(f=>/^index\.html$/i.test(f.name)))
+        out.push({path:base+"index.html", text:'<!DOCTYPE html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url='+encodeURIComponent(mainName)+'"><title>'+meta.title.replace(/[<&]/g,"")+'</title><a href="'+encodeURIComponent(mainName)+'">Mở demo</a>'});
+    }
+    out.push({path:base+"meta.json", text:JSON.stringify(meta,null,2)+"\n"});
+    const tree=[];
+    for(const o of out){
+      const blob = o.file ? await gh(R()+"/git/blobs",{method:"POST",body:{content:b64(await o.file.arrayBuffer()),encoding:"base64"}})
+                          : await gh(R()+"/git/blobs",{method:"POST",body:{content:o.text,encoding:"utf-8"}});
+      tree.push({path:o.path,mode:"100644",type:"blob",sha:blob.sha});
+    }
+    const msg=(existing?"Cập nhật":"Thêm")+" demo "+slug+" ("+meta.title+")";
+    for(let attempt=0;;attempt++){
+      const ref=await gh(R()+"/git/ref/heads/"+encodeURIComponent(cfg.branch));
+      const head=await gh(R()+"/git/commits/"+ref.object.sha);
+      const t=await gh(R()+"/git/trees",{method:"POST",body:{base_tree:head.tree.sha,tree}});
+      const c=await gh(R()+"/git/commits",{method:"POST",body:{message:msg,tree:t.sha,parents:[ref.object.sha]}});
+      try{ await gh(R()+"/git/refs/heads/"+encodeURIComponent(cfg.branch),{method:"PATCH",body:{sha:c.sha}}); sha=c.sha; break; }
+      catch(err){ if(err.status===422 && attempt<2){ await sleep(1500); continue; } throw err; }
+    }
+    $("p1").className="ok";
+  }catch(err){
+    $("p1").className="bad";
+    fail(err.status===403||err.status===404 ? "Token chưa có quyền ghi (Contents: Read and write) vào repo. Tạo lại token theo hướng dẫn ở bước 1."
+      : err.status===409 ? "Repo đang trống hoặc nhánh "+cfg.branch+" chưa có." : "Chưa đẩy được file lên GitHub: "+err.message);
+    return;
+  }
+  // chờ GitHub Pages: đọc lại meta.json trên link thật cho tới khi thấy bản vừa đăng
+  $("p2").className="run";
+  const url=demoUrl(slug), t0=Date.now();
+  let built=false;
+  while(Date.now()-t0 < 6*60*1000){
+    await sleep(5000);
+    const sec=Math.round((Date.now()-t0)/1000);
+    $("p2t").textContent=sec+" giây";
+    try{
+      const runs=await gh(R()+"/actions/runs?head_sha="+sha+"&per_page=5");
+      const run=(runs.workflow_runs||[]).find(r=>/pages/i.test(r.path||r.name||""));
+      if(run && run.status==="completed" && run.conclusion==="failure"){ $("p2").className="bad"; fail("GitHub build lỗi. Xem chi tiết: "+run.html_url); return; }
+      if(run && run.status==="completed" && run.conclusion==="success" && !built){ built=true; $("p2").className="ok"; $("p3").className="run"; }
+    }catch(e){}
+    try{
+      const r=await fetch(url+"meta.json?t="+Date.now(),{cache:"no-store"});
+      if(r.ok){ const m=await r.json(); if(m.updated===meta.updated){ $("p2").className="ok"; $("p3").className="ok"; done(url, slug); return; } }
+    }catch(e){}
+  }
+  $("p2").className="bad";
+  fail("Deploy lâu hơn bình thường. File đã lên GitHub; mở tab Actions của repo để xem, hoặc thử mở link sau ít phút: "+url);
+});
+function fail(t){ $("s3err").textContent=t; $("s3err").hidden=false; busy=false; $("deploy").textContent="Deploy lại"; updateReady(); }
+function done(url, slug){
+  $("link").value=url; $("open").href=url;
+  $("code").href="https://github.com/"+cfg.owner+"/"+cfg.repo+"/tree/"+cfg.branch+"/demos/"+slug;
+  $("result").hidden=false; busy=false; $("deploy").textContent="Deploy"; updateReady();
+}
+$("copy").onclick=async()=>{
+  try{ await navigator.clipboard.writeText($("link").value); $("copy").textContent="Đã copy"; }
+  catch(e){ $("link").select(); $("copy").textContent="Bấm Ctrl+C"; }
+  setTimeout(()=>$("copy").textContent="Copy link",2000);
+};
+$("again").onclick=()=>{
+  files.length=0; mainName=null; existing=null; slugTouched=false;
+  ["title","slug","desc","tags"].forEach(id=>$(id).value="");
+  renderFiles(); $("pii").hidden=true; $("exists").hidden=true; updateUrl();
+  $("s3").hidden=true; window.scrollTo({top:0,behavior:"smooth"});
+};
+
+/* ---------- start ---------- */
+loadConfig().then(()=>{ updateUrl(); const t=store.get(); if(t){ $("tok").value=t; connect(t,true); } });
+})();
+</script>
+</body>
+</html>

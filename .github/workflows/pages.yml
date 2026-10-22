@@ -1,0 +1,55 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# nhiều lần đăng liền nhau: huỷ bản build cũ, bản mới đã gồm mọi file
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Chụp thumb cho demo chưa có ảnh
+        continue-on-error: true
+        timeout-minutes: 4
+        run: |
+          if python3 - <<'EOF'
+          import pathlib, sys
+          missing = [f for f in pathlib.Path("demos").iterdir()
+                     if f.is_dir() and not any((f / t).exists() for t in ("thumb.jpg", "thumb.png", "thumb.webp"))]
+          sys.exit(0 if missing else 1)
+          EOF
+          then
+            pip install --quiet playwright pillow
+            python3 -m playwright install --with-deps chromium
+            python3 scripts/make_thumb.py
+          else
+            echo "Mọi demo đã có thumb."
+          fi
+      - name: Build catalog
+        run: python3 scripts/build_catalog.py || echo "::warning::Có demo thiếu thông tin, xem log ở trên"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
