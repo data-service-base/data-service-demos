@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Báo cáo KPI — APA United Nano Technology (bản mô phỏng)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2EE; --surface:#FFFFFF; --surface-2:#F7F9F7; --ink:#14231E; --ink-2:#4A5C55; --ink-3:#7B8B84;
+  --line:#DCE4DE; --line-2:#C8D4CC;
+  --brand:#04662F; --brand-2:#00A652; --brand-soft:#E1F1E7;
+  --amber:#B8811A; --amber-soft:#FBF0DA; --red:#C4161C; --red-soft:#F9E3E4; --blue:#262161;
+  --a:#04662F; --b:#00A652; --c:#C79420; --d:#C4161C; --none:#C2CCC6;
+  --shadow:0 1px 2px rgba(20,35,30,.06), 0 8px 24px -16px rgba(20,35,30,.28);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101815; --surface:#18221E; --surface-2:#1E2A25; --ink:#E8EFEA; --ink-2:#AFC0B8; --ink-3:#88998F;
+    --line:#2A3833; --line-2:#3A4A43;
+    --brand:#39A869; --brand-2:#4FC585; --brand-soft:#16311F;
+    --amber:#D9A43F; --amber-soft:#2B2213; --red:#E4675F; --red-soft:#3A211D; --blue:#9A97E0;
+    --a:#39A869; --b:#63C48E; --c:#D9A43F; --d:#E4675F; --none:#3E4E47;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 26px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101815; --surface:#18221E; --surface-2:#1E2A25; --ink:#E8EFEA; --ink-2:#AFC0B8; --ink-3:#88998F;
+  --line:#2A3833; --line-2:#3A4A43; --brand:#39A869; --brand-2:#4FC585; --brand-soft:#16311F;
+  --amber:#D9A43F; --amber-soft:#2B2213; --red:#E4675F; --red-soft:#3A211D; --blue:#9A97E0;
+  --a:#39A869; --b:#63C48E; --c:#D9A43F; --d:#E4675F; --none:#3E4E47;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{ -webkit-text-size-adjust:100%; scroll-padding-top:env(safe-area-inset-top,0px); }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:14px; line-height:1.5; font-variant-numeric:tabular-nums;
+  display:flex; min-height:100vh;
+}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand-2); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- sidebar ---------- */
+.side{
+  width:238px; flex:0 0 238px; background:#05261A; color:#CFE0D8; position:sticky; top:0;
+  height:100vh; padding:22px 16px calc(18px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:26px;
+}
+.brandmark{display:flex; flex-direction:column; gap:10px}
+.brandmark img{display:block; width:100%; max-width:188px; height:auto; background:#fff; border-radius:9px; padding:8px 10px}
+.brandmark span{font-size:11px; color:#7FA394; line-height:1.4}
+.side h6{margin:0 0 8px; font-size:11px; font-weight:500; color:#6F9184; letter-spacing:.04em}
+.nav{display:flex; flex-direction:column; gap:2px}
+.nav button{
+  text-align:left; background:none; border:0; border-radius:8px; padding:9px 10px; cursor:pointer;
+  color:#BFD4CA; font-size:13.5px; display:flex; gap:10px; align-items:flex-start; line-height:1.35;
+}
+.nav button .no{font-size:11px; color:#5E8274; padding-top:2px; min-width:12px}
+.nav button:hover{background:rgba(255,255,255,.05)}
+.nav button[aria-current="true"]{background:var(--brand); color:#fff}
+.nav button[aria-current="true"] .no{color:#B7E2D2}
+.nav small{display:block; font-size:11px; color:#7FA394; font-weight:300}
+.nav button[aria-current="true"] small{color:#CDEADE}
+.side .foot{margin-top:auto; font-size:11.5px; color:#6F9184; line-height:1.55; border-top:1px solid #1D362E; padding-top:14px}
+.side .foot b{color:#9FC0B2; font-weight:500}
+.themebtn{margin-top:10px;background:none;border:1px solid #29453B;color:#8FB3A4;border-radius:7px;padding:5px 9px;font-size:11.5px;cursor:pointer}
+
+/* ---------- main ---------- */
+main{flex:1; min-width:0; max-width:100%; display:flex; flex-direction:column}
+.topbar{
+  position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  padding:12px 26px calc(12px); display:flex; flex-wrap:wrap; gap:14px 18px; align-items:flex-end;
+  top:env(safe-area-inset-top,0px);
+}
+.crumb{font-size:12px; color:var(--ink-3); margin-bottom:2px}
+.crumb button{background:none;border:0;padding:0;color:var(--brand);cursor:pointer;font-size:12px}
+.topbar h1{margin:0; font-size:18px; font-weight:600; letter-spacing:-.01em}
+.filters{display:flex; gap:10px; margin-left:auto; flex-wrap:wrap}
+.f{display:flex; flex-direction:column; gap:3px}
+.f label{font-size:10.5px; color:var(--ink-3)}
+.f select,.f input{
+  background:var(--surface); border:1px solid var(--line-2); color:var(--ink); border-radius:7px;
+  padding:6px 9px; font-size:12.5px; min-width:120px; font-family:inherit;
+}
+.page{padding:22px 26px 60px; display:flex; flex-direction:column; gap:18px; min-width:0}
+.hidden{display:none!important}
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); min-width:0; max-width:100%}
+.card>header{padding:14px 18px 0; display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.card>header h2{margin:0; font-size:14.5px; font-weight:600}
+.card>header p{margin:2px 0 0; font-size:12px; color:var(--ink-3)}
+.card .body{padding:14px 18px 18px}
+.grid2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px}
+.grid2>*,.grid3>*{min-width:0}
+.grid3{display:grid; grid-template-columns:1.15fr 1fr 1fr; gap:18px}
+@media(max-width:1080px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* hero */
+.hero{display:grid; grid-template-columns:minmax(300px,1fr) 1.25fr; gap:0; overflow:hidden}
+.hero .left{padding:20px 22px; border-right:1px solid var(--line)}
+.hero .right{padding:20px 22px; display:grid; grid-template-columns:repeat(4,1fr); gap:18px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.hero .left{border-right:0;border-bottom:1px solid var(--line)}.hero .right{grid-template-columns:repeat(2,1fr)}}
+.bignum{font-size:42px; font-weight:600; letter-spacing:-.03em; line-height:1}
+.bignum small{font-size:15px; font-weight:400; color:var(--ink-3); letter-spacing:0}
+.kicker{font-size:12px; color:var(--ink-3); margin:0 0 6px}
+.dots{display:flex; flex-wrap:wrap; gap:4px; margin-top:16px; max-width:360px}
+.dot{width:14px; height:14px; border-radius:4px; background:var(--none)}
+.dot.open{background:transparent; border:1px dashed var(--line-2)}
+.legend{display:flex; flex-wrap:wrap; gap:12px; margin-top:12px; font-size:11.5px; color:var(--ink-2)}
+.legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px}
+.metric .v{font-size:26px; font-weight:600; letter-spacing:-.02em; line-height:1.15}
+.metric .l{font-size:11.5px; color:var(--ink-3); margin-top:4px; line-height:1.35}
+.metric .s{font-size:11.5px; color:var(--ink-2); margin-top:6px}
+
+/* bars */
+.stack{display:flex; height:34px; border-radius:7px; overflow:hidden; border:1px solid var(--line)}
+.stack div{display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:500; min-width:0; overflow:hidden; white-space:nowrap}
+.rank-list{display:flex; flex-direction:column; gap:9px; margin-top:14px}
+.rank-row{display:grid; grid-template-columns:200px minmax(0,1fr) 58px; gap:14px; align-items:center; font-size:12.5px; cursor:pointer}
+.rank-row:hover .name{color:var(--brand)}
+.rank-row .track{height:9px; background:var(--surface-2); border-radius:5px; overflow:hidden; border:1px solid var(--line)}
+.rank-row .fill{height:100%; border-radius:5px}
+.rank-row .val{text-align:right; font-weight:500}
+.rank-row .name{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.rank-row .sub{font-size:11px; color:var(--ink-3)}
+
+/* table */
+table{width:100%; border-collapse:collapse; font-size:12.5px}
+th{text-align:left; font-weight:500; color:var(--ink-3); font-size:11.5px; padding:8px 10px; border-bottom:1px solid var(--line-2); white-space:nowrap}
+td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.clickable{cursor:pointer}
+tbody tr.clickable:hover{background:var(--surface-2)}
+.num{text-align:right}
+.tbl-wrap{overflow-x:auto; max-width:100%}
+.pill{display:inline-block; padding:2px 8px; border-radius:20px; font-size:11.5px; font-weight:500; white-space:nowrap}
+.pill.A{background:var(--brand-soft); color:var(--brand)}
+.pill.B{background:var(--brand-soft); color:var(--b)}
+.pill.C{background:var(--amber-soft); color:var(--amber)}
+.pill.D{background:var(--red-soft); color:var(--red)}
+.pill.muted{background:var(--surface-2); color:var(--ink-3); border:1px solid var(--line)}
+.delta.up{color:var(--brand)} .delta.dn{color:var(--red)}
+.mini{font-size:11px; color:var(--ink-3)}
+
+/* matrix */
+.matrix{display:grid; gap:3px; font-size:11.5px; min-width:620px}
+.matrix .ph{font-size:10.5px; color:var(--ink-2); text-align:center; padding:0 4px 5px; border-bottom:1px solid var(--line-2); margin-bottom:4px}
+.matrix .h{color:var(--ink-3); font-size:11px; padding:0 4px 4px; text-align:center}
+.matrix .rowname{padding:6px 8px 6px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.cell{height:30px; border-radius:5px; display:flex; align-items:center; justify-content:center; color:var(--ink); font-weight:500}
+
+/* tabs */
+.tabs{display:flex; gap:4px; border-bottom:1px solid var(--line); padding:0 18px; flex-wrap:wrap}
+.tabs button{background:none;border:0;padding:11px 12px;cursor:pointer;font-size:13px;color:var(--ink-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--brand); border-bottom-color:var(--brand); font-weight:500}
+
+/* note */
+.note{border-left:3px solid var(--amber); background:var(--amber-soft); padding:12px 16px; border-radius:0 10px 10px 0; font-size:12.5px; color:var(--ink-2)}
+.note b{color:var(--ink)}
+.note ul{margin:6px 0 0; padding-left:18px} .note li{margin:3px 0}
+.alert{border-left:3px solid var(--red); background:var(--red-soft); padding:12px 16px; border-radius:0 10px 10px 0; font-size:12.5px; color:var(--ink-2)}
+.alert b{color:var(--red)}
+
+/* page 3 */
+.idhead{display:grid; grid-template-columns:1.3fr 1fr; gap:0; overflow:hidden}
+@media(max-width:900px){.idhead{grid-template-columns:1fr}}
+.idhead .l{padding:20px 22px; border-right:1px solid var(--line)}
+.idhead .r{padding:20px 22px; display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+.idhead h3{margin:0 0 2px; font-size:21px; font-weight:600; letter-spacing:-.02em}
+.meta{display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; color:var(--ink-2); margin-top:10px}
+.meta span b{font-weight:500; color:var(--ink-3); font-weight:400}
+tr.crit{cursor:pointer}
+tr.crit[aria-selected="true"]{background:var(--brand-soft)}
+tr.crit[aria-selected="true"] td:first-child{box-shadow:inset 3px 0 0 var(--brand)}
+.grpname{font-weight:500}
+.expl{display:grid; grid-template-columns:1fr 1fr; gap:0}
+@media(max-width:900px){.expl{grid-template-columns:1fr}}
+.expl>div{padding:16px 18px}
+.expl>div:first-child{border-right:1px solid var(--line)}
+.expl h4{margin:0 0 10px; font-size:12.5px; font-weight:600; color:var(--ink)}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:5px 14px; font-size:12.5px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+.scale{width:100%; font-size:12px; margin-top:4px}
+.scale td{padding:4px 8px}
+.scale tr.hit{background:var(--brand-soft); font-weight:500}
+.levels{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:6px}
+.levels div{border:1px solid var(--line); border-radius:8px; padding:9px 10px; background:var(--surface-2)}
+.levels .v{font-size:19px; font-weight:600}
+.levels .l{font-size:11px; color:var(--ink-3)}
+svg .gl{stroke:var(--line); stroke-width:1}
+svg text{fill:var(--ink-3); font-size:10.5px; font-family:inherit}
+.chip{display:inline-block;font-size:11px;padding:1px 7px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-2)}
+
+/* --- focal band: điểm nhìn chính của mỗi trang --- */
+.focal{background:#05261A; color:#D6E7DE; border-radius:14px; padding:22px 26px;
+  display:grid; grid-template-columns:1.5fr repeat(3,auto); gap:30px; align-items:center}
+.focal .lead{font-size:15.5px; line-height:1.55; color:#DDEDE4; max-width:60ch; font-weight:300}
+.focal .lead b{color:#fff; font-weight:600}
+.focal .st{text-align:right; white-space:nowrap}
+.focal .st .v{font-size:32px; font-weight:600; letter-spacing:-.025em; line-height:1; color:#fff}
+.focal .st .l{font-size:11.5px; color:#7FA394; margin-top:6px}
+.focal .st.warn .v{color:#F0BC6A}
+.focal .st.bad .v{color:#F0958A}
+@media(max-width:900px){.focal{grid-template-columns:1fr 1fr; gap:18px; padding:18px}
+  .focal .lead{grid-column:1/-1; font-size:14px}.focal .st{text-align:left}.focal .st .v{font-size:26px}}
+
+.grid-m{display:grid; grid-template-columns:minmax(0,1.75fr) minmax(0,1fr); gap:18px}
+@media(max-width:1080px){.grid-m{grid-template-columns:1fr}}
+
+.card>header{padding:15px 18px 0; align-items:center}
+.card>header h2{font-size:14px; font-weight:600; letter-spacing:.005em}
+.card>header p{font-size:11.5px}
+.sub-h{font-size:12.5px; font-weight:600; margin:0 0 10px; color:var(--ink-2)}
+
+/* bảng nhẹ hơn: ít viền, ít màu */
+th{font-size:11px; border-bottom:1px solid var(--line); color:var(--ink-3); font-weight:400}
+td{border-bottom:1px solid color-mix(in srgb, var(--line) 55%, transparent)}
+tr.total td{border-top:1px solid var(--line-2); border-bottom:0; font-weight:600}
+tr.sep td{background:var(--surface-2); font-size:11px; color:var(--ink-3); padding:5px 10px}
+.mstack{display:inline-flex; width:80px; height:8px; border-radius:4px; overflow:hidden; background:var(--surface-2); vertical-align:middle}
+.mstack i{display:block}
+.ibar{display:inline-block; width:100%; min-width:52px; height:7px; border-radius:4px; background:var(--surface-2); position:relative; vertical-align:middle; overflow:hidden}
+.ibar i{position:absolute; left:0; top:0; bottom:0; border-radius:4px}
+.rk{display:inline-flex; align-items:center; gap:6px; font-weight:500}
+.rk i{width:7px; height:7px; border-radius:50%}
+.delta{font-size:12px}
+
+/* cảnh báo: điểm nhấn duy nhất bằng màu đỏ */
+.alert{border:1px solid color-mix(in srgb, var(--red) 40%, transparent); background:var(--red-soft);
+  border-left:4px solid var(--red); border-radius:0 12px 12px 0; padding:16px 20px}
+.alert-h{font-size:14.5px; font-weight:600; color:var(--red); margin-bottom:12px}
+.alert-nums{display:grid; grid-template-columns:auto auto 1fr; gap:26px; align-items:center}
+.alert-nums .v{font-size:27px; font-weight:600; letter-spacing:-.02em; line-height:1}
+.alert-nums .l{font-size:11.5px; color:var(--ink-2); margin-top:5px}
+.alert-nums p{margin:0; font-size:12.5px; color:var(--ink-2); line-height:1.55}
+@media(max-width:900px){.alert-nums{grid-template-columns:1fr 1fr; gap:14px}.alert-nums p{grid-column:1/-1}}
+
+.levels div.flag{border-color:color-mix(in srgb, var(--red) 45%, transparent); background:var(--red-soft)}
+.levels div.flag .v{color:var(--red)}
+
+details.notes{border:1px solid var(--line); border-radius:10px; background:var(--surface-2); padding:0 16px}
+details.notes summary{cursor:pointer; padding:11px 0; font-size:12.5px; color:var(--ink-2); list-style:none}
+details.notes summary::-webkit-details-marker{display:none}
+details.notes summary::before{content:'+ '; color:var(--ink-3)}
+details.notes[open] summary::before{content:'– '}
+details.notes ul{margin:0 0 14px; padding-left:18px; font-size:12.5px; color:var(--ink-2); line-height:1.6}
+details.notes li{margin:5px 0}
+table.hist{margin:6px 0}
+.dots{gap:5px}
+.dot{width:13px; height:13px}
+
+/* --- nhập mã & phân quyền --- */
+.gate{position:fixed; inset:0; z-index:60; background:#05261A; display:flex; align-items:center; justify-content:center; padding:24px}
+.gate.hidden{display:none}
+.gate-card{background:var(--surface); border-radius:16px; padding:30px 32px; max-width:470px; width:100%; box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
+.gate-card img{display:block; width:190px; height:auto; margin-bottom:20px}
+.gate-card h2{margin:0 0 6px; font-size:19px; font-weight:600}
+.gate-card p{margin:0 0 18px; font-size:13px; color:var(--ink-2); line-height:1.55}
+.gate-form{display:flex; gap:10px}
+.gate-form input{flex:1; min-width:0; padding:10px 12px; border:1px solid var(--line-2); border-radius:9px; background:var(--surface); color:var(--ink); font:inherit; font-size:14px}
+.gate-err{font-size:12.5px; color:var(--red); min-height:18px; margin-top:8px}
+.gate-demo{margin-top:12px; border-top:1px solid var(--line); padding-top:14px; font-size:12px; color:var(--ink-3)}
+.gate-demo>div{display:flex; flex-wrap:wrap; gap:8px; margin-top:9px}
+.gate-demo button{background:var(--surface-2); border:1px solid var(--line-2); border-radius:8px; padding:7px 10px; cursor:pointer; font-size:12px; text-align:left; line-height:1.35}
+.gate-demo button b{display:block; font-weight:600; color:var(--brand)}
+.btn{background:var(--surface); border:1px solid var(--line-2); color:var(--ink); border-radius:9px; padding:9px 14px; font-size:13px; cursor:pointer; font-weight:500}
+.btn.primary{background:var(--brand); border-color:var(--brand); color:#fff}
+.btn.sm{padding:4px 10px; font-size:12px; border-radius:7px}
+.userchip{display:flex; align-items:center; gap:12px; padding:6px 10px 6px 12px; border:1px solid var(--line-2); border-radius:9px; background:var(--surface)}
+.userchip b{font-size:12.5px; font-weight:600}
+.userchip button{background:none; border:0; color:var(--brand); cursor:pointer; font-size:12px; text-decoration:underline}
+.who{background:rgba(255,255,255,.06); border-radius:9px; padding:9px 11px; margin-bottom:12px; color:#BFD4CA; font-size:11.5px; line-height:1.5}
+.who b{color:#fff; font-weight:600; font-size:12.5px}
+
+/* --- phiếu đánh giá trên Base Service --- */
+.card.ticket{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:22px; align-items:center; padding:16px 20px}
+.tk-code{font-size:14.5px; font-weight:600; letter-spacing:.01em}
+.tk-steps{display:flex; align-items:center; gap:0}
+.tk-step{display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--ink-3); padding-right:14px; margin-right:14px; border-right:1px solid var(--line)}
+.tk-step:last-child{border-right:0; padding-right:0; margin-right:0}
+.tk-step i{width:9px; height:9px; border-radius:50%; background:var(--line-2)}
+.tk-step.done i{background:var(--brand-2)}
+.tk-step.done span{color:var(--ink-2)}
+.tk-step.now i{background:var(--amber); box-shadow:0 0 0 4px var(--amber-soft)}
+.tk-step.now span{color:var(--ink); font-weight:600}
+.tk-a{text-align:right}
+.tk-flash{grid-column:1/-1; color:var(--ink-2)}
+.tk-flash:empty{display:none}
+@media(max-width:1080px){.card.ticket{grid-template-columns:1fr}.tk-a{text-align:left}
+  .tk-steps{flex-wrap:wrap; gap:8px}.tk-step{border-right:0; padding-right:0; margin-right:10px}}
+
+/* --- focal: biểu đồ thay cho câu văn --- */
+.focal .fl{min-width:0}
+.ft{font-size:17px; font-weight:600; color:#fff; letter-spacing:-.01em}
+.fs{font-size:11.5px; color:#7FA394; margin-top:4px}
+.fsplit{display:flex; gap:2px; height:44px; border-radius:9px; overflow:hidden; margin-top:14px}
+.fsplit>div{display:flex; flex-direction:column; justify-content:center; padding:0 10px; min-width:0}
+.fsplit b{font-size:15px; font-weight:600; color:#fff; line-height:1.15}
+.fsplit span{font-size:10.5px; color:rgba(255,255,255,.78); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.fgauge{margin-top:18px}
+.fgauge .tr{position:relative; height:12px; border-radius:6px; background:rgba(255,255,255,.13)}
+.fgauge .tr i{position:absolute; left:0; top:0; bottom:0; border-radius:6px}
+.fgauge .mk{position:absolute; top:-4px; bottom:-4px; width:1px; background:rgba(255,255,255,.55)}
+.fgauge .mkv{position:absolute; top:-22px; transform:translateX(-50%); font-size:11px; font-weight:600; color:#fff}
+.fgauge .lbl{position:relative; height:15px; font-size:10.5px; color:#7FA394; margin-top:9px}
+.fgauge .lbl span{position:absolute; white-space:nowrap}
+.fchips{display:flex; flex-wrap:wrap; gap:8px; margin-top:13px}
+.fchip{font-size:11.5px; color:#9FC0B2; background:rgba(255,255,255,.07); border-radius:7px; padding:5px 10px}
+.fchip b{color:#fff; margin-left:7px; font-weight:600}
+.fchip.warn{background:rgba(217,164,63,.18); color:#EFCB8A}
+.fchip.bad{background:rgba(228,103,95,.2); color:#F3B2AC}
+
+/* --- khối lệch điểm --- */
+.alert-grid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:28px}
+@media(max-width:900px){.alert-grid{grid-template-columns:1fr; gap:20px}}
+.bands{display:flex; gap:5px; margin-top:9px}
+.band{flex:1; min-width:0; text-align:center; border:1px solid var(--line); border-radius:8px; padding:8px 3px; background:var(--surface)}
+.band b{display:block; font-size:16px; font-weight:600; color:var(--ink-3); line-height:1}
+.band span{display:block; font-size:9.5px; color:var(--ink-3); margin-top:4px; white-space:nowrap}
+.band.rule{border-color:var(--brand); background:var(--brand-soft)}
+.band.rule b{color:var(--brand)}
+.band.appr{border-color:var(--red); background:color-mix(in srgb, var(--red) 12%, var(--surface))}
+.band.appr b{color:var(--red)}
+.bandkey{display:flex; gap:16px; margin-top:10px; font-size:11.5px}
+.bandkey .k::before{content:''; display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:6px}
+.bandkey .rule{color:var(--brand)} .bandkey .rule::before{background:var(--brand)}
+.bandkey .appr{color:var(--red)} .bandkey .appr::before{background:var(--red)}
+.cmp{display:flex; flex-direction:column; gap:12px; margin-top:12px}
+.cmp-row{display:grid; grid-template-columns:112px minmax(0,1fr); gap:12px; align-items:center; font-size:12px}
+.cmp-l{color:var(--ink-2)}
+.cmp-bar{height:14px; border-radius:7px; background:var(--surface); border:1px solid var(--line); overflow:hidden}
+.cmp-bar i{display:block; height:100%; border-radius:7px}
+.cmp-v{grid-column:2; font-size:12px; color:var(--ink-2); margin-top:-4px}
+.cmp-v b{font-size:15px}
+
+.matrix .h.hot{color:var(--red); font-weight:600}
+.matrix .rowname.clickable{cursor:pointer}
+.matrix .rowname.clickable:hover{color:var(--brand); text-decoration:underline}
+.matrix .rowname.avg{font-weight:600; color:var(--ink-2); border-top:1px solid var(--line-2); padding-top:9px}
+.matrix .cell.avg{border-top:1px solid var(--line-2); margin-top:5px; font-weight:600}
+.matrix .cell.empty{background:var(--surface-2); color:var(--ink-3)}
+
+/* --- ô số trạng thái tuân thủ --- */
+.tiles{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px}
+@media(max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--surface-2)}
+.tile .v{font-size:23px; font-weight:600; letter-spacing:-.02em; line-height:1.1}
+.tile .v small{font-size:12px; font-weight:400; color:var(--ink-3); margin-left:3px}
+.tile .l{font-size:11.5px; color:var(--ink-3); margin-top:5px; line-height:1.35}
+.tile.bad{border-color:color-mix(in srgb, var(--red) 40%, transparent); background:var(--red-soft)}
+.tile.bad .v{color:var(--red)}
+td.warn{color:var(--red); font-weight:600}
+tr.hot td{background:color-mix(in srgb, var(--amber) 10%, transparent)}
+tr.hot td:first-child{box-shadow:inset 3px 0 0 var(--amber)}
+.card .body.grid2{gap:22px}
+
+.ptabs{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 8px; box-shadow:var(--shadow); border-bottom:1px solid var(--line)}
+.ptabs button{padding:13px 14px; font-size:13.5px}
+
+@media(max-width:820px){
+  body{flex-direction:column}
+  .side{width:auto; flex:none; height:auto; position:static; flex-direction:column; gap:14px; padding-top:calc(16px + env(safe-area-inset-top,0px))}
+  .nav{flex-direction:row; overflow-x:auto}
+  .nav button{white-space:nowrap}
+  .nav small{display:none}
+  .side .foot{display:none}
+  .topbar{padding:12px 16px; top:0}
+  .page{padding:16px}
+  .filters{margin-left:0; width:100%}
+  .rank-row{grid-template-columns:minmax(0,118px) minmax(0,1fr) 52px}
+  .hero .right{grid-template-columns:1fr 1fr}
+  .levels{grid-template-columns:1fr 1fr}
+  .f select,.f input{min-width:104px}
+  .card .body table{display:block; overflow-x:auto}
+  .expl>div:first-child{border-right:0; border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <div class="brandmark"><img src="data:image/png;base64,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" alt="APA United Nano Technology"><span>Báo cáo KPI · thuốc thú y</span></div>
+  <div>
+    <h6>Báo cáo</h6>
+    <div class="nav" id="nav">
+      <button data-page="1"><span class="no">1</span><span>Tổng quan KPI<small>Ban lãnh đạo &amp; nhân sự</small></span></button>
+      <button data-page="2"><span class="no">2</span><span>KPI bộ phận<small>Trưởng bộ phận</small></span></button>
+      <button data-page="3"><span class="no">3</span><span>KPI cá nhân<small>Giải thích điểm</small></span></button>
+      <button data-page="4"><span class="no">4</span><span>Hồ sơ chờ đánh giá<small>Nhân sự &amp; trưởng bộ phận</small></span></button>
+    </div>
+  </div>
+  <div class="foot">
+    <div id="whoami" class="who"></div>
+    <b>Bản mô phỏng</b><br>
+    Dữ liệu minh họa, dựng theo mẫu KPI sales và mẫu văn phòng khách đã chia sẻ. Công thức, thang điểm và ngưỡng xếp loại chờ khách chốt.
+    <button class="themebtn" id="themebtn" type="button">Đổi nền sáng/tối</button>
+  </div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div>
+      <div class="crumb" id="crumb"></div>
+      <h1 id="ptitle"></h1>
+    </div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="page" id="page1"></div>
+  <div class="page hidden" id="page2"></div>
+  <div class="page hidden" id="page3"></div>
+  <div class="page hidden" id="page4"></div>
+</main>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img id="glogo" alt="APA">
+    <h2>Báo cáo KPI nhân sự</h2>
+    <p>Nhập mã nhân sự để vào phần dữ liệu thuộc quyền của bạn. Ban giám đốc và Phòng Nhân sự xem toàn công ty, trưởng bộ phận xem bộ phận mình, nhân viên xem hồ sơ cá nhân.</p>
+    <div class="gate-form"><input id="gcode" placeholder="Mã nhân sự, ví dụ NV1042" autocomplete="off"><button class="btn primary" id="gbtn" type="button">Vào báo cáo</button></div>
+    <div id="gerr" class="gate-err"></div>
+    <div class="gate-demo"><span>Mã dùng thử:</span><div id="gchips"></div></div>
+  </div>
+</div>
+
+<script>
+/* ============================ DỮ LIỆU MÔ PHỎNG ============================ */
+const YEAR = 2026, CUR_MONTH = 8, MONTHS = [1,2,3,4,5,6,7,8];
+const TARGET_TOTAL = 4.60, TARGET_P1 = 4.00, TARGET_P2 = 0.60;
+const W_P1 = 0.80, W_P2 = 0.12; // 5 x 0.12 = 0.60 điểm mục tiêu phần II
+
+const DEPTS = [
+  {id:'smn', name:'Sale Miền Nam',        khoi:'Kinh doanh', ql1:'Huỳnh Thanh Sơn',   ql2:'Trần Đức Anh'},
+  {id:'smb', name:'Sale Miền Bắc',        khoi:'Kinh doanh', ql1:'Nguyễn Văn Hùng',   ql2:'Trần Đức Anh'},
+  {id:'smt', name:'Sale Miền Trung',      khoi:'Kinh doanh', ql1:'Phan Văn Tài',      ql2:'Trần Đức Anh'},
+  {id:'hr',  name:'Nhân sự',              khoi:'Văn phòng',  ql1:'Đỗ Hữu Minh Huy',   ql2:'Trần Đức Anh'},
+  {id:'acc', name:'Kế toán',              khoi:'Văn phòng',  ql1:'Nguyễn Thị Thanh Thảo', ql2:'Trần Đức Anh'},
+  {id:'pur', name:'Mua hàng',             khoi:'Văn phòng',  ql1:'Lê Thị Thu Vân',    ql2:'Trần Đức Anh'},
+  {id:'mkt', name:'Marketing',            khoi:'Văn phòng',  ql1:'Hoàng Anh Tú',      ql2:'Trần Đức Anh'},
+  {id:'adm', name:'Pháp chế & Hành chính',khoi:'Văn phòng',  ql1:'Đỗ Hữu Minh Huy',   ql2:'Trần Đức Anh'},
+  {id:'prd', name:'Sản xuất',             khoi:'Nhà máy',    ql1:'Nguyễn Văn Bình',   ql2:'Lê Trung Hiếu'},
+  {id:'qa',  name:'QA/QC',                khoi:'Nhà máy',    ql1:'Trần Thị Ngọc Diệp',ql2:'Lê Trung Hiếu'},
+  {id:'wh',  name:'Kho vận',              khoi:'Nhà máy',    ql1:'Đặng Văn Hoàng',    ql2:'Lê Trung Hiếu'},
+  {id:'mnt', name:'Bảo trì',              khoi:'Nhà máy',    ql1:'Trần Công Minh',    ql2:'Lê Trung Hiếu'}
+];
+const KHOIS = ['Kinh doanh','Văn phòng','Nhà máy'];
+const deptById = id => DEPTS.find(d=>d.id===id);
+
+const RAW_EMP = [
+  ['Trần Quốc Bảo','smn','Nhân viên kinh doanh',-1.1],
+  ['Nguyễn Thị Mai Hương','smn','Nhân viên kinh doanh',0.9],
+  ['Lê Hoàng Phúc','smn','Nhân viên kinh doanh',0.2],
+  ['Phạm Văn Đạt','smn','Nhân viên kinh doanh',-0.4],
+  ['Võ Thị Kim Chi','smn','Nhân viên kinh doanh',0.6],
+  ['Đặng Minh Trí','smn','Nhân viên kinh doanh',-0.8],
+  ['Huỳnh Thanh Sơn','smn','Trưởng nhóm kinh doanh',0.8],
+  ['Nguyễn Văn Hùng','smb','Trưởng nhóm kinh doanh',0.5],
+  ['Đỗ Thị Thu Hà','smb','Nhân viên kinh doanh',0.3],
+  ['Bùi Quang Vinh','smb','Nhân viên kinh doanh',-0.6],
+  ['Trịnh Văn Long','smb','Nhân viên kinh doanh',0.1],
+  ['Lý Thị Ngọc Ánh','smb','Nhân viên kinh doanh',0.7],
+  ['Ngô Đức Thắng','smb','Nhân viên kinh doanh',-0.2],
+  ['Phan Văn Tài','smt','Trưởng nhóm kinh doanh',0.4],
+  ['Hồ Thị Lệ Quyên','smt','Nhân viên kinh doanh',-0.5],
+  ['Trương Minh Nhật','smt','Nhân viên kinh doanh',0.2],
+  ['Lâm Quốc Duy','smt','Nhân viên kinh doanh',-0.9],
+  ['Nguyễn Thị Bích Trâm','smt','Sale Admin',0.6],
+  ['Đỗ Hữu Minh Huy','hr','Giám đốc Nhân sự',0.7],
+  ['Nguyễn Thị Hồng Nhung','hr','Chuyên viên Tuyển dụng',0.1],
+  ['Trần Thị Mỹ Linh','hr','Chuyên viên C&B',0.5],
+  ['Lê Văn Khoa','hr','Chuyên viên HCNS',-0.7],
+  ['Nguyễn Thị Thanh Thảo','acc','Kế toán trưởng',0.8],
+  ['Vũ Thị Hạnh','acc','Kế toán công nợ',0.3],
+  ['Đinh Văn Cường','acc','Kế toán kho',-0.3],
+  ['Mai Thị Phương','acc','Kế toán tổng hợp',0.4],
+  ['Trần Văn Nam','acc','Thủ quỹ',0.0],
+  ['Lê Thị Thu Vân','pur','Trưởng phòng Mua hàng',0.2],
+  ['Nguyễn Hữu Tuấn','pur','Chuyên viên Mua hàng',-0.8],
+  ['Phạm Thị Yến','pur','Chuyên viên Mua hàng',0.1],
+  ['Hoàng Anh Tú','mkt','Trưởng phòng Marketing',0.5],
+  ['Nguyễn Thị Diễm My','mkt','Chuyên viên Marketing',-0.4],
+  ['Trần Bảo Khánh','mkt','Chuyên viên Thiết kế',0.2],
+  ['Ngô Thị Hải Yến','adm','Chuyên viên Pháp chế',0.6],
+  ['Vương Đình Khôi','adm','Chuyên viên Hành chính',-0.6],
+  ['Tạ Thị Lan','adm','Nhân viên Hành chính',0.0],
+  ['Nguyễn Văn Bình','prd','Quản đốc phân xưởng',0.6],
+  ['Lê Thị Thu Hà','prd','Tổ trưởng pha chế',0.3],
+  ['Trần Văn Lợi','prd','Tổ trưởng đóng gói',-0.2],
+  ['Phạm Minh Quân','prd','Công nhân vận hành',-0.9],
+  ['Nguyễn Thị Hoa','prd','Công nhân pha chế',0.4],
+  ['Đoàn Văn Hải','prd','Công nhân vận hành',-0.5],
+  ['Bùi Thị Thắm','prd','Công nhân đóng gói',0.1],
+  ['Trần Thị Ngọc Diệp','qa','Trưởng phòng QA',0.7],
+  ['Nguyễn Văn Phát','qa','Chuyên viên QC',0.2],
+  ['Lê Thị Kim Oanh','qa','Chuyên viên QA',-0.3],
+  ['Hồ Văn Tiến','qa','Nhân viên lấy mẫu',-0.7],
+  ['Đặng Văn Hoàng','wh','Thủ kho',0.3],
+  ['Nguyễn Thị Tuyết','wh','Nhân viên kho',-0.4],
+  ['Phạm Văn Sáng','wh','Nhân viên giao nhận',0.0],
+  ['Trần Công Minh','mnt','Tổ trưởng Bảo trì',0.5],
+  ['Nguyễn Văn Thái','mnt','Kỹ thuật viên bảo trì',-0.6]
+];
+
+/* Bộ tiêu chí theo khối — khung chung 4 nhóm, trọng số và nội dung khác nhau */
+const SCALE_STD = [[110,5],[100,4],[90,3],[80,2],[70,1],[0,0]];
+const SCALE_ONTIME = [[100,5],[95,4],[85,3],[75,2],[60,1],[0,0]];
+const SCALE_BUDGET = [[100,5],[98,4],[95,3],[90,2],[85,1],[0,0]]; // tiết kiệm/đúng ngân sách
+const GROUPS = ['Tài chính','Khách hàng & dịch vụ','Quy trình & hệ thống','Đào tạo & phát triển'];
+const BGROUPS = ['Thái độ & kỷ luật','Chuyên môn & cải tiến'];
+const ALLG = [...GROUPS,...BGROUPS];
+const PART_NAME = {1:'Công việc',2:'Năng lực'};
+const groupName = c => c.part===1?GROUPS[c.g]:BGROUPS[c.g-4];
+
+const KPISET = {
+  'Kinh doanh':{
+    code:'KPI-SALE-01', name:'Bộ KPI Kinh doanh thị trường',
+    perf:[
+      {g:0,w:.50,name:'Doanh số cá nhân',unit:'tr đồng',scale:SCALE_STD,
+       desc:'Tỷ lệ doanh số thực đạt / chỉ tiêu được giao trong tháng. Chỉ tiêu phân bổ Công ty → team → cá nhân theo địa bàn, không chia đều.',
+       src:'SAP — báo cáo doanh thu theo nhân viên'},
+      {g:1,w:.30,name:'Thu hồi công nợ đến hạn',unit:'%',scale:SCALE_STD,
+       desc:'Giá trị công nợ thu hồi / giá trị công nợ đến hạn trong kỳ. Cách tính (theo tiền, theo số khách hay theo khoản đến hạn) cần khách chốt.',
+       src:'SAP — công nợ phải thu'},
+      {g:2,w:.10,name:'Sale forecast & hồ sơ chứng từ',unit:'%',scale:SCALE_ONTIME,
+       desc:'Gộp 2 việc: gửi sale forecast đúng hạn cho nhà máy và hoàn tất hồ sơ chứng từ khách hàng. Độ chính xác forecast tính riêng theo khoảng chuẩn 95–105%.',
+       src:'Base Quy trình (đề xuất bổ sung) — hiện chưa gửi trên Base'},
+      {g:3,w:.10,name:'Phát triển khách hàng mới',unit:'khách',scale:SCALE_STD,
+       desc:'Số khách hàng mới phát sinh doanh thu lần đầu trong tháng / chỉ tiêu giao. Định nghĩa "khách hàng mới" cần khách chốt.',
+       src:'SAP — doanh thu theo khách hàng'}
+    ]},
+  'Văn phòng':{
+    code:'KPI-VP-01', name:'Bộ KPI khối Văn phòng',
+    perf:[
+      {g:0,w:.40,name:'Doanh số công ty & ngân sách phòng',unit:'%',scale:SCALE_BUDGET,
+       desc:'Đạt khi công ty đạt doanh số VÀ phòng ban không vượt ngân sách tháng được phân bổ. Chi vượt ngân sách bị trừ điểm dù doanh số công ty đạt.',
+       src:'SAP — doanh thu công ty; ngân sách năm phân bổ 12 tháng'},
+      {g:1,w:.20,name:'Chất lượng phục vụ nội bộ',unit:'sao',scale:SCALE_STD,
+       desc:'Điểm sao trung bình các phòng ban chấm sau khi nhiệm vụ liên phòng ban hoàn tất. Số lượt đánh giá tối thiểu và cách tổng hợp cần chốt.',
+       src:'Base Quy trình — bước đánh giá cuối (đề xuất bổ sung)'},
+      {g:2,w:.30,name:'Mục tiêu tháng & xử lý quy trình',unit:'%',scale:SCALE_ONTIME,
+       desc:'Mức hoàn thành các mục tiêu quản lý giao đầu tháng, kết hợp tỷ lệ bước xử lý quy trình đúng hạn trên Base.',
+       src:'Base Wework (mục tiêu tháng) + Base Quy trình (trễ hạn)'},
+      {g:3,w:.10,name:'Đào tạo & phát triển',unit:'%',scale:SCALE_STD,
+       desc:'Mục tiêu đào tạo/phát triển do quản lý giao theo vị trí trong kỳ.',
+       src:'Base Wework — nhập tay khi giao mục tiêu'}
+    ]},
+  'Nhà máy':{
+    code:'KPI-NM-01', name:'Bộ KPI khối Nhà máy',
+    perf:[
+      {g:0,w:.30,name:'Doanh số công ty & ngân sách bộ phận',unit:'%',scale:SCALE_BUDGET,
+       desc:'Đạt khi công ty đạt doanh số và bộ phận không vượt ngân sách tháng.',
+       src:'SAP — doanh thu công ty; ngân sách bộ phận'},
+      {g:1,w:.20,name:'Chất lượng lô & phản hồi nội bộ',unit:'%',scale:SCALE_STD,
+       desc:'Tỷ lệ lô đạt kiểm tra chất lượng lần đầu, kết hợp điểm phản hồi của bộ phận liên quan.',
+       src:'QA/QC — hiện ghi nhận ngoài hệ thống, cần đưa lên Base'},
+      {g:2,w:.40,name:'Tuân thủ GMP, sự cố máy & lỗi sản xuất',unit:'%',scale:SCALE_ONTIME,
+       desc:'Tiêu chí chuyên môn do quản lý điền theo vị trí: số lỗi sản xuất, sự cố máy móc, điểm kiểm tra GMP.',
+       src:'Quản lý nhập tay / Base Quy trình bảo trì'},
+      {g:3,w:.10,name:'Đào tạo & cải tiến sản xuất',unit:'%',scale:SCALE_STD,
+       desc:'Hoàn thành đào tạo bắt buộc và đề xuất cải tiến được ghi nhận.',
+       src:'Base Wework — nhập tay'}
+    ]}
+};
+const BEHAV = [
+  {bg:4,w:.40,name:'Kỷ luật, chuyên cần',scale:SCALE_ONTIME,
+   desc:'Trừ điểm theo số lần đi muộn/về sớm, quên chấm công, nghỉ không lương trong tháng.',
+   src:'Base HRM — chấm công (đã số hóa)'},
+  {bg:4,w:.20,name:'Trung thực, minh bạch',scale:SCALE_ONTIME,
+   desc:'Không có vi phạm về báo cáo, chứng từ trong kỳ; quản lý xác nhận.',src:'Quản lý đánh giá'},
+  {bg:4,w:.20,name:'Tuân thủ quy trình, nội quy',scale:SCALE_ONTIME,
+   desc:'Số bước quy trình để báo đỏ/trễ hạn trên Base và vi phạm nội quy ghi nhận trong kỳ.',
+   src:'Base Quy trình — trạng thái trễ hạn'},
+  {bg:5,w:.20,name:'Đóng góp, cải tiến',scale:SCALE_STD,
+   desc:'Ý kiến/hoạt động cải tiến được ghi nhận và áp dụng trong kỳ.',src:'Quản lý đánh giá'}
+];
+
+/* ------- tiện ích ------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const fmt=(n,d=1)=>Number(n).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmt0=n=>Math.round(n).toLocaleString('vi-VN');
+function scoreOf(scale,pct){for(const [min,s] of scale){if(pct>=min) return s;}return 0;}
+function rankOf(ratio){return ratio>=90?'A':ratio>=80?'B':ratio>=70?'C':'D';}
+const RANK_COLOR={A:'var(--a)',B:'var(--b)',C:'var(--c)',D:'var(--d)'};
+
+/* ------- sinh dữ liệu ------- */
+const EMPLOYEES = RAW_EMP.map((e,i)=>{
+  const d=deptById(e[1]);
+  return {id:i+1, code:'NV'+String(1042+i*3), name:e[0], deptId:e[1], dept:d.name, khoi:d.khoi,
+          pos:e[2], bias:e[3], ql1:d.ql1===e[0]?d.ql2:d.ql1, ql2:d.ql2,
+          target: 150+((i*17)%8)*10, quota: 2+((i*5)%2)};
+});
+
+function buildRecord(emp,month){
+  const rnd=mulberry32(emp.id*977+month*131);
+  const set=KPISET[emp.khoi];
+  const seasonal=[0,-1,0.5,1.5,-0.5,1,2,1,1.5][month]||0;
+  const crit=[];
+  set.perf.forEach((c,k)=>{
+    let pct=104+emp.bias*6+seasonal*0.7+(rnd()-0.5)*19+(k===0?(rnd()-0.5)*9:0);
+    if(c.scale===SCALE_BUDGET) pct=Math.min(pct,104);
+    pct=Math.max(42,Math.min(148,pct));
+    const rule=scoreOf(c.scale,pct);
+    let appr=rule;
+    const r=rnd();
+    if(r>0.90 && rule<5) appr=Math.min(5,rule+1);
+    if(r>0.975 && rule<4) appr=Math.min(5,rule+2);
+    crit.push({...c,part:1,pct,rule,appr,self:Math.min(5,appr+(rnd()>0.7?1:0)),ql1:appr,ql2:appr});
+  });
+  BEHAV.forEach((c,k)=>{
+    let pct=103+emp.bias*3+(rnd()-0.5)*17; pct=Math.max(58,Math.min(120,pct));
+    const rule=scoreOf(c.scale,pct); let appr=rule;
+    if(rnd()>0.93 && rule<5) appr=rule+1;
+    crit.push({...c,g:c.bg,part:2,pct,rule,appr,self:Math.min(5,appr+(rnd()>0.6?1:0)),ql1:appr,ql2:appr});
+  });
+
+  // dữ liệu căn cứ
+  const f=crit[0], compliance={
+    late: Math.round(rnd()*4), forget: Math.round(rnd()*3), unpaid: Math.round(rnd()*2),
+    overdue: Math.round(rnd()*6), stars: 3.2+rnd()*1.8, starCount: 2+Math.round(rnd()*10),
+    leaveTotal: 12, leaveUsed: Math.min(12, Math.round(rnd()*7))
+  };
+  compliance.lateMin = compliance.late? compliance.late*(8+Math.round(rnd()*22)) : 0;
+  compliance.overdueHours = compliance.overdue? compliance.overdue*(2+Math.round(rnd()*12)) : 0;
+  const sales={target:emp.target, actual: emp.target*f.pct/100, newCus:Math.round(emp.quota*crit[3].pct/100), quota:emp.quota,
+               debtPct:crit[1].pct, budgetPct:crit[0].pct};
+
+  const rec={emp,month,crit,compliance,sales,status:'Đã chốt'};
+  if(month===CUR_MONTH){
+    const m=emp.id%13;
+    rec.status = m===3?'Chờ QL cấp 2' : m===7?'Chờ QL cấp 1' : m===11?'Chưa tự chấm' : 'Đã chốt';
+  }
+  finalize(rec);
+  return rec;
+}
+
+function finalize(rec){
+  let p1=0,p2=0,p1r=0,p2r=0;
+  rec.crit.forEach(c=>{
+    const wt = c.part===1?W_P1:W_P2;
+    c.pts = c.appr*c.w*wt; c.ptsRule = c.rule*c.w*wt; c.ptsTarget = 5*c.w*wt;
+    if(c.part===1){p1+=c.pts;p1r+=c.ptsRule;} else {p2+=c.pts;p2r+=c.ptsRule;}
+  });
+  rec.p1=p1; rec.p2=p2; rec.total=p1+p2;
+  rec.ratio=rec.total/TARGET_TOTAL*100; rec.rank=rankOf(rec.ratio);
+  rec.totalRule=p1r+p2r; rec.ratioRule=rec.totalRule/TARGET_TOTAL*100; rec.rankRule=rankOf(rec.ratioRule);
+  rec.gap=rec.total-rec.totalRule;
+  rec.groupPct=[0,1,2,3,4,5].map(g=>{
+    const cs=rec.crit.filter(c=>c.g===g);
+    const t=cs.reduce((s,c)=>s+c.ptsTarget,0), a=cs.reduce((s,c)=>s+c.pts,0);
+    return t?a/t*100:0;
+  });
+}
+
+const DATA={};
+EMPLOYEES.forEach(e=>{ DATA[e.id]={}; MONTHS.forEach(m=>{ DATA[e.id][m]=buildRecord(e,m); }); });
+
+/* --- Ca minh họa theo đúng mẫu KPI sales khách gửi: 4,20 / 4,60 = 91,3% loại A,
+       trong khi doanh thu chỉ đạt 71% (thang điểm ra 1 điểm, đang chấm 4 điểm) --- */
+(function seedShowcase(){
+  const rec=DATA[1][CUR_MONTH];
+  rec.status='Đã chốt';
+  const c=rec.crit;
+  c[0].pct=71.1; c[0].rule=1; c[0].appr=4; c[0].self=4; c[0].ql1=4; c[0].ql2=4;
+  c[1].pct=112;  c[1].rule=5; c[1].appr=5; c[1].self=5; c[1].ql1=5; c[1].ql2=5;
+  c[2].pct=100;  c[2].rule=5; c[2].appr=5; c[2].self=5; c[2].ql1=5; c[2].ql2=5;
+  c[3].pct=150;  c[3].rule=5; c[3].appr=5; c[3].self=5; c[3].ql1=5; c[3].ql2=5;
+  for(let i=4;i<8;i++){c[i].pct=100;c[i].rule=5;c[i].appr=5;c[i].self=5;c[i].ql1=5;c[i].ql2=5;}
+  rec.sales={target:190, actual:135, newCus:3, quota:2, debtPct:112, budgetPct:100};
+  rec.compliance={late:0,lateMin:0,forget:0,unpaid:0,overdue:1,overdueHours:5,stars:4.6,starCount:7,leaveTotal:12,leaveUsed:3};
+  rec.note='Điểm doanh số được chấm 4 trong khi kết quả 71% chỉ tương ứng 1 điểm theo thang đánh giá của chính bộ KPI.';
+  finalize(rec);
+})();
+
+/* công việc / mục tiêu tháng */
+const TASK_POOL={
+  hr:['Cải tạo hệ thống nhà vệ sinh nhà máy (4 khu)','Tổ chức chương trình Trung thu cho CBNV','Tuyển vị trí Senior QA','Hệ thống hóa lại cơ cấu tổ chức các bộ phận','Làm việc với cơ quan nhà nước về hồ sơ an toàn lao động','Hoàn tất hồ sơ BHXH tháng'],
+  acc:['Chốt sổ và báo cáo thuế tháng','Đối chiếu công nợ phải thu với sale admin','Kiểm kê kho định kỳ cùng thủ kho','Hoàn thiện hồ sơ thanh toán nhà cung cấp'],
+  pur:['Đàm phán lại giá bao bì với 3 nhà cung cấp','Hoàn tất mua sắm vật tư sản xuất quý IV','Cập nhật danh mục nhà cung cấp đạt chuẩn'],
+  mkt:['Hoàn thiện bộ catalogue dòng sản phẩm mới','Tổ chức hội thảo khách hàng khu vực Miền Tây','Chuẩn hóa hình ảnh nhãn sản phẩm theo quy định'],
+  adm:['Rà soát mẫu hợp đồng đại lý','Chuẩn bị hồ sơ chuyển sang hợp đồng điện tử','Cập nhật nội quy lao động theo quy định mới'],
+  prd:['Giảm tỷ lệ lỗi đóng gói lô sản xuất','Hoàn thành kế hoạch sản xuất tháng','Bảo trì dây chuyền pha chế theo lịch','Đào tạo GMP cho công nhân mới'],
+  qa:['Hoàn tất hồ sơ lô kiểm nghiệm','Rà soát SOP lấy mẫu','Xử lý khiếu nại chất lượng từ khách hàng'],
+  wh:['Sắp xếp lại khu vực hàng thành phẩm','Kiểm kê tồn kho cuối tháng','Giảm thời gian giao nhận cho đơn gấp'],
+  mnt:['Bảo trì định kỳ máy đóng nang','Xử lý sự cố hệ thống khí nén','Lập kế hoạch vật tư thay thế'],
+  smn:['Triển khai chương trình khuyến mãi quý cho đại lý','Mở rộng địa bàn 2 tỉnh mới','Thu hồi công nợ nhóm khách quá hạn'],
+  smb:['Triển khai chương trình khuyến mãi quý cho đại lý','Khảo sát thị trường trại chăn nuôi phía Bắc','Thu hồi công nợ nhóm khách quá hạn'],
+  smt:['Mở rộng đại lý khu vực Tây Nguyên','Gửi báo cáo thị trường hàng tháng','Thu hồi công nợ nhóm khách quá hạn']
+};
+const TASK_STATUS=['Hoàn thành','Hoàn thành trễ','Đang thực hiện','Quá hạn','Chuyển tiếp tháng sau'];
+function tasksOf(emp,month){
+  const rnd=mulberry32(emp.id*331+month*17);
+  const pool=TASK_POOL[emp.deptId]||TASK_POOL.adm;
+  const n=3+Math.round(rnd());
+  const out=[];
+  for(let i=0;i<n;i++){
+    const r=rnd();
+    const st = r>0.82?'Quá hạn' : r>0.70?'Chuyển tiếp tháng sau' : r>0.56?'Hoàn thành trễ' : r>0.22?'Hoàn thành':'Đang thực hiện';
+    out.push({name:pool[(i+emp.id)%pool.length], due:`${String(5+Math.round(rnd()*22)).padStart(2,'0')}/${String(month).padStart(2,'0')}`,
+      done: st==='Hoàn thành'?100: st==='Hoàn thành trễ'?100: Math.round(40+rnd()*50),
+      status:st, group:GROUPS[(i+emp.id)%4], star:(3+rnd()*2)});
+  }
+  if(emp.deptId==='hr'&&month===CUR_MONTH){
+    out[0]={name:'Cải tạo hệ thống nhà vệ sinh nhà máy (4 khu)',due:'30/08',done:75,status:'Chuyển tiếp tháng sau',group:'Quy trình & hệ thống',star:4.0};
+  }
+  return out;
+}
+
+/* ===================== TRẠNG THÁI & TRUY VẤN ===================== */
+const state={page:1, month:CUR_MONTH, khoi:'Tất cả', deptId:'smn', empId:1, tab:'work', ptab:'kpi', qtab:'comp', crit:0, search:'', user:null};
+const recOf=(id,m)=>DATA[id][m];
+function pool(month,{khoi,deptId}={}){
+  return EMPLOYEES.filter(e=> (!khoi||khoi==='Tất cả'||e.khoi===khoi) && (!deptId||e.deptId===deptId))
+                  .map(e=>recOf(e.id,month));
+}
+function agg(recs){
+  const closed=recs.filter(r=>r.status==='Đã chốt');
+  const pass=closed.filter(r=>r.ratio>=80);
+  return {n:recs.length, closed:closed.length, pass:pass.length, fail:closed.length-pass.length,
+    passRate: closed.length? pass.length/closed.length*100 : 0,
+    avg: closed.length? closed.reduce((s,r)=>s+r.ratio,0)/closed.length : 0,
+    dist:['A','B','C','D'].map(k=>closed.filter(r=>r.rank===k).length),
+    gaps: closed.filter(r=>r.gap>=0.4).length};
+}
+
+/* ===================== VẼ BIỂU ĐỒ (SVG thuần) ===================== */
+function lineChart(series,{w=640,h=180,min=40,max=120,labels=[],ref=null,unit='%'}={}){
+  const pl=34,pr=10,pt=12,pb=22, iw=w-pl-pr, ih=h-pt-pb;
+  const x=i=>pl+(series[0].pts.length>1? i*iw/(series[0].pts.length-1):iw/2);
+  const y=v=>pt+ih-(Math.max(min,Math.min(max,v))-min)/(max-min)*ih;
+  let g='';
+  for(let i=0;i<=4;i++){const v=min+(max-min)*i/4; const yy=y(v);
+    g+=`<line class="gl" x1="${pl}" y1="${yy}" x2="${w-pr}" y2="${yy}"/><text x="4" y="${yy+3.5}">${Math.round(v)}${unit}</text>`;}
+  labels.forEach((l,i)=>{ g+=`<text x="${x(i)}" y="${h-6}" text-anchor="middle">${l}</text>`; });
+  if(ref!==null){ const yy=y(ref);
+    g+=`<line x1="${pl}" y1="${yy}" x2="${w-pr}" y2="${yy}" stroke="var(--amber)" stroke-width="1" stroke-dasharray="4 3"/>`+
+       `<text x="${pl+4}" y="${yy-5}" style="fill:var(--amber)">ngưỡng đạt ${ref}%</text>`; }
+  series.forEach(s=>{
+    const d=s.pts.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    if(s.area){
+      g+=`<path d="${d} L${x(s.pts.length-1)},${pt+ih} L${x(0)},${pt+ih} Z" fill="${s.color}" opacity=".10"/>`;
+    }
+    g+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>`;
+    s.pts.forEach((v,i)=>{ g+=`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="var(--surface)" stroke="${s.color}" stroke-width="2"/>`; });
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" role="img">${g}</svg>`;
+}
+function heat(pct){
+  if(pct>=95) return 'color-mix(in srgb, var(--brand) 12%, var(--surface))';
+  if(pct>=85) return 'color-mix(in srgb, var(--amber) 22%, var(--surface))';
+  if(pct>=75) return 'color-mix(in srgb, var(--amber) 42%, var(--surface))';
+  return 'color-mix(in srgb, var(--red) 40%, var(--surface))';
+}
+
+/* ===================== KHUNG ĐIỀU HƯỚNG ===================== */
+const $=s=>document.querySelector(s);
+/* ===================== PHÂN QUYỀN THEO MÃ NHÂN SỰ ===================== */
+const ROLE_LABEL={all:'Toàn công ty',dept:'Bộ phận',self:'Cá nhân'};
+const EXTRA_ACCOUNTS={
+  'BOD':{name:'Trần Đức Anh',pos:'Tổng giám đốc',role:'all',deptId:null,empId:null,code:'BOD'}
+};
+function roleOf(e){
+  if(e.pos.includes('Giám đốc Nhân sự')) return 'all';
+  return deptById(e.deptId).ql1===e.name ? 'dept' : 'self';
+}
+function login(code){
+  const c=(code||'').trim().toUpperCase();
+  if(!c) return null;
+  if(EXTRA_ACCOUNTS[c]) return {...EXTRA_ACCOUNTS[c]};
+  const e=EMPLOYEES.find(x=>x.code.toUpperCase()===c);
+  if(!e) return null;
+  return {name:e.name,pos:e.pos,role:roleOf(e),code:e.code,deptId:e.deptId,empId:e.id};
+}
+function allowedPages(){
+  const r=state.user.role;
+  return r==='all'?[1,2,3,4]:r==='dept'?[2,3,4]:[3];
+}
+function scopeEmployees(){
+  const u=state.user;
+  if(u.role==='all') return EMPLOYEES;
+  if(u.role==='dept') return EMPLOYEES.filter(e=>e.deptId===u.deptId);
+  return EMPLOYEES.filter(e=>e.id===u.empId);
+}
+function applyScope(){
+  const u=state.user, allow=allowedPages();
+  if(!allow.includes(state.page)) state.page=allow[0];
+  if(u.role==='dept'){ state.deptId=u.deptId;
+    if(!scopeEmployees().some(e=>e.id===state.empId)) state.empId=scopeEmployees()[0].id; }
+  if(u.role==='self'){ state.empId=u.empId; state.deptId=EMPLOYEES.find(e=>e.id===u.empId).deptId; }
+}
+
+/* ===================== PHIẾU ĐÁNH GIÁ TRÊN BASE SERVICE ===================== */
+const TICKET_STEPS=['CBNV đánh giá','Trưởng bộ phận đánh giá','BP Nhân sự đánh giá','Hoàn thành'];
+function ticket(r){
+  const i = r.status==='Chưa tự chấm'?0 : r.status==='Chờ QL cấp 1'?1 : r.status==='Chờ QL cấp 2'?2 : 3;
+  const handler = i===0?r.emp.name : i===1?r.emp.ql1 : i===2?`BP Nhân sự (${r.emp.ql2})` : '—';
+  return {code:`KPI-${YEAR}${String(r.month).padStart(2,'0')}-${r.emp.code}`, step:i, handler};
+}
+function isMyTurn(r){
+  const t=ticket(r), u=state.user;
+  if(t.step===3) return false;
+  if(u.role==='self') return t.step===0 && u.empId===r.emp.id;
+  if(u.role==='dept') return t.step===1 && r.emp.ql1===u.name;
+  return t.step===2;
+}
+function openTicket(code){
+  const el=document.getElementById('tflash');
+  if(el) el.innerHTML=`Bản mô phỏng — nút này mở phiếu <b>${code}</b> trên Base Service, quy trình “APA | Quy trình đánh giá nhân sự hàng tháng”, đúng bước đang chờ người đăng nhập xử lý.`;
+}
+function ticketCard(r){
+  const t=ticket(r), mine=isMyTurn(r);
+  const done=i=> t.step===3 || i<t.step;
+  const steps=TICKET_STEPS.map((s,i)=>`<div class="tk-step ${done(i)?'done':''} ${(i===t.step&&t.step<3)?'now':''}"><i></i><span>${s}</span></div>`).join('');
+  return `<div class="card ticket">
+    <div class="tk-l">
+      <div class="tk-code">${t.code}</div>
+      <div class="mini">Quy trình “APA | Quy trình đánh giá nhân sự hàng tháng” · mỗi nhân sự một phiếu mỗi kỳ</div>
+    </div>
+    <div class="tk-steps">${steps}</div>
+    <div class="tk-a">
+      <div class="mini" style="margin-bottom:6px">${t.step===3?'Phiếu đã hoàn thành':'Đang chờ: '+t.handler}</div>
+      <button class="btn ${mine?'primary':''}" onclick="openTicket('${t.code}')">${mine?'Đánh giá phiếu này':'Mở phiếu'}</button>
+    </div>
+    <div id="tflash" class="mini tk-flash"></div>
+  </div>`;
+}
+
+/* ===================== THANH TRÊN ===================== */
+function monthOpts(sel){return MONTHS.map(m=>`<option value="${m}" ${m===sel?'selected':''}>Tháng ${m}/${YEAR}</option>`).join('');}
+function go(page,opts={}){ Object.assign(state,opts,{page}); applyScope(); render(); window.scrollTo({top:0,behavior:'instant'}); }
+
+function renderTop(){
+  applyScope();
+  const u=state.user, allow=allowedPages();
+  const d=deptById(state.deptId), e=EMPLOYEES.find(x=>x.id===state.empId);
+  const titles={1:'Tổng quan KPI toàn công ty',2:`KPI bộ phận — ${d.name}`,3:`KPI cá nhân — ${e.name}`,4:'Hồ sơ chờ đánh giá'};
+  $('#ptitle').textContent=titles[state.page];
+
+  const c1=allow.includes(1)?`<button onclick="go(1)">Tổng quan KPI</button> › `:'';
+  const c2=allow.includes(2)?`<button onclick="go(2,{deptId:'${e.deptId}'})">${e.dept}</button> › `:`${e.dept} › `;
+  const crumbs={1:`Kỳ đánh giá tháng ${state.month}/${YEAR} · chốt vào ngày 05 tháng sau`,
+    2:`${c1}${d.khoi} › ${d.name}`, 3:`${c1}${c2}${e.name}`,
+    4:`Kỳ đánh giá tháng ${state.month}/${YEAR} · ${u.role==='dept'?deptById(u.deptId).name:'toàn công ty'}`};
+  $('#crumb').innerHTML=crumbs[state.page];
+
+  let f=`<div class="f"><label for="fm">Kỳ đánh giá</label><select id="fm">${monthOpts(state.month)}</select></div>`;
+  if(state.page===1||(state.page===4&&u.role==='all'))
+    f+=`<div class="f"><label for="fk">Khối</label><select id="fk">${['Tất cả',...KHOIS].map(k=>`<option ${k===state.khoi?'selected':''}>${k}</option>`).join('')}</select></div>`;
+  if(state.page===2){
+    const opts=(u.role==='all'?DEPTS:DEPTS.filter(x=>x.id===u.deptId));
+    f+=`<div class="f"><label for="fd">Bộ phận</label><select id="fd" ${opts.length<2?'disabled':''}>${opts.map(d2=>`<option value="${d2.id}" ${d2.id===state.deptId?'selected':''}>${d2.name}</option>`).join('')}</select></div>
+        <div class="f"><label for="fs">Tìm nhân viên</label><input id="fs" value="${state.search}" placeholder="Nhập tên"></div>`;
+  }
+  if(state.page===3){
+    const list=scopeEmployees();
+    f+=`<div class="f"><label for="fe">Nhân viên</label><select id="fe" ${list.length<2?'disabled':''}>${list.map(x=>`<option value="${x.id}" ${x.id===state.empId?'selected':''}>${x.name}${u.role==='all'?' — '+x.dept:''}</option>`).join('')}</select></div>`;
+  }
+  f+=`<div class="userchip"><div><b>${u.name}</b><div class="mini">${u.pos} · quyền xem: ${ROLE_LABEL[u.role]}</div></div>
+      <button type="button" onclick="logout()">Đổi mã</button></div>`;
+  $('#filters').innerHTML=f;
+
+  $('#fm').onchange=ev=>go(state.page,{month:+ev.target.value});
+  if($('#fk')) $('#fk').onchange=ev=>go(state.page,{khoi:ev.target.value});
+  if($('#fd')) $('#fd').onchange=ev=>go(2,{deptId:ev.target.value,tab:state.tab});
+  if($('#fe')) $('#fe').onchange=ev=>go(3,{empId:+ev.target.value,crit:0});
+  if($('#fs')) $('#fs').oninput=ev=>{state.search=ev.target.value; renderP2(); $('#fs').focus();};
+  document.querySelectorAll('#nav button').forEach(b=>{
+    const p=+b.dataset.page;
+    b.classList.toggle('hidden', !allow.includes(p));
+    b.setAttribute('aria-current', String(p===state.page));
+    b.onclick=()=>go(p);
+  });
+  $('#whoami').innerHTML=`<b>${u.name}</b><br>${u.pos}<br>Quyền xem: ${ROLE_LABEL[u.role]}${u.role==='dept'?' — '+deptById(u.deptId).name:''}`;
+}
+
+/* ===================== THÀNH PHẦN DÙNG CHUNG ===================== */
+function miniStack(dist){
+  const t=dist.reduce((s,x)=>s+x,0)||1;
+  return `<span class="mstack">`+['A','B','C','D'].map((k,i)=>dist[i]?`<i style="width:${dist[i]/t*100}%;background:${RANK_COLOR[k]}" title="Loại ${k}: ${dist[i]} người"></i>`:'').join('')+`</span>`;
+}
+function ibar(pct,color){
+  return `<span class="ibar"><i style="width:${Math.max(0,Math.min(100,pct))}%;background:${color||'var(--ink-3)'}"></i></span>`;
+}
+const rk = k => `<span class="rk"><i style="background:${RANK_COLOR[k]}"></i>${k}</span>`;
+const attn = p => p>=80?'var(--ink-3)': p>=60?'var(--amber)':'var(--red)';
+function statusCell(r){
+  if(r.status==='Đã chốt') return '<span class="mini">Đã chốt</span>';
+  const who = r.status==='Chưa tự chấm'?r.emp.name:(r.status==='Chờ QL cấp 1'?r.emp.ql1:r.emp.ql2);
+  return `<span class="pill C">${r.status}</span><div class="mini">${who}</div>`;
+}
+function focal({title,sub='',chart='',chips=[],stats}){
+  return `<div class="focal">
+    <div class="fl">
+      <div class="ft">${title}</div>
+      ${sub?`<div class="fs">${sub}</div>`:''}
+      ${chart}
+      ${chips.length?`<div class="fchips">${chips.map(c=>`<span class="fchip ${c.tone||''}">${c.k}<b>${c.v}</b></span>`).join('')}</div>`:''}
+    </div>`+
+    stats.map(x=>`<div class="st ${x.tone||''}"><div class="v">${x.v}</div><div class="l">${x.l}</div></div>`).join('')+`</div>`;
+}
+function focalSplit(parts){
+  const t=parts.reduce((s,p)=>s+p.n,0)||1;
+  return `<div class="fsplit">${parts.filter(p=>p.n).map(p=>`<div style="width:${p.n/t*100}%;background:${p.c}" title="${p.l}: ${p.n}"><b>${p.n}</b><span>${p.l}</span></div>`).join('')}</div>`;
+}
+function focalGauge(ratio,rank){
+  const pos=v=>Math.max(0,Math.min(100,v/120*100));
+  return `<div class="fgauge">
+    <div class="tr"><i style="width:${pos(ratio)}%;background:${RANK_COLOR[rank]}"></i>
+      <span class="mk" style="left:${pos(80)}%"></span><span class="mk" style="left:${pos(90)}%"></span>
+      <span class="mkv" style="left:${pos(ratio)}%">${fmt(ratio,1)}%</span></div>
+    <div class="lbl"><span style="left:0">0%</span><span style="left:${pos(80)}%;transform:translateX(-50%)">ngưỡng đạt 80%</span><span style="right:0">120%</span></div>
+  </div>`;
+}
+function notes(title,items){
+  return `<details class="notes"><summary>${title}</summary><ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul></details>`;
+}
+
+/* ===================== TRANG 1 ===================== */
+function renderP1(){
+  const recs=pool(state.month,{khoi:state.khoi});
+  const a=agg(recs);
+  const deptsShown=DEPTS.filter(d=>state.khoi==='Tất cả'||d.khoi===state.khoi);
+  const deptAgg=deptsShown.map(d=>({d,a:agg(pool(state.month,{deptId:d.id}))})).sort((x,y)=>x.a.passRate-y.a.passRate);
+  const worst=deptAgg[0];
+  const gapCount=recs.filter(r=>r.status==='Đã chốt'&&r.gap>=0.4).length;
+
+  const head=focal({
+    title:`Kỳ đánh giá tháng ${state.month}/${YEAR}${state.khoi!=='Tất cả'?' · khối '+state.khoi:''}`,
+    sub:`${a.n} nhân sự · ${deptsShown.length} bộ phận`,
+    chart:focalSplit([{n:a.pass,l:'Đạt KPI',c:'#2E9E62'},{n:a.fail,l:'Chưa đạt',c:'#D9843A'},{n:a.n-a.closed,l:'Chưa chốt',c:'rgba(255,255,255,.16)'}]),
+    chips:[{k:'Thấp nhất',v:`${worst.d.name} · ${fmt(worst.a.passRate,0)}%`,tone:'warn'}]
+      .concat(gapCount?[{k:'Lệch thang điểm',v:`${gapCount} hồ sơ`,tone:'bad'}]:[]),
+    stats:[{v:fmt(a.passRate,1)+'%',l:'Nhân sự đạt KPI'},
+     {v:`${a.n-a.closed}`,l:'Hồ sơ chưa chốt',tone:'warn'},
+     {v:`${gapCount}`,l:'Hồ sơ lệch điểm',tone:'bad'}]});
+
+  const dt=a.dist.reduce((s,x)=>s+x,0)||1;
+  const GN=ALLG;
+  const hmRows=deptAgg.map(({d})=>{
+    const closed=pool(state.month,{deptId:d.id}).filter(r=>r.status==='Đã chốt');
+    const g=[0,1,2,3,4,5].map(i=> closed.length? closed.reduce((s,r)=>s+r.groupPct[i],0)/closed.length : null);
+    return {d,g,n:closed.length};
+  });
+  const hmCols=[0,1,2,3,4,5].map(i=>{
+    const v=hmRows.filter(x=>x.g[i]!==null);
+    return v.length? v.reduce((s,x)=>s+x.g[i],0)/v.length : null;
+  });
+  const hotIdx=hmCols.reduce((best,v,i)=>(v!==null&&(best<0||v<hmCols[best]))?i:best,-1);
+  const heatmap=`<div class="matrix" style="grid-template-columns:168px repeat(6,1fr)">
+      <div></div><div class="ph" style="grid-column:span 4">Phần I — Công việc · 80%</div><div class="ph" style="grid-column:span 2">Phần II — Năng lực · 20%</div>
+      <div></div>${GN.map((g,i)=>`<div class="h ${i===hotIdx?'hot':''}">${g}</div>`).join('')}
+      ${hmRows.map(x=>`<div class="rowname clickable" onclick="go(2,{deptId:'${x.d.id}'})" title="${x.d.name}">${x.d.name}</div>`+
+        x.g.map((v,i)=>v===null?`<div class="cell empty">—</div>`
+          :`<div class="cell" style="background:${heat(v)}" title="${x.d.name} — ${GN[i]}: ${fmt(v,0)}% điểm mục tiêu nhóm (${x.n} hồ sơ)">${fmt(v,0)}</div>`).join('')).join('')}
+      <div class="rowname avg">Trung bình toàn công ty</div>
+      ${hmCols.map(v=>v===null?`<div class="cell empty">—</div>`:`<div class="cell avg" style="background:${heat(v)}">${fmt(v,0)}</div>`).join('')}
+    </div>`;
+  const stack=['A','B','C','D'].map((k,i)=>{ if(!a.dist[i]) return '';
+    const sh=a.dist[i]/dt*100;
+    return `<div title="Loại ${k}: ${a.dist[i]} người" style="width:${sh}%;background:${RANK_COLOR[k]}">${sh>=9?`${k} · ${a.dist[i]}`:''}</div>`;}).join('');
+
+  const focusList=deptAgg.filter(x=>x.a.passRate<100);
+  const fullList=deptAgg.length-focusList.length;
+  const bars=(focusList.length?focusList:deptAgg).map(({d,a:x})=>{
+    const hot=x.passRate<80;
+    return `<div class="rank-row" onclick="go(2,{deptId:'${d.id}'})" tabindex="0" onkeydown="if(event.key==='Enter')go(2,{deptId:'${d.id}'})">
+      <div><div class="name">${d.name}</div><div class="sub">${d.khoi} · ${x.closed}/${x.n} đã chốt</div></div>
+      <div class="track"><div class="fill" style="width:${x.passRate}%;background:${hot?attn(x.passRate):'var(--line-2)'}"></div></div>
+      <div class="val" style="${hot?`color:${attn(x.passRate)};font-weight:600`:'color:var(--ink-3)'}">${fmt(x.passRate,0)}%</div>
+    </div>`;}).join('');
+
+  const trend=MONTHS.map(m=>agg(pool(m,{khoi:state.khoi})).passRate);
+
+  const rows=deptAgg.map(({d,a:x})=>`
+    <tr class="clickable" onclick="go(2,{deptId:'${d.id}'})">
+      <td><b style="font-weight:500">${d.name}</b><div class="mini">${d.khoi}</div></td>
+      <td class="num">${x.closed}<span class="mini"> / ${x.n}</span></td>
+      <td class="num" style="${x.passRate<80?`color:${attn(x.passRate)};font-weight:600`:''}">${x.closed?fmt(x.passRate,0)+'%':'—'}</td>
+      <td>${ibar(x.passRate, x.passRate<80?attn(x.passRate):'var(--brand)')}</td>
+      <td>${x.closed?miniStack(x.dist):'<span class="mini">chưa chốt</span>'}</td>
+      <td class="num">${x.gaps?`<span class="pill D">${x.gaps}</span>`:'<span class="mini">—</span>'}</td>
+    </tr>`).join('');
+
+  $('#page1').innerHTML=`
+  ${head}
+  <div class="grid-m">
+    <div class="card">
+      <header><div><h2>Điểm nóng theo bộ phận và nhóm tiêu chí</h2><p>% điểm đạt trung bình so với điểm mục tiêu từng nhóm · ô càng đậm càng yếu</p></div></header>
+      <div class="body tbl-wrap">${heatmap}
+        <div class="legend" style="margin-top:12px">
+          <span><i style="background:color-mix(in srgb, var(--brand) 12%, var(--surface))"></i>≥ 95%</span>
+          <span><i style="background:color-mix(in srgb, var(--amber) 22%, var(--surface))"></i>85–94%</span>
+          <span><i style="background:color-mix(in srgb, var(--amber) 42%, var(--surface))"></i>75–84%</span>
+          <span><i style="background:color-mix(in srgb, var(--red) 40%, var(--surface))"></i>&lt; 75%</span>
+          <span>Chọn tên bộ phận để mở trang 2</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header><div><h2>Xu hướng và xếp loại</h2></div><span class="mini">${a.closed}/${a.n} hồ sơ đã chốt</span></header>
+      <div class="body">
+        ${lineChart([{pts:trend,color:'var(--brand)',area:true}],{labels:MONTHS.map(m=>'T'+m),ref:80,h:186,w:420})}
+        <div class="stack" style="margin-top:16px">${stack||'<div style="background:var(--none);width:100%">Chưa có hồ sơ chốt</div>'}</div>
+        <div class="legend" style="margin-top:10px">
+          ${['A','B','C','D'].map((k,i)=>`<span><i style="background:${RANK_COLOR[k]}"></i>${k}: ${a.dist[i]}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <header><div><h2>Bộ phận cần xem trước</h2><p>Xếp từ thấp lên cao · chọn một bộ phận để mở trang 2</p></div></header>
+    <div class="body"><div class="rank-list">${bars}</div>
+      ${fullList&&focusList.length?`<p class="mini" style="margin:14px 0 0">${fullList} bộ phận còn lại có 100% nhân sự đạt KPI ở kỳ này.</p>`:''}</div>
+  </div>
+
+  <div class="card">
+    <header><div><h2>Bảng tổng hợp bộ phận</h2></div><span class="mini">kỳ tháng ${state.month}/${YEAR}</span></header>
+    <div class="body tbl-wrap">
+      <table>
+        <thead><tr><th>Bộ phận</th><th class="num">Đã chốt</th><th class="num">Đạt KPI</th><th></th><th>Xếp loại</th><th class="num">Lệch điểm</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  ${notes('Ghi chú cho buổi trình bày',[
+    'Chỉ số kết quả tính trên hồ sơ đã chốt, luôn đặt cạnh độ phủ đánh giá để không hiểu nhầm một bộ phận mới chấm vài người là kết quả cả bộ phận.',
+    'Cột <b>Lệch điểm</b> đếm hồ sơ có điểm duyệt khác điểm tính theo thang điểm — đề xuất bổ sung từ bên triển khai, xuất phát từ dòng doanh thu trong mẫu khách gửi.',
+    'Cần khách chốt: ngưỡng xếp loại A/B/C/D, định nghĩa "đạt KPI", cách xử lý tháng thiếu dữ liệu và người mới vào.'])}`;
+}
+
+/* ===================== TRANG 2 ===================== */
+function renderP2(){
+  const d=deptById(state.deptId);
+  let recs=pool(state.month,{deptId:d.id});
+  if(state.search.trim()) recs=recs.filter(r=>r.emp.name.toLowerCase().includes(state.search.trim().toLowerCase()));
+  const a=agg(recs), nSafe=a.n||1;
+  const waiting=recs.filter(r=>r.status==='Chờ QL cấp 1'||r.status==='Chờ QL cấp 2').length;
+  const gapRecs=recs.filter(r=>r.status==='Đã chốt'&&r.gap>=0.4);
+  const sorted=[...recs].sort((x,y)=>x.ratio-y.ratio);
+  const low=sorted.filter(r=>r.status==='Đã chốt'&&r.ratio<80);
+
+  const head=focal({
+    title:`${d.name}`,
+    sub:`${KPISET[d.khoi].name} · ${KPISET[d.khoi].code} · kỳ tháng ${state.month}/${YEAR}`,
+    chart:focalSplit([{n:a.pass,l:'Đạt KPI',c:'#2E9E62'},{n:a.fail,l:'Chưa đạt',c:'#D9843A'},{n:a.n-a.closed,l:'Chưa chốt',c:'rgba(255,255,255,.16)'}]),
+    chips:(sorted.length?[{k:'Thấp nhất',v:`${sorted[0].emp.name} · ${fmt(sorted[0].ratio,1)}%`,tone:low.length?'warn':''}]:[])
+      .concat(gapRecs.length?[{k:'Lệch thang điểm',v:`${gapRecs.length} hồ sơ`,tone:'bad'}]:[]),
+    stats:[{v:fmt(a.passRate,1)+'%',l:'Nhân sự đạt KPI'},
+     {v:`${waiting}`,l:'Chờ quản lý đánh giá',tone:'warn'},
+     {v:`${gapRecs.length}`,l:'Hồ sơ lệch điểm',tone:'bad'}]});
+
+  const gnames=ALLG;
+  const matrix=`<div class="matrix" style="grid-template-columns:150px repeat(6,1fr)">
+      <div></div><div class="ph" style="grid-column:span 4">Công việc · 80%</div><div class="ph" style="grid-column:span 2">Năng lực · 20%</div>
+      <div></div>${gnames.map(g=>`<div class="h">${g}</div>`).join('')}
+      ${sorted.map(r=>`<div class="rowname" title="${r.emp.name}">${r.emp.name}</div>`+
+        r.groupPct.map((p,gi)=>`<div class="cell" style="background:${heat(p)}" title="${r.emp.name} — ${gnames[gi]}: ${fmt(p,0)}% điểm mục tiêu nhóm">${fmt(p,0)}</div>`).join('')).join('')}
+    </div>`;
+
+  const trend=MONTHS.map(m=>agg(pool(m,{deptId:d.id})).passRate);
+
+  const rows=sorted.map(r=>{
+    const prev=state.month>1?recOf(r.emp.id,state.month-1):null;
+    const delta=prev?r.ratio-prev.ratio:null;
+    const bad=r.status==='Đã chốt'&&r.ratio<80;
+    return `<tr class="clickable" onclick="go(3,{empId:${r.emp.id},crit:0})">
+      <td><b style="font-weight:500">${r.emp.name}</b><div class="mini">${r.emp.pos}</div></td>
+      <td class="num" style="${bad?'color:var(--red);font-weight:600':''}">${fmt(r.ratio,1)}%</td>
+      <td style="width:90px">${ibar(r.ratio, r.status!=='Đã chốt'?'var(--line-2)':RANK_COLOR[r.rank])}</td>
+      <td>${r.status==='Đã chốt'?rk(r.rank):'<span class="mini">—</span>'}</td>
+      <td class="num">${delta===null?'—':`<span class="delta ${delta>=0?'up':'dn'}">${delta>=0?'+':'−'}${fmt(Math.abs(delta),1)}</span>`}</td>
+      <td>${statusCell(r)}</td>
+      <td class="num">${r.gap>=0.4?`<span class="pill D" title="Điểm duyệt cao hơn điểm theo thang điểm">+${fmt(r.gap,2)}</span>`:'<span class="mini">—</span>'}</td>
+      <td>${isMyTurn(r)?`<button class="btn sm primary" onclick="event.stopPropagation();openTicket('${ticket(r).code}')">Đánh giá</button>`:`<span class="mini">${TICKET_STEPS[ticket(r).step]}</span>`}</td>
+    </tr>`;}).join('');
+
+  $('#page2').innerHTML=`
+  ${head}
+  <div class="grid-m">
+    <div class="card">
+      <header><div><h2>Ma trận nhóm tiêu chí</h2><p>% điểm đạt so với điểm mục tiêu từng nhóm · ô càng nhạt càng cần xem</p></div></header>
+      <div class="body tbl-wrap">${matrix}
+        <div class="legend" style="margin-top:12px">
+          <span><i style="background:color-mix(in srgb, var(--brand) 12%, var(--surface))"></i>≥ 95%</span>
+          <span><i style="background:color-mix(in srgb, var(--amber) 22%, var(--surface))"></i>85–94%</span>
+          <span><i style="background:color-mix(in srgb, var(--amber) 42%, var(--surface))"></i>75–84%</span>
+          <span><i style="background:color-mix(in srgb, var(--red) 40%, var(--surface))"></i>&lt; 75%</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header><div><h2>Xu hướng bộ phận</h2></div></header>
+      <div class="body">
+        ${lineChart([{pts:trend,color:'var(--brand)',area:true}],{labels:MONTHS.map(m=>'T'+m),ref:80,h:210,w:420})}
+        <div class="legend"><span>${a.closed}/${a.n} hồ sơ đã chốt (${fmt(a.closed/nSafe*100,0)}%)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <header><div><h2>Danh sách nhân viên</h2><p>Xếp từ thấp lên cao · chọn một dòng để mở trang giải thích điểm</p></div></header>
+    <div class="body tbl-wrap">
+      <table><thead><tr><th>Nhân viên</th><th class="num">Tỷ lệ kết quả</th><th></th><th>Loại</th><th class="num">So với T${state.month-1||12}</th><th>Trạng thái</th><th class="num">Lệch điểm</th><th>Phiếu đánh giá</th></tr></thead>
+      <tbody>${rows||'<tr><td colspan="8" class="mini">Không có nhân viên khớp bộ lọc.</td></tr>'}</tbody></table>
+      <div id="tflash" class="mini tk-flash"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="${state.tab==='work'}" onclick="go(2,{tab:'work'})">Phần I — Công việc</button>
+      <button role="tab" aria-selected="${state.tab==='cap'}" onclick="go(2,{tab:'cap'})">Phần II — Năng lực</button>
+      <button role="tab" aria-selected="${state.tab==='prog'}" onclick="go(2,{tab:'prog'})">Tiến độ đánh giá</button>
+    </div>
+    <div class="body tbl-wrap">${tabContent(d,recs)}</div>
+  </div>`;
+}
+
+function tabContent(d,recs){
+  const isSale=d.khoi==='Kinh doanh';
+
+  /* ---------- PHẦN I — CÔNG VIỆC ---------- */
+  if(state.tab==='work'){
+    const all=recs.flatMap(r=>tasksOf(r.emp,state.month).map(t=>({r,t})));
+    const late=all.filter(x=>x.t.status==='Quá hạn'||x.t.status==='Hoàn thành trễ');
+    const shown=[...late,...all.filter(x=>!late.includes(x))].slice(0,10);
+    const rows=shown.map(({r,t})=>`
+      <tr><td>${r.emp.name}</td><td>${t.name}</td><td class="mini">${t.group}</td><td class="num">${t.due}</td>
+      <td class="num">${t.done}%</td>
+      <td>${t.status==='Quá hạn'?`<span class="pill D">Quá hạn</span>`:t.status==='Hoàn thành trễ'?`<span class="pill C">Hoàn thành trễ</span>`:t.status==='Chuyển tiếp tháng sau'?`<span class="mini">Chuyển tiếp T${state.month+1}</span>`:t.status==='Hoàn thành'?`<span class="mini">Hoàn thành</span>`:`<span class="mini">Đang thực hiện</span>`}</td>
+      <td class="num">${fmt(t.star,1)} ★</td></tr>`).join('');
+
+    const head1 = isSale
+      ? `<h3 class="sub-h">Tài chính, khách hàng và dịch vụ — tháng ${state.month}</h3>
+         <table style="margin-bottom:24px"><thead><tr><th>Nhân viên</th><th class="num">Chỉ tiêu</th><th class="num">Thực đạt</th><th class="num">Mức hoàn thành</th><th></th><th class="num">Thu hồi công nợ</th><th class="num">KH mới</th></tr></thead><tbody>${
+          recs.map(r=>{const p=r.sales.actual/r.sales.target*100;return `<tr><td>${r.emp.name}</td><td class="num">${fmt0(r.sales.target)} tr</td><td class="num">${fmt0(r.sales.actual)} tr</td>
+          <td class="num" style="${p<100?'color:var(--red);font-weight:600':''}">${fmt(p,1)}%</td><td style="width:80px">${ibar(p,p<100?'var(--red)':'var(--brand)')}</td><td class="num">${fmt(r.sales.debtPct,0)}%</td><td class="num">${r.sales.newCus}/${r.sales.quota}</td></tr>`;}).join('')
+         }</tbody></table>`
+      : `<h3 class="sub-h">Tài chính, khách hàng và dịch vụ — tháng ${state.month}</h3>
+         <table style="margin-bottom:24px"><thead><tr><th>Nhân viên</th><th class="num">Ngân sách đã dùng</th><th class="num">Điểm tài chính</th><th class="num">Phục vụ nội bộ</th><th class="num">Lượt đánh giá</th><th class="num">Mục tiêu tháng</th><th></th></tr></thead><tbody>${
+          recs.map(r=>{const c0=r.crit[0],c1=r.crit[1],c2=r.crit[2],use=200-c0.pct;
+          return `<tr><td>${r.emp.name}</td>
+            <td class="num" style="${use>100?'color:var(--red);font-weight:600':''}">${fmt(use,0)}%</td>
+            <td class="num">${c0.appr}</td>
+            <td class="num">${fmt(r.compliance.stars,1)} ★</td>
+            <td class="num">${r.compliance.starCount}</td>
+            <td class="num">${fmt(c2.pct,0)}%</td>
+            <td style="width:80px">${ibar(c2.pct,c2.pct>=100?'var(--brand)':attn(c2.pct))}</td></tr>`;}).join('')
+         }</tbody></table>`;
+
+    return head1
+      +`<h3 class="sub-h">Quy trình, hệ thống và mục tiêu được giao — ưu tiên việc trễ hạn</h3>
+        <table><thead><tr><th>Nhân viên</th><th>Nội dung công việc</th><th>Nhóm tiêu chí</th><th class="num">Hạn</th><th class="num">Hoàn thành</th><th>Trạng thái</th><th class="num">Điểm chất lượng</th></tr></thead><tbody>${rows}</tbody></table>
+        <p class="mini" style="margin:10px 0 0">Hiển thị ${shown.length}/${all.length} đầu việc. Việc chưa xong chuyển sang kỳ sau — cần quy tắc phân bổ điểm để không tính lặp một kết quả vào nhiều kỳ.</p>`;
+  }
+
+  /* ---------- PHẦN II — NĂNG LỰC ---------- */
+  if(state.tab==='cap'){
+    const r1=recs.map(r=>{const c=r.compliance, k=r.crit[4], t=r.crit[6];
+      return `<tr>
+      <td>${r.emp.name}</td>
+      <td class="num">${c.late||'<span class="mini">0</span>'}</td>
+      <td class="num">${c.forget||'<span class="mini">0</span>'}</td>
+      <td class="num">${c.unpaid||'<span class="mini">0</span>'}</td>
+      <td class="num">${c.leaveUsed}/${c.leaveTotal}</td>
+      <td class="num">${c.overdue>3?`<span class="pill D">${c.overdue}</span>`:(c.overdue?c.overdue:'<span class="mini">0</span>')}</td>
+      <td class="num">${k.appr}</td><td class="num">${t.appr}</td>
+      <td class="num" style="${r.groupPct[4]<80?'color:var(--red);font-weight:600':''}">${fmt(r.groupPct[4],0)}%</td>
+      <td style="width:70px">${ibar(r.groupPct[4],r.groupPct[4]>=95?'var(--brand)':attn(r.groupPct[4]))}</td></tr>`;}).join('');
+
+    const r2=recs.map(r=>{const c=r.crit[7];
+      return `<tr>
+      <td>${r.emp.name}</td>
+      <td class="num">${fmt(c.pct,0)}%</td>
+      <td class="num">${c.appr}</td>
+      <td class="num" style="${r.groupPct[5]<80?'color:var(--red);font-weight:600':''}">${fmt(r.groupPct[5],0)}%</td>
+      <td style="width:70px">${ibar(r.groupPct[5],r.groupPct[5]>=95?'var(--brand)':attn(r.groupPct[5]))}</td>
+      <td class="mini">${r.emp.ql1} chấm</td></tr>`;}).join('');
+
+    return `<h3 class="sub-h">Nhóm thái độ và kỷ luật</h3>
+      <table style="margin-bottom:24px"><thead><tr><th>Nhân viên</th><th class="num">Đi muộn</th><th class="num">Quên chấm công</th><th class="num">Nghỉ không lương</th><th class="num">Phép đã dùng</th><th class="num">Bước quy trình trễ</th><th class="num">Điểm kỷ luật</th><th class="num">Điểm tuân thủ</th><th class="num">Đạt nhóm</th><th></th></tr></thead><tbody>${r1}</tbody></table>
+      <h3 class="sub-h">Nhóm chuyên môn và cải tiến</h3>
+      <table><thead><tr><th>Nhân viên</th><th class="num">Mức ghi nhận</th><th class="num">Điểm cơ sở</th><th class="num">Đạt nhóm</th><th></th><th>Người đánh giá</th></tr></thead><tbody>${r2}</tbody></table>
+      <p class="mini" style="margin:10px 0 0">Thái độ và kỷ luật lấy tự động: chuyên cần từ Base HRM, bước trễ hạn từ Base Quy trình. Chuyên môn và cải tiến hiện do quản lý ghi nhận — cần chốt cách tính điểm và bằng chứng đi kèm.</p>`;
+  }
+
+  /* ---------- TIẾN ĐỘ ĐÁNH GIÁ ---------- */
+  const rows=recs.map(r=>`<tr>
+    <td>${r.emp.name}</td>
+    <td>${r.status==='Chưa tự chấm'?'<span class="pill C">Chưa tự chấm</span>':'<span class="mini">Đã tự chấm</span>'}</td>
+    <td class="num">${r.status==='Chưa tự chấm'||r.status==='Chờ QL cấp 1'?'<span class="mini">—</span>':fmt(r.crit.reduce((s,c)=>s+c.ql1*c.w*(c.part===1?W_P1:W_P2),0),2)}</td>
+    <td class="num">${r.status==='Đã chốt'?`<b>${fmt(r.total,2)}</b>`:'<span class="mini">—</span>'}</td>
+    <td>${statusCell(r)}</td>
+    <td>${r.emp.khoi==='Kinh doanh'?'<span class="mini">Đủ dữ liệu SAP</span>':(r.compliance.starCount<4?'<span class="pill C">Thiếu lượt đánh giá phối hợp</span>':'<span class="mini">Đủ dữ liệu</span>')}</td></tr>`).join('');
+  return `<table><thead><tr><th>Nhân viên</th><th>Tự chấm</th><th class="num">Điểm QL cấp 1</th><th class="num">Điểm cuối</th><th>Trạng thái</th><th>Dữ liệu đầu vào</th></tr></thead><tbody>${rows}</tbody></table>
+  <p class="mini" style="margin:10px 0 0">Luồng mô phỏng: nhân viên tự chấm → QL cấp 1 → QL cấp 2 → nhân sự khóa kỳ. Tự chấm có bắt buộc không, hai cấp chấm độc lập hay duyệt điểm cấp trước, điểm cuối lấy cấp 2 hay trung bình — cần khách xác nhận.</p>`;
+}
+
+/* ===================== TRANG 3 ===================== */
+function renderP3(){
+  const e=EMPLOYEES.find(x=>x.id===state.empId);
+  const r=recOf(e.id,state.month);
+  const set=KPISET[e.khoi];
+  const c=r.crit[state.crit];
+  const weak=[...r.crit].sort((x,y)=>(x.pts/x.ptsTarget)-(y.pts/y.ptsTarget))[0];
+
+  const head=focal({
+    title:`${e.name}`,
+    sub:`${e.pos} · ${e.dept} · ${set.code} · kỳ tháng ${state.month}/${YEAR}`,
+    chart:focalGauge(r.ratio,r.rank),
+    chips:[{k:'Kéo điểm nhiều nhất',v:`${weak.name} · ${fmt(weak.pts/weak.ptsTarget*100,0)}%`,tone:weak.pts/weak.ptsTarget<0.8?'warn':''}]
+      .concat(r.gap>=0.4?[{k:'Lệch thang điểm',v:`+${fmt(r.gap,2)} điểm`,tone:'bad'}]:[]),
+    stats:[{v:fmt(r.total,2),l:`Điểm thực đạt / ${fmt(TARGET_TOTAL,2)}`},
+     {v:fmt(r.ratio,1)+'%',l:'Tỷ lệ kết quả'},
+     {v:r.rank,l:'Xếp loại',tone:r.rank==='A'||r.rank==='B'?'':(r.rank==='C'?'warn':'bad')}]});
+
+  const gapBlock = r.gap>=0.4 ? gapCharts(r) : '';
+
+  const critRow=(cc,i)=>{
+    const t=targetText(r,cc,i), off=cc.appr!==cc.rule;
+    return `<tr class="crit" aria-selected="${i===state.crit}" onclick="go(3,{crit:${i}})">
+      <td><div class="grpname">${cc.name}</div><div class="mini">${groupName(cc)}</div></td>
+      <td class="mini">${t[0]}</td><td>${t[1]}</td>
+      <td class="num">${fmt(cc.pct,0)}%</td>
+      <td style="width:78px">${ibar(cc.pct, cc.pct>=100?'var(--brand)':attn(cc.pct))}</td>
+      <td class="num" style="white-space:nowrap">${off?`<b style="color:var(--red)">${cc.appr}</b><div class="mini" style="color:var(--red)">thang điểm: ${cc.rule}</div>`:cc.appr}</td>
+      <td class="num mini">${fmt(cc.w*100,0)}%</td>
+      <td class="num"><b>${fmt(cc.pts,2)}</b> <span class="mini">/ ${fmt(cc.ptsTarget,2)}</span></td>
+    </tr>`;};
+
+  const hist=MONTHS.map(m=>recOf(e.id,m));
+
+  const T1=state.ptab!=='hr';
+  $('#page3').innerHTML=`
+  ${head}
+  ${ticketCard(r)}
+  ${gapBlock}
+
+  <div class="tabs ptabs" role="tablist">
+    <button role="tab" aria-selected="${T1}" onclick="go(3,{ptab:'kpi'})">Kết quả và cách ra điểm</button>
+    <button role="tab" aria-selected="${!T1}" onclick="go(3,{ptab:'hr'})">Tuân thủ, lịch sử và thu nhập</button>
+  </div>
+
+  ${T1?`
+  <div class="grid2">
+    <div class="card">
+      <header><div><h2>Tổng hợp kết quả</h2><p>Theo đúng cấu trúc hai phần của mẫu KPI khách đang dùng</p></div></header>
+      <div class="body">
+        <table>
+          <thead><tr><th>Phần</th><th class="num">Tỷ lệ</th><th class="num">Mục tiêu</th><th class="num">Thực đạt</th><th></th><th class="num">Đạt</th></tr></thead>
+          <tbody>
+            <tr><td>Phần I — Công việc<div class="mini">Tài chính · Khách hàng &amp; dịch vụ · Quy trình &amp; hệ thống · Đào tạo &amp; phát triển</div></td><td class="num mini">80%</td><td class="num mini">${fmt(TARGET_P1,2)}</td><td class="num"><b>${fmt(r.p1,2)}</b></td><td style="width:70px">${ibar(r.p1/TARGET_P1*100,r.p1/TARGET_P1>=0.8?'var(--brand)':'var(--amber)')}</td><td class="num">${fmt(r.p1/TARGET_P1*100,0)}%</td></tr>
+            <tr><td>Phần II — Năng lực<div class="mini">Thái độ &amp; kỷ luật · Chuyên môn &amp; cải tiến</div></td><td class="num mini">20%</td><td class="num mini">${fmt(TARGET_P2,2)}</td><td class="num"><b>${fmt(r.p2,2)}</b></td><td>${ibar(r.p2/TARGET_P2*100,r.p2/TARGET_P2>=0.8?'var(--brand)':'var(--amber)')}</td><td class="num">${fmt(r.p2/TARGET_P2*100,0)}%</td></tr>
+            <tr class="total"><td>Tổng</td><td class="num mini">100%</td><td class="num mini">${fmt(TARGET_TOTAL,2)}</td><td class="num"><b>${fmt(r.total,2)}</b></td><td>${ibar(r.ratio,RANK_COLOR[r.rank])}</td><td class="num"><b>${fmt(r.ratio,1)}%</b></td></tr>
+          </tbody>
+        </table>
+        <p class="mini" style="margin:12px 0 0">Cơ cấu điểm chia hai phần trước — Công việc và Năng lực — rồi mới xuống nhóm tiêu chí và từng tiêu chí. Mẫu khách ghi Phần II tỷ lệ 20% nhưng điểm mục tiêu 0,60 (không phải 1,00). Bản mô phỏng giữ đúng con số của khách; cách quy đổi Phần II cần chốt lại.</p>
+      </div>
+    </div>
+    <div class="card">
+      <header><div><h2>Kết quả qua các tháng</h2></div><span class="mini">năm ${YEAR}</span></header>
+      <div class="body">
+        ${lineChart([{pts:hist.map(h=>h.ratio),color:'var(--brand)',area:true}],{labels:MONTHS.map(m=>'T'+m),ref:80,h:200,w:420})}
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <header><div><h2>Chi tiết KPI</h2><p>Chọn một tiêu chí để xem căn cứ và cách ra điểm</p></div></header>
+    <div class="body tbl-wrap">
+      <table>
+        <thead><tr><th>Tiêu chí</th><th>Chỉ tiêu</th><th>Thực tế</th><th class="num">Hoàn thành</th><th></th><th class="num">Điểm cơ sở</th><th class="num">Trọng số</th><th class="num">Điểm quy đổi</th></tr></thead>
+        <tbody>
+          <tr class="sep"><td colspan="8">Phần I — Công việc · 80% · điểm mục tiêu ${fmt(TARGET_P1,2)}</td></tr>
+          ${r.crit.filter(x=>x.part===1).map((cc,i)=>critRow(cc,i)).join('')}
+          <tr class="sep"><td colspan="8">Phần II — Năng lực · 20% · điểm mục tiêu ${fmt(TARGET_P2,2)}</td></tr>
+          ${r.crit.filter(x=>x.part===2).map((cc,i)=>critRow(cc,i+4)).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="expl" style="border-top:1px solid var(--line)">
+      <div>
+        <h4>Căn cứ kết quả — ${c.name}</h4>
+        <dl class="kv">${evidence(r,c,state.crit).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+        <h4 style="margin-top:18px">Quy tắc tính</h4>
+        <p class="mini" style="margin:0 0 8px">${c.desc}</p>
+        <table class="scale">
+          <tbody>${c.scale.map(([min,s],i)=>{
+            const next=i===0?null:c.scale[i-1][0];
+            const label = i===0?`Từ ${min}% trở lên`:`Từ ${min}% đến dưới ${next}%`;
+            return `<tr class="${scoreOf(c.scale,c.pct)===s?'hit':''}"><td>${label}</td><td class="num">${s} điểm</td></tr>`;}).join('')}
+          </tbody>
+        </table>
+        <p class="mini" style="margin:10px 0 0">Điểm cơ sở × trọng số tiêu chí × trọng số phần = <b>${c.appr} × ${fmt(c.w*100,0)}% × ${c.part===1?'80%':'12%'} = ${fmt(c.pts,2)}</b></p>
+      </div>
+      <div>
+        <h4>Điểm theo từng cấp</h4>
+        <div class="levels">
+          <div><div class="v">${c.rule}</div><div class="l">Theo thang điểm</div></div>
+          <div><div class="v">${c.self}</div><div class="l">Nhân viên tự chấm</div></div>
+          <div><div class="v">${c.ql1}</div><div class="l">${e.ql1} · QL cấp 1</div></div>
+          <div class="${c.appr!==c.rule?'flag':''}"><div class="v">${c.ql2}</div><div class="l">${e.ql2} · QL cấp 2 — điểm cuối</div></div>
+        </div>
+        <h4 style="margin-top:18px">Điểm cuối cùng</h4>
+        <dl class="kv">
+          <dt>Điểm được duyệt</dt><dd>${c.appr} điểm cơ sở → ${fmt(c.pts,2)} điểm quy đổi</dd>
+          <dt>Người duyệt</dt><dd>${e.ql2} (QL cấp 2)</dd>
+          <dt>Nguồn dữ liệu</dt><dd>${c.src}</dd>
+          <dt>Lý do điều chỉnh</dt><dd>${c.appr!==c.rule?`<b style="color:var(--red)">Chưa ghi nhận lý do</b> — điểm duyệt ${c.appr} khác điểm theo thang điểm ${c.rule}.`:'Không có điều chỉnh'}</dd>
+        </dl>
+        <p class="mini" style="margin:14px 0 0">Đề xuất: khi điểm duyệt khác điểm theo quy tắc, hệ thống bắt buộc nhập lý do và lưu lịch sử chỉnh sửa.</p>
+      </div>
+    </div>
+  </div>
+
+  ${notes('Ghi chú cho buổi trình bày',[
+    'Điểm tự đánh giá, điểm quản lý và điểm cuối được tách riêng thay vì gộp thành một cột "điểm KPI".',
+    'Mỗi tiêu chí dẫn ngược về dữ liệu gốc: doanh số và công nợ từ SAP, chuyên cần từ Base HRM, công việc và trễ hạn từ Base Quy trình/Wework.'])}
+  `:`
+  ${complianceCard(r)}
+  ${historyCard(e)}
+  ${payrollCard(e,state.month)}
+  ${notes('Ghi chú cho buổi trình bày',[
+    'Chuyên cần lấy từ Base HRM, trễ hạn lấy từ Base Quy trình — báo cáo tuân thủ xem được kể cả khi công thức chấm KPI chưa chốt.',
+    'Bảng lương đặt hai kỳ cạnh nhau và tự nêu nguyên nhân chênh lệch, thay cho việc tải file về rồi VLOOKUP đối chiếu tay.'])}
+  `}`;
+}
+
+function gapCharts(r){
+  const c=[...r.crit].sort((x,y)=>(y.appr-y.rule)-(x.appr-x.rule))[0];
+  const asc=[...c.scale].reverse();
+  const bands=asc.map(([min,sc],i)=>{
+    const nx=asc[i+1];
+    const lbl = i===0?`< ${nx?nx[0]:100}%` : (nx?`${min}–${nx[0]}%`:`≥ ${min}%`);
+    return `<div class="band ${sc===c.rule?'rule':''} ${sc===c.appr?'appr':''}"><b>${sc}</b><span>${lbl}</span></div>`;
+  }).join('');
+  const bar=(v,pct,lab,color,rank)=>`<div class="cmp-row">
+      <div class="cmp-l">${lab}</div>
+      <div class="cmp-bar"><i style="width:${Math.min(100,pct)}%;background:${color}"></i></div>
+      <div class="cmp-v"><b style="color:${color}">${fmt(v,2)}</b> · ${fmt(pct,1)}% · loại ${rank}</div>
+    </div>`;
+  return `<div class="alert">
+    <div class="alert-h">Điểm duyệt lệch ${fmt(r.gap,2)} điểm so với thang điểm · chưa ghi nhận lý do</div>
+    <div class="alert-grid">
+      <div>
+        <div class="mini">Thang điểm “${c.name}” — kết quả thực tế ${fmt(c.pct,1)}%</div>
+        <div class="bands">${bands}</div>
+        <div class="bandkey"><span class="k rule">Theo thang điểm: ${c.rule} điểm</span><span class="k appr">Đang chấm: ${c.appr} điểm</span></div>
+      </div>
+      <div>
+        <div class="mini">Tổng điểm trên thang mục tiêu ${fmt(TARGET_TOTAL,2)}</div>
+        <div class="cmp">
+          ${bar(r.totalRule,r.ratioRule,'Theo thang điểm','var(--ink-3)',r.rankRule)}
+          ${bar(r.total,r.ratio,'Được duyệt','var(--red)',r.rank)}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function targetText(r,c,i){
+  const e=r.emp;
+  if(e.khoi==='Kinh doanh'){
+    if(i===0) return [`${fmt0(r.sales.target)} tr đồng`,`${fmt0(r.sales.actual)} tr đồng`];
+    if(i===1) return ['100% công nợ đến hạn', `${fmt(r.sales.debtPct,0)}% giá trị đến hạn`];
+    if(i===2) return ['Gửi đủ, đúng hạn', `${fmt(c.pct,0)}% lượt đúng hạn`];
+    if(i===3) return [`${r.sales.quota} khách mới`, `${r.sales.newCus} khách mới`];
+  } else {
+    if(i===0) return ['Không vượt ngân sách tháng', `Sử dụng ${fmt(200-c.pct,0)}% ngân sách`];
+    if(i===1) return ['5,0 sao', `${fmt(c.pct/20,1)} sao (${r.compliance.starCount} lượt)`];
+    if(i===2) return ['100% mục tiêu, đúng hạn', `${fmt(c.pct,0)}% hoàn thành`];
+    if(i===3) return ['Hoàn thành mục tiêu phát triển', `${fmt(c.pct,0)}%`];
+  }
+  const k=i-4;
+  const cp=r.compliance;
+  if(k===0) return ['Không vi phạm chuyên cần', `Đi muộn ${cp.late}, quên chấm công ${cp.forget}, nghỉ KL ${cp.unpaid}`];
+  if(k===1) return ['Không vi phạm', 'Không ghi nhận vi phạm'];
+  if(k===2) return ['Không để bước quy trình trễ hạn', `${cp.overdue} bước trễ hạn`];
+  return ['Có đóng góp cải tiến', `${fmt(c.pct,0)}% so với kỳ vọng`];
+}
+function evidence(r,c,i){
+  const cp=r.compliance, e=r.emp;
+  if(c.part===2){
+    if(i===4) return [['Đi muộn / về sớm',`${cp.late} lần`],['Quên chấm công',`${cp.forget} lần`],['Nghỉ không lương',`${cp.unpaid} ngày`],['Phép năm',`đã dùng ${cp.leaveUsed}/${cp.leaveTotal} ngày`],['Nguồn','Base HRM — chấm công']];
+    if(i===6) return [['Bước quy trình trễ hạn',`${cp.overdue} bước`],['Vi phạm nội quy','Không ghi nhận'],['Nguồn','Base Quy trình']];
+    return [['Ghi nhận trong kỳ','Quản lý đánh giá, chưa có dữ liệu hệ thống'],['Nguồn',c.src]];
+  }
+  if(e.khoi==='Kinh doanh'){
+    if(i===0) return [['Chỉ tiêu tháng',`${fmt0(r.sales.target)} triệu đồng`],['Doanh số thực đạt',`${fmt0(r.sales.actual)} triệu đồng`],['Mức hoàn thành',`${fmt(r.sales.actual/r.sales.target*100,1)}%`],['Cách phân bổ','Công ty → team → cá nhân theo địa bàn'],['Nguồn',c.src]];
+    if(i===1) return [['Công nợ đến hạn trong kỳ',`${fmt0(r.sales.target*0.62)} triệu đồng`],['Đã thu hồi',`${fmt0(r.sales.target*0.62*r.sales.debtPct/100)} triệu đồng`],['Số khách đến hạn','4 khách — thu đủ 3 khách'],['Cần chốt','Tính theo giá trị tiền, số khách hay số khoản đến hạn'],['Nguồn',c.src]];
+    if(i===2) return [['Gửi sale forecast',`${fmt(c.pct,0)}% lượt đúng hạn`],['Độ chính xác forecast','Khoảng chuẩn 95–105% — cần làm rõ so sánh đại lượng nào'],['Hồ sơ chứng từ','Hoàn tất trong kỳ'],['Hiện trạng','Chưa gửi trên Base nên chưa có căn cứ tự động xác định đúng/trễ hạn'],['Nguồn',c.src]];
+    return [['Chỉ tiêu khách hàng mới',`${r.sales.quota} khách`],['Khách mới trong kỳ',`${r.sales.newCus} khách`],['Định nghĩa đang dùng','Khách phát sinh doanh thu lần đầu trong kỳ'],['Cần chốt','Tạo mã mới hay phát sinh doanh thu lần đầu'],['Nguồn',c.src]];
+  }
+  if(i===0) return [['Doanh số công ty tháng',`đạt ${fmt(94+c.pct%7,0)}% kế hoạch`],['Ngân sách bộ phận được giao','Phân bổ từ ngân sách năm theo tháng'],['Thực chi / ngân sách',`${fmt(200-c.pct,0)}%`],['Quy tắc','Đạt khi công ty đạt doanh số và bộ phận không vượt ngân sách'],['Nguồn',c.src]];
+  if(i===1) return [['Điểm sao trung bình',`${fmt(cp.stars,1)} / 5,0`],['Số lượt được đánh giá',`${cp.starCount} lượt`],['Người đánh giá','Các bộ phận phối hợp, chấm sau khi nhiệm vụ hoàn tất'],['Cần chốt','Số lượt tối thiểu, cách xử lý người chưa được đánh giá'],['Nguồn',c.src]];
+  if(i===2){
+    const ts=tasksOf(e,r.month);
+    return [['Số mục tiêu được giao',`${ts.length} việc`],['Hoàn thành đúng hạn',`${ts.filter(t=>t.status==='Hoàn thành').length} việc`],['Hoàn thành trễ / quá hạn',`${ts.filter(t=>t.status==='Hoàn thành trễ').length} / ${ts.filter(t=>t.status==='Quá hạn').length} việc`],['Chuyển tiếp kỳ sau',`${ts.filter(t=>t.status==='Chuyển tiếp tháng sau').length} việc`],['Bước quy trình trễ hạn',`${cp.overdue} bước`],['Nguồn',c.src]];
+  }
+  return [['Mục tiêu phát triển kỳ này','Do quản lý giao đầu tháng'],['Mức hoàn thành',`${fmt(c.pct,0)}%`],['Nguồn',c.src]];
+}
+
+/* ===================== LƯƠNG (mô phỏng) ===================== */
+function baseSalary(e){
+  const p=e.pos;
+  if(p.includes('Giám đốc')) return 38;
+  if(p.includes('Kế toán trưởng')) return 26;
+  if(p.includes('Trưởng phòng')||p.includes('Quản đốc')) return 22;
+  if(p.includes('Trưởng nhóm')||p.includes('Tổ trưởng')||p.includes('Thủ kho')) return 17;
+  if(p.includes('Chuyên viên')||p.includes('Kế toán')||p.includes('Thủ quỹ')||p.includes('Sale Admin')||p.includes('Kỹ thuật')) return 13;
+  if(p.includes('Nhân viên kinh doanh')) return 12;
+  return 9;
+}
+function payroll(e,m){
+  const rnd=mulberry32(e.id*613+m*29);
+  const base=baseSalary(e)*1000000, std=26;
+  const rec=recOf(e.id,m), c=rec.compliance;
+  const cong=std-c.unpaid-(rnd()>0.72?1:0);
+  const luongCong=base/std*cong;
+  const otH=Math.round(rnd()*16);
+  const ot=base/std/8*1.5*otH;
+  const pc=1500000+((e.pos.includes('Trưởng')||e.pos.includes('Giám đốc')||e.pos.includes('Quản đốc'))?1000000:0);
+  const thuong=(m%3===0&&e.khoi==='Kinh doanh')?base*0.3*(rec.ratio/100):0;
+  const truCC=c.late*50000+c.forget*100000;
+  const khauTru=base*0.105;
+  const net=luongCong+ot+pc+thuong-truCC-khauTru;
+  return {base,std,cong,luongCong,otH,ot,pc,thuong,truCC,khauTru,net};
+}
+const vnd = n => Math.round(n).toLocaleString('vi-VN');
+function lateTasks(e,m){
+  const t=tasksOf(e,m);
+  return {late:t.filter(x=>x.status==='Quá hạn'||x.status==='Hoàn thành trễ').length, total:t.length};
+}
+
+/* ===================== KHỐI TUÂN THỦ / LƯƠNG / LỊCH SỬ (trang 3) ===================== */
+function complianceCard(r){
+  const c=r.compliance, lt=lateTasks(r.emp,r.month);
+  const tile=(v,u,l,bad)=>`<div class="tile ${bad?'bad':''}"><div class="v">${v}<small>${u||''}</small></div><div class="l">${l}</div></div>`;
+  return `<div class="card">
+    <header><div><h2>Trạng thái tuân thủ và chuyên cần</h2><p>Dữ liệu gốc cấu thành nhóm Thái độ &amp; kỷ luật · kỳ tháng ${r.month}/${YEAR}</p></div>
+      <span class="mini">Base HRM · Base Quy trình</span></header>
+    <div class="body tiles">
+      ${tile(c.late,' lần','Đi muộn / về sớm',c.late>2)}
+      ${tile(c.lateMin,' phút','Tổng số phút đi muộn',c.lateMin>60)}
+      ${tile(c.forget,' lần','Quên chấm công',c.forget>2)}
+      ${tile(c.unpaid,' ngày','Nghỉ không lương',c.unpaid>1)}
+      ${tile(`${c.leaveTotal-c.leaveUsed}/${c.leaveTotal}`,'','Phép còn lại trong năm',false)}
+      ${tile(lt.late,`/${lt.total}`,'Công việc trễ hạn',lt.late>1)}
+      ${tile(c.overdue,' bước','Bước quy trình trễ hạn',c.overdue>3)}
+      ${tile(c.overdueHours,' giờ','Tổng thời gian trễ hạn',c.overdueHours>24)}
+    </div>
+  </div>`;
+}
+
+function payrollCard(e,m){
+  const p=payroll(e,m), prev=m>1?payroll(e,m-1):null;
+  const row=(l,v,pv,neg)=>{
+    const d=prev?v-pv:0;
+    return `<tr><td>${l}</td><td class="num">${neg&&v?'−':''}${vnd(v)}</td>
+      <td class="num mini">${prev?(neg&&pv?'−':'')+vnd(pv):'—'}</td>
+      <td class="num">${!prev?'—':(Math.abs(d)<1?'<span class="mini">0</span>':`<span class="delta ${((neg?-d:d)>=0)?'up':'dn'}">${d>0?'+':'−'}${vnd(Math.abs(d))}</span>`)}</td></tr>`;};
+  const hist=MONTHS.map(x=>payroll(e,x).net/1e6);
+  const causes=[];
+  if(prev){
+    if(p.cong!==prev.cong) causes.push(`ngày công ${prev.cong} → ${p.cong}`);
+    if(p.otH!==prev.otH) causes.push(`tăng ca ${prev.otH}h → ${p.otH}h`);
+    if(Math.abs(p.truCC-prev.truCC)>1) causes.push(`trừ chuyên cần ${vnd(prev.truCC)} → ${vnd(p.truCC)}`);
+    if(Math.abs(p.thuong-prev.thuong)>1) causes.push(`thưởng doanh số ${vnd(prev.thuong)} → ${vnd(p.thuong)}`);
+  }
+  const diff=prev?p.net-prev.net:0;
+  return `<div class="card">
+    <header><div><h2>Thu nhập và đối chiếu với kỳ trước</h2><p>Mở từng ô là thấy cấu phần tạo ra số tiền, không cần mở file Excel riêng</p></div>
+      <span class="mini">Base HRM · bảng lương tháng ${m}/${YEAR}</span></header>
+    <div class="body grid2">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Cấu phần</th><th class="num">Tháng ${m}</th><th class="num">Tháng ${m-1||12}</th><th class="num">Chênh lệch</th></tr></thead>
+          <tbody>
+            ${row(`Lương theo công (${p.cong}/${p.std} công)`,p.luongCong,prev?prev.luongCong:0)}
+            ${row(`Tăng ca (${p.otH} giờ)`,p.ot,prev?prev.ot:0)}
+            ${row('Phụ cấp',p.pc,prev?prev.pc:0)}
+            ${row('Thưởng doanh số theo quý',p.thuong,prev?prev.thuong:0)}
+            ${row('Trừ chuyên cần',p.truCC,prev?prev.truCC:0,true)}
+            ${row('Khấu trừ BHXH & thuế TNCN',p.khauTru,prev?prev.khauTru:0,true)}
+            <tr class="total"><td>Thực nhận</td><td class="num"><b>${vnd(p.net)}</b></td><td class="num mini">${prev?vnd(prev.net):'—'}</td>
+              <td class="num">${!prev?'—':`<b class="delta ${diff>=0?'up':'dn'}">${diff>=0?'+':'−'}${vnd(Math.abs(diff))}</b>`}</td></tr>
+          </tbody>
+        </table>
+        <p class="mini" style="margin:10px 0 0">${prev?(causes.length?`Nguyên nhân chênh lệch: ${causes.join(' · ')}.`:'Không có cấu phần nào thay đổi so với kỳ trước.'):'Chưa có kỳ trước để đối chiếu.'}</p>
+      </div>
+      <div>
+        ${lineChart([{pts:hist,color:'var(--brand)',area:true}],{labels:MONTHS.map(x=>'T'+x),min:0,max:Math.ceil(Math.max(...hist)*1.25),unit:' tr',h:196,w:420})}
+        <p class="mini" style="margin:6px 0 0">Thực nhận theo tháng (triệu đồng). KPI tháng không quyết định lương tháng — KPI tổng hợp 12 tháng để xếp loại và tính thưởng cuối năm.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function historyCard(e){
+  const rows=MONTHS.map(m=>{
+    const h=recOf(e.id,m), p=payroll(e,m);
+    return `<tr class="clickable" onclick="go(3,{month:${m},crit:0})">
+      <td>Tháng ${m}/${YEAR}</td>
+      <td class="num">${fmt(h.p1,2)} <span class="mini">/ ${fmt(TARGET_P1,2)}</span></td>
+      <td class="num">${fmt(h.p2,2)} <span class="mini">/ ${fmt(TARGET_P2,2)}</span></td>
+      <td class="num"><b>${fmt(h.total,2)}</b></td>
+      <td class="num">${fmt(h.ratio,1)}%</td>
+      <td style="width:80px">${ibar(h.ratio,RANK_COLOR[h.rank])}</td>
+      <td>${rk(h.rank)}</td>
+      <td class="num">${vnd(p.net)}</td>
+      <td class="mini">${h.status}</td></tr>`;}).join('');
+  return `<div class="card">
+    <header><div><h2>Lịch sử nhân sự theo tháng</h2><p>Điểm hai phần, xếp loại và thu nhập của từng kỳ · chọn một dòng để mở kỳ đó</p></div>
+      <span class="mini">năm ${YEAR}</span></header>
+    <div class="body tbl-wrap">
+      <table><thead><tr><th>Kỳ</th><th class="num">Công việc</th><th class="num">Năng lực</th><th class="num">Tổng điểm</th><th class="num">Tỷ lệ</th><th></th><th>Loại</th><th class="num">Thực nhận</th><th>Trạng thái</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+      <p class="mini" style="margin:10px 0 0">Kết quả năm chỉ hiển thị sau khi thống nhất quy tắc tổng hợp 12 tháng và cách xử lý tháng thiếu dữ liệu, người mới vào.</p>
+    </div>
+  </div>`;
+}
+
+/* ===================== TRANG 4 — HỒ SƠ CHỜ ĐÁNH GIÁ ===================== */
+function renderP4(){
+  const u=state.user;
+  const scope = u.role==='dept' ? {deptId:u.deptId} : (state.khoi!=='Tất cả'?{khoi:state.khoi}:{});
+  const all=pool(state.month,scope);
+  const recs=all.filter(r=>r.status!=='Đã chốt');
+  const mine=recs.filter(isMyTurn);
+  const byStep=[0,1,2].map(i=>recs.filter(r=>ticket(r).step===i).length);
+  const deptsTouched=new Set(recs.map(r=>r.emp.deptId)).size;
+
+  const head=focal({
+    title:`Hồ sơ chưa đánh giá — kỳ tháng ${state.month}/${YEAR}`,
+    sub:`${u.role==='dept'?deptById(u.deptId).name:'Toàn công ty'} · ${all.length} nhân sự trong phạm vi`,
+    chart:focalSplit([{n:byStep[0],l:'Chờ CBNV tự chấm',c:'rgba(255,255,255,.16)'},
+                      {n:byStep[1],l:'Chờ trưởng bộ phận',c:'#D9843A'},
+                      {n:byStep[2],l:'Chờ BP Nhân sự',c:'#2E9E62'}]),
+    chips:[{k:'Bộ phận liên quan',v:`${deptsTouched}`},{k:'Độ phủ đánh giá',v:`${fmt((all.length-recs.length)/(all.length||1)*100,0)}%`}],
+    stats:[{v:`${recs.length}`,l:'Hồ sơ chưa chốt',tone:'warn'},
+           {v:`${mine.length}`,l:'Đang chờ tôi xử lý',tone:mine.length?'bad':''},
+           {v:`${all.length-recs.length}`,l:'Đã chốt'}]});
+
+  const showPay = u.role==='all';
+  const payTab = showPay && state.qtab==='pay';
+  const sorted=[...recs].sort((a,b)=>(isMyTurn(b)?1:0)-(isMyTurn(a)?1:0)||ticket(a).step-ticket(b).step);
+  const rows=sorted.map(r=>{
+    const t=ticket(r), c=r.compliance, lt=lateTasks(r.emp,r.month), me=isMyTurn(r), pay=payroll(r.emp,r.month);
+    const k=v=>Math.round(v/1000)*1000;
+    const lc=k(pay.luongCong), ot=k(pay.ot), pc=k(pay.pc), th=k(pay.thuong), tc=k(pay.truCC), kt=k(pay.khauTru);
+    const net=lc+ot+pc+th-tc-kt;
+    const body = payTab
+      ? `<td class="num mini">${pay.cong}/${pay.std}</td>
+         <td class="num">${vnd(lc)}</td>
+         <td class="num mini">${ot?vnd(ot):'—'}</td>
+         <td class="num mini">${vnd(pc)}</td>
+         <td class="num ${th?'':'mini'}">${th?vnd(th):'—'}</td>
+         <td class="num ${tc>150000?'warn':'mini'}">${tc?'−'+vnd(tc):'—'}</td>
+         <td class="num mini">−${vnd(kt)}</td>
+         <td class="num"><b style="font-weight:600">${vnd(net)}</b></td>`
+      : `<td class="mini">${t.handler}</td>
+         <td class="num ${c.late>2?'warn':''}">${c.late}</td>
+         <td class="num mini">${c.lateMin}′</td>
+         <td class="num ${c.forget>2?'warn':''}">${c.forget}</td>
+         <td class="num">${c.unpaid}</td>
+         <td class="num mini">${c.leaveTotal-c.leaveUsed}/${c.leaveTotal}</td>
+         <td class="num ${lt.late>1?'warn':''}">${lt.late}</td>
+         <td class="num mini">${c.overdueHours}h</td>`;
+    return `<tr class="${me?'hot':''}">
+      <td><b style="font-weight:500">${r.emp.name}</b><div class="mini">${r.emp.pos}</div></td>
+      <td class="mini">${r.emp.dept}</td>
+      <td><span class="pill C">${TICKET_STEPS[t.step]}</span></td>
+      ${body}
+      <td>${me?`<button class="btn sm primary" onclick="openTicket('${t.code}')">Đánh giá</button>`
+              :`<button class="btn sm" onclick="openTicket('${t.code}')">Mở phiếu</button>`}</td>
+    </tr>`;}).join('');
+
+  const head3 = `<th>Nhân viên</th><th>Bộ phận</th><th>Bước đang chờ</th>`;
+  const headMid = payTab
+    ? `<th class="num">Công</th><th class="num">Lương theo công</th><th class="num">Tăng ca</th><th class="num">Phụ cấp</th>
+       <th class="num">Thưởng</th><th class="num">Trừ chấm công</th><th class="num">Khấu trừ BH</th><th class="num">Thực nhận</th>`
+    : `<th>Người xử lý</th><th class="num">Đi muộn</th><th class="num">Số phút</th><th class="num">Quên chấm</th>
+       <th class="num">Nghỉ KL</th><th class="num">Phép còn</th><th class="num">CV trễ</th><th class="num">Giờ trễ</th>`;
+  const nCols = 12;
+
+  const tabBar = showPay ? `<div class="tabs" role="tablist">
+      <button role="tab" aria-selected="${!payTab}" onclick="go(4,{qtab:'comp'})">Tuân thủ và chuyên cần</button>
+      <button role="tab" aria-selected="${payTab}" onclick="go(4,{qtab:'pay'})">Các khoản lương kỳ này</button>
+    </div>` : '';
+
+  $('#page4').innerHTML=`
+  ${head}
+  <div class="card">
+    <header><div><h2>Danh sách hồ sơ chờ xử lý</h2><p>Hồ sơ đang chờ chính người đăng nhập được đưa lên đầu và làm nổi</p></div>
+      <span class="mini">${sorted.length} hồ sơ${payTab?' · đơn vị: đồng':''}</span></header>
+    ${tabBar}
+    <div class="body tbl-wrap">
+      <table style="min-width:${payTab?1460:1100}px"><thead><tr>
+        ${head3}${headMid}<th>Phiếu Service</th>
+      </tr></thead>
+      <tbody>${rows||`<tr><td colspan="${nCols}" class="mini">Không còn hồ sơ nào chờ đánh giá trong phạm vi này.</td></tr>`}</tbody></table>
+      <div id="tflash" class="mini tk-flash"></div>
+    </div>
+  </div>
+  ${notes('Ghi chú cho buổi trình bày',[
+    'Trang này gom dữ liệu tuân thủ từ Base HRM và Base Quy trình ngay cạnh nút mở phiếu, để người chấm không phải mở thêm báo cáo nào khác.',
+    'Khi chạy thật, nút mở phiếu trỏ thẳng tới request tương ứng trên Base Service theo mã phiếu.',
+    'Tab lương chỉ hiện với Ban giám đốc và Phòng Nhân sự; trưởng bộ phận không thấy. Các khoản là tạm tính của kỳ, chưa phải bảng lương chốt.'])}`;
+}
+
+/* ===================== KHỞI CHẠY ===================== */
+function render(){
+  renderTop();
+  ['1','2','3','4'].forEach(p=>$('#page'+p).classList.toggle('hidden', +p!==state.page));
+  if(state.page===1) renderP1(); else if(state.page===2) renderP2(); else if(state.page===3) renderP3(); else renderP4();
+}
+$('#themebtn').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const dark=cur? cur==='dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme', dark?'light':'dark');
+};
+window.go=go; window.openTicket=openTicket;
+window.logout=function(){ try{localStorage.removeItem('apa_kpi_code');}catch(e){}
+  state.user=null; $('#gate').classList.remove('hidden'); $('#gcode').value=''; $('#gcode').focus(); };
+
+const DEMO_CODES=[['BOD','Ban giám đốc'],[EMPLOYEES[18].code,'Giám đốc Nhân sự'],[EMPLOYEES[6].code,'Trưởng nhóm Sale Miền Nam'],[EMPLOYEES[0].code,'Nhân viên kinh doanh']];
+$('#glogo').src=document.querySelector('.brandmark img').src;
+$('#gchips').innerHTML=DEMO_CODES.map(([c,l])=>`<button type="button" data-code="${c}"><b>${c}</b>${l}</button>`).join('');
+$('#gchips').querySelectorAll('button').forEach(b=>b.onclick=()=>{ $('#gcode').value=b.dataset.code; doLogin(); });
+function doLogin(){
+  const u=login($('#gcode').value);
+  if(!u){ $('#gerr').textContent='Mã không hợp lệ. Dùng mã nhân sự trên hệ thống hoặc chọn một mã dùng thử bên dưới.'; return; }
+  $('#gerr').textContent='';
+  state.user=u; state.page=allowedPages()[0];
+  if(u.role!=='all'){ state.deptId=u.deptId||state.deptId; if(u.empId) state.empId=u.empId; }
+  try{localStorage.setItem('apa_kpi_code',u.code);}catch(e){}
+  $('#gate').classList.add('hidden');
+  render();
+}
+$('#gbtn').onclick=doLogin;
+$('#gcode').onkeydown=ev=>{ if(ev.key==='Enter') doLogin(); };
+let saved=null; try{saved=localStorage.getItem('apa_kpi_code');}catch(e){}
+if(saved && login(saved)){ $('#gcode').value=saved; doLogin(); } else { $('#gcode').focus(); }
+</script>
+</body>
+</html>

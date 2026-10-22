@@ -1,0 +1,22 @@
+{
+  "slug": "quan-nho-nhan-su-doanh-thu",
+  "title": "Quán Nhỏ — Báo cáo nhân sự & doanh thu",
+  "type": "dashboard",
+  "industry": "FnB",
+  "department": "HR",
+  "description": "Cơ cấu nhân sự, tuyển mới, nghỉ việc, quỹ lương và doanh thu theo ca, theo cơ sở.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Quan-Nho/",
+  "source_repo": "https://github.com/tbinh-06/Quan-Nho",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "nhân sự",
+    "quỹ lương",
+    "doanh thu"
+  ]
+}

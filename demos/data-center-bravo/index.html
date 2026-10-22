@@ -1,0 +1,478 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sơ đồ giải pháp — Data Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04173A; --ink:#EAF2FF; --ink-2:#9CB6DC; --ink-3:#7C99C4; --gold:#FFC53D;
+  --stagebg:#0B2551;
+  --sc:#0C2F6E; --sc2:#0F3272; --sframe:#3C6FB5; --sl:#2C63B5;
+  --st0:#FFFFFF; --st1:#EAF2FF; --st2:#9CB6DC; --st3:#7C99C4;
+  --sHeader:#0A2A63; --sOnHeader:#FFFFFF; --sOnHeader2:#FFC53D; --sonAcc:#04173A;
+  --ssoft:rgba(255,255,255,.045); --ssoft2:rgba(255,255,255,.025);
+  --k-gold:#FFC53D; --k-cyan:#4FC3F7; --k-purple:#C89BFF; --k-green:#7BE0A6;
+  --k-red:#FF7A66; --k-orange:#FF9A3D; --k-pink:#FF8FB1; --k-teal:#5EEAD4;
+}
+body.light{
+  --bg:#F4F7FC; --ink:#12263F; --ink-2:#5A7194; --ink-3:#75879F; --gold:#C98A08;
+  --stagebg:#FAFCFF;
+  --sc:#FFFFFF; --sc2:#F3F7FF; --sframe:#9DBBE4; --sl:#C8D8EE;
+  --st0:#FFFFFF; --st1:#12263F; --st2:#5A7194; --st3:#75879F;
+  --sHeader:#0F2C5C; --sOnHeader:#FFFFFF; --sOnHeader2:#FFD782; --sonAcc:#04173A;
+  --ssoft:rgba(15,44,92,.045); --ssoft2:rgba(15,44,92,.025);
+  --k-gold:#C98A08; --k-cyan:#1786C4; --k-purple:#7A4FD1; --k-green:#12965E;
+  --k-red:#D9483A; --k-orange:#D97218; --k-pink:#C93E76; --k-teal:#0E9488;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:'Be Vietnam Pro',system-ui,sans-serif;
+  font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;padding:20px 20px 26px}
+.wrap{width:100%;max-width:1760px;margin:0 auto}
+.head{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.headmid{flex:1;text-align:center;min-width:0}
+.headmid h1{margin:0;font-size:clamp(19px,2.3vw,29px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.headmid h1 em{font-style:normal;color:var(--gold)}
+.headmid .sub{margin-top:4px;font-size:12.5px;color:var(--ink-2)}
+.themebtn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:var(--ink-2);
+  border-radius:999px;padding:8px 16px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  flex:0 0 auto;transition:.2s;white-space:nowrap}
+.themebtn:hover{border-color:var(--gold);color:var(--gold)}
+body.light .themebtn{background:#fff;border-color:#E2E8F2;color:#5A7194}
+.stage{position:relative;border-radius:16px;overflow:hidden;background:var(--stagebg);
+  border:1px solid rgba(255,255,255,.09)}
+body.light .stage{border-color:#E2E8F2}
+svg#stage{display:block;width:100%;height:auto}
+.cap{margin-top:13px;background:var(--sc);border:1px solid var(--sl);border-left:4px solid var(--gold);
+  border-radius:12px;padding:13px 18px;display:flex;align-items:center;gap:16px;min-height:58px}
+.cap .k{font-size:25px;font-weight:800;color:var(--gold);line-height:1;min-width:100px;text-align:center}
+.cap .k small{display:block;font-size:10.5px;font-weight:600;color:var(--ink-3);margin-top:5px}
+.cap .t{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.cap .t b{color:var(--ink);font-weight:700}
+.cap .t i{font-style:normal;color:var(--k-cyan);font-weight:700}
+.foot{margin-top:9px;text-align:right}
+.rp{background:none;border:1px solid var(--sl);color:var(--ink-2);border-radius:8px;padding:6px 14px;
+  font-family:inherit;font-size:11.5px;cursor:pointer}
+.rp:hover{border-color:var(--gold);color:var(--gold)}
+@media (prefers-reduced-motion: reduce){.themebtn{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div class="headmid">
+      <h1>Data Center là <em>nền tảng dữ liệu dài hạn</em></h1>
+      <div class="sub">Nhiều nguồn → xử lý &amp; chuẩn hoá có kiểm soát → một nền tảng trung tâm → Data Mart chuyên biệt → Báo cáo · Cảnh báo · AI Agent</div>
+    </div>
+    <button class="themebtn" id="themeBtn">☀️  Nền sáng</button>
+  </div>
+
+  <div class="stage">
+    <svg id="stage" viewBox="0 0 1800 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="gOr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9A3D"/><stop offset="1" stop-color="#E8730E"/></linearGradient>
+        <linearGradient id="gPu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A78BFA"/><stop offset="1" stop-color="#6D28D9"/></linearGradient>
+        <linearGradient id="gBl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60A5FA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
+        <g id="defsPaths"></g>
+      </defs>
+      <g id="lyLines"></g><g id="ly1"></g><g id="fx"></g>
+    </svg>
+  </div>
+
+  <div class="cap"><div class="k" id="capK">–<small>&nbsp;</small></div><div class="t" id="capT">&nbsp;</div></div>
+  <div class="foot"><button class="rp" id="replay">↻ Chạy lại</button></div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const NS='http://www.w3.org/2000/svg', $=id=>document.getElementById(id);
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const T=(x,y,t,f,s,w,an)=>{const e=el('text',{x,y,fill:f,'font-size':s,'font-weight':w||600,'text-anchor':an||'start'});e.textContent=t;return e;};
+const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= ICON ================= */
+function ic(kind,x,y,c,sc){
+  const g=el('g',{transform:`translate(${x},${y}) scale(${sc||1})`,fill:'none',stroke:c,
+    'stroke-width':1.9,'stroke-linecap':'round','stroke-linejoin':'round'});
+  const P=d=>g.appendChild(el('path',{d})), C=(cx,cy,r,f)=>g.appendChild(el('circle',{cx,cy,r,fill:f||'none'}));
+  switch(kind){
+    case 'calc': g.appendChild(el('rect',{x:-7,y:-9,width:14,height:18,rx:2.4})); P('M-4.2,-5 h8.4');
+      [-1,2.6,6].forEach(r=>[-4,0,4].forEach(cx=>C(cx,r,.95,c))); break;
+    case 'user': C(0,-4,3.6); P('M-8,8 c0,-4.4 3.6,-7 8,-7 s8,2.6 8,7'); break;
+    case 'grid': g.appendChild(el('rect',{x:-9,y:-9,width:18,height:18,rx:2.4})); P('M-9,-3 h18 M-9,3 h18 M-3,-9 v18 M3,-9 v18'); break;
+    case 'sheet': g.appendChild(el('rect',{x:-8,y:-9,width:16,height:18,rx:2.4})); P('M-8,-3 h16 M-8,3 h16 M-1.5,-9 v18'); break;
+    case 'win': P('M-9,-7 l8,-1.4 v8.4 h-8 Z M1,-8.6 l8,-1.4 v10 h-8 Z M-9,1 h8 v8.4 l-8,-1.4 Z M1,1 h8 v10 l-8,-1.4 Z'); break;
+    case 'cart': P('M-8,-6 h2.5 l2,10 h9 l2,-7.5 h-11.5'); C(-2,6.5,1.5,c); C(5,6.5,1.5,c); break;
+    case 'chat': P('M-8,-7 h16 a2,2 0 0 1 2,2 v7 a2,2 0 0 1 -2,2 h-8 l-4,4 v-4 h-4 a2,2 0 0 1 -2,-2 v-7 a2,2 0 0 1 2,-2 Z');
+      [-3.5,0,3.5].forEach(dx=>C(dx,-1.5,1.2,c)); break;
+    case 'cam': g.appendChild(el('rect',{x:-9,y:-6,width:18,height:12,rx:2.5})); C(0,0,3.4); P('M-5,-6 v-2 h4 v2'); break;
+    case 'gear': C(0,0,3.4); P('M0,-9.5 v3.2 M0,9.5 v-3.2 M-9.5,0 h3.2 M9.5,0 h-3.2 M-6.7,-6.7 l2.3,2.3 M6.7,6.7 l-2.3,-2.3 M6.7,-6.7 l-2.3,2.3 M-6.7,6.7 l2.3,-2.3'); break;
+    case 'db': g.appendChild(el('ellipse',{cx:0,cy:-6,rx:9,ry:3.4,fill:'none'}));
+      P('M-9,-6 v12 c0,1.9 4,3.4 9,3.4 s9,-1.5 9,-3.4 v-12 M-9,0 c0,1.9 4,3.4 9,3.4 s9,-1.5 9,-3.4'); break;
+    case 'shield': P('M0,-10 L9,-6 v6 C9,5 4.5,9 0,10.5 C-4.5,9 -9,5 -9,0 v-6 Z'); break;
+    case 'lake': P('M-10,3 C-6,-1 -2,5 2,1 C5,-2 8,2 10,0'); P('M-10,8 C-6,4 -2,10 2,6 C5,3 8,7 10,5'); P('M-7,-4 h14 l-3,-5 h-8 Z'); break;
+    case 'wh': P('M-10,-1 L0,-9 L10,-1 v10 h-20 Z'); P('M-5,9 v-6 h10 v6'); break;
+    case 'chart': P('M-9,8 h18 M-6,8 v-7 M0,8 v-12 M6,8 v-5'); break;
+    case 'bell': P('M-7,4 h14 M-5.5,4 v-6 a5.5,5.5 0 0 1 11,0 v6 M-2,7.5 a2,2 0 0 0 4,0'); break;
+    case 'doc': P('M-7,-10 h10 l4,4 v16 h-14 Z M3,-10 v4 h4 M-4,-2 h8 M-4,3 h8'); break;
+    case 'bot': g.appendChild(el('rect',{x:-8,y:-5,width:16,height:12,rx:3.5})); P('M0,-5 v-3.5 M-11,0 v3 M11,0 v3'); C(-3.4,.5,1.5,c); C(3.4,.5,1.5,c); break;
+    case 'plug': P('M-4,-9 v5 M4,-9 v5 M-8,-4 h16 v4 a8,8 0 0 1 -16,0 Z M0,4 v6'); break;
+    case 'share': C(-6,0,2.6); C(6,-5,2.6); C(6,5,2.6); P('M-3.6,-1.2 L3.6,-4 M-3.6,1.2 L3.6,4'); break;
+    case 'users': C(-3.5,-4,3.2); C(5,-3,2.6); P('M-10,7 c0,-4 3,-6 6.5,-6 s6.5,2 6.5,6 M4,1.4 c3.2,0 6,1.8 6,5.6'); break;
+    case 'lock': g.appendChild(el('rect',{x:-6.5,y:-1.5,width:13,height:10.5,rx:2.2})); P('M-3.8,-1.5 v-3.7 a3.8,3.8 0 0 1 7.6,0 v3.7'); break;
+    case 'eye': P('M-10,0 C-6,-5.5 6,-5.5 10,0 C6,5.5 -6,5.5 -10,0 Z'); C(0,0,2.8); break;
+    case 'check': P('M-8,0 l5.5,5.5 l11,-12'); break;
+    case 'cloud': P('M-6,5 a5,5 0 0 1 0.6,-9.9 A6.5,6.5 0 0 1 7,-2.5 a4,4 0 0 1 0,7.5 Z'); break;
+  }
+  return g;
+}
+
+/* ================= DỮ LIỆU SƠ ĐỒ ================= */
+const SRC=[
+ {n:'Bravo ERP',            s:'Kế toán · Kho · Mua hàng · Sản xuất',        i:'calc',  c:'var(--k-orange)'},
+ {n:'CRM / Bán hàng',       s:'Salesforce · HubSpot · CRM nội bộ',          i:'user',  c:'var(--k-pink)'},
+ {n:'Base.vn',              s:'Work · Request · HRM · Office',              i:'grid',  c:'var(--k-gold)'},
+ {n:'Kênh bán & POS',       s:'Website · Sàn TMĐT · POS · DMS',             i:'cart',  c:'var(--k-green)'},
+ {n:'Google Workspace',     s:'Sheets · Forms · Drive · Gmail',             i:'sheet', c:'var(--k-cyan)'},
+ {n:'Microsoft 365',        s:'Excel · SharePoint · Teams · Outlook',       i:'win',   c:'var(--k-cyan)'},
+ {n:'Kênh giao tiếp',       s:'Zalo OA · Facebook · Tổng đài · Email',      i:'chat',  c:'var(--k-purple)'},
+ {n:'Thiết bị & IoT',       s:'Camera AI · Máy chấm công · Cân · Máy SX',   i:'cam',   c:'var(--k-teal)'},
+];
+const PIPE=[['COLLECT','Thu thập'],['CLEAN','Làm sạch'],['VALIDATE','Kiểm tra'],
+            ['STANDARDIZE','Chuẩn hoá'],['INTEGRATE','Tích hợp'],['LOAD','Nạp vào kho']];
+const DQC=['Thiếu dữ liệu','Trùng bản ghi','Sai kiểu dữ liệu','Khớp mã gốc','Quy tắc nghiệp vụ','Đối chiếu số'];
+const SEC=[['users','Phân quyền','RBAC / ABAC'],['lock','Mã hoá','Data Encryption'],
+           ['eye','Giám sát','Audit & Logs'],['check','Tuân thủ','Compliance'],['cloud','Sao lưu','Backup & DR']];
+const MARTS=[
+ {n:'Bán hàng & Doanh thu', c:'var(--k-gold)',  i:'chart'},
+ {n:'Khách hàng',           c:'var(--k-pink)',  i:'user'},
+ {n:'Kho & Tồn kho',        c:'var(--k-cyan)',  i:'wh'},
+ {n:'Sản xuất & Vận hành',  c:'var(--k-red)',   i:'gear'},
+ {n:'Tài chính & Công nợ',  c:'var(--k-green)', i:'calc'},
+ {n:'Mua hàng & Nhà cung cấp', c:'var(--k-orange)', i:'cart'},
+ {n:'Nhân sự',              c:'var(--k-teal)',  i:'users'},
+ {n:'Kho tri thức (RAG)',   c:'var(--k-purple)',i:'db'},
+];
+const ROLES=[
+ {n:'Ban Giám đốc',        s:'Toàn cảnh doanh nghiệp',      i:'users', c:'var(--k-orange)', see:[1,1,1,1,1,1,1,1]},
+ {n:'Kinh doanh & Marketing', s:'Doanh thu · khách hàng · chiến dịch', i:'chart', c:'var(--k-pink)', see:[1,1,0,0,0,0,0,1]},
+ {n:'Kho & Vận hành',      s:'Nhập – xuất – tồn · giao nhận', i:'wh',   c:'var(--k-cyan)',   see:[0,0,1,1,0,1,0,1]},
+ {n:'Tài chính – Kế toán', s:'Doanh thu · chi phí · công nợ', i:'calc', c:'var(--k-green)',  see:[1,0,0,0,1,1,1,1]},
+ {n:'Sản xuất',            s:'Kế hoạch · năng suất · NVL',    i:'gear', c:'var(--k-red)',    see:[0,0,1,1,0,1,0,1]},
+ {n:'Nhân sự',             s:'Chấm công · lương · đánh giá',  i:'user', c:'var(--k-teal)',   see:[0,0,0,0,0,0,1,1]},
+];
+const OUT=[
+ {n:'Dashboard điều hành', s:'Theo dõi thời gian thực · drill-down', i:'chart', c:'var(--k-gold)'},
+ {n:'Báo cáo định kỳ',     s:'Ngày · tuần · tháng · quý, tự động gửi', i:'doc',  c:'var(--k-cyan)'},
+ {n:'Cảnh báo tự động',    s:'Vượt ngưỡng · bất thường · quá hạn',  i:'bell',  c:'var(--k-red)'},
+ {n:'AI Agent hỏi đáp',    s:'Hỏi bằng lời, trả lời đúng quyền',    i:'bot',   c:'var(--k-purple)'},
+ {n:'API / đẩy ngược',     s:'Trả số về ERP · CRM · app nội bộ',    i:'plug',  c:'var(--k-green)'},
+ {n:'Chia sẻ & xuất file', s:'Excel · PDF · link chia sẻ có hạn',   i:'share', c:'var(--k-teal)'},
+];
+
+/* ================= HẠ TẦNG VẼ ================= */
+const P={}, defs=$('defsPaths'), LINES=$('lyLines');
+function wire(id,d,opt){
+  opt=opt||{};
+  const p=el('path',{id,d,fill:'none'}); defs.appendChild(p);
+  P[id]={node:p,len:p.getTotalLength()};
+  const v=el('path',{d,fill:'none',stroke:opt.stroke||'var(--sl)','stroke-width':opt.w||1.6,
+    'stroke-dasharray':opt.dash||'4 6',opacity:opt.o||.55});
+  if(opt.cls) v.setAttribute('class',opt.cls);
+  LINES.appendChild(v);
+}
+function at(id,t){const p=P[id];if(!p)return{x:0,y:0};return p.node.getPointAtLength(Math.max(0,Math.min(1,t))*p.len);}
+let parts=[],raf=null,last=0;
+function dot(id,color,speed,onEnd,r){
+  if(!P[id]){ if(onEnd)onEnd(); return; }
+  const n=el('circle',{r:r||3.6,fill:color,filter:'url(#glow)'});
+  $('fx').appendChild(n); parts.push({node:n,id,t:0,speed,onEnd});
+}
+function clearFx(){parts.forEach(p=>p.node.remove());parts=[];}
+
+/* ================= DỰNG SƠ ĐỒ ================= */
+const G={}, pipeEls=[], martEls=[], outEls=[], PERM=[];
+const CX=340, CW=1064, BX=456;
+const MX=1184, MW=210, MH=64, MP=71, MY=100;
+const AX=1470, AW=300, AH=104, AP=112, AY=100;
+(function build(){
+  ['frame','src','t1','t2','t3','mart','out'].forEach(k=>{G[k]=el('g',{});$('ly1').appendChild(G[k]);});
+  let g=G.src;
+
+  /* ---- cột nguồn ---- */
+  g.appendChild(T(40,74,'NGUỒN DỮ LIỆU · MỌI HỆ THỐNG ĐANG DÙNG','var(--st2)',11,700));
+  SRC.forEach((s,i)=>{
+    const y=88+i*78;
+    g.appendChild(el('rect',{x:40,y,width:268,height:68,rx:11,fill:'var(--sc)',stroke:s.c,'stroke-width':1.4}));
+    g.appendChild(el('rect',{x:40,y,width:5,height:68,rx:2.5,fill:s.c}));
+    g.appendChild(el('rect',{x:56,y:y+18,width:32,height:32,rx:9,fill:s.c,opacity:.16}));
+    g.appendChild(ic(s.i,72,y+34,s.c,1.05));
+    g.appendChild(T(98,y+30,s.n,'var(--st1)',13,700));
+    g.appendChild(T(98,y+47,s.s,'var(--st3)',9.4,500));
+  });
+
+  /* ---- khung Data Center ---- */
+  g=G.frame;
+  g.appendChild(el('rect',{x:CX,y:22,width:CW,height:690,rx:18,fill:'none',
+    stroke:'var(--sframe)','stroke-width':1.4,'stroke-dasharray':'7 6'}));
+  g.appendChild(el('rect',{x:CX+20,y:36,width:CW-40,height:50,rx:12,fill:'var(--sHeader)',stroke:'var(--k-gold)','stroke-width':1.6}));
+  g.appendChild(T(CX+CW/2,59,'DATA CENTER — NỀN TẢNG DỮ LIỆU TRUNG TÂM','var(--sOnHeader)',16,800,'middle'));
+  g.appendChild(T(CX+CW/2,76,'Data Lake  →  Data Warehouse  →  Data Mart','var(--sOnHeader2)',10.5,600,'middle'));
+
+  function tier(y,h,grad,no,lines,railIcon){
+    g.appendChild(el('rect',{x:CX+20,y,width:734,height:h,rx:12,fill:'var(--ssoft)',stroke:'var(--sl)','stroke-width':1.1}));
+    g.appendChild(el('rect',{x:CX+20,y,width:96,height:h,rx:12,fill:grad}));
+    const cy=y+h/2, top=cy-(lines.length*14)/2-26;
+    g.appendChild(ic(railIcon,CX+68,top-4,'var(--st0)',1.05));
+    g.appendChild(T(CX+68,top+24,no,'var(--st0)',11.5,800,'middle'));
+    lines.forEach((t,i)=>g.appendChild(T(CX+68,top+42+i*14,t,'var(--st0)',9.6,700,'middle')));
+  }
+
+  /* ---- 01 · kết nối & xử lý ---- */
+  g=G.t1;
+  tier(102,210,'url(#gOr)','01',['KẾT NỐI &','XỬ LÝ DỮ LIỆU','(LÀM SẠCH)'],'gear');
+  g.appendChild(el('rect',{x:BX+10,y:118,width:614,height:68,rx:9,fill:'rgba(255,197,61,.08)',stroke:'var(--k-gold)','stroke-width':1.1}));
+  g.appendChild(T(BX+20,140,'🔍  DATA QUALITY CHECK — kiểm soát trước khi vào kho','var(--k-gold)',10.5,800));
+  DQC.forEach((d,i)=>{const x=BX+26+(i%3)*204, y=160+Math.floor(i/3)*18;
+    g.appendChild(T(x,y,'✓','var(--k-green)',10,800)); g.appendChild(T(x+13,y,d,'var(--st2)',10,500));});
+  g.appendChild(T(BX+318,212,'PIPELINE KẾT NỐI & CHUẨN HOÁ DỮ LIỆU','var(--k-gold)',10.5,800,'middle'));
+  PIPE.forEach((p,i)=>{
+    const x=BX+10+i*104, y=224;
+    const box=el('rect',{x,y,width:98,height:62,rx:9,fill:'var(--sc)',stroke:'var(--sl)','stroke-width':1.2});
+    g.appendChild(box);
+    g.appendChild(T(x+7,y+16,String(i+1),'var(--st3)',8.5,800));
+    const t1=T(x+49,y+32,p[0],'var(--st1)',10,800,'middle'), t2=T(x+49,y+47,p[1],'var(--st2)',9,500,'middle');
+    g.appendChild(t1); g.appendChild(t2); pipeEls.push({box,t1,t2});
+    if(i<5) wire('pS'+i,`M${x+98},${y+31} L${x+104},${y+31}`,{o:0});
+  });
+
+  /* ---- 02 · lưu trữ ---- */
+  g=G.t2;
+  tier(330,160,'url(#gPu)','02',['LƯU TRỮ','DỮ LIỆU'],'db');
+  [[BX+8,192,'lake','var(--k-cyan)','DATA LAKE','giữ nguyên bản thô'],
+   [BX+220,192,'wh','var(--k-gold)','DATA WAREHOUSE','đã chuẩn hoá · mô hình hoá'],
+   [BX+432,192,'chart','var(--k-purple)','DATA MARTS','cắt lát theo vai trò']].forEach((b,i)=>{
+    const x=b[0], w=b[1], c=b[3];
+    g.appendChild(el('rect',{x,y:350,width:w,height:120,rx:11,fill:'var(--sc)',stroke:c,'stroke-width':1.5}));
+    g.appendChild(ic(b[2],x+w/2,386,c,1.35));
+    g.appendChild(T(x+w/2,424,b[4],'var(--st1)',13.5,800,'middle'));
+    g.appendChild(T(x+w/2,443,b[5],'var(--st2)',9.6,500,'middle'));
+    if(i<2) g.appendChild(T(x+w+10,417,'→','var(--k-gold)',19,800,'middle'));
+  });
+
+  /* ---- 03 · bảo mật ---- */
+  g=G.t3;
+  tier(506,153,'url(#gBl)','03',['BẢO MẬT','DỮ LIỆU'],'shield');
+  SEC.forEach((s,i)=>{
+    const x=BX+16+i*122;
+    g.appendChild(el('rect',{x,y:530,width:112,height:104,rx:10,fill:'var(--sc)',stroke:'var(--sl)','stroke-width':1.1}));
+    g.appendChild(ic(s[0],x+56,566,'var(--k-cyan)',1.2));
+    g.appendChild(T(x+56,600,s[1],'var(--st1)',11.5,700,'middle'));
+    g.appendChild(T(x+56,615,s[2],'var(--st3)',8.8,500,'middle'));
+  });
+  const pf=el('text',{x:CX+CW/2,y:686,'text-anchor':'middle','font-size':12.5,'font-weight':600});
+  const s1=el('tspan',{fill:'var(--st2)'}); s1.textContent='NỀN TẢNG:  ';
+  const s2=el('tspan',{fill:'var(--k-gold)','font-weight':800}); s2.textContent='BigQuery · SQL Server';
+  pf.appendChild(s1); pf.appendChild(s2); g.appendChild(pf);
+
+  /* ---- cột Data Mart (trong khung) ---- */
+  g=G.mart;
+  MARTS.forEach((m,i)=>{
+    const y=MY+i*MP;
+    const box=el('rect',{x:MX,y,width:MW,height:MH,rx:11,fill:'var(--sc)',stroke:m.c,'stroke-width':1.4});
+    g.appendChild(box);
+    g.appendChild(el('rect',{x:MX,y,width:5,height:MH,rx:2.5,fill:m.c}));
+    g.appendChild(el('rect',{x:MX+14,y:y+18,width:28,height:28,rx:8,fill:m.c,opacity:.16}));
+    g.appendChild(ic(m.i,MX+28,y+32,m.c,.92));
+    g.appendChild(T(MX+52,y+29,m.n,'var(--st1)',12,700));
+    g.appendChild(T(MX+52,y+45,'data mart','var(--st3)',9,500));
+    martEls.push(box);
+  });
+
+  /* ---- cột phải: 2 chế độ xem ---- */
+  g=G.out;
+  ['use','perm'].forEach((m,i)=>{
+    const bw=146, x=AX+i*(bw+8), y=54;
+    const bx=el('rect',{x,y,width:bw,height:26,rx:8,fill:'var(--sc)',stroke:'var(--sl)','stroke-width':1.2});
+    bx.style.cursor='pointer'; bx.setAttribute('data-m',m); g.appendChild(bx);
+    const tb=T(x+bw/2,y+17,m==='use'?'Khai thác & sử dụng':'Phân quyền theo vai trò','var(--st2)',10.5,700,'middle');
+    tb.style.cursor='pointer'; tb.setAttribute('data-m',m); g.appendChild(tb);
+    [bx,tb].forEach(e=>e.addEventListener('click',()=>{rightMode=m;renderRight();}));
+  });
+  g.appendChild(el('g',{id:'rightCol'}));
+
+  /* ---- dây ---- */
+  SRC.forEach((s,i)=>{ const y=88+i*78+34;
+    wire('w_s'+i, `M308,${y} C356,${y} 400,${150+i*3} ${BX+6},${146+i*4}`, {stroke:s.c,o:.4,w:1.4}); });
+  wire('w_q2p', `M${BX+59},186 L${BX+59},224`,{stroke:'var(--k-green)'});
+  wire('w_p2l', `M${BX+628},255 C${BX+672},306 ${BX+250},316 ${BX+104},350`,{stroke:'var(--k-cyan)'});
+  wire('w_l2w', `M${BX+200},410 L${BX+218},410`,{stroke:'var(--k-cyan)'});
+  wire('w_w2m', `M${BX+412},410 L${BX+430},410`,{stroke:'var(--k-purple)'});
+  MARTS.forEach((m,i)=>{ const my=MY+i*MP+MH/2;
+    wire('w_m'+i, `M${BX+624},410 C${MX-104},410 ${MX-72},${my} ${MX-2},${my}`,{stroke:m.c,dash:'5 6',o:.35}); });
+  OUT.forEach((o,i)=>{ const ay=AY+i*AP+AH/2;
+    wire('w_o'+i, `M${MX+MW},380 C${MX+MW+40},380 ${AX-40},${ay} ${AX-2},${ay}`,
+         {stroke:o.c,dash:'5 6',o:.32,cls:'wo wo'+i}); });
+  // chế độ phân quyền: mỗi vai trò chỉ nối tới đúng những Data Mart được cấp
+  PERM.length=0;
+  ROLES.forEach((r,i)=>{ const ay=AY+i*AP+AH/2;
+    r.see.forEach((ok,j)=>{ if(!ok) return;
+      const my=MY+j*MP+MH/2;
+      wire('w_p'+i+'_'+j, `M${MX+MW},${my} C${MX+MW+46},${my} ${AX-46},${ay} ${AX-2},${ay}`,
+           {stroke:MARTS[j].c,dash:'5 6',o:.28,cls:'wp wp_'+i+'_'+j});
+      PERM.push([i,j]);
+    });
+  });
+})();
+
+let rightMode='use';
+function renderRight(){
+  const g=$('rightCol'); g.textContent=''; outEls.length=0;
+  document.querySelectorAll('[data-m]').forEach(e=>{
+    const on=e.getAttribute('data-m')===rightMode;
+    if(e.tagName==='rect'){ e.setAttribute('stroke',on?'var(--k-gold)':'var(--sl)');
+      e.setAttribute('stroke-width',on?2:1.2); e.setAttribute('fill',on?'var(--ssoft)':'var(--sc)'); }
+    else e.setAttribute('fill',on?'var(--k-gold)':'var(--st2)');
+  });
+  const L = rightMode==='use' ? OUT : ROLES;
+  const users=['Giám đốc · Trưởng bộ phận','Toàn công ty theo phân quyền','Người phụ trách liên quan',
+               'Mọi vai trò, giới hạn theo quyền','Hệ thống nghiệp vụ','Đối tác · khách hàng'];
+  L.forEach((o,i)=>{
+    const y=AY+i*AP;
+    const box=el('rect',{x:AX,y,width:AW,height:AH,rx:12,fill:'var(--sc2)',stroke:o.c,'stroke-width':1.4});
+    g.appendChild(box);
+    g.appendChild(el('rect',{x:AX+16,y:y+18,width:36,height:36,rx:10,fill:o.c,opacity:.16}));
+    g.appendChild(ic(o.i,AX+34,y+36,o.c,1.15));
+    g.appendChild(T(AX+62,y+34,o.n,'var(--st1)',13.5,700));
+    g.appendChild(T(AX+62,y+52,o.s,'var(--st3)',9.8,500));
+    if(rightMode==='use'){
+      g.appendChild(T(AX+18,y+82,'▸  '+users[i],'var(--st2)',10,500));
+    } else {
+      // 8 ô tương ứng 8 Data Mart: sáng = được xem, mờ + khoá = không
+      o.see.forEach((ok,j)=>{
+        const cx=AX+18+j*35, cy=y+70;
+        g.appendChild(el('rect',{x:cx,y:cy,width:30,height:20,rx:5,
+          fill:ok?MARTS[j].c:'var(--ssoft)',opacity:ok?.9:.5,
+          stroke:ok?MARTS[j].c:'var(--sl)','stroke-width':1}));
+        if(!ok) g.appendChild(T(cx+15,cy+14,'🔒','var(--st3)',9,600,'middle'));
+      });
+      const n=o.see.filter(Boolean).length;
+      g.appendChild(T(AX+18,y+96,'Xem được '+n+'/8 Data Mart','var(--st3)',9.6,600));
+    }
+    outEls.push(box);
+  });
+  const useMode = rightMode==='use';
+  document.querySelectorAll('.wo').forEach(v=>v.setAttribute('opacity',useMode?'.32':'0'));
+  document.querySelectorAll('.wp').forEach(v=>v.setAttribute('opacity',useMode?'0':'.28'));
+  oBusy=0; oCool=0; oTurn=0;
+  resetRight();
+}
+
+/* ================= HIỆU ỨNG ================= */
+function cap(k,t){const p=k.split('|');$('capK').innerHTML=p[0]+'<small>'+(p[1]||'&nbsp;')+'</small>';$('capT').innerHTML=t;}
+function litPipe(i){
+  const p=pipeEls[i]; if(!p) return;
+  p.box.setAttribute('fill','var(--k-gold)'); p.box.setAttribute('stroke','var(--k-gold)');
+  p.t1.setAttribute('fill','var(--sonAcc)'); p.t2.setAttribute('fill','var(--sonAcc)');
+  setTimeout(()=>{p.box.setAttribute('fill','var(--sc)');p.box.setAttribute('stroke','var(--sl)');
+    p.t1.setAttribute('fill','var(--st1)');p.t2.setAttribute('fill','var(--st2)');},reduce?80:900);
+}
+function flashBox(b,c){ if(!b) return; const ow=b.getAttribute('stroke-width');
+  b.setAttribute('stroke-width','2.8'); setTimeout(()=>b.setAttribute('stroke-width',ow||'1.4'),760); }
+
+let FLOW=[], busy={}, cool={};
+function buildFlow(){
+  FLOW=[]; SRC.forEach((s,i)=>FLOW.push(['w_s'+i,s.c,.34]));
+  FLOW.push(['w_q2p','var(--k-green)',1.0],['w_p2l','var(--k-cyan)',.42],
+            ['w_l2w','var(--k-cyan)',.52],['w_w2m','var(--k-purple)',.52]);
+  for(let i=0;i<5;i++) FLOW.push(['pS'+i,'var(--k-gold)',1.5]);
+}
+function flowTick(){
+  const now=performance.now();
+  FLOW.forEach(([id,c,sp])=>{
+    if(busy[id]||now<(cool[id]||0)) return; busy[id]=1;
+    dot(id,c,sp,()=>{busy[id]=0;cool[id]=performance.now()+700+Math.random()*500;},4);
+  });
+}
+/* Mart & đầu ra: mỗi lượt 1 chấm, xoay vòng */
+let mBusy=0,mCool=0,mTurn=0, oBusy=0,oCool=0,oTurn=0;
+/* --- chế độ phân quyền: quét lần lượt TỪNG vai trò --- */
+let roleIdx=-1, roleT=99;
+function lightRole(k){
+  roleIdx=k; const r=ROLES[k];
+  outEls.forEach((b,i)=>{ const on=i===k;
+    b.setAttribute('opacity', on?'1':'.3');
+    b.setAttribute('stroke', on?'var(--k-gold)':ROLES[i].c);
+    b.setAttribute('stroke-width', on?2.2:1.4); });
+  martEls.forEach((b,j)=>{ const on=!!r.see[j];
+    b.setAttribute('opacity', on?'1':'.32');
+    b.setAttribute('stroke-width', on?2:1.4); });
+  document.querySelectorAll('.wp').forEach(v=>v.setAttribute('opacity','.06'));
+  r.see.forEach((ok,j)=>{ if(!ok) return;
+    const v=document.querySelector('.wp_'+k+'_'+j); if(v) v.setAttribute('opacity','.85'); });
+  // chấm chạy lần lượt qua từng mart được cấp
+  const list=r.see.map((ok,j)=>ok?j:-1).filter(j=>j>=0);
+  (function chain(n){
+    if(n>=list.length || roleIdx!==k) return;
+    const j=list[n];
+    flashBox(martEls[j],MARTS[j].c);
+    dot('w_p'+k+'_'+j, MARTS[j].c, .85, ()=>{ flashBox(outEls[k],'var(--k-gold)'); chain(n+1); }, 4.2);
+  })(0);
+}
+function resetRight(){
+  roleIdx=-1; roleT=99;
+  outEls.forEach((b,i)=>{ b.setAttribute('opacity','1');
+    b.setAttribute('stroke',(rightMode==='use'?OUT:ROLES)[i].c); b.setAttribute('stroke-width',1.4); });
+  martEls.forEach(b=>{ b.setAttribute('opacity','1'); b.setAttribute('stroke-width',1.4); });
+}
+function fanTick(){
+  const now=performance.now();
+  if(!mBusy && now>=mCool){ const i=mTurn++%MARTS.length; mBusy=1;
+    dot('w_m'+i,MARTS[i].c,.5,()=>{mBusy=0;mCool=performance.now()+520;flashBox(martEls[i],MARTS[i].c);},4.2); }
+  if(rightMode==='use' && !oBusy && now>=oCool){
+    oBusy=1; const i=oTurn++%OUT.length;
+    dot('w_o'+i,OUT[i].c,.5,()=>{oBusy=0;oCool=performance.now()+620;flashBox(outEls[i],OUT[i].c);},4.2);
+  }
+}
+const CAPS=[
+ ['8|nhóm nguồn','Mọi hệ thống đang dùng — <b>Bravo ERP · CRM · Base · POS · Google · Microsoft · kênh chat · thiết bị IoT</b> — được kết nối về <i>một chỗ duy nhất</i>.'],
+ ['6|bước xử lý','<b>Pipeline</b>: thu thập → làm sạch → kiểm tra → chuẩn hoá → tích hợp → nạp kho. Không đạt <i>Data Quality Check</i> thì không được vào kho.'],
+ ['3|lớp lưu trữ','<b>Data Lake</b> giữ nguyên bản thô · <b>Data Warehouse</b> đã chuẩn hoá dùng chung · <b>Data Mart</b> cắt lát theo vai trò.'],
+ ['8|Data Mart','Mỗi phòng ban một lát dữ liệu chuyên biệt, nằm ngay <i>trong Data Center</i> — không phải hệ thống rời bên ngoài.'],
+ ['6|cách khai thác','Từ Data Mart ra <b>Dashboard · Báo cáo định kỳ · Cảnh báo tự động · AI Agent · API đẩy ngược · Chia sẻ file</b> — mỗi kênh phục vụ một nhóm người dùng.'],
+ ['6|vai trò','Bấm <b>Phân quyền theo vai trò</b> ở cột phải: mỗi vai trò chỉ đọc được những Data Mart được cấp, phần còn lại <i>khoá lại</i> ngay từ tầng dữ liệu.'],
+];
+let ci=0,ct=99,pi=0,pt=0;
+function tick(ts){
+  const dt=Math.min(.05,(ts-last)/1000)||0; last=ts;
+  for(let i=parts.length-1;i>=0;i--){
+    const p=parts[i]; p.t+=p.speed*dt;
+    if(p.t>=1){p.node.remove();parts.splice(i,1);if(p.onEnd)p.onEnd();continue;}
+    const pt2=at(p.id,p.t); p.node.setAttribute('cx',pt2.x); p.node.setAttribute('cy',pt2.y);
+  }
+  flowTick(); fanTick();
+  if(rightMode==='perm'){ roleT+=dt;
+    if(roleT>4.2){ roleT=0; lightRole((roleIdx+1)%ROLES.length); } }
+  pt+=dt; if(pt>.72){pt=0; litPipe(pi%6); pi++;}
+  ct+=dt; if(ct>6.4){ct=0; cap(CAPS[ci%CAPS.length][0],CAPS[ci%CAPS.length][1]); ci++;}
+  raf=requestAnimationFrame(tick);
+}
+function start(){ clearFx(); busy={}; cool={}; mBusy=oBusy=0; mCool=oCool=0; buildFlow();
+  renderRight(); ci=0; ct=99; pi=0; pt=0; }
+$('replay').addEventListener('click',start);
+(function(){ const b=$('themeBtn');
+  b.addEventListener('click',()=>{ const light=document.body.classList.toggle('light');
+    b.textContent = light ? '🌙  Nền tối' : '☀️  Nền sáng'; });
+})();
+start(); last=performance.now(); raf=requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

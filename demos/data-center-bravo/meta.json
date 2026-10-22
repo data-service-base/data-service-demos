@@ -1,0 +1,22 @@
+{
+  "slug": "data-center-bravo",
+  "title": "Data Center — Sơ đồ giải pháp cho Bravo",
+  "type": "proposal",
+  "industry": "General",
+  "department": "All",
+  "description": "Sơ đồ Data Center cho doanh nghiệp dùng ERP Bravo: nguồn, xử lý, data mart, báo cáo, cảnh báo và AI agent.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/SDGP_Bravo/",
+  "source_repo": "https://github.com/tbinh-06/SDGP_Bravo",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "data center",
+    "Bravo",
+    "ERP"
+  ]
+}

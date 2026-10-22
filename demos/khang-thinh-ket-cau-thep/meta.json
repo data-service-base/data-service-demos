@@ -1,0 +1,23 @@
+{
+  "slug": "khang-thinh-ket-cau-thep",
+  "title": "Khang Thịnh — Báo cáo quản trị nhà máy kết cấu thép",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "All",
+  "description": "Kinh doanh, đơn hàng, dòng tiền và kho cho nhà máy kết cấu thép.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/KhangThinh/",
+  "source_repo": "https://github.com/tbinh-06/KhangThinh",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "kết cấu thép",
+    "đơn hàng",
+    "dòng tiền",
+    "tồn kho"
+  ]
+}

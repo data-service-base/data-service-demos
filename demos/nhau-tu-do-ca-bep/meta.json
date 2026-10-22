@@ -1,0 +1,22 @@
+{
+  "slug": "nhau-tu-do-ca-bep",
+  "title": "Nhậu Tự Do — Báo cáo ca bếp",
+  "type": "dashboard",
+  "industry": "FnB",
+  "department": "Vận hành",
+  "description": "Tổng quan, xu hướng, cảnh báo và phân tích lỗi theo ca bếp.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Nhau-Tu-Do/",
+  "source_repo": "https://github.com/tbinh-06/Nhau-Tu-Do",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "bếp",
+    "ca làm",
+    "QAQC"
+  ]
+}

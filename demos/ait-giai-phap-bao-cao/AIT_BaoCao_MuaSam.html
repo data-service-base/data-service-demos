@@ -1,0 +1,632 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIT CORP · Báo cáo mua sắm vật tư thiết bị</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+
+:root{
+ --bg:#eef2f7;--pan:#fff;--pan2:#f7f9fc;
+ --head:#152238;--head2:#1e3050;
+ --bd:#e3e9f1;--bd2:#d7dee8;
+ --tx:#1b2431;--mut:#7c899b;--fnt:#95a2b3;
+ --bl:#2E6FB0;--bl2:#5b93cf;--bl3:#a8c8e6;
+ --og:#e8a33d;--gr:#3FA875;--rd:#D2564A;--pu:#8b6fb0;
+ --gr-s:#e7f4ee;--rd-s:#fbecec;--og-s:#fdf4dc;--bl-s:#e9f1f9;
+ --sw:236px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--sw);background:var(--head);color:#fff;display:flex;flex-direction:column;z-index:40;overflow-y:auto}
+.brand{padding:16px 16px 14px;border-bottom:1px solid #2a3d63;display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+.blogo{background:#fff;border-radius:5px;padding:7px 9px;width:104px;height:auto;display:block;flex:none}
+.bnm{font-weight:700;font-size:13.5px;line-height:1.25;font-family:'Archivo'}
+.bsb{font-size:10px;color:#8fa3c4;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.nav{padding:12px 10px;flex:1}
+.nvl{font-size:9.5px;font-weight:700;letter-spacing:1px;color:#7389af;text-transform:uppercase;padding:10px 10px 7px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:6px;color:#c6d3e6;font:600 13px Inter,sans-serif;padding:10px 12px;cursor:pointer;margin-bottom:2px}
+.nv:hover{background:#1e3050;color:#fff}
+.nv.on{background:var(--bl);color:#fff}
+.nv i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.55;flex:none}
+.nv.on i{opacity:1}
+.sfoot{padding:14px 18px;border-top:1px solid #2a3d63;font-size:11px;color:#8fa3c4}
+
+.main{margin-left:var(--sw)}
+.top{background:#fff;border-bottom:1px solid var(--bd);padding:0 26px;position:sticky;top:0;z-index:31}
+.topin{display:flex;align-items:center;gap:14px;min-height:58px;flex-wrap:wrap}
+.ptit{font-size:17px;font-weight:700;font-family:'Archivo'}
+.psub{font-size:11.5px;color:var(--fnt);margin-top:1px}
+.sp{flex:1}
+.hb{background:var(--pan2);border:1px solid var(--bd);border-radius:20px;padding:6px 13px;font-size:11.5px;color:var(--mut);display:inline-flex;align-items:center;gap:7px}
+.hb i{width:7px;height:7px;border-radius:50%;background:var(--gr);display:block}
+
+/* ---------- FILTER BAR ---------- */
+.fbar{background:#fff;border-bottom:1px solid var(--bd);padding:11px 26px;position:sticky;top:58px;z-index:30;
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.fg{display:flex;align-items:center;gap:6px}
+.fg label{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
+.fbar select{background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;padding:6px 10px;font:500 12.5px Inter,sans-serif;color:var(--tx);cursor:pointer;max-width:290px}
+.fbar select:focus{outline:2px solid var(--bl);outline-offset:-1px}
+.fbtn{background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;padding:6px 13px;font:600 12.5px Inter,sans-serif;color:var(--mut);cursor:pointer}
+.fbtn:hover{border-color:var(--bl);color:var(--bl)}
+.fst{font-size:11.5px;color:var(--fnt);margin-left:auto}
+.fst b{color:var(--bl);font-weight:700}
+
+.wrap{padding:20px 26px 60px}
+.page{display:none}.page.on{display:block}
+.cgrp{display:flex;align-items:center;gap:12px;margin:26px 0 14px;font-size:12px;font-weight:700;font-family:'Archivo';letter-spacing:1.1px;text-transform:uppercase;color:var(--head2)}
+.cgrp:first-of-type{margin-top:4px}
+.cgrp::after{content:"";flex:1;height:1px;background:var(--bd2)}
+.cgrp b{background:var(--head);color:#fff;width:21px;height:21px;border-radius:4px;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.note{background:var(--bl-s);border-left:3px solid var(--bl);padding:10px 14px;border-radius:0 6px 6px 0;font-size:12.5px;color:#3b4a63;margin-bottom:16px}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--pan);border:1px solid var(--bd);border-left:3.5px solid var(--bl);border-radius:7px;padding:15px 17px}
+.kpi.g{border-left-color:var(--gr)}.kpi.o{border-left-color:var(--og)}.kpi.r{border-left-color:var(--rd)}
+.kl{font-size:10.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.kv{font-size:29px;font-weight:800;font-family:'Archivo';letter-spacing:-.6px;margin:7px 0 4px;line-height:1.1}
+.kv u{font-size:13px;font-weight:600;color:var(--mut);text-decoration:none;margin-left:4px}
+.kd{font-size:11.5px;color:var(--mut)}
+.up{color:var(--gr);font-weight:600}.dn{color:var(--rd);font-weight:600}
+.row{display:grid;gap:16px;margin-bottom:16px}
+.c2{grid-template-columns:1fr 1fr}.c21{grid-template-columns:1.65fr 1fr}.c12{grid-template-columns:1fr 1.65fr}
+.card{background:var(--pan);border:1px solid var(--bd);border-radius:7px;padding:15px 17px 17px}
+.ct{font-size:14px;font-weight:700;font-family:'Archivo';display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ct::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--bl);flex:none}
+.cs{font-size:11.5px;color:var(--fnt);margin:4px 0 13px;padding-left:15px}
+.cv{position:relative;height:275px}.cv.lg{height:335px}
+.seg{display:inline-flex;background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;overflow:hidden;margin-left:auto}
+.seg button{background:none;border:0;padding:5px 12px;font:600 11.5px Inter,sans-serif;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--bl);color:#fff}
+.stabs{display:flex;gap:3px;border-bottom:1px solid var(--bd);margin-bottom:16px;overflow-x:auto}
+.stab{background:none;border:0;border-bottom:2.5px solid transparent;padding:11px 17px;font:600 13.5px Inter,sans-serif;color:var(--mut);cursor:pointer;white-space:nowrap}
+.stab:hover{color:var(--tx)}.stab.on{color:var(--bl);border-bottom-color:var(--bl)}
+.spane{display:none}.spane.on{display:block}
+table{width:100%;border-collapse:collapse;font-size:12.6px}
+th{background:var(--pan2);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--bd)}
+tbody tr:hover{background:var(--pan2)}
+.n{text-align:right;font-variant-numeric:tabular-nums;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.8px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:var(--head2);font-weight:600;white-space:nowrap}
+tr.tot td{background:#eef3f9;font-weight:700;border-top:1.5px solid var(--bd2)}
+.frz th:first-child,.frz td:first-child{position:sticky;left:0;background:#fff;z-index:2;box-shadow:1px 0 0 var(--bd)}
+.frz th:first-child{background:var(--pan2);z-index:3}
+.frz tbody tr:hover td:first-child{background:var(--pan2)}
+.frz tr.tot td:first-child{background:#eef3f9}
+.scr{overflow-x:auto}
+.empty{padding:26px;text-align:center;color:var(--fnt);font-size:12.5px}
+.pill{display:inline-block;font-size:10.3px;font-weight:700;padding:3px 9px;border-radius:12px;white-space:nowrap}
+.p-g{background:var(--gr-s);color:#2b7351}.p-o{background:var(--og-s);color:#8a6420}
+.p-r{background:var(--rd-s);color:#a83c37}.p-b{background:var(--bl-s);color:#245c8f}
+.p-n{background:#eef2f7;color:#7c899b}
+.bar{height:7px;background:#e7ecf3;border-radius:4px;overflow:hidden;min-width:58px}
+.bar i{display:block;height:100%;border-radius:4px}
+.tl{display:flex;gap:2px;margin-top:5px}
+.tl span{flex:1;height:18px;border-radius:2px;background:#e7ecf3;position:relative}
+.tl span.dn2{background:var(--bl)}.tl span.ac{background:var(--og)}
+.tl span:hover::after{content:attr(data-s);position:absolute;bottom:23px;left:50%;transform:translateX(-50%);background:var(--head);color:#fff;font-size:10.5px;padding:4px 8px;border-radius:4px;white-space:nowrap;z-index:5}
+.tlk{display:flex;gap:16px;font-size:11.5px;color:var(--mut);margin-top:12px;flex-wrap:wrap}
+.tlk b{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.ntw{display:grid;grid-template-columns:250px 1fr;gap:18px}
+.ntnav{border-right:1px solid var(--bd);padding-right:14px;max-height:430px;overflow-y:auto}
+.ntb{display:block;width:100%;text-align:left;background:none;border:0;border-left:2.5px solid transparent;padding:9px 11px;cursor:pointer;border-radius:0 5px 5px 0;margin-bottom:2px}
+.ntb:hover{background:var(--pan2)}
+.ntb.on{background:var(--bl-s);border-left-color:var(--bl)}
+.ntb u{display:block;font-family:ui-monospace,Menlo,monospace;font-size:10.7px;color:var(--head2);font-weight:600;text-decoration:none}
+.ntb span{display:block;font-size:11.8px;color:var(--mut);margin-top:2px}
+.ntp{max-height:430px;overflow-y:auto}
+.stp{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.stp b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;background:#e7ecf3;color:var(--mut)}
+.stp.ok b{background:var(--gr);color:#fff}.stp.nt b{background:var(--bl);color:#fff}.stp.dg b{background:var(--og);color:#fff}
+.stp em{font-style:normal;flex:1;font-size:13px;font-weight:600}
+.stp .pc{font-size:11.5px;color:var(--mut);min-width:38px;text-align:right}
+.stp .vl{font-weight:700;min-width:78px;text-align:right;font-variant-numeric:tabular-nums}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.mk{background:var(--pan2);border:1px solid var(--bd);border-radius:6px;padding:11px 13px}
+.mk u{display:block;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);text-decoration:none}
+.mk b{display:block;font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-.4px}
+.mk b small{font-size:11px;font-weight:600;color:var(--mut)}
+
+.k5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.k5c{background:var(--pan);border:1px solid var(--bd);border-radius:7px;padding:13px 15px}
+.k5c .ttl{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mut)}
+.k5c .big{font-size:24px;font-weight:800;letter-spacing:-.5px;margin:6px 0 8px;line-height:1.1}
+.k5c .big small{font-size:12px;font-weight:600;color:var(--mut)}
+.k5c .rw{display:flex;justify-content:space-between;font-size:11.5px;padding:2px 0;gap:8px}
+.k5c .rw .l{color:var(--fnt)}
+.k5c .rw .v{font-weight:600;font-variant-numeric:tabular-nums}
+.lgd{display:flex;gap:15px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin:2px 0 12px;padding-left:15px}
+.lgd i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.s2{font-size:11.5px;font-weight:400;color:var(--fnt)}
+.hm td .hc{border-radius:3px;padding:5px 7px;text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+.hm tr.pr{cursor:pointer}
+.hm tr.pr:hover td:first-child{color:var(--bl)}
+.hm tr.ch td{background:var(--pan2);font-size:12px}
+.hm tr.ch td:first-child{padding-left:26px;color:var(--mut);font-weight:400;font-family:Inter,sans-serif;font-size:12px}
+.cr{display:inline-block;width:13px;color:var(--fnt);font-size:10px;transition:transform .15s}
+.lk{color:var(--bl);font-weight:600;text-decoration:none;font-family:ui-monospace,Menlo,monospace;font-size:11.3px;white-space:nowrap}
+.lk:hover{text-decoration:underline}
+.lk::after{content:"↗";margin-left:3px;font-size:10px;font-family:Inter,sans-serif}
+tr.pr{cursor:pointer}
+tr.pr:hover td:first-child{color:var(--bl)}
+tr.ch td{background:var(--pan2);font-size:12px}
+tr.ch td:first-child{padding-left:28px;color:var(--tx)}
+.cr.op{transform:rotate(90deg)}
+@media(max-width:1250px){.k5{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:820px){.k5{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.k5{grid-template-columns:1fr}}
+@media(max-width:1250px){.c2,.c21,.c12{grid-template-columns:1fr}.kgrid,.mini{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:980px){:root{--sw:0px}.side{transform:translateX(-100%)}.main{margin-left:0}.ntw{grid-template-columns:1fr}.ntnav{border-right:0;border-bottom:1px solid var(--bd);padding-right:0;padding-bottom:10px;max-height:180px}.fbar{top:0;position:relative}}
+@media(max-width:620px){.kgrid,.mini{grid-template-columns:1fr}}
+
+/* ─── riêng báo cáo mua sắm ─── */
+.star{color:var(--og);letter-spacing:1px;font-size:12px}
+</style>
+
+<div class="side">
+  <div class="brand">
+    <img class="blogo" src="data:image/png;base64,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" alt="AIT">
+    <div><div class="bnm">AIT CORP</div><div class="bsb">Mua sắm vật tư</div></div>
+  </div>
+  <div class="nav">
+    <div class="nvl">Báo cáo</div>
+    <button class="nv on" data-p="tq"><i></i>Mua sắm &amp; dự toán</button>
+    <button class="nv" data-p="nc"><i></i>Nhà cung cấp &amp; kho</button>
+    <div class="nvl" style="margin-top:8px">Báo cáo khác</div>
+    <a class="nv" href="AIT_BaoCao_TongQuan.html" style="text-decoration:none"><i></i>Tổng quan điều hành</a>
+    <a class="nv" href="AIT_BaoCao_TienDo.html" style="text-decoration:none"><i></i>Tiến độ dự án</a>
+    <a class="nv" href="AIT_BaoCao_TaiChinh.html" style="text-decoration:none"><i></i>Tài chính</a>
+  </div>
+  <div class="sfoot">Quy trình AIT-QT-06<br>Nguồn: Base.vn WorkFlow</div>
+</div>
+
+<div class="main">
+<div class="top"><div class="topin">
+  <div><div class="ptit" id="ptit">Tổng quan mua sắm</div><div class="psub" id="psub">Giá trị mua sắm · cơ cấu vật tư · danh mục đơn hàng</div></div>
+  <div class="sp"></div>
+  <span class="hb"><i></i>Dữ liệu minh họa</span>
+</div></div>
+
+<div class="fbar">
+  <div class="fg"><label>Dự án</label><select id="f_pj"></select></div>
+  <div class="fg"><label>Nhóm vật tư</label><select id="f_nh"></select></div>
+  <div class="fg"><label>Từ</label><select id="f_a"></select></div>
+  <div class="fg"><label>Đến</label><select id="f_b"></select></div>
+  <button class="fbtn" id="f_rs">Đặt lại</button>
+  <div class="fst2" id="f_st" style="font-size:11.5px;color:var(--fnt);margin-left:auto"></div>
+</div>
+
+<div class="wrap">
+
+<!-- ══════ MUA SẮM & DỰ TOÁN ══════ -->
+<div class="page on" id="p-tq">
+
+  <div class="cgrp"><b>1</b>Đối chiếu dự toán — ký hợp đồng — thực tế</div>
+  <div class="kgrid" style="margin-bottom:16px">
+    <div class="kpi"><div class="kl">Dự toán được duyệt</div><div class="kv" id="b1">–<u>tỷ đ</u></div><div class="kd" id="b1d">–</div></div>
+    <div class="kpi g"><div class="kl">Giá ký hợp đồng</div><div class="kv" id="b2">–<u>tỷ đ</u></div><div class="kd" id="b2d">–</div></div>
+    <div class="kpi o"><div class="kl">Giá trị thực tế</div><div class="kv" id="b3">–<u>tỷ đ</u></div><div class="kd" id="b3d">–</div></div>
+    <div class="kpi"><div class="kl">Tiến độ thực hiện</div><div class="kv" id="b4">–</div><div class="kd" id="b4d">–</div></div>
+  </div>
+  <div class="row c2">
+    <div class="card"><div class="ct">Dự toán vs ký hợp đồng vs thực tế
+        <span class="seg" id="sg_bg"><button class="on" data-m="nh">Theo nhóm vật tư</button><button data-m="pj">Theo dự án</button></span></div>
+      <div class="cs">Đơn vị tỷ đồng · khoảng cách cột 1 và 2 là mức giảm so dự toán sau thương thảo</div>
+      <div class="cv lg"><canvas id="ch_ds1"></canvas></div></div>
+    <div class="card"><div class="ct">Chênh lệch giá ký so dự toán theo dự án</div>
+      <div class="cs">Trục ngang: giá trị dự toán · Trục dọc: mức giảm so dự toán · Độ lớn bong bóng: số gói thầu · Đường đứt: mức bình quân</div>
+      <div class="cv lg"><canvas id="ch_ds2"></canvas></div></div>
+  </div>
+
+  <div class="cgrp"><b>2</b>Đối chiếu chi tiết theo đơn</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct">Đơn mua sắm và đối chiếu dự toán <span class="s2">· bấm dòng dự án để xem từng đơn</span>
+      <span class="seg" id="sg_ds"><button class="on" data-m="all">Tất cả</button><button data-m="ov">Vượt dự toán</button><button data-m="ps">Có phát sinh</button></span></div>
+    <div class="cs" id="cs_ds">–</div>
+    <div class="scr" style="max-height:540px;overflow-y:auto"><table class="frz" id="tb_ds"><thead><tr>
+      <th style="min-width:250px">Dự án / Đơn mua sắm</th><th>Nhà cung cấp</th><th>Nhóm vật tư</th><th>Giai đoạn</th>
+      <th class="n">Dự toán</th><th class="n">Giá ký</th><th class="n">% giảm</th><th class="n">Phát sinh</th>
+      <th class="n">Thực tế</th><th class="n">So dự toán</th><th>Đánh giá</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="cgrp"><b>3</b>Phát sinh sau ký hợp đồng</div>
+  <div class="card"><div class="ct">Các khoản phát sinh sau ký và nguyên nhân</div>
+    <div class="cs" id="cs_dsp">–</div>
+    <div class="scr"><table class="frz" id="tb_dsp"><thead><tr>
+      <th>Mã đơn</th><th>Mã dự án</th><th>Nhà cung cấp</th><th>Nguyên nhân phát sinh</th>
+      <th class="n">Giá ký</th><th class="n">Phát sinh</th><th class="n">% so giá ký</th><th>Mức độ</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════ NHÀ CUNG CẤP & KHO ══════ -->
+<div class="page" id="p-nc">
+  <div class="cgrp"><b>1</b>Nhà cung cấp</div>
+  <div class="kgrid" style="margin-bottom:16px">
+    <div class="kpi"><div class="kl">Số nhà cung cấp</div><div class="kv" id="n1">–</div><div class="kd" id="n1d">–</div></div>
+    <div class="kpi g"><div class="kl">Tỷ lệ giao đúng hạn</div><div class="kv" id="n2">–<u>%</u></div><div class="kd" id="n2d">–</div></div>
+    <div class="kpi o"><div class="kl">Thời gian giao bình quân</div><div class="kv" id="n3">–<u>ngày</u></div><div class="kd">Từ ký hợp đồng đến nhập kho</div></div>
+    <div class="kpi"><div class="kl">Điểm chất lượng bình quân</div><div class="kv" id="n4">–<u>/ 5</u></div><div class="kd" id="n4d">–</div></div>
+  </div>
+  <div class="row c2">
+    <div class="card"><div class="ct">Giá trị mua vào theo nhà cung cấp</div>
+      <div class="cs">Đơn vị tỷ đồng · xếp theo giá trị giảm dần</div>
+      <div class="cv"><canvas id="ch_nc1"></canvas></div></div>
+    <div class="card"><div class="ct">Chất lượng giao hàng</div>
+      <div class="cs">Số đơn giao đúng hạn và trễ hẹn theo nhà cung cấp</div>
+      <div class="cv"><canvas id="ch_nc2"></canvas></div></div>
+  </div>
+  <div class="cgrp"><b>2</b>Nhập kho thiết bị</div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="mini" id="mn_nk"></div>
+    <div class="row c21" style="margin:0">
+      <div class="card" style="border:0;padding:0"><div class="ct">Giá trị nhập kho theo tháng</div>
+        <div class="cs">Cột: giá trị nhập · Đường: lũy kế — tỷ đồng</div>
+        <div class="cv"><canvas id="ch_nk1"></canvas></div></div>
+      <div class="card" style="border:0;padding:0"><div class="ct">Phân bổ theo kho</div>
+        <div class="cs">Giá trị hàng đã nhập theo từng kho</div>
+        <div class="cv"><canvas id="ch_nk2"></canvas></div></div>
+    </div>
+  </div>
+  <div class="card"><div class="ct">Danh sách vật tư nhập kho
+      <span class="seg" id="sg_kho"><button class="on" data-m="all">Tất cả</button><button data-m="in">Đã nhập</button><button data-m="wait">Chờ nhập</button></span></div>
+    <div class="cs" id="cs_kho">–</div>
+    <div class="scr" style="max-height:520px;overflow-y:auto"><table class="frz" id="tb_kho"><thead><tr>
+      <th>Chứng từ</th><th>Mã đơn</th><th>Mã dự án</th><th>Nhà cung cấp</th><th>Nội dung</th>
+      <th>Ngày nhập / hẹn</th><th>Kho</th><th class="n">Giá trị</th><th>Trạng thái</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+</div></div>
+
+<script>
+const D={"stages": [["Hoàn thiện dự thảo HĐ", 40, 3, 22], ["Ý kiến của TBP", 8, 0, 12], ["Ký kết hợp đồng", 24, 0, 22], ["Triển khai hợp đồng", 160, 3, 17], ["Nhập kho thiết bị", 16, 0, 8], ["Hoàn thành", 0, 0, 0]], "months": ["T1/26", "T2/26", "T3/26", "T4/26", "T5/26", "T6/26", "T7/26"], "nhom": ["Máy cắt & dao cách ly", "Máy biến áp lực", "Cáp & phụ kiện", "Điều khiển & bảo vệ", "Tủ trung — hạ thế", "Kết cấu thép & giá đỡ"], "po": [["PO-26/0312", "24127-1-TRLI-P-BA3", "Hitachi Energy Vietnam", "Máy cắt & dao cách ly", 5.2, "14/03/2026", 2, 5, 0, 34, "Nguyễn Thùy Dương", 5.43, 5.05, 0.15, "Bổ sung tủ đấu nối tại chỗ"], ["PO-26/0448", "24127-1-TRLI-P-BA3", "Eaton Vietnam", "Tủ trung — hạ thế", 4.3, "22/05/2026", 4, 3, 17, 41, "Nguyễn Thùy Dương", 4.62, 4.3, 0.0, ""], ["PO-26/0571", "24127-1-TRLI-P-BA3", "Cơ khí Trần Phú", "Kết cấu thép & giá đỡ", 2.5, "09/07/2026", 6, 2, 2, 12, "Phạm Duy Tùng", 2.69, 2.5, 0.0, ""], ["PO-26/0128", "24038-2-PhBi2-P2T-BA3", "Siemens Vietnam", "Máy cắt & dao cách ly", 11.2, "18/01/2026", 0, 5, 0, 41, "Phạm Thị Hương Giang", 11.72, 10.78, 0.42, "Điều chỉnh cấu hình rơ le theo yêu cầu chủ đầu tư"], ["PO-26/0215", "24038-2-PhBi2-P2T-BA3", "Cadivi", "Cáp & phụ kiện", 8.4, "20/02/2026", 1, 5, 0, 29, "Phạm Thị Hương Giang", 9.13, 8.4, 0.0, ""], ["PO-26/0334", "24038-2-PhBi2-P2T-BA3", "Cơ khí Trần Phú", "Kết cấu thép & giá đỡ", 5.6, "25/03/2026", 2, 5, 0, 33, "Phạm Duy Tùng", 5.52, 5.32, 0.28, "Phát sinh khối lượng kết cấu thép"], ["PO-26/0502", "24038-2-PhBi2-P2T-BA3", "Hitachi Energy Vietnam", "Điều khiển & bảo vệ", 3.87, "12/06/2026", 5, 4, 1, 55, "Phạm Duy Tùng", 4.21, 3.87, 0.0, ""], ["PO-26/0588", "24038-2-PhBi2-P2T-BA3", "GE Grid Solutions", "Điều khiển & bảo vệ", 2.5, "16/07/2026", 6, 3, 12, 21, "Phạm Thị Hương Giang", 2.72, 2.5, 0.0, ""], ["PO-26/0261", "24035-1-G5MV-P-SPC", "Thibidi", "Máy biến áp lực", 5.5, "05/03/2026", 2, 5, 0, 37, "Lê Thanh Sơn", 5.93, 5.28, 0.22, "Bổ sung 01 máy biến áp dự phòng"], ["PO-26/0466", "24035-1-G5MV-P-SPC", "Siemens Vietnam", "Máy cắt & dao cách ly", 3.23, "28/05/2026", 4, 3, 26, 68, "Lê Thanh Sơn", 3.43, 3.05, 0.18, "Điều chỉnh giá theo biến động thép và đồng"], ["PO-26/0604", "24035-1-G5MV-P-SPC", "Eaton Vietnam", "Tủ trung — hạ thế", 2.0, "24/07/2026", 6, 1, 1, 13, "Lê Thanh Sơn", 2.25, 2.0, 0.0, ""], ["PO-26/0187", "24074-1-NASA2-PC-HDPC", "Thibidi", "Máy biến áp lực", 6.8, "08/02/2026", 1, 5, 0, 31, "Đặng Ngọc Trang", 7.16, 6.8, 0.0, ""], ["PO-26/0356", "24074-1-NASA2-PC-HDPC", "Hitachi Energy Vietnam", "Điều khiển & bảo vệ", 4.5, "02/04/2026", 3, 5, 0, 44, "Đặng Ngọc Trang", 4.53, 4.3, 0.2, "Bổ sung module truyền tin SCADA"], ["PO-26/0519", "24074-1-NASA2-PC-HDPC", "Cơ khí Trần Phú", "Kết cấu thép & giá đỡ", 2.93, "18/06/2026", 5, 3, 24, 49, "Đặng Ngọc Trang", 2.86, 2.78, 0.15, "Phát sinh khối lượng móng cột"], ["PO-26/0596", "24074-1-NASA2-PC-HDPC", "Cadivi", "Cáp & phụ kiện", 1.5, "21/07/2026", 6, 2, 2, 16, "Nguyễn Thùy Dương", 1.58, 1.5, 0.0, ""], ["PO-26/0577", "24041-2-GILO-P-NPMB", "Siemens Vietnam", "Máy cắt & dao cách ly", 3.4, "15/07/2026", 6, 0, 9, 22, "Nguyễn Kim Quý", 3.49, 3.4, 0.0, ""], ["PO-26/0592", "24041-2-GILO-P-NPMB", "GE Grid Solutions", "Điều khiển & bảo vệ", 2.17, "20/07/2026", 1, 1, 1, 17, "Nguyễn Kim Quý", 2.23, 2.17, 0.0, ""], ["PO-26/0611", "24041-2-GILO-P-NPMB", "Eaton Vietnam", "Tủ trung — hạ thế", 1.4, "27/07/2026", 6, 2, 2, 10, "Nguyễn Kim Quý", 1.44, 1.4, 0.0, ""], ["PO-26/0143", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp & phụ kiện", 8.5, "22/01/2026", 0, 5, 0, 38, "Trần Như Toàn", 8.72, 8.16, 0.34, "Phát sinh chiều dài tuyến cáp ngầm"], ["PO-26/0298", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp & phụ kiện", 5.6, "14/03/2026", 2, 5, 0, 30, "Trần Như Toàn", 6.05, 5.6, 0.0, ""], ["PO-26/0421", "24019-2-TĐHB-PCable-EVNPSC", "Cadivi", "Cáp & phụ kiện", 3.48, "30/04/2026", 3, 5, 0, 35, "Trần Như Toàn", 3.68, 3.48, 0.0, ""], ["PO-26/0563", "24019-2-TĐHB-PCable-EVNPSC", "GE Grid Solutions", "Điều khiển & bảo vệ", 2.0, "06/07/2026", 6, 4, 6, 32, "Trần Như Toàn", 1.98, 1.88, 0.12, "Bổ sung phụ kiện đấu nối đầu cáp"], ["PO-26/0092", "24059-1-LOBI-P-BA1", "Siemens Vietnam", "Điều khiển & bảo vệ", 5.8, "09/01/2026", 0, 5, 0, 28, "Nguyễn Kim Quý", 6.04, 5.8, 0.0, ""], ["PO-26/0176", "24059-1-LOBI-P-BA1", "Cadivi", "Cáp & phụ kiện", 4.02, "04/02/2026", 1, 5, 0, 26, "Nguyễn Kim Quý", 4.19, 4.02, 0.0, ""], ["PO-26/0247", "24059-1-LOBI-P-BA1", "Cơ khí Trần Phú", "Kết cấu thép & giá đỡ", 2.4, "27/02/2026", 1, 5, 0, 24, "Nguyễn Kim Quý", 2.4, 2.3, 0.1, "Phát sinh giá đỡ thiết bị bổ sung"], ["PO-26/0071", "23079-HH3-BG-VISC", "GE Grid Solutions", "Điều khiển & bảo vệ", 4.2, "06/01/2026", 0, 5, 0, 25, "Lê Thanh Sơn", 4.62, 4.2, 0.0, ""], ["PO-26/0159", "23079-HH3-BG-VISC", "LS Vina Cable", "Cáp & phụ kiện", 2.9, "02/02/2026", 1, 5, 0, 27, "Lê Thanh Sơn", 3.19, 2.9, 0.0, ""], ["PO-26/0232", "23079-HH3-BG-VISC", "Eaton Vietnam", "Tủ trung — hạ thế", 1.7, "23/02/2026", 1, 5, 0, 23, "Lê Thanh Sơn", 1.87, 1.7, 0.0, ""]], "nhapkho": [["NK-26/0418", "PO-26/0577", "24041-2-GILO-P-NPMB", "Siemens Vietnam", "Máy cắt SF6 220kV lô 1", "02/08/2026", 6, 1.85, "Kho Hà Nội", "Chờ kiểm định"], ["NK-26/0412", "PO-26/0563", "24019-2-TĐHB-PCable-EVNPSC", "GE Grid Solutions", "Tủ điều khiển trung tâm", "28/07/2026", 6, 2.0, "Kho Hà Nội", "Đạt"], ["NK-26/0405", "PO-26/0502", "24038-2-PhBi2-P2T-BA3", "Hitachi Energy Vietnam", "Rơ le bảo vệ đường dây", "24/07/2026", 6, 3.87, "Kho Hà Nội", "Đạt"], ["NK-26/0398", "PO-26/0571", "24127-1-TRLI-P-BA3", "Cơ khí Trần Phú", "Giá đỡ & kết cấu phụ", "19/07/2026", 6, 1.2, "Kho Bắc Giang", "Đạt"], ["NK-26/0387", "PO-26/0312", "24127-1-TRLI-P-BA3", "Hitachi Energy Vietnam", "Máy cắt SF6 110kV", "12/07/2026", 6, 5.2, "Kho Bắc Giang", "Đạt"], ["NK-26/0371", "PO-26/0519", "24074-1-NASA2-PC-HDPC", "Cơ khí Trần Phú", "Cột thép & phụ kiện đợt 3", "03/07/2026", 6, 1.45, "Kho Hải Dương", "Đạt"], ["NK-26/0352", "PO-26/0421", "24019-2-TĐHB-PCable-EVNPSC", "Cadivi", "Cáp điều khiển & phụ kiện", "24/06/2026", 5, 3.48, "Kho Hòa Bình", "Đạt"], ["NK-26/0341", "PO-26/0356", "24074-1-NASA2-PC-HDPC", "Hitachi Energy Vietnam", "Rơ le bảo vệ 110kV", "17/06/2026", 5, 4.5, "Kho Hải Dương", "Đạt"], ["NK-26/0328", "PO-26/0261", "24035-1-G5MV-P-SPC", "Thibidi", "Máy biến áp phân phối lô 2", "09/06/2026", 5, 5.5, "Kho Miền Nam", "Đạt"], ["NK-26/0311", "PO-26/0334", "24038-2-PhBi2-P2T-BA3", "Cơ khí Trần Phú", "Cột thép mạ kẽm đợt 2", "28/05/2026", 4, 5.6, "Kho Thái Nguyên", "Đạt"], ["NK-26/0296", "PO-26/0298", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm 110kV đợt 2", "19/05/2026", 4, 5.6, "Kho Hòa Bình", "Đạt"], ["NK-26/0274", "PO-26/0187", "24074-1-NASA2-PC-HDPC", "Thibidi", "Máy biến áp lực 63MVA", "06/05/2026", 4, 6.8, "Kho Hải Dương", "Đạt"], ["NK-26/0258", "PO-26/0215", "24038-2-PhBi2-P2T-BA3", "Cadivi", "Cáp lực XLPE 220kV", "24/04/2026", 3, 8.4, "Kho Thái Nguyên", "Đạt"], ["NK-26/0237", "PO-26/0128", "24038-2-PhBi2-P2T-BA3", "Siemens Vietnam", "Máy cắt & dao cách ly 220kV", "11/04/2026", 3, 11.2, "Kho Thái Nguyên", "Đạt"], ["NK-26/0219", "PO-26/0143", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm 110kV đợt 1", "28/03/2026", 2, 8.5, "Kho Hòa Bình", "Đạt"], ["NK-26/0198", "PO-26/0247", "24059-1-LOBI-P-BA1", "Cơ khí Trần Phú", "Giá đỡ thiết bị trạm", "17/03/2026", 2, 2.4, "Kho Lạng Sơn", "Đạt"], ["NK-26/0184", "PO-26/0176", "24059-1-LOBI-P-BA1", "Cadivi", "Cáp lực & cáp điều khiển", "05/03/2026", 2, 4.02, "Kho Lạng Sơn", "Đạt"], ["NK-26/0163", "PO-26/0232", "23079-HH3-BG-VISC", "Eaton Vietnam", "Tủ trung thế 24kV", "22/02/2026", 1, 1.7, "Kho Bắc Giang", "Đạt"], ["NK-26/0147", "PO-26/0092", "24059-1-LOBI-P-BA1", "Siemens Vietnam", "Hệ thống điều khiển tích hợp", "12/02/2026", 1, 5.8, "Kho Lạng Sơn", "Đạt"], ["NK-26/0131", "PO-26/0159", "23079-HH3-BG-VISC", "LS Vina Cable", "Cáp ngầm & phụ kiện", "03/02/2026", 1, 2.9, "Kho Bắc Giang", "Đạt"], ["NK-26/0108", "PO-26/0071", "23079-HH3-BG-VISC", "GE Grid Solutions", "Hệ thống điều khiển bảo vệ", "21/01/2026", 0, 4.2, "Kho Bắc Giang", "Đạt"]], "ncc": [["Siemens Vietnam", "Máy cắt, thiết bị đóng cắt", 4, 23.63, 3, 34, 4.5, "A"], ["LS Vina Cable", "Cáp ngầm trung — cao thế", 3, 17.0, 3, 29, 4.7, "A"], ["Hitachi Energy Vietnam", "Máy cắt, rơ le bảo vệ", 3, 13.57, 2, 44, 4.2, "B"], ["Cadivi", "Cáp lực & cáp điều khiển", 4, 17.4, 4, 27, 4.6, "A"], ["Thibidi", "Máy biến áp phân phối", 2, 12.3, 2, 34, 4.4, "A"], ["Cơ khí Trần Phú", "Kết cấu thép, giá đỡ", 4, 13.43, 3, 30, 4.0, "B"], ["GE Grid Solutions", "Hệ thống điều khiển", 4, 10.87, 2, 29, 3.8, "B"], ["Eaton Vietnam", "Tủ trung — hạ thế", 4, 9.4, 4, 22, 4.3, "A"]], "chonhap": [["PO-26/0577", "24041-2-GILO-P-NPMB", "Siemens Vietnam", "Máy cắt SF6 220kV lô 2", "18/08/2026", -12, 1.55, "Đúng tiến độ"], ["PO-26/0466", "24035-1-G5MV-P-SPC", "Siemens Vietnam", "Thiết bị đóng cắt trung thế", "28/07/2026", 9, 3.23, "Trễ hẹn"], ["PO-26/0448", "24127-1-TRLI-P-BA3", "Eaton Vietnam", "Tủ trung thế 24kV bổ sung", "10/08/2026", -4, 4.3, "Đúng tiến độ"], ["PO-26/0519", "24074-1-NASA2-PC-HDPC", "Cơ khí Trần Phú", "Cột thép đợt 4", "02/08/2026", 4, 1.48, "Trễ hẹn"], ["PO-26/0588", "24038-2-PhBi2-P2T-BA3", "GE Grid Solutions", "Tủ điều khiển ngăn lộ", "25/08/2026", -19, 2.5, "Đúng tiến độ"], ["PO-26/0596", "24074-1-NASA2-PC-HDPC", "Cadivi", "Cáp điều khiển bổ sung", "14/08/2026", -8, 1.5, "Đúng tiến độ"], ["PO-26/0604", "24035-1-G5MV-P-SPC", "Eaton Vietnam", "Tủ hạ thế 0.4kV", "22/08/2026", -16, 2.0, "Đúng tiến độ"], ["PO-26/0611", "24041-2-GILO-P-NPMB", "Eaton Vietnam", "Tủ phân phối trung tâm", "30/08/2026", -24, 1.4, "Đúng tiến độ"], ["PO-26/0592", "24041-2-GILO-P-NPMB", "GE Grid Solutions", "Hệ thống SCADA trạm", "05/09/2026", -30, 2.17, "Đúng tiến độ"]], "projects": [["24127-1-TRLI-P-BA3", "TBA 110kV Trảng Lĩnh", "Trạm biến áp", "P.DALĐ"], ["24038-2-PhBi2-P2T-BA3", "ĐZ 220kV Phú Bình 2", "Đường dây", "P.DALĐ"], ["24035-1-G5MV-P-SPC", "Mua sắm VTTB G5 Miền Nam", "Mua sắm VTTB", "P.DACĐ"], ["24074-1-NASA2-PC-HDPC", "ĐZ 110kV Nam Sách 2", "Đường dây", "P.DALĐ"], ["24041-2-GILO-P-NPMB", "TBA 220kV Gia Lộc", "Trạm biến áp", "P.DALĐ"], ["24019-2-TĐHB-PCable-EVNPSC", "Cáp ngầm Thủy điện Hòa Bình", "Cáp ngầm", "P.DACĐ"], ["24059-1-LOBI-P-BA1", "TBA 110kV Lộc Bình", "Trạm biến áp", "P.DAĐCN"], ["23079-HH3-BG-VISC", "ĐZ 110kV Hải Hà 3", "Đường dây", "P.DAĐCN"]]};
+
+const F=(n,d=1)=>Number(n).toFixed(d).replace('.',',');
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const NM=D.months.length, NS=D.stages.length;
+const short=m=>m==='—'?'—':m.split('-')[0];
+const C={bl:'#2E6FB0',bl2:'#5b93cf',bl3:'#a8c8e6',og:'#e8a33d',gr:'#3FA875',rd:'#D2564A',pu:'#8b6fb0',grid:'#e7ecf3',mut:'#7c899b'};
+const PAL=[C.bl,C.bl2,C.og,C.gr,C.pu,C.bl3];
+const PJ={}; D.projects.forEach(p=>PJ[p[0]]=p);
+const slaDays=i=>Math.round(D.stages[i][1]/8);
+
+Chart.defaults.font.family='Inter,sans-serif';
+Chart.defaults.font.size=11.5;
+Chart.defaults.color=C.mut;
+Chart.defaults.plugins.legend.labels.boxWidth=11;
+Chart.defaults.plugins.legend.labels.boxHeight=11;
+Chart.defaults.plugins.legend.labels.padding=13;
+Chart.defaults.maintainAspectRatio=false;
+const AX={grid:{color:C.grid,drawTicks:false},border:{display:false}};
+const AXn={...AX,beginAtZero:true};
+const AXx={grid:{display:false},border:{display:false}};
+const EMPTY=(tb,n,msg)=>{tb.querySelector('tbody').innerHTML='<tr><td colspan="'+n+'"><div class="empty">'+msg+'</div></td></tr>';};
+
+/* ═══════ FILTER ═══════ */
+const FS={pj:'all',nh:'all',a:0,b:NM-1};
+let A={};
+function recompute(){
+  A.po=D.po.filter(p=>(FS.pj==='all'||p[1]===FS.pj)&&(FS.nh==='all'||p[3]===FS.nh)&&p[6]>=FS.a&&p[6]<=FS.b);
+  A.keys=new Set(A.po.map(p=>p[0]));
+  A.nk=D.nhapkho.filter(v=>(FS.pj==='all'||v[2]===FS.pj)&&v[6]>=FS.a&&v[6]<=FS.b&&(FS.nh==='all'||A.keys.has(v[1])||FS.nh==='all'));
+  if(FS.nh!=='all') A.nk=A.nk.filter(v=>A.keys.has(v[1]));
+  A.cn=D.chonhap.filter(v=>(FS.pj==='all'||v[1]===FS.pj)&&(FS.nh==='all'||A.keys.has(v[0])));
+  A.val=sum(A.po.map(p=>p[4]));
+  A.done=A.po.filter(p=>p[7]===NS-1);
+  A.wip=A.po.filter(p=>p[7]<NS-1);
+  A.over=A.wip.filter(p=>p[8]>slaDays(p[7]));
+  A.pjs=[...new Set(A.po.map(p=>p[1]))];
+}
+
+/* ═══════ KPI ═══════ */
+function kpis(){
+  const S=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
+  const nc=nccAgg();
+  const tOk=sum(nc.map(n=>n[4])), tN=sum(nc.map(n=>n[2]));
+  S('n1',nc.length+'<u>đơn vị</u>'); S('n1d',tN+' đơn · '+F(sum(nc.map(n=>n[3])),2)+' tỷ đ');
+  S('n2',F(tN?tOk/tN*100:0)+'<u>%</u>'); S('n2d',tOk+'/'+tN+' đơn giao đúng hẹn');
+  S('n3',Math.round(nc.length?sum(nc.map(n=>n[5]*n[2]))/tN:0)+'<u>ngày</u>');
+  const dtb=nc.length?sum(nc.map(n=>n[6]*n[2]))/tN:0;
+  S('n4',F(dtb,1)+'<u>/ 5</u>');
+  S('n4d',nc.filter(n=>n[7]==='A').length+' nhà cung cấp loại A');
+
+}
+
+
+
+/* ═══════ BẢNG ═══════ */
+const poExp=new Set();
+
+
+function nccAgg(){
+  const m={};
+  A.po.forEach(p=>{const a=m[p[2]]=m[p[2]]||[0,0];a[0]++;a[1]+=p[4];});
+  return D.ncc.filter(n=>m[n[0]]).map(n=>{
+    const [cnt,val]=m[n[0]];
+    const ok=Math.min(n[4],cnt);
+    return [n[0],n[1],cnt,+val.toFixed(2),ok,n[5],n[6],n[7]];
+  }).sort((a,b)=>b[3]-a[3]);
+}
+
+
+
+
+
+
+/* ─── danh sách vật tư nhập kho (gộp đã nhập + chờ nhập) ─── */
+let khoF='all';
+function tbKho(){
+  const tb=document.getElementById('tb_kho');
+  const rows=[];
+  A.nk.forEach(v=>rows.push({ct:v[0],po:v[1],pj:v[2],ncc:v[3],nd:v[4],ngay:v[5],kho:v[8],
+    val:v[7],st:v[9]==='Đạt'?'Đã nhập kho':'Chờ kiểm định',in:1,late:0}));
+  A.cn.forEach(v=>rows.push({ct:'—',po:v[0],pj:v[1],ncc:v[2],nd:v[3],ngay:v[4],kho:'—',
+    val:v[6],st:v[5]>0?'Trễ hẹn '+v[5]+' ngày':'Chờ nhập',in:0,late:v[5]>0?1:0}));
+  let src=rows;
+  if(khoF==='in') src=rows.filter(r=>r.in);
+  else if(khoF==='wait') src=rows.filter(r=>!r.in);
+  src=src.slice().sort((a,b)=>b.val-a.val);
+  const vin=sum(rows.filter(r=>r.in).map(r=>r.val)), vw=sum(rows.filter(r=>!r.in).map(r=>r.val));
+  document.getElementById('cs_kho').innerHTML=
+    'Đã nhập <b style="color:var(--gr)">'+F(vin,2)+' tỷ đ</b> · chờ nhập <b style="color:var(--og)">'
+    +F(vw,2)+' tỷ đ</b> · tổng '+rows.length+' chứng từ';
+  if(!src.length){EMPTY(tb,9,'Không có vật tư trong phạm vi lọc');return;}
+  const cl=r=>r.late?'p-r':(r.in?(r.st==='Đã nhập kho'?'p-g':'p-o'):'p-b');
+  tb.querySelector('tbody').innerHTML=src.map(r=>
+    '<tr><td class="mono">'+r.ct+'</td><td class="mono">'+r.po+'</td><td class="mono">'+short(r.pj)+'</td>'
+    +'<td style="font-size:12px">'+r.ncc+'</td><td>'+r.nd+'</td>'
+    +'<td style="white-space:nowrap'+(r.in?'':';color:var(--mut)')+'">'+r.ngay+'</td>'
+    +'<td style="font-size:12px;color:var(--mut)">'+r.kho+'</td>'
+    +'<td class="n" style="font-weight:600">'+F(r.val,2)+'</td>'
+    +'<td><span class="pill '+cl(r)+'">'+r.st+'</span></td></tr>').join('')
+  +'<tr class="tot"><td colspan="7">TỔNG '+src.length+' CHỨNG TỪ</td><td class="n">'
+  +F(sum(src.map(r=>r.val)),2)+'</td><td></td></tr>';
+}
+
+
+
+/* ═══════ CHARTS ═══════ */
+const CH={};
+function mk(id,cfg){const el=document.getElementById(id);if(!el)return;if(CH[id])CH[id].destroy();CH[id]=new Chart(el,cfg);}
+const labs=()=>{const o=[];for(let j=FS.a;j<=FS.b;j++)o.push(D.months[j]);return o;};
+
+function drawTQ(){ drawDS(); }
+
+
+
+function drawNC(){
+  drawNK();
+  const src=nccAgg();
+  mk('ch_nc1',{type:'bar',data:{labels:src.map(n=>n[0]),datasets:[
+    {label:'Giá trị',data:src.map(n=>n[3]),backgroundColor:C.bl,borderRadius:4}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>F(c.parsed.x,2)+' tỷ'}}},
+      scales:{x:{...AXn,ticks:{callback:v=>v+' tỷ'}},y:AXx}}});
+  mk('ch_nc2',{type:'bar',data:{labels:src.map(n=>n[0]),datasets:[
+    {label:'Đúng hạn',data:src.map(n=>n[4]),backgroundColor:C.gr,stack:'s',borderRadius:3},
+    {label:'Trễ hẹn',data:src.map(n=>n[2]-n[4]),backgroundColor:C.rd,stack:'s',borderRadius:3}]},
+    options:{indexAxis:'y',plugins:{legend:{position:'bottom'},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x+' đơn'}}},
+      scales:{x:{...AXn,stacked:true,ticks:{stepSize:1}},y:{...AXx,stacked:true}}}});
+}
+
+function drawNK(){
+  tbKho();
+  const nkv=sum(A.nk.map(v=>v[7])), cnv=sum(A.cn.map(v=>v[6])), late=A.cn.filter(v=>v[5]>0);
+  const mn=document.getElementById('mn_nk');
+  if(mn) mn.innerHTML=
+     '<div class="mk"><u>Đã nhập kho</u><b style="color:var(--gr)">'+F(nkv,2)+'<small> tỷ đ · '+F(A.val?nkv/A.val*100:0)+'%</small></b></div>'
+    +'<div class="mk"><u>Số phiếu nhập</u><b>'+A.nk.length+'<small> phiếu</small></b></div>'
+    +'<div class="mk"><u>Chờ nhập kho</u><b style="color:var(--og)">'+F(cnv,2)+'<small> tỷ đ · '+A.cn.length+' đơn</small></b></div>'
+    +'<div class="mk"><u>Trễ hẹn giao</u><b style="color:'+(late.length?'var(--rd)':'var(--mut)')+'">'+late.length+'<small> đơn · '+F(sum(late.map(v=>v[6])),2)+' tỷ</small></b></div>';
+  const val=[];
+  for(let j=FS.a;j<=FS.b;j++) val.push(+sum(A.nk.filter(v=>v[6]===j).map(v=>v[7])).toFixed(2));
+  let s=0; const cum=val.map(v=>+(s+=v).toFixed(2));
+  mk('ch_nk1',{data:{labels:labs(),datasets:[
+    {type:'bar',label:'Giá trị nhập kho',data:val,backgroundColor:C.gr,borderRadius:3,order:2},
+    {type:'line',label:'Lũy kế',data:cum,borderColor:C.bl,borderWidth:2.5,pointRadius:3,tension:.3,order:1}]},
+    options:{interaction:{mode:'index',intersect:false},scales:{x:AXx,y:{...AXn,title:{display:true,text:'tỷ đồng'}}},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+F(c.parsed.y,2)+' tỷ'}}}}});
+  const m={}; A.nk.forEach(v=>m[v[8]]=(m[v[8]]||0)+v[7]);
+  const k=Object.keys(m), v2=Object.values(m).map(x=>+x.toFixed(2));
+  mk('ch_nk2',{type:'bar',data:{labels:k,datasets:[{label:'Giá trị',data:v2,backgroundColor:C.bl,borderRadius:4}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>F(c.parsed.x,2)+' tỷ'}}},
+      scales:{x:{...AXn,ticks:{callback:v=>v+' tỷ'}},y:AXx}}});
+}
+
+/* ═══════ DỰ TOÁN & TIẾT KIỆM ═══════ */
+let bgMode='nh', dsF='all';
+const dsAgg=()=>{
+  const dt=sum(A.po.map(p=>p[11])), ky=sum(A.po.map(p=>p[12])),
+        ps=sum(A.po.map(p=>p[13])), tt=sum(A.po.map(p=>p[4]));
+  return {dt,ky,ps,tt,tk:dt-ky,tkp:dt?(dt-ky)/dt*100:0,ch:tt-dt,chp:dt?(tt-dt)/dt*100:0};
+};
+function kpiDS(){
+  const S=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
+  const g=dsAgg(), nps=A.po.filter(p=>p[13]>0).length;
+  S('b1',F(g.dt,2)+'<u>tỷ đ</u>'); S('b1d',A.po.length+' gói thầu · '+A.pjs.length+' dự án');
+  S('b2',F(g.ky,2)+'<u>tỷ đ</u>');
+  S('b2d','<span class="up">Thấp hơn dự toán '+F(g.tk,2)+' tỷ đ ('+F(g.tkp)+'%)</span>');
+  S('b3',F(g.tt,2)+'<u>tỷ đ</u>');
+  S('b3d',g.ps>0?'<span class="dn">Phát sinh +'+F(g.ps,2)+' tỷ đ · '+nps+' đơn</span>':'Không phát sinh');
+  S('b4',A.done.length+'<u>/ '+A.po.length+' đơn xong</u>');
+  S('b4d',A.over.length?'<span class="dn">'+A.over.length+' đơn quá SLA · '+A.wip.length+' đang xử lý</span>'
+                       :A.wip.length+' đơn đang xử lý');
+}
+const dsEval=p=>{
+  const ch=p[4]-p[11];
+  if(ch>0)   return ['p-r','Vượt dự toán'];
+  if(p[13]>0)return ['p-o','Có phát sinh'];
+  const tk=p[11]?(p[11]-p[12])/p[11]*100:0;
+  return tk>=6?['p-g','Dưới dự toán']:['p-b','Sát dự toán'];
+};
+function tbDS(){
+  const tb=document.getElementById('tb_ds');
+  let src=A.po.slice();
+  if(dsF==='ov') src=src.filter(p=>p[4]>p[11]);
+  else if(dsF==='ps') src=src.filter(p=>p[13]>0);
+  const g=dsAgg();
+  const sdt=sum(src.map(p=>p[11])), stt=sum(src.map(p=>p[4]));
+  document.getElementById('cs_ds').innerHTML=src.length+' đơn · dự toán <b>'+F(sdt,2)
+    +'</b> → thực tế <b style="color:var(--bl)">'+F(stt,2)+' tỷ đ</b> · chênh <b style="color:'
+    +(stt>sdt?'var(--rd)':'var(--gr)')+'">'+(stt>sdt?'+':'')+F(stt-sdt,2)+'</b>';
+  if(!src.length){EMPTY(tb,11,'Không có đơn phù hợp bộ lọc');return;}
+  const grp={}; src.forEach(p=>{(grp[p[1]]=grp[p[1]]||[]).push(p);});
+  const rows=Object.entries(grp).map(([k,l])=>({k,l,
+    dt:sum(l.map(p=>p[11])),ky:sum(l.map(p=>p[12])),ps:sum(l.map(p=>p[13])),tt:sum(l.map(p=>p[4]))}))
+    .sort((a,b)=>b.tt-a.tt);
+  const mxc=Math.max(...rows.map(r=>Math.abs(r.tt-r.dt)),0.01);
+  const scl=i=>i===NS-1?'p-g':(i>=3?'p-b':'p-o');
+  let h='';
+  rows.forEach(r=>{
+    const op=poExp.has(r.k), pj=PJ[r.k];
+    const tkp=r.dt?(r.dt-r.ky)/r.dt*100:0, ch=r.tt-r.dt;
+    const dn=r.l.filter(p=>p[7]===NS-1).length;
+    const al=(0.10+0.50*Math.abs(ch)/mxc).toFixed(3);
+    const bg=Math.abs(ch)<0.005?'transparent':(ch>0?'rgba(215,90,84,':'rgba(67,167,118,')+al+')';
+    h+='<tr class="pr" data-m="'+r.k+'"><td><span class="cr'+(op?' op':'')+'">▶</span> '
+      +'<span class="mono">'+short(r.k)+'</span> <span style="color:var(--mut)">'+pj[1]+'</span></td>'
+      +'<td style="color:var(--fnt)">'+r.l.length+' đơn</td><td></td>'
+      +'<td><span class="pill p-n">'+dn+'/'+r.l.length+' xong</span></td>'
+      +'<td class="n">'+F(r.dt,2)+'</td><td class="n">'+F(r.ky,2)+'</td>'
+      +'<td class="n" style="color:'+(tkp>=6?C.gr:(tkp>=3?C.og:C.rd))+';font-weight:700">'+F(tkp)+'%</td>'
+      +'<td class="n"'+(r.ps>0?' style="color:'+C.og+';font-weight:600"':' style="color:var(--fnt)"')+'>'
+      +(r.ps>0?'+'+F(r.ps,2):'—')+'</td>'
+      +'<td class="n" style="font-weight:700">'+F(r.tt,2)+'</td>'
+      +'<td class="n" style="background:'+bg+';color:'+(ch>0?C.rd:C.gr)+';font-weight:700">'+(ch>0?'+':'')+F(ch,2)+'</td>'
+      +'<td></td></tr>';
+    if(op) r.l.slice().sort((x,y)=>(y[4]-y[11])-(x[4]-x[11])).forEach(p=>{
+      const tk=p[11]-p[12], tkp2=p[11]?tk/p[11]*100:0, c2=p[4]-p[11];
+      const [cl,tx]=dsEval(p);
+      h+='<tr class="ch"><td><span class="mono">'+p[0]+'</span></td>'
+        +'<td style="font-size:11.5px;color:var(--mut)">'+p[2]+'</td>'
+        +'<td style="font-size:11.5px;color:var(--mut)">'+p[3]+'</td>'
+        +'<td><span class="pill '+scl(p[7])+'">'+D.stages[p[7]][0]+'</span></td>'
+        +'<td class="n" style="color:var(--mut)">'+F(p[11],2)+'</td>'
+        +'<td class="n">'+F(p[12],2)+'</td>'
+        +'<td class="n" style="color:'+(tkp2>=6?C.gr:(tkp2>=3?C.og:C.rd))+';font-weight:600">'+F(tkp2)+'%</td>'
+        +'<td class="n"'+(p[13]>0?' style="color:'+C.og+';font-weight:600"':' style="color:var(--fnt)"')+'>'
+        +(p[13]>0?'+'+F(p[13],2):'—')+'</td>'
+        +'<td class="n" style="font-weight:600">'+F(p[4],2)+'</td>'
+        +'<td class="n" style="color:'+(c2>0?C.rd:C.gr)+';font-weight:600">'+(c2>0?'+':'')+F(c2,2)+'</td>'
+        +'<td><span class="pill '+cl+'">'+tx+'</span></td></tr>';});
+  });
+  h+='<tr class="tot"><td>TỔNG '+rows.length+' DỰ ÁN · '+src.length+' ĐƠN</td><td colspan="3"></td>'
+    +'<td class="n">'+F(sdt,2)+'</td><td class="n">'+F(sum(src.map(p=>p[12])),2)+'</td>'
+    +'<td class="n">'+F(g.tkp)+'%</td><td class="n">'+F(sum(src.map(p=>p[13])),2)+'</td>'
+    +'<td class="n">'+F(stt,2)+'</td><td class="n">'+F(stt-sdt,2)+'</td><td></td></tr>';
+  tb.querySelector('tbody').innerHTML=h;
+  tb.querySelectorAll('tr.pr').forEach(tr=>tr.addEventListener('click',()=>{
+    const k=tr.dataset.m; poExp.has(k)?poExp.delete(k):poExp.add(k); tbDS();}));
+}
+
+function tbDSP(){
+  const tb=document.getElementById('tb_dsp');
+  const src=A.po.filter(p=>p[13]>0).sort((a,b)=>b[13]-a[13]);
+  const tot=sum(src.map(p=>p[13])), ky=sum(A.po.map(p=>p[12]));
+  document.getElementById('cs_dsp').innerHTML=src.length+' đơn phát sinh · tổng <b style="color:var(--og)">'
+    +F(tot,2)+' tỷ đ</b> · chiếm '+F(ky?tot/ky*100:0)+'% giá trị ký hợp đồng';
+  if(!src.length){EMPTY(tb,8,'Không có phát sinh trong phạm vi lọc');return;}
+  tb.querySelector('tbody').innerHTML=src.map(p=>{
+    const r=p[12]?p[13]/p[12]*100:0;
+    const [cl,tx]=r>=5?['p-r','Đáng kể']:(r>=3?['p-o','Trung bình']:['p-b','Nhỏ']);
+    return '<tr><td class="mono">'+p[0]+'</td><td class="mono">'+short(p[1])+'</td>'
+      +'<td style="font-size:12px;color:var(--mut)">'+p[2]+'</td><td>'+p[14]+'</td>'
+      +'<td class="n">'+F(p[12],2)+'</td>'
+      +'<td class="n" style="color:'+C.og+';font-weight:700">+'+F(p[13],2)+'</td>'
+      +'<td class="n" style="font-weight:600">'+F(r)+'%</td>'
+      +'<td><span class="pill '+cl+'">'+tx+'</span></td></tr>';
+  }).join('')
+  +'<tr class="tot"><td colspan="4">TỔNG '+src.length+' KHOẢN</td>'
+  +'<td class="n">'+F(sum(src.map(p=>p[12])),2)+'</td><td class="n">'+F(tot,2)+'</td><td colspan="2"></td></tr>';
+}
+function drawDS(){
+  kpiDS(); tbDS(); tbDSP();
+  const key=bgMode==='nh'?3:1, m={};
+  A.po.forEach(p=>{const a=m[p[key]]=m[p[key]]||[0,0,0];a[0]+=p[11];a[1]+=p[12];a[2]+=p[4];});
+  const ks=Object.keys(m).sort((a,b)=>m[b][0]-m[a][0]);
+  const lb=bgMode==='nh'?ks:ks.map(k=>short(k));
+  mk('ch_ds1',{type:'bar',data:{labels:lb,datasets:[
+    {label:'Dự toán',data:ks.map(k=>+m[k][0].toFixed(2)),backgroundColor:C.bl3,borderRadius:3},
+    {label:'Giá ký HĐ',data:ks.map(k=>+m[k][1].toFixed(2)),backgroundColor:C.bl,borderRadius:3},
+    {label:'Thực tế',data:ks.map(k=>+m[k][2].toFixed(2)),backgroundColor:C.og,borderRadius:3}]},
+    options:{indexAxis:'y',plugins:{legend:{position:'bottom'},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+F(c.parsed.x,2)+' tỷ'}}},
+      scales:{x:{...AXn,ticks:{callback:v=>v+' tỷ'}},y:AXx}}});
+  const pm={};
+  A.po.forEach(p=>{const a=pm[p[1]]=pm[p[1]]||[0,0,0];a[0]+=p[11];a[1]+=p[12];a[2]++;});
+  const pts=Object.keys(pm).map(k=>{
+    const [dt,ky,n]=pm[k];
+    return {x:+dt.toFixed(2),y:+(dt?(dt-ky)/dt*100:0).toFixed(1),r:6+n*2.6,n,k:short(k),ten:PJ[k][1]};
+  });
+  const mxx=Math.max(...pts.map(p=>p.x),1);
+  mk('ch_ds2',{type:'bubble',data:{datasets:[{data:pts,
+    backgroundColor:pts.map(p=>(p.y>=6?'rgba(67,167,118,':(p.y>=3?'rgba(232,163,61,':'rgba(215,90,84,'))+'0.55)'),
+    borderColor:pts.map(p=>p.y>=6?C.gr:(p.y>=3?C.og:C.rd)),borderWidth:1.5}]},
+    options:{plugins:{legend:{display:false},
+      tooltip:{callbacks:{
+        title:c=>c[0].raw.k+' · '+c[0].raw.ten,
+        label:c=>['Dự toán: '+F(c.raw.x,2)+' tỷ','Giảm so dự toán: '+F(c.raw.y)+'%',c.raw.n+' gói thầu']}}},
+      scales:{
+        x:{...AXn,max:Math.ceil(mxx*1.15),title:{display:true,text:'Giá trị dự toán (tỷ đồng)'},ticks:{callback:v=>v+' tỷ'}},
+        y:{...AXn,max:13,title:{display:true,text:'Mức giảm so dự toán (%)'},ticks:{callback:v=>v+'%'}}}},
+    plugins:[{id:'avg',afterDraw(ch){
+      const {ctx,chartArea:{left,right},scales:{y}}=ch, av=dsAgg().tkp, yy=y.getPixelForValue(av);
+      ctx.save();ctx.strokeStyle='#7c899b';ctx.setLineDash([5,4]);ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#7c899b';ctx.font='600 10.5px Inter';ctx.textAlign='right';
+      ctx.fillText('Bình quân '+F(av)+'%',right-4,yy-5);ctx.restore();}}]});
+}
+
+
+/* ═══════ NAV & FILTER ═══════ */
+const META={tq:['Mua sắm & dự toán','Đối chiếu dự toán · giá ký hợp đồng · chi tiết từng đơn'],
+ nc:['Nhà cung cấp & kho','Đánh giá nhà cung cấp · nhập kho · vật tư chờ về kho']};
+const DRAW={tq:drawTQ,nc:drawNC};
+let cur='tq';
+function show(p){
+  cur=p;
+  document.querySelectorAll('button.nv').forEach(t=>t.classList.toggle('on',t.dataset.p===p));
+  document.querySelectorAll('.page').forEach(g=>g.classList.remove('on'));
+  document.getElementById('p-'+p).classList.add('on');
+  document.getElementById('ptit').textContent=META[p][0];
+  document.getElementById('psub').textContent=META[p][1];
+  DRAW[p]();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function refresh(){
+  recompute(); kpis(); DRAW[cur]();
+  document.getElementById('f_st').innerHTML='Đang xem <b style="color:var(--bl)">'+A.po.length
+    +'</b> đơn · <b style="color:var(--bl)">'+A.pjs.length+'</b> dự án ('+D.months[FS.a]+' – '+D.months[FS.b]+')';
+}
+function buildFilters(){
+  const pj=document.getElementById('f_pj');
+  pj.innerHTML='<option value="all">Tất cả dự án</option>'
+    +D.projects.map(p=>'<option value="'+p[0]+'">'+p[0]+' · '+p[1]+'</option>').join('');
+  const nh=document.getElementById('f_nh');
+  nh.innerHTML='<option value="all">Tất cả nhóm</option>'+D.nhom.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+  const opt=D.months.map((m,i)=>'<option value="'+i+'">'+m+'</option>').join('');
+  const a=document.getElementById('f_a'),b=document.getElementById('f_b');
+  a.innerHTML=opt;b.innerHTML=opt;a.value=0;b.value=NM-1;
+  pj.addEventListener('change',()=>{FS.pj=pj.value;poExp.clear();refresh();});
+  nh.addEventListener('change',()=>{FS.nh=nh.value;poExp.clear();refresh();});
+  a.addEventListener('change',()=>{FS.a=+a.value;if(FS.a>FS.b){FS.b=FS.a;b.value=FS.b;}refresh();});
+  b.addEventListener('change',()=>{FS.b=+b.value;if(FS.b<FS.a){FS.a=FS.b;a.value=FS.a;}refresh();});
+  document.getElementById('f_rs').addEventListener('click',()=>{
+    FS.pj='all';FS.nh='all';FS.a=0;FS.b=NM-1;poExp.clear();
+    pj.value='all';nh.value='all';a.value=0;b.value=NM-1;refresh();});
+}
+document.querySelectorAll('button.nv').forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
+const segBind=(id,fn)=>document.querySelectorAll('#'+id+' button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset.m);}));
+segBind('sg_bg',m=>{bgMode=m;drawDS();});
+segBind('sg_ds',m=>{dsF=m;tbDS();});
+segBind('sg_kho',m=>{khoF=m;tbKho();});
+
+buildFilters(); refresh();
+</script>

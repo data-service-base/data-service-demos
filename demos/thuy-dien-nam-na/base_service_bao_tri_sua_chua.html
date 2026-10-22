@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base Service — Bảo trì & Sửa chữa thiết bị · Cụm Thủy điện Nậm Na</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --green:#0e9f6e;--green-d:#0a7d56;--green-l:#e7f6ef;
+    --ink:#1b2a36;--muted:#6b7d8a;--line:#e3e9ee;--bg:#eef2f5;--card:#fff;
+    --blue:#2e7fc4;--blue-l:#e9f1fa;--amber:#c08a2e;--amber-l:#fbf3e3;--red:#c0392b;--red-l:#fdecea;--purple:#7c5cbf;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5}
+  .top{background:#fff;border-bottom:1px solid var(--line);padding:10px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+  .logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--green-d)}
+  .logo .mark{width:24px;height:24px;border-radius:7px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+  .crumb{color:var(--muted);font-size:13px}.crumb b{color:var(--ink)}
+  .wrap{max-width:1080px;margin:0 auto;padding:18px 16px 40px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .card h2{margin:0 0 2px;font-size:15px;color:var(--ink)}
+  .card .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+  .svc-name{font-size:18px;font-weight:700;margin:2px 0}
+  .svc-tag{display:inline-block;background:var(--green-l);color:var(--green-d);font-size:11.5px;font-weight:600;border-radius:20px;padding:3px 11px;margin-top:6px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid2>div{min-width:0}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .kv{font-size:13px;margin-top:10px}.kv .k{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:3px}
+  .code{font-family:ui-monospace,Menlo,monospace;background:#f3f6f8;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12.5px}
+  .bullet{font-size:12.5px;color:var(--ink);margin:4px 0;padding-left:16px;position:relative}
+  .bullet:before{content:'•';position:absolute;left:3px;color:var(--green)}
+  .gatebox{background:var(--amber-l);border:1px solid #e6d2a8;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#8a5a0a;margin-top:10px}
+  .gatebox b{color:#6b450a}
+
+  .phase-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:6px 0 8px}
+  .pipe{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;align-items:stretch}
+  .pchip{flex:0 0 auto;min-width:158px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 10px;border-top:3px solid var(--blue)}
+  .pchip.a{border-top-color:#2e7fc4}.pchip.c{border-top-color:#0e9f6e}.pchip.d{border-top-color:#7c5cbf}
+  .pchip.gate{border-top-color:var(--amber);background:var(--amber-l)}
+  .pchip .pn{font-size:10px;font-weight:700;color:var(--muted)}
+  .pchip.gate .pn{color:#8a5a0a}
+  .pchip .pt{font-size:12px;font-weight:600;margin-top:2px;line-height:1.3}
+  .pchip .pr{font-size:10.5px;color:var(--muted);margin-top:4px}
+  .parrow{display:flex;align-items:center;color:#bcccd6;font-size:16px;flex:0 0 auto}
+
+  .tlist{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:760px){.tlist{grid-template-columns:1fr}}
+  .tcard{border:1px solid var(--line);border-radius:10px;padding:11px 13px;cursor:pointer;background:#fff;transition:.15s}
+  .tcard:hover{border-color:var(--green)}
+  .tcard.on{border-color:var(--green);box-shadow:0 0 0 2px var(--green-l)}
+  .tcode{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+  .ttitle{font-size:13.5px;font-weight:600;margin:3px 0 6px;line-height:1.3}
+  .ttags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}
+  .tag{font-size:10.5px;font-weight:600;border-radius:5px;padding:2px 8px}
+  .ty-suco{background:var(--red-l);color:#a3281c}.ty-dinhky{background:var(--blue-l);color:#1a5a99}.ty-canhbao{background:var(--amber-l);color:#9a5a00}
+  .pr-cao{background:var(--red-l);color:#a3281c}.pr-tb{background:var(--amber-l);color:#9a5a00}.pr-thap{background:#eef2f5;color:#6b7d8a}
+  .tstat{font-size:11.5px;color:var(--muted)}.tstat b{color:var(--green-d)}
+  .tstat.gate b{color:var(--amber)} .tstat.done b{color:var(--green-d)}
+
+  .split{display:grid;grid-template-columns:300px 1fr;gap:16px}.split>*{min-width:0}
+  @media(max-width:820px){.split{grid-template-columns:1fr}}
+  .step{display:flex;gap:10px;cursor:pointer}
+  .step .rail{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+  .step .mk{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--line);background:#fff;color:var(--muted)}
+  .step.done .mk{background:var(--green);border-color:var(--green);color:#fff}
+  .step.current .mk{background:#fff;border-color:var(--green);color:var(--green);box-shadow:0 0 0 3px var(--green-l)}
+  .step.gate .mk{border-radius:7px}
+  .step.gate.current .mk{border-color:var(--amber);color:var(--amber);box-shadow:0 0 0 3px var(--amber-l)}
+  .step.gate.done .mk{background:var(--amber);border-color:var(--amber)}
+  .step .line{width:2px;flex:1;background:var(--line);min-height:14px}
+  .step:last-child .line{display:none}
+  .step .body{padding:1px 0 12px}
+  .step .nm{font-size:13px;font-weight:600;line-height:1.3}.step.todo .nm{color:var(--muted)}
+  .step .role{font-size:11px;color:var(--muted);margin-top:1px}
+  .step.sel .nm{color:var(--green-d)}
+  .step .st{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-top:3px}
+  .step.done .st{color:var(--green)}.step.current .st{color:var(--amber)}.step.todo .st{color:#9aa9b4}
+
+  .detail{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .dhead{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .dtitle{font-size:16px;font-weight:700}
+  .statuschip{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:3px 11px;margin-left:8px;vertical-align:middle}
+  .sc-done{background:var(--green-l);color:var(--green-d)}.sc-current{background:var(--amber-l);color:var(--amber)}.sc-todo{background:#eef2f5;color:#8a99a3}
+  .dmeta{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
+  .dmeta .k{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .dmeta .v{font-size:13px;font-weight:600;margin-top:1px}
+  .dform{padding:8px 18px 16px}
+  .frow{padding:11px 0;border-bottom:1px solid #f0f3f5;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+  .frow:last-child{border-bottom:none}
+  .flabel{font-size:12.5px;color:var(--muted);flex:0 0 44%;padding-top:2px}
+  .fval{font-size:13px;font-weight:500;flex:1;text-align:right;word-break:break-word}
+  .fbadge{display:inline-block;font-size:9.5px;font-weight:700;border-radius:5px;padding:2px 7px;margin-left:7px;text-transform:uppercase;letter-spacing:.3px}
+  .b-auto{background:#fdf0e0;color:#b45f06}.b-attach{background:var(--blue-l);color:#1a5a99}.b-sign{background:#efeafb;color:#5b3da8}.b-calc{background:var(--green-l);color:var(--green-d)}.b-ok{background:var(--green-l);color:var(--green-d)}.b-sel{background:#eef2f5;color:#5b7286}
+  .dfoot{padding:13px 18px;background:#f8fafb;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .note{font-size:11.5px;color:var(--muted);flex:1;min-width:160px}
+  .btn{border:none;border-radius:8px;padding:9px 15px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  .btn.pri{background:var(--green);color:#fff}.btn.pri:hover{background:var(--green-d)}
+  .btn.app{background:var(--amber);color:#fff}.btn.rej{background:#fff;color:var(--red);border:1px solid #e6b6ae}
+  .btn.dis{background:#e6ebee;color:#9aa9b4;cursor:default}
+  .btn.link{background:var(--blue-l);color:#1a5a99}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo"><span class="mark">B</span> Base Service</div>
+  <div class="crumb">Quy trình / <b>Bảo trì – Sửa chữa thiết bị — Cụm Thủy điện Nậm Na</b></div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="svc-name">Bảo trì – Sửa chữa thiết bị — Cụm Thủy điện Nậm Na</div>
+    <span class="svc-tag">● Service đang chạy · 8 block · có cổng phê duyệt</span>
+    <div class="grid2" style="margin-top:14px">
+      <div>
+        <div class="kv"><div class="k">Quy tắc mã ticket</div><span class="code">BT-{YYYY-MM-DD}-{NM}-{số}</span></div>
+        <div class="kv"><div class="k">Ticket được tạo khi</div>
+          <div class="bullet">Cảnh báo từ SCADA (nhiệt độ / rung vượt ngưỡng) → tự tạo ticket, tự gắn thiết bị</div>
+          <div class="bullet">Đến hạn bảo trì định kỳ (theo giờ chạy / lịch) → tự tạo</div>
+          <div class="bullet">Đề xuất hiện trường (trực ca / kỹ thuật) → tạo thủ công</div>
+        </div>
+      </div>
+      <div>
+        <div class="kv"><div class="k">Phân loại ticket</div>
+          <span class="tag ty-suco">Sửa chữa sự cố</span> <span class="tag ty-dinhky">Bảo trì định kỳ</span> <span class="tag ty-canhbao">Khắc phục cảnh báo</span></div>
+        <div class="gatebox"><b>Cổng phê duyệt theo hạn mức dự toán:</b><br>&lt; 20 tr → Trưởng phòng Kỹ thuật · 20–100 tr → GĐ nhà máy · &gt; 100 tr → Moonlight. Có ký số, không duyệt thì không cấp vật tư.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Quy trình 8 block</h2>
+    <div class="sub">Tiếp nhận & đánh giá → Phê duyệt (cổng) → Thực hiện → Quyết toán</div>
+    <div id="pipe"></div>
+  </div>
+
+  <div class="card">
+    <h2>Danh sách ticket bảo trì / sửa chữa</h2>
+    <div class="sub">Bấm một ticket để xem tiến độ và form từng block</div>
+    <div class="tlist" id="tlist"></div>
+  </div>
+
+  <div class="card">
+    <h2 id="detailTitle">Tiến độ block</h2>
+    <div class="sub">Bấm vào block để xem form, người phụ trách và dữ liệu</div>
+    <div class="split">
+      <div id="stepper"></div>
+      <div class="detail" id="detail"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const BLOCKS=[
+  {key:'b1', no:1, phase:'a', name:'Tiếp nhận yêu cầu sửa chữa / bảo trì', role:'PX Vận hành / Sửa chữa · tự sinh từ cảnh báo SCADA', when:'Ngay khi phát hiện', sla:'Tức thời', src:'Tự tạo từ SCADA hoặc nhập tay',
+    fields:[{l:'Thiết bị',v:'__DEVICE__',t:'auto'},{l:'Mô tả hiện tượng',v:'Nhiệt độ ổ hướng tăng, vượt ngưỡng cảnh báo',t:'text'},{l:'Loại',v:'__TYPE__',t:'sel'},{l:'Mức ưu tiên',v:'__PRIO__',t:'sel'},{l:'Nguồn phát hiện',v:'Cảnh báo SCADA',t:'auto'},{l:'Ảnh / đính kèm',v:'anh_hien_truong.jpg',t:'attach'}],
+    note:'Cảnh báo SCADA tự sinh ticket và điền sẵn thiết bị + thông số.'},
+  {key:'b2', no:2, phase:'a', name:'Đánh giá kỹ thuật & lập phương án', role:'Kỹ thuật – An toàn', when:'Trong ngày', sla:'≤ 1 ngày', src:'Nhập tay + phiếu công tác',
+    fields:[{l:'Nguyên nhân sơ bộ',v:'Khô mỡ / lệch tâm nhẹ',t:'text'},{l:'Phương án kỹ thuật',v:'Bổ sung bôi trơn, kiểm tra căn chỉnh',t:'text'},{l:'Hạng mục công việc',v:'3 hạng mục',t:'text'},{l:'Cần dừng máy?',v:'Có — khoảng 4 giờ',t:'sel'},{l:'Phiếu công tác',v:'Đã lập',t:'sign'},{l:'Thời gian dự kiến',v:'1 ngày',t:'text'}],
+    note:'Gắn phiếu công tác an toàn; nếu cần dừng máy sẽ phối hợp kế hoạch huy động.'},
+  {key:'b3', no:3, phase:'a', name:'Đối soát vật tư & lập dự toán', role:'Kế hoạch – Vật tư / Kho · Tài chính', when:'Sau đánh giá', sla:'≤ 1 ngày', src:'Tồn kho tự điền + nhập dự toán',
+    fields:[{l:'Danh mục vật tư (BOM)',v:'Mỡ chịu nhiệt, gioăng, dầu',t:'text'},{l:'Tồn kho hiện có',v:'Đủ 2/3 hạng mục',t:'auto'},{l:'Cần mua thêm',v:'Gioăng × 2 (lead time 3 ngày)',t:'text'},{l:'Dự toán vật tư',v:'8,5 tr',t:'text'},{l:'Dự toán nhân công',v:'4,0 tr',t:'text'},{l:'Tổng dự toán',v:'12,5 tr',t:'calc'}],
+    note:'Tồn kho kéo tự động từ dữ liệu Kho (Data Pipeline / AppSheet); thiếu thì gắn nhu cầu mua sắm.'},
+  {key:'b4', no:4, phase:'gate', gate:true, name:'Phê duyệt', role:'Theo hạn mức: Trưởng phòng KT / GĐ nhà máy / Moonlight', when:'Sau đối soát', sla:'≤ 1 ngày', src:'Duyệt + ký số',
+    fields:[{l:'Tổng dự toán',v:'12,5 tr',t:'auto'},{l:'Cấp duyệt (theo hạn mức)',v:'Trưởng phòng Kỹ thuật (< 20 tr)',t:'text'},{l:'Ý kiến duyệt',v:'—',t:'text'},{l:'Trạng thái',v:'Chờ duyệt',t:'sel'},{l:'Ký số',v:'—',t:'sign'}],
+    note:'Không duyệt thì ticket không sang bước cấp vật tư. Hạn mức quyết định cấp duyệt.'},
+  {key:'b5', no:5, phase:'c', name:'Cấp vật tư & chuẩn bị thi công', role:'Kho / Kế hoạch – Vật tư', when:'Sau duyệt', sla:'Theo lead time', src:'Phiếu xuất kho + mua sắm bổ sung',
+    fields:[{l:'Phiếu xuất kho',v:'PXK-2026-06-…',t:'attach'},{l:'Vật tư đã cấp',v:'Đủ',t:'ok'},{l:'Mua sắm bổ sung',v:'Gioăng đã về',t:'text'},{l:'Sẵn sàng thi công',v:'Sẵn sàng',t:'ok'}],
+    note:'Chỉ thực hiện sau khi đã được duyệt và đủ vật tư.'},
+  {key:'b6', no:6, phase:'c', name:'Thực hiện sửa chữa', role:'PX Sửa chữa / Bảo trì', when:'Theo lịch dừng máy', sla:'Theo phương án', src:'Nhật ký + ảnh hiện trường',
+    fields:[{l:'Người thực hiện',v:'Tổ sửa chữa cơ',t:'text'},{l:'Tiến độ',v:'60%',t:'text'},{l:'Nhật ký công việc',v:'Đã tháo, vệ sinh, đang căn chỉnh',t:'text'},{l:'Ảnh trước / sau',v:'2 ảnh',t:'attach'},{l:'Biện pháp an toàn',v:'Đã áp dụng, có phiếu công tác',t:'ok'}],
+    note:'Tiến độ & ảnh cập nhật tại hiện trường qua mobile (AppSheet).'},
+  {key:'b7', no:7, phase:'c', name:'Nghiệm thu & cập nhật hồ sơ thiết bị', role:'Kỹ thuật – An toàn', when:'Sau sửa chữa', sla:'Ngay sau thi công', src:'Kết quả đo + cập nhật CMMS',
+    fields:[{l:'Kết quả đo sau sửa',v:'Nhiệt độ ổ hướng về định mức',t:'auto'},{l:'Tiêu chuẩn nghiệm thu',v:'Đạt',t:'text'},{l:'Kết quả',v:'Đạt',t:'ok'},{l:'Cập nhật lý lịch thiết bị',v:'Đã cập nhật CMMS',t:'sign'}],
+    note:'Kết quả đo có thể kéo từ SCADA để xác nhận thiết bị về định mức.'},
+  {key:'b8', no:8, phase:'d', name:'Quyết toán chi phí', role:'Tài chính – Kế toán', when:'Sau nghiệm thu', sla:'Theo kỳ', src:'Chi phí thực tế + chứng từ',
+    fields:[{l:'Chi phí vật tư thực tế',v:'8,2 tr',t:'text'},{l:'Chi phí nhân công',v:'4,0 tr',t:'text'},{l:'Tổng / so dự toán',v:'12,2 tr (−0,3 tr)',t:'calc'},{l:'Chứng từ',v:'Hóa đơn, biên bản nghiệm thu',t:'attach'},{l:'Trạng thái thanh toán',v:'Đã quyết toán',t:'ok'}],
+    note:'Đóng ticket → cập nhật chi phí O&M lên dashboard và lịch sử thiết bị.'},
+];
+const ORDER=BLOCKS.map(b=>b.key);
+const TICKETS=[
+  {code:'BT-2026-06-15-NM1-001', plant:'Nậm Na 1', device:'Hệ thống làm mát tổ máy H1', type:'dinhky', prio:'tb',
+   status:['done','done','done','current','todo','todo','todo','todo']},
+  {code:'BT-2026-06-12-NM2-002', plant:'Nậm Na 2', device:'Ổ hướng tổ máy H2', type:'canhbao', prio:'cao',
+   status:['done','done','done','done','done','current','todo','todo']},
+  {code:'BT-2026-06-16-NM3-003', plant:'Nậm Na 3', device:'Gối trục turbine H1', type:'suco', prio:'cao',
+   status:['done','current','todo','todo','todo','todo','todo','todo']},
+  {code:'BT-2026-06-10-NM2-001', plant:'Nậm Na 2', device:'Van xả đáy', type:'dinhky', prio:'thap',
+   status:['done','done','done','done','done','done','done','done']},
+];
+const TYPE={suco:['ty-suco','Sửa chữa sự cố'],dinhky:['ty-dinhky','Bảo trì định kỳ'],canhbao:['ty-canhbao','Khắc phục cảnh báo']};
+const PRIO={cao:['pr-cao','Ưu tiên cao'],tb:['pr-tb','Trung bình'],thap:['pr-thap','Thấp']};
+const PHASE={a:{l:'Tiếp nhận & đánh giá',c:'a'},gate:{l:'Phê duyệt (cổng)',c:'gate'},c:{l:'Thực hiện & nghiệm thu',c:'c'},d:{l:'Quyết toán',c:'d'}};
+const STLAB={done:'Hoàn thành',current:'Đang xử lý',todo:'Chờ'};
+const $=s=>document.querySelector(s);
+let curTicket=0, curBlock=null;
+
+function curBlockLabel(t){
+  const ci=t.status.findIndex(s=>s==='current');
+  if(ci<0) return {txt:'Hoàn tất toàn bộ', cls:'done'};
+  const b=BLOCKS[ci];
+  return {txt:'Đang ở block '+b.no+': '+b.name, cls:b.gate?'gate':''};
+}
+function buildPipe(){
+  let groups=[],cur=null;
+  BLOCKS.forEach(b=>{if(!cur||cur.ph!==b.phase){cur={ph:b.phase,items:[]};groups.push(cur);}cur.items.push(b);});
+  let h='';
+  groups.forEach((g,gi)=>{
+    h+=`<div style="margin-top:${gi?14:0}px"><div class="phase-lbl">${PHASE[g.ph].l}</div><div class="pipe">`;
+    g.items.forEach((b,bi)=>{
+      if(bi>0) h+=`<div class="parrow">→</div>`;
+      const cls=b.gate?'gate':PHASE[b.phase].c;
+      h+=`<div class="pchip ${cls}"><div class="pn">${b.gate?'⚑ CỔNG · ':''}BLOCK ${b.no}</div><div class="pt">${b.name}</div><div class="pr">${b.role}</div></div>`;
+    });
+    h+=`</div></div>`;
+  });
+  $('#pipe').innerHTML=h;
+}
+function buildList(){
+  $('#tlist').innerHTML=TICKETS.map((t,i)=>{
+    const ty=TYPE[t.type],pr=PRIO[t.prio],cb=curBlockLabel(t);
+    return `<div class="tcard${i===curTicket?' on':''}" data-i="${i}">
+      <div class="tcode">${t.code} · ${t.plant}</div>
+      <div class="ttitle">${t.device}</div>
+      <div class="ttags"><span class="tag ${ty[0]}">${ty[1]}</span><span class="tag ${pr[0]}">${pr[1]}</span></div>
+      <div class="tstat ${cb.cls}">▸ <b>${cb.txt}</b></div></div>`;
+  }).join('');
+  $('#tlist').querySelectorAll('.tcard').forEach(el=>el.onclick=()=>{curTicket=+el.dataset.i;curBlock=null;render();});
+}
+function render(){
+  buildList();
+  const t=TICKETS[curTicket];
+  $('#detailTitle').textContent='Ticket '+t.code+' — '+t.device;
+  if(!curBlock){ const ci=t.status.findIndex(s=>s==='current'); curBlock=ORDER[ci>=0?ci:ORDER.length-1]; }
+  let h='';
+  BLOCKS.forEach((b,i)=>{
+    const st=t.status[i], sel=b.key===curBlock?' sel':'', gate=b.gate?' gate':'';
+    const mk = st==='done'?(b.gate?'✓':'✓'):(st==='current'?(b.gate?'⚑':'●'):b.no);
+    h+=`<div class="step ${st}${sel}${gate}" data-k="${b.key}">
+      <div class="rail"><div class="mk">${mk}</div><div class="line"></div></div>
+      <div class="body"><div class="nm">${b.gate?'⚑ ':''}${b.name}</div><div class="role">${b.role}</div><div class="st">${STLAB[st]}</div></div></div>`;
+  });
+  $('#stepper').innerHTML=h;
+  $('#stepper').querySelectorAll('.step').forEach(el=>el.onclick=()=>{curBlock=el.dataset.k;render();});
+  renderDetail(t);
+}
+function renderDetail(t){
+  const b=BLOCKS.find(x=>x.key===curBlock), i=ORDER.indexOf(b.key), st=t.status[i];
+  const scClass={done:'sc-done',current:'sc-current',todo:'sc-todo'}[st];
+  const ty=TYPE[t.type], pr=PRIO[t.prio];
+  const badge={auto:['b-auto','Tự điền'],attach:['b-attach','Đính kèm'],sign:['b-sign','Ký số'],calc:['b-calc','Tự tính'],ok:['b-ok','✓'],sel:['b-sel','Chọn'],text:['','']};
+  const rows=b.fields.map(f=>{
+    let v=f.v.replace('__DEVICE__',t.device).replace('__TYPE__',ty[1]).replace('__PRIO__',pr[1]);
+    const bd=badge[f.t], bg=bd&&bd[1]?`<span class="fbadge ${bd[0]}">${bd[1]}</span>`:'';
+    return `<div class="frow"><div class="flabel">${f.l}</div><div class="fval">${v}${bg}</div></div>`;
+  }).join('');
+  let foot;
+  if(st==='done') foot=`<span class="note">Đã hoàn thành — dữ liệu đã chuyển sang block sau.</span><button class="btn dis">Đã hoàn thành ✓</button>`;
+  else if(st==='current' && b.gate) foot=`<span class="note">${b.note}</span><button class="btn rej" onclick="alert('Demo: từ chối / yêu cầu bổ sung')">Từ chối</button><button class="btn app" onclick="alert('Demo: phê duyệt & ký số → chuyển sang Cấp vật tư')">Phê duyệt & ký số</button>`;
+  else if(st==='current') foot=`<span class="note">${b.note}</span><button class="btn pri" onclick="alert('Demo: hoàn thành block & chuyển ticket sang block kế tiếp')">Hoàn thành & chuyển block</button>`;
+  else foot=`<span class="note">Chờ hoàn thành các block trước${ORDER.indexOf('b4')>i?'':' (và phê duyệt)'}.</span><button class="btn dis">Chưa tới lượt</button>`;
+  $('#detail').innerHTML=`
+    <div class="dhead">
+      <div class="dtitle">${b.gate?'⚑ ':''}Block ${b.no}: ${b.name}<span class="statuschip ${scClass}">${STLAB[st]}</span></div>
+      <div class="dmeta">
+        <div><div class="k">Phụ trách</div><div class="v">${b.role}</div></div>
+        <div><div class="k">Thời điểm / SLA</div><div class="v">${b.when} · ${b.sla}</div></div>
+        <div><div class="k">Nguồn dữ liệu</div><div class="v">${b.src}</div></div>
+      </div>
+    </div>
+    <div class="dform">${rows}</div>
+    <div class="dfoot">${foot}</div>`;
+}
+buildPipe(); render();
+</script>
+</body>
+</html>

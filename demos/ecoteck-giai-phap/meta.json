@@ -1,0 +1,22 @@
+{
+  "slug": "ecoteck-giai-phap",
+  "title": "ECO TECK — Sơ đồ giải pháp số hoá & báo cáo",
+  "type": "proposal",
+  "industry": "Xây dựng",
+  "department": "All",
+  "description": "Từ dữ liệu phân mảnh về một nền tảng, kèm báo cáo ngân sách và sản lượng, vật tư thiết bị.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Ecoteck/",
+  "source_repo": "https://github.com/tbinh-06/Ecoteck",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "ngân sách",
+    "vật tư",
+    "thiết bị"
+  ]
+}

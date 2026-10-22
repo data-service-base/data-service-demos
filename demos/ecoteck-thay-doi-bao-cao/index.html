@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tổng hợp thay đổi báo cáo · ECO TECK</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A2430; --teal:#0E7C86; --aqua:#35B9C7;
+  --slate:#5B7683; --slate2:#8AA2AC; --line:#DFE8EA; --line2:#EEF3F4;
+  --amber:#D98A16; --red:#C0392B; --green:#1F8A5F; --violet:#6B5BD2;
+  --bg:#F6F9F9; --card:#FFFFFF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+
+header{background:var(--ink);color:#fff;padding:40px 0 0}
+h1{margin:0 0 10px;font-size:28px;font-weight:800;letter-spacing:-.02em}
+header p{margin:0;color:#9FC2CB;font-size:14.5px;max-width:80ch}
+nav{display:flex;gap:4px;margin-top:28px;flex-wrap:wrap}
+nav button{appearance:none;border:0;background:transparent;color:#9FC2CB;cursor:pointer;
+  font:inherit;font-size:14px;font-weight:600;padding:13px 20px;border-radius:10px 10px 0 0;
+  border-bottom:3px solid transparent}
+nav button:hover{color:#fff}
+nav button.on{background:var(--bg);color:var(--ink);border-bottom-color:var(--aqua)}
+nav button span{color:var(--aqua);margin-right:9px;font-variant-numeric:tabular-nums}
+nav button.on span{color:var(--teal)}
+
+main{padding:34px 0 70px}
+.page{display:none}
+.page.on{display:block}
+section{margin-bottom:38px}
+h2{font-size:19px;font-weight:800;margin:0 0 4px;letter-spacing:-.01em}
+.lead{margin:0 0 18px;color:var(--slate);font-size:14px;max-width:88ch}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+svg{display:block;width:100%;height:auto}
+.kicker{font-size:12.5px;font-weight:700;color:var(--slate2);margin:0 0 12px}
+.note{margin:14px 0 0;font-size:13px;color:var(--slate);border-left:3px solid var(--line);padding-left:14px}
+.note b{color:var(--ink)}
+.warn{border-left-color:var(--red)}
+.good{border-left-color:var(--green)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:700;color:var(--slate);border-bottom:1px solid var(--line);
+   padding:9px 12px 9px 0;font-size:12.5px}
+td{padding:10px 12px 10px 0;border-bottom:1px solid var(--line2);vertical-align:top}
+td.o{color:var(--slate)}
+td.n{font-weight:600}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:700}
+.t-add{background:#E6F4EC;color:var(--green)}
+.t-del{background:#FBEAE7;color:var(--red)}
+.t-fix{background:#FFF4E0;color:var(--amber)}
+.t-mov{background:#EDEBFB;color:var(--violet)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:900px){.two{grid-template-columns:1fr}}
+footer{color:var(--slate2);font-size:12.5px;border-top:1px solid var(--line);padding-top:18px;margin-bottom:40px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Tổng hợp thay đổi báo cáo</h1>
+    <p>Đối chiếu bản Ecoteck gửi lại với bản hiện tại, chia theo ba nhóm: logic dùng chung cho cả hai báo cáo, phần riêng của báo cáo ngân sách, phần riêng của báo cáo vật tư.</p>
+    <nav>
+      <button class="on" data-p="p1"><span>01</span>Logic dùng chung</button>
+      <button data-p="p2"><span>02</span>Báo cáo ngân sách</button>
+      <button data-p="p3"><span>03</span>Báo cáo vật tư</button>
+    </nav>
+  </div>
+</header>
+
+<main><div class="wrap">
+
+<!-- ================= TRANG 1 ================= -->
+<div class="page on" id="p1">
+
+<section>
+  <h2>Ba lớp giá trị, bốn con số để so sánh</h2>
+  <p class="lead">Khung chung cho cả hai báo cáo. Báo cáo ngân sách dùng đủ ba lớp; báo cáo vật tư bỏ lớp 1 vì cung ứng không xem giá bán cho khách.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 300" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="0" y="26" width="1180" height="62" rx="10" fill="#EAF4EE" stroke="#A9CFBA"/>
+      <rect x="0" y="26" width="5" height="62" rx="2.5" fill="#1F8A5F"/>
+      <text x="24" y="50" font-size="12.5" font-weight="800" fill="#1F8A5F">LỚP 1 · HỢP ĐỒNG</text>
+      <text x="24" y="74" font-size="14.5" font-weight="700" fill="#0A2430">Giá trị HĐ</text>
+      <text x="1156" y="52" font-size="12.5" fill="#5B7683" text-anchor="end">Giá trị đầu ra ký với chủ đầu tư</text>
+      <text x="1156" y="74" font-size="12.5" fill="#8AA2AC" text-anchor="end">Chỉ quản lý ở cấp dự án</text>
+
+      <path d="M590,92 l0,14" stroke="#8AA2AC" stroke-width="1.6"/>
+      <path d="M583,100 l7,8 l7,-8" stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <rect x="0" y="112" width="1180" height="62" rx="10" fill="#EDF4F6" stroke="#C2D6DC"/>
+      <rect x="0" y="112" width="5" height="62" rx="2.5" fill="#0E7C86"/>
+      <text x="24" y="136" font-size="12.5" font-weight="800" fill="#0E7C86">LỚP 2 · DỰ TOÁN</text>
+      <text x="24" y="160" font-size="14.5" font-weight="700" fill="#0A2430">Giá trị dự toán</text>
+      <text x="1156" y="138" font-size="12.5" fill="#5B7683" text-anchor="end">Ngân sách dự kiến để thực hiện hạng mục</text>
+      <text x="1156" y="160" font-size="12.5" fill="#8AA2AC" text-anchor="end">Ban đầu + điều chỉnh đã duyệt = hiện hành</text>
+
+      <path d="M590,178 l0,14" stroke="#8AA2AC" stroke-width="1.6"/>
+      <path d="M583,186 l7,8 l7,-8" stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <rect x="0" y="198" width="1180" height="88" rx="10" fill="#FDF6EA" stroke="#E3C08A"/>
+      <rect x="0" y="198" width="5" height="88" rx="2.5" fill="#D98A16"/>
+      <text x="24" y="222" font-size="12.5" font-weight="800" fill="#D98A16">LỚP 3 · CHI PHÍ DỰ KIẾN — hai con số</text>
+      <rect x="24" y="234" width="540" height="38" rx="8" fill="#FFFFFF" stroke="#D98A16"/>
+      <text x="42" y="250" font-size="13.5" font-weight="700" fill="#0A2430">GT đã thực hiện</text>
+      <text x="42" y="266" font-size="12" fill="#5B7683">Đã ký/chốt với NCC hoặc nhà thầu phụ</text>
+      <rect x="584" y="234" width="540" height="38" rx="8" fill="#FFFFFF" stroke="#E3C08A"/>
+      <text x="602" y="250" font-size="13.5" font-weight="700" fill="#0A2430">GT chưa thực hiện</text>
+      <text x="602" y="266" font-size="12" fill="#5B7683">Phần chưa ký, tạm tính theo dự toán</text>
+      <text x="1156" y="222" font-size="12.5" fill="#5B7683" text-anchor="end">Cộng lại = Tổng CP dự kiến hoàn thành</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Cách tính chi phí dự kiến hoàn thành</h2>
+  <p class="lead">Công thức cũ lấy giá trị lớn hơn giữa dự toán và dự chi, nên hầu hết hạng mục ra đúng bằng dự toán — chính điều khách đã bác. Công thức mới thay giá dự toán bằng giá thực tế ở phần đã ký, phần chưa ký mới giữ theo dự toán.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 330" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <text x="0" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">BẢN CŨ</text>
+      <rect x="0" y="30" width="520" height="118" rx="11" fill="#FBEAE7" stroke="#E3B5AE"/>
+      <text x="24" y="60" font-size="14.5" font-weight="700" fill="#C0392B">Tổng CP dự kiến = MAX(dự toán hiện hành, dự chi đã duyệt)</text>
+      <text x="24" y="86" font-size="13" fill="#5B7683">Dự toán 4.386  ·  dự chi 4.210  →  lấy 4.386</text>
+      <text x="24" y="110" font-size="13" fill="#5B7683">Dự toán 18.992  ·  dự chi 13.195  →  lấy 18.992</text>
+      <text x="24" y="134" font-size="13" font-weight="700" fill="#C0392B">Chi phí dự kiến luôn bằng dự toán · chênh lệch = 0</text>
+
+      <path d="M545,89 h48" stroke="#0E7C86" stroke-width="2" fill="none"/>
+      <path d="M586,82 l9,7 l-9,7" stroke="#0E7C86" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <text x="620" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">BẢN HIỆN TẠI</text>
+      <rect x="620" y="30" width="560" height="118" rx="11" fill="#EAF4EE" stroke="#A9CFBA"/>
+      <text x="644" y="60" font-size="14.5" font-weight="700" fill="#1F8A5F">Tổng CP dự kiến = GT đã thực hiện + GT chưa thực hiện</text>
+      <text x="644" y="86" font-size="13" fill="#5B7683">Đã mua  →  sản lượng đã mua × đơn giá đã ký</text>
+      <text x="644" y="110" font-size="13" fill="#5B7683">Chưa mua  →  sản lượng chưa mua × đơn giá dự toán ban đầu</text>
+      <text x="644" y="134" font-size="13" font-weight="700" fill="#1F8A5F">Chi phí dự kiến lệch khỏi dự toán đúng theo giá ký thật</text>
+
+      <text x="0" y="192" font-size="12.5" font-weight="700" fill="#8AA2AC">MINH HOẠ · A1.2.2 THÉP THANH VẰN CB400 — mua đắt hơn dự toán</text>
+      <text x="0" y="222" font-size="13" fill="#0A2430">Dự toán hiện hành</text>
+      <rect x="230" y="208" width="580" height="20" rx="5" fill="#C2D6DC"/>
+      <text x="822" y="223" font-size="12.5" font-weight="700" fill="#5B7683">7.830</text>
+
+      <text x="0" y="264" font-size="13" fill="#0A2430">Tổng CP dự kiến</text>
+      <rect x="230" y="250" width="458" height="20" rx="5" fill="#D98A16"/>
+      <rect x="688" y="250" width="139" height="20" rx="5" fill="#E3C08A"/>
+      <text x="839" y="265" font-size="12.5" font-weight="700" fill="#C0392B">8.068</text>
+      <text x="242" y="265" font-size="11.5" font-weight="700" fill="#3A2606">288,69 tấn × 21,437 = 6.189</text>
+      <text x="698" y="265" font-size="11.5" font-weight="700" fill="#3A2606">91,17 × 20,613 = 1.879</text>
+
+      <path d="M810,206 v68" stroke="#0A2430" stroke-width="1.4" stroke-dasharray="4 3"/>
+      <text x="0" y="300" font-size="13" fill="#5B7683">Đơn giá mua 21,437 cao hơn đơn giá dự toán 20,613</text>
+      <text x="520" y="300" font-size="13" font-weight="700" fill="#C0392B">→ hạng mục này vượt dự toán 238</text>
+    </svg>
+    <p class="note warn"><b>Không được tính tắt:</b> phần chưa mua không lấy bằng dự toán trừ đi phần đã mua, mà phải tính theo từng vật tư và công việc còn lại. Lấy hiệu ở cấp tổng sẽ để phần vượt triệt tiêu phần thiếu.</p>
+    <p class="note"><b>Dùng đơn giá dự toán ban đầu</b>, không dùng đơn giá hiện hành. Hệ quả: điều chỉnh dự toán chỉ dịch mốc so sánh, không làm đổi chi phí dự kiến của phần chưa mua — duyệt tăng ngân sách thì cột Tiết kiệm tăng chứ tổng chi phí không nhúc nhích.</p>
+    <p class="note good"><b>Điều kiện bắt buộc:</b> mỗi mã dự toán phải có khối lượng và đơn giá đã chốt với NCC. Nếu hệ thống chỉ lưu tổng tiền hợp đồng NCC thì không tính được cột chưa thực hiện theo cách này.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Đề xuất chờ duyệt chỉ để cảnh báo</h2>
+  <p class="lead">Chưa duyệt, chưa chốt giá, có thể bị từ chối — nên không được cộng vào chi phí dự kiến. Chuyển sang nhóm Theo dõi, đứng ngoài khối chi phí.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 190" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="0" y="20" width="270" height="66" rx="10" fill="#F2F0FC" stroke="#C7BDF2"/>
+      <text x="20" y="46" font-size="13" font-weight="700" fill="#6B5BD2">Đề xuất chờ duyệt</text>
+      <text x="20" y="68" font-size="12" fill="#5B7683">Chưa duyệt · chưa chốt giá</text>
+
+      <path d="M280,53 h44" stroke="#8AA2AC" stroke-width="1.8"/>
+      <path d="M316,46 l9,7 l-9,7" stroke="#8AA2AC" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="288" y="38" font-size="11.5" fill="#8AA2AC">duyệt và chốt giá</text>
+
+      <rect x="332" y="20" width="270" height="66" rx="10" fill="#FDF6EA" stroke="#D98A16"/>
+      <text x="352" y="46" font-size="13" font-weight="700" fill="#D98A16">GT đã thực hiện</text>
+      <text x="352" y="68" font-size="12" fill="#5B7683">Vào chi phí dự kiến</text>
+
+      <path d="M612,53 h44" stroke="#8AA2AC" stroke-width="1.8"/>
+      <path d="M648,46 l9,7 l-9,7" stroke="#8AA2AC" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="616" y="38" font-size="11.5" fill="#8AA2AC">đồng thời</text>
+
+      <rect x="664" y="20" width="516" height="66" rx="10" fill="#EDF4F6" stroke="#C2D6DC"/>
+      <text x="684" y="46" font-size="13" font-weight="700" fill="#0E7C86">Khối lượng tương ứng rời khỏi GT chưa thực hiện</text>
+      <text x="684" y="68" font-size="12" fill="#5B7683">Không có chuyện một khối lượng nằm ở cả hai cột</text>
+
+      <rect x="0" y="106" width="1180" height="66" rx="10" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="22" y="132" font-size="12.5" font-weight="700" fill="#0A2430">Tooltip trên cột</text>
+      <text x="190" y="132" font-size="12.5" fill="#5B7683">Chỉ phục vụ cảnh báo, không cộng trực tiếp vào Tổng CP dự kiến</text>
+      <text x="22" y="156" font-size="12.5" font-weight="700" fill="#0A2430">Khi nào bật đỏ</text>
+      <text x="190" y="156" font-size="12.5" fill="#5B7683">Nếu duyệt toàn bộ đề xuất đang chờ thì hạng mục sẽ vượt dự toán</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Quy tắc trạng thái — xét theo thứ tự</h2>
+  <p class="lead">Bản cũ gán nguy cơ vượt chỉ vì tỷ lệ sử dụng chạm 100%, nên A2 đang tiết kiệm 41 vẫn bị báo nguy cơ, B2 đúng dự toán cũng bị báo. Nay xét lần lượt và dừng ở điều kiện đầu tiên đúng.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 250" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <g font-size="12.5">
+        <rect x="0" y="20" width="224" height="72" rx="10" fill="#FBEAE7" stroke="#E3B5AE"/>
+        <text x="20" y="46" font-size="13" font-weight="700" fill="#C0392B">Vượt dự toán</text>
+        <text x="20" y="68" fill="#5B7683">Tổng CP dự kiến</text>
+        <text x="20" y="84" fill="#5B7683">&gt; dự toán hiện hành</text>
+
+        <rect x="240" y="20" width="224" height="72" rx="10" fill="#F1F5F6" stroke="#D6E1E4"/>
+        <text x="260" y="46" font-size="13" font-weight="700" fill="#5B7683">Chưa chốt NCC</text>
+        <text x="260" y="68" fill="#5B7683">Chưa ký hợp đồng</text>
+        <text x="260" y="84" fill="#5B7683">với NCC/NTP nào</text>
+
+        <rect x="480" y="20" width="224" height="72" rx="10" fill="#FFF4E0" stroke="#E8C98A"/>
+        <text x="500" y="46" font-size="13" font-weight="700" fill="#D98A16">Có nguy cơ vượt</text>
+        <text x="500" y="68" fill="#5B7683">Duyệt hết đề xuất</text>
+        <text x="500" y="84" fill="#5B7683">đang chờ thì sẽ vượt</text>
+
+        <rect x="720" y="20" width="224" height="72" rx="10" fill="#EAF4EE" stroke="#A9CFBA"/>
+        <text x="740" y="46" font-size="13" font-weight="700" fill="#1F8A5F">Tiết kiệm</text>
+        <text x="740" y="68" fill="#5B7683">Tổng CP dự kiến</text>
+        <text x="740" y="84" fill="#5B7683">&lt; dự toán hiện hành</text>
+
+        <rect x="960" y="20" width="220" height="72" rx="10" fill="#EAF4EE" stroke="#A9CFBA"/>
+        <text x="980" y="46" font-size="13" font-weight="700" fill="#1F8A5F">Trong dự toán</text>
+        <text x="980" y="68" fill="#5B7683">Hai giá trị</text>
+        <text x="980" y="84" fill="#5B7683">bằng nhau</text>
+      </g>
+      <g stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M226,56 h8"/><path d="M228,49 l7,7 l-7,7"/>
+        <path d="M466,56 h8"/><path d="M468,49 l7,7 l-7,7"/>
+        <path d="M706,56 h8"/><path d="M708,49 l7,7 l-7,7"/>
+        <path d="M946,56 h8"/><path d="M948,49 l7,7 l-7,7"/>
+      </g>
+
+      <rect x="0" y="124" width="1180" height="106" rx="11" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="24" y="150" font-size="12.5" font-weight="700" fill="#8AA2AC">HAI DÒNG TRƯỚC ĐÂY BỊ GẮN SAI</text>
+      <text x="24" y="178" font-size="13" fill="#0A2430">A2 · Chi phí cơ điện</text>
+      <text x="230" y="178" font-size="13" fill="#5B7683">dự toán 22.262 · CP dự kiến 22.221 · tiết kiệm 41</text>
+      <text x="700" y="178" font-size="13" fill="#C0392B">Có nguy cơ vượt</text>
+      <text x="860" y="178" font-size="13" fill="#1F8A5F">→ Tiết kiệm, kèm ghi chú nếu duyệt hết đề xuất</text>
+      <text x="24" y="204" font-size="13" fill="#0A2430">B2 · Chi phí bán hàng</text>
+      <text x="230" y="204" font-size="13" fill="#5B7683">không có đề xuất chờ · chênh lệch 0</text>
+      <text x="700" y="204" font-size="13" fill="#C0392B">Có nguy cơ vượt</text>
+      <text x="860" y="204" font-size="13" fill="#1F8A5F">→ Trong dự toán</text>
+    </svg>
+    <p class="note">Tỷ lệ sử dụng hiển thị thêm một chữ số thập phân. Trước đây dòng A vượt 102 nhưng hiển thị tròn 100%, mâu thuẫn với chính trạng thái của nó.</p>
+  </div>
+</section>
+
+</div>
+
+<!-- ================= TRANG 2 ================= -->
+<div class="page" id="p2">
+
+<section>
+  <h2>Một bảng tách thành hai</h2>
+  <p class="lead">Bản cũ dồn doanh thu, dự toán, dự chi và thực chi vào cùng một bảng. Nay tách theo lớp: doanh thu quản lý ở cấp dự án, chi phí quản lý theo cây hạng mục.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 396" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <text x="0" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">BẢNG CŨ · 14 cột trong một bảng</text>
+      <rect x="0" y="28" width="380" height="300" rx="11" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="20" y="54" font-size="13" font-weight="700" fill="#0A2430">Mã · Hạng mục</text>
+      <text x="20" y="80" font-size="13" fill="#5B7683">HĐ ký với khách hàng</text>
+      <text x="20" y="106" font-size="13" fill="#5B7683">Ban đầu · Điều chỉnh · Hiện hành</text>
+      <text x="20" y="132" font-size="13" fill="#5B7683">Dự chi đã duyệt</text>
+      <text x="20" y="158" font-size="13" fill="#5B7683">Đề xuất chờ duyệt</text>
+      <text x="20" y="184" font-size="13" fill="#C0392B">Thực chi</text>
+      <text x="20" y="210" font-size="13" fill="#5B7683">Tổng CP dự kiến</text>
+      <text x="20" y="236" font-size="13" fill="#C0392B">Còn lại</text>
+      <text x="20" y="262" font-size="13" fill="#C0392B">Vượt dự toán</text>
+      <text x="20" y="288" font-size="13" fill="#5B7683">% sử dụng · Trạng thái</text>
+      <text x="20" y="314" font-size="12" fill="#C0392B">mở xuống từng phiếu chi</text>
+
+      <path d="M392,120 C440,120 440,86 488,86" stroke="#1F8A5F" stroke-width="1.8" fill="none"/>
+      <path d="M392,196 C440,196 440,250 488,250" stroke="#D98A16" stroke-width="1.8" fill="none"/>
+      <path d="M480,79 l9,7 l-9,7" stroke="#1F8A5F" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M480,243 l9,7 l-9,7" stroke="#D98A16" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <rect x="500" y="28" width="680" height="128" rx="11" fill="#EAF4EE" stroke="#A9CFBA"/>
+      <text x="522" y="54" font-size="14" font-weight="800" fill="#1F8A5F">BẢNG 1 · Doanh thu và dự toán dự án</text>
+      <text x="522" y="78" font-size="12.5" fill="#5B7683">Chạy theo dự án, không theo hạng mục</text>
+      <text x="522" y="102" font-size="13" fill="#0A2430">HĐ ký với khách hàng · Giá trị quyết toán</text>
+      <text x="522" y="126" font-size="13" fill="#0A2430">Ban đầu · Điều chỉnh đã duyệt · Hiện hành</text>
+      <text x="1158" y="54" font-size="11.5" font-weight="700" fill="#1F8A5F" text-anchor="end">LỚP 1 + LỚP 2</text>
+
+      <rect x="500" y="176" width="680" height="200" rx="11" fill="#FDF6EA" stroke="#E3C08A"/>
+      <text x="522" y="202" font-size="14" font-weight="800" fill="#D98A16">BẢNG 2 · Báo cáo hệ số dự án</text>
+      <text x="522" y="226" font-size="12.5" fill="#5B7683">Dựng theo khung biểu mẫu Ecoteck đang dùng</text>
+      <text x="522" y="252" font-size="13" fill="#0A2430">Dự toán hiện hành</text>
+      <text x="522" y="276" font-size="13" fill="#0A2430">GT đã thực hiện · GT chưa thực hiện · Tổng chi phí</text>
+      <text x="522" y="300" font-size="13" fill="#0A2430">Tiết kiệm / (Vượt)  ·  % sử dụng</text>
+      <rect x="522" y="314" width="636" height="46" rx="8" fill="#F2F0FC" stroke="#C7BDF2"/>
+      <text x="540" y="332" font-size="12.5" font-weight="700" fill="#6B5BD2">Nhóm Theo dõi — ngoài khung biểu mẫu</text>
+      <text x="540" y="350" font-size="12" fill="#5B7683">Đề xuất chờ duyệt · Trạng thái · chỉ cảnh báo, không cộng vào tổng</text>
+      <text x="1158" y="202" font-size="11.5" font-weight="700" fill="#D98A16" text-anchor="end">LỚP 2 + LỚP 3</text>
+    </svg>
+    <p class="note warn"><b>Bỏ khỏi bảng chính:</b> thực chi và phiếu chi chuyển sang báo cáo thanh toán và công nợ nhà cung cấp. Hai cột Còn lại và Vượt dự toán gộp thành một cột Tiết kiệm/(Vượt) vì cùng diễn tả một phép so sánh.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Cây phân cấp sâu thêm một tầng</h2>
+  <p class="lead">Tầng công việc, vật tư chi tiết là nơi giữ khối lượng và đơn giá — không có tầng này thì không tính được phần chưa thực hiện.</p>
+  <div class="two">
+    <div class="card">
+      <p class="kicker">BẢN CŨ · 3 cấp, cấp cuối là phiếu chi</p>
+      <svg viewBox="0 0 540 230" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+        <rect x="0" y="8" width="540" height="34" rx="7" fill="#EDF4F6"/>
+        <text x="16" y="30" font-size="13.5" font-weight="700" fill="#0A2430">A · Giá vốn</text>
+        <rect x="26" y="50" width="514" height="34" rx="7" fill="#F4F8F9"/>
+        <text x="42" y="72" font-size="13" fill="#0A2430">A1 · Chi phí xây dựng</text>
+        <rect x="52" y="92" width="488" height="34" rx="7" fill="#FAFCFC"/>
+        <text x="68" y="114" font-size="13" fill="#0A2430">A1.1 · Cọc, móng và công trình tạm</text>
+        <rect x="78" y="134" width="462" height="34" rx="7" fill="#FBEAE7"/>
+        <text x="94" y="156" font-size="13" fill="#C0392B">TT00353 · phiếu chi ép cọc</text>
+        <rect x="78" y="176" width="462" height="34" rx="7" fill="#FBEAE7"/>
+        <text x="94" y="198" font-size="13" fill="#C0392B">TT00318 · phiếu chi bơm chìm</text>
+      </svg>
+      <p class="note warn">Phiếu chi trộn vào bảng dự toán làm bảng rối và không có khối lượng để tính.</p>
+    </div>
+    <div class="card">
+      <p class="kicker">BẢN HIỆN TẠI · 4 cấp, cấp cuối là công việc</p>
+      <svg viewBox="0 0 540 230" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+        <rect x="0" y="8" width="540" height="34" rx="7" fill="#EDF4F6"/>
+        <text x="16" y="30" font-size="13.5" font-weight="700" fill="#0A2430">A · Giá vốn</text>
+        <rect x="26" y="50" width="514" height="34" rx="7" fill="#F4F8F9"/>
+        <text x="42" y="72" font-size="13" fill="#0A2430">A1 · Chi phí xây dựng</text>
+        <rect x="52" y="92" width="488" height="34" rx="7" fill="#FAFCFC"/>
+        <text x="68" y="114" font-size="13" fill="#0A2430">A1.1 · Cọc, móng và công trình tạm</text>
+        <rect x="78" y="134" width="462" height="34" rx="7" fill="#FDF6EA" stroke="#E3C08A"/>
+        <text x="94" y="150" font-size="12.5" font-weight="700" fill="#0A2430">A1.1.1 · Ép cọc BTCT D300</text>
+        <text x="94" y="164" font-size="11" fill="#5B7683">m · dự toán 3.446 × 0,70 · đã chốt 3.446 × 0,676</text>
+        <rect x="78" y="176" width="462" height="34" rx="7" fill="#FDF6EA" stroke="#E3C08A"/>
+        <text x="94" y="192" font-size="12.5" font-weight="700" fill="#0A2430">A1.1.2 · Bê tông, cốt thép đài giằng</text>
+        <text x="94" y="206" font-size="11" fill="#5B7683">m³ · dự toán 791 × 1,83 · đã chốt 791 × 1,870</text>
+      </svg>
+      <p class="note good">Mỗi công việc mang cặp khối lượng × đơn giá ở cả hai trạng thái dự toán và đã chốt.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Bố cục cột đọc thành phép nhân</h2>
+  <p class="lead">Cột sản lượng và đơn giá đứng ngay trước cột kết quả của nó, có dấu nhân và dấu bằng trên tiêu đề. Mặc định thu gọn còn 9 cột, bấm nút mở thêm 5 cột.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 216" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <text x="0" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">THU GỌN · 9 cột</text>
+      <g font-size="12" font-weight="700" fill="#0A2430">
+        <rect x="0" y="26" width="196" height="32" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="16" y="47">TT · Hạng mục</text>
+        <rect x="204" y="26" width="150" height="32" rx="7" fill="#EDF4F6" stroke="#C2D6DC"/><text x="220" y="47">Dự toán hiện hành</text>
+        <rect x="362" y="26" width="160" height="32" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="378" y="47">GT đã thực hiện</text>
+        <rect x="530" y="26" width="168" height="32" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="546" y="47">GT chưa thực hiện</text>
+        <rect x="706" y="26" width="130" height="32" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="722" y="47">Tổng chi phí</text>
+        <rect x="844" y="26" width="336" height="32" rx="7" fill="#F2F0FC" stroke="#C7BDF2"/><text x="860" y="47" fill="#6B5BD2">Chờ duyệt · Tiết kiệm/(Vượt) · Trạng thái</text>
+      </g>
+
+      <path d="M590,66 l0,16" stroke="#8AA2AC" stroke-width="1.6"/>
+      <path d="M583,76 l7,8 l7,-8" stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="606" y="80" font-size="11.5" fill="#8AA2AC">bấm nút Xem cách tính</text>
+
+      <text x="0" y="112" font-size="12.5" font-weight="700" fill="#8AA2AC">MỞ RỘNG · 14 cột</text>
+      <g font-size="11.5" font-weight="700" fill="#0A2430">
+        <rect x="0" y="122" width="150" height="32" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="14" y="142">TT · Hạng mục</text>
+        <rect x="158" y="122" width="122" height="32" rx="7" fill="#EDF4F6" stroke="#C2D6DC"/><text x="172" y="142">Dự toán HH</text>
+        <rect x="288" y="122" width="58" height="32" rx="7" fill="#FBF6EC" stroke="#E3C08A"/><text x="302" y="142">ĐVT</text>
+        <rect x="354" y="122" width="110" height="32" rx="7" fill="#FBF6EC" stroke="#E3C08A"/><text x="368" y="142">KL đã mua</text>
+        <rect x="472" y="122" width="110" height="32" rx="7" fill="#FBF6EC" stroke="#E3C08A"/><text x="486" y="142">× ĐG đã ký</text>
+        <rect x="590" y="122" width="150" height="32" rx="7" fill="#FDF6EA" stroke="#D98A16"/><text x="604" y="142">= GT đã thực hiện</text>
+        <rect x="748" y="122" width="112" height="32" rx="7" fill="#FBF6EC" stroke="#E3C08A"/><text x="762" y="142">KL chưa mua</text>
+        <rect x="868" y="122" width="140" height="32" rx="7" fill="#FBF6EC" stroke="#E3C08A"/><text x="882" y="142">× ĐG dự toán</text>
+        <rect x="1016" y="122" width="164" height="32" rx="7" fill="#FDF6EA" stroke="#D98A16"/><text x="1030" y="142">= GT chưa thực hiện</text>
+      </g>
+      <rect x="0" y="166" width="1180" height="42" rx="9" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="20" y="192" font-size="12.5" fill="#5B7683">Bỏ cột Chi tiết · nhóm Dự toán không còn cột đơn giá · dòng nhóm cộng được sản lượng khi các công việc con cùng đơn vị tính</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Giá trị quyết toán — sửa sai khái niệm</h2>
+  <div class="card">
+    <svg viewBox="0 0 1180 176" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="0" y="16" width="470" height="132" rx="11" fill="#FBEAE7" stroke="#E3B5AE"/>
+      <text x="22" y="42" font-size="12.5" font-weight="700" fill="#C0392B">BẢN TRUNG GIAN — SAI</text>
+      <text x="22" y="72" font-size="13.5" fill="#0A2430">HĐ ký với khách hàng</text>
+      <text x="448" y="72" font-size="13.5" font-weight="700" fill="#0A2430" text-anchor="end">68.718</text>
+      <text x="22" y="100" font-size="13.5" fill="#0A2430">Giá trị quyết toán</text>
+      <text x="448" y="100" font-size="13.5" font-weight="700" fill="#C0392B" text-anchor="end">6.116</text>
+      <text x="22" y="130" font-size="12.5" fill="#C0392B">Cộng quyết toán của vài mã chi phí, đặt cạnh doanh thu</text>
+
+      <path d="M496,82 h40" stroke="#0E7C86" stroke-width="2"/>
+      <path d="M530,75 l9,7 l-9,7" stroke="#0E7C86" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <rect x="560" y="16" width="620" height="132" rx="11" fill="#EAF4EE" stroke="#A9CFBA"/>
+      <text x="582" y="42" font-size="12.5" font-weight="700" fill="#1F8A5F">BẢN HIỆN TẠI — giá trị đầu ra ở cấp dự án</text>
+      <text x="582" y="72" font-size="13.5" fill="#0A2430">HĐ ký  +  phát sinh tăng được duyệt  −  giảm trừ khi quyết toán</text>
+      <text x="582" y="102" font-size="13.5" fill="#0A2430">Đồng Hướng:  16.450  +  620  −  180</text>
+      <text x="1158" y="102" font-size="14" font-weight="800" fill="#1F8A5F" text-anchor="end">16.890</text>
+      <text x="582" y="130" font-size="12.5" fill="#5B7683">Dự án chưa quyết toán để trống, không tự điền số</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Lãi lỗ tách thành ba chỉ số</h2>
+  <p class="lead">Dòng D cũ vừa chứa giá trị hợp đồng, dự toán, lãi lỗ và phần trăm trên cùng một hàng nên không đọc được số nào đại diện cho khái niệm gì.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 168" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="0" y="16" width="1180" height="40" rx="9" fill="#FBEAE7" stroke="#E3B5AE"/>
+      <text x="20" y="41" font-size="13" fill="#C0392B">D · LÃI/LỖ — mục tiêu vs dự kiến    78.550    69.430    +850    70.280    8.150    10,38%    Thấp hơn mục tiêu</text>
+
+      <rect x="0" y="80" width="380" height="72" rx="10" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="22" y="106" font-size="13" font-weight="700" fill="#0A2430">LN theo dự toán</text>
+      <text x="22" y="128" font-size="12.5" fill="#5B7683">Doanh thu dự kiến − dự toán hiện hành</text>
+      <text x="358" y="112" font-size="18" font-weight="800" fill="#0A2430" text-anchor="end">8,71 tỷ</text>
+
+      <rect x="400" y="80" width="380" height="72" rx="10" fill="#EAF4EE" stroke="#A9CFBA"/>
+      <text x="422" y="106" font-size="13" font-weight="700" fill="#0A2430">LN dự kiến</text>
+      <text x="422" y="128" font-size="12.5" fill="#5B7683">Doanh thu dự kiến − tổng CP dự kiến</text>
+      <text x="758" y="112" font-size="18" font-weight="800" fill="#1F8A5F" text-anchor="end">8,59 tỷ</text>
+
+      <rect x="800" y="80" width="380" height="72" rx="10" fill="#FDF6EA" stroke="#E3C08A"/>
+      <text x="822" y="106" font-size="13" font-weight="700" fill="#0A2430">Biên LN dự kiến</text>
+      <text x="822" y="128" font-size="12.5" fill="#5B7683">Đã quyết toán thì lấy giá trị quyết toán</text>
+      <text x="1158" y="112" font-size="18" font-weight="800" fill="#D98A16" text-anchor="end">10,88%</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Tab mới · Thanh toán và công nợ nhà cung cấp</h2>
+  <p class="lead">Theo yêu cầu tách khỏi bảng chi phí. Bảng chi phí trả lời dự án sẽ tốn bao nhiêu, bảng này trả lời trong phần đã chốt thì đã trả bao nhiêu và còn nợ bao nhiêu.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 232" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <text x="0" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">BỐN MỐC CỦA MỘT HỢP ĐỒNG · triệu đồng</text>
+      <g>
+        <rect x="0" y="30" width="280" height="70" rx="10" fill="#FDF6EA" stroke="#D98A16"/>
+        <text x="20" y="54" font-size="12.5" font-weight="700" fill="#D98A16">Đã ký với NCC</text>
+        <text x="260" y="82" font-size="17" font-weight="800" fill="#0A2430" text-anchor="end">48.385</text>
+        <rect x="300" y="30" width="280" height="70" rx="10" fill="#EDF4F6" stroke="#C2D6DC"/>
+        <text x="320" y="54" font-size="12.5" font-weight="700" fill="#0E7C86">Đã nghiệm thu</text>
+        <text x="560" y="82" font-size="17" font-weight="800" fill="#0A2430" text-anchor="end">42.613</text>
+        <rect x="600" y="30" width="280" height="70" rx="10" fill="#F2F0FC" stroke="#C7BDF2"/>
+        <text x="620" y="54" font-size="12.5" font-weight="700" fill="#6B5BD2">Đã nhận hoá đơn</text>
+        <text x="860" y="82" font-size="17" font-weight="800" fill="#0A2430" text-anchor="end">36.846</text>
+        <rect x="900" y="30" width="280" height="70" rx="10" fill="#EAF4EE" stroke="#A9CFBA"/>
+        <text x="920" y="54" font-size="12.5" font-weight="700" fill="#1F8A5F">Đã thanh toán</text>
+        <text x="1160" y="82" font-size="17" font-weight="800" fill="#0A2430" text-anchor="end">29.969</text>
+      </g>
+      <g stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M284,65 h8"/><path d="M286,58 l7,7 l-7,7"/>
+        <path d="M584,65 h8"/><path d="M586,58 l7,7 l-7,7"/>
+        <path d="M884,65 h8"/><path d="M886,58 l7,7 l-7,7"/>
+      </g>
+      <rect x="0" y="118" width="1180" height="100" rx="11" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="22" y="144" font-size="12.5" font-weight="700" fill="#0A2430">Công nợ còn lại</text>
+      <text x="200" y="144" font-size="12.5" fill="#5B7683">= đã nhận hoá đơn − đã thanh toán  =  36.846 − 29.969  =</text>
+      <text x="640" y="144" font-size="13.5" font-weight="800" fill="#C0392B">6.877</text>
+      <text x="22" y="170" font-size="12.5" font-weight="700" fill="#0A2430">Không lấy đã ký − đã trả</text>
+      <text x="200" y="170" font-size="12.5" fill="#5B7683">phần chưa nghiệm thu hoặc chưa có hoá đơn chưa phải nghĩa vụ phải trả, tính gộp sẽ thổi công nợ lên gần 19 tỷ</text>
+      <text x="22" y="196" font-size="12.5" font-weight="700" fill="#0A2430">Khớp với bảng chi phí</text>
+      <text x="200" y="196" font-size="12.5" fill="#5B7683">tổng đã ký 48.385 đúng bằng cột GT đã thực hiện ở Bảng 2</text>
+    </svg>
+    <p class="note">Cột theo đúng yêu cầu: Nhà cung cấp · Hợp đồng/PO · Giá trị đã ký · Đã nghiệm thu · Đã nhận hoá đơn · Đã thanh toán · Công nợ còn lại · Hạn thanh toán · Trạng thái. Nguồn: hợp đồng và PO từ quy trình mua hàng, nghiệm thu và đề nghị thanh toán từ Base, hoá đơn và số đã trả từ MISA.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Bảng đối chiếu cột</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:32%">Bản Ecoteck gửi</th><th style="width:42%">Bản hiện tại</th><th>Lý do</th></tr></thead>
+      <tbody>
+        <tr><td class="o">Dự chi đã duyệt</td><td class="n">GT đã thực hiện</td><td><span class="tag t-fix">đổi nghĩa</span> căn cứ là hợp đồng, PO hoặc báo giá đã chốt, không lấy phiếu mới duyệt chủ trương</td></tr>
+        <tr><td class="o">—</td><td class="n">GT chưa thực hiện</td><td><span class="tag t-add">thêm</span> = sản lượng chưa mua × đơn giá dự toán <b>ban đầu</b>, tính theo từng công việc</td></tr>
+        <tr><td class="o">Thực chi</td><td class="n">chuyển sang báo cáo công nợ</td><td><span class="tag t-mov">chuyển</span> bảng chính trả lời dự án tốn bao nhiêu, bảng công nợ trả lời đã trả bao nhiêu</td></tr>
+        <tr><td class="o">Còn lại + Vượt dự toán</td><td class="n">Tiết kiệm / (Vượt)</td><td><span class="tag t-del">gộp</span> hai cột cùng diễn tả một phép so sánh</td></tr>
+        <tr><td class="o">—</td><td class="n">Giá trị quyết toán</td><td><span class="tag t-add">thêm</span> quyết toán có thể cao hoặc thấp hơn hợp đồng</td></tr>
+        <tr><td class="o">Đề xuất chờ duyệt nằm trong nhóm chi phí</td><td class="n">tách sang nhóm Theo dõi</td><td><span class="tag t-mov">chuyển</span> chưa duyệt, chưa chốt giá, không được cộng vào chi phí dự kiến</td></tr>
+        <tr><td class="o">% sử dụng = dự chi / dự toán</td><td class="n">= tổng CP dự kiến / dự toán hiện hành</td><td><span class="tag t-fix">sửa</span> hiển thị một chữ số thập phân</td></tr>
+        <tr><td class="o">Dòng D gộp lãi lỗ</td><td class="n">ba KPI riêng</td><td><span class="tag t-fix">tách</span> mỗi số một khái niệm rõ ràng</td></tr>
+        <tr><td class="o">Doanh thu phân bổ xuống mọi hạng mục</td><td class="n">chỉ hiển thị ở cấp dự án</td><td><span class="tag t-fix">sửa</span> hợp đồng đầu ra không bóc giá trị theo hạng mục chi phí</td></tr>
+        <tr><td class="o">—</td><td class="n">hai nút xem nhanh</td><td><span class="tag t-add">thêm</span> Xem theo tỷ lệ % đổi bốn cột giá trị sang tỷ trọng · Xem cách tính mở năm cột sản lượng và đơn giá</td></tr>
+        <tr><td class="o">Chi tiết</td><td class="n">bỏ cột</td><td><span class="tag t-del">bỏ</span> mô tả hạng mục không mang thông tin để ra quyết định</td></tr>
+        <tr><td class="o">Cây 3 cấp, cấp cuối là phiếu chi</td><td class="n">4 cấp, cấp cuối là công việc</td><td><span class="tag t-fix">sửa</span> cấp công việc giữ khối lượng và đơn giá, là nơi tính ra hai cột giá trị</td></tr>
+        <tr><td class="o">—</td><td class="n">tab Thanh toán &amp; công nợ NCC</td><td><span class="tag t-add">thêm</span> 9 cột theo yêu cầu, tổng đã ký khớp cột GT đã thực hiện</td></tr>
+        <tr><td class="o">Không ghi đơn vị</td><td class="n">đơn vị dưới tên cột</td><td><span class="tag t-add">thêm</span> tr đ, tr/ĐVT, % · tự đổi theo nút xem tỷ lệ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div>
+
+<!-- ================= TRANG 3 ================= -->
+<div class="page" id="p3">
+
+<section>
+  <h2>Bỏ lớp hợp đồng, bắt đầu từ dự toán</h2>
+  <p class="lead">Hai nhóm người dùng khác nhau: tài chính kế toán xem giá trị tiền và biên lãi, cung ứng xem khối lượng và tiến độ order. Báo cáo vật tư phục vụ nhóm thứ hai nên không hiển thị giá bán cho khách.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 200" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <rect x="0" y="20" width="1180" height="52" rx="10" fill="#F4F6F6" stroke="#E0E6E6" stroke-dasharray="5 4"/>
+      <text x="24" y="44" font-size="12.5" font-weight="800" fill="#B3C2C7">LỚP 1 · HỢP ĐỒNG</text>
+      <text x="24" y="62" font-size="13" fill="#B3C2C7">Giá trị HĐ — không hiển thị trong báo cáo vật tư</text>
+      <text x="1156" y="52" font-size="12.5" font-weight="700" fill="#C0392B" text-anchor="end">ĐÃ BỎ</text>
+
+      <rect x="0" y="84" width="580" height="52" rx="10" fill="#EDF4F6" stroke="#C2D6DC"/>
+      <rect x="0" y="84" width="5" height="52" rx="2.5" fill="#0E7C86"/>
+      <text x="24" y="106" font-size="12.5" font-weight="800" fill="#0E7C86">LỚP 2 · DỰ TOÁN</text>
+      <text x="24" y="126" font-size="13" fill="#0A2430">Khối lượng và đơn giá định mức từng đầu mục</text>
+
+      <rect x="600" y="84" width="580" height="52" rx="10" fill="#FDF6EA" stroke="#E3C08A"/>
+      <rect x="600" y="84" width="5" height="52" rx="2.5" fill="#D98A16"/>
+      <text x="624" y="106" font-size="12.5" font-weight="800" fill="#D98A16">LỚP 3 · CHI PHÍ DỰ KIẾN</text>
+      <text x="624" y="126" font-size="13" fill="#0A2430">Đã order và chưa order, cùng khối lượng đã nhận</text>
+
+      <rect x="0" y="148" width="1180" height="44" rx="10" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="24" y="168" font-size="13" fill="#5B7683">Năm thẻ tổng quan: Giá trị dự toán 32,70 tỷ · GT đã thực hiện 29,01 tỷ · GT chưa thực hiện 4,52 tỷ · Tổng CP vật tư 33,52 tỷ · Đã nhận 27,98 tỷ</text>
+      <text x="24" y="186" font-size="12" fill="#8AA2AC">Cùng công thức với báo cáo ngân sách: đã order × đơn giá đã ký, cộng phần chưa order × đơn giá dự toán ban đầu</text>
+    </svg>
+  </div>
+</section>
+
+<section>
+  <h2>Bảng rút từ 16 cột còn 11</h2>
+  <p class="lead">Ba tầng tiêu đề gộp chạy song song là nguyên nhân bảng khó nhìn. Nay chỉ còn một bộ số, đổi giữa khối lượng và tiền bằng một nút.</p>
+  <div class="card">
+    <svg viewBox="0 0 1180 268" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+      <text x="0" y="16" font-size="12.5" font-weight="700" fill="#8AA2AC">BẢN CŨ · ba bộ số song song</text>
+      <rect x="0" y="28" width="360" height="30" rx="6" fill="#F1EFE6" stroke="#DFD8C2"/>
+      <text x="16" y="48" font-size="12.5" font-weight="700" fill="#5B7683">KHỐI LƯỢNG · 5 cột</text>
+      <rect x="372" y="28" width="240" height="30" rx="6" fill="#EDEFF4" stroke="#D3D8E4"/>
+      <text x="388" y="48" font-size="12.5" font-weight="700" fill="#5B7683">ĐƠN GIÁ · 2 cột</text>
+      <rect x="624" y="28" width="300" height="30" rx="6" fill="#E8F0EC" stroke="#C6DACE"/>
+      <text x="640" y="48" font-size="12.5" font-weight="700" fill="#5B7683">THÀNH TIỀN · 3 cột</text>
+      <rect x="936" y="28" width="244" height="30" rx="6" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="952" y="48" font-size="12.5" font-weight="700" fill="#5B7683">% dự chi · Trạng thái</text>
+
+      <path d="M590,72 l0,18" stroke="#8AA2AC" stroke-width="1.6"/>
+      <path d="M583,84 l7,8 l7,-8" stroke="#8AA2AC" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <text x="0" y="122" font-size="12.5" font-weight="700" fill="#8AA2AC">BẢN HIỆN TẠI · một bộ số, đổi đơn vị bằng nút</text>
+      <g font-size="12.5" font-weight="700" fill="#0A2430">
+        <rect x="0" y="134" width="150" height="34" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="16" y="156">Mã · Tên</text>
+        <rect x="158" y="134" width="110" height="34" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="174" y="156">Hạng mục</text>
+        <rect x="276" y="134" width="90" height="34" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="292" y="156">ĐVT</text>
+        <rect x="374" y="134" width="120" height="34" rx="7" fill="#EDF4F6" stroke="#C2D6DC"/><text x="390" y="156">Dự toán</text>
+        <rect x="502" y="134" width="120" height="34" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="518" y="156">Đã order</text>
+        <rect x="630" y="134" width="120" height="34" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="646" y="156">Đã nhận</text>
+        <rect x="758" y="134" width="120" height="34" rx="7" fill="#FDF6EA" stroke="#E3C08A"/><text x="774" y="156">Còn lại</text>
+        <rect x="886" y="134" width="124" height="34" rx="7" fill="#F2F0FC" stroke="#C7BDF2"/><text x="902" y="156" fill="#6B5BD2">Chờ duyệt</text>
+        <rect x="1018" y="134" width="162" height="34" rx="7" fill="#F7FAFA" stroke="#DFE8EA"/><text x="1034" y="156">% order · Trạng thái</text>
+      </g>
+
+      <rect x="0" y="192" width="1180" height="62" rx="10" fill="#F7FAFA" stroke="#DFE8EA"/>
+      <text x="22" y="216" font-size="12.5" font-weight="700" fill="#0A2430">Nút Xem theo tiền</text>
+      <text x="200" y="216" font-size="12.5" fill="#5B7683">cùng bộ cột đổi sang triệu đồng, cột ĐVT đổi thành tr đ</text>
+      <text x="22" y="240" font-size="12.5" font-weight="700" fill="#0A2430">Đơn giá</text>
+      <text x="200" y="240" font-size="12.5" fill="#5B7683">chuyển xuống dòng phụ dưới tên vật tư, không chiếm cột</text>
+    </svg>
+    <p class="note"><b>Dòng nhóm luôn quy ra tiền</b> vì các đầu mục trong cùng một nhóm khác đơn vị tính, không cộng khối lượng được. Các dòng này ghi rõ tr đ ở cột đơn vị để không đọc nhầm.</p>
+    <p class="note good"><b>Đơn vị ghi dưới tên cột</b> và tự đổi theo nút: mặc định là KL, bấm Xem theo tiền thì năm cột đổi nhãn sang tr đ. Cột % order và cột đơn giá giữ nguyên đơn vị vì không đổi theo chế độ.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Đổi trục nhóm và thêm góc nhìn nhà cung cấp</h2>
+  <div class="two">
+    <div class="card">
+      <p class="kicker">CÂY PHÂN CẤP · đổi trục giữa</p>
+      <svg viewBox="0 0 540 196" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+        <text x="0" y="14" font-size="11.5" font-weight="700" fill="#8AA2AC">CŨ</text>
+        <rect x="0" y="22" width="250" height="28" rx="6" fill="#EDF4F6"/><text x="14" y="41" font-size="12.5" fill="#0A2430">Dự án</text>
+        <rect x="16" y="56" width="234" height="28" rx="6" fill="#FBEAE7"/><text x="30" y="75" font-size="12.5" fill="#C0392B">Hạng mục</text>
+        <rect x="32" y="90" width="218" height="28" rx="6" fill="#FAFCFC"/><text x="46" y="109" font-size="12.5" fill="#0A2430">Đầu mục vật tư</text>
+        <rect x="48" y="124" width="202" height="28" rx="6" fill="#FAFCFC"/><text x="62" y="143" font-size="12.5" fill="#0A2430">Đơn mua</text>
+
+        <text x="290" y="14" font-size="11.5" font-weight="700" fill="#8AA2AC">HIỆN TẠI</text>
+        <rect x="290" y="22" width="250" height="28" rx="6" fill="#EDF4F6"/><text x="304" y="41" font-size="12.5" fill="#0A2430">Dự án</text>
+        <rect x="306" y="56" width="234" height="28" rx="6" fill="#EAF4EE"/><text x="320" y="75" font-size="12.5" font-weight="700" fill="#1F8A5F">Nhóm vật tư</text>
+        <rect x="322" y="90" width="218" height="28" rx="6" fill="#FAFCFC"/><text x="336" y="109" font-size="12.5" fill="#0A2430">Mã vật tư</text>
+        <rect x="338" y="124" width="202" height="28" rx="6" fill="#FAFCFC"/><text x="352" y="143" font-size="12.5" fill="#0A2430">Đơn mua</text>
+        <text x="290" y="176" font-size="12" fill="#5B7683">Hạng mục chuyển thành một cột</text>
+      </svg>
+    </div>
+    <div class="card">
+      <p class="kicker">CHART · đổi nội dung</p>
+      <svg viewBox="0 0 540 196" xmlns="http://www.w3.org/2000/svg" font-family="Inter, sans-serif">
+        <rect x="0" y="22" width="250" height="130" rx="9" fill="#FBEAE7" stroke="#E3B5AE"/>
+        <text x="16" y="46" font-size="12.5" font-weight="700" fill="#C0392B">Bốn lớp theo hạng mục</text>
+        <text x="16" y="70" font-size="12" fill="#5B7683">Trùng thông tin với bảng</text>
+        <text x="16" y="90" font-size="12" fill="#5B7683">ngay bên dưới</text>
+        <text x="16" y="132" font-size="12" font-weight="700" fill="#C0392B">Đã thay</text>
+
+        <path d="M262,87 h20" stroke="#0E7C86" stroke-width="1.8"/>
+        <path d="M276,80 l8,7 l-8,7" stroke="#0E7C86" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <rect x="290" y="22" width="250" height="130" rx="9" fill="#EAF4EE" stroke="#A9CFBA"/>
+        <text x="306" y="46" font-size="12.5" font-weight="700" fill="#1F8A5F">Sản lượng theo nhà cung cấp</text>
+        <text x="306" y="66" font-size="12.5" font-weight="700" fill="#1F8A5F">và theo tháng</text>
+        <text x="306" y="90" font-size="12" fill="#5B7683">Cột chồng, bảy NCC lớn nhất</text>
+        <text x="306" y="110" font-size="12" fill="#5B7683">qua sáu tháng</text>
+        <text x="306" y="134" font-size="12" fill="#1F8A5F">Ai giao nhiều, giao khi nào</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>ECO TECK · Base.vn Data Service — tài liệu nội bộ phục vụ rà soát báo cáo, số liệu trong ví dụ là số demo.</footer>
+
+</div></main>
+
+<script>
+(function(){
+  var tabs=document.querySelectorAll('nav button');
+  for(var i=0;i<tabs.length;i++){
+    tabs[i].addEventListener('click',function(){
+      var cur=document.querySelector('nav button.on'); if(cur) cur.classList.remove('on');
+      this.classList.add('on');
+      var op=document.querySelector('.page.on'); if(op) op.classList.remove('on');
+      var np=document.getElementById(this.getAttribute('data-p')); if(np) np.classList.add('on');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  }
+})();
+</script>
+</body>
+</html>

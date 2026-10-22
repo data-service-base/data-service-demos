@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEID — Báo cáo 04: Hành chính & Nhân sự</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F0F3F8;
+  --color-background-danger:#FCEAEA;
+  --color-background-warning:#FBF1DD;
+  --color-background-success:#E8F6EE;
+  --color-background-info:#E9F2FC;
+  --color-border-tertiary:#E2E7F0;
+  --color-border-secondary:#CCD5E2;
+  --color-border-info:#A9CBF0;
+  --color-text-primary:#1A2230;
+  --color-text-secondary:#5A6678;
+  --color-text-tertiary:#8A95A8;
+  --color-text-info:#2F6FE0;
+  --color-text-success:#1E9E57;
+  --color-text-danger:#E24B4A;
+  --color-text-warning:#D98200;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--color-border-tertiary);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.brand .nm{font-weight:600;font-size:14px}.brand .sub{font-size:10.5px;color:var(--color-text-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;background:transparent;border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--color-background-secondary)}
+.nav button.on{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;position:relative}
+.kpi .chg{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;line-height:1.45}
+.kpi .chg.u{color:var(--color-text-success);background:var(--color-background-success)}
+.kpi .chg.d{color:var(--color-text-danger);background:var(--color-background-danger)}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi .big{font-size:23px;font-weight:500;margin:5px 0 9px}
+.kpi .row{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:3px 0}
+.kpi .row .l{color:var(--color-text-secondary)}.kpi .row .v{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.hd{font-size:13px;font-weight:500;margin:0 0 12px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.up{color:var(--color-text-success)}.dn{color:var(--color-text-danger)}.wn{color:var(--color-text-warning)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.tab{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+table.rk{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11.5px}
+table.rk th{text-align:right;font-weight:500;color:var(--color-text-secondary);padding:6px 7px;font-size:11px;position:sticky;top:0;background:var(--color-background-secondary)}
+table.rk td{padding:9px 7px;border-top:0.5px solid var(--color-border-tertiary);text-align:right;vertical-align:middle}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:500;background:var(--color-background-secondary)}
+table.dvt td,table.dvt th{border-left:0.5px solid var(--color-border-tertiary)}
+table.dvt td:first-child,table.dvt th:first-child{border-left:none}
+.mono{font-variant-numeric:tabular-nums}.s2{font-size:11px;color:var(--color-text-tertiary)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px;gap:12px;flex-wrap:wrap}
+.titlebar .t{font-size:18px;font-weight:600}
+.bdg{font-size:10.5px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.bG{background:var(--color-background-success);color:var(--color-text-success)}
+.bM{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bD{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bB{background:var(--color-background-info);color:var(--color-text-info)}
+.bN{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.pgbar{height:8px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;margin:4px 0}
+.pgbar .fill{height:100%;border-radius:999px}
+/* Stat pair: icon + số lớn */
+.statpair{display:flex;align-items:center;gap:14px}
+.statpair .icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.statpair .num{font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.statpair .lbl{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+/* VB card mini */
+.vbgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.vbcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.vbcard .section{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.vbcard .row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.vbcard .row:last-child{border-bottom:none}
+.vbcard .row .lbl{color:var(--color-text-secondary)}
+.vbcard .row .val{font-weight:600;font-variant-numeric:tabular-nums}
+/* Attendance grid */
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.att-item{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:10px 12px;display:flex;align-items:center;gap:10px}
+.att-item .dot-lg{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.att-item .name{font-size:11.5px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.att-item .st{font-size:10.5px}
+/* Sidebar filter */
+.sidefilter{margin-top:14px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
+.sftitle{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 11px 9px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:10px;padding:0 11px}
+.fitem-f{display:flex;flex-direction:column;gap:4px}
+.flabel-f{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.4px}
+.fsel{font-size:12px;font-family:inherit;width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 9px;color:var(--color-text-primary);cursor:pointer;outline:none}
+.freset{font-size:11.5px;color:var(--color-text-info);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:5px;padding:4px 0;margin-top:2px}
+.freset:hover{text-decoration:underline}
+/* Pending VB list */
+.vb-pending{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto}
+.vb-row{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:11.5px}
+.vb-row .num-badge{font-size:10px;font-weight:700;background:var(--color-text-danger);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.vb-row .meta{flex:1;min-width:0}
+.vb-row .meta .title{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vb-row .meta .sub{color:var(--color-text-tertiary);font-size:10.5px;margin-top:2px}
+.vb-row .days{font-size:11px;font-weight:600;color:var(--color-text-danger);flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">HEID</div><div><div class="nm">HEID</div><div class="sub">Hành chính &amp; Nhân sự</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="admin"><i class="ti ti-mail"></i> Hành chính - Văn bản</button>
+      <button data-page="hr"><i class="ti ti-users"></i> Nhân sự - Tổng quan</button>
+      <button data-page="attendance"><i class="ti ti-clock-check"></i> Điểm danh &amp; Làm việc</button>
+    </nav>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar">
+        <div class="fitem-f"><span class="flabel-f">Kỳ báo cáo</span>
+          <select class="fsel"><option>YTD 2026</option><option>Quý II/2026</option><option>Tháng 07/2026</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Phòng / Ban</span>
+          <select class="fsel"><option>Toàn công ty</option><option>Ban Giám đốc</option><option>Phòng Kinh doanh</option><option>Phòng Biên tập</option><option>Phòng Kế toán</option><option>Phòng IT</option><option>Phòng HC-NS</option></select></div>
+        <button class="freset"><i class="ti ti-rotate-2"></i> Đặt lại bộ lọc</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+  <!-- ========== HÀNH CHÍNH - VĂN BẢN ========== -->
+  <section class="page" id="page-admin" style="display:block">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Hành chính - Văn bản</span><span style="font-size:11px;color:var(--color-text-tertiary)">· Cập nhật 31/07/2026</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+
+    <!-- KPI tổng quan -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px" id="ad_kpi"></div>
+
+    <!-- Hai card VB đến / VB đi -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <!-- VB Đến -->
+      <div class="card">
+        <div class="section" style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+          <i class="ti ti-mail-forward" style="font-size:16px;color:var(--color-text-info)"></i> 1. VĂN BẢN ĐẾN
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px" id="ad_den_kpi"></div>
+        <div class="hd" style="margin-top:4px"><i class="ti ti-chart-bar"></i> VB đến theo tuần</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Đã xử lý</span><span><span class="dot" style="background:#CCD5E2"></span>Chưa xử lý</span></div>
+        <div style="position:relative;height:180px"><canvas id="ad_c1"></canvas></div>
+      </div>
+      <!-- VB Đi -->
+      <div class="card">
+        <div class="section" style="font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+          <i class="ti ti-send" style="font-size:16px;color:var(--color-text-info)"></i> 2. VĂN BẢN ĐI
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px" id="ad_di_kpi"></div>
+        <div class="hd" style="margin-top:4px"><i class="ti ti-chart-bar"></i> VB đi theo tuần</div>
+        <div class="legend"><span><span class="dot" style="background:#0C447C"></span>Nội bộ</span><span><span class="dot" style="background:#8FBEEC"></span>Gửi ngoài</span></div>
+        <div style="position:relative;height:180px"><canvas id="ad_c2"></canvas></div>
+      </div>
+    </div>
+
+    <!-- VB chưa xử lý + thống kê loại VB -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between">
+          <span><i class="ti ti-clock-exclamation"></i> Văn bản đến chưa xử lý <span class="bdg bD" style="margin-left:4px" id="ad_pending_count"></span></span>
+          <span class="s2">· sắp xếp theo số ngày tồn đọng</span>
+        </div>
+        <div class="vb-pending" id="ad_pending_list"></div>
+        <div class="s2" style="margin-top:8px">Ngày tồn đọng = ngày hôm nay − ngày VB đến. <b>Ngưỡng:</b> &gt; 7 ngày = cần xử lý gấp.</div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Cơ cấu văn bản đến theo loại</div>
+        <div style="position:relative;height:220px"><canvas id="ad_c3"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Xu hướng VB đến+đi theo tháng -->
+    <div class="card">
+      <div class="hd" style="justify-content:space-between">
+        <span><i class="ti ti-chart-line"></i> Xu hướng văn bản đến &amp; đi theo tháng</span>
+        <div style="display:flex;gap:6px"><button class="tab adview on" data-v="both">Cả hai</button><button class="tab adview" data-v="den">VB đến</button><button class="tab adview" data-v="di">VB đi</button></div>
+      </div>
+      <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>VB đến</span><span><span class="dot" style="background:#0C447C"></span>VB đi</span></div>
+      <div style="position:relative;height:210px"><canvas id="ad_c4"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ========== NHÂN SỰ - TỔNG QUAN ========== -->
+  <section class="page" id="page-hr">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Nhân sự - Tổng quan</span><span style="font-size:11px;color:var(--color-text-tertiary)">· Tính đến 31/07/2026</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> Cập nhật 31/07/2026</span>
+    </div>
+
+    <!-- KPI tổng quan -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:14px" id="hr_kpi"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:14px">
+      <!-- Cơ cấu nhân sự theo phòng ban -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-sitemap"></i> Cơ cấu nhân sự theo phòng ban</div>
+        <div style="max-height:300px;overflow:auto">
+          <table class="rk dvt" style="min-width:360px"><thead><tr><th>Phòng / Ban</th><th>Biên chế</th><th>Thực tế</th><th>CTV</th><th>% Biên chế</th></tr></thead><tbody id="hr_dept_tb"></tbody></table>
+        </div>
+      </div>
+      <!-- Biến động nhân sự theo tháng -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Biến động nhân sự theo tháng</div>
+        <div class="legend"><span><span class="dot" style="background:#1E9E57"></span>Vào</span><span><span class="dot" style="background:#E24B4A"></span>Ra</span><span><span class="dot" style="background:#2E7CD6;height:3px;width:16px"></span>Tổng NS</span></div>
+        <div style="position:relative;height:240px"><canvas id="hr_c1"></canvas></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:14px">
+      <!-- Cơ cấu theo giới tính & hợp đồng -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-users-group"></i> Cơ cấu theo giới tính &amp; loại hợp đồng</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <div style="font-size:10.5px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Giới tính</div>
+            <div style="position:relative;height:160px"><canvas id="hr_c2"></canvas></div>
+          </div>
+          <div>
+            <div style="font-size:10.5px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">Loại hợp đồng</div>
+            <div style="position:relative;height:160px"><canvas id="hr_c3"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <!-- Cơ cấu theo độ tuổi -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Cơ cấu nhân sự theo độ tuổi</div>
+        <div style="position:relative;height:210px"><canvas id="hr_c4"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Nhân sự chính thức & CTV -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-id-badge"></i> Trạng thái nhân sự chính thức</div>
+        <div id="hr_status_bars" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-user-check"></i> Nhân sự CTV (Talent) &amp; điểm danh</div>
+        <div style="position:relative;height:210px"><canvas id="hr_c5"></canvas></div>
+        <div class="s2" style="margin-top:6px">Điểm danh muộn = vào sau 08:15. Không đăng ký = vắng mặt không có phép.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ĐIỂM DANH & LÀM VIỆC ========== -->
+  <section class="page" id="page-attendance">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Điểm danh &amp; Trạng thái làm việc</span><span style="font-size:11px;color:var(--color-text-tertiary)">· Hôm nay 31/07/2026</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-clock"></i> Cập nhật 08:30</span>
+    </div>
+
+    <!-- KPI hôm nay -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:14px" id="att_kpi"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:14px">
+      <!-- Tỷ lệ trạng thái làm việc hôm nay -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Tỷ lệ nhân sự theo trạng thái làm việc hôm nay</div>
+        <div style="position:relative;height:260px"><canvas id="att_c1"></canvas></div>
+      </div>
+      <!-- Điểm danh theo phòng ban -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Điểm danh theo phòng ban hôm nay</div>
+        <div style="position:relative;height:260px"><canvas id="att_c2"></canvas></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:14px">
+      <!-- Xu hướng điểm danh theo tuần -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-line"></i> Tỷ lệ điểm danh đúng giờ theo tuần <span class="s2" style="font-weight:400">· 5 tuần gần nhất</span></div>
+        <div style="position:relative;height:200px"><canvas id="att_c3"></canvas></div>
+        <div class="s2" style="margin-top:6px">Đúng giờ = có mặt trước 08:15. Tính trên tổng nhân sự chính thức làm việc trong ngày.</div>
+      </div>
+      <!-- Làm ngoài giờ -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-clock-bolt"></i> Làm ngoài giờ theo phòng ban <span class="s2" style="font-weight:400">· tháng 07/2026</span></div>
+        <div style="position:relative;height:200px"><canvas id="att_c4"></canvas></div>
+        <div class="s2" style="margin-top:6px">ĐVT: giờ · Tổng giờ OT của toàn bộ nhân sự trong phòng trong tháng.</div>
+      </div>
+    </div>
+
+    <!-- Danh sách điểm danh hôm nay -->
+    <div class="card">
+      <div class="hd" style="justify-content:space-between">
+        <span><i class="ti ti-list-check"></i> Danh sách điểm danh hôm nay</span>
+        <div style="display:flex;gap:6px">
+          <button class="tab attf on" data-v="all">Tất cả</button>
+          <button class="tab attf" data-v="late">Đến muộn</button>
+          <button class="tab attf" data-v="absent">Vắng</button>
+          <button class="tab attf" data-v="wfh">Làm từ xa</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="rk dvt" id="att_table" style="min-width:680px">
+          <thead><tr><th>#</th><th>Họ tên</th><th>Phòng ban</th><th>Trạng thái</th><th>Giờ vào</th><th>Giờ ra (dự kiến)</th><th>Ghi chú</th></tr></thead>
+          <tbody id="att_tb"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="s2" style="margin-top:18px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)">
+    Ghi chú: toàn bộ số liệu là <b>số minh họa</b> phục vụ thiết kế giao diện.
+    Nguồn: Base/hệ thống quản lý văn bản (văn bản đến/đi) · HRM + hệ thống chấm công (nhân sự, điểm danh, làm việc).
+    Kỳ YTD 2026 (01/01–31/07/2026). Dữ liệu điểm danh cập nhật gần thời gian thực.
+    Phân quyền: TGĐ + Phòng HC-NS — xem toàn bộ, không áp RLS.
+  </div>
+  </main>
+</div>
+
+<script>
+/* ============ UTILS ============ */
+const grid='rgba(128,128,128,0.18)', tickc='rgba(128,128,128,0.85)';
+const BL='#2E7CD6',BLL='#8FBEEC',NV='#0C447C',GN='#1E9E57',OR='#EF9F27',RD='#E24B4A',GY='#CCD5E2',PU='#7C4DFF';
+const SH=['#0C447C','#185FA5','#2E7CD6','#5B9BE0','#8FBEEC','#BBD7F6'];
+Chart.defaults.font.family="Inter,-apple-system,sans-serif"; Chart.defaults.font.size=11; Chart.defaults.color=tickc;
+const nf=v=>Math.round(v).toLocaleString('vi-VN');
+const pp=v=>v.toFixed(1).replace('.',',');
+const el=id=>document.getElementById(id);
+const MON=['T01','T02','T03','T04','T05','T06','T07'];
+const TUAN5=['T3(30/06)','T4(07/07)','T1(14/07)','T2(21/07)','T3(28/07)'];
+
+/* ============ DATA ============ */
+// --- VĂN BẢN ---
+const VBD_TUAN=[{d:63,xuly:45},{d:71,xuly:61},{d:61,xuly:38},{d:45,xuly:17},{d:16,xuly:0}]; // 5 tuần gần nhất
+const VBD_THANG=[45,68,72,58,62,71,60]; // VB đến theo tháng
+const VBD_TOTAL=VBD_THANG.reduce((a,b)=>a+b,0); // 436 (mock ~356 như PDF)
+const VBD_XULY=VBD_TUAN.reduce((a,x)=>a+x.xuly,0)+VBD_THANG.slice(0,5).reduce((a,b)=>a+Math.round(b*0.9),0);
+const VBD_CXL=VBD_TUAN.reduce((a,x)=>a+x.d-x.xuly,0);
+
+const VBD_LOAI=[
+  {n:'Chỉ đạo / Điều hành',v:112,c:NV},
+  {n:'Hành chính / Tổ chức',v:89,c:BL},
+  {n:'Tài chính / Kế toán',v:68,c:OR},
+  {n:'Kinh doanh / Đối tác',v:95,c:GN},
+  {n:'Pháp lý / Hợp đồng',v:42,c:PU},
+  {n:'Khác',v:30,c:GY},
+];
+
+const VBI_THANG=[32,48,52,42,45,52,45]; // VB nội bộ theo tháng
+const VBN_THANG=[28,35,40,38,37,43,38]; // VB gửi ngoài theo tháng
+const VBI_TUAN=[{nb:25,nn:32},{nb:32,nn:36},{nb:36,nn:20},{nb:20,nn:16},{nb:nb=15,nn:5}];
+
+const VB_PENDING=[
+  {so:'245/CV-ĐHQG',loai:'Công văn',nguon:'NXB ĐH Quốc gia',ngay:'18/07/2026',ngay_ton:13},
+  {so:'189/TB-GD',loai:'Thông báo',nguon:'Sở GD&ĐT Hà Nội',ngay:'21/07/2026',ngay_ton:10},
+  {so:'302/QĐ-BTC',loai:'Quyết định',nguon:'Bộ Tài chính',ngay:'22/07/2026',ngay_ton:9},
+  {so:'78/CV-NXB',loai:'Công văn',nguon:'NXB Giáo dục VN',ngay:'24/07/2026',ngay_ton:7},
+  {so:'415/CV-ĐT',loai:'Tờ trình',nguon:'Ban Đào tạo',ngay:'25/07/2026',ngay_ton:6},
+  {so:'512/VB-HC',loai:'Công văn',nguon:'Phòng HC',ngay:'27/07/2026',ngay_ton:4},
+  {so:'621/TB-KD',loai:'Thông báo',nguon:'Phòng Kinh doanh',ngay:'28/07/2026',ngay_ton:3},
+  {so:'730/CV-IT',loai:'Yêu cầu',nguon:'Phòng IT',ngay:'30/07/2026',ngay_ton:1},
+];
+
+// --- NHÂN SỰ ---
+const NS_PHONG=[
+  {n:'Ban Giám đốc',bc:5,tt:5,ctv:0},
+  {n:'Phòng Kinh doanh',bc:28,tt:26,ctv:4},
+  {n:'Phòng Biên tập',bc:38,tt:35,ctv:12},
+  {n:'Phòng Kế toán',bc:12,tt:11,ctv:0},
+  {n:'Phòng IT',bc:14,tt:13,ctv:6},
+  {n:'Phòng HC-NS',bc:10,tt:9,ctv:1},
+  {n:'Phòng Phát triển SP',bc:20,tt:18,ctv:3},
+  {n:'Phòng Kho vận',bc:16,tt:15,ctv:2},
+];
+const NS_TOTAL=148, NS_CTV=16;
+const NS_VAO=[3,2,4,1,2,3,1]; // nhân sự vào theo tháng
+const NS_RA=[1,1,2,1,1,2,1];  // nhân sự ra theo tháng
+const NS_TH=NS_PHONG.reduce((a,p)=>a+p.tt,0); // tổng chính thức
+
+// Trạng thái nhân sự chính thức (số từ PDF trang 5)
+const NS_STATUS=[
+  {n:'Đã điểm danh đúng giờ', v:117, c:GN},
+  {n:'Điểm danh muộn',         v:9,   c:OR},
+  {n:'Chưa điểm danh',         v:19,  c:GY},
+  {n:'Điểm danh muộn (TGĐ)',   v:9,   c:RD},
+  {n:'Không có đăng ký',        v:11,  c:RD},
+];
+
+// CTV
+const CTV_STATUS=[
+  {n:'Đã điểm danh',   v:9, c:GN},
+  {n:'Điểm danh muộn', v:4, c:OR},
+  {n:'Không đăng ký',  v:3, c:RD},
+];
+
+// Tuổi
+const TUOI=[{n:'< 25',v:18},{n:'25–30',v:42},{n:'31–35',v:38},{n:'36–40',v:24},{n:'41–50',v:18},{n:'> 50',v:8}];
+
+// --- ĐIỂM DANH HÔM NAY ---
+const ATT_TRANG_THAI=[
+  {n:'Đang làm việc',v:117,c:GN},
+  {n:'Đi công tác',  v:8,  c:BL},
+  {n:'Làm từ xa',    v:6,  c:OR},
+  {n:'Nghỉ phép',    v:11, c:GY},
+  {n:'Vắng không phép',v:4, c:RD},
+  {n:'Điểm danh muộn',v:2, c:'#EF9F27'},
+];
+const ATT_PHONG=[
+  {n:'Kinh doanh',daden:24,muon:2,vang:0},{n:'Biên tập',daden:30,muon:3,vang:2},
+  {n:'Kế toán',daden:10,muon:1,vang:0},{n:'IT',daden:11,muon:1,vang:1},
+  {n:'HC-NS',daden:8,muon:0,vang:1},{n:'PT Sản phẩm',daden:16,muon:1,vang:1},
+  {n:'Kho vận',daden:13,muon:1,vang:1},{n:'BGĐ',daden:5,muon:0,vang:0},
+];
+const ATT_RATE_TUAN=[91.2,88.6,93.4,90.1,92.5]; // % đúng giờ 5 tuần
+const OT_PHONG=[
+  {n:'Kinh doanh',gio:124},{n:'Biên tập',gio:186},{n:'Kế toán',gio:68},
+  {n:'IT',gio:142},{n:'HC-NS',gio:48},{n:'PT Sản phẩm',gio:162},{n:'Kho vận',gio:96},{n:'BGĐ',gio:24},
+];
+
+// Danh sách điểm danh mock
+const ATT_LIST=[
+  {stt:1,ten:'Nguyễn Thị Hoa',pb:'Kinh doanh',tt:'Đang làm việc',vao:'07:52',ra:'17:30',note:''},
+  {stt:2,ten:'Trần Văn Minh',pb:'Biên tập',tt:'Đang làm việc',vao:'08:05',ra:'17:30',note:''},
+  {stt:3,ten:'Lê Thị Thu',pb:'Kế toán',tt:'Điểm danh muộn',vao:'08:28',ra:'17:30',note:'Muộn 13 phút'},
+  {stt:4,ten:'Phạm Văn Đức',pb:'IT',tt:'Làm từ xa',vao:'08:00',ra:'17:30',note:'WFH đã phê duyệt'},
+  {stt:5,ten:'Hoàng Thị Lan',pb:'Biên tập',tt:'Đang làm việc',vao:'07:45',ra:'17:30',note:''},
+  {stt:6,ten:'Vũ Văn Nam',pb:'Kho vận',tt:'Đi công tác',vao:'—',ra:'—',note:'TP.HCM 30–31/07'},
+  {stt:7,ten:'Đặng Thị Mai',pb:'HC-NS',tt:'Đang làm việc',vao:'08:00',ra:'17:30',note:''},
+  {stt:8,ten:'Bùi Văn Hùng',pb:'PT Sản phẩm',tt:'Nghỉ phép',vao:'—',ra:'—',note:'Phép năm đã duyệt'},
+  {stt:9,ten:'Ngô Thị Yến',pb:'Kinh doanh',tt:'Đang làm việc',vao:'07:58',ra:'17:30',note:''},
+  {stt:10,ten:'Đinh Văn Thành',pb:'Biên tập',tt:'Vắng không phép',vao:'—',ra:'—',note:'Chưa liên lạc được'},
+  {stt:11,ten:'Lý Thị Hằng',pb:'IT',tt:'Điểm danh muộn',vao:'09:15',ra:'17:30',note:'Muộn 60 phút'},
+  {stt:12,ten:'Tô Văn Quang',pb:'Kế toán',tt:'Làm từ xa',vao:'07:55',ra:'17:30',note:'WFH đã phê duyệt'},
+];
+
+/* ============ TRANG HÀNH CHÍNH ============ */
+(function(){
+  let built=false, c4, c4mode='both';
+  window.adBuild=function(){
+    const VBD_T=VBD_THANG.reduce((a,b)=>a+b,0);
+    const VBI_T=VBI_THANG.reduce((a,b)=>a+b,0);
+    const VBN_T=VBN_THANG.reduce((a,b)=>a+b,0);
+    el('ad_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng VB đến</div><div class="big" style="color:var(--color-text-info)">'+nf(VBD_T)+'</div>'
+      +'<div class="row"><span class="l">BQ / tháng</span><span class="v">'+Math.round(VBD_T/7)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">VB đến chưa XL</div><div class="big dn">'+nf(VBD_CXL)+'</div>'
+      +'<div class="row"><span class="l">Tỷ lệ chưa XL</span><span class="v dn">'+pp(VBD_CXL/(VBD_CXL+VBD_XULY)*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng VB đi</div><div class="big" style="color:var(--color-text-info)">'+nf(VBI_T+VBN_T)+'</div>'
+      +'<div class="row"><span class="l">Nội bộ / Ngoài</span><span class="v">'+nf(VBI_T)+' / '+nf(VBN_T)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Loại VB phổ biến</div><div class="big" style="color:var(--color-text-info);font-size:16px">Kinh doanh</div>'
+      +'<div class="row"><span class="l">95 văn bản YTD</span><span class="v"></span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tuần có VB cao nhất</div><div class="big" style="color:var(--color-text-info);font-size:16px">Tuần 3/T03</div>'
+      +'<div class="row"><span class="l">72 văn bản</span><span class="v"></span></div></div>';
+
+    el('ad_den_kpi').innerHTML=
+      '<div class="kpi" style="text-align:center"><div class="ttl">Tổng</div><div class="big" style="font-size:20px;color:var(--color-text-info)">'+nf(VBD_T)+'</div><div class="s2">văn bản</div></div>'
+      +'<div class="kpi" style="text-align:center"><div class="ttl">Đã xử lý</div><div class="big" style="font-size:20px" class="up">'+nf(VBD_T-VBD_CXL)+'</div><div class="s2 up">'+pp((VBD_T-VBD_CXL)/VBD_T*100)+'%</div></div>'
+      +'<div class="kpi" style="text-align:center"><div class="ttl">Chưa xử lý</div><div class="big dn" style="font-size:20px">'+nf(VBD_CXL)+'</div><div class="s2 dn">cần xử lý</div></div>';
+
+    const VBD_T2=VBI_T+VBN_T;
+    el('ad_di_kpi').innerHTML=
+      '<div class="kpi" style="text-align:center"><div class="ttl">Tổng</div><div class="big" style="font-size:20px;color:var(--color-text-info)">'+nf(VBD_T2)+'</div><div class="s2">văn bản</div></div>'
+      +'<div class="kpi" style="text-align:center"><div class="ttl">Nội bộ</div><div class="big" style="font-size:20px;color:var(--color-text-info)">'+nf(VBI_T)+'</div><div class="s2">'+pp(VBI_T/VBD_T2*100)+'%</div></div>'
+      +'<div class="kpi" style="text-align:center"><div class="ttl">Gửi ngoài</div><div class="big" style="font-size:20px;color:var(--color-text-info)">'+nf(VBN_T)+'</div><div class="s2">'+pp(VBN_T/VBD_T2*100)+'%</div></div>';
+
+    el('ad_pending_count').textContent=VBD_CXL;
+    el('ad_pending_list').innerHTML=VB_PENDING.map((x,i)=>{
+      const urgent=x.ngay_ton>7;
+      return '<div class="vb-row">'
+        +'<div class="num-badge" style="background:'+(urgent?RD:OR)+'">'+x.ngay_ton+'</div>'
+        +'<div class="meta"><div class="title">'+x.so+' — '+x.loai+'</div>'
+        +'<div class="sub">'+x.nguon+' · Ngày đến: '+x.ngay+'</div></div>'
+        +'<div class="days">'+x.ngay_ton+' ngày</div></div>';}).join('');
+
+    if(built)return;
+    new Chart(el('ad_c1'),{type:'bar',data:{labels:TUAN5,datasets:[
+        {label:'Đã xử lý',data:VBD_TUAN.map(x=>x.xuly),backgroundColor:BL,borderRadius:3,stack:'s'},
+        {label:'Chưa xử lý',data:VBD_TUAN.map(x=>x.d-x.xuly),backgroundColor:GY,borderRadius:3,stack:'s'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+' VB'}}},
+        scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9.5}}},y:{stacked:true,grid:{color:grid},ticks:{stepSize:20}}}}});
+    new Chart(el('ad_c2'),{type:'bar',data:{labels:TUAN5,datasets:[
+        {label:'Nội bộ',data:VBI_TUAN.map(x=>x.nb),backgroundColor:NV,borderRadius:3,stack:'s'},
+        {label:'Gửi ngoài',data:VBI_TUAN.map(x=>x.nn),backgroundColor:BLL,borderRadius:3,stack:'s'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+' VB'}}},
+        scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9.5}}},y:{stacked:true,grid:{color:grid},ticks:{stepSize:20}}}}});
+    new Chart(el('ad_c3'),{type:'doughnut',data:{labels:VBD_LOAI.map(x=>x.n),datasets:[{data:VBD_LOAI.map(x=>x.v),backgroundColor:VBD_LOAI.map(x=>x.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' VB ('+pp(c.parsed/VBD_T*100)+'%)'}}}}});
+    c4=new Chart(el('ad_c4'),{type:'line',data:{labels:MON,datasets:[
+        {label:'VB đến',data:VBD_THANG,borderColor:BL,borderWidth:2.5,tension:.35,pointRadius:4,fill:false},
+        {label:'VB đi',data:VBI_THANG.map((v,i)=>v+VBN_THANG[i]),borderColor:NV,borderWidth:2.5,tension:.35,pointRadius:4,fill:false}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+' VB'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},grace:'15%'}}}});
+    document.querySelectorAll('.adview').forEach(b=>b.addEventListener('click',()=>{
+      c4mode=b.dataset.v;
+      c4.data.datasets[0].hidden=c4mode==='di';
+      c4.data.datasets[1].hidden=c4mode==='den';
+      c4.update();
+      document.querySelectorAll('.adview').forEach(x=>x.classList.toggle('on',x===b));
+    }));
+    built=true;
+  };
+})();
+
+/* ============ TRANG NHÂN SỰ ============ */
+(function(){
+  let built=false;
+  window.hrBuild=function(){
+    const bc_total=NS_PHONG.reduce((a,p)=>a+p.bc,0);
+    el('hr_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng nhân sự chính thức</div><div class="big" style="color:var(--color-text-info)">'+NS_TH+'</div>'
+      +'<div class="row"><span class="l">Biên chế</span><span class="v">'+bc_total+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Nhân sự CTV (Talent)</div><div class="big" style="color:var(--color-text-info)">'+NS_CTV+'</div>'
+      +'<div class="row"><span class="l">% tổng</span><span class="v">'+pp(NS_CTV/(NS_TH+NS_CTV)*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tỷ lệ lấp đầy BC</div><div class="big up">'+pp(NS_TH/bc_total*100)+'%</div>'
+      +'<div class="row"><span class="l">Còn thiếu</span><span class="v dn">'+(bc_total-NS_TH)+' vị trí</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Vào trong kỳ</div><div class="big up">'+NS_VAO.reduce((a,b)=>a+b,0)+'</div>'
+      +'<div class="row"><span class="l">Ra trong kỳ</span><span class="v dn">'+NS_RA.reduce((a,b)=>a+b,0)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tỷ lệ nghỉ việc</div><div class="big" style="color:var(--color-text-info)">'+pp(NS_RA.reduce((a,b)=>a+b,0)/NS_TH*100*12/7)+'%</div>'
+      +'<div class="row"><span class="l">annualized YTD</span><span class="v"></span></div></div>';
+
+    el('hr_dept_tb').innerHTML=NS_PHONG.map(p=>{
+      const fill=Math.round(p.tt/p.bc*100);
+      return '<tr><td>'+p.n+'</td><td class="mono">'+p.bc+'</td><td class="mono">'+p.tt+'</td><td class="mono">'+p.ctv+'</td>'
+        +'<td><div style="display:flex;align-items:center;gap:6px"><span class="mono" style="min-width:34px">'+fill+'%</span>'
+        +'<div class="pgbar" style="flex:1;height:6px;min-width:50px"><div class="fill" style="width:'+fill+'%;background:'+(fill>=95?GN:fill>=80?OR:RD)+'"></div></div>'
+        +'</div></td></tr>';}).join('')
+      +'<tr class="tot"><td>TỔNG</td><td class="mono">'+bc_total+'</td><td class="mono">'+NS_TH+'</td>'
+      +'<td class="mono">'+NS_CTV+'</td><td class="mono">'+Math.round(NS_TH/bc_total*100)+'%</td></tr>';
+
+    // Status bars
+    const ns_main=132; // nhân sự chính thức đang làm (theo PDF)
+    const statusData=[
+      {n:'Đang làm việc (chính thức)',v:ns_main,c:GN,max:NS_TH},
+      {n:'Đã điểm danh (chính thức)',v:117,c:BL,max:NS_TH},
+      {n:'Điểm danh muộn',v:9,c:OR,max:NS_TH},
+      {n:'Không có đăng ký / Vắng',v:11,c:RD,max:NS_TH},
+    ];
+    el('hr_status_bars').innerHTML=statusData.map(x=>'<div>'
+      +'<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">'
+      +'<span style="color:var(--color-text-secondary)">'+x.n+'</span>'
+      +'<b>'+x.v+' / '+x.max+'</b></div>'
+      +'<div class="pgbar" style="height:10px"><div class="fill" style="width:'+Math.round(x.v/x.max*100)+'%;background:'+x.c+'"></div></div>'
+      +'</div>').join('');
+
+    if(built)return;
+    // Biến động NS
+    const ns_cumulative=[NS_TH];
+    let ns_cur=NS_TH;
+    for(let i=MON.length-1;i>=1;i--){ns_cur=ns_cur-NS_VAO[i]+NS_RA[i];ns_cumulative.unshift(ns_cur);}
+    new Chart(el('hr_c1'),{type:'bar',data:{labels:MON,datasets:[
+        {type:'bar',label:'Vào',data:NS_VAO,backgroundColor:GN,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'Ra',data:NS_RA,backgroundColor:RD,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'Tổng NS',data:ns_cumulative,borderColor:BL,borderWidth:2.5,tension:.3,pointRadius:4,yAxisID:'y1'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+(c.datasetIndex===2?' người':'')}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},max:8,grace:0},
+                y1:{position:'right',grid:{display:false},min:130,max:160,ticks:{stepSize:5}}}}});
+    new Chart(el('hr_c2'),{type:'doughnut',data:{labels:['Nữ','Nam'],datasets:[{data:[88,60],backgroundColor:[OR,BL],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10,font:{size:10.5}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' người ('+pp(c.parsed/148*100)+'%)'}}}}});
+    new Chart(el('hr_c3'),{type:'doughnut',data:{labels:['HĐ không xác định kỳ hạn','HĐ 12 tháng','HĐ 6 tháng','Thử việc'],
+        datasets:[{data:[82,38,20,8],backgroundColor:[NV,BL,BLL,GY],borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:8,font:{size:9.5}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' người'}}}}});
+    new Chart(el('hr_c4'),{type:'bar',data:{labels:TUOI.map(x=>x.n),datasets:[{data:TUOI.map(x=>x.v),
+        backgroundColor:['#BBD7F6','#8FBEEC','#5B9BE0','#2E7CD6','#185FA5','#0C447C'],borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.parsed.y+' người'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{stepSize:10}}}}});
+    new Chart(el('hr_c5'),{type:'bar',data:{labels:['CTV'],datasets:[
+        {label:'Đã điểm danh',data:[9],backgroundColor:GN,borderRadius:4,stack:'s'},
+        {label:'Điểm danh muộn',data:[4],backgroundColor:OR,borderRadius:4,stack:'s'},
+        {label:'Không đăng ký',data:[3],backgroundColor:RD,borderRadius:4,stack:'s'}]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x+' người'}}},
+        scales:{x:{stacked:true,grid:{color:grid},max:16},y:{stacked:true,grid:{display:false}}}}});
+    built=true;
+  };
+})();
+
+/* ============ TRANG ĐIỂM DANH ============ */
+(function(){
+  let built=false, attFilter='all';
+  function renderTb(){
+    const filtered=attFilter==='all'?ATT_LIST
+      :attFilter==='late'?ATT_LIST.filter(x=>x.tt==='Điểm danh muộn')
+      :attFilter==='absent'?ATT_LIST.filter(x=>x.tt==='Vắng không phép'||x.tt==='Nghỉ phép')
+      :ATT_LIST.filter(x=>x.tt==='Làm từ xa');
+    const stCls={
+      'Đang làm việc':'bG','Điểm danh muộn':'bM','Làm từ xa':'bB',
+      'Đi công tác':'bB','Nghỉ phép':'bN','Vắng không phép':'bD'
+    };
+    el('att_tb').innerHTML=filtered.map((x,i)=>'<tr>'
+      +'<td class="mono" style="color:var(--color-text-tertiary)">'+(i+1)+'</td>'
+      +'<td style="font-weight:500">'+x.ten+'</td>'
+      +'<td>'+x.pb+'</td>'
+      +'<td><span class="bdg '+(stCls[x.tt]||'bN')+'">'+x.tt+'</span></td>'
+      +'<td class="mono">'+x.vao+'</td><td class="mono">'+x.ra+'</td>'
+      +'<td style="color:var(--color-text-tertiary);font-size:11px">'+x.note+'</td></tr>').join('');
+  }
+  window.attBuild=function(){
+    const total_today=ATT_TRANG_THAI.reduce((a,x)=>a+x.v,0);
+    el('att_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng nhân sự hôm nay</div><div class="big" style="color:var(--color-text-info)">'+total_today+'</div>'
+      +'<div class="row"><span class="l">Chính thức</span><span class="v">'+NS_TH+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đang làm việc</div><div class="big up">'+ATT_TRANG_THAI[0].v+'</div>'
+      +'<div class="row"><span class="l">Tỷ lệ có mặt</span><span class="v up">'+pp(ATT_TRANG_THAI[0].v/total_today*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đi công tác / WFH</div><div class="big" style="color:var(--color-text-info)">'+(ATT_TRANG_THAI[1].v+ATT_TRANG_THAI[2].v)+'</div>'
+      +'<div class="row"><span class="l">Công tác / WFH</span><span class="v">'+ATT_TRANG_THAI[1].v+' / '+ATT_TRANG_THAI[2].v+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Nghỉ phép</div><div class="big wn">'+ATT_TRANG_THAI[3].v+'</div>'
+      +'<div class="row"><span class="l">Đã phê duyệt</span><span class="v">'+ATT_TRANG_THAI[3].v+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Vắng không phép</div><div class="big dn">'+ATT_TRANG_THAI[4].v+'</div>'
+      +'<div class="row"><span class="l">Cần xử lý</span><span class="v dn">ngay hôm nay</span></div></div>';
+
+    renderTb();
+    if(built)return;
+    new Chart(el('att_c1'),{type:'doughnut',data:{labels:ATT_TRANG_THAI.map(x=>x.n),datasets:[{data:ATT_TRANG_THAI.map(x=>x.v),backgroundColor:ATT_TRANG_THAI.map(x=>x.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:10,font:{size:10.5}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' người ('+pp(c.parsed/total_today*100)+'%)'}}}}});
+    new Chart(el('att_c2'),{type:'bar',data:{labels:ATT_PHONG.map(x=>x.n),datasets:[
+        {label:'Đã điểm danh',data:ATT_PHONG.map(x=>x.daden),backgroundColor:BL,borderRadius:3,stack:'s'},
+        {label:'Đến muộn',data:ATT_PHONG.map(x=>x.muon),backgroundColor:OR,borderRadius:3,stack:'s'},
+        {label:'Vắng',data:ATT_PHONG.map(x=>x.vang),backgroundColor:RD,borderRadius:3,stack:'s'}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,boxHeight:8,font:{size:10}}},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x+' người'}}},
+        scales:{x:{stacked:true,grid:{color:grid}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}}});
+    new Chart(el('att_c3'),{type:'line',data:{labels:TUAN5,datasets:[{label:'Tỷ lệ đúng giờ',data:ATT_RATE_TUAN,borderColor:GN,borderWidth:2.5,tension:.3,pointRadius:5,pointBackgroundColor:GN,fill:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>pp(c.parsed.y)+'%'}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:grid},min:80,max:100,ticks:{callback:v=>v+'%'}}}}});
+    new Chart(el('att_c4'),{type:'bar',data:{labels:OT_PHONG.map(x=>x.n),datasets:[{data:OT_PHONG.map(x=>x.gio),
+        backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.parsed.x+' giờ OT'}}},
+        scales:{x:{grid:{color:grid}},y:{grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}}}});
+
+    document.querySelectorAll('.attf').forEach(b=>b.addEventListener('click',()=>{
+      attFilter=b.dataset.v;
+      document.querySelectorAll('.attf').forEach(x=>x.classList.toggle('on',x===b));
+      renderTb();
+    }));
+    built=true;
+  };
+})();
+
+/* ============ ĐIỀU HƯỚNG ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='admin'&&window.adBuild)adBuild();
+  if(id==='hr'&&window.hrBuild)hrBuild();
+  if(id==='attendance'&&window.attBuild)attBuild();
+}
+document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+showPage('admin');
+</script>
+</body>
+</html>

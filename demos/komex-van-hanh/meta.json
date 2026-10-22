@@ -1,0 +1,23 @@
+{
+  "slug": "komex-van-hanh",
+  "title": "Komex — Bảng điều hành vận hành & sau bán hàng",
+  "type": "dashboard",
+  "industry": "Bán lẻ",
+  "department": "Chăm sóc khách hàng",
+  "description": "Hoàn trả, bảo hành, khiếu nại và đánh giá khách hàng theo gian hàng.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Komex/",
+  "source_repo": "https://github.com/tbinh-06/Komex",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "hoàn trả",
+    "bảo hành",
+    "khiếu nại",
+    "TMĐT"
+  ]
+}

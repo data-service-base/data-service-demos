@@ -1,0 +1,21 @@
+{
+  "slug": "heid-chuoi-gia-tri",
+  "title": "HEID — Chuỗi giá trị & lịch khảo sát",
+  "type": "proposal",
+  "industry": "Giáo dục",
+  "department": "All",
+  "description": "Chuỗi giá trị HEID, lịch khảo sát nhu cầu báo cáo các phòng và các mốc triển khai.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/HEID_Phase3/",
+  "source_repo": "https://github.com/tbinh-06/HEID_Phase3",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "chuỗi giá trị",
+    "khảo sát"
+  ]
+}

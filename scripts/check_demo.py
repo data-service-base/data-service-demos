@@ -20,7 +20,7 @@ def check(folder: pathlib.Path) -> bool:
     if not any((folder / t).exists() for t in ("thumb.jpg", "thumb.png", "thumb.webp")):
         print("! chưa có thumb.jpg (ảnh chụp 16:10 hiện ở trang kho)")
     for ref in sorted(set(re.findall(r'(?:src|href)="(?!https?:|data:|#|mailto:|tel:|javascript:|blob:)([^"?#]+)', html))):
-        if ref and "${" not in ref and not (folder / ref).exists():
+        if ref and not re.search(r"\$\{|['`+]", ref) and not (folder / ref).exists():  # bỏ qua link ghép trong JS
             print(f"✗ tham chiếu file cục bộ không có: {ref}"); ok = False
     hosts = sorted(set(re.findall(r'(?:src|href)="https?://([^/"]+)', html)))
     if hosts:

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEID — Báo cáo: Hoạt động triển khai sản phẩm số</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg-1:#FFFFFF;--bg-2:#F0F3F8;--bd:#E2E7F0;--bd2:#CCD5E2;
+  --tx-1:#1A2230;--tx-2:#5A6678;--tx-3:#8A95A8;
+  --info:#2F6FE0;--info-bg:#E9F2FC;--info-bd:#A9CBF0;
+  --suc:#1E9E57;--suc-bg:#E8F6EE;--dng:#E24B4A;--dng-bg:#FCEAEA;
+  --wrn:#D98200;--wrn-bg:#FBF1DD;--r:12px;--rmd:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--tx-1);font-family:'Inter',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:238px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--bd);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px}
+.brand .nm{font-weight:600;font-size:13px}.brand .sub{font-size:10px;color:var(--tx-3)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;background:transparent;border-radius:var(--rmd);color:var(--tx-2);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}.nav button:hover{background:var(--bg-2)}
+.nav button.on{background:var(--info-bg);color:var(--info);font-weight:500}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px;gap:12px;flex-wrap:wrap}
+.titlebar .t{font-size:19px;font-weight:600}
+.kpi{background:var(--bg-1);border:0.5px solid var(--bd);border-radius:var(--r);padding:13px 15px;position:relative;display:flex;flex-direction:column}
+.kpi .chg{order:3;align-self:flex-start;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.kpi .chg::after{content:' so với cùng kỳ';font-weight:400;opacity:.8}
+.kpi .ttl{order:1}.kpi .big{order:2}
+.kpi .chg.u{color:var(--suc);background:var(--suc-bg)}.kpi .chg.d{color:var(--dng);background:var(--dng-bg)}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--tx-2);text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:4px}
+.kpi .big{font-size:22px;font-weight:600;margin:5px 0 3px;color:var(--info)}
+.kpi .expl{font-size:10px;color:var(--tx-3);line-height:1.4;margin-top:2px}
+.kpi .row{display:flex;font-size:11.5px;padding:2px 0;color:var(--tx-2)}
+.kpi .row .v{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--tx-1)}
+.info-i{font-size:12px;color:var(--tx-3);cursor:help}
+.card{background:var(--bg-1);border:0.5px solid var(--bd);border-radius:var(--r);padding:14px 16px}
+.hd{font-size:13px;font-weight:600;margin:0 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0;font-size:12px;color:var(--tx-2)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.tab{font-size:12px;padding:5px 12px;border-radius:var(--rmd);border:0.5px solid var(--bd2);background:transparent;color:var(--tx-2);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--info-bg);color:var(--info);border-color:var(--info-bd)}
+table.rk{width:100%;border-collapse:collapse;font-size:11.5px}
+table.rk th{text-align:right;font-weight:500;color:var(--tx-2);padding:7px;font-size:11px;background:var(--bg-2);position:sticky;top:0}
+table.rk td{padding:8px 7px;border-top:0.5px solid var(--bd);text-align:right}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--bd2);font-weight:600;background:var(--bg-2)}
+table.dvt td,table.dvt th{border-left:0.5px solid var(--bd)}
+table.dvt td:first-child,table.dvt th:first-child{border-left:none}
+.mono{font-variant-numeric:tabular-nums}.s2{font-size:11px;color:var(--tx-3)}
+.bdg{font-size:10.5px;padding:2px 8px;border-radius:var(--rmd)}
+.bG{background:var(--suc-bg);color:var(--suc)}.bM{background:var(--wrn-bg);color:var(--wrn)}.bD{background:var(--dng-bg);color:var(--dng)}
+.bB{background:var(--info-bg);color:var(--info)}
+.banner{background:linear-gradient(90deg,#E9F2FC,#F0F4FA);border:0.5px solid var(--info-bd);border-radius:var(--r);padding:11px 16px;margin-bottom:16px;font-size:12px;color:#0C447C;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.banner i{font-size:18px;margin-top:1px;flex-shrink:0}
+.pill{display:inline-block;font-size:10px;padding:1px 8px;border-radius:999px;background:var(--bg-2);color:var(--tx-2);margin-left:4px}
+.sidefilter{margin-top:14px;border-top:0.5px solid var(--bd);padding-top:12px}
+.sftitle{font-size:10px;font-weight:600;color:var(--tx-3);text-transform:uppercase;letter-spacing:.6px;padding:0 4px 9px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:9px;padding:0 4px}
+.fitem-f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.flabel-f{font-size:10px;font-weight:600;color:var(--tx-3);text-transform:uppercase;letter-spacing:.4px}
+.fsel,.fdate{font-size:12px;font-family:inherit;width:100%;background:var(--bg-2);border:0.5px solid var(--bd2);border-radius:var(--rmd);padding:7px 9px;color:var(--tx-1);cursor:pointer;outline:none}
+.fdate{cursor:text}
+.fsel:focus,.fdate:focus{border-color:var(--info)}
+.fdrow{display:flex;gap:6px}.fdrow .fitem-f{flex:1}
+.freset{font-size:11.5px;color:var(--info);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:5px;padding:4px 0;margin-top:2px}
+.freset:hover{text-decoration:underline}
+.fbadge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:999px;background:var(--info-bg);color:var(--info);border:0.5px solid var(--info-bd)}
+.fbadge i{font-size:12px;cursor:pointer}
+.factive{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.tt{position:relative;display:inline-flex}
+.tt .ttbox{visibility:hidden;opacity:0;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:#1A2230;color:#fff;font-size:10.5px;font-weight:400;padding:7px 10px;border-radius:6px;width:200px;line-height:1.5;z-index:20;text-transform:none;letter-spacing:0;transition:opacity .15s}
+.tt:hover .ttbox{visibility:visible;opacity:1}
+.tt .ttbox::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1A2230}
+.hm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.hm-cell{border-radius:var(--rmd);padding:10px 11px;cursor:pointer;transition:transform .12s,box-shadow .12s;border:1.5px solid transparent}
+.hm-cell:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.hm-cell.sel{border-color:#1A2230}
+.hm-cell .hm-name{font-size:11px;font-weight:600;line-height:1.2;margin-bottom:5px}
+.hm-cell .hm-val{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.hm-cell .hm-sub{font-size:9.5px;opacity:.8;margin-top:1px}
+.hm-scale{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--tx-3);margin-top:10px}
+.hm-scale .bar{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#EAF2FC,#2E7CD6,#0C447C);max-width:180px}
+
+.gk{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media(max-width:1000px){.g2{grid-template-columns:1fr}.gk{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.vscroll{overflow-y:auto;overflow-x:hidden;padding-right:4px}
+.hscroll{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+.vscroll::-webkit-scrollbar,.hscroll::-webkit-scrollbar{width:8px;height:8px}
+.vscroll::-webkit-scrollbar-thumb,.hscroll::-webkit-scrollbar-thumb{background:#C9D3E0;border-radius:8px}
+th.sortable{cursor:pointer;user-select:none;white-space:nowrap}
+th.sortable:hover{color:var(--info)}
+th.sortable i{font-size:12px;opacity:.45;vertical-align:-1px}
+th.sortable.on i{opacity:1;color:var(--info)}
+tr.grp td{background:#EEF3FA;font-weight:600;cursor:pointer}
+tr.grp td:first-child i{font-size:13px;vertical-align:-2px}
+td.pk{padding-left:22px}
+#dt_prod_head th:nth-child(2),#dt_prod_tb td:nth-child(2){text-align:left}
+#dt_prod_head th:nth-child(3),#dt_prod_tb td:nth-child(3){text-align:center}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><img src="data:image/png;base64,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" alt="HEID" style="width:38px;height:38px;border-radius:8px;object-fit:contain;flex-shrink:0"><div><div class="nm">HEID · Sản phẩm số</div><div class="sub">Hoạt động triển khai</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="overview"><i class="ti ti-layout-dashboard"></i> Tổng quan</button>
+      <button data-page="detail"><i class="ti ti-table"></i> Chi tiết phân tích</button>
+    </nav>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc phân tích</div>
+      <div class="filterbar">
+        <div class="fdrow">
+          <div class="fitem-f"><span class="flabel-f">Từ ngày</span><input type="date" class="fdate" id="f_start" value="2026-01-01"></div>
+          <div class="fitem-f"><span class="flabel-f">Đến ngày</span><input type="date" class="fdate" id="f_end" value="2026-07-31"></div>
+        </div>
+        <div class="fitem-f"><span class="flabel-f">Sản phẩm</span>
+          <select class="fsel" id="f_prod"><option value="all">Tất cả sản phẩm</option><option value="gs">GlobalSpeak</option><option value="hl">Học liệu (Hoclieu.vn)</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Gói sản phẩm</span>
+          <select class="fsel" id="f_pkg"><option value="all">Tất cả gói sản phẩm</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Tỉnh / Thành phố</span>
+          <select class="fsel" id="f_geo"><option value="all">Toàn quốc</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Khách hàng</span>
+          <select class="fsel" id="f_cust"><option value="all">Tất cả</option><option value="b2b">B2B (Trường / Sở GD)</option><option value="b2c">B2C (Cá nhân / GV)</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Kênh bán</span>
+          <select class="fsel" id="f_chan"><option value="all">Tất cả kênh</option><option value="le">Bán lẻ (VietQR)</option><option value="buon">Bán buôn (hợp đồng)</option></select></div>
+        <button class="freset" id="f_reset"><i class="ti ti-rotate-2"></i> Đặt lại bộ lọc</button>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:11px;background:var(--bg-2);border-radius:var(--rmd);font-size:10.5px;color:var(--tx-2);line-height:1.6">
+      <b style="color:var(--tx-1)">📦 2 sản phẩm · 21 gói sản phẩm</b><br>
+      GlobalSpeak (Bee): 2 gói · Học liệu (Sao Khuê): 19 gói.
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="factive" id="factive"></div>
+
+    <!-- ============ TRANG 1: TỔNG QUAN ============ -->
+    <section class="page" id="page-overview" style="display:block">
+      <div class="titlebar">
+        <div style="display:flex;align-items:center;gap:8px"><span class="t">Tổng quan sản phẩm số</span><span class="s2">· người dùng · người mua · doanh thu bán lẻ</span></div>
+        <span class="s2" id="ov_range"><i class="ti ti-calendar"></i></span>
+      </div>
+
+      <div class="gk" style="margin-bottom:18px" id="ov_kpi"></div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--tx-1);margin:4px 0 12px;display:flex;align-items:center;gap:8px"><i class="ti ti-users" style="color:var(--info);font-size:18px"></i> 1. Người dùng</div>
+
+      <div class="g2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between"><span><i class="ti ti-chart-bar"></i> Người dùng theo tháng</span>
+            <div style="display:flex;gap:6px"><button class="tab ovu on" data-v="month">Tháng</button><button class="tab ovu" data-v="cumu">Lũy kế</button></div></div>
+          <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Tổng</span><span><span class="dot" style="background:#1E9E57"></span>Hoạt động</span></div>
+          <div style="position:relative;height:300px"><canvas id="ov_c1"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-package"></i> Người dùng theo gói sản phẩm</div>
+          <div class="legend"><span><span class="dot" style="background:#1E9E57"></span>Hoạt động (có phiên trong 30 ngày)</span><span><span class="dot" style="background:#C9D3E0"></span>Không hoạt động</span></div>
+          <div class="vscroll" style="height:300px"><div style="position:relative;height:560px"><canvas id="ov_uprod"></canvas></div></div>
+        </div>
+        <div class="card" style="grid-column:1/-1">
+          <div class="hd"><i class="ti ti-activity"></i> Người dùng theo mốc thời gian hoạt động <span class="pill">MAU · WAU · DAU</span></div>
+          <div style="position:relative;height:250px"><canvas id="ov_active"></canvas></div>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--tx-1);margin:8px 0 12px;display:flex;align-items:center;gap:8px"><i class="ti ti-user-dollar" style="color:var(--info);font-size:18px"></i> 2. Người mua</div>
+      <div class="g2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between"><span><i class="ti ti-chart-bar"></i> Người mua theo tháng</span>
+            <div style="display:flex;gap:6px"><button class="tab ovb on" data-v="month">Tháng</button><button class="tab ovb" data-v="cumu">Lũy kế</button></div></div>
+          <div class="legend"><span><span class="dot" style="background:#8577C4"></span>Mua lẻ (trả phí)</span><span><span class="dot" style="background:#2E7CD6"></span>B2B qua nhà trường</span><span><span class="dot" style="background:#E0B050"></span>Miễn phí</span></div>
+          <div style="position:relative;height:300px"><canvas id="ov_bmonth"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-package"></i> Người mua theo gói sản phẩm</div>
+          <div class="legend"><span><span class="dot" style="background:#8577C4"></span>Mua lẻ (trả phí)</span><span><span class="dot" style="background:#2E7CD6"></span>B2B qua nhà trường</span><span><span class="dot" style="background:#E0B050"></span>Miễn phí</span></div>
+          <div class="vscroll" style="height:300px"><div style="position:relative;height:560px"><canvas id="ov_grpprod"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-chart-donut"></i> Cơ cấu người mua</div>
+          <div style="position:relative;height:250px"><canvas id="ov_access"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-gift"></i> Người mua miễn phí</div>
+          <div style="position:relative;height:250px"><canvas id="ov_freetype"></canvas></div>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:600;color:var(--tx-1);margin:8px 0 12px;display:flex;align-items:center;gap:8px"><i class="ti ti-coin" style="color:var(--info);font-size:18px"></i> 3. Doanh thu</div>
+      <div class="g2">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between"><span><i class="ti ti-chart-bar"></i> Doanh thu bán lẻ theo tháng</span>
+            <div style="display:flex;gap:6px"><button class="tab ovr on" data-v="month">Theo tháng</button><button class="tab ovr" data-v="cumu">Lũy kế</button></div></div>
+          <div class="legend" id="ov_rev_lg"></div>
+          <div style="position:relative;height:300px"><canvas id="ov_c3"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-package"></i> Doanh thu bán lẻ theo gói sản phẩm</div>
+          <div class="vscroll" style="height:324px"><div style="position:relative;height:560px"><canvas id="ov_c4"></canvas></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRANG 2: CHI TIẾT ============ -->
+    <section class="page" id="page-detail">
+      <div class="titlebar">
+        <div style="display:flex;align-items:center;gap:8px"><span class="t">Chi tiết phân tích</span><span class="s2">· thời gian · kênh bán · địa phương · top dùng nhiều/ít</span></div>
+        <span class="s2" id="dt_range"><i class="ti ti-calendar"></i></span>
+      </div>
+
+      <!-- Thời gian + kênh bán -->
+      <div class="g2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="hd"><i class="ti ti-chart-line"></i> Theo khoảng thời gian <span class="s2" style="font-weight:400">· người dùng &amp; doanh thu</span></div>
+          <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Người dùng mới</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Doanh thu (tr đ)</span></div>
+          <div style="position:relative;height:230px"><canvas id="dt_c_time"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-clock-hour-4"></i> Tổng thời lượng sử dụng theo gói sản phẩm</div>
+          <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Tổng thời lượng (giờ)</span><span><span class="dot" style="background:#EF9F27;height:3px;width:16px"></span>Thời lượng BQ/phiên (phút)</span></div>
+          <div class="hscroll"><div style="position:relative;height:260px;min-width:1200px"><canvas id="dt_c_dur"></canvas></div></div>
+        </div>
+      </div>
+
+      <!-- Top tỉnh (địa phương dạng số + dải màu nhiệt trong ô) -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between"><span><i class="ti ti-map-pin"></i> Theo tỉnh/thành phố</span></div>
+        <div style="overflow-x:auto;max-height:320px;overflow-y:auto"><table class="rk dvt" style="min-width:720px"><thead id="dt_prov_head"></thead><tbody id="dt_prov_tb"></tbody></table></div>
+      </div>
+
+      <!-- Top dùng nhiều/ít -->
+      <div class="banner"><i class="ti ti-info-circle"></i>
+        <div><b>Top dùng nhiều / dùng ít.</b> Lọc theo kênh: <b>Bán lẻ → Top người dùng</b> · <b>Bán buôn → Top trường</b> (theo số người sử dụng). "Dùng nhiều/ít" = nhiều/ít phiên truy cập nhất.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="tab topchan on" data-v="le">Bán lẻ (Top người)</button>
+        <button class="tab topchan" data-v="buon">Bán buôn (Top trường)</button>
+      </div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="hd"><i class="ti ti-trending-up"></i> <span id="top_title">Top trường dùng nhiều nhất</span></div>
+          <div style="overflow-x:auto;max-height:360px;overflow-y:auto"><table class="rk"><thead id="dt_top_head"></thead><tbody id="dt_top_tb"></tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-trending-down"></i> <span id="bot_title">Top dùng ít nhất</span> <span class="s2" style="font-weight:400">· cần CSKH</span></div>
+          <div style="overflow-x:auto"><table class="rk"><thead id="dt_bot_head"></thead><tbody id="dt_bot_tb"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- Phân tích theo sản phẩm (CUỐI TRANG) -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-apps"></i> Phân tích theo sản phẩm &amp; gói sản phẩm <span class="pill" id="dt_prod_pill"></span></div>
+        <div style="overflow-x:auto;max-height:620px;overflow-y:auto">
+          <table class="rk dvt" style="min-width:1080px"><thead id="dt_prod_head"></thead><tbody id="dt_prod_tb"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <div class="s2" style="margin-top:18px;padding-top:12px;border-top:0.5px solid var(--bd)">
+      Báo cáo demo — số liệu <b>minh họa</b>, thay đổi theo bộ lọc. Cấu trúc bám Khảo sát mục 2: người dùng/người mua/doanh thu bán lẻ · phân tích theo sản phẩm, tỉnh/thành, thời gian, kênh bán · top dùng nhiều/ít theo khách hàng &amp; sản phẩm.
+      Nguồn: GlobalSpeak (Bee) · Hoclieu.vn (Sao Khuê).
+    </div>
+  </main>
+</div>
+
+<script>
+const grid='rgba(128,128,128,0.16)';
+const BL='#2E7CD6',BLL='#8FBEEC',NV='#0C447C',GN='#1E9E57',OR='#EF9F27',RD='#E24B4A',GY='#CCD5E2';
+const PU='#8577C4',PUD='#63569C',PUL='#CFC8E7';  // tông tím dịu cho NGƯỜI MUA
+const SHADE=['#0C447C','#12508E','#185FA5','#2372C4','#2E7CD6','#4A8FDD','#6BA5E4','#8FBEEC','#B0D2F2','#D0E4F8'];
+Chart.defaults.font.family="Inter,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color='rgba(128,128,128,0.85)';
+const nf=v=>Math.round(v).toLocaleString('vi-VN');
+const pp=v=>v.toFixed(1).replace('.',',');
+const el=id=>document.getElementById(id);
+const MON=['T01','T02','T03','T04','T05','T06','T07'];
+const cumu=a=>{let s=0;return a.map(v=>+(s+=v).toFixed(1));};
+const charts={};
+function dc(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+/* ===== DATA ===== */
+// buyers = người TRẢ PHÍ · free = có quyền dùng gói nhưng KHÔNG trả tiền (dùng thử/khuyến mại/tặng/test)
+// Tầng 1 = Sản phẩm (plat: gs = GlobalSpeak, hl = Học liệu) · Tầng 2 = Gói sản phẩm (n = tên đầy đủ, s = tên ngắn cho biểu đồ)
+// role: đối tượng sử dụng (GV/HS) — chỉ ghi khi danh mục có phân biệt
+const PRODUCTS=[
+  {id:'gs1', plat:'gs',n:'Học',s:'GS · Học',role:'',users:50200,active:0.55,buyers:18800,free:6900,rev:9400,dur:17},
+  {id:'gs2', plat:'gs',n:'Kiểm tra đánh giá',s:'GS · Kiểm tra ĐG',role:'',users:18250,active:0.51,buyers:5500,free:2300,rev:2900,dur:14},
+  {id:'hl1', plat:'hl',n:'Sách mềm Tiếng Anh — Sách học sinh dùng để giảng dạy',s:'SM TA SHS (GV)',role:'GV',users:9800,active:0.74,buyers:3100,free:900,rev:1050,dur:18},
+  {id:'hl2', plat:'hl',n:'Sách mềm Tiếng Anh — Sách học sinh dùng để tự học',s:'SM TA SHS (HS)',role:'HS',users:34600,active:0.70,buyers:11800,free:4100,rev:3400,dur:15},
+  {id:'hl3', plat:'hl',n:'Sách mềm — Sách bài tập dùng để giảng dạy (các môn)',s:'SM SBT (GV)',role:'GV',users:12400,active:0.72,buyers:3900,free:1100,rev:1200,dur:16},
+  {id:'hl4', plat:'hl',n:'Sách mềm — Sách bài tập dùng để học tập (các môn)',s:'SM SBT (HS)',role:'HS',users:41200,active:0.69,buyers:14200,free:4700,rev:3900,dur:14},
+  {id:'hl5', plat:'hl',n:'Ôn luyện thông minh (OLTM)',s:'OLTM',role:'',users:28600,active:0.71,buyers:10400,free:3600,rev:3300,dur:22},
+  {id:'hl6', plat:'hl',n:'Học liệu số Sách bài tập OLTM',s:'HLS SBT OLTM',role:'',users:15800,active:0.66,buyers:5200,free:1900,rev:1500,dur:19},
+  {id:'hl7', plat:'hl',n:'Bộ câu hỏi bài tập số OLTM',s:'Bộ CH OLTM',role:'',users:13200,active:0.68,buyers:4600,free:1600,rev:1350,dur:21},
+  {id:'hl8', plat:'hl',n:'Ôn thi',s:'Ôn thi',role:'',users:19400,active:0.72,buyers:7300,free:2400,rev:2600,dur:25},
+  {id:'hl9', plat:'hl',n:'Nhật ký ngày hè vui cho GV',s:'NK ngày hè (GV)',role:'GV',users:3200,active:0.58,buyers:900,free:400,rev:260,dur:9},
+  {id:'hl10',plat:'hl',n:'Nhật ký ngày hè vui cho HS',s:'NK ngày hè (HS)',role:'HS',users:14600,active:0.61,buyers:4800,free:1900,rev:1150,dur:11},
+  {id:'hl11',plat:'hl',n:'Global Teach',s:'Global Teach',role:'',users:4600,active:0.66,buyers:1500,free:500,rev:620,dur:17},
+  {id:'hl12',plat:'hl',n:'Global Math&Science',s:'Global M&S',role:'',users:9800,active:0.63,buyers:3200,free:1200,rev:1100,dur:18},
+  {id:'hl13',plat:'hl',n:'STEM',s:'STEM',role:'',users:7400,active:0.60,buyers:2300,free:900,rev:760,dur:20},
+  {id:'hl14',plat:'hl',n:'Hành trang công dân số',s:'HT công dân số',role:'',users:8200,active:0.57,buyers:2400,free:1100,rev:600,dur:12},
+  {id:'hl15',plat:'hl',n:'Sách tham khảo khác',s:'Sách TK khác',role:'',users:6400,active:0.52,buyers:1800,free:800,rev:520,dur:10},
+  {id:'hl16',plat:'hl',n:'LMS',s:'LMS',role:'',users:9600,active:0.64,buyers:900,free:400,rev:310,dur:13},
+  {id:'hl17',plat:'hl',n:'Thư viện',s:'Thư viện',role:'',users:5200,active:0.50,buyers:1100,free:600,rev:300,dur:12},
+  {id:'hl18',plat:'hl',n:'Hợp tác Quảng Ích',s:'HT Quảng Ích',role:'',users:1800,active:0.55,buyers:400,free:200,rev:140,dur:10},
+  {id:'hl19',plat:'hl',n:'Hợp tác VTS',s:'HT VTS',role:'',users:880,active:0.48,buyers:200,free:100,rev:70,dur:8},
+];
+const PLAT_NAME={gs:'GlobalSpeak',hl:'Học liệu'};
+const SESS_PERIOD=30;  // số phiên BQ / người hoạt động trong kỳ (để ước tính tổng thời lượng)
+const U_NEW_ALL=[38200,42400,48600,44800,46200,52100,48900];
+const BUYER_M_ALL=[11800,13200,15400,14100,14600,16200,13000];  // người mua theo tháng
+const REV_HL=[7100,8400,9600,8900,8500,9800,8200];
+const REV_GS=[3400,4200,5100,5800,5600,6900,8200];
+
+// tỉnh/thành (người dùng, hoạt động, người mua, doanh thu bán lẻ tr đ)
+const PROV=[
+  ['Hà Nội',58200,42100,24800,12200],['TP.HCM',49800,35600,19600,9800],
+  ['Hải Phòng',22400,15200,8900,4200],['Đà Nẵng',20200,14100,7800,3600],
+  ['Nghệ An',18600,12400,6400,2800],['Bình Dương',16800,11200,6800,2600],
+  ['Thanh Hóa',15400,9800,4200,1900],['Cần Thơ',13800,9200,5200,2100],
+  ['Bắc Ninh',11400,7600,4200,1600],['Quảng Ninh',10600,7100,3800,1500],
+  ['Đồng Nai',9800,6400,3400,1300],['Khánh Hòa',8600,5600,2900,1100],
+];
+const PROV_TOTAL=PROV.reduce((a,p)=>a+p[1],0);
+
+// top trường theo số user (đúng dữ liệu ảnh)
+const TOP_TRUONG=[
+  ['THPT Mỹ Đình','Hà Nội',2029],['THCS Xuân Đỉnh','Hà Nội',1878],['TH&THCS Hải Hòa','Thanh Hóa',1626],
+  ['TH Tương Giang','Bắc Ninh',1253],['TH Liên Bảo','Vĩnh Phúc',1239],['THPT Nguyễn Văn Cừ','Hà Nội',1194],
+  ['TH Vân Canh','Hà Nội',1128],['THCS Phú Lâm','TP.HCM',1123],['TH Đường Hoa','Quảng Ninh',1069],
+  ['THPT Lê Việt Thuật','Nghệ An',1049],['TH Bình Thuận','Bình Thuận',1030],['TH&THCS Chiến Thắng','Hải Phòng',1024],
+  ['TH Đồng Nguyên 2','Bắc Ninh',1016],['THPT Trần Phú','Đà Nẵng',965],['THCS Hội Hợp','Vĩnh Phúc',859],
+];
+// top người (bán lẻ)
+const TOP_NGUOI=[
+  ['Nguyễn Văn An','Hà Nội',428],['Trần Thị Bình','TP.HCM',396],['Lê Hoàng Nam','Đà Nẵng',372],
+  ['Phạm Thu Hà','Hải Phòng',358],['Vũ Minh Đức','Cần Thơ',341],['Hoàng Lan Anh','Hà Nội',328],
+  ['Đỗ Quốc Việt','Bình Dương',312],['Ngô Thị Thu','Nghệ An',298],['Bùi Văn Khoa','TP.HCM',285],
+  ['Đặng Minh Tú','Hà Nội',271],['Lý Thị Hồng','Cần Thơ',264],['Trịnh Văn Hải','Đà Nẵng',252],
+];
+const BOT_NGUOI=[
+  ['Đỗ Văn Sơn','Thanh Hóa',6],['Ngô Thị Yến','Yên Bái',5],['Bùi Văn Hùng','Hà Giang',5],['Đinh Thị Mai','Lai Châu',4],
+  ['Vương Văn Tú','Cao Bằng',4],['Hà Thị Loan','Điện Biên',3],['Phan Văn Bình','Sơn La',3],['Lê Thị Nga','Bắc Kạn',2],
+  ['Trần Văn Kiên','Lào Cai',2],['Nguyễn Thị Hoa','Kon Tum',1],
+];
+const BOT_TRUONG=[
+  ['TH Xã Đông Sơn','Thanh Hóa',640,54],['THCS Yên Bình','Yên Bái',520,32],
+  ['TH Cẩm Thủy','Thanh Hóa',410,22],['THCS Mường Lát','Thanh Hóa',380,18],
+  ['TH Bản Phố','Lào Cai',340,15],['THCS Sín Chải','Điện Biên',298,12],
+  ['TH Nà Bủng','Sơn La',264,10],['THCS Đồng Văn','Hà Giang',210,8],
+  ['TH Lũng Cú','Hà Giang',186,6],['THCS Bảo Lạc','Cao Bằng',150,5],
+];
+const CHANNELS=[['Bán lẻ (VietQR)',88600,9800],['Bán buôn (hợp đồng)',66400,17000]];
+
+// pool tên để sinh top cho tỉnh bất kỳ (≥10)
+const SCHOOL_POOL=['THPT Chuyên','THPT Nguyễn Huệ','THCS Lê Quý Đôn','TH&THCS Trần Hưng Đạo','Tiểu học Kim Đồng','THPT Lê Lợi','THCS Nguyễn Du','Tiểu học Võ Thị Sáu','THPT Phan Bội Châu','THCS Chu Văn An','Tiểu học Đinh Tiên Hoàng','THPT Ngô Quyền'];
+const NAME_POOL=['Nguyễn Văn An','Trần Thị Bình','Lê Hoàng Nam','Phạm Thu Hà','Vũ Minh Đức','Hoàng Lan Anh','Đỗ Quốc Việt','Ngô Thị Thu','Bùi Văn Khoa','Đặng Minh Tú','Lý Thị Hồng','Trịnh Văn Hải'];
+const BOT_SCHOOL_POOL=['TH Vùng cao','THCS Xã Đông','TH Bản Mới','THCS Biên Giới','TH Thôn Thượng','THCS Nà Pó','TH Khe Sanh','THCS Pù Luông','TH Suối Giàng','THCS Tà Xùa'];
+const BOT_NAME_POOL=['Đỗ Văn Sơn','Ngô Thị Yến','Bùi Văn Hùng','Đinh Thị Mai','Vương Văn Tú','Hà Thị Loan','Phan Văn Bình','Lê Thị Nga','Trần Văn Kiên','Nguyễn Thị Hoa'];
+function provUsers(name){const p=PROV.find(x=>x[0]===name);return p?p[1]:20000;}
+// top theo tỉnh (mọi tỉnh đều có dữ liệu)
+function topFor(kind){
+  const ds=dateScale();
+  if(F.geo==='all'){const src=kind==='truong'?TOP_TRUONG:TOP_NGUOI;return src.slice(0,10).map(r=>[r[0],r[1],Math.round(r[2]*ds)]);}
+  const base=provUsers(F.geo);
+  if(kind==='truong'){
+    const peak=base*0.035;
+    return SCHOOL_POOL.slice(0,10).map((nm,i)=>[nm+' '+F.geo,F.geo,Math.max(Math.round(peak*(1-i*0.06)*ds),200)]);
+  }else{
+    const peak=200+base/400;
+    return NAME_POOL.slice(0,10).map((nm,i)=>[nm,F.geo,Math.max(Math.round(peak*(1-i*0.055)*ds),40)]);
+  }
+}
+function botFor(kind){
+  const ds=dateScale();
+  if(F.geo==='all')return (kind==='truong'?BOT_TRUONG:BOT_NGUOI).slice(0,10).map(r=>[r[0],r[1],Math.round(r[2]*ds)]);
+  const base=provUsers(F.geo);
+  if(kind==='truong'){
+    return BOT_SCHOOL_POOL.slice(0,10).map((nm,i)=>[nm+' '+F.geo,F.geo,Math.max(Math.round(base*0.007*Math.pow(0.86,i)*ds),40)]);
+  }else{
+    return BOT_NAME_POOL.slice(0,10).map((nm,i)=>[nm,F.geo,Math.max(Math.round((10-i)*0.6*ds),1)]);
+  }
+}
+// cơ cấu người dùng & người mua theo kênh (tỷ lệ trên tổng)
+// 3 nhóm theo quyền sử dụng gói:
+//  Nhóm 1 = buyers : mua lẻ, trả tiền trực tiếp qua hệ thống (VietQR)
+//  Nhóm 3 = free   : có quyền dùng gói nhưng không trả tiền (dùng thử/khuyến mại/tặng/test)
+//  Nhóm 2 = còn lại: B2B qua nhà trường (trả qua hợp đồng — số liệu thanh toán theo CSDL Phòng KD)
+const FREE_TYPES=[['Dùng thử',0.55],['Khuyến mại',0.20],['Tặng',0.17],['Test',0.08]];
+function b2bOf(p){return Math.max(p.users-p.buyers-p.free,0);}
+// Mức độ hoạt động theo mốc thời gian: MAU (30 ngày) = active; WAU, DAU là tập con của MAU
+const WAU_OF_MAU=0.62;  // WAU (7 ngày) ≈ 62% MAU
+const DAU_OF_MAU=0.28;  // DAU (trong ngày) ≈ 28% MAU
+
+/* ===== FILTER STATE ===== */
+const F={start:'2026-01-01',end:'2026-07-31',prod:'all',pkg:'all',geo:'all',cust:'all',chan:'all'};
+let plat='all';
+const FULL_START=new Date('2026-01-01'), FULL_END=new Date('2026-07-31');
+const FULL_DAYS=(FULL_END-FULL_START)/86400000+1;
+function dateScale(){
+  const s=new Date(F.start),e=new Date(F.end);
+  if(isNaN(s)||isNaN(e)||e<s)return 1;
+  return Math.min(((e-s)/86400000+1)/FULL_DAYS,1);
+}
+const SC={cust:{all:1,b2b:0.62,b2c:0.38},chan:{all:1,le:0.45,buon:0.55}};
+function geoScale(){
+  if(F.geo==='all')return 1;
+  const p=PROV.find(x=>x[0]===F.geo);
+  return p?p[1]/PROV_TOTAL:1;
+}
+function fscale(){return dateScale()*SC.cust[F.cust]*SC.chan[F.chan]*geoScale();}
+const S=v=>Math.round(v*fscale());
+// scale không tính geo (dùng cho bảng tỉnh để không nhân đôi)
+function scNoGeo(){return dateScale()*SC.cust[F.cust]*SC.chan[F.chan];}
+
+function selProd(){return PRODUCTS.filter(p=>(plat==='all'||p.plat===plat)&&(F.pkg==='all'||p.id===F.pkg));}
+const ALL_U=PRODUCTS.reduce((a,p)=>a+p.users,0);
+function shareU(){return selProd().reduce((a,p)=>a+p.users,0)/ALL_U;}            // tỷ trọng người dùng của phần đang lọc
+function revShare(pl){const all=PRODUCTS.filter(p=>p.plat===pl).reduce((a,p)=>a+p.rev,0);return selProd().filter(p=>p.plat===pl).reduce((a,p)=>a+p.rev,0)/(all||1);}
+function fillPkg(){
+  const list=PRODUCTS.filter(p=>F.prod==='all'||p.plat===F.prod);
+  if(!list.some(p=>p.id===F.pkg))F.pkg='all';
+  el('f_pkg').innerHTML='<option value="all">Tất cả gói sản phẩm</option>'+list.map(p=>'<option value="'+p.id+'">'+(F.prod==='all'?PLAT_NAME[p.plat]+' · ':'')+p.n+'</option>').join('');
+  el('f_pkg').value=F.pkg;
+}
+function sumProd(k){return selProd().reduce((a,p)=>a+p[k],0);}
+function fitRows(id,n){el(id).parentElement.style.height=Math.max(n*26+50,200)+'px';}
+function fitCols(id,n){el(id).parentElement.style.minWidth=Math.max(n*58,400)+'px';}
+const fmtD=d=>{const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];};
+
+const LABELS={prod:{all:'Tất cả SP',gs:'GlobalSpeak',hl:'Học liệu'},cust:{all:'Tất cả KH',b2b:'B2B',b2c:'B2C'},chan:{all:'Tất cả kênh',le:'Bán lẻ',buon:'Bán buôn'}};
+function renderChips(){
+  const chips=[];
+  if(F.start!=='2026-01-01'||F.end!=='2026-07-31')chips.push('<span class="fbadge">'+fmtD(F.start)+' → '+fmtD(F.end)+' <i class="ti ti-x" data-clear="date"></i></span>');
+  if(F.prod!=='all')chips.push('<span class="fbadge">'+LABELS.prod[F.prod]+' <i class="ti ti-x" data-clear="prod"></i></span>');
+  if(F.pkg!=='all')chips.push('<span class="fbadge">'+PRODUCTS.find(p=>p.id===F.pkg).s+' <i class="ti ti-x" data-clear="pkg"></i></span>');
+  if(F.geo!=='all')chips.push('<span class="fbadge">'+F.geo+' <i class="ti ti-x" data-clear="geo"></i></span>');
+  if(F.cust!=='all')chips.push('<span class="fbadge">'+LABELS.cust[F.cust]+' <i class="ti ti-x" data-clear="cust"></i></span>');
+  if(F.chan!=='all')chips.push('<span class="fbadge">'+LABELS.chan[F.chan]+' <i class="ti ti-x" data-clear="chan"></i></span>');
+  el('factive').innerHTML=chips.length?chips.join(''):'<span class="s2" style="padding:3px 0">Không có bộ lọc — đang xem toàn bộ dữ liệu 01/01 → 31/07/2026</span>';
+  el('factive').querySelectorAll('[data-clear]').forEach(x=>x.addEventListener('click',()=>{
+    const k=x.dataset.clear;
+    if(k==='date'){F.start='2026-01-01';F.end='2026-07-31';el('f_start').value=F.start;el('f_end').value=F.end;}
+    else{F[k]='all';el('f_'+k).value='all';}
+    applyFilters();
+  }));
+}
+function updRange(){
+  const txt='<i class="ti ti-calendar"></i> '+fmtD(F.start)+' → '+fmtD(F.end)+' · số minh họa';
+  el('ov_range').innerHTML=txt;el('dt_range').innerHTML=txt;
+}
+function applyFilters(){fillPkg();plat=F.prod;renderChips();updRange();builders[curPage]();}
+
+// click hàng bảng tỉnh → lọc theo tỉnh (bấm lại để bỏ lọc)
+window.selectProvince=function(name){
+  F.geo=(F.geo===name)?'all':name;
+  el('f_geo').value=F.geo;
+  applyFilters();
+};
+
+/* ========= TRANG 1 ========= */
+let ovuMode='month', ovrMode='month', ovbMode='month';
+function buildOverview(){
+  const users=S(sumProd('users'));
+  const act=selProd().reduce((a,p)=>a+p.active*p.users,0)/sumProd('users');
+  const buyers=S(sumProd('buyers'));
+  const buyersLe=buyers;                                // Nhóm 1: mua lẻ trả phí (mẫu số ARPU)
+  const freeU=S(sumProd('free'));                       // Nhóm 3: miễn phí
+  const b2bU=Math.max(users-buyersLe-freeU,0);          // Nhóm 2: B2B qua nhà trường = còn lại
+  const rev=S(sumProd('rev'));                          // doanh thu bán lẻ
+  // thời lượng sử dụng
+  const actUsers=selProd().reduce((a,p)=>a+p.active*p.users,0);
+  const durAvg=actUsers>0?selProd().reduce((a,p)=>a+p.active*p.users*p.dur,0)/actUsers:0;  // BQ/phiên (phút)
+  const totalHours=S(selProd().reduce((a,p)=>a+p.active*p.users*SESS_PERIOD*p.dur/60,0));   // tổng giờ
+  el('ov_kpi').innerHTML=
+    '<div class="kpi"><div class="chg u">↑ 18,4%</div><div class="ttl">Tổng người dùng</div><div class="big">'+nf(users)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 12,5%</div><div class="ttl">Người dùng hoạt động (MAU)<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>MAU</b> (Monthly Active Users): tài khoản có ≥1 phiên đăng nhập trong <b>30 ngày</b> gần nhất. Chi tiết WAU/DAU xem biểu đồ Mức độ hoạt động.</span></span></div><div class="big" style="color:var(--suc)">'+nf(users*act)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 14,1%</div><div class="ttl">Người mua lẻ (trả phí)<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>Nhóm 1:</b> người mua lẻ, trả tiền trực tiếp qua hệ thống (VietQR). Là căn cứ tính doanh thu bán lẻ & ARPU.</span></span></div><div class="big" style="color:#8577C4">'+nf(buyersLe)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 7,2%</div><div class="ttl">Người dùng B2B (nhà trường)<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>Nhóm 2:</b> = Tổng người dùng − Mua lẻ − Miễn phí. Mua qua nhà trường, trả tiền theo hợp đồng/dự án nên không có giao dịch trên hệ thống; số liệu thanh toán lấy từ CSDL theo dõi của Phòng KD.</span></span></div><div class="big" style="color:var(--info)">'+nf(b2bU)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 9,6%</div><div class="ttl">Người dùng miễn phí<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>Nhóm 3:</b> có quyền sử dụng gói nhưng <b>không trả tiền</b>: dùng thử, khuyến mại, được tặng, tài khoản test.</span></span></div><div class="big" style="color:#C98A2E">'+nf(freeU)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 16,2%</div><div class="ttl">Doanh thu bán lẻ<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>Doanh thu bán lẻ trong kỳ:</b> tổng giá trị đơn bán lẻ (qua VietQR) đã hoàn thành, cộng dồn trong khoảng ngày đã chọn. Chưa gồm bán buôn (hợp đồng — tương lai).</span></span></div><div class="big">'+nf(rev)+'</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 5,8%</div><div class="ttl">DT BQ / người mua lẻ<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>ARPU bán lẻ:</b> = Doanh thu bán lẻ ÷ <b>Người mua lẻ</b> (chỉ tính Nhóm 1 — người trả tiền trực tiếp qua hệ thống). Cho biết mỗi khách lẻ đóng góp trung bình bao nhiêu.</span></span></div><div class="big">'+pp(rev*1000/buyersLe)+'K</div></div>'
+    +'<div class="kpi"><div class="chg u">↑ 21,3%</div><div class="ttl">Tổng thời lượng sử dụng<span class="tt"><i class="ti ti-info-circle info-i"></i><span class="ttbox"><b>Tổng số giờ user đã sử dụng sản phẩm trong kỳ:</b> = Σ (số phiên × thời lượng mỗi phiên) của toàn bộ user. Đo tổng mức độ sử dụng thực tế, không phải bình quân.</span></span></div><div class="big" style="color:var(--suc)">'+nf(totalHours)+'</div></div>';
+
+  // Mức độ hoạt động — phễu Tổng → MAU → WAU → DAU
+  dc('ov_active');
+  const totU=users, mau=Math.round(users*act), wau=Math.round(mau*WAU_OF_MAU), dau=Math.round(mau*DAU_OF_MAU);
+  charts.ov_active=new Chart(el('ov_active'),{type:'bar',data:{labels:['Tổng tài khoản','MAU (30 ngày)','WAU (7 ngày)','DAU (trong ngày)'],
+    datasets:[{data:[totU,mau,wau,dau],backgroundColor:['#9EC2EA','#2E7CD6','#1E66B5','#0C447C'],borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>nf(c.parsed.x)+' tài khoản'+(c.dataIndex>0?' ('+pp(c.parsed.x/totU*100)+'% tổng)':'')}}},
+      scales:{x:{grid:{color:grid},ticks:{callback:nf}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+  dc('ov_c1');
+  const uNew=U_NEW_ALL.map(v=>Math.round(v*shareU())).map(S);
+  const actLine=uNew.map(v=>Math.round(v*4.3));
+  charts.ov_c1=new Chart(el('ov_c1'),{data:{labels:MON,datasets:[
+    {type:'bar',label:'Tổng người dùng',data:ovuMode==='cumu'?cumu(uNew):uNew,backgroundColor:BL,borderRadius:4,order:2},
+    {type:'line',label:'Hoạt động',data:ovuMode==='cumu'?cumu(actLine):actLine,borderColor:GN,borderWidth:2.5,tension:.3,pointRadius:3,order:1,yAxisID:'y1'}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:nf}},y1:{position:'right',grid:{display:false},ticks:{callback:nf}}}}});
+
+  // Cơ cấu người dùng theo quyền sử dụng gói — 3 nhóm (tổng = tổng người dùng)
+  dc('ov_access');
+  const grpTot=buyersLe+b2bU+freeU||1;
+  charts.ov_access=new Chart(el('ov_access'),{type:'doughnut',data:{labels:['Mua lẻ (trả phí)','B2B qua nhà trường','Miễn phí'],
+    datasets:[{data:[buyersLe,b2bU,freeU],backgroundColor:['#8577C4','#2E7CD6','#E0B050'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:10,font:{size:10.5}}},
+      tooltip:{callbacks:{label:c=>c.label+': '+nf(c.parsed)+' ('+pp(c.parsed/grpTot*100)+'%)'}}}}});
+
+  // Cơ cấu 3 nhóm theo sản phẩm (stacked)
+  dc('ov_grpprod');fitRows('ov_grpprod',selProd().length);
+  const gp=selProd().map(p=>[p.s,S(p.buyers),S(b2bOf(p)),S(p.free),PLAT_NAME[p.plat]+' · '+p.n]).sort((a,b)=>(b[1]+b[2]+b[3])-(a[1]+a[2]+a[3]));  // lớn → nhỏ theo tổng
+  charts.ov_grpprod=new Chart(el('ov_grpprod'),{type:'bar',data:{labels:gp.map(x=>x[0]),datasets:[
+    {label:'Mua lẻ (trả phí)',data:gp.map(x=>x[1]),backgroundColor:'#8577C4',stack:'g'},
+    {label:'B2B qua nhà trường',data:gp.map(x=>x[2]),backgroundColor:'#2E7CD6',stack:'g'},
+    {label:'Miễn phí',data:gp.map(x=>x[3]),backgroundColor:'#E0B050',stack:'g'}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>gp[it[0].dataIndex][4],label:c=>c.dataset.label+': '+nf(c.parsed.x)}}},
+      scales:{x:{position:'top',stacked:true,grid:{color:grid},ticks:{callback:nf}},y:{stacked:true,grid:{display:false},ticks:{font:{size:9.5},autoSkip:false}}}}});
+
+  // Người dùng miễn phí theo loại
+  dc('ov_freetype');
+  const ftp=FREE_TYPES.map(([n,r])=>[n,Math.round(freeU*r)]);
+  charts.ov_freetype=new Chart(el('ov_freetype'),{type:'bar',data:{labels:ftp.map(x=>x[0]),datasets:[{data:ftp.map(x=>x[1]),backgroundColor:['#E0B050','#E9C77A','#C98A2E','#B9A27A'],borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>nf(c.parsed.y)+' người ('+pp(c.parsed.y/(freeU||1)*100)+'%)'}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:grid},grace:'10%',ticks:{callback:nf}}}}});
+
+  // Người dùng theo gói sản phẩm (xanh)
+  dc('ov_uprod');fitRows('ov_uprod',selProd().length);
+  const upk=selProd().map(p=>{const u=S(p.users),a=S(Math.round(p.active*p.users));return [p.s,u,PLAT_NAME[p.plat]+' · '+p.n,a,Math.max(u-a,0)];}).sort((a,b)=>b[1]-a[1]);  // lớn → nhỏ theo tổng
+  charts.ov_uprod=new Chart(el('ov_uprod'),{type:'bar',data:{labels:upk.map(x=>x[0]),datasets:[
+    {label:'Hoạt động',data:upk.map(x=>x[3]),backgroundColor:GN,stack:'u'},
+    {label:'Không hoạt động',data:upk.map(x=>x[4]),backgroundColor:'#C9D3E0',stack:'u'}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},
+      tooltip:{callbacks:{title:it=>upk[it[0].dataIndex][2]+' · '+nf(upk[it[0].dataIndex][1])+' người dùng',label:c=>c.dataset.label+': '+nf(c.parsed.x)+' ('+pp(c.parsed.x/(upk[c.dataIndex][1]||1)*100)+'%)'}}},
+      scales:{x:{position:'top',stacked:true,grid:{color:grid},ticks:{callback:nf}},y:{stacked:true,grid:{display:false},ticks:{font:{size:9.5},autoSkip:false}}}}});
+
+  // Người mua theo tháng — cột chồng 3 nhóm
+  dc('ov_bmonth');
+  const bm=BUYER_M_ALL.map(v=>Math.round(v*shareU())).map(S);
+  const freeRatio=sumProd('free')/(sumProd('buyers')||1);
+  const b2bRatio=selProd().reduce((a,p)=>a+b2bOf(p),0)/(sumProd('buyers')||1);
+  const fm=bm.map(v=>Math.round(v*freeRatio)), b2m=bm.map(v=>Math.round(v*b2bRatio));
+  const mv=a=>ovbMode==='cumu'?cumu(a):a;
+  charts.ov_bmonth=new Chart(el('ov_bmonth'),{type:'bar',data:{labels:MON,datasets:[
+    {label:'Mua lẻ (trả phí)',data:mv(bm),backgroundColor:'#8577C4',stack:'m'},
+    {label:'B2B qua nhà trường',data:mv(b2m),backgroundColor:'#2E7CD6',stack:'m'},
+    {label:'Miễn phí',data:mv(fm),backgroundColor:'#E0B050',stack:'m',borderRadius:{topLeft:4,topRight:4}}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' người'}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},grace:'5%',ticks:{callback:nf}}}}});
+
+  const shHL=revShare('hl'), shGS=revShare('gs');
+  el('ov_rev_lg').innerHTML=[['Học liệu',BL,shHL],['GlobalSpeak',OR,shGS]].filter(x=>x[2]>0).map(([n,c])=>'<span><span class="dot" style="background:'+c+'"></span>'+n+'</span>').join('');
+  dc('ov_c3');
+  const rHL=REV_HL.map(v=>S(v*shHL)), rGS=REV_GS.map(v=>S(v*shGS));
+  const ds=[];
+  if(shHL>0)ds.push({label:'Học liệu',data:ovrMode==='cumu'?cumu(rHL):rHL,backgroundColor:BL,borderRadius:4,stack:'s'});
+  if(shGS>0)ds.push({label:'GlobalSpeak',data:ovrMode==='cumu'?cumu(rGS):rGS,backgroundColor:OR,borderRadius:4,stack:'s'});
+  charts.ov_c3=new Chart(el('ov_c3'),{type:'bar',data:{labels:MON,datasets:ds},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' tr đ'}}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:nf}}}}});
+
+  dc('ov_c4');fitRows('ov_c4',selProd().length);
+  const rpSrc=selProd().map((p,i)=>({s:p.s,full:PLAT_NAME[p.plat]+' · '+p.n,v:S(p.rev)})).sort((a,b)=>b.v-a.v);
+  const revTot=rpSrc.reduce((a,x)=>a+x.v,0)||1;
+  charts.ov_c4=new Chart(el('ov_c4'),{type:'bar',data:{labels:rpSrc.map(x=>x.s),datasets:[{data:rpSrc.map(x=>x.v),backgroundColor:OR,borderRadius:4}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:it=>rpSrc[it[0].dataIndex].full,label:c=>nf(c.parsed.x)+' tr đ ('+pp(c.parsed.x/revTot*100)+'%)'}}},
+      scales:{x:{position:'top',grid:{color:grid},ticks:{callback:nf}},y:{grid:{display:false},ticks:{font:{size:9.5},autoSkip:false}}}}});
+
+
+
+}
+
+/* ===== Sắp xếp bảng (bấm tiêu đề cột) ===== */
+const SORT={prov:{k:null,d:-1},prod:{k:null,d:-1}};
+const SUB=t=>'<br><span style="font-weight:400;opacity:.7">'+t+'</span>';
+function thSort(tb,cols){
+  const st=SORT[tb];
+  return '<tr>'+cols.map(c=>{
+    if(!c.k)return '<th>'+c.l+'</th>';
+    const on=st.k===c.k, ic=on?(st.d<0?'ti-sort-descending':'ti-sort-ascending'):'ti-arrows-sort';
+    return '<th class="sortable'+(on?' on':'')+'" title="Bấm để sắp xếp" onclick="sortBy(\''+tb+'\',\''+c.k+'\','+(c.t?1:0)+')">'+c.l+' <i class="ti '+ic+'"></i></th>';
+  }).join('')+'</tr>';
+}
+window.sortBy=function(tb,k,isText){
+  const st=SORT[tb];
+  if(st.k===k)st.d=-st.d; else {st.k=k;st.d=isText?1:-1;}
+  tb==='prov'?drawProv():drawProd();
+};
+function sortRows(rows,st){
+  if(!st.k)return rows;
+  return rows.slice().sort((a,b)=>{const x=a[st.k],y=b[st.k];
+    return (typeof x==='string'?x.localeCompare(y,'vi'):x-y)*st.d;});
+}
+const heatBg=t=>{
+  const lerp=(a,b,u)=>Math.round(a+(b-a)*u);let r,g,b;
+  if(t<0.5){const u=t/0.5;r=lerp(234,110,u);g=lerp(242,175,u);b=lerp(252,236,u);}
+  else{const u=(t-0.5)/0.5;r=lerp(110,46,u);g=lerp(175,124,u);b=lerp(236,214,u);}
+  return 'background:rgb('+r+','+g+','+b+');color:'+(t>0.62?'#fff':'#1A2230')+';font-weight:600';
+};
+
+/* --- Bảng tỉnh/thành --- */
+function drawProv(){
+  const sc=scNoGeo();
+  el('dt_prov_head').innerHTML=thSort('prov',[
+    {k:'name',l:'Tỉnh/Thành phố',t:1},{k:'u',l:'Người dùng'},{k:'mau',l:'MAU'+SUB('30 ngày')},{k:'wau',l:'WAU'+SUB('7 ngày')},
+    {k:'dau',l:'DAU'+SUB('trong ngày')},{k:'b',l:'Người mua'},{k:'rev',l:'Doanh thu (tr đ)'}]);
+  const base=(F.geo==='all'?PROV:PROV.filter(p=>p[0]===F.geo)).map(p=>{const mau=Math.round(p[2]*sc);
+    return {name:p[0],u:Math.round(p[1]*sc),mau,wau:Math.round(mau*WAU_OF_MAU),dau:Math.round(mau*DAU_OF_MAU),b:Math.round(p[3]*sc),rev:Math.round(p[4]*sc)};});
+  // dải màu nhiệt cho Người dùng & Doanh thu — thang màu riêng từng cột, theo toàn bộ tỉnh
+  const mxU=Math.max(...PROV.map(p=>p[1]))*sc||1, mxR=Math.max(...PROV.map(p=>p[4]))*sc||1;
+  const rows=sortRows(base,SORT.prov);
+  const T=k=>base.reduce((a,r)=>a+r[k],0);
+  el('dt_prov_tb').innerHTML=rows.map(r=>{
+    const isActive=F.geo===r.name;
+    return '<tr style="cursor:pointer'+(isActive?';outline:2px solid var(--info);outline-offset:-2px':'')+'" onclick="selectProvince(\''+r.name+'\')" title="Bấm để lọc theo '+r.name+'">'
+      +'<td>'+(isActive?'<i class="ti ti-map-pin-filled" style="color:var(--info);font-size:12px"></i> ':'')+r.name+'</td>'
+      +'<td class="mono" style="'+heatBg(Math.min(r.u/mxU,1))+'">'+nf(r.u)+'</td>'
+      +'<td class="mono">'+nf(r.mau)+'</td><td class="mono">'+nf(r.wau)+'</td><td class="mono">'+nf(r.dau)+'</td>'
+      +'<td class="mono">'+nf(r.b)+'</td>'
+      +'<td class="mono" style="'+heatBg(Math.min(r.rev/mxR,1))+'">'+nf(r.rev)+'</td></tr>';}).join('')
+    +'<tr class="tot"><td>TỔNG '+base.length+' TỈNH</td><td class="mono">'+nf(T('u'))+'</td><td class="mono">'+nf(T('mau'))+'</td><td class="mono">'+nf(T('wau'))+'</td><td class="mono">'+nf(T('dau'))+'</td><td class="mono">'+nf(T('b'))+'</td><td class="mono">'+nf(T('rev'))+'</td></tr>';
+}
+
+/* --- Bảng sản phẩm → gói sản phẩm (2 tầng, bấm dòng sản phẩm để thu/mở) --- */
+const COLLAPSED={};
+window.togglePlat=function(pl){COLLAPSED[pl]=!COLLAPSED[pl];drawProd();};
+function aggRows(list){
+  const u=list.reduce((a,r)=>a+r.u,0),mau=list.reduce((a,r)=>a+r.mau,0);
+  return {u,mau,wau:list.reduce((a,r)=>a+r.wau,0),dau:list.reduce((a,r)=>a+r.dau,0),pm:u?mau/u*100:0,
+    b:list.reduce((a,r)=>a+r.b,0),dur:mau?list.reduce((a,r)=>a+r.dur*r.mau,0)/mau:0,rev:list.reduce((a,r)=>a+r.rev,0)};
+}
+function drawProd(){
+  el('dt_prod_head').innerHTML=thSort('prod',[
+    {k:'plat',l:'Sản phẩm',t:1},{k:'name',l:'Gói sản phẩm',t:1},{k:'role',l:'Đối tượng',t:1},{k:'u',l:'Người dùng'},
+    {k:'mau',l:'MAU'+SUB('30 ngày')},{k:'wau',l:'WAU'+SUB('7 ngày')},{k:'dau',l:'DAU'+SUB('trong ngày')},
+    {k:'pm',l:'% MAU'},{k:'b',l:'Người mua'},{k:'dur',l:'TL BQ/phiên'},{k:'rev',l:'Doanh thu (tr đ)'}]);
+  const items=selProd().map(p=>{const u=S(p.users),mau=S(Math.round(p.active*p.users));
+    return {pl:p.plat,plat:PLAT_NAME[p.plat],name:p.n,role:p.role||'—',u,mau,wau:Math.round(mau*WAU_OF_MAU),dau:Math.round(mau*DAU_OF_MAU),pm:p.active*100,b:S(p.buyers),dur:p.dur,rev:S(p.rev)};});
+  el('dt_prod_pill').textContent=items.length+' gói sản phẩm';
+  const st=SORT.prod;
+  const pmB=v=>'<span class="bdg '+(v>=65?'bG':v>=55?'bM':'bD')+'">'+pp(v)+'%</span>';
+  const durB=v=>'<span class="bdg '+(v>=15?'bG':v>=10?'bM':'bD')+'">'+pp(v)+'\'</span>';
+  const cells=r=>'<td class="mono">'+nf(r.u)+'</td><td class="mono">'+nf(r.mau)+'</td><td class="mono">'+nf(r.wau)+'</td><td class="mono">'+nf(r.dau)+'</td>'
+    +'<td>'+pmB(r.pm)+'</td><td class="mono">'+nf(r.b)+'</td><td>'+durB(r.dur)+'</td><td class="mono">'+nf(r.rev)+'</td>';
+  let groups=['gs','hl'].map(pl=>{const ch=items.filter(r=>r.pl===pl);return ch.length?Object.assign({pl,plat:PLAT_NAME[pl],name:'',role:'',ch},aggRows(ch)):null;}).filter(Boolean);
+  // sắp xếp tầng Sản phẩm theo tổng của nhóm; tầng Gói theo giá trị từng gói
+  const gKey=(st.k==='name'||st.k==='role')?null:st.k;
+  if(gKey)groups=sortRows(groups,{k:gKey,d:st.d});
+  let html='';
+  groups.forEach(g=>{
+    const col=COLLAPSED[g.pl];
+    html+='<tr class="grp" onclick="togglePlat(\''+g.pl+'\')" title="Bấm để thu gọn / mở rộng"><td><i class="ti '+(col?'ti-chevron-right':'ti-chevron-down')+'"></i> '+g.plat+'</td><td>'+g.ch.length+' gói</td><td>—</td>'+cells(g)+'</tr>';
+    if(!col)sortRows(g.ch,st.k==='plat'?{k:null}:st).forEach(r=>{html+='<tr><td></td><td class="pk">'+r.name+'</td><td>'+r.role+'</td>'+cells(r)+'</tr>';});
+  });
+  const tot=aggRows(items);
+  html+='<tr class="tot"><td>TỔNG</td><td>'+items.length+' gói</td><td>—</td>'+cells(tot)+'</tr>';
+  el('dt_prod_tb').innerHTML=html;
+}
+
+/* ========= TRANG 2 ========= */
+let topChan='le';
+function buildDetail(){
+  // theo thời gian
+  dc('dt_c_time');
+  const uNew=U_NEW_ALL.map(v=>Math.round(v*shareU())).map(S);
+  const revTime=MON.map((_,i)=>S(REV_HL[i]*revShare('hl')+REV_GS[i]*revShare('gs')));
+  charts.dt_c_time=new Chart(el('dt_c_time'),{data:{labels:MON,datasets:[
+    {type:'bar',label:'Người dùng mới',data:uNew,backgroundColor:BL,borderRadius:4,yAxisID:'y',order:2},
+    {type:'line',label:'Doanh thu',data:revTime,borderColor:NV,borderWidth:2.5,tension:.3,pointRadius:3,yAxisID:'y1',order:1}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+(c.datasetIndex===1?' tr đ':'')}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:nf}},y1:{position:'right',grid:{display:false},ticks:{callback:nf,color:NV}}}}});
+
+  // Tổng thời lượng sử dụng theo sản phẩm (giờ)
+  dc('dt_c_dur');fitCols('dt_c_dur',selProd().length);
+  const durData=selProd().map(p=>{
+    const hours=S(Math.round(p.active*p.users*SESS_PERIOD*p.dur/60));
+    return [p.s,hours,p.dur,PLAT_NAME[p.plat]+' · '+p.n];
+  }).sort((a,b)=>b[1]-a[1]);
+  charts.dt_c_dur=new Chart(el('dt_c_dur'),{data:{labels:durData.map(x=>x[0]),datasets:[
+    {type:'bar',label:'Tổng thời lượng',data:durData.map(x=>x[1]),backgroundColor:BL,borderRadius:4,yAxisID:'y',order:2},
+    {type:'line',label:'BQ/phiên',data:durData.map(x=>x[2]),borderColor:OR,backgroundColor:OR,borderWidth:2.5,tension:.3,pointRadius:3.5,yAxisID:'y1',order:1}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},
+      tooltip:{callbacks:{title:it=>durData[it[0].dataIndex][3],label:c=>c.datasetIndex===0?'Tổng thời lượng: '+nf(c.parsed.y)+' giờ':'BQ/phiên: '+c.parsed.y+' phút'}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:9},maxRotation:45,minRotation:45,autoSkip:false}},
+        y:{grid:{color:grid},ticks:{callback:nf},title:{display:true,text:'giờ',font:{size:10}}},
+        y1:{position:'right',grid:{display:false},min:0,ticks:{callback:v=>v+'\''},title:{display:true,text:'phút/phiên',font:{size:10}}}}}});
+
+  drawProv();
+  drawTop();
+  drawProd();
+}
+
+function drawTop(){
+  const isTruong=topChan==='buon';
+  const entity=isTruong?'Trường':'Người dùng';
+  const kind=isTruong?'truong':'nguoi';
+  const metric=isTruong?'Người sử dụng':'Số phiên';
+  el('top_title').textContent='Top '+(isTruong?'trường':'người dùng')+' dùng nhiều nhất'+(F.geo!=='all'?' · '+F.geo:'');
+  el('bot_title').textContent='Top '+(isTruong?'trường':'người dùng')+' dùng ít nhất'+(F.geo!=='all'?' · '+F.geo:'');
+  // cùng cấu trúc cột: # · Tên · Địa phương · Chỉ số
+  const head='<tr><th>#</th><th>'+entity+'</th><th>Địa phương</th><th>'+metric+'</th></tr>';
+  el('dt_top_head').innerHTML=head;
+  el('dt_bot_head').innerHTML=head;
+  const rows=topFor(kind);
+  el('dt_top_tb').innerHTML=rows.map((x,i)=>'<tr><td class="mono s2">'+(i+1)+'</td><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="mono"><span class="bdg bG">'+nf(x[2])+'</span></td></tr>').join('');
+  const brows=botFor(kind);
+  el('dt_bot_tb').innerHTML=brows.map((x,i)=>'<tr><td class="mono s2">'+(i+1)+'</td><td>'+x[0]+'</td><td>'+x[1]+'</td><td class="mono"><span class="bdg bD">'+nf(x[2])+'</span></td></tr>').join('');
+}
+
+
+/* ===== INIT ===== */
+let curPage='overview';
+const builders={overview:buildOverview,detail:buildDetail};
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  el('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  curPage=id; builders[id]();
+}
+// populate province dropdown
+PROV.forEach(p=>{const o=document.createElement('option');o.value=p[0];o.textContent=p[0];el('f_geo').appendChild(o);});
+
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+el('f_start').addEventListener('change',e=>{F.start=e.target.value;applyFilters();});
+el('f_end').addEventListener('change',e=>{F.end=e.target.value;applyFilters();});
+['prod','pkg','geo','cust','chan'].forEach(k=>el('f_'+k).addEventListener('change',e=>{
+  F[k]=e.target.value;
+  if(k==='chan'){topChan=F.chan==='le'?'le':'buon';document.querySelectorAll('.topchan').forEach(x=>x.classList.toggle('on',x.dataset.v===topChan));}
+  applyFilters();
+}));
+el('f_reset').addEventListener('click',()=>{
+  F.start='2026-01-01';F.end='2026-07-31';F.prod='all';F.pkg='all';F.geo='all';F.cust='all';F.chan='all';
+  el('f_start').value=F.start;el('f_end').value=F.end;
+  ['prod','geo','cust','chan'].forEach(k=>el('f_'+k).value='all');
+  applyFilters();
+});
+document.querySelectorAll('.ovu').forEach(b=>b.addEventListener('click',()=>{ovuMode=b.dataset.v;document.querySelectorAll('.ovu').forEach(x=>x.classList.toggle('on',x===b));buildOverview();}));
+document.querySelectorAll('.ovb').forEach(b=>b.addEventListener('click',()=>{ovbMode=b.dataset.v;document.querySelectorAll('.ovb').forEach(x=>x.classList.toggle('on',x===b));buildOverview();}));
+document.querySelectorAll('.ovr').forEach(b=>b.addEventListener('click',()=>{ovrMode=b.dataset.v;document.querySelectorAll('.ovr').forEach(x=>x.classList.toggle('on',x===b));buildOverview();}));
+document.querySelectorAll('.topchan').forEach(b=>b.addEventListener('click',()=>{topChan=b.dataset.v;document.querySelectorAll('.topchan').forEach(x=>x.classList.toggle('on',x===b));drawTop();}));
+
+fillPkg();renderChips();updRange();
+showPage('overview');
+</script>
+</body>
+</html>

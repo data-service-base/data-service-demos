@@ -1,0 +1,22 @@
+{
+  "slug": "cao-su-siem-riep-eudr",
+  "title": "Cao su Tây Ninh Siêm Riệp — Quy trình truy xuất EUDR",
+  "type": "proposal",
+  "industry": "Cao su",
+  "department": "Vận hành",
+  "description": "Luồng truy xuất nguồn gốc EUDR cho Tây Ninh Siêm Riệp PTCS.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Siem_Riep_TruyxuatEUDR/",
+  "source_repo": "https://github.com/tbinh-06/Siem_Riep_TruyxuatEUDR",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "quy trình"
+  ]
+}

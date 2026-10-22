@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P&C — Trung tâm vận hành & báo cáo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6FA;--panel:#FFFFFF;--panel2:#F0F3F8;
+    --ink:#1A2230;--ink2:#5A6678;--ink3:#8A95A8;--line:#E2E7F0;
+    --ocean:#3C8C95;--ocean-deep:#2A6B73;--ocean-mid:#4781BD;--ocean-soft:#E9F2FC;
+    --form:#5A6678;--step:#4781BD;--approve:#C0954A;--cond:#8E6FC0;
+    --service:#57A07A;--merge:#5A6678;--end:#57A07A;
+    --go:#57A07A;--go-soft:#E8F6EE;--stop:#CB6A62;--stop-soft:#FCEAEA;--loop:#8E6FC0;--loop-soft:#EFEAF8;
+    --disp:"Inter",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"Inter",system-ui,sans-serif;}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+  a{color:var(--ocean);text-decoration:none}
+
+  .topbar{display:flex;align-items:center;gap:12px;padding:14px 26px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+  .topbar .logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#1A2230,#3C8C95);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:12px}
+  .topbar .bnm{font-family:var(--disp);font-weight:700;font-size:15px;letter-spacing:-.01em}
+  .topbar .bsub{font-size:11px;color:var(--ink3)}
+  .topbar .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .btn{font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:9px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink2);transition:.14s}
+  .btn:hover{background:var(--panel2)}
+  .btn.primary{background:var(--ocean);color:#fff;border-color:var(--ocean)}
+  .btn.primary:hover{filter:brightness(.94)}
+  .hero{padding:42px 0 6px}
+  .hero .eyebrow{font-family:var(--disp);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ocean)}
+  h1{font-family:var(--disp);font-weight:800;font-size:clamp(26px,3.6vw,38px);line-height:1.14;margin:13px 0 0;letter-spacing:-.02em;color:var(--ink);max-width:22ch}
+  .lede{font-size:15.5px;color:var(--ink2);max-width:64ch;margin:14px 0 0;line-height:1.6}
+  .lede b{color:var(--ink);font-weight:600}
+  .lede i{color:var(--ink3);font-style:italic}
+  .stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 18px;min-width:128px}
+  .stat .v{font-family:var(--disp);font-weight:800;font-size:26px;line-height:1;color:var(--ocean)}
+  .stat .l{font-size:12px;color:var(--ink3);margin-top:5px}
+
+  .ribbon{background:var(--panel);border-bottom:1px solid var(--line)}
+  .ribbon .wrap{display:flex;align-items:center;gap:8px;padding:14px 26px;overflow-x:auto}
+  .rb{display:flex;align-items:center;gap:8px;white-space:nowrap;flex:none}
+  .rb .ph{font-family:var(--mono);font-size:10.5px;color:var(--ocean);font-weight:600}
+  .rb .nm{font-size:13px;color:var(--ink2);font-weight:500}
+  .rb .arr{color:var(--ink3);font-size:13px;margin:0 2px}
+
+  main{padding:36px 0 60px}
+  .sec-h{display:flex;align-items:baseline;gap:12px;margin:8px 0 4px;flex-wrap:wrap}
+  .sec-h h2{font-family:var(--disp);font-weight:700;font-size:21px;margin:0;letter-spacing:-.01em}
+  .sec-h .hint{font-size:13px;color:var(--ink3)}
+  .sec-h .hint code{font-family:var(--mono);font-size:.86em;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+
+  .reports{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 12px}
+  .rcard{display:block;background:linear-gradient(135deg,#2F6E78,#3C8C95);color:#fff;border-radius:16px;padding:20px 18px;position:relative;overflow:hidden;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease}
+  .rcard.green{background:linear-gradient(135deg,#3E8A6E,#57A07A)}
+  .rcard.deep{background:linear-gradient(135deg,#234E5C,#3C7DA0)}
+  .rcard::after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.12) 1px,transparent 0);background-size:18px 18px;opacity:.55}
+  .rcard:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(7,59,99,.24)}
+  .rcard>*{position:relative;z-index:1}
+  .rcard .ric{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);
+    display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:20px}
+  .rcard .rt{font-family:var(--disp);font-weight:700;font-size:17px;margin-top:13px;letter-spacing:-.01em}
+  .rcard .rd{font-size:12.8px;color:#EAF4FB;margin-top:7px;line-height:1.5;min-height:54px}
+  .rcard .rgo{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:12px;font-weight:600;margin-top:10px}
+  .rcard .rgo i{font-style:normal;transition:transform .15s}
+  .rcard:hover .rgo i{transform:translateX(4px)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0 8px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 17px;cursor:pointer;
+    transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease;position:relative;text-align:left}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(7,59,99,.13);border-color:#B8D3E6}
+  .card:focus-visible{outline:2px solid var(--ocean);outline-offset:2px}
+  .card .row1{display:flex;align-items:center;gap:11px}
+  .badge{font-family:var(--mono);font-weight:600;font-size:13px;min-width:34px;height:34px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;color:#fff;background:var(--ocean);flex:none}
+  .card.branch .badge{background:var(--service)}
+  .card.cut .badge{background:var(--cond)}
+  .card.support .badge{background:var(--merge)}
+  .card .ttl{font-family:var(--disp);font-weight:700;font-size:15px;line-height:1.18}
+  .card .role{font-size:12.7px;color:var(--ink2);margin-top:9px;min-height:34px}
+  .card .foot{display:flex;align-items:center;gap:7px;margin-top:11px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:10.5px;border-radius:20px;padding:2px 9px;border:1px solid var(--line);color:var(--ink3);background:var(--panel2)}
+  .chip.ph{color:var(--ocean);border-color:#Bcdcef;background:var(--ocean-soft)}
+  .chip.calls{color:var(--service);border-color:#Bfe2d7;background:#E4F2EE}
+  .card .open{position:absolute;top:15px;right:15px;color:var(--ink3);font-size:13px;transition:color .14s,transform .14s}
+  .card:hover .open{color:var(--ocean);transform:translateX(2px)}
+
+  .support-h{margin-top:34px}
+  .support-note{font-size:13px;color:var(--ink3);background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--approve);
+    border-radius:0 10px 10px 0;padding:11px 14px;margin:14px 0 0}
+  .support-note b{color:var(--ink2)}
+
+  .scrim{position:fixed;inset:0;background:rgba(7,29,48,.52);opacity:0;pointer-events:none;transition:opacity .22s ease;z-index:40}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(610px,100%);background:var(--bg);z-index:50;
+    transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-18px 0 50px rgba(7,29,48,.22)}
+  .drawer.on{transform:translateX(0)}
+  .dhead{background:var(--ocean-deep);color:#fff;padding:20px 24px;position:relative;flex:none}
+  .dhead .dno{font-family:var(--mono);font-size:11.5px;color:#9FCBE8;letter-spacing:.06em}
+  .dhead h3{font-family:var(--disp);font-weight:700;font-size:21px;margin:7px 0 0;letter-spacing:-.01em;padding-right:34px}
+  .dhead .drole{font-size:13px;color:#CFE6F5;margin-top:7px}
+  .dclose{position:absolute;top:18px;right:18px;width:30px;height:30px;border:none;border-radius:8px;background:rgba(255,255,255,.14);
+    color:#fff;font-size:17px;cursor:pointer;line-height:1}
+  .dclose:hover{background:rgba(255,255,255,.26)}
+  .dbody{overflow-y:auto;padding:22px 24px 40px;flex:1}
+
+  .alt{border:1px dashed #C7B79A;background:#FBF4E9;border-radius:11px;padding:12px 14px;margin:0 0 20px;font-size:13px;color:#6E5526}
+  .alt b{color:#5A4316}
+
+  .flow{position:relative;padding:2px 0}
+  .step{position:relative;padding-left:40px}
+  .marker{position:absolute;left:6px;top:12px;width:12px;height:12px;border-radius:3px;background:var(--step);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line);z-index:2}
+  .step.decision .marker{transform:rotate(45deg)}
+  .k-form .marker{background:var(--form)} .k-step .marker{background:var(--step)}
+  .k-approve .marker{background:var(--approve)} .k-condition .marker,.k-convert .marker{background:var(--cond)}
+  .k-service .marker,.k-webhook .marker{background:var(--service)} .k-merge .marker{background:var(--merge)}
+  .k-end .marker{background:var(--end);border-radius:50%}
+
+  .ncard{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .step.decision .ncard{border-color:#C7D2EE}
+  .step.k-approve.decision .ncard{border-color:#E6C79B}
+  .nhead{display:flex;align-items:flex-start;gap:9px}
+  .ktag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.03em;border-radius:5px;padding:2px 7px;flex:none;margin-top:1px}
+  .k-form .ktag{background:#EBEFF2;color:var(--form)} .k-step .ktag{background:var(--ocean-soft);color:var(--ocean)}
+  .k-approve .ktag{background:#FBEFDD;color:var(--approve)} .k-condition .ktag,.k-convert .ktag{background:var(--loop-soft);color:var(--cond)}
+  .k-service .ktag,.k-webhook .ktag{background:#E0F2EC;color:var(--service)} .k-merge .ktag{background:#EBEFF2;color:var(--merge)}
+  .k-end .ktag{background:var(--go-soft);color:var(--end)}
+  .nname{font-size:14px;font-weight:500;line-height:1.4;flex:1}
+  .sla{font-family:var(--mono);font-size:10.5px;color:var(--ink3);white-space:nowrap;margin-top:2px;flex:none}
+  .sla.hot{color:var(--approve);font-weight:600}
+  .callwrap{margin-top:10px}
+  .golink{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;font-weight:600;
+    background:var(--ocean-soft);color:var(--ocean);border:1px solid #Bcdcef;border-radius:8px;padding:5px 11px;cursor:pointer}
+  .golink:hover{background:var(--ocean);color:#fff;border-color:var(--ocean)}
+
+  .edge{position:relative;height:26px}
+  .edge::before{content:"";position:absolute;left:11px;top:-2px;bottom:9px;width:2px;background:#BCD0DD}
+  .edge::after{content:"";position:absolute;left:6px;bottom:1px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #BCD0DD}
+
+  .fork{position:relative;margin:12px 0 2px;padding-left:4px}
+  .fork::before{content:"";position:absolute;left:-28px;top:-14px;bottom:15px;width:2px;background:#9FB6C6}
+  .branch{position:relative;margin-bottom:9px;min-height:14px}
+  .branch:last-child{margin-bottom:0}
+  .branch::before{content:"";position:absolute;left:-28px;top:13px;width:26px;height:2px;background:#9FB6C6;border-bottom-left-radius:7px}
+  .bbox{display:inline-block;font-size:12px;line-height:1.45;border-radius:8px;padding:6px 11px;border:1px solid var(--line);background:var(--panel);color:var(--ink2)}
+  .branch.go .bbox{border-color:#BFDCC0;background:var(--go-soft);color:var(--go)}
+  .branch.stop .bbox{border-color:#E9C3C5;background:var(--stop-soft);color:var(--stop)}
+  .branch.loop .bbox{border-color:#CDC8F0;background:var(--loop-soft);color:var(--loop)}
+  .branch.loop .bbox::before{content:"↺ ";font-weight:700}
+  .branch.stop::before,.branch.stop .bbox{border-style:solid}
+  .stub{font-size:13px;color:var(--ink3);background:var(--panel);border:1px dashed var(--line);border-radius:11px;padding:14px;margin-bottom:14px}
+
+  footer{border-top:1px solid var(--line);padding:24px 0 50px;color:var(--ink3);font-size:12.7px}
+  footer b{color:var(--ink2)}footer code{font-family:var(--mono);font-size:.9em}
+
+  .pintro{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--ocean);border-radius:12px;padding:15px 18px;margin:18px 0 4px;font-size:14px;color:var(--ink2);line-height:1.55}
+  .pintro b{color:var(--ink)} .pintro i{color:var(--ink3);font-style:italic}
+  .elev{background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 24px 26px;margin:20px 0;box-shadow:0 12px 34px rgba(28,45,72,.07)}
+  .elev .sec-h{margin-top:18px}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto 1fr;column-gap:20px;row-gap:12px;margin:20px 0 4px}
+  .pcard{display:contents}
+  .pblock{border-radius:14px;padding:16px 17px;border:1px solid}
+  .pblock.pain{background:var(--stop-soft);border-color:#EFD4D1;grid-row:1}
+  .parrow{grid-row:2;text-align:center;font-size:10px;font-weight:700;color:var(--service);letter-spacing:.1em}
+  .pblock.sol{background:var(--go-soft);border-color:#CFE6D8;grid-row:3;display:flex;flex-direction:column}
+  .ptag{font-size:10.5px;font-weight:700;color:var(--stop);letter-spacing:.04em;text-transform:uppercase}
+  .stag{font-size:10.5px;font-weight:700;color:var(--service);letter-spacing:.04em;text-transform:uppercase}
+  .ptxt{font-size:13.5px;color:var(--ink2);line-height:1.55;margin-top:8px}
+  .ptxt b{color:var(--ink);font-weight:600}
+  .stitle{font-size:13px;font-weight:700;color:var(--ink);margin-top:9px}
+  .sul{margin:11px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  .sul li{display:grid;grid-template-columns:13px 142px 1fr;column-gap:8px;align-items:start;font-size:12.6px;line-height:1.5}
+  .sul li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--service);margin-top:6px}
+  .sul li .lbl{font-weight:600;color:var(--ink)}
+  .sul li .dsc{color:var(--ink2)}
+  .slink{margin-top:auto;padding-top:14px}
+  .slink a{font-size:12px;font-weight:600;color:var(--ocean);display:inline-flex;align-items:center;gap:6px}
+  .slink a:hover{text-decoration:underline}
+  @media(max-width:820px){.grid,.reports{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr;grid-template-rows:none}.pblock.pain,.parrow,.pblock.sol{grid-row:auto}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <span class="logo">P&amp;C</span>
+  <div><div class="bnm">P&amp;C Solutions</div><div class="bsub">Giải pháp Doanh nghiệp · Base.vn Service</div></div>
+  <div class="acts">
+    <a class="btn" href="PC_techmap.html" target="_blank" rel="noopener">⤢ Sơ đồ giải pháp công nghệ</a>
+    <a class="btn" href="PC_baocao_congviec.html">Báo cáo công việc</a>
+    <a class="btn" href="PC_baocao_tonghop.html">Báo cáo tổng hợp</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Trung tâm vận hành &amp; báo cáo</div>
+    <h1>Số hóa vận hành đơn hàng</h1>
+    <p class="lede">PCES dùng <b>Base Service</b> nhưng quy trình bị tách nhỏ, dữ liệu phân mảnh. Trang này tóm tắt <b>luồng hiện tại của PCES</b>, các <b>bài toán → giải pháp</b>, và <b>xem demo báo cáo</b> cùng luồng data từ Service. <i>(Đang chờ tài khoản hệ thống Service để đối chiếu số liệu thật.)</i></p>
+    <div class="stats">
+      <div class="stat"><div class="v">2</div><div class="l">báo cáo điều hành</div></div>
+      <div class="stat"><div class="v">14</div><div class="l">quy trình &amp; QT con</div></div>
+    </div>
+  </section>
+</div>
+
+
+<main>
+  <div class="wrap">
+    <div class="elev">
+    <div class="sec-h"><h2>Bài toán của PCES → Giải pháp</h2><span class="hint">Mỗi điểm nghẽn → một dashboard điều hành real-time</span></div>
+    <div class="pintro">PCES đang dùng <b>Base Service</b> nhưng quy trình bị tách nhỏ, dữ liệu phân mảnh. Hai dashboard dưới đây đọc trực tiếp từ Service, cập nhật real-time. <i>(Đang chờ tài khoản hệ thống Service để đối chiếu số liệu thật.)</i></div>
+    <div class="pgrid">
+
+      <div class="pcard">
+        <div class="pblock pain">
+          <div class="ptag">⚠ Pain 01 · Công việc</div>
+          <div class="ptxt">Nhiều quy trình nên nhân sự <b>thường xuyên miss việc</b>, công việc <b>trễ / tắc</b>; CEO/trưởng phòng phải nhắc mới biết.</div>
+        </div>
+        <div class="parrow">↓ GIẢI PHÁP</div>
+        <div class="pblock sol">
+          <div class="stag">✓ Dashboard công việc · real-time</div>
+          <div class="stitle">Để CEO &amp; trưởng phòng nhìn được:</div>
+          <ul class="sul">
+            <li><span class="lbl">Đơn / khách quan trọng đang trễ hoặc có nguy cơ trễ</span><span class="dsc">→ để ưu tiên xử lý ngay; thấy rõ nên ưu tiên đơn nào, khách nào.</span></li>
+            <li><span class="lbl">Bước nào trong quy trình bị block nhiều</span><span class="dsc">→ có phương án, hoặc điều chỉnh thời gian (SLA) cho bước đó.</span></li>
+            <li><span class="lbl">Workload từng nhân sự</span><span class="dsc">→ ai hay chậm trễ thì không giao thêm, ai đang quá tải thì không giao thêm.</span></li>
+          </ul>
+          <div class="slink"><a href="PC_baocao_congviec.html">Mở báo cáo công việc →</a></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pblock pain">
+          <div class="ptag">⚠ Pain 02 · Công nợ</div>
+          <div class="ptxt">Một đơn hàng có <b>nhiều PO mua từ nhiều NCC</b> khác nhau → công nợ phải thu (khách) &amp; phải trả (NCC) rải rác, khó tổng hợp.</div>
+        </div>
+        <div class="parrow">↓ GIẢI PHÁP</div>
+        <div class="pblock sol">
+          <div class="stag">✓ Dashboard công nợ · real-time</div>
+          <div class="stitle">Để kế toán &amp; CEO theo dõi:</div>
+          <ul class="sul">
+            <li><span class="lbl">Công nợ nào sắp đến hạn / đã quá hạn</span><span class="dsc">(cả phải thu khách &amp; phải trả NCC) → xử lý trước, không sót.</span></li>
+            <li><span class="lbl">Gom nhiều PO của một đơn về một chỗ</span><span class="dsc">→ biết một đơn đang nợ ai, bao nhiêu, đến hạn khi nào.</span></li>
+            <li><span class="lbl">Tuổi nợ &amp; dự báo dòng tiền</span><span class="dsc">2 tháng tới → chủ động thu/chi, giảm nợ xấu kéo dài.</span></li>
+          </ul>
+          <div class="slink"><a href="PC_baocao_tonghop.html">Mở báo cáo tổng hợp →</a></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pblock pain">
+          <div class="ptag">⚠ Pain 03 · Đơn hàng &amp; khách</div>
+          <div class="ptxt">Quá nhiều quy trình nên khách <b>không biết đang có bao nhiêu đơn hàng / dự án</b>, đang ở đâu, của khách nào.</div>
+        </div>
+        <div class="parrow">↓ GIẢI PHÁP</div>
+        <div class="pblock sol">
+          <div class="stag">✓ Dashboard đơn hàng &amp; khách · real-time</div>
+          <div class="stitle">Để CEO &amp; kinh doanh nắm:</div>
+          <ul class="sul">
+            <li><span class="lbl">Tổng số đơn / dự án</span><span class="dsc">và từng đơn đang ở giai đoạn nào, đúng hạn hay trễ.</span></li>
+            <li><span class="lbl">Gom mọi quy trình rải rác về theo từng đơn</span><span class="dsc">→ một đơn xem được trọn vẹn tiến trình.</span></li>
+            <li><span class="lbl">Phân nhóm khách hàng</span><span class="dsc">(ưu tiên / tiềm năng) &amp; doanh thu → biết khách nào quan trọng để ưu tiên.</span></li>
+          </ul>
+          <div class="slink"><a href="PC_baocao_tonghop.html">Mở báo cáo tổng hợp →</a></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sec-h"><h2>Báo cáo vận hành</h2><span class="hint">Dashboard trực tiếp từ dữ liệu Base.vn Service</span></div>
+    <div class="reports">
+      <a class="rcard" href="PC_baocao_congviec.html">
+        <span class="ric">✓</span>
+        <div class="rt">Báo cáo công việc</div>
+        <div class="rd">Tiến độ &amp; deadline theo nhân sự / phòng ban, task quá hạn, SLA từng bước, timeline dự án.</div>
+        <span class="rgo">Mở báo cáo <i>→</i></span>
+      </a>
+      <a class="rcard green" href="PC_baocao_tonghop.html">
+        <span class="ric">▦</span>
+        <div class="rt">Báo cáo tổng hợp — Công nợ + Đơn hàng</div>
+        <div class="rd">Gồm cả <b>Công nợ</b> (phải thu khách / phải trả NCC, tuổi nợ) <b>và Đơn hàng</b> (tiến độ từng đơn) cùng phân nhóm khách hàng — 3 góc nhìn trong một báo cáo.</div>
+        <span class="rgo">Mở báo cáo <i>→</i></span>
+      </a>
+    </div>
+    </div>
+
+    <div class="sec-h" style="margin-top:34px"><h2>Luồng hiện tại của PCES</h2><span class="hint">Quy trình đang chạy trên Base.vn Service · bấm vào ô bất kỳ để mở flow chi tiết</span></div>
+    <div class="pintro">PCES đang dùng <b>Base Service</b> nhưng quy trình bị <b>tách thành nhiều luồng nhỏ</b> nên dữ liệu phân mảnh. Dưới đây là toàn bộ luồng hiện tại theo hành trình một đơn hàng.</div>
+    <div class="grid" id="gridOrder"></div>
+
+    <div class="sec-h support-h"><h2>Logistic</h2><span class="hint">Giao nhận — dùng chung cho lấy hàng đầu vào &amp; giao hàng cho khách</span></div>
+    <div class="grid" id="gridLogistic"></div>
+
+    <div class="sec-h support-h"><h2>Luồng phụ trợ</h2><span class="hint">Không gắn đơn khách</span></div>
+    <div class="grid" id="gridSupport"></div>
+    <div class="support-note"><b>Lưu ý báo cáo:</b> 3 quy trình phụ trợ này không phải đơn khách — cần loại trừ khỏi báo cáo đơn hàng, nếu không số "đơn" sẽ bị thổi phồng.</div>
+  </div>
+</main>
+
+<footer><div class="wrap">
+  Dựng từ lưu đồ Base.vn của P&amp;C; tên bước &amp; SLA chép theo lưu đồ. <b>#5 Nhập khẩu</b> &amp; <b>#6 Thanh toán</b> chưa có lưu đồ chi tiết — vai trò suy ra từ điểm gọi. Cần đối chiếu khi có tài khoản hệ thống.
+</div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <button class="dclose" id="dclose" aria-label="Đóng">✕</button>
+    <div class="dno" id="dno"></div><h3 id="dttl"></h3><div class="drole" id="drole"></div>
+  </div>
+  <div class="dbody" id="dbody"></div>
+</aside>
+
+<script>
+const KIND = {
+  form:'Biểu mẫu', step:'Bước', approve:'Phê duyệt', condition:'Điều kiện',
+  convert:'Chuyển đổi', service:'Dịch vụ', webhook:'Webhook', merge:'Hợp nhất', end:'Kết thúc'
+};
+
+const P = {
+  p1:{no:'Quy trình 1', cls:'', title:'QT RFQ — đơn gốc', phase:'PHA 1 · Báo giá',
+    role:'Quy trình bán hàng / xử lý đơn gốc — xương sống mà mọi quy trình khác treo vào.',
+    calls:['p2','p7'],
+    alt:'<b>Cửa vào B — Reorder / chỉ gia công</b> [tức thì]: đơn đặt lại đã biết giá → Nhập thông tin thanh toán &amp; hợp đồng [4h] → Chờ khách xác nhận → đẩy thẳng sang sản xuất, bỏ qua giai đoạn báo giá.',
+    nodes:[
+      {k:'form',name:'Tạo yêu cầu mua hàng (BOM)',sla:'SLA 4h'},
+      {k:'step',name:'Phân công lấy báo giá',sla:'SLA 2h'},
+      {k:'convert',name:'Chuyển đổi CD PCLBG',sla:'tức thì'},
+      {k:'step',name:'Check giá NCC',sla:'SLA 8h'},
+      {k:'approve',name:'Duyệt xử lý giá',sla:'tức thì'},
+      {k:'step',name:'Lập báo giá gửi khách',sla:'SLA 24h'},
+      {k:'step',name:'Chờ xác nhận của khách hàng',sla:'tức thì',br:[['go','Mua hàng → đi tiếp'],['stop','Kết thúc → khách từ chối']]},
+      {k:'step',name:'Kế toán xác nhận PO',sla:'SLA 4h',br:[['go','If(QT sản xuất)=True → bắn phiếu SX'],['','=False → chỉ mua hàng']],link:'p7',linkLabel:'Mở QT Sản xuất'},
+      {k:'step',name:'Lập phiếu mua hàng dự án',sla:'SLA 4h'},
+      {k:'service',name:'Gọi 2. QT Mua hàng dự án',sla:'tức thì',link:'p2',linkLabel:'Mở QT Mua hàng dự án'},
+      {k:'step',name:'Kho chờ nhận đã giao hàng',sla:'SLA 96h',hot:true,br:[['go','Done → đi tiếp'],['loop','Gia hạn nhắc nhở → chờ thêm']]},
+      {k:'step',name:'Kế toán xác nhận được phép giao',sla:'tức thì'},
+      {k:'step',name:'Giao hàng cho khách',sla:'SLA 4h'},
+      {k:'condition',name:'If(thanh toán sau giao hàng)',sla:'tức thì',br:[['','True → Đề nghị thanh toán sau giao hàng'],['','False → đã thu trước']]},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  p2:{no:'Quy trình 2', cls:'', title:'QT Mua hàng dự án — Xử lý BOM', phase:'PHA 2 · Mua hàng',
+    role:'Mua hàng phục vụ đơn/dự án từ BOM. Tạo PO rồi gọi QT xử lý PO.', calls:['p3'],
+    nodes:[
+      {k:'form',name:'Yêu cầu mua hàng (BOM list)',sla:'SLA 4h'},
+      {k:'step',name:'Check tồn kho',sla:'SLA 4h'},
+      {k:'condition',name:'If phân công mua hàng',sla:'tức thì',br:[['','True → Phân công mua hàng → Check giá'],['','False → Check giá trực tiếp']]},
+      {k:'step',name:'Check giá NCC',sla:'SLA 16h'},
+      {k:'approve',name:'Duyệt Best price &amp; BOM list',sla:'tức thì',br:[['go','Đã duyệt → tạo PO'],['stop','Từ chối → Hủy bỏ'],['loop','Cần thêm thông tin → ↑ Check giá NCC']]},
+      {k:'step',name:'NV Mua hàng tiếp nhận &amp; Tạo PO',sla:'SLA 4h'},
+      {k:'service',name:'Gọi 3. QT Xử lý PO',sla:'tức thì',link:'p3',linkLabel:'Mở QT Xử lý PO'},
+      {k:'merge',name:'Chờ PO về đủ',sla:'tức thì'},
+      {k:'approve',name:'Kết thúc xử lý PO',sla:'SLA 240h',hot:true,br:[['go','Đã duyệt → Hoàn thành']]},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  p3:{no:'Quy trình 3', cls:'', title:'QT Xử lý PO', phase:'PHA 2 · Mua hàng',
+    role:'Làm việc với từng NCC: tạo PO, nhận PI/CI, định tuyến theo thanh toán trước/sau và hàng gia công.', calls:['p4','p6'],
+    nodes:[
+      {k:'form',name:'Tạo PO gửi NCC',sla:'tức thì'},
+      {k:'step',name:'NCC xác nhận PO &amp; Gửi PI/CI',sla:'SLA 16h',br:[['loop','Quay lại chỉnh sửa PO → ↑ Tạo PO'],['go','Step Done → đi tiếp']]},
+      {k:'condition',name:'If Cần thanh toán trước',sla:'tức thì',br:[['go','True → Webhook → #6 Thanh toán → Chờ TT xong'],['','False → đi tiếp']],link:'p6',linkLabel:'Mở QT Thanh toán'},
+      {k:'condition',name:'If Hàng mới (gia công PCB)',sla:'tức thì',br:[['','True → KT kiểm tra WG/EQ [4h]'],['','False → tạo phiếu theo dõi']]},
+      {k:'step',name:'Tạo phiếu theo dõi PO về',sla:'SLA 40h',hot:true},
+      {k:'service',name:'Gọi 4. QT Theo dõi PO về',sla:'tức thì',link:'p4',linkLabel:'Mở QT Theo dõi PO về'},
+      {k:'webhook',name:'WH chuyển #6 Thanh toán sau',sla:'tức thì',link:'p6',linkLabel:'Mở QT Thanh toán'},
+      {k:'merge',name:'Chờ PO về đủ',sla:'tức thì'},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  p4:{no:'Quy trình 4', cls:'', title:'QT Theo dõi PO về', phase:'PHA 3 · Hàng về',
+    role:'Ngã ba lớn nhất: định tuyến hàng theo nước ngoài / nội địa, tự lấy / NCC giao, và xử lý hàng lỗi-thiếu.',
+    calls:['p5','pL','pKho','pReturn','p6'],
+    nodes:[
+      {k:'form',name:'Theo dõi PO về',sla:'SLA 4h'},
+      {k:'condition',name:'If(nước ngoài)',sla:'tức thì',br:[['go','True → chờ kho → gom shipment → #5'],['','False → luồng nội địa ↓']]},
+      {k:'step',name:'Chờ có kho nhận',sla:'SLA 40h',hot:true},
+      {k:'step',name:'Hàng chờ gom shipment',sla:'tức thì'},
+      {k:'step',name:'Lập phiếu QT theo dõi nhập hàng',sla:'SLA 4h'},
+      {k:'service',name:'Gọi 5. QT Nhập khẩu hàng hóa',sla:'tức thì',link:'p5',linkLabel:'Mở QT Nhập khẩu'},
+      {k:'condition',name:'If Đi lấy hàng (nội địa)',sla:'tức thì',br:[['go','True → Gọi QT Tài xế giao nhận'],['','False → NCC ship đến kho ↓']]},
+      {k:'service',name:'Gọi QT Tài xế giao nhận hàng',sla:'tức thì',link:'pL',linkLabel:'Mở QT Tài xế giao nhận'},
+      {k:'step',name:'Đang ship hàng, kho chờ nhận',sla:'tức thì'},
+      {k:'step',name:'Kiểm tra chất lượng vật tư đầu vào',sla:'tức thì'},
+      {k:'step',name:'Nhập kho',sla:'tức thì',br:[['go','OK → WH tạo phiếu Kho đã nhận (5.1)'],['stop','Lỗi / thiếu hàng → Gọi QT Đối trả khiếu nại NCC']]},
+      {k:'webhook',name:'WH tạo phiếu Kho đã nhận',sla:'tức thì',link:'pKho',linkLabel:'Mở QT 5.1 Kho đã nhận'},
+      {k:'service',name:'Gọi QT Đối trả hàng khiếu nại NCC',sla:'tức thì',link:'pReturn',linkLabel:'Mở QT Đối trả khiếu nại'},
+      {k:'condition',name:'If(thanh toán sau)',sla:'tức thì',br:[['go','True → WH → #6 Thanh toán sau']],link:'p6',linkLabel:'Mở QT Thanh toán'},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  p5:{no:'Quy trình 5', cls:'branch', title:'QT Nhập khẩu hàng hóa', phase:'PHA 3 · Hàng về',
+    role:'Được #4 gọi khi hàng từ nước ngoài: gom shipment, theo dõi thông quan, hàng về kho.',
+    stub:'Chưa có lưu đồ chi tiết trong tài liệu — vai trò suy ra từ điểm gọi.', calls:['p4'],
+    nodes:[
+      {k:'service',name:'Được gọi từ #4 (nhánh nước ngoài)',sla:'tức thì',link:'p4',linkLabel:'Mở QT Theo dõi PO về'},
+      {k:'step',name:'Theo dõi nhập hàng / thông quan',sla:'tức thì'},
+      {k:'end',name:'Hàng về → trả kết quả về #4',sla:'tức thì'}
+    ]},
+
+  p6:{no:'Quy trình 6', cls:'cut', title:'QT Thanh toán', phase:'PHA 6 · Thanh toán',
+    role:'Cắt ngang nhiều đơn. Gọi từ ≥ 3 điểm: TT trước NCC (#3), TT sau khi hàng về (#3/#4), và sau giao hàng (khách, #1).',
+    stub:'Chưa có lưu đồ chi tiết trong tài liệu.', calls:['p3','p4'],
+    nodes:[
+      {k:'webhook',name:'Nhận từ #3 — thanh toán trước NCC',sla:'tức thì',link:'p3',linkLabel:'Mở QT Xử lý PO'},
+      {k:'webhook',name:'Nhận từ #4 — thanh toán sau khi hàng về',sla:'tức thì',link:'p4',linkLabel:'Mở QT Theo dõi PO về'},
+      {k:'step',name:'Đề nghị → duyệt → chi',sla:'tức thì'},
+      {k:'end',name:'Chờ thanh toán xong → trả về',sla:'tức thì'}
+    ]},
+
+  p7:{no:'Quy trình 7', cls:'branch', title:'QT Sản xuất', phase:'PHA 4 · Sản xuất',
+    role:'Sản xuất điện tử: chia hai luồng SMT (dán linh kiện) và PCBA chạy song song, kèm các vòng kiểm tra & rework.',
+    nodes:[
+      {k:'form',name:'Kĩ thuật upload',sla:'SLA 4h'},
+      {k:'step',name:'Xác nhận thông tin sản xuất',sla:'SLA 4h'},
+      {k:'condition',name:'Điều kiện KT SMT',sla:'tức thì',br:[['go','True → luồng SMT ↓'],['','False → KT PCBA → Đóng gói / report']]},
+      {k:'step',name:'SMT xác nhận kiểm tra file',sla:'SLA 4h',br:[['go','Step Done → Kho giao linh kiện'],['loop','Step Failed → Kĩ thuật kiểm tra']]},
+      {k:'step',name:'Kho giao linh kiện',sla:'SLA 4h'},
+      {k:'merge',name:'Đồng thời: SMT nhận lk · SX nhận lk',sla:'tức thì'},
+      {k:'step',name:'SMT và report',sla:'SLA 4h'},
+      {k:'step',name:'Rework sau SMT',sla:'SLA 4h'},
+      {k:'step',name:'Testing',sla:'SLA 4h',br:[['go','đạt → đi tiếp'],['loop','lỗi → Rework sau Testing']]},
+      {k:'condition',name:'KT Coating',sla:'tức thì',br:[['','True → Coating → Rework → Đóng gói'],['','False → Đóng gói']]},
+      {k:'step',name:'Đóng gói',sla:'SLA 4h'},
+      {k:'step',name:'Kho nhận',sla:'SLA 4h'},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  p8:{no:'Quy trình 8', cls:'', title:'QT Bảo hành', phase:'PHA 7 · Bảo hành',
+    role:'Kích hoạt khi khách yêu cầu bảo hành sau giao hàng. Quy trình độc lập.',
+    nodes:[
+      {k:'form',name:'Tiếp nhận Bảo hành',sla:'SLA 4h'},
+      {k:'step',name:'Kiểm tra thông tin BH',sla:'SLA 8h'},
+      {k:'approve',name:'Duyệt BH',sla:'SLA 4h',br:[['go','Đã duyệt → Xử lý BH'],['stop','Từ chối → Hoàn trả hàng BH'],['loop','Cần thêm thông tin → ↑ Kiểm tra']]},
+      {k:'step',name:'Xử lý BH',sla:'SLA 8h'},
+      {k:'step',name:'Hoàn trả hàng BH',sla:'SLA 4h'},
+      {k:'end',name:'Kết thúc BH',sla:'tức thì'}
+    ]},
+
+  pL:{no:'Logistic', cls:'branch', title:'QT Tài xế giao nhận hàng', phase:'PHA 3 + 5',
+    role:'Được #4 gọi khi đi lấy hàng nội địa, và dùng để giao hàng cho khách ở RFQ.',
+    nodes:[
+      {k:'form',name:'Biểu mẫu phiếu yêu cầu lấy hàng',sla:'SLA 4h'},
+      {k:'approve',name:'Duyệt',sla:'SLA 4h',br:[['go','Đã duyệt → Tài xế giao nhận hàng'],['stop','Đã từ chối → Kết thúc giao hàng'],['loop','Cần thêm thông tin → ↑ Biểu mẫu phiếu'],['go','Đã bỏ qua → Tài xế giao nhận hàng']]},
+      {k:'step',name:'Tài xế giao nhận hàng',sla:'tức thì',br:[['go','Hoàn thành → Kết thúc giao hàng'],['loop','Chưa thực hiện được → ↑ Biểu mẫu phiếu']]},
+      {k:'end',name:'Kết thúc giao hàng',sla:'tức thì'}
+    ]},
+
+  pReturn:{no:'Quy trình con', cls:'branch', title:'QT Đối trả hàng khiếu nại NCC', phase:'PHA 3 · Hàng về',
+    role:'Xử lý hàng NCC bị lỗi / thiếu. Hai đầu vào: nhập tay phiếu Tiếp nhận thông tin, hoặc webhook nhận thông tin hàng lỗi (từ #4) → phân công → vào phiếu tiếp nhận.',
+    calls:['p4'],
+    nodes:[
+      {k:'webhook',name:'Nhận thông tin hàng lỗi (đầu vào tự động)',sla:'tức thì',link:'p4',linkLabel:'Mở QT Theo dõi PO về'},
+      {k:'convert',name:'Phân công',sla:'tức thì'},
+      {k:'form',name:'Tiếp nhận thông tin',sla:'SLA 4h'},
+      {k:'step',name:'Xử lí đối trả',sla:'tức thì'},
+      {k:'end',name:'Kết thúc',sla:'tức thì'}
+    ]},
+
+  pKho:{no:'Quy trình con · 5.1', cls:'branch', title:'5.1 Kho đã nhận', phase:'PHA 3 · Hàng về',
+    role:'Xác nhận kho đã nhận hàng. Hai đầu vào: nhập tay phiếu Nhận hàng, hoặc webhook tự động từ #4 Theo dõi hàng về.',
+    calls:['p4'],
+    nodes:[
+      {k:'webhook',name:'QT theo dõi hàng về (đầu vào tự động)',sla:'tức thì',link:'p4',linkLabel:'Mở QT Theo dõi PO về'},
+      {k:'form',name:'Nhận hàng',sla:'tức thì'},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  pP:{no:'Phụ trợ', cls:'support', title:'Đề xuất mua vật tư / thiết bị', phase:'Nội bộ',
+    role:'Mua sắm NỘI BỘ (không gắn đơn khách). Cũng gọi QT Xử lý PO, kết thúc bằng nhập tài sản.', calls:['p3'],
+    nodes:[
+      {k:'form',name:'Lập phiếu đề xuất vật tư',sla:'SLA 1h'},
+      {k:'approve',name:'Duyệt đề xuất',sla:'SLA 4h',br:[['go','Đã duyệt → đi tiếp'],['stop','Từ chối → Hủy duyệt'],['loop','Cần thêm thông tin → ↑ phiếu']]},
+      {k:'convert',name:'Chuyển đổi CB DDX',sla:'tức thì'},
+      {k:'step',name:'Tìm NCC và so sánh giá',sla:'SLA 24h'},
+      {k:'approve',name:'Duyệt báo giá',sla:'SLA 4h'},
+      {k:'step',name:'NV Mua hàng tiếp nhận &amp; Tạo PO',sla:'SLA 24h',br:[['go','Mua hàng xong → đi tiếp'],['loop','Quay lại lấy giá → ↑ Tìm NCC']]},
+      {k:'service',name:'Gọi 3. QT Xử lý PO',sla:'tức thì',link:'p3',linkLabel:'Mở QT Xử lý PO'},
+      {k:'step',name:'Theo dõi nhập hàng',sla:'SLA 3h'},
+      {k:'step',name:'Kết thúc xử lý PO &amp; Kho chờ nhận',sla:'SLA 3h'},
+      {k:'condition',name:'If(Tài sản)',sla:'tức thì',br:[['','True → Nhập tài sản vào asset [4h]'],['','False → Người đề xuất nhận bàn giao [4h]']]},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  pT:{no:'Phụ trợ', cls:'support', title:'QT Mua hàng trading', phase:'Nội bộ',
+    role:'Mua đứt – bán lại, độc lập với đơn dự án. Có cấp duyệt riêng của Giám đốc.',
+    nodes:[
+      {k:'form',name:'Lập đề nghị mua hàng',sla:'SLA 4h'},
+      {k:'step',name:'Phân công lấy báo giá',sla:'SLA 2h'},
+      {k:'step',name:'Báo giá',sla:'SLA 4h'},
+      {k:'step',name:'Kho check stock',sla:'SLA 8h'},
+      {k:'step',name:'Cập nhật báo giá &amp; Lập PO',sla:'SLA 4h'},
+      {k:'approve',name:'Giám đốc duyệt PO',sla:'SLA 8h',br:[['go','Đã duyệt → Đặt hàng'],['stop','Từ chối → Đề xuất bị từ chối'],['loop','Cần thêm thông tin → ↑ cập nhật báo giá']]},
+      {k:'step',name:'Đặt hàng',sla:'SLA 24h'},
+      {k:'webhook',name:'Auto gửi email NCC → Chuyển QT Nhập hàng',sla:'tức thì'},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]},
+
+  pN:{no:'Phụ trợ', cls:'support', title:'Đề xuất nhận vật tư', phase:'Nội bộ',
+    role:'Xuất kho vật tư phục vụ sản xuất. Có vòng lặp chờ mua lại nếu thiếu.',
+    nodes:[
+      {k:'form',name:'Lập phiếu đề xuất nhận vật tư',sla:'tức thì'},
+      {k:'approve',name:'Duyệt',sla:'SLA 4h',br:[['go','Đã duyệt → đi tiếp'],['stop','Từ chối → Hủy duyệt'],['loop','Cần thêm thông tin → ↑ phiếu']]},
+      {k:'step',name:'Kho soạn vật tư',sla:'SLA 8h'},
+      {k:'step',name:'Người đề xuất nhận vật tư tại kho',sla:'SLA 4h',br:[['go','Đã nhận đủ → Hoàn thành'],['loop','Còn thiếu → Chờ mua lại vật tư → ↑']]},
+      {k:'end',name:'Hoàn thành',sla:'tức thì'}
+    ]}
+};
+
+const ORDER = ['p1','p2','p3','p4','p5','pKho','pReturn','p6','p7','p8'];
+const LOGISTIC = ['pL'];
+const SUPPORT = ['pP','pT','pN'];
+const RIBBON = [
+  ['PHA 1','Báo giá'],['PHA 2','Mua hàng'],['PHA 3','Hàng về'],
+  ['PHA 4','Sản xuất'],['PHA 5','Giao hàng'],['PHA 6','Thanh toán'],['PHA 7','Bảo hành']
+];
+
+function badgeText(id){
+  const map={p1:'1',p2:'2',p3:'3',p4:'4',p5:'5',p6:'6',p7:'7',p8:'8',pL:'L',pKho:'5.1',pReturn:'ĐT',pP:'P',pT:'T',pN:'N'};
+  return map[id]||'?';
+}
+function callTitle(id){return (P[id]?P[id].title:id).replace(/^QT\s/,'');}
+
+function cardHTML(id){
+  const p=P[id];
+  const callsChip = p.calls&&p.calls.length
+    ? `<span class="chip calls">↳ ${p.calls.map(callTitle).join(' · ')}</span>` : '';
+  return `<button class="card ${p.cls}" data-id="${id}">
+    <span class="open">›</span>
+    <div class="row1"><span class="badge">${badgeText(id)}</span>
+      <span class="ttl">${p.title.replace(/^QT\s/,'')}</span></div>
+    <div class="role">${p.role}</div>
+    <div class="foot"><span class="chip ph">${p.phase}</span>${callsChip}</div>
+  </button>`;
+}
+document.getElementById('gridOrder').innerHTML = ORDER.map(cardHTML).join('');
+document.getElementById('gridLogistic').innerHTML = LOGISTIC.map(cardHTML).join('');
+document.getElementById('gridSupport').innerHTML = SUPPORT.map(cardHTML).join('');
+
+function stepHTML(n){
+  const dec = n.br && n.br.length;
+  const sla = n.sla?`<span class="sla ${n.hot?'hot':''}">${n.sla}</span>`:'';
+  const link = n.link?`<div class="callwrap"><button class="golink" data-go="${n.link}">${n.linkLabel||'Mở quy trình'} <span>→</span></button></div>`:'';
+  const fork = dec?`<div class="fork">${n.br.map(b=>{
+      const tone=b[0]||'neu'; return `<div class="branch ${tone}"><span class="bbox">${b[1]}</span></div>`;
+    }).join('')}</div>`:'';
+  return `<div class="step k-${n.k}${dec?' decision':''}">
+    <span class="marker"></span>
+    <div class="ncard"><div class="nhead"><span class="ktag">${KIND[n.k]}</span><span class="nname">${n.name}</span>${sla}</div>${link}</div>
+    ${fork}
+  </div>`;
+}
+function buildFlow(nodes){
+  return '<div class="flow">'+nodes.map((n,i)=> stepHTML(n)+(i<nodes.length-1?'<div class="edge"></div>':'')).join('')+'</div>';
+}
+function openProc(id){
+  const p=P[id]; if(!p) return;
+  document.getElementById('dno').textContent = p.no+' · '+p.phase;
+  document.getElementById('dttl').textContent = p.title;
+  document.getElementById('drole').textContent = p.role;
+  let body='';
+  if(p.alt) body+=`<div class="alt">${p.alt}</div>`;
+  if(p.stub) body+=`<div class="stub">${p.stub}</div>`;
+  body+=buildFlow(p.nodes);
+  document.getElementById('dbody').innerHTML=body;
+  document.getElementById('dbody').scrollTop=0;
+  document.getElementById('drawer').classList.add('on');
+  document.getElementById('drawer').setAttribute('aria-hidden','false');
+  document.getElementById('scrim').classList.add('on');
+}
+function closeProc(){
+  document.getElementById('drawer').classList.remove('on');
+  document.getElementById('drawer').setAttribute('aria-hidden','true');
+  document.getElementById('scrim').classList.remove('on');
+}
+
+document.addEventListener('click',e=>{
+  const card=e.target.closest('.card'); if(card){openProc(card.dataset.id);return;}
+  const go=e.target.closest('.golink'); if(go){openProc(go.dataset.go);return;}
+});
+document.getElementById('dclose').addEventListener('click',closeProc);
+document.getElementById('scrim').addEventListener('click',closeProc);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProc();});
+</script>
+</body>
+</html>

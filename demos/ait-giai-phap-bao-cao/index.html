@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="vi"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sơ đồ Giải pháp Dữ liệu &amp; Báo cáo — AIT CORP</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#f4f5f9;font-family:'Be Vietnam Pro',sans-serif;color:#111;min-height:100vh}
+.page{padding:22px 32px 36px;max-width:1480px;margin:0 auto}
+.hdr{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:18px}
+.hdr img{width:104px;background:#fff;border:1px solid #dce0ee;border-radius:7px;padding:6px 8px}
+h1{font-size:21px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;line-height:1.3}
+.hsub{font-size:11px;color:#888;font-weight:500;letter-spacing:.04em;margin-top:2px;text-transform:none}
+.card{background:#fff;border:1px solid #dce0ee;border-radius:12px;overflow:hidden}
+
+.tabnav{display:flex;gap:4px;padding:0 4px}
+.tabnav a{font-size:11px;font-weight:600;padding:8px 16px;border-radius:7px 7px 0 0;color:#888;background:#eef0f8;border:1px solid #e4e8f4;border-bottom:none;cursor:pointer;text-decoration:none;display:block;transition:all .12s}
+.tabnav a:hover{color:#444}
+.tabnav a.on{background:#fff;color:#2060c0;border-color:#dce0ee}
+.tabpage{display:none}.tabpage.on{display:block}
+
+.hrow{display:grid;grid-template-columns:170px 1fr 210px 1fr;border-bottom:2px solid #e4e8f4}
+.hcell{padding:9px 12px;text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#222;display:flex;align-items:center;justify-content:center;gap:6px;border-right:1px solid #e4e8f4}
+.hcell:last-child{border-right:none}
+.hn{color:#fff;font-size:8px;padding:2px 7px;border-radius:10px;letter-spacing:.06em;font-weight:700;flex-shrink:0}
+
+.mgrid{display:grid;grid-template-columns:170px 1fr 210px 1fr;align-items:start;position:relative}
+.mcell{padding:14px 12px;border-right:1px solid #e4e8f4;position:relative}
+.mcell:last-child{border-right:none}
+#overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;overflow:visible}
+
+.zone{border:1.5px dashed;border-radius:10px;padding:12px 10px}
+
+.bx{border:1.5px solid #f5a623;border-radius:8px;padding:8px 11px;background:#fff9f0;cursor:pointer;transition:all .14s;text-align:center;display:block;width:100%}
+.bx:hover{background:#fff0d0;transform:translateY(-1px);box-shadow:0 2px 8px rgba(245,166,35,.2)}
+.bx.active{border-color:#e8440a!important;background:#fff0d0!important;box-shadow:0 0 0 3px rgba(232,68,10,.12)!important}
+.bx.bl{border-color:#3d6ef5;background:#f0f4ff}.bx.bl:hover{background:#e8edff}
+.bx.pu{border-color:#7c5cfc;background:#f8f5ff}.bx.pu:hover{background:#f0eaff}
+.bn{font-size:11px;font-weight:600;color:#111;line-height:1.3}
+.bt{font-size:9.5px;font-weight:600;margin-top:2px}
+.bx.bl .bt{color:#3d6ef5}.bx.pu .bt{color:#5830d8}
+.bx:not(.bl):not(.pu) .bt{color:#e8440a}
+.bs{font-size:9px;color:#999;margin-top:2px;line-height:1.3}
+
+.prow{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.prow:last-of-type{margin-bottom:0}
+.pico{font-size:17px;color:#555;flex-shrink:0;line-height:1}
+.parr{flex:1;height:1px;background:#ccc;position:relative;min-width:8px}
+.parr::after{content:'\25B6';position:absolute;right:-5px;top:-6px;font-size:8px;color:#bbb}
+.sbox{border:1.5px solid #f5a623;border-radius:7px;padding:5px 8px;background:#fff9f0;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;text-align:center;flex-shrink:0;min-width:92px;max-width:112px}
+.sbox:hover{background:#fff0d0;transform:translateY(-1px)}
+.sbox.active{border-color:#e8440a;background:#fff0d0;box-shadow:0 0 0 3px rgba(232,68,10,.12)}
+.stch{font-size:8.5px;font-weight:500;margin-top:1px;color:#e8440a}
+.blbl{font-size:9px;color:#bbb;text-align:center;margin-top:8px;font-style:italic}
+
+.harr{display:flex;align-items:center;gap:0}
+.hl{height:2px;background:#ddd;flex:1;position:relative;min-width:12px}
+.hl .pk{position:absolute;top:-3px;width:6px;height:6px;border-radius:50%;animation:pkH var(--d,2s) linear infinite;animation-delay:var(--dl,0s)}
+@keyframes pkH{0%{left:-3px;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 3px);opacity:0}}
+.hat{font-size:9px;color:#bbb;flex-shrink:0}
+.vc{display:flex;flex-direction:column;align-items:center}
+.vl{width:2px;background:#ddd;position:relative}
+.vl .pk{position:absolute;left:-3px;width:6px;height:6px;border-radius:50%;animation:pkV var(--d,2s) linear infinite;animation-delay:var(--dl,0s)}
+@keyframes pkV{0%{top:-3px;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:calc(100% - 3px);opacity:0}}
+.vt{font-size:10px;color:#bbb;text-align:center;line-height:1}
+.c2top{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.dp-lbl{font-size:9px;color:#3d6ef5;font-weight:600;white-space:nowrap;text-align:center}
+.dp-sub{font-size:8px;color:#aaa;white-space:nowrap}
+.etl-lbl{font-size:9px;color:#e8440a;font-weight:700;text-align:center}
+.c3wrap{display:flex;flex-direction:column;gap:10px}
+
+.uc-group{border:1px solid #e4e8f4;border-radius:8px;overflow:hidden;margin-bottom:6px}
+.uc-head{padding:5px 9px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #e4e8f4}
+.uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px}
+.uc-item{border:1px solid;border-radius:5px;padding:5px 8px;cursor:pointer;transition:all .12s}
+.uc-item:hover{transform:translateY(-1px)}
+.uc-id{font-size:8px;font-weight:700;letter-spacing:.06em}
+.uc-name{font-size:10px;font-weight:600;color:#111;line-height:1.25;margin-top:1px}
+.uc-sub{font-size:8.5px;color:#999;margin-top:1px}
+.g2 .uc-head{background:#fffbe8;color:#a06000}.g2 .uc-item{border-color:#f5c060;background:#fffef5}.g2 .uc-id{color:#a06000}
+.g2 .uc-item:hover{background:#fff8e0}.g2 .uc-item.active{box-shadow:0 0 0 2px #f5a623;background:#fff3cc}
+.g3 .uc-head{background:#e8f4ff;color:#1040a0}.g3 .uc-item{border-color:#90b8f0;background:#f5f9ff}.g3 .uc-id{color:#1040a0}
+.g3 .uc-item:hover{background:#e8f0ff}.g3 .uc-item.active{box-shadow:0 0 0 2px #3d6ef5;background:#dce8ff}
+.g4 .uc-head{background:#eef5e8;color:#1a6020}.g4 .uc-item{border-color:#80c880;background:#f5fbf0}.g4 .uc-id{color:#1a6020}
+.g4 .uc-item:hover{background:#e8f7e0}.g4 .uc-item.active{box-shadow:0 0 0 2px #2dc98a;background:#d8f2e8}
+.g5 .uc-head{background:#f0ecff;color:#4020a0}.g5 .uc-item{border-color:#b090f0;background:#f8f5ff}.g5 .uc-id{color:#4020a0}
+.g5 .uc-item:hover{background:#eee8ff}.g5 .uc-item.active{box-shadow:0 0 0 2px #7c5cfc;background:#e4dcff}
+
+.s5row{border-top:2px solid #e4e8f4;display:flex;align-items:center;justify-content:center;padding:8px 20px;background:#f8f9fd}
+.s5lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#666;display:flex;align-items:center;gap:7px}
+.legend{padding:8px 20px;background:#fafbfe;border-top:1px solid #eef0f8;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555}
+.leg-sw{width:13px;height:13px;border-radius:3px;border:1.5px solid;flex-shrink:0}
+
+.drawer{display:none;border-top:2px solid #f5a623;padding:16px 20px;background:#fffcf7}
+.dhead{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px}
+.dbadge{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:#fff3dc;color:#c06000;border:1px solid #f5c060;flex-shrink:0;margin-top:2px}
+.dname{font-size:16px;font-weight:700;color:#111;line-height:1.2}
+.dtech{font-size:11px;color:#888;margin-top:2px}
+.dclose{margin-left:auto;width:24px;height:24px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:#aaa;flex-shrink:0}
+.dclose:hover{background:#fee;color:#c00}
+.dbody{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.dlbl{font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;margin-bottom:6px}
+.drow{display:flex;gap:5px;padding:3px 0;border-bottom:1px solid #f5f0e8}
+.drow:last-child{border-bottom:none}
+.ddot{width:4px;height:4px;border-radius:50%;background:#f5a623;flex-shrink:0;margin-top:5px}
+.dtext{font-size:11px;color:#555;line-height:1.5}
+
+.ixp{padding:20px}
+.ix{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.ixc{border:1px solid #dce0ee;border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;display:block;transition:all .16s;background:#fff}
+.ixc:hover{box-shadow:0 4px 18px rgba(32,96,192,.13);transform:translateY(-2px);border-color:#90b8f0}
+.ixh{background:#f4f8ff;border-bottom:1px solid #e4e8f4;padding:13px 17px;display:flex;align-items:center;gap:12px}
+.ixn{background:#2060c0;color:#fff;width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.ixt{font-size:15px;font-weight:700;line-height:1.25}
+.ixs{font-size:10px;color:#3d6ef5;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.ixb{padding:14px 17px 16px}
+.ixd{font-size:11.5px;color:#666;line-height:1.6;margin-bottom:11px;min-height:38px}
+.ixtag{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ixtag span{font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:10px;background:#eef4ff;color:#2060c0}
+.ixf{display:flex;padding-top:11px;border-top:1px solid #eef0f8;align-items:center;justify-content:flex-end}
+.ixf .go{font-size:11.5px;font-weight:700;color:#2060c0}
+
+.mp{padding:22px 24px 28px;background:#fbfcfe}
+.tier{background:#fff;border:1px solid #e8ecf6;border-radius:14px;padding:0 0 4px;margin-bottom:0}
+.tierh{display:flex;align-items:center;gap:13px;padding:12px 18px 10px}
+.tierb{background:#eef2ff;color:#3d6ef5;font-size:10px;font-weight:800;letter-spacing:.09em;padding:4px 11px;border-radius:6px}
+.tiert{font-size:13px;font-weight:600;color:#444}
+.tierc{padding:0 18px 16px}
+.goal{border-left:3px solid #3d6ef5;background:#fbfcff;border-radius:0 8px 8px 0;padding:12px 16px;font-size:12.5px;font-style:italic;color:#555;line-height:1.55;margin-bottom:18px}
+.qcols{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.qcol{padding:0 22px;border-right:1px solid #eef0f6}
+.qcol:first-child{padding-left:4px}
+.qcol:last-child{border-right:none;padding-right:4px}
+.qh{font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:11px}
+.qh i{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.qq{display:flex;gap:8px;font-size:12px;color:#666;line-height:1.55;padding:4px 0}
+.qq b{color:#c8cede;font-weight:400;flex-shrink:0}
+.tierlink{display:grid;grid-template-columns:repeat(3,1fr);height:22px}
+.tierlink span{border-right:1px dashed #d8deec;display:block}
+.tierlink span:last-child{border-right:none}
+.depts{display:grid;grid-template-columns:1.28fr 1fr 1fr;gap:16px}
+.dept{border:1px solid #e8ecf6;border-radius:13px;overflow:hidden;background:#fff}
+.depth{padding:13px 16px;display:flex;align-items:center;gap:11px}
+.depti{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0}
+.deptn{font-size:14px;font-weight:700;line-height:1.2}
+.depte{font-size:9.5px;font-weight:600;letter-spacing:.07em;margin-top:2px;opacity:.72}
+.deptb{padding:12px 14px 15px;display:grid;gap:0 18px}
+.deptb.two{grid-template-columns:1fr 1fr}
+.grp{min-width:0}
+.grpt{font-size:10px;font-weight:700;letter-spacing:.07em;margin-bottom:9px;padding-bottom:5px;border-bottom:1px solid #f0f2f8}
+.itm{display:flex;align-items:center;gap:8px;border:1px solid #eef0f6;border-radius:8px;padding:8px 11px;margin-bottom:7px;font-size:11.5px;color:#333;line-height:1.35}
+.itm i{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.itm span{flex:1;min-width:0}
+.bdg{font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:4px;flex-shrink:0;letter-spacing:.03em}
+.bdg.kpi{background:#e8f0ff;color:#2060c0}
+.bdg.alert{background:#fdeaee;color:#c02040}
+.bdg.timeline{background:#f0ecff;color:#5830d8}
+.bdg.heatmap{background:#fff4e0;color:#a06000}
+.bdg.bang{background:#eef5e8;color:#1a6020}
+.mlinks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mlink{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e8ecf6;border-radius:10px;padding:13px 16px;background:#fff;text-decoration:none;color:#333;font-size:12.5px;font-weight:600;transition:all .14s}
+.mlink:hover{border-color:#90b8f0;box-shadow:0 3px 12px rgba(32,96,192,.1);transform:translateY(-1px);color:#2060c0}
+.mlink em{font-style:normal;color:#c8cede;font-size:14px}
+.mlink:hover em{color:#2060c0}
+@media(max-width:1180px){.qcols,.depts,.mlinks,.tierlink{grid-template-columns:1fr}.qcol{border-right:none;border-bottom:1px solid #eef0f6;padding:10px 4px}.qcol:last-child{border-bottom:none}.deptb.two{grid-template-columns:1fr}.tierlink{display:none}}
+@media(max-width:1180px){.hrow,.mgrid{grid-template-columns:1fr 1fr}#overlay{display:none}.ix,.rm{grid-template-columns:1fr}.dbody{grid-template-columns:1fr}}
+</style></head><body>
+<div class="page">
+<div class="hdr">
+  <img src="data:image/png;base64,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" alt="AIT">
+  <div><h1>Sơ đồ Giải pháp Dữ liệu &amp; Báo cáo</h1>
+  <div class="hsub">AIT CORP × Base.vn · 2026 — bấm vào từng khối để xem chi tiết</div></div>
+</div>
+
+<div class="tabnav" id="tabnav">
+  <a class="on" onclick="switchTab('overview',this)">Tổng quan</a>
+  <a onclick="switchTab('map',this)">Bản đồ báo cáo quản trị</a>
+  <a onclick="switchTab('reports',this)">Danh mục báo cáo</a>
+</div>
+
+<div class="tabpage on" id="tab-overview">
+<div class="card">
+<div class="hrow">
+  <div class="hcell"><span class="hn" style="background:#c07010">1</span>SỐ HÓA</div>
+  <div class="hcell"><span class="hn" style="background:#2060c0">2</span>LƯU TRỮ</div>
+  <div class="hcell"><span class="hn" style="background:#5830d8">3</span>PHÂN PHỐI</div>
+  <div class="hcell"><span class="hn" style="background:#1a6a3a">4</span>SỬ DỤNG &amp; AI</div>
+</div>
+
+<div class="mgrid" id="mgrid">
+<svg id="overlay"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker></defs></svg>
+
+<div class="mcell">
+  <div class="zone" style="border-color:#f5c060;background:#fffdf4;min-width:0">
+    <div class="prow"><span class="pico">&#128100;</span><div class="parr"></div>
+      <div class="sbox" id="s-wework" onclick="pick('wework')">Base WeWork<div class="stch">Dự án · công việc</div></div></div>
+    <div class="prow"><span class="pico">&#128100;</span><div class="parr"></div>
+      <div class="sbox" id="s-workflow" onclick="pick('workflow')">Base WorkFlow<div class="stch">16 quy trình</div></div></div>
+    <div class="prow"><span class="pico">&#128100;</span><div class="parr"></div>
+      <div class="sbox" id="s-service" onclick="pick('service')">Base Service<div class="stch">Đề xuất tạm ứng</div></div></div>
+    <div class="prow" style="margin-bottom:0"><span class="pico">&#128196;</span><div class="parr"></div>
+      <div class="sbox" id="s-excel" onclick="pick('excel')">Excel<div class="stch">Hoá đơn · dự toán</div></div></div>
+    <div class="blbl">đồng bộ theo lịch 2–4 giờ</div>
+  </div>
+</div>
+
+<div class="mcell" style="padding:0">
+  <div style="padding:12px 12px 10px;border-bottom:2px dashed #c8d8f0;background:#f4f8ff">
+    <div style="font-size:8px;font-weight:700;color:#2060c0;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:5px">
+      <span style="background:#2060c0;color:#fff;font-size:7px;padding:1px 6px;border-radius:8px">2</span>LƯU TRỮ
+    </div>
+    <div class="c2top">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="dp-lbl">Data pipeline</div><div class="dp-sub">đồng bộ theo lịch</div>
+      </div>
+      <div style="flex-shrink:0">
+        <div style="font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#3d6ef5;text-align:center;margin-bottom:3px">Google BigQuery</div>
+        <div class="bx bl" id="b-lake" onclick="pick('lake')" style="width:100px">
+          <div class="bn" style="font-size:11px">Data Lake</div><div class="bs">Dữ liệu thô</div></div>
+      </div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:18px">
+        <div class="etl-lbl">ETL</div>
+        <div class="harr" style="width:28px"><div class="hl" style="background:#f5c090"><div class="pk" style="background:#e8440a;--d:1.4s;--dl:0"></div></div><div class="hat">&#9654;</div></div>
+      </div>
+      <div style="flex-shrink:0">
+        <div style="height:18px"></div>
+        <div class="bx bl" id="b-dwh" onclick="pick('dwh')" style="width:116px">
+          <div class="bn" style="font-size:11px">Data Warehouse</div><div class="bs">SQL · chuẩn hoá</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:13px 12px;background:#fffaf4">
+    <div style="font-size:8px;font-weight:700;color:#c07010;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:5px">
+      <span style="background:#c07010;color:#fff;font-size:7px;padding:1px 6px;border-radius:8px">5</span>GIÁM SÁT HỆ THỐNG
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div class="vc"><div class="vl" style="height:10px"><div class="pk" style="background:#3d6ef5;--d:2s;--dl:0"></div></div><div class="vt">&#9660;</div></div>
+      <div class="bx" id="b-mon" onclick="pick('mon')" style="width:190px">
+        <div class="bn">Giám sát &amp; ghi log</div><div class="bt">số bản ghi mỗi lần chạy</div></div>
+      <div class="vc" style="margin-top:4px"><div class="vl" style="height:10px"><div class="pk" style="background:#f5a623;--d:1.9s;--dl:.2s"></div></div><div class="vt">&#9660;</div></div>
+      <div class="bx" id="b-alert" onclick="pick('alert')" style="width:190px">
+        <div class="bn">Cảnh báo khi lỗi</div><div class="bt">Mail · Base Message</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="mcell">
+  <div style="font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#5830d8;text-align:center;margin-bottom:9px">Data Mart — BigQuery</div>
+  <div class="c3wrap">
+    <div class="bx pu" id="b-mart1" onclick="pick('mart1')"><div class="bn">Dự án &amp; tiến độ</div><div class="bt">giai đoạn · nghiệm thu</div></div>
+    <div class="bx pu" id="b-mart2" onclick="pick('mart2')"><div class="bn">Tài chính công trình</div><div class="bt">doanh thu · công nợ</div></div>
+    <div class="bx pu" id="b-mart3" onclick="pick('mart3')"><div class="bn">Mua sắm &amp; vật tư</div><div class="bt">dự toán · nhập kho</div></div>
+  </div>
+</div>
+
+<div class="mcell">
+  <div class="zone" style="border-color:#80c880;background:#fafdf8;padding:10px 9px">
+    <div class="uc-group g5">
+      <div class="uc-head">Trợ lý AI</div>
+      <div class="uc-grid">
+        <div class="uc-item" id="u-ai" onclick="pick('ai')" style="grid-column:1/-1"><div class="uc-id">AI</div><div class="uc-name">Claude — hỏi đáp trực tiếp trên kho dữ liệu</div><div class="uc-sub">truy vấn 4 kho chủ đề · trả lời kèm số liệu và nguồn</div></div>
+      </div>
+    </div>
+    <div class="uc-group g3">
+      <div class="uc-head">Báo cáo điều hành</div>
+      <div class="uc-grid">
+        <div class="uc-item" id="u-r_tq" onclick="pick('r_tq')"><div class="uc-id">BC 01</div><div class="uc-name">Tổng quan điều hành</div><div class="uc-sub">1 trang · đã có</div></div>
+        <div class="uc-item" id="u-r_td" onclick="pick('r_td')"><div class="uc-id">BC 02</div><div class="uc-name">Tiến độ dự án</div><div class="uc-sub">2 trang · đã có</div></div>
+      </div>
+    </div>
+    <div class="uc-group g2">
+      <div class="uc-head">Báo cáo tài chính</div>
+      <div class="uc-grid">
+        <div class="uc-item" id="u-r_tc" onclick="pick('r_tc')" style="grid-column:1/-1"><div class="uc-id">BC 03</div><div class="uc-name">Tài chính — doanh thu, chi phí, công nợ và dòng tiền</div><div class="uc-sub">3 trang · đã có</div></div>
+      </div>
+    </div>
+    <div class="uc-group g4" style="margin-bottom:0">
+      <div class="uc-head">Báo cáo vận hành</div>
+      <div class="uc-grid">
+        <div class="uc-item" id="u-r_ms" onclick="pick('r_ms')" style="grid-column:1/-1"><div class="uc-id">BC 04</div><div class="uc-name">Mua sắm vật tư — dự toán, nhà cung cấp và kho</div><div class="uc-sub">2 trang · đã có</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="s5row"><div class="s5lbl"><span class="hn" style="background:#c07010">5</span>Giám sát hệ thống — chạy xuyên suốt các lớp</div></div>
+
+<div class="legend">
+  <div class="leg-item"><span class="leg-sw" style="border-color:#f5a623;background:#fff9f0"></span>Nguồn dữ liệu đang vận hành</div>
+  <div class="leg-item"><span class="leg-sw" style="border-color:#3d6ef5;background:#f0f4ff"></span>Lưu trữ</div>
+  <div class="leg-item"><span class="leg-sw" style="border-color:#7c5cfc;background:#f8f5ff"></span>Kho chủ đề</div>
+  <div class="leg-item"><span class="leg-sw" style="border-color:#2dc98a;background:#f0faf5"></span>Báo cáo &amp; phân tích</div>
+  <div class="leg-item" style="color:#aaa">· Hạt chạy trên đường nối thể hiện luồng dữ liệu</div>
+</div>
+
+<div class="drawer" id="drawer">
+  <div class="dhead">
+    <span class="dbadge" id="db">–</span>
+    <div><div class="dname" id="dn">–</div><div class="dtech" id="dt">–</div></div>
+    <button class="dclose" onclick="pick(cur)">&#10005;</button>
+  </div>
+  <div class="dbody" id="dd"></div>
+</div>
+</div>
+</div>
+
+<div class="tabpage" id="tab-map">
+<div class="mp">
+  <div class="tier">
+    <div class="tierh"><span class="tierb">TẦNG 1</span><span class="tiert">Tổng quan dự án — Ban lãnh đạo</span></div>
+    <div class="tierc">
+      <div class="goal" id="goal"></div>
+      <div class="qcols" id="qcols"></div>
+    </div>
+  </div>
+
+  <div class="tierlink"><span></span><span></span><span></span></div>
+
+  <div class="tier" style="border:0;background:none;padding:0">
+    <div class="tierh"><span class="tierb">TẦNG 2</span><span class="tiert">Phòng ban / Bộ phận — Báo cáo chi tiết nghiệp vụ</span></div>
+    <div class="depts" id="depts"></div>
+  </div>
+
+  <div class="tier" style="border:0;background:none;padding:0;margin-top:22px">
+    <div class="tierh"><span class="tierb" style="background:#eefaf5;color:#1a7040">FILE</span><span class="tiert">Bốn lát cắt báo cáo tương ứng</span></div>
+    <div class="mlinks" id="mlinks"></div>
+  </div>
+</div>
+</div>
+
+<div class="tabpage" id="tab-reports">
+<div class="card"><div class="ixp">
+  <div style="font-size:11.5px;color:#666;line-height:1.6;margin-bottom:16px;padding:10px 14px;background:#f4f8ff;border-left:3px solid #2060c0;border-radius:0 6px 6px 0">
+    Bốn lát cắt báo cáo đang triển khai cho AIT CORP. Bấm vào từng thẻ để mở báo cáo chi tiết. Các file đặt cùng thư mục nên mở trực tiếp được, không cần máy chủ.
+  </div>
+  <div class="ix" id="ix"></div>
+</div></div>
+</div>
+
+</div>
+
+<script>
+const D={"wework": {"badge": "Số hóa · Dự án", "name": "Base WeWork", "tech": "Base.vn API · dự án DAWW · 14 nhóm công việc", "role": ["Mỗi dự án là một DAWW theo vòng đời hợp đồng", "14 nhóm việc: Đấu thầu → Ký HĐ → Thiết kế → Mua sắm → Thi công → Quyết toán", "Giao việc, thời hạn và người thực hiện theo phòng ban"], "flow": ["Lấy theo lịch 4 giờ/lần qua Base Open API", "Trường: mã dự án · công việc · trạng thái · thời hạn · ngày hoàn thành"], "note": ["~8 dự án đang chạy · khoảng 120 công việc mỗi dự án", "Tên công việc phải theo Phụ lục 01 để ghép đúng quy trình"]}, "workflow": {"badge": "Số hóa · Quy trình", "name": "Base WorkFlow", "tech": "AIT-QT-DS · 16 quy trình AIT-QT-XX", "role": ["Mỗi nhiệm vụ chi tiết ứng với một công việc bên WeWork", "Ghi dấu thời gian vào và ra từng giai đoạn", "QT-04 Kế hoạch · QT-05 Thiết kế · QT-06 Mua sắm · QT-10 Nghiệm thu · QT-14 Thanh toán"], "flow": ["Lấy theo lịch 4 giờ/lần", "Trường: giai đoạn hiện tại · thời gian từng bước · người xử lý"], "note": ["Đây là nguồn duy nhất tính được SLA và thời gian dừng ở từng bước"]}, "service": {"badge": "Số hóa · Yêu cầu", "name": "Base Service", "tech": "Phiếu yêu cầu nội bộ · luồng phê duyệt", "role": ["Đề xuất tạm ứng và đề nghị mua sắm", "Gắn với một dự án và một cấp phê duyệt", "Theo dõi thời gian chờ ở từng cấp"], "flow": ["Lấy theo lịch 2 giờ/lần", "Trường: mã phiếu · người đề xuất · số tiền · cấp duyệt · ngày chờ"], "note": ["Dùng để phát hiện đề xuất tồn đọng quá 14 ngày"]}, "excel": {"badge": "Số hóa · Kế toán", "name": "Excel", "tech": "Nhập qua Google Sheet có ràng buộc định dạng", "role": ["Hoá đơn bán ra và chứng từ phải trả", "Dự toán gói thầu được duyệt và giá ký hợp đồng", "Bảo lãnh ngân hàng còn hiệu lực"], "flow": ["Nhập vào Sheet trung gian, đồng bộ 1 lần mỗi ngày", "Kết nối trực tiếp nếu phần mềm kế toán có API"], "note": ["Nhập tay dễ sai mã dự án — cần danh mục dùng chung", "Luồng đồng bộ đối chiếu mã và báo lỗi ngay khi lệch"]}, "lake": {"badge": "Lưu trữ", "name": "Data Lake", "tech": "Google BigQuery · dữ liệu thô, không sửa", "role": ["Giữ nguyên dữ liệu gốc lấy từ nguồn", "Không biến đổi, không xoá — truy vết được lịch sử", "Phân vùng theo ngày lấy dữ liệu"], "flow": ["Nhận từ luồng đồng bộ theo lịch", "Ghi thêm, không ghi đè"], "note": ["Khi cần dựng lại kho có thể tính lại toàn bộ từ đây"]}, "dwh": {"badge": "Lưu trữ", "name": "Data Warehouse", "tech": "BigQuery · SQL · đã chuẩn hoá", "role": ["Chuẩn hoá danh mục dùng chung: mã dự án, phòng ban, nhà cung cấp", "Khử trùng lặp và thống nhất định dạng", "Nối dữ liệu WeWork với WorkFlow theo mã công việc"], "flow": ["ETL từ Data Lake, chạy sau mỗi lần đồng bộ", "Kiểm tra ràng buộc trước khi ghi"], "note": ["Lệch mã dự án giữa Base và kế toán là lỗi hay gặp nhất"]}, "mon": {"badge": "Giám sát", "name": "Giám sát &amp; ghi log", "tech": "Theo dõi mọi lần chạy luồng", "role": ["Ghi số bản ghi mỗi lần chạy để đối chiếu", "Phát hiện luồng chạy lỗi hoặc không chạy", "Theo dõi độ trễ đồng bộ giữa các nguồn"], "flow": ["Ghi log sau mỗi lần luồng chạy", "Thử lại 3 lần trước khi báo lỗi"], "note": ["Không có giám sát thì báo cáo sai mà không ai biết"]}, "alert": {"badge": "Giám sát", "name": "Cảnh báo khi lỗi", "tech": "Mail · Base Message", "role": ["Báo lỗi đồng bộ ngay khi phát sinh", "Báo dữ liệu bất thường: mã dự án lạ, số âm, trống bắt buộc"], "flow": ["Mail cho quản trị dữ liệu", "Tin nhắn vào kênh Base Message của nhóm phụ trách"], "note": ["Kèm mã lỗi và tên luồng để xử lý nhanh"]}, "mart1": {"badge": "Phân phối · Kho chủ đề", "name": "Kho Dự án &amp; tiến độ", "tech": "BigQuery Data Mart", "role": ["Gom WeWork và WorkFlow về một bảng theo công việc", "Tính sẵn tiến độ theo giai đoạn và thời gian dừng từng bước", "Đợt nghiệm thu và bảo lãnh theo hợp đồng"], "flow": ["Cập nhật sau mỗi lần ETL"], "note": ["Phục vụ báo cáo Tiến độ dự án và Tổng quan điều hành"]}, "mart2": {"badge": "Phân phối · Kho chủ đề", "name": "Kho Tài chính công trình", "tech": "BigQuery Data Mart", "role": ["Doanh thu ghi nhận theo đợt nghiệm thu", "Chi phí theo hạng mục và theo tháng", "Công nợ phải thu, phải trả, dòng tiền, tạm ứng"], "flow": ["Nối dữ liệu Base với hoá đơn từ kế toán qua mã dự án"], "note": ["Chỉ tiêu tính sẵn: biên lợi nhuận · tuổi nợ · số ngày thu bình quân"]}, "mart3": {"badge": "Phân phối · Kho chủ đề", "name": "Kho Mua sắm &amp; vật tư", "tech": "BigQuery Data Mart", "role": ["Đơn mua sắm theo quy trình AIT-QT-06", "Dự toán duyệt, giá ký hợp đồng, phát sinh sau ký", "Phiếu nhập kho và đánh giá nhà cung cấp"], "flow": ["Ghép đơn mua sắm với dự toán từ Sheet kế toán"], "note": ["Chỉ tiêu tính sẵn: chênh lệch so dự toán · thời gian giao · tỷ lệ đúng hẹn"]}, "ai": {"badge": "Sử dụng · Trợ lý AI", "name": "Claude — hỏi đáp trên kho dữ liệu", "tech": "Truy vấn trực tiếp 3 kho chủ đề", "role": ["Đặt câu hỏi bằng tiếng Việt, không cần mở báo cáo", "Trả lời kèm số liệu cụ thể và nguồn trích từ kho nào", "Tổng hợp chéo nhiều kho trong một câu trả lời"], "flow": ["Câu hỏi được chuyển thành truy vấn trên Data Mart", "Kho đã tính sẵn chỉ tiêu nên trả lời nhanh, không phải nối bảng thô"], "note": ["Ví dụ: dự án nào chậm thu tiền nhất · gói thầu nào vượt dự toán · nhà cung cấp nào hay giao trễ", "Điều kiện: kho dữ liệu chuẩn hoá và có từ điển trường dữ liệu"]}, "r_tq": {"badge": "Sử dụng · Báo cáo", "name": "Tổng quan điều hành", "tech": "Đã triển khai · 1 trang", "role": ["Kết quả kinh doanh toàn danh mục", "Danh mục 8 dự án với tiến độ và tỷ lệ thu tiền", "Dẫn tới ba báo cáo chi tiết"], "flow": ["Nguồn: Kho Dự án · Kho Tài chính"], "note": ["Dành cho ban lãnh đạo xem nhanh mỗi tuần"]}, "r_td": {"badge": "Sử dụng · Báo cáo", "name": "Tiến độ dự án", "tech": "Đã triển khai · 2 trang", "role": ["Giai đoạn từng công trình theo AIT-QT-DS", "Các đợt nghiệm thu theo mẫu thanh toán", "SLA quy trình mua sắm và đơn tồn đọng"], "flow": ["Nguồn: Kho Dự án · Kho Mua sắm"], "note": ["Trả lời được dự án chậm vì kẹt ở bước nào và bao lâu"]}, "r_tc": {"badge": "Sử dụng · Báo cáo", "name": "Tài chính", "tech": "Đã triển khai · 3 trang", "role": ["Doanh thu công trình so kế hoạch, biên lợi nhuận theo dự án", "Chi phí đối chiếu ngân sách, dự báo hoàn thành", "Công nợ, dòng tiền, tạm ứng và bảo lãnh"], "flow": ["Nguồn: Kho Tài chính · Kho Dự án · Kho Mua sắm"], "note": ["Cảnh báo dự án thu tiền chậm hơn tiến độ trên 20 điểm"]}, "r_ms": {"badge": "Sử dụng · Báo cáo", "name": "Mua sắm vật tư", "tech": "Đã triển khai · 2 trang", "role": ["Đối chiếu dự toán, giá ký hợp đồng và giá thực tế", "Phát sinh sau ký kèm nguyên nhân", "Nhà cung cấp và tình hình nhập kho"], "flow": ["Nguồn: Kho Mua sắm"], "note": ["Tổng giá trị khớp hạng mục Vật tư thiết bị của báo cáo Tài chính"]}};
+const REPORTS=[["01", "Tổng quan điều hành", "Bức tranh toàn danh mục", "Kết quả kinh doanh toàn công ty, danh mục 8 dự án với tiến độ và tỷ lệ thu tiền, dẫn tới ba báo cáo chi tiết.", ["Kết quả kinh doanh", "Danh mục dự án", "Liên kết báo cáo"], [["391,6", "tổng giá trị hợp đồng (tỷ đ)"], ["8", "dự án đang chạy"]], "AIT_BaoCao_TongQuan.html"], ["02", "Tiến độ dự án", "Giai đoạn · nghiệm thu · SLA", "Giai đoạn từng công trình theo AIT-QT-DS, các đợt nghiệm thu, và SLA quy trình mua sắm AIT-QT-06 kèm đơn tồn đọng.", ["Tiến độ công trình", "Quy trình &amp; SLA"], [["2", "trang báo cáo"], ["6", "giai đoạn quy trình"]], "AIT_BaoCao_TienDo.html"], ["03", "Tài chính", "Doanh thu · chi phí · dòng tiền", "Doanh thu công trình theo nghiệm thu, chi phí đối chiếu ngân sách, công nợ phải thu phải trả, dòng tiền và tạm ứng.", ["Doanh thu công trình", "Chi phí &amp; ngân sách", "Công nợ &amp; dòng tiền"], [["248,1", "doanh thu ghi nhận (tỷ đ)"], ["49,0", "công nợ phải thu (tỷ đ)"]], "AIT_BaoCao_TaiChinh.html"], ["04", "Mua sắm vật tư", "Dự toán · nhà cung cấp · kho", "Đối chiếu dự toán duyệt với giá ký hợp đồng và giá thực tế cho từng gói thầu, đánh giá nhà cung cấp và nhập kho.", ["Mua sắm &amp; dự toán", "Nhà cung cấp &amp; kho"], [["117,6", "giá trị mua sắm (tỷ đ)"], ["28", "đơn mua sắm"]], "AIT_BaoCao_MuaSam.html"]];
+const TIER1_GOAL="Theo dõi tổng quan toàn danh mục dự án EPC — bức tranh nhanh về doanh thu, tiến độ, dòng tiền và cảnh báo rủi ro";
+const TIER1=[["Kết quả &amp; Tiến độ", "#3d6ef5", ["Doanh thu tháng này đạt bao nhiêu phần trăm kế hoạch?", "Biên lợi nhuận gộp toàn danh mục đang ở mức nào?", "Dự án nào đang chậm tiến độ và chậm bao nhiêu?"]], ["Dòng tiền &amp; Công nợ", "#7c5cfc", ["Công nợ phải thu bao nhiêu, quá hạn bao nhiêu?", "Tháng tới dự kiến thu và chi bao nhiêu?", "Dự án nào thu tiền chậm hơn tiến độ thi công?"]], ["Cảnh báo", "#e05570", ["Gói thầu nào có giá ký vượt dự toán?", "Đơn mua sắm nào đang vượt SLA quy trình?", "Hoá đơn nào quá hạn trên 90 ngày cần xử lý gấp?"]]];
+const TIER2=[["Ban quản lý dự án", "PROJECT MANAGEMENT", "&#9635;", "#4a5fd0", "#f0f2ff", [["TIẾN ĐỘ CÔNG TRÌNH", [["Giai đoạn dự án theo AIT-QT-DS", "Timeline"], ["Đợt nghiệm thu theo mẫu thanh toán", ""], ["Tiến độ thi công vs tỷ lệ thu tiền", "KPI"], ["Danh mục dự án theo phòng ban", ""], ["Dự án chậm thu tiền trên 20 điểm", "Alert"]]], ["QUY TRÌNH &amp; SLA", [["Sơ đồ 6 giai đoạn AIT-QT-06", ""], ["Phễu số đơn qua từng bước", ""], ["Thời gian thực tế so SLA", "KPI"], ["Phân bố đơn theo dự án × giai đoạn", "Heatmap"], ["Đơn tồn đọng vượt SLA", "Alert"]]]]], ["Phòng Vật tư &#8211; XNK", "PROCUREMENT", "&#128722;", "#1a9e7c", "#eefaf5", [["DỰ TOÁN &amp; MUA SẮM", [["Đối chiếu dự toán &#8212; giá ký &#8212; thực tế", ""], ["Chênh lệch so dự toán theo dự án", "KPI"], ["Chi tiết từng gói thầu", "Bảng"], ["Phát sinh sau ký kèm nguyên nhân", "Alert"], ["Gói thầu vượt dự toán", "Alert"]]], ["NHÀ CUNG CẤP &amp; KHO", [["Giá trị mua vào theo nhà cung cấp", ""], ["Tỷ lệ giao đúng hẹn", "KPI"], ["Điểm chất lượng và xếp loại", ""], ["Nhập kho theo tháng và theo kho", ""], ["Vật tư trễ hẹn giao", "Alert"]]]]], ["Phòng Tài chính &#8211; Kế toán", "FINANCE &amp; ACCOUNTING", "&#128181;", "#e05570", "#fef0f3", [["DOANH THU &amp; CHI PHÍ", [["Doanh thu thực tế vs kế hoạch", ""], ["Biên lợi nhuận gộp theo dự án", "KPI"], ["Chi phí theo hạng mục và theo tháng", ""], ["Chi phí dự án × hạng mục", "Heatmap"], ["Dự báo hoàn thành theo run-rate", "KPI"], ["Chi tiết khoản chi theo dự án", "Bảng"]]], ["CÔNG NỢ &amp; DÒNG TIỀN", [["Dòng tiền thu chi theo tháng", ""], ["Tuổi nợ phải thu và phải trả", ""], ["Hoá đơn quá hạn trên 60 ngày", "Alert"], ["Đề xuất tạm ứng chờ duyệt", "Alert"], ["Quyết toán hợp đồng", ""], ["Bảo lãnh sắp hết hạn", "Alert"]]]]]];
+const MAPLINKS=[["Tổng quan điều hành", "AIT_BaoCao_TongQuan.html"], ["Tiến độ dự án", "AIT_BaoCao_TienDo.html"], ["Tài chính", "AIT_BaoCao_TaiChinh.html"], ["Mua sắm vật tư", "AIT_BaoCao_MuaSam.html"]];
+
+function switchTab(id,el){
+  document.querySelectorAll('.tabpage').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tabnav a').forEach(function(a){a.classList.remove('on');});
+  document.getElementById('tab-'+id).classList.add('on');
+  el.classList.add('on');
+  if(id==='overview'){setTimeout(function(){drawConnectors();},150);}
+}
+
+const DOTS=[];
+function getR(id){
+  const el=document.getElementById(id); if(!el)return null;
+  const gr=document.getElementById('mgrid').getBoundingClientRect();
+  const r=el.getBoundingClientRect();
+  return{cy:r.top-gr.top+r.height/2, rx:r.left-gr.left+r.width, lx:r.left-gr.left};
+}
+function conn(svg,x1,y1,x2,y2,color,dur,delay){
+  const ns='http://www.w3.org/2000/svg', mx=(x1+x2)/2;
+  const path=document.createElementNS(ns,'path');
+  path.setAttribute('d','M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2);
+  path.setAttribute('fill','none');path.setAttribute('stroke',color);
+  path.setAttribute('stroke-width','1.5');path.setAttribute('opacity','0.45');
+  path.setAttribute('marker-end','url(#ah)');
+  svg.appendChild(path);
+  const dot=document.createElementNS(ns,'circle');
+  dot.setAttribute('r','3.5');dot.setAttribute('fill',color);dot.setAttribute('opacity','0');
+  svg.appendChild(dot);
+  DOTS.push({dot:dot,path:path,dur:dur*1000,delay:delay*1000,start:null});
+}
+function connLabel(svg,x,y,text,color){
+  const ns='http://www.w3.org/2000/svg';
+  const tx=document.createElementNS(ns,'text');
+  tx.setAttribute('x',x);tx.setAttribute('y',y);tx.setAttribute('text-anchor','middle');
+  tx.setAttribute('font-size','8.5');tx.setAttribute('fill',color);tx.setAttribute('font-weight','700');
+  tx.setAttribute('font-family','Be Vietnam Pro,sans-serif');
+  tx.textContent=text; svg.appendChild(tx);
+}
+function animDots(ts){
+  DOTS.forEach(function(d){
+    if(d.start===null){ if(ts<d.delay){d.dot.setAttribute('opacity','0');return;} d.start=ts-d.delay; }
+    const t=((ts-d.start)%d.dur)/d.dur;
+    const len=d.path.getTotalLength(); const pt=d.path.getPointAtLength(t*len);
+    d.dot.setAttribute('cx',pt.x);d.dot.setAttribute('cy',pt.y);
+    d.dot.setAttribute('opacity', t<0.05||t>0.95?'0':'1');
+  });
+  requestAnimationFrame(animDots);
+}
+let animOn=false;
+function drawConnectors(){
+  const svg=document.getElementById('overlay'); if(!svg)return;
+  while(svg.children.length>1)svg.removeChild(svg.lastChild);
+  DOTS.length=0;
+  const gr=document.getElementById('mgrid'); if(!gr)return;
+  svg.setAttribute('width',gr.offsetWidth); svg.setAttribute('height',gr.offsetHeight);
+  const lk=getR('b-lake'), dwh=getR('b-dwh');
+  if(!lk||!dwh)return;
+  [['s-wework',0],['s-workflow',.35],['s-service',.7],['s-excel',1.05]].forEach(function(a){
+    const s=getR(a[0]); if(!s)return;
+    conn(svg,s.rx,s.cy,lk.lx,lk.cy,'#c8a060',2.2,a[1]);
+  });
+  [['b-mart1',0],['b-mart2',.4],['b-mart3',.8]].forEach(function(a){
+    const m=getR(a[0]); if(!m)return;
+    conn(svg,dwh.rx,dwh.cy,m.lx,m.cy,'#7c5cfc',2.3,a[1]);
+  });
+  const m0=getR('b-mart1');
+  if(m0) connLabel(svg,(dwh.rx+m0.lx)/2,Math.min(dwh.cy,m0.cy)-20,'Data pipeline 2 — chuẩn hoá theo chủ đề','#7c5cfc');
+  const col4=document.querySelectorAll('.mcell')[3]; if(!col4)return;
+  const grR=gr.getBoundingClientRect(), c4=col4.getBoundingClientRect();
+  const c4lx=c4.left-grR.left;
+  ['b-mart1','b-mart2','b-mart3'].forEach(function(mid,i){
+    const m=getR(mid); if(!m)return;
+    conn(svg,m.rx,m.cy,c4lx,m.cy,'#2dc98a',2.1,i*0.28);
+  });
+  if(!animOn){animOn=true;requestAnimationFrame(animDots);}
+}
+window.addEventListener('load',function(){setTimeout(drawConnectors,300);});
+window.addEventListener('resize',function(){DOTS.length=0;drawConnectors();});
+
+let cur=null;
+function pick(id){
+  document.querySelectorAll('.bx,.sbox,.uc-item').forEach(function(e){e.classList.remove('active');});
+  const dr=document.getElementById('drawer');
+  if(cur===id){cur=null;dr.style.display='none';return;}
+  cur=id;
+  ['b-'+id,'s-'+id,'u-'+id].forEach(function(k){const el=document.getElementById(k);if(el)el.classList.add('active');});
+  const a=D[id]; if(!a)return;
+  document.getElementById('db').innerHTML=a.badge||'';
+  document.getElementById('dn').innerHTML=a.name;
+  document.getElementById('dt').innerHTML=a.tech;
+  const cols=[{l:'Vai trò',r:a.role||[]},{l:'Dòng chảy dữ liệu',r:a.flow||[]},{l:'Lưu ý',r:a.note||[]}];
+  document.getElementById('dd').innerHTML=cols.map(function(c){
+    return '<div><div class="dlbl">'+c.l+'</div>'
+      +c.r.map(function(r){return '<div class="drow"><div class="ddot"></div><div class="dtext">'+r+'</div></div>';}).join('')
+      +'</div>';}).join('');
+  dr.style.display='block';
+}
+
+function renderReports(){
+  document.getElementById('ix').innerHTML=REPORTS.map(function(r){
+    return '<a class="ixc" href="'+r[6]+'">'
+    +'<div class="ixh"><div class="ixn">'+r[0]+'</div>'
+    +'<div><div class="ixt">'+r[1]+'</div><div class="ixs">'+r[2]+'</div></div></div>'
+    +'<div class="ixb"><div class="ixd">'+r[3]+'</div>'
+    +'<div class="ixtag">'+r[4].map(function(p){return '<span>'+p+'</span>';}).join('')+'</div>'
+    +'<div class="ixf"><span class="go">Mở báo cáo &#8594;</span></div></div></a>';}).join('');
+}
+function renderMap(){
+  document.getElementById('goal').innerHTML='<b style="font-style:normal;color:#3d6ef5">Mục tiêu:</b> '+TIER1_GOAL;
+  document.getElementById('qcols').innerHTML=TIER1.map(function(t){
+    return '<div class="qcol"><div class="qh" style="color:'+t[1]+'"><i style="background:'+t[1]+'"></i>'+t[0]+'</div>'
+      +t[2].map(function(q){return '<div class="qq"><b>&#8250;</b><span>'+q+'</span></div>';}).join('')
+      +'</div>';}).join('');
+
+  document.getElementById('depts').innerHTML=TIER2.map(function(d){
+    var two=d[5].length>1;
+    return '<div class="dept">'
+      +'<div class="depth" style="background:'+d[4]+'">'
+      +'<div class="depti" style="background:'+d[3]+'">'+d[2]+'</div>'
+      +'<div><div class="deptn" style="color:'+d[3]+'">'+d[0]+'</div>'
+      +'<div class="depte" style="color:'+d[3]+'">'+d[1]+'</div></div></div>'
+      +'<div class="deptb'+(two?' two':'')+'">'
+      +d[5].map(function(g){
+        return '<div class="grp"><div class="grpt" style="color:'+d[3]+'">'+g[0]+'</div>'
+          +g[1].map(function(it){
+            var bd=it[1]?'<span class="bdg '+bcls(it[1])+'">'+it[1]+'</span>':'';
+            return '<div class="itm"><i style="background:'+d[3]+'"></i><span>'+it[0]+'</span>'+bd+'</div>';}).join('')
+          +'</div>';}).join('')
+      +'</div></div>';}).join('');
+
+  document.getElementById('mlinks').innerHTML=MAPLINKS.map(function(l){
+    return '<a class="mlink" href="'+l[1]+'"><span>'+l[0]+'</span><em>&#8594;</em></a>';}).join('');
+}
+function bcls(b){
+  var m={'KPI':'kpi','Alert':'alert','Timeline':'timeline','Heatmap':'heatmap','Bảng':'bang'};
+  return m[b]||'kpi';
+}
+renderReports(); renderMap();
+</script>
+</body></html>

@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Quy trình truy xuất nguồn gốc — Cao su Tây Ninh Siêm Riệp</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+:root{
+  --blue:#185FA5;--blue-dark:#0F3460;--blue-light:#E6F1FB;--blue-xl:#F0F6FD;
+  --teal:#1A7A5E;--teal-dark:#0A4D3C;--teal-light:#E1F5EE;--teal-xl:#F0FAF6;
+  --purple:#7B2FA0;--purple-dark:#3D1C72;--purple-light:#F0E8FA;--purple-xl:#F8F4FD;
+  --orange:#C25B10;--orange-dark:#7A3208;--orange-light:#FDE8D8;--orange-xl:#FEF4EE;
+  --rose:#8B2252;--rose-dark:#5C1538;--rose-light:#F9E0EC;--rose-xl:#FDF3F8;
+  --indigo:#2F4B9B;--indigo-dark:#1B2C63;--indigo-light:#E4EAF8;--indigo-xl:#F2F5FC;
+  --amber:#854F0B;--amber-light:#FAEEDA;
+  --green:#3B6D11;--green-light:#EAF3DE;
+  --red:#A32D2D;--red-light:#FEE8E8;
+  --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
+  --g400:#9CA3AF;--g500:#6B7280;--g700:#374151;--g900:#111827;
+  --w:#fff;--r:8px;--sh:0 1px 4px rgba(0,0,0,.08);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--g100);color:var(--g900);font-size:14px}
+
+.hdr{padding:26px 36px;color:#fff}
+.hdr-0{background:linear-gradient(135deg,var(--blue-dark),var(--blue))}
+.hdr-1{background:linear-gradient(135deg,var(--teal-dark),var(--teal))}
+.hdr-2{background:linear-gradient(135deg,var(--purple-dark),var(--purple))}
+.hdr-3{background:linear-gradient(135deg,var(--orange-dark),var(--orange))}
+.hdr-4{background:linear-gradient(135deg,var(--rose-dark),var(--rose))}
+.hdr-5{background:linear-gradient(135deg,var(--indigo-dark),var(--indigo))}
+.hdr-badge{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+.hdr h1{font-size:21px;font-weight:700;margin-bottom:4px}
+.hdr p{font-size:13px;opacity:.75}
+
+.flow-tabs{background:var(--w);border-bottom:1px solid var(--g200);display:flex;overflow-x:auto}
+.ftab{padding:13px 20px;font-size:13px;font-weight:500;color:var(--g500);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;font-family:inherit;transition:all .15s}
+.ftab:hover{color:var(--g700)}
+.ftab.fa0{color:var(--blue);border-bottom-color:var(--blue)}
+.ftab.fa1{color:var(--teal);border-bottom-color:var(--teal)}
+.ftab.fa2{color:var(--purple);border-bottom-color:var(--purple)}
+.ftab.fa3{color:var(--orange);border-bottom-color:var(--orange)}
+.ftab.fa4{color:var(--rose);border-bottom-color:var(--rose)}
+.ftab.fa5{color:var(--indigo);border-bottom-color:var(--indigo)}
+
+th/* phân loại trường */
+.fk-tag{display:inline-block;border-radius:9px;padding:0 7px;font-size:9.5px;font-weight:700;margin-left:6px;vertical-align:middle;letter-spacing:.02em;text-transform:none}
+.t-fill{background:#FDE8D8;color:#7A3208;border:1px solid #C25B10}
+.t-inh{background:var(--teal-light);color:var(--teal);border:1px solid var(--teal)}
+.t-auto{background:var(--g200);color:var(--g500);border:1px solid var(--g400)}
+.t-app{background:var(--purple-light);color:var(--purple);border:1px solid var(--purple)}
+.fk-fill input,.fk-fill select,.fk-fill textarea,.fk-fill .mdd-btn{background:var(--w);border-color:#E3B892}
+.fk-fill input:hover,.fk-fill select:hover,.fk-fill textarea:hover{border-color:var(--orange)}
+.fk-legend{display:flex;flex-wrap:wrap;gap:14px;padding:8px 22px;border-bottom:1px solid var(--g200);background:var(--g50);font-size:11px;color:var(--g500)}
+.mdd{position:relative}
+.mdd-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 11px;border:1px solid var(--g300);border-radius:var(--r);background:var(--g50);font-family:inherit;font-size:13px;color:var(--g900);cursor:pointer;text-align:left;text-transform:none;letter-spacing:0}
+.mdd-btn:hover{background:var(--w)}
+.mdd-ar{color:var(--g400);font-size:11px}
+.mdd-panel{display:none;position:absolute;z-index:60;top:calc(100% + 4px);left:0;right:0;background:var(--w);border:1px solid var(--g300);border-radius:var(--r);box-shadow:0 6px 18px rgba(0,0,0,.12);padding:5px;max-height:220px;overflow:auto}
+.mdd-panel.open{display:block}
+.mdd-opt{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:6px;font-size:12.5px;color:var(--g700);cursor:pointer;text-transform:none;letter-spacing:0;font-weight:500}
+.mdd-opt:hover{background:var(--g100)}
+.mdd-opt.on{background:var(--teal-light);color:var(--teal-dark)}
+.mdd-opt input{width:15px;height:15px;margin:0}
+.inh-tag{display:inline-block;background:var(--teal-light);color:var(--teal);border-radius:9px;padding:0 7px;font-size:10px;font-weight:600;margin-right:4px}
+.step-nav{background:var(--w);border-bottom:1px solid var(--g200);position:sticky;top:env(safe-area-inset-top,0px);z-index:100;overflow-x:auto}
+.snav-inner{display:flex;align-items:center;padding:10px 28px;min-width:max-content}
+.snav-item{display:flex;align-items:center;cursor:pointer}
+.snav-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--g300);background:var(--w);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--g400);flex-shrink:0;transition:all .2s}
+.snav-label{font-size:10px;color:var(--g500);font-weight:500;margin-left:6px;margin-right:2px;max-width:92px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snav-line{width:16px;height:2px;background:var(--g200);flex-shrink:0}
+.s0 .snav-item.sa .snav-dot{background:var(--blue);border-color:var(--blue);color:#fff}
+.s1 .snav-item.sa .snav-dot{background:var(--teal);border-color:var(--teal);color:#fff}
+.s2 .snav-item.sa .snav-dot{background:var(--purple);border-color:var(--purple);color:#fff}
+.s3 .snav-item.sa .snav-dot{background:var(--orange);border-color:var(--orange);color:#fff}
+.s4 .snav-item.sa .snav-dot{background:var(--rose);border-color:var(--rose);color:#fff}
+.s5 .snav-item.sa .snav-dot{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.snav-item.sd .snav-dot{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.snav-item.sd .snav-line{background:var(--green)}
+
+.main{max-width:1000px;margin:26px auto;padding:0 18px 60px}
+.sc{background:var(--w);border:1px solid var(--g200);border-radius:12px;overflow:hidden;box-shadow:var(--sh)}
+.sc-hdr{padding:17px 22px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:12px}
+.sc-hdr-0{background:var(--blue-xl)}.sc-hdr-1{background:var(--teal-xl)}.sc-hdr-2{background:var(--purple-xl)}
+.sc-hdr-3{background:var(--orange-xl)}.sc-hdr-4{background:var(--rose-xl)}
+.sc-hdr-5{background:var(--indigo-xl)}
+.sc-badge{min-width:34px;height:34px;border-radius:50%;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.sb0{background:var(--blue)}.sb1{background:var(--teal)}.sb2{background:var(--purple)}
+.sb3{background:var(--orange)}.sb4{background:var(--rose)}
+.sb5{background:var(--indigo)}
+.sc-title{font-size:15px;font-weight:600;margin-bottom:2px}
+.sc-title-0{color:var(--blue-dark)}.sc-title-1{color:var(--teal-dark)}.sc-title-2{color:var(--purple-dark)}
+.sc-title-3{color:var(--orange-dark)}.sc-title-4{color:var(--rose-dark)}
+.sc-title-5{color:var(--indigo-dark)}
+.sc-desc{font-size:12px;color:var(--g500)}
+
+.ibar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--g200)}
+.ibar-item{padding:9px 16px;border-right:1px solid var(--g200)}
+.ibar-item:last-child{border-right:none}
+.ilbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:2px}
+.ival{font-size:12px;color:var(--g700);font-weight:500}
+.role-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.rb0{background:var(--blue-light);color:var(--blue)}.rb1{background:var(--teal-light);color:var(--teal)}
+.rb2{background:var(--purple-light);color:var(--purple)}.rb3{background:var(--orange-light);color:var(--orange)}
+.rb4{background:var(--rose-light);color:var(--rose)}
+.rb5{background:var(--indigo-light);color:var(--indigo)}
+
+.fb{padding:20px 22px}
+.fs{margin-bottom:22px}
+.fs:last-child{margin-bottom:0}
+.stitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid}
+.st0{color:var(--blue);border-color:var(--blue-light)}.st1{color:var(--teal);border-color:var(--teal-light)}
+.st2{color:var(--purple);border-color:var(--purple-light)}.st3{color:var(--orange);border-color:var(--orange-light)}
+.st4{color:var(--rose);border-color:var(--rose-light)}
+.st5{color:var(--indigo);border-color:var(--indigo-light)}
+.fg{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.fgrp.full{grid-column:1/-1}
+.fgrp label{display:block;font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.fgrp input,.fgrp textarea,.fgrp select{width:100%;padding:7px 11px;border:1px solid var(--g300);border-radius:var(--r);font-family:inherit;font-size:13px;color:var(--g900);background:var(--g50);transition:border .15s;resize:vertical}
+.fgrp input:focus,.fgrp textarea:focus,.fgrp select:focus{outline:none;border-color:var(--blue);background:var(--w);box-shadow:0 0 0 2px rgba(24,95,165,.08)}
+.fgrp textarea{min-height:64px}
+.fgrp input[readonly]{background:var(--g100);color:var(--g700);font-weight:600}
+.req::after{content:' *';color:var(--red)}
+.fhint{font-size:10.5px;color:var(--g400);margin-top:3px;text-transform:none;letter-spacing:0;font-weight:400}
+
+.tw{overflow-x:auto;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--g100);padding:7px 9px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);border:1px solid var(--g200);white-space:nowrap}
+td{padding:4px 6px;border:1px solid var(--g200);vertical-align:middle}
+td input,td select{width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;color:var(--g900);padding:2px 4px;min-height:26px}
+td input:focus,td select:focus{outline:1px solid var(--blue);border-radius:3px;background:var(--blue-xl)}
+td select.pick{font-weight:600;color:var(--blue);background:var(--blue-xl);border-radius:4px}
+td input[readonly],td select[disabled]{color:var(--g500);font-weight:600;background:var(--g50);cursor:default}
+td input[readonly]:focus{outline:none;background:var(--g50)}
+tfoot td{background:var(--g100);font-weight:600}
+.tadd{margin-top:6px;font-size:12px;cursor:pointer;font-weight:500;background:none;border:1px dashed;border-radius:6px;padding:5px 12px;width:100%;font-family:inherit}
+.tadd-0{color:var(--blue);border-color:var(--blue)}.tadd-1{color:var(--teal);border-color:var(--teal)}
+.tadd-2{color:var(--purple);border-color:var(--purple)}.tadd-3{color:var(--orange);border-color:var(--orange)}
+.tadd-4{color:var(--rose);border-color:var(--rose)}
+.tadd-5{color:var(--indigo);border-color:var(--indigo)}
+.tdel{background:none;border:none;color:var(--g400);cursor:pointer;font-size:15px;padding:0 4px}
+.tdel:hover{color:var(--red)}
+
+.callout{border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.55;margin-bottom:14px}
+.co-warn{background:var(--amber-light);border:1px solid var(--amber);color:#5c3706}
+.co-info{background:var(--blue-light);border:1px solid var(--blue);color:var(--blue-dark)}
+.co-auto{background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark)}
+.co-danger{background:var(--red-light);border:1px solid var(--red);color:#6d1d1d}
+.co-t{font-weight:700;display:block;margin-bottom:2px}
+.gia-dinh{display:inline-block;background:var(--amber-light);color:var(--amber);border:1px solid var(--amber);border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:6px;vertical-align:middle}
+
+.ck-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--g100)}
+.tf{background:var(--g100);border-top:2px solid var(--g300);padding:6px 10px;font-size:13.5px;font-weight:700}
+.tf-lbl{font-size:10.5px;letter-spacing:.06em;color:var(--g500);text-align:center}
+.tf-pre{font-size:10px;font-weight:500;color:var(--g500);margin-right:3px}
+.tv-blue{color:var(--blue)}.tv-teal{color:var(--teal)}.tv-amber{color:var(--amber)}
+.tv-green{color:var(--green)}.tv-red{color:var(--red)}
+.totrow{margin-top:-1px}
+.totrow table{border-collapse:collapse}
+.totrow th{background:var(--g200)}
+.tot-lbl{background:var(--g100);font-size:10.5px;font-weight:700;color:var(--g500);letter-spacing:.05em;text-align:center}
+.tot-val{font-size:15px;font-weight:700;padding:8px 10px;background:var(--g50)}
+.tv-blue{color:var(--blue)}.tv-teal{color:var(--teal)}.tv-amber{color:var(--amber)}
+.tv-green{color:var(--green)}.tv-red{color:var(--red)}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+.metric{border-radius:8px;padding:11px;text-align:center;border:1px solid}
+.m-blue{background:var(--blue-light);border-color:var(--blue)}
+.m-teal{background:var(--teal-light);border-color:var(--teal)}
+.m-amber{background:var(--amber-light);border-color:var(--amber)}
+.m-green{background:var(--green-light);border-color:var(--green)}
+.m-red{background:var(--red-light);border-color:var(--red)}
+.m-val{font-size:19px;font-weight:700;line-height:1.2}
+.m-blue .m-val{color:var(--blue)}.m-teal .m-val{color:var(--teal)}.m-amber .m-val{color:var(--amber)}
+.m-green .m-val{color:var(--green)}.m-red .m-val{color:var(--red)}
+.m-lbl{font-size:10.5px;color:var(--g500);margin-top:3px}
+
+.navr{display:flex;justify-content:space-between;align-items:center;padding:13px 22px;border-top:1px solid var(--g200);background:var(--g50);gap:10px;flex-wrap:wrap}
+.navc{font-size:12px;color:var(--g500)}
+.navb{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:8px;border:1px solid var(--g300);background:var(--w);color:var(--g700);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--g100)}
+.btn-p0{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-p1{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-p2{background:var(--purple);color:#fff;border-color:var(--purple)}
+.btn-p3{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn-p4{background:var(--rose);color:#fff;border-color:var(--rose)}
+.btn-p5{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.btn-ok{background:var(--green-light);color:var(--green);border-color:var(--green)}
+.num-right{text-align:right}
+@media print{.flow-tabs,.step-nav,.navr,.tadd,.tdel{display:none!important}.main{margin:0;max-width:100%}.sc{box-shadow:none}body{background:#fff}}
+@media(max-width:700px){
+  .fg,.fg3,.ibar,.metric-grid{grid-template-columns:1fr}
+  .ibar-item{border-right:none;border-bottom:1px solid var(--g200)}
+  .main{padding:0 10px 40px}.hdr{padding:18px}.snav-label{display:none}
+  .metric-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="hdr-wrap"></div>
+<div class="flow-tabs" id="flow-tabs"></div>
+<div class="step-nav" id="step-nav"></div>
+<div class="main"><div class="sc" id="sc"></div></div>
+
+<script>
+/* ============================================================
+   DỮ LIỆU DANH MỤC (theo khảo sát anh Bảo — Tây Ninh Siêm Riệp)
+   ============================================================ */
+const NGUON   = ['Khai thác — Tổ 1–10 (TN)','Thu mua — Best Royal (BR)'];
+const TO_LIST = ['T01','T02','T03','T04','T05','T06','T07','T08','T09','T10','BR'];
+const LOAI_MU = ['Mủ tạp','Mủ dây'];
+const LOAI_TP = ['CSR 10','CSR 20','CSR ngoại lệ'];
+const KHU_LUU = ['Ô BR — mủ thu mua (Best Royal)','Ô Tây Ninh Siêm Riệp 1 — mủ khai thác','Ô Tây Ninh Siêm Riệp 2 — mủ khai thác'];
+// Dữ liệu nền hệ thống trả về khi người dùng chọn mã (mô phỏng bảng dữ liệu)
+const POOL = {
+  maA:[
+    {ma_a:'2025050101',ngay:'2025-05-10',to:'TN/T01',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-123.45',phieu:'PC001',tuoi:'12000',drc:'32.5',kho:'3900'},
+    {ma_a:'2025050102',ngay:'2025-05-10',to:'TN/T01',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-678.90',phieu:'PC002',tuoi:'9500',drc:'32.5',kho:'3087'},
+    {ma_a:'2025050103',ngay:'2025-05-10',to:'TN/T02',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-111.22',phieu:'PC003',tuoi:'8200',drc:'32.5',kho:'2665'},
+    {ma_a:'2025050104',ngay:'2025-05-11',to:'TN/T02',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-345.67',phieu:'PC004',tuoi:'7400',drc:'31.0',kho:'2294'},
+    {ma_a:'2025050105',ngay:'2025-05-11',to:'BR',nguon:'Thu mua — Best Royal (BR)',loai_mu:'Mủ tạp',xe:'BR-02',phieu:'PC005',tuoi:'8000',drc:'30.0',kho:'2400'},
+    {ma_a:'2025050106',ngay:'2025-05-12',to:'BR',nguon:'Thu mua — Best Royal (BR)',loai_mu:'Mủ tạp',xe:'BR-05',phieu:'PC006',tuoi:'6500',drc:'30.0',kho:'1950'},
+    {ma_a:'2025050107',ngay:'2025-05-12',to:'TN/T03',nguon:'Khai thác — Tổ 1–10 (TN)',loai_mu:'Mủ tạp',xe:'61C-909.09',phieu:'PC007',tuoi:'10100',drc:'31.5',kho:'3182'}
+  ],
+  loTP:[
+    {lo:'TP-CB250502-1',ma_c:'CB250502',tp:'CSR 10',nguon:'Thu mua',ton:'5040',ngay:'2025-05-02'},
+    {lo:'TP-CB250502-2',ma_c:'CB250502',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-02'},
+    {lo:'TP-CB250502-3',ma_c:'CB250502',tp:'CSR 10',nguon:'Khai thác',ton:'3600',ngay:'2025-05-02'},
+    {lo:'TP-CB250501-1',ma_c:'CB250501',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-15'},
+    {lo:'TP-CB250501-2',ma_c:'CB250501',tp:'CSR 10',nguon:'Khai thác',ton:'5040',ngay:'2025-05-15'},
+    {lo:'TP-CB250501-3',ma_c:'CB250501',tp:'CSR 10',nguon:'Thu mua',ton:'1820',ngay:'2025-05-15'}
+  ],
+  maB:[
+    {ma_b:'B-250001-KT',khu:'Ô Tây Ninh Siêm Riệp 1 — mủ khai thác',nguon:'Khai thác',ton:'31500',kt:'31500',tm:'0'},
+    {ma_b:'B-250002-TM',khu:'Ô BR — mủ thu mua (Best Royal)',nguon:'Thu mua',ton:'18000',kt:'0',tm:'18000'},
+    {ma_b:'B-250003-KT',khu:'Ô Tây Ninh Siêm Riệp 2 — mủ khai thác',nguon:'Khai thác',ton:'12500',kt:'12500',tm:'0'},
+    {ma_b:'B-250004-TM',khu:'Ô BR — mủ thu mua (Best Royal)',nguon:'Thu mua',ton:'9000',kt:'0',tm:'9000'}
+  ]
+};
+const POOL_KEY = {maA:'ma_a', maB:'ma_b', loTP:'lo'};
+const KG_BANH = 35, BANH_PALLET = 36, PALLET_LO = 4;
+const KG_LO = KG_BANH*BANH_PALLET*PALLET_LO;      // 5.040 kg
+const BANH_LO = BANH_PALLET*PALLET_LO;            // 144 bành
+const PALLET_KY = ['A','B','C','D'];
+
+/* ============================================================
+   ĐỊNH NGHĨA QUY TRÌNH — BƯỚC — TRƯỜNG
+   type: text | num | date | sel | area | file | ro | check
+   ============================================================ */
+const FLOWS = [
+{ f:0, code:'QT1', label:'QT1 — Ghi nhận giao nhận, cân và DRC (Mã A)',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Thực hiện trên AppSheet của Nghĩa · Base chỉ nhận Mã A và dữ liệu kèm theo',
+  ngoai:'AppSheet của Nghĩa',
+  steps:[
+  { code:'A-1', title:'Tài xế cung cấp Phiếu ID Giao nhận', desc:'Đầu vào thứ nhất của cặp mã liên kết',
+    nguoi:'Tài xế · Nhân sự trạm cân', sla:'Khi xe tới trạm cân', duyet:'—',
+    body:[
+      {co:'warn',t:'Quy trình này chạy trên AppSheet của Nghĩa',x:'Cả 4 bước A-1 → A-4 do <b>AppSheet của Nghĩa</b> thực hiện, không dựng trên service Base. Base nhận <b>Mã A</b> kèm nguồn, loại mủ, DRC và KL quy khô để bắt đầu từ QT2.'},
+      {co:'info',t:'Cặp mã liên kết đầu vào',x:'<b>Mã Phiếu ID Giao nhận</b> (từ tài xế) + <b>Mã Phiếu cân</b> (từ máy cân) là cặp bắt buộc để nối Mã A về vùng trồng.'},
+      {title:'Phiếu giao nhận', fields:[
+        {id:'a1_id_gn',label:'Mã Phiếu ID Giao nhận',type:'text',ph:'VD: GN-2025-000123',req:1,hint:'Tài xế cung cấp',dflt:'GN-2025-000123'},
+        {id:'a1_ngay_gn',label:'Ngày giao nhận',type:'date',dflt:'2025-05-12'},
+        {id:'a1_to',label:'Tổ sản xuất / NCC',type:'sel',opts:TO_LIST,req:1,hint:'T01–T10 nội bộ · BR = Best Royal'},
+        {id:'a1_nguon',label:'Nguồn nguyên liệu',type:'sel',opts:NGUON,req:1},
+        {id:'a1_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,req:1},
+        {id:'a1_xe',label:'Phương tiện vận chuyển',type:'text',ph:'VD: 61C-123.45',dflt:'61C-123.45'},
+        {id:'a1_tai_xe',label:'Tài xế',type:'text',dflt:'Nguyễn Văn Tám'},
+        {id:'a1_file_gn',label:'Ảnh phiếu giao nhận (3 chữ ký)',type:'file',hint:'Tổ trưởng · vận chuyển · phụ trách trạm cân'}
+      ]}
+    ]},
+  { code:'A-2', title:'Thực hiện cân', desc:'Máy cân sinh Mã Phiếu cân và khối lượng',
+    nguoi:'Máy cân · Nhân sự trạm cân', sla:'Ngay khi xe cân', duyet:'—',
+    body:[
+      {title:'Kết quả cân', fields:[
+        {id:'a2_ma_can',label:'Mã Phiếu cân',type:'text',ph:'VD: PC001',req:1,hint:'Máy cân sinh ra',dflt:'PC008'},
+        {id:'a2_ngay',label:'Ngày cân',type:'date',req:1,calc:1,inh:['0_0','a1_ngay_gn'],inhLbl:'A-1',hint:'Ngày này là ngày của Mã A',dflt:'2025-05-12'},
+        {id:'a2_stt',label:'STT phiếu cân trong ngày (XX)',type:'num',calc:1,ph:'1',dflt:'1'},
+        {id:'a2_kl_can',label:'Khối lượng tại điểm cân (kg)',type:'num',req:1,calc:1,dflt:'12000'},
+        {id:'a2_tru15',label:'Khối lượng đã trừ 15% (kg)',type:'ro',hint:'Theo Sổ cân mủ Mẫu 01-PEFC04'},
+        {id:'a2_nv',label:'Nhân sự trạm cân',type:'text',dflt:'Trần Thị B — NV trạm cân'},
+        {id:'a2_file',label:'Ảnh phiếu cân',type:'file',full:1}
+      ]}
+    ]},
+  { code:'A-3', title:'Nhập dữ liệu trên App DRC', desc:'Mapping Mã Phiếu ID Giao nhận ↔ Mã Phiếu cân',
+    nguoi:'Nhân sự trạm cân', sla:'Ngay sau khi cân', duyet:'—',
+    body:[
+      {co:'warn',t:'Bắt buộc nhập cả hai mã',x:'Đã xác nhận với Nghĩa: mapping thực hiện trên <b>App DRC</b>. Thiếu một trong hai mã là đứt liên kết về vùng trồng.'},
+      {title:'Mapping hai mã', fields:[
+        {id:'a3_id_gn',label:'Mã Phiếu ID Giao nhận',type:'ro',inh:['0_0','a1_id_gn'],inhLbl:'A-1'},
+        {id:'a3_ma_can',label:'Mã Phiếu cân',type:'ro',inh:['0_1','a2_ma_can'],inhLbl:'A-2'},
+        {id:'a3_drc',label:'DRC (%) theo App DRC',type:'num',req:1,calc:1,hint:'Kiểm nghiệm cuối ngày, áp chung cho các Mã A cùng tổ',dflt:'32.5'},
+        {id:'a3_kl_kho',label:'KL quy khô (kg)',type:'ro',hint:'= KL cân × DRC — con số đi tiếp toàn chuỗi'},
+        {id:'a3_tt',label:'Trạng thái mapping',type:'sel',opts:['Đã mapping trên App DRC','Chờ mạng — nhập bù sau']}
+      ]}
+    ]},
+  { code:'A-4', title:'Tạo Mã A', desc:'Hoàn tất dữ liệu Mã A — chờ lập phiếu nhập kho nguyên liệu tại QT2',
+    nguoi:'Hệ thống · Nhân sự trạm cân', sla:'Ngay sau mapping', duyet:'—',
+    body:[
+      {title:'Dữ liệu Mã A', fields:[
+        {id:'a4_ma_a',label:'Mã A (Ma_GiaoNhan_GN)',type:'ro',hint:'[YYYYMMDD][XX] — hệ thống sinh'},
+        {id:'a4_id_gn',label:'Mã Phiếu ID Giao nhận',type:'ro',inh:['0_0','a1_id_gn'],inhLbl:'A-1'},
+        {id:'a4_ma_can',label:'Mã Phiếu cân',type:'ro',inh:['0_1','a2_ma_can'],inhLbl:'A-2'},
+        {id:'a4_ngay',label:'Ngày cân',type:'ro',inh:['0_1','a2_ngay'],inhLbl:'A-2'},
+        {id:'a4_nguon',label:'Nguồn nguyên liệu',type:'ro',inh:['0_0','a1_nguon'],inhLbl:'A-1'},
+        {id:'a4_loai_mu',label:'Loại mủ',type:'ro',inh:['0_0','a1_loai_mu'],inhLbl:'A-1'},
+        {id:'a4_drc',label:'DRC (%)',type:'ro',inh:['0_2','a3_drc'],inhLbl:'A-3'},
+        {id:'a4_kho',label:'KL quy khô (kg)',type:'ro',inh:['0_2','a3_kl_kho'],inhLbl:'A-3'},
+        {id:'a4_nguoi',label:'Người thực hiện',type:'text',inh:['0_1','a2_nv'],inhLbl:'A-2',dflt:'Trần Thị B — NV trạm cân'}
+      ]},
+      {co:'auto',t:'Chỉ dùng KL quy khô',x:'Từ Mã A trở đi truy xuất dùng <b>KL quy khô</b>. Không đưa KL tươi vào dữ liệu A → B.'},
+      {co:'warn',t:'Master data vùng trồng còn thiếu',x:'Cần xin anh Hùng: <b>Lô ID ↔ Polygon ID ↔ Toạ độ Polygon</b> để truy ngược từ Mã A về vùng trồng.'}
+    ]}
+]},
+{ f:1, code:'QT2', label:'QT2 — Nhập kho nguyên liệu',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Ghi tăng kho nguyên liệu từ các Mã A · tận dụng QT nhập kho sẵn có của khách, bổ sung liên kết Mã A',
+  steps:[
+  { code:'NK-1', title:'Lập đề nghị nhập kho', desc:'Chọn tiêu chí lọc Mã A cần ghi tăng kho',
+    nguoi:'Nhân viên kho nguyên liệu', sla:'Theo đợt nhập kho', duyet:'—',
+    body:[
+      {co:'info',t:'Tạo Mã A chưa phải là nhập kho',x:'Mã A sinh ở QT1 (AppSheet) mới là ghi nhận giao nhận, cân và DRC. Phải qua phiếu nhập kho này mới được phép đưa vào phân lô Mã B.'},
+      {title:'Tiêu chí lọc Mã A', fields:[
+        {id:'nk1_tu',label:'Ngày Mã A — từ',type:'date',req:1,dflt:'2025-05-10'},
+        {id:'nk1_den',label:'Ngày Mã A — đến',type:'date',req:1,dflt:'2025-05-12'},
+        {id:'nk1_nguon',label:'Nguồn nguyên liệu',type:'sel',opts:['Cả hai nguồn'].concat(NGUON),req:1,dflt:NGUON[0]},
+        {id:'nk1_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,req:1,dflt:'Mủ tạp'},
+        {id:'nk1_ngay',label:'Ngày nhập kho dự kiến',type:'date',req:1,dflt:'2025-05-12'}
+      ]},
+      {co:'auto',t:'Hệ thống lọc',x:'Chỉ trả về Mã A <b>đã có KL quy khô</b> và <b>chưa thuộc phiếu nhập kho đang hiệu lực</b>. Mã A trong phiếu bị <b>huỷ hoặc trả lại</b> được giải phóng, lọc lại được ngay.'}
+    ]},
+  { code:'NK-2', title:'Kiểm tra danh sách nguyên liệu', desc:'Hệ thống trả danh sách — bỏ bớt hoặc bổ sung Mã A',
+    nguoi:'Nhân viên kho nguyên liệu', sla:'Ngay sau khi lọc', duyet:'—',
+    body:[
+      {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Bấm × để bỏ Mã A chưa muốn nhập kho, hoặc chọn thêm Mã A đủ điều kiện từ danh sách.'},
+      {title:'Danh sách Mã A đề nghị nhập kho', table:{id:'nk2_list', add:'+ Thêm Mã A — chọn từ danh sách',
+        cols:[{k:'ma_a',l:'Mã A',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày cân',type:'date',w:'125px',ro:1},
+              {k:'to',l:'Tổ / NCC',w:'110px',ro:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:NGUON,w:'190px',ro:1},
+              {k:'loai_mu',l:'Loại mủ',type:'sel',opts:LOAI_MU,w:'110px',ro:1},
+              {k:'kho',l:'KL quy khô (kg)',type:'num',w:'130px',ro:1}],
+        def:[POOL.maA[0],POOL.maA[1]],
+        foot:[{k:'ma_a',lbl:'Σ TỔNG CỘNG'},{k:'to',id:'nk2_m_so',pre:'Số Mã A:',c:'amber'},
+              {k:'kho',id:'nk2_m_kho',c:'teal'}]}},
+      {title:'Cơ cấu nguồn', fields:[
+        {id:'nk2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'nk2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]}
+    ]},
+  { code:'NK-3', title:'Hoàn thiện phiếu nhập kho', desc:'Bổ sung chứng từ theo biểu mẫu nhập kho đang dùng',
+    nguoi:'Nhân viên kho nguyên liệu', sla:'Cùng ngày', duyet:'—',
+    body:[
+      {title:'Thông tin phiếu', fields:[
+        {id:'nk3_ma_phieu',label:'Mã phiếu nhập kho nguyên liệu',type:'ro',hint:'Hệ thống sinh'},
+        {id:'nk3_ngay',label:'Ngày nhập kho',type:'date',req:1,inh:['1_0','nk1_ngay'],inhLbl:'NK-1'},
+        {id:'nk3_nguon',label:'Nguồn nguyên liệu',type:'ro',src:'inh',inh:['1_0','nk1_nguon'],inhLbl:'NK-1'},
+        {id:'nk3_loai_mu',label:'Loại mủ',type:'ro',src:'inh',inh:['1_0','nk1_loai_mu'],inhLbl:'NK-1'},
+        {id:'nk3_so_ma',label:'Số Mã A cấu thành',type:'ro'},
+        {id:'nk3_kl',label:'Tổng KL nhập kho (kg quy khô)',type:'ro'},
+        {id:'nk3_nguoi',label:'Người lập phiếu',type:'text',dflt:'Nguyễn Văn A — NV kho nguyên liệu'},
+        {id:'nk3_tt',label:'Trạng thái phiếu',type:'ro',hint:'Tự cập nhật theo kết quả duyệt ở NK-4'}
+      ]},
+      {title:'Chứng từ', fields:[
+        {id:'nk3_ct',label:'Chứng từ nhập kho nguyên liệu',type:'file',req:1,full:1,hint:'Theo biểu mẫu đang dùng trên Base'}
+      ]},
+      {co:'auto',t:'Lưu cả danh sách Mã A',x:'Phiếu lưu <b>danh sách Mã A cấu thành</b>, không chỉ lưu tổng khối lượng — đây là mắt xích truy ngược.'}
+    ]},
+  { code:'NK-4', title:'Duyệt và ghi nhận nhập kho', desc:'Duyệt xong Mã A mới được phép phân lô',
+    nguoi:'Người có thẩm quyền theo QT sẵn có', sla:'1 ngày', duyet:'Theo QT nhập kho hiện hành',
+    body:[
+      {title:'Phê duyệt', fields:[
+        {id:'nk4_nguoi',label:'Người duyệt',type:'text'},
+        {id:'nk4_ngay',label:'Ngày duyệt',type:'date'},
+        {id:'nk4_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — ghi nhận nhập kho','✗ Trả lại — bổ sung'],req:1,full:1},
+        {id:'nk4_ykien',label:'Ý kiến duyệt',type:'area',full:1}
+      ]},
+      {co:'warn',t:'Chống ghi tăng kho hai lần',x:'Mã A đã duyệt nhập kho <b>không được đưa vào phiếu nhập khác</b>. Khi gom thành Mã B chỉ chuyển sang quản lý theo lô, <b>không cộng thêm vào tồn lần nữa</b>.'}
+    ]}
+]},
+
+{ f:2, code:'QT3', label:'QT3 — Phân lô lưu trữ (Mã A → Mã B)',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Gom Mã A theo bộ lọc → 1 Mã B của bãi lưu trữ',
+  steps:[
+  { code:'B-1', title:'Tiêu chí lọc & gom Mã A', desc:'Vẫn chọn tay, nhưng có bộ lọc cho nhanh',
+    nguoi:'Nhân viên kho nguyên liệu', sla:'Theo đợt gom lô', duyet:'—',
+    body:[
+      {co:'info',t:'Bộ lọc Mã A',x:'Ngày Mã A (ngày cân) · Nguồn · Loại mủ · Ô lưu trữ. Lọc xong vẫn chọn tay.'},
+      {co:'warn',t:'Chỉ gom Mã A đã nhập kho',x:'Danh sách chỉ gồm Mã A đã được duyệt nhập kho ở QT2 và chưa thuộc Mã B nào. Gom thành Mã B <b>không cộng thêm vào tồn</b>, chỉ chuyển sang quản lý theo lô.'},
+      {co:'warn',t:'Một Mã B — một nguồn, một ô',x:'Gom A → B chỉ lấy <b>khai thác</b> hoặc <b>thu mua</b>, nằm gọn trong <b>một ô</b> trên bãi; mã mang hậu tố <b>-KT</b> / <b>-TM</b>. Từ khâu chế biến trở đi mới được làm cùng lúc cả hai nguồn.'},
+      {title:'Bộ lọc Mã A', fields:[
+        {id:'b1_tu',label:'Ngày Mã A — từ',type:'date',req:1,dflt:'2025-05-10'},
+        {id:'b1_den',label:'Ngày Mã A — đến',type:'date',req:1,dflt:'2025-05-12'},
+        {id:'b1_nguon',label:'Nguồn / Nhà cung cấp',type:'sel',opts:NGUON,req:1,dflt:NGUON[0],hint:'Bắt buộc — mỗi Mã B chỉ một nguồn'},
+        {id:'b1_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,req:1,inh:['0_0','a1_loai_mu'],inhLbl:'A-1',dflt:'Mủ tạp'}
+      ]},
+      {title:'Thông tin lô lưu trữ', fields:[
+        {id:'b1_ngay_lo',label:'Ngày phân lô (ngày tạo B)',type:'date',req:1,dflt:'2025-05-12',hint:'Khác với khoảng ngày gom ở trên'},
+        {id:'b1_khu',label:'Ô lưu trữ trên bãi tập kết mủ',type:'sel',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1],hint:'Mỗi Mã B nằm gọn trong một ô — ô đã tách sẵn theo nguồn'},
+        {id:'b1_ghichu',label:'Ghi chú',type:'area',full:1}
+      ]},
+      {co:'auto',t:'Hệ thống tự sinh',x:'<b>Mã B = B-[YY][XXXX]-KT/TM</b>, STT lấy max+1. Người tạo và người duyệt lấy theo tài khoản.'}
+    ]},
+  { code:'B-2', title:'Kết quả gom — đối chiếu Mã B', desc:'Danh sách Mã A cấu thành — mắt xích truy ngược',
+    nguoi:'Nhân viên kho nguyên liệu', sla:'Ngay sau khi lọc', duyet:'—',
+    body:[
+      {title:'Mã B vừa sinh', fields:[
+        {id:'b2_ma_b',label:'Mã B (hệ thống sinh)',type:'ro',hint:'B-[YY][XXXX]-KT/TM — hậu tố theo nguồn của lô'},
+        {id:'b2_khu',label:'Ô lưu trữ',type:'ro',full:1,inh:['2_0','b1_khu'],inhLbl:'B-1',dflt:KHU_LUU[1]},
+        {id:'b2_nguon',label:'Nguồn của Mã B',type:'ro',inh:['2_0','b1_nguon'],inhLbl:'B-1',dflt:NGUON[0]},
+        {id:'b2_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,inh:['2_0','b1_loai_mu'],inhLbl:'B-1',dflt:'Mủ tạp'},
+        {id:'b2_ngay',label:'Ngày phân lô',type:'ro',inh:['2_0','b1_ngay_lo'],inhLbl:'B-1',dflt:'2025-05-12'},
+        {id:'b2_nguoi',label:'Người tạo B',type:'text',dflt:'Nguyễn Văn A — NV kho nguyên liệu',hint:'Theo tài khoản đăng nhập'}
+      ]},
+      {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Bấm × để bỏ Mã A không muốn gom. Thêm lại thì chọn Mã A trong danh sách, các cột khác tự đổ theo.'},
+      {title:'Danh sách Mã Giao Nhận (Mã A) hệ thống trả về', table:{id:'b2_list', add:'+ Thêm Mã A — chọn từ danh sách',
+        cols:[{k:'ma_a',l:'Mã A',w:'165px',pick:'maA'},{k:'ngay',l:'Ngày nhận',type:'date',w:'125px',ro:1},
+              {k:'to',l:'Nguồn (Đơn vị/Tổ)',w:'110px',ro:1},
+              {k:'nguon',l:'Phân loại',type:'sel',opts:NGUON,w:'190px',ro:1},
+              {k:'loai_mu',l:'Loại mủ',type:'sel',opts:LOAI_MU,w:'110px',ro:1},
+              {k:'kho',l:'KL quy khô (kg)',type:'num',w:'120px',ro:1}],
+        def:[POOL.maA[0],POOL.maA[1],POOL.maA[2]],
+        foot:[{k:'ma_a',lbl:'Σ TỔNG CỘNG'},{k:'to',id:'b2_m_so',pre:'Số Mã A:',c:'amber'},
+              {k:'kho',id:'b2_m_kho',c:'teal'}]}},
+      {title:'Cơ cấu nguồn của Mã B', fields:[
+        {id:'b2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'b2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
+    ]},
+  { code:'B-3', title:'Duyệt tạo Mã B', desc:'Chốt lô lưu trữ — sẵn sàng đưa vào chế biến',
+    nguoi:'Phụ trách kho', sla:'1 ngày', duyet:'Trưởng phòng kế hoạch',
+    body:[
+      {title:'Phê duyệt', fields:[
+        {id:'b3_nguoi',label:'Người duyệt',type:'text'},
+        {id:'b3_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — Mã B sẵn sàng chế biến','✗ Từ chối — quay lại bước B-1']},
+        {id:'b3_ykien',label:'Ý kiến duyệt',type:'area',full:1},
+        {id:'b3_lydo',label:'Lý do từ chối (nếu có)',type:'area',full:1}
+      ]}
+    ]}
+]},
+
+{ f:3, code:'QT4', label:'QT4 — Gia công chế biến (Mã B → Mã C)',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Lọc & chọn Mã B → vận chuyển → thành phẩm → sai lệch → cân bằng khối lượng',
+  steps:[
+  { code:'C-1', title:'Lập lệnh gia công chế biến', desc:'Điền tiêu chí lọc Mã B đưa vào chế biến',
+    nguoi:'Giám sát chế biến', sla:'Theo lệnh sản xuất', duyet:'—',
+    body:[
+      {title:'Thông tin lệnh chế biến (BM02 — Mẫu 07-PEFC04)', fields:[
+        {id:'c1_loai_tp',label:'Sản phẩm mục tiêu',type:'sel',opts:LOAI_TP,req:1},
+        {id:'c1_loai_mu',label:'Loại mủ',type:'sel',opts:LOAI_MU,req:1,inh:['2_0','b1_loai_mu'],inhLbl:'B-1'},
+        {id:'c1_ngay',label:'Ngày chế biến',type:'date',req:1,calc:1,hint:'Cấu phần [YYMMDD] của Mã C',dflt:'2025-05-15'},
+        {id:'c1_so_lsx',label:'Số lệnh sản xuất / mã mẻ trộn',type:'text',ph:'LSX-2025-015',dflt:'LSX-2025-015'},
+        {id:'c1_nguoi',label:'Người phụ trách chế biến',type:'text',req:1,dflt:'Lê Văn C — giám sát chế biến'},
+        {id:'c1_kcs',label:'Người kiểm tra KCS (nếu có)',type:'text',dflt:'Phạm D — KCS'}
+      ]},
+      {title:'Tiêu chí lọc Mã B', fields:[
+        {id:'c1_tu',label:'Ngày phân lô Mã B — từ',type:'date',dflt:'2025-05-10'},
+        {id:'c1_den',label:'Ngày phân lô Mã B — đến',type:'date',dflt:'2025-05-14'},
+        {id:'c1_khu',label:'Ô lưu trữ',type:'multi',opts:KHU_LUU,req:1,full:1,dflt:KHU_LUU[1]+' · '+KHU_LUU[0],hint:'Một đợt có thể chọn cả hai nguồn; nguyên liệu và thành phẩm được chế biến, ghi nhận riêng theo nguồn'},
+        ]},
+      {co:'info',t:'Một đợt chế biến có thể gồm hai nguồn',x:'Nguyên liệu và thành phẩm được <b>quản lý tách riêng theo nguồn</b>: vào ghi riêng theo Mã B, ra ghi riêng ở C-4.'},
+      
+      {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã C = CB[YYMMDD]</b> và trả danh sách Mã B còn khối lượng khả dụng khớp tiêu chí sang bước C-2.'}
+    ]},
+  { code:'C-2', title:'Chọn Mã B đưa vào chế biến', desc:'Hệ thống trả danh sách — người dùng thêm bớt và điền KL',
+    nguoi:'Giám sát chế biến', sla:'Ngay sau khi lọc', duyet:'—',
+    body:[
+      {title:'Lệnh chế biến', fields:[
+        {id:'c2_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro'},
+        {id:'c2_loai_tp',label:'Sản phẩm mục tiêu',type:'ro',inh:['3_0','c1_loai_tp'],inhLbl:'C-1'},
+        {id:'c2_loai_mu',label:'Loại mủ',type:'ro',inh:['3_0','c1_loai_mu'],inhLbl:'C-1'},
+        {id:'c2_ngay',label:'Ngày chế biến',type:'ro',inh:['3_0','c1_ngay'],inhLbl:'C-1'}
+      ]},
+      {co:'auto',t:'Hệ thống tự đổ dữ liệu',x:'Danh sách Mã B còn khối lượng khả dụng khớp tiêu chí ở C-1. Bấm × để bỏ, hoặc chọn thêm Mã B từ danh sách.'},
+      
+      {title:'Danh sách Mã B hệ thống trả về', table:{id:'c1_ma_b', add:'+ Thêm Mã B — chọn từ danh sách',
+        cols:[{k:'ma_b',l:'Mã Lô Lưu trữ (Mã B)',w:'165px',pick:'maB'},{k:'khu',l:'Ô lưu trữ',type:'sel',opts:KHU_LUU,w:'220px',ro:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'110px',ro:1},
+              {k:'ton',l:'Tồn quy khô (kg)',type:'num',w:'120px',ro:1},
+              {k:'cb',l:'Chỉ định CB',w:'110px',calc:1},
+              {k:'lay',l:'KL đem chế biến (kg)',type:'num',w:'130px',calc:1},
+              ],
+        def:[{ma_b:'B-250001-KT',khu:KHU_LUU[1],nguon:'Khai thác',ton:'31500',cb:'CB',lay:'31500'},
+             {ma_b:'B-250002-TM',khu:KHU_LUU[0],nguon:'Thu mua',ton:'18000',cb:'CB10000',lay:'10000'}],
+        foot:[{k:'ma_b',lbl:'Σ TỔNG CỘNG'},
+              {k:'ton',id:'c1_m_ton',c:'amber'},{k:'lay',id:'c1_m_vao',c:'teal'},
+              ]}},
+      {title:'Cơ cấu nguyên liệu đưa vào chế biến', fields:[
+        {id:'c2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'c2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
+      {co:'info',t:'Chỉ định CB',x:'<b>CB</b> = 100% tồn · <b>CBxxx</b> = xxx kg · <b>CBxx%</b> = xx% tồn. Cột KL tự điền theo.'},
+
+    ]},
+  { code:'C-3', title:'Vận chuyển bãi ủ → kho nhà máy', desc:'Toàn bộ tính theo khối lượng quy khô',
+    nguoi:'App DRC (Nghĩa) + kho nhà máy', sla:'Trong ngày vận chuyển', duyet:'—',
+    body:[
+      {co:'warn',t:'Đây là bước xuất kho nguyên liệu',x:'Lập <b>phiếu xuất kho nguyên liệu</b> (Mẫu 05-PEFC04) và <b>trừ tồn Mã B</b> đúng phần đã lấy đi chế biến ở C-2.'},
+      {title:'Xuất kho bãi ủ — lấy từ app của Nghĩa', fields:[
+        {id:'c3_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',full:1,inh:['3_1','c2_ma_c'],inhLbl:'C-2'},
+        {id:'c2_x_kho',label:'KL quy khô xuất bãi ủ (kg)',type:'ro',src:'app',full:1,dflt:'41470',calc:1,hint:'Đồng bộ từ app của Nghĩa'}
+      ]},
+      {title:'Nhập kho nhà máy — người vận hành điền', fields:[
+        {id:'c2_n_kho',label:'KL quy khô thực nhận (kg)',type:'num',calc:1,req:1,full:1,dflt:'41310.5'}
+      ]},
+      {title:'Đối chiếu hao hụt vận chuyển — hệ thống tự tính', fields:[
+        {id:'c2_hao',label:'Hao hụt vận chuyển (kg quy khô)',type:'ro'},
+        {id:'c2_pct',label:'Tỷ lệ hao hụt (%)',type:'ro'},
+        {id:'c2_tt',label:'Trạng thái',type:'ro'}
+      ]},
+      {title:'Chứng từ & ghi chú', fields:[
+        {id:'c2_ct_xk',label:'Phiếu xuất kho nguyên liệu (Mẫu 05-PEFC04)',type:'file',full:1},
+        {id:'c2_ghichu',label:'Nguyên nhân / ghi chú hao hụt',type:'area',full:1}
+      ]}
+    ]},
+  { code:'C-4', title:'Nhập khối lượng thành phẩm', desc:'Không cần chọn lại Mã C — chỉ điền khối lượng ra',
+    nguoi:'Giám sát chế biến', sla:'Sau khi chế biến xong', duyet:'—',
+    body:[
+      {co:'info',t:'Sai lệch tính bằng kg',x:'<code>Sai lệch = KL thành phẩm − KL đầu vào</code>, số tuyệt đối, không tính %. Văn bản tập đoàn gọi là <b>sai lệch so với nguyên liệu</b>.'},
+      {title:'Kết quả chế biến', fields:[
+        {id:'c4_ma_c',label:'Mã Lô Chế Biến (Mã C)',type:'ro',ph:'CB250501',inh:['3_1','c2_ma_c'],inhLbl:'C-2'},
+        {id:'c3_sp_tt',label:'Sản phẩm thực tế',type:'sel',opts:LOAI_TP,inh:['3_0','c1_loai_tp'],inhLbl:'C-1 · sản phẩm mục tiêu',hint:'Sửa lại nếu phân loại lại sau kiểm tra chất lượng'},
+        
+        
+        
+        ]},
+      
+      
+      {title:'Luồng KHAI THÁC', fields:[
+        {id:'c3_vao_kt',label:'KL nguyên liệu vào — khai thác (kg)',type:'ro',src:'inh',dflt:'31500'},
+        {id:'c3_tp_kt',label:'KL thành phẩm — khai thác (kg)',type:'num',calc:1,req:1,dflt:'35400',hint:'Ghi chép thực tế tại xưởng'},
+        {id:'c3_lech_kt',label:'Sai lệch — khai thác (kg)',type:'ro',full:1}
+      ]},
+      {title:'Luồng THU MUA', fields:[
+        {id:'c3_vao_tm',label:'KL nguyên liệu vào — thu mua (kg)',type:'ro',src:'inh',dflt:'10000'},
+        {id:'c3_tp_tm',label:'KL thành phẩm — thu mua (kg)',type:'num',calc:1,req:1,dflt:'11400',hint:'Ghi chép thực tế tại xưởng'},
+        {id:'c3_lech_tm',label:'Sai lệch — thu mua (kg)',type:'ro',full:1}
+      ]},
+      {title:'Tổng hợp cả mẻ', fields:[
+        {id:'c3_vao',label:'Tổng KL nguyên liệu vào (kg)',type:'ro'},
+        {id:'c3_tp',label:'Tổng KL thành phẩm (kg)',type:'ro',hint:'= KT + TM'},
+        {id:'c3_sai_lech',label:'Tổng sai lệch so với nguyên liệu (kg)',type:'ro',full:1}
+      ]},
+      {title:'Chứng từ & thông tin kế thừa', fields:[
+        {id:'c3_bb',label:'Biên bản xác nhận khối lượng chế biến',type:'file',req:1,full:1,
+         hint:'Chứng từ minh chứng cho con số thành phẩm sau chế biến'},
+        {id:'c3_dinh_muc',label:'Định mức (KL ra / KL vào)',type:'ro',hint:'PEFC mục 5.4 — ghi nhận để tính định mức'},
+        {id:'c3_ghichu',label:'Ghi chú chung cho lô chế biến',type:'area',full:1}
+      ]}
+    ]},
+  { code:'C-5', title:'Duyệt kết quả chế biến', desc:'Đối chiếu biên bản với số liệu đã điền',
+    nguoi:'Người duyệt (ngoài giám sát)', sla:'1 ngày', duyet:'Trưởng phòng kế hoạch',
+    body:[
+      {title:'Checklist đối chiếu', check:[
+        'Biên bản xác nhận khối lượng chế biến đã đính kèm',
+        'Số trên biên bản khớp với KL thành phẩm đã điền',
+        'Đã tách đúng KL khai thác / KL thu mua',
+        'Các Mã B đưa vào chế biến đúng với lệnh sản xuất',
+        'Toàn bộ số liệu là khối lượng quy khô'
+      ]},
+      {title:'Kết luận', fields:[
+        {id:'c4_nguoi',label:'Người duyệt',type:'text',dflt:'Nguyễn Quốc Bảo — TP Kế hoạch'},
+        {id:'c4_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — chuyển cân bằng khối lượng','✗ Trả lại bước C-3']},
+        {id:'c4_ykien',label:'Ý kiến duyệt',type:'area',full:1}
+      ]}
+    ]},
+  { code:'C-6', title:'Cân bằng khối lượng', desc:'Xử lý sai lệch trước khi cho nhập kho',
+    nguoi:'Người phụ trách cân bằng', sla:'Ngay sau mỗi đợt chế biến', duyet:'—',
+    body:[
+      
+      {co:'info',t:'Cân bằng ghi riêng',x:'Cân bằng khối lượng <b>ghi riêng cho khai thác và thu mua</b>, mỗi luồng một con số.'},
+      {co:'warn',t:'Sai lệch tăng → sinh Mã B điều chỉnh riêng',x:'<b>Không sửa Mã A gốc.</b> Phần tăng ghi bằng một <b>Mã B điều chỉnh</b>, không tạo từ Mã A — là điều chỉnh do sai lệch khi xác định DRC ban đầu. Phải có <b>ghi nhận nhập kho điều chỉnh</b> gắn hồ sơ xử lý sai lệch; Mã C liên kết cả <b>Mã B gốc</b> và <b>Mã B điều chỉnh</b>.'},
+      {co:'danger',t:'Xử lý sai lệch',x:'<b>Dư</b> → tự cộng ngược vào nguyên liệu đầu vào cho hiệu = 0. <b>Hụt</b> → không trừ nguyên liệu, bắt buộc giải trình.'},
+      {co:'info',t:'Ai thực hiện cân bằng',x:'Phiếu chỉ ghi nhận sai lệch và giải trình. Việc cộng ngược vào nguyên liệu và sinh Mã B điều chỉnh do <b>luồng n8n chạy trên bảng dữ liệu sau khi C-7 được duyệt</b>.'},
+      
+      {title:'Cân bằng luồng KHAI THÁC', fields:[
+        {id:'c5_vao_kt',label:'KL nguyên liệu vào (kg)',type:'ro',src:'inh'},
+        {id:'c5_tp_kt',label:'KL thành phẩm (kg)',type:'ro',src:'inh'},
+        {id:'c5_lech_kt',label:'Sai lệch (kg)',type:'ro'},
+        {id:'c5_huong_kt',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
+        {id:'c5_maB_kt',label:'Mã B điều chỉnh',type:'ro',hint:'Chỉ sinh khi sai lệch tăng · không tạo từ Mã A'},
+        {id:'c5_kldc_kt',label:'KL điều chỉnh (kg)',type:'ro'},
+        {id:'c5_giai_trinh_kt',label:'Giải trình hao hụt luồng khai thác',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
+      ]},
+      {title:'Cân bằng luồng THU MUA', fields:[
+        {id:'c5_vao_tm',label:'KL nguyên liệu vào (kg)',type:'ro',src:'inh'},
+        {id:'c5_tp_tm',label:'KL thành phẩm (kg)',type:'ro',src:'inh'},
+        {id:'c5_lech_tm',label:'Sai lệch (kg)',type:'ro'},
+        {id:'c5_huong_tm',label:'Hướng xử lý',type:'sel',opts:['','Hiệu số = 0 — không cần xử lý','Cộng phần dư vào nguyên liệu đầu vào','Giải trình hao hụt — không trừ nguyên liệu'],req:1,full:1},
+        {id:'c5_maB_tm',label:'Mã B điều chỉnh',type:'ro',hint:'Chỉ sinh khi sai lệch tăng · không tạo từ Mã A'},
+        {id:'c5_kldc_tm',label:'KL điều chỉnh (kg)',type:'ro'},
+        {id:'c5_giai_trinh_tm',label:'Giải trình hao hụt luồng thu mua',type:'area',full:1,ph:'Bắt buộc khi hiệu âm…'}
+      ]},
+      {title:'Giải trình & chứng từ', fields:[
+        
+        {id:'c5_bb',label:'Biên bản xử lý sai lệch (mẫu chung — các phòng ban ký, lãnh đạo ký)',type:'file',req:1,full:1},
+        {id:'c5_ct_dc',label:'Chứng từ nhập kho điều chỉnh',type:'file',full:1,hint:'Gắn với Mã B điều chỉnh ở trên'},
+        {id:'c5_vao_sau',label:'Đầu vào Mã C sau điều chỉnh (kg)',type:'ro',full:1,hint:'= KL nguyên liệu vào + KL điều chỉnh'}
+      ]},
+    ]},
+  { code:'C-7', title:'Duyệt cân bằng khối lượng', desc:'Duyệt xong mới được nhập kho thành phẩm',
+    nguoi:'Người phụ trách cân bằng trình ký', sla:'1–2 ngày', duyet:'Trưởng phòng kế hoạch → các cấp',
+    body:[
+      {co:'auto',t:'Sau khi duyệt',x:'Hệ thống sinh <b>Mã B điều chỉnh</b> và phiếu <b>nhập kho điều chỉnh</b>, gắn vào Mã C; đồng thời bắn phiếu nhập kho thành phẩm sang QT5. Chế biến đợt nào nghiệm thu nhập kho đợt đó.'},
+      {title:'Phê duyệt', fields:[
+        {id:'c6_cap1',label:'Người duyệt',type:'text',req:1,dflt:'Nguyễn Quốc Bảo — TP Kế hoạch',hint:'Sau này bổ sung thêm các cấp ký lần lượt'},
+        {id:'c6_ngay1',label:'Ngày duyệt',type:'date',dflt:'2025-05-17'},
+        {id:'c6_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt','✗ Không duyệt'],req:1,full:1},
+        {id:'c6_ykien',label:'Thông tin thêm',type:'area',full:1}
+      ]}
+    ]}
+]},
+
+{ f:4, code:'QT5', label:'QT5 — Nhập kho thành phẩm',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Lập phiếu nhập kho → hệ thống tự tạo mã lô → duyệt',
+  steps:[
+  { code:'D-1', title:'Lập phiếu nhập kho thành phẩm', desc:'Tự động chuyển sang sau khi cân bằng khối lượng được duyệt',
+    nguoi:'Thủ kho thành phẩm', sla:'Ngay sau nghiệm thu đợt chế biến', duyet:'—',
+    body:[
+      {title:'Thông tin nhập kho (BM03A — Mẫu 08A-PEFC04)', fields:[
+        {id:'d1_ma_nk',label:'Mã phiếu nhập kho TP',type:'ro',hint:'F03N-[STT] — hệ thống sinh'},
+        {id:'d1_ma_c',label:'Mã Lô chế biến nguồn (Mã C)',type:'ro',calc:1,inh:['3_1','c2_ma_c'],inhLbl:'C-2',hint:'Tự lấy từ phiếu QT4 nối sang'},
+        {id:'d1_ma_sp',label:'Mã sản phẩm',type:'ro',inh:['3_3','c3_sp_tt'],inhLbl:'C-4'},
+        {id:'d1_ngay',label:'Ngày nhập kho',type:'date',req:1,dflt:'2025-05-17'},
+        {id:'d1_kl_kt',label:'KL nhập — khai thác (kg)',type:'ro',src:'inh',calc:1},
+        {id:'d1_kl_tm',label:'KL nhập — thu mua (kg)',type:'ro',src:'inh',calc:1},
+        {id:'d1_kl',label:'Tổng số lượng nhập (kg)',type:'ro'}
+      ]},
+      {title:'Chứng từ', fields:[
+        {id:'d1_ct',label:'Chứng từ nhập kho (theo mẫu sẵn có trên Base)',type:'file',req:1,full:1}
+      ]},
+      {co:'auto',t:'Sau khi gửi xử lý',x:'Hệ thống sinh <b>Mã D = [TP-][Mã C]</b>, tự chia lô và trả danh sách mã lô sang bước D-2.'}
+    ]},
+  { code:'D-2', title:'Danh sách mã lô hệ thống tạo', desc:'Kiểm tra lô đã sinh, thêm bớt nếu cần',
+    nguoi:'Thủ kho thành phẩm', sla:'Ngay sau khi lập phiếu', duyet:'—',
+    body:[
+      {title:'Phiếu nhập kho', fields:[
+        {id:'d2_ma_d',label:'Mã Lô Thành Phẩm (Mã D)',type:'ro',hint:'[TP-][Mã C] — hệ thống sinh khi gửi xử lý D-1'},
+        {id:'d2_kl',label:'Tổng KL nhập (kg)',type:'ro',inh:['4_0','d1_kl'],inhLbl:'D-1'},
+        {id:'d2_so_lo',label:'Số lô hệ thống tạo',type:'ro'}
+      ]},
+      {co:'auto',t:'Quy tắc nhập mã lô',x:'Mã lô kiểu <b>26J309</b> = năm 26 · chuyền 3 tấn · tháng 9. Điền <b>từ–đến</b> thì khối lượng tự tính = số lô × 5.040 kg (1 lô = 4 pallet = 144 bành × 35 kg).'},
+      {co:'warn',t:'Lô lẻ',x:'Lô cuối không đủ: điền <b>từ</b>, <b>bỏ trống đến</b> để hệ thống không tự tính, rồi điền khối lượng thực tế vào cột <b>Lô lẻ</b>.'},
+      {title:'Danh sách mã lô thành phẩm', table:{id:'d1_lo', add:'+ Thêm dòng mã lô',
+        cols:[{k:'lo',l:'Mã lô',w:'150px',calc:1},
+              {k:'tu',l:'Từ',type:'num',w:'90px',calc:1},
+              {k:'den',l:'Đến',type:'num',w:'90px',calc:1},
+              {k:'kl',l:'Khối lượng (kg)',type:'num',w:'140px',ro:1},
+              {k:'le',l:'Lô lẻ (kg)',type:'num',w:'130px',calc:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'120px'}],
+        def:[{lo:'26J309',tu:'1',den:'8',le:'',nguon:'Khai thác'},
+             {lo:'26J309',tu:'9',den:'',le:'6480',nguon:'Thu mua'}],
+        foot:[{k:'lo',lbl:'Σ TỔNG'},{k:'den',id:'d1_m_lo',pre:'Số lô:',c:'amber'},
+              {k:'kl',id:'d1_m_kl',c:'teal'},{k:'le',id:'d1_m_le',c:'blue'}]}},
+      {title:'Đối chiếu khối lượng', fields:[
+        {id:'d2_tong_lo',label:'Tổng khối lượng + lô lẻ (kg)',type:'ro'},
+        {id:'d2_kl_nhap',label:'Tổng KL thành phẩm thực tế (kg)',type:'ro',src:'inh'},
+        {id:'d2_check',label:'Kết quả đối chiếu',type:'ro',full:1}
+      ]},
+      {title:'Cơ cấu nguồn của lô nhập kho', fields:[
+        {id:'d2_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'d2_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]}
+    ]},
+  { code:'D-3', title:'Duyệt nhập kho', desc:'Duyệt xong mới ghi tồn kho thành phẩm',
+    nguoi:'Thủ kho trình ký', sla:'1 ngày', duyet:'Thủ trưởng đơn vị',
+    body:[
+      {title:'Phê duyệt', fields:[
+        {id:'d2_nguoi',label:'Người duyệt',type:'text',dflt:'Hồ Trung Nghĩa — Thủ trưởng đơn vị'},
+        {id:'d2_ngay',label:'Ngày duyệt',type:'date',dflt:'2025-05-18'},
+        {id:'d2_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — nhập kho thành công','✗ Trả lại — bổ sung chứng từ'],full:1},
+        {id:'d2_ykien',label:'Ý kiến duyệt',type:'area',full:1}
+      ]}
+    ]}
+]},
+{ f:5, code:'QT6', label:'QT6 — Bán hàng & Xuất kho thành phẩm',
+  badge:'Truy xuất nguồn gốc cao su · Tây Ninh Siêm Riệp PTCS',
+  sub:'Đơn hàng / Hợp đồng → Lệnh xuất hàng → Chọn lô thành phẩm → Ghi nhận xuất kho → Duyệt',
+  steps:[
+  { code:'X-1', title:'Đơn hàng / Hợp đồng', desc:'Kế thừa từ quy trình Bán hàng tổng hợp đã có trên Base',
+    nguoi:'Kinh doanh (QT Bán hàng)', sla:'Theo đơn hàng', duyet:'—',
+    body:[
+      {title:'Thông tin đơn hàng — kế thừa từ quy trình Bán hàng', fields:[
+        {id:'x1_ma_dh',label:'Mã đơn hàng',type:'ro',src:'inh',dflt:'DH-2025-042'},
+        {id:'x1_so_hd',label:'Số hợp đồng',type:'ro',src:'inh',dflt:'HĐ-2025-018/TNSR',hint:'Số không trùng — dùng để tra cứu truy xuất'},
+        {id:'x1_kh',label:'Khách hàng',type:'ro',src:'inh',dflt:'Công ty TNHH Cao su Phương Đông'},
+        {id:'x1_tp',label:'Loại sản phẩm',type:'ro',src:'inh',dflt:'CSR 10'},
+        {id:'x1_kl',label:'Khối lượng yêu cầu (kg)',type:'ro',src:'inh',calc:1,dflt:'100000'},
+        {id:'x1_so_banh',label:'Số bành yêu cầu',type:'ro',hint:'= Khối lượng yêu cầu ÷ 35 kg'},
+        {id:'x1_ngay_giao',label:'Ngày giao',type:'ro',src:'inh',dflt:'2025-05-25'},
+        {id:'x1_tt',label:'Trạng thái đơn hàng',type:'ro',src:'inh',dflt:'Đủ điều kiện xử lý'}
+      ]},
+      {co:'info',t:'Không nhập lại ở đây',x:'Toàn bộ thông tin kế thừa từ <b>quy trình Bán hàng tổng hợp</b> đã có trên Base. Đơn hàng đủ điều kiện xử lý mới tạo được <b>Lệnh xuất hàng</b>.'}
+    ]},
+  { code:'X-2', title:'Lệnh xuất hàng', desc:'Cầu nối giữa bán hàng và xuất kho',
+    nguoi:'Kinh doanh · Kế hoạch', sla:'Sau khi chốt đơn', duyet:'—',
+    body:[
+      {title:'Lệnh xuất hàng', fields:[
+        {id:'x2_ma_lenh',label:'Mã lệnh xuất hàng',type:'ro',hint:'Hệ thống sinh'},
+        {id:'x2_ma_dh',label:'Mã đơn hàng',type:'ro',inh:['5_0','x1_ma_dh'],inhLbl:'X-1'},
+        {id:'x2_so_hd',label:'Số hợp đồng',type:'ro',inh:['5_0','x1_so_hd'],inhLbl:'X-1'},
+        {id:'x2_kh',label:'Khách hàng',type:'ro',inh:['5_0','x1_kh'],inhLbl:'X-1'},
+        {id:'x2_tp',label:'Loại sản phẩm',type:'ro',inh:['5_0','x1_tp'],inhLbl:'X-1'},
+        {id:'x2_kl',label:'Khối lượng cần xuất (kg)',type:'ro',calc:1,inh:['5_0','x1_kl'],inhLbl:'X-1'},
+        {id:'x2_so_banh',label:'Số bành cần xuất',type:'ro',hint:'= Khối lượng cần xuất ÷ 35 kg'},
+        {id:'x2_ngay',label:'Ngày dự kiến xuất',type:'date',calc:1,dflt:'2025-05-23'},
+        {id:'x2_tt',label:'Trạng thái',type:'sel',opts:['Chờ xuất kho','Đang xuất kho','Đã xuất kho']},
+        {id:'x2_uu_tien',label:'Ưu tiên nguồn khi lấy hàng',type:'sel',calc:1,full:1,
+          opts:['Thu mua trước — hết mới lấy khai thác','Khai thác trước','FIFO — first in first out'],
+          hint:'Thực tế: xuất hết thu mua rồi mới tới khai thác, trong từng nhóm vẫn FIFO'}
+      ]}
+    ]},
+  { code:'X-3', title:'Chọn thành phẩm để xuất kho', desc:'Hệ thống trả danh sách đã sắp xếp — người dùng chỉnh lại',
+    nguoi:'Thủ kho thành phẩm', sla:'Trong ngày', duyet:'—',
+    body:[
+      {co:'info',t:'Nguồn dữ liệu',x:'Danh sách lô lấy từ <b>dải lô đã nhập ở D-2</b> (mã lô + số thứ tự), gồm cả lô lẻ.'},
+      {co:'auto',t:'Danh sách đã sắp theo FIFO + ưu tiên nguồn',x:'KL xuất mặc định bằng KL tồn của từng lô — chỉnh lại theo nhu cầu, bấm × để bỏ lô, hoặc chọn thêm mã lô từ danh sách.'},
+      {title:'Tồn kho theo lô thành phẩm', table:{id:'x3_ton', add:'+ Thêm mã lô — chọn từ danh sách',
+        cols:[{k:'lo',l:'Mã lô',w:'185px',pick:'loTP'},{k:'ma_c',l:'Mã C',w:'110px',ro:1},
+              {k:'tp',l:'Loại sản phẩm',type:'sel',opts:LOAI_TP,w:'140px',ro:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'115px',ro:1},
+              {k:'ton',l:'KL tồn (kg)',type:'num',w:'105px',ro:1},
+              {k:'ngay',l:'Ngày nhập kho',type:'date',w:'130px',ro:1},
+              {k:'kl',l:'KL xuất (kg)',type:'num',w:'110px',calc:1}],
+        defFn:function(){ return poolOf('loTP').map(function(r){ return Object.assign({},r,{kl:r.ton}); }); },
+        def:[],
+        foot:[{k:'lo',lbl:'Σ ĐÃ CHỌN'},{k:'ma_c',id:'x3_m_can',pre:'Cần:',c:'blue'},
+              {k:'ton',id:'x3_m_ton',c:'amber'},
+              {k:'kl',id:'x3_m_chon',c:'teal'},{k:'ngay',id:'x3_m_thieu',pre:'Thiếu/dư:',c:'red'}]}},
+      {title:'Cơ cấu nguồn của lô đã chọn', fields:[
+        {id:'x3_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'x3_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'}
+      ]},
+      {co:'warn',t:'Quản lý tới mã lô',x:'Không xuất kho ở cấp Mã C: một Mã C tạo nhiều lô, mỗi lần xuất có thể chỉ xuất một phần.'}
+    ]},
+  { code:'X-4', title:'Ghi nhận xuất kho', desc:'Lập phiếu xuất kho thành phẩm',
+    nguoi:'Thủ kho thành phẩm', sla:'Ngày xuất', duyet:'—',
+    body:[
+      {title:'Phiếu xuất kho (Mẫu 08B-PEFC04)', fields:[
+        {id:'x4_ma_phieu',label:'Mã phiếu xuất kho',type:'ro',hint:'F03X-[năm]-[STT] — hệ thống sinh'},
+        {id:'x4_ma_lenh',label:'Mã lệnh xuất hàng',type:'ro',inh:['5_1','x2_ma_lenh'],inhLbl:'X-2'},
+        {id:'x4_ma_dh',label:'Mã đơn hàng',type:'ro',inh:['5_0','x1_ma_dh'],inhLbl:'X-1'},
+        {id:'x4_kh',label:'Khách hàng',type:'ro',inh:['5_0','x1_kh'],inhLbl:'X-1'},
+        {id:'x4_tp',label:'Loại thành phẩm',type:'ro',inh:['5_0','x1_tp'],inhLbl:'X-1'},
+        {id:'x4_tl_kt',label:'Tỉ lệ khai thác (%)',type:'ro'},
+        {id:'x4_tl_tm',label:'Tỉ lệ thu mua (%)',type:'ro'},
+        {id:'x4_kl',label:'Khối lượng xuất (kg)',type:'ro'},
+        {id:'x4_ngay',label:'Ngày xuất',type:'date',req:1,dflt:'2025-05-23'},
+        {id:'x4_nguoi',label:'Người lập phiếu',type:'text',dflt:'Vũ Thị E — thủ kho thành phẩm'}
+      ]},
+      {title:'Danh sách mã lô xuất', table:{id:'x4_lo', add:'+ Thêm lô', inh:['5_2','x3_ton'],
+        cols:[{k:'lo',l:'Mã lô',w:'160px',ro:1},{k:'ma_c',l:'Mã C',w:'110px',ro:1},
+              {k:'nguon',l:'Nguồn',type:'sel',opts:['Khai thác','Thu mua'],w:'115px',ro:1},
+              {k:'kl',l:'KL xuất (kg)',type:'num',w:'120px',calc:1}],
+        def:[],
+        foot:[{k:'lo',lbl:'Σ TỔNG XUẤT'},{k:'kl',id:'x4_m_kl',c:'teal'}]}}
+    ]},
+  { code:'X-5', title:'Duyệt xuất kho', desc:'Duyệt xong mới được xuất hàng và trừ tồn',
+    nguoi:'Thủ kho trình ký', sla:'1 ngày', duyet:'Thủ trưởng đơn vị',
+    body:[
+      {title:'Phê duyệt', fields:[
+        {id:'x5_nguoi',label:'Người duyệt',type:'text',dflt:'Hồ Trung Nghĩa — Thủ trưởng đơn vị'},
+        {id:'x5_ngay',label:'Ngày duyệt',type:'date',dflt:'2025-05-24'},
+        {id:'x5_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — hoàn thành xuất kho','✗ Trả lại — chọn lại lô'],full:1},
+        {id:'x5_ykien',label:'Ý kiến duyệt',type:'area',full:1}
+      ]},
+      {co:'warn',t:'Chốt chặn',x:'Chỉ trừ tồn kho sau khi phiếu được duyệt.'},
+      {chain:1}
+    ]}
+]}
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
+// Dọn dữ liệu nhập thử của bản cũ (cấu trúc bảng đã đổi)
+const STORE_VER='v56';
+try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
+
+
+let cf = parseInt(ss('cs_cf')||'-1');
+let cs = FLOWS.map((_,i)=>parseInt(ss('cs_s'+i)||'0'));
+let state = {};
+try{ state = JSON.parse(ss('cs_state')||'{}'); }catch(e){ state={}; }
+
+function save(){ ss('cs_cf',cf); cs.forEach((v,i)=>ss('cs_s'+i,v)); try{ ss('cs_state',JSON.stringify(state)); }catch(e){} }
+function inMode(o){ return true; }
+function colsOf(t){ return t.cols.filter(inMode); }
+function key(){ return cf+'_'+cs[cf]; }
+function D(){ return state[key()]||{}; }
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function esc(v){ return (v===undefined||v===null?'':String(v)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function n(v){
+  let t=String(v==null?'':v).trim().replace(/[^0-9.,\-]/g,'');
+  if(t.indexOf(',')>=0) t=t.replace(/\./g,'').replace(',','.');        // 41.310,5 -> 41310.5
+  else if(/^-?\d{1,3}(\.\d{3})+$/.test(t)) t=t.replace(/\./g,'');     // 41.310 -> 41310
+  const x=parseFloat(t); return isNaN(x)?0:x;
+}
+function fmt(x){ return (Math.round(x*100)/100).toLocaleString('vi-VN'); }
+function setM(id,val,sub){ const e=document.getElementById(id); if(e) e.innerHTML=val+(sub?'<span style="font-size:11px;font-weight:500"> '+sub+'</span>':''); }
+
+/* ============================================================
+   RENDER — FIELD / TABLE / SECTION
+   ============================================================ */
+function toggleMdd(id){
+  const pan=document.getElementById('mddpan_'+id); if(!pan) return;
+  const open=pan.classList.toggle('open');
+  document.querySelectorAll('.mdd-panel.open').forEach(function(p){ if(p!==pan) p.classList.remove('open'); });
+  if(open){ setTimeout(function(){
+    document.addEventListener('click', function close(e){
+      if(!e.target.closest('#mdd_'+id)){ pan.classList.remove('open'); document.removeEventListener('click',close); }
+    });
+  },0); }
+}
+
+function syncMulti(el,id){
+  el.closest('.mdd-opt').classList.toggle('on',el.checked);
+  const box=el.closest('.mdd-panel');
+  const vals=Array.from(box.querySelectorAll('input[type=checkbox]')).filter(function(c){return c.checked;}).map(function(c){return c.dataset.v;});
+  const h=document.getElementById(id); if(h) h.value=vals.join(' · ');
+  const lb=document.getElementById('mddlbl_'+id);
+  if(lb) lb.textContent = vals.length? (vals.length===1? vals[0] : vals.length+' ô đã chọn') : '— chọn ô —';
+  recalc();
+}
+
+// phân loại trường: điền tay · kế thừa · tự tính · đồng bộ app
+function fieldKind(f){
+  if(f.src==='app') return {cls:'fk-app', tag:'<span class="fk-tag t-app">⇄ App Nghĩa</span>'};
+  // sửa được thì vẫn là trường điền, dù có giá trị mặc định kế thừa
+  if(f.type!=='ro') return {cls:'fk-fill', tag:'<span class="fk-tag t-fill">✎ Điền</span>'};
+  if(f.inh || f.src==='inh') return {cls:'fk-inh', tag:'<span class="fk-tag t-inh">↩ Kế thừa</span>'};
+  return {cls:'fk-auto',tag:'<span class="fk-tag t-auto">⚙ Tự tính</span>'};
+}
+
+function inhVal(f){ if(!f.inh) return ''; const s=state[f.inh[0]]||{}; const v=s[f.inh[1]]; return (v===undefined||v===null)?'':v; }
+
+function fieldHTML(f,d){
+  let v = d[f.id]!==undefined && d[f.id]!=='' ? d[f.id] : '';
+  let inherited=false;
+  if(v==='' && f.inh){ const iv=inhVal(f); if(iv!==''){ v=iv; inherited=true; } }
+  if(v==='' && f.dflt!==undefined) v=f.dflt;
+  const kind = fieldKind(f);
+  const cls = 'fgrp'+(f.full?' full':'')+' '+kind.cls;
+  const lab = '<label class="'+(f.req?'req':'')+'">'+esc(f.label)+kind.tag+'</label>';
+  const hint = f.hint?'<div class="fhint">'+f.hint+'</div>':'';
+  const oi = f.calc?' oninput="recalc()" onchange="recalc()"':'';
+  let inp='';
+  if(f.type==='multi'){
+    const cur=String(v||'').split(' · ').filter(Boolean);
+    const lbl = cur.length? (cur.length===1? cur[0] : cur.length+' ô đã chọn') : '— chọn ô —';
+    inp='<div class="mdd" id="mdd_'+f.id+'">'
+      +'<button type="button" class="mdd-btn" onclick="toggleMdd(\''+f.id+'\')"><span id="mddlbl_'+f.id+'">'+esc(lbl)+'</span><span class="mdd-ar">▾</span></button>'
+      +'<div class="mdd-panel" id="mddpan_'+f.id+'">'
+      +f.opts.map(function(o){
+        return '<label class="mdd-opt'+(cur.indexOf(o)>=0?' on':'')+'"><input type="checkbox" data-v="'+esc(o)+'" '+(cur.indexOf(o)>=0?'checked':'')
+          +' onchange="syncMulti(this,\''+f.id+'\')"/>'+esc(o)+'</label>';
+      }).join('')
+      +'</div><input type="hidden" id="'+f.id+'" value="'+esc(v)+'"/></div>';
+  } else if(f.type==='sel'){
+    if(f.opts.indexOf(v)<0) v = (f.dflt!==undefined && f.opts.indexOf(f.dflt)>=0)? f.dflt : f.opts[0];
+    inp='<select id="'+f.id+'"'+oi+'>'+f.opts.map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+  } else if(f.type==='area'){
+    inp='<textarea id="'+f.id+'" placeholder="'+esc(f.ph||'')+'">'+esc(v)+'</textarea>';
+  } else if(f.type==='file'){
+    inp='<input id="'+f.id+'" value="'+esc(v)+'" placeholder="'+esc(f.ph||'Tên file / link chứng từ đính kèm…')+'"/>';
+  } else if(f.type==='ro'){
+    inp='<input id="'+f.id+'" value="'+esc(v)+'" placeholder="'+esc(f.ph||'')+'" readonly/>';
+  } else if(f.type==='num'){
+    inp='<input id="'+f.id+'" type="number" step="any" value="'+esc(v)+'" placeholder="'+esc(f.ph||'0')+'"'+oi+'/>';
+  } else if(f.type==='date'){
+    inp='<input id="'+f.id+'" type="date" value="'+esc(v)+'"'+oi+'/>';
+  } else {
+    inp='<input id="'+f.id+'" value="'+esc(v)+'" placeholder="'+esc(f.ph||'')+'"'+oi+'/>';
+  }
+  return '<div class="'+cls+'">'+lab+inp+hint+'</div>';
+}
+
+function cellHTML(c,row){
+  const v = row[c.k]!==undefined?row[c.k]:'';
+  const oi = c.calc?' oninput="recalc()" onchange="recalc()"':'';
+  if(c.pick){
+    let list=poolOf(c.pick); const k=POOL_KEY[c.pick];
+    let opts='<option value="">— chọn —</option>';
+    if(v && !list.some(function(r){return r[k]===v;})) opts+='<option selected>'+esc(v)+'</option>';
+    opts+=list.map(function(r){return '<option'+(r[k]===v?' selected':'')+'>'+esc(r[k])+'</option>';}).join('');
+    return '<select data-k="'+c.k+'" class="pick" onchange="pickRow(this,\''+c.pick+'\')">'+opts+'</select>';
+  }
+  if(c.type==='sel' && c.ro) return '<input data-k="'+c.k+'" value="'+esc(v)+'" readonly/>';
+  if(c.type==='sel') return '<select data-k="'+c.k+'"'+oi+'>'+['']. concat(c.opts).map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+  if(c.type==='check') return '<div style="text-align:center"><input type="checkbox" data-k="'+c.k+'" '+(v===true||v==='true'?'checked':'')+' style="width:16px;height:16px"'+oi+'/></div>';
+  if(c.type==='num') return '<input type="number" step="any" data-k="'+c.k+'" value="'+esc(v)+'" class="num-right"'+(c.ro?' readonly':'')+oi+'/>';
+  if(c.type==='date') return '<input type="date" data-k="'+c.k+'" value="'+esc(v)+'"'+oi+'/>';
+  return '<input data-k="'+c.k+'" value="'+esc(v)+'"'+(c.ro?' readonly':'')+oi+'/>';
+}
+
+function rowHTML(t,row){
+  return '<tr>'+colsOf(t).map(c=>'<td'+(c.w?' style="width:'+c.w+'"':'')+'>'+cellHTML(c,row)+'</td>').join('')
+    +'<td style="width:28px"><button class="tdel" onclick="this.closest(\'tr\').remove();recalc()">×</button></td></tr>';
+}
+
+function tableHTML(t,d){
+  let rows = d[t.id]!==undefined ? d[t.id] : null;
+  if(rows===null && t.inh){ const src=(state[t.inh[0]]||{})[t.inh[1]]; if(src && src.length) rows=src; }
+  if(rows===null && t.defFn) rows = t.defFn();
+  if(rows===null) rows = t.def||[];
+  let foot='';
+  if(t.foot){
+    foot='<tfoot><tr>'+colsOf(t).map(c=>{
+      const f=t.foot.find(x=>x.k===c.k);
+      if(!f) return '<td class="tf"></td>';
+      if(f.lbl) return '<td class="tf tf-lbl">'+esc(f.lbl)+'</td>';
+      const al=(c.type==='num')?' num-right':'';
+      return '<td class="tf'+al+' tv-'+(f.c||'blue')+'">'+(f.pre?'<span class="tf-pre">'+esc(f.pre)+'</span>':'')+'<span id="'+f.id+'">—</span></td>';
+    }).join('')+'<td class="tf"></td></tr></tfoot>';
+  }
+  return '<div class="tw"><table><thead><tr>'+colsOf(t).map(c=>'<th'+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+'</th>').join('')
+    +'<th style="width:28px"></th></tr></thead><tbody id="tb-'+t.id+'">'+rows.map(r=>rowHTML(t,r)).join('')+'</tbody>'+foot+'</table></div>'
+    +'<button class="tadd tadd-'+cf+'" onclick="addRow(\''+t.id+'\')">'+esc(t.add||'+ Thêm dòng')+'</button>';
+}
+
+function blockHTML(b,d){
+  if(!inMode(b)) return '';
+  if(b.co) return '<div class="callout co-'+b.co+'"><span class="co-t">'+b.t+'</span>'+b.x+'</div>';
+  if(b.chain) return chainHTML();
+  if(b.btn) return '<div style="margin:10px 0"><button class="btn btn-p'+cf+'" id="'+b.btn.id+'" onclick="'+b.btn.fn+'">'+b.btn.label+'</button></div>';
+  if(b.metrics){ const ms=b.metrics.filter(inMode);
+    return '<div class="tw totrow"><table><thead><tr><th style="width:90px">Hàng tổng</th>'
+      + ms.map(m=>'<th>'+esc(m.l)+'</th>').join('')+'</tr></thead><tbody><tr>'
+      + '<td class="tot-lbl">Σ TỔNG</td>'
+      + ms.map(m=>'<td class="tot-val tv-'+m.c+'" id="'+m.id+'">—</td>').join('')
+      + '</tr></tbody></table></div>'; }
+  let h='<div class="fs">';
+  if(b.title) h+='<div class="stitle st'+cf+'">'+esc(b.title)+'</div>';
+  if(b.fields) h+='<div class="fg">'+b.fields.filter(inMode).map(f=>fieldHTML(f,d)).join('')+'</div>';
+  if(b.table) h+=tableHTML(b.table,d);
+  if(b.check) h+=b.check.map((c,i)=>'<div class="ck-row"><input type="checkbox" id="ck_'+i+'" '+(d['ck_'+i]?'checked':'')
+      +' style="width:16px;height:16px;flex-shrink:0"/><label for="ck_'+i+'" style="font-size:13px;cursor:pointer">'+esc(c)+'</label></div>').join('');
+  return h+'</div>';
+}
+
+function addRow(tid){
+  const step=FLOWS[cf].steps[cs[cf]];
+  let t=null; step.body.forEach(b=>{ if(b.table&&b.table.id===tid) t=b.table; });
+  if(!t) return;
+  document.getElementById('tb-'+tid).insertAdjacentHTML('beforeend',rowHTML(t,{}));
+  recalc();
+}
+
+// Bung dải lô nhập ở D-2 thành từng lô để chọn khi xuất kho
+function loTuD2(){
+  const rows=(state['4_1']||{}).d1_lo||[];
+  const maC=(state['3_3']||{})._maC||'';
+  const ngay=(state['4_0']||{}).d1_ngay||'';
+  const tp=(state['4_0']||{}).d1_ma_sp||LOAI_TP[0];
+  const out=[];
+  rows.forEach(function(r){
+    const tu=n(r.tu), den=n(r.den), ng=r.nguon||'Khai thác';
+    if(tu>0 && den>=tu){ for(let i=tu;i<=den;i++) out.push({lo:r.lo+'-'+i,ma_c:maC,tp:tp,nguon:ng,ton:KG_LO,ngay:ngay}); }
+    else if(tu>0 && n(r.le)>0) out.push({lo:r.lo+'-'+tu,ma_c:maC,tp:tp,nguon:ng,ton:n(r.le),ngay:ngay});
+  });
+  return out;
+}
+function poolOf(name){
+  if(name==='loTP'){ const l=loTuD2(); return l.length? l : (POOL.loTP||[]); }
+  return POOL[name]||[];
+}
+
+function pickRow(el,poolName){
+  const list=poolOf(poolName), k=POOL_KEY[poolName];
+  const rec=list.filter(function(r){return r[k]===el.value;})[0];
+  const tr=el.closest('tr');
+  tr.querySelectorAll('[data-k]').forEach(function(c){
+    if(c===el) return;
+    const key=c.dataset.k;
+    if(rec && rec[key]!==undefined) c.value=rec[key];
+    else if(!rec) c.value='';
+  });
+  recalc();
+}
+
+function readTable(tid){
+  const tb=document.getElementById('tb-'+tid); if(!tb) return [];
+  return Array.from(tb.rows).map(tr=>{
+    const o={};
+    tr.querySelectorAll('[data-k]').forEach(el=>{ o[el.dataset.k]= el.type==='checkbox'?el.checked:el.value; });
+    return o;
+  });
+}
+function cellEl(tid,i,k){ const tb=document.getElementById('tb-'+tid); if(!tb||!tb.rows[i]) return null; return tb.rows[i].querySelector('[data-k="'+k+'"]'); }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+function renderTabs(){
+  document.getElementById('flow-tabs').innerHTML =
+    '<button class="ftab'+(cf===-1?' fa-ov':'')+'" onclick="goOverview()">🔗 Tổng quan chuỗi mã</button>'
+    + FLOWS.map((fl,i)=>'<button class="ftab'+(i===cf?' fa'+i:'')+'" onclick="goFlow('+i+')">'+esc(fl.label)+(fl.ngoai?' ⧉':'')+'</button>').join('')
+;
+}
+
+
+
+function renderHeader(){
+  const fl=FLOWS[cf];
+  document.getElementById('hdr-wrap').innerHTML =
+    '<div class="hdr hdr-'+cf+'"><div class="hdr-badge">'+esc(fl.badge)+'</div><h1>'+esc(fl.label)+'</h1>'
+    +'<p>'+esc(fl.sub)+'</p></div>';
+}
+
+function renderNav(){
+  const fl=FLOWS[cf], nav=document.getElementById('step-nav');
+  nav.className='step-nav s'+cf;
+  nav.innerHTML='<div class="snav-inner">'+fl.steps.map((s,i)=>{
+    const done=(state[cf+'_'+i]||{}).done, active=i===cs[cf];
+    return '<div class="snav-item'+(active?' sa':'')+(done?' sd':'')+'" onclick="goStep('+i+')" title="'+esc(s.title)+'">'
+      +'<div class="snav-dot">'+(done?'✓':(i+1))+'</div><span class="snav-label">'+esc(s.code)+'</span>'
+      +(i<fl.steps.length-1?'<div class="snav-line"></div>':'')+'</div>';
+  }).join('')+'</div>';
+}
+
+function renderCard(){
+  const fl=FLOWS[cf], c=cs[cf], step=fl.steps[c], d=D();
+  const last=c===fl.steps.length-1;
+  document.getElementById('sc').innerHTML =
+    '<div class="sc-hdr sc-hdr-'+cf+'"><div class="sc-badge sb'+cf+'">'+(c+1)+'</div><div>'
+      +'<div class="sc-title sc-title-'+cf+'">'+esc(step.code)+' — '+esc(step.title)+'</div>'
+      +'<div class="sc-desc">'+esc(step.desc)+'</div></div></div>'
+    +'<div class="ibar">'
+      +'<div class="ibar-item"><div class="ilbl">Quy trình</div><div class="ival"><span class="role-badge rb'+cf+'">'+esc(fl.code)+'</span></div></div>'
+      +'<div class="ibar-item"><div class="ilbl">Người thực hiện</div><div class="ival">'+esc(step.nguoi)+'</div></div>'
+      +'<div class="ibar-item"><div class="ilbl">Thời điểm / SLA</div><div class="ival">'+esc(step.sla)+'</div></div>'
+      +'<div class="ibar-item"><div class="ilbl">Người duyệt</div><div class="ival">'+esc(step.duyet)+'</div></div>'
+    +'</div>'
+    +'<div class="fb">'+step.body.map(b=>blockHTML(b,d)).join('')+'</div>'
+    +'<div class="navr"><span class="navc">Bước '+(c+1)+'/'+fl.steps.length+' · '+esc(fl.label)+'</span><div class="navb">'
+      +(c>0?'<button class="btn" onclick="prevStep()">← Bước trước</button>':'')
+      +'<button class="btn btn-ok" onclick="markDone()">✓ Đánh dấu hoàn thành</button>'
+      +(!last?'<button class="btn btn-p'+cf+'" onclick="nextStep()">Lưu & tiếp →</button>'
+             :'<button class="btn btn-p'+cf+'" onclick="nextFlow()">Sang quy trình sau →</button>')
+    +'</div></div>';
+  recalc();
+}
+
+function renderAll(){ renderHeader(); renderTabs(); renderNav(); renderCard(); }
+function goFlow(i){ saveForm(); cf=i; save(); renderAll(); scrollTo(0,0); }
+function goStep(i){ saveForm(); cs[cf]=i; save(); renderNav(); renderCard(); scrollTo(0,0); }
+function nextStep(){ saveForm(); if(cs[cf]<FLOWS[cf].steps.length-1){cs[cf]++;save();renderNav();renderCard();scrollTo(0,0);} }
+function prevStep(){ saveForm(); if(cs[cf]>0){cs[cf]--;save();renderNav();renderCard();scrollTo(0,0);} }
+function nextFlow(){ saveForm(); if(cf<FLOWS.length-1){ cf++; save(); renderAll(); scrollTo(0,0);} else { goOverview(); } }
+function markDone(){ saveForm(); if(!state[key()]) state[key()]={}; state[key()].done=true; save(); renderNav(); }
+
+function saveForm(){
+  if(cf<0) return;
+  const d={};
+  document.querySelectorAll('#sc input[id], #sc select[id], #sc textarea[id]').forEach(el=>{
+    d[el.id] = el.type==='checkbox' ? el.checked : el.value;
+  });
+  const step=FLOWS[cf].steps[cs[cf]];
+  step.body.forEach(b=>{ if(b.table) d[b.table.id]=readTable(b.table.id); });
+  const old=state[key()]||{};
+  state[key()]=Object.assign({},old,d);
+  save();
+}
+
+/* ============================================================
+   TÍNH TOÁN THEO BƯỚC
+   ============================================================ */
+/* ---- Sinh mã theo PEFC-TNSR-04 ---- */
+function pad(v,l){ const s=String(v==null?'':v).replace(/\D/g,''); return s? s.padStart(l,'0').slice(-l):''; }
+function dparts(v){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); return m?{y4:m[1],yy:m[1].slice(2),mm:m[2],dd:m[3]}:null; }
+function setV(id,v){ const e=document.getElementById(id); if(e && (e.readOnly || !e.value)) e.value=v; else if(e && e.readOnly) e.value=v; }
+
+
+function recalc(){
+  if(cf<0) return;
+  const k=cf+'_'+cs[cf];
+  if(k==='0_1') calcA2();
+  if(k==='0_2') calcA3();
+  if(k==='0_3') calcA4();
+  if(k==='1_1') calcNK2();
+  if(k==='1_2') calcNK3();
+  if(k==='2_1') calcB2();
+  if(k==='3_0') calcC1();
+  if(k==='3_1') calcC2();
+  if(k==='3_2') calcC3();
+  if(k==='3_3') calcC4();
+  if(k==='3_5') calcC6();
+  if(k==='4_0') calcD1();
+  if(k==='4_1') calcD2();
+  if(k==='5_0') calcX1();
+  if(k==='5_1') calcX2();
+  if(k==='5_2') calcX3();
+  if(k==='5_3') calcX4();
+}
+
+
+function setRO(id,v){ const e=document.getElementById(id); if(e) e.value=v; }
+
+function calcA2(){
+  const can=n(document.getElementById('a2_kl_can')?.value);
+  setRO('a2_tru15', can? fmt(can*0.85) : '');
+  const d=dparts(document.getElementById('a2_ngay')?.value), stt=document.getElementById('a2_stt')?.value;
+  state['0_1']=Object.assign({},state['0_1'],{_maA:(d&&stt)? d.y4+d.mm+d.dd+pad(stt,2):'',_kl:can}); save();
+}
+
+function calcA3(){
+  const can=n((state['0_1']||{})._kl);
+  const drc=n(document.getElementById('a3_drc')?.value);
+  setRO('a3_kl_kho', (can&&drc)? fmt(can*drc/100) : '');
+  state['0_2']=Object.assign({},state['0_2'],{_kho:(can&&drc)?Math.round(can*drc/100*100)/100:''}); save();
+}
+
+function calcA4(){
+  setRO('a4_ma_a',(state['0_1']||{})._maA||'');
+}
+
+function calcNK2(){
+  const rows=readTable('nk2_list');
+  let kho=0,kt=0,tm=0;
+  rows.forEach(r=>{ const k=n(r.kho); kho+=k; if(r.nguon===NGUON[1]) tm+=k; else kt+=k; });
+  setM('nk2_m_so',rows.length); setM('nk2_m_kho',fmt(kho));
+  setRO('nk2_tl_kt', kho? fmt(kt/kho*100)+' %' : ''); setRO('nk2_tl_tm', kho? fmt(tm/kho*100)+' %' : '');
+  state['1_1']=Object.assign({},state['1_1'],{_kho:kho,_so:rows.length});
+  save();
+}
+
+function calcNK3(){
+  const s1=state['1_1']||{};
+  const kq=(state['1_3']||{}).nk4_kq||'';
+  setRO('nk3_tt', kq.indexOf('Duyệt')>0? 'Đã duyệt' : (kq.indexOf('Trả lại')>0? 'Trả lại' : 'Chờ duyệt'));
+  setRO('nk3_ma_phieu','NKNL-'+pad((state['1_2']||{})._stt||1,3));
+  setRO('nk3_so_ma', s1._so||'');
+  setRO('nk3_kl', s1._kho? fmt(n(s1._kho)) : '');
+}
+
+function calcB2(){
+  const d=dparts((state['2_0']||{}).b1_ngay_lo || '2025-05-12');
+  const eB=document.getElementById('b2_ma_b');
+  const ng=(state['2_0']||{}).b1_nguon||NGUON[0];
+  const hau = ng===NGUON[1] ? '-TM' : '-KT';
+  if(eB) eB.value = d? 'B-'+d.yy+pad((state['2_0']||{})._stt||1,4)+hau : '';
+  const eK=document.getElementById('b2_khu');
+  if(eK && !eK.value && (state['2_0']||{}).b1_khu) eK.value=(state['2_0']||{}).b1_khu;
+  const rows=readTable('b2_list');
+  let kho=0,kt=0,tm=0;
+  rows.forEach(r=>{ const k=n(r.kho); kho+=k; if(r.nguon===NGUON[1]) tm+=k; else kt+=k; });
+  setM('b2_m_so',rows.length);
+  setM('b2_m_kho',fmt(kho));
+  setRO('b2_tl_kt', kho? fmt(kt/kho*100)+' %' : ''); setRO('b2_tl_tm', kho? fmt(tm/kho*100)+' %' : '');
+  state['2_1']=Object.assign({},state['2_1'],{_kho:kho,_kt:kt,_tm:tm});
+}
+
+function calcC1(){
+  const d=dparts(document.getElementById('c1_ngay')?.value);
+  state['3_0']=Object.assign({},state['3_0'],{_maC: d? 'CB'+d.yy+d.mm+d.dd : ''}); save();
+}
+
+function calcC2(){
+  const maC=(state['3_0']||{})._maC||'';
+  setRO('c2_ma_c',maC);
+  const rows=readTable('c1_ma_b');
+  let vao=0,kt=0,tm=0;
+  rows.forEach((r,i)=>{
+    // Chỉ định CB / CBxxx / CBxx%
+    const ton=n(r.ton), cb=String(r.cb||'').trim().toUpperCase();
+    let lay=n(r.lay);
+    if(cb){
+      if(cb==='CB') lay=ton;
+      else if(/^CB[\d.]+%$/.test(cb)) lay=ton*parseFloat(cb.slice(2))/100;
+      else if(/^CB[\d.]+$/.test(cb)) lay=parseFloat(cb.slice(2));
+      const el=cellEl('c1_ma_b',i,'lay'); if(el && lay) el.value=Math.round(lay*100)/100;
+    }
+    vao+=lay;
+    // cơ cấu KT/TM suy từ nguồn của Mã B
+    const src=(POOL.maB||[]).filter(function(x){return x.ma_b===r.ma_b;})[0];
+    let rkt=0,rtm=0;
+    if(src){ const t=n(src.kt)+n(src.tm); if(t>0){ rkt=lay*n(src.kt)/t; rtm=lay*n(src.tm)/t; } }
+    else if((r.nguon||'')==='Thu mua') rtm=lay; else rkt=lay;
+    kt+=rkt; tm+=rtm;
+  });
+  let ton=0; rows.forEach(r=>ton+=n(r.ton));
+  setM('c1_m_ton',fmt(ton));
+  setM('c1_m_vao',fmt(vao));
+  setRO('c2_tl_kt', vao? fmt(kt/vao*100)+' %' : ''); setRO('c2_tl_tm', vao? fmt(tm/vao*100)+' %' : '');
+  state['3_1']=Object.assign({},state['3_1'],{_vao:vao,_kt:kt,_tm:tm,_maC:maC});
+  save();
+}
+
+function calcC3(){
+  setRO('c3_ma_c',(state['3_1']||{})._maC||'');
+  const xk=n(document.getElementById('c2_x_kho')?.value), nk=n(document.getElementById('c2_n_kho')?.value);
+  const hao=xk-nk, pct= xk? hao/xk*100 : 0;
+  setRO('c2_hao', (xk||nk)? fmt(hao) : '');
+  setRO('c2_pct', xk? fmt(pct)+' %' : '');
+  setRO('c2_tt', !xk?'':(hao>0?'Có hao hụt':'Không hao hụt'));
+}
+
+function calcC4(){
+  const st=state['3_1']||{};
+  const eC=document.getElementById('c4_ma_c'); if(eC && st._maC) eC.value=st._maC;
+  const eKt=document.getElementById('c3_vao_kt'), eTm=document.getElementById('c3_vao_tm');
+  if(eKt && st._kt!==undefined && st._kt!=='') eKt.value=Math.round(n(st._kt)*100)/100;
+  if(eTm && st._tm!==undefined && st._tm!=='') eTm.value=Math.round(n(st._tm)*100)/100;
+  const vKt=n(eKt?.value), vTm=n(eTm?.value), vao=vKt+vTm;
+  const kt=n(document.getElementById('c3_tp_kt')?.value), tm=n(document.getElementById('c3_tp_tm')?.value), tp=kt+tm;
+  const lKt=kt-vKt, lTm=tm-vTm;
+  setRO('c3_lech_kt', (vKt||kt)? (lKt>=0?'+':'')+fmt(lKt)+' kg' : '');
+  setRO('c3_lech_tm', (vTm||tm)? (lTm>=0?'+':'')+fmt(lTm)+' kg' : '');
+  setRO('c3_vao', vao? fmt(vao) : '');
+  setRO('c3_tp', tp? fmt(tp) : '');
+  setRO('c3_sai_lech', (vao||tp)? (tp-vao>=0?'+':'')+fmt(tp-vao)+' kg' : '');
+  const eDm=document.getElementById('c3_dinh_muc');
+  if(eDm) eDm.value = (vao&&tp)? fmt(tp/vao*100)+' %' : '';
+  state['3_3']=Object.assign({},state['3_3'],{_vao:vao,_tp:tp,_kt:kt,_tm:tm,_vKt:vKt,_vTm:vTm,_lKt:lKt,_lTm:lTm,_maC:st._maC||''});
+  save();
+}
+
+function calcC6(){
+  const s3=state['3_3']||{};
+  function huong(id,l){
+    const e=document.getElementById(id); if(!e || e.value) return;
+    e.value = l>0? 'Cộng phần dư vào nguyên liệu đầu vào'
+            : l<0? 'Giải trình hao hụt — không trừ nguyên liệu'
+            : 'Hiệu số = 0 — không cần xử lý';
+  }
+  const vKt=n(s3._vKt), tKt=n(s3._kt), lKt=tKt-vKt;
+  const vTm=n(s3._vTm), tTm=n(s3._tm), lTm=tTm-vTm;
+  setRO('c5_vao_kt',fmt(vKt)); setRO('c5_tp_kt',fmt(tKt));
+  setRO('c5_lech_kt',(lKt>=0?'+':'')+fmt(lKt)+' kg'); huong('c5_huong_kt',lKt);
+  setRO('c5_vao_tm',fmt(vTm)); setRO('c5_tp_tm',fmt(tTm));
+  setRO('c5_lech_tm',(lTm>=0?'+':'')+fmt(lTm)+' kg'); huong('c5_huong_tm',lTm);
+  const maC=s3._maC||'';
+  setRO('c5_maB_kt', lKt>0? 'B-ĐC-'+maC+'-KT' : '—');
+  setRO('c5_kldc_kt', lKt>0? fmt(lKt) : '0');
+  setRO('c5_maB_tm', lTm>0? 'B-ĐC-'+maC+'-TM' : '—');
+  setRO('c5_kldc_tm', lTm>0? fmt(lTm) : '0');
+  const dc=(lKt>0?lKt:0)+(lTm>0?lTm:0);
+  setRO('c5_vao_sau', (vKt+vTm)? fmt(vKt+vTm+dc) : '');
+}
+
+
+function calcD1(){
+  const s3=state['3_3']||{};
+  const fKt=document.getElementById('d1_kl_kt'), fTm=document.getElementById('d1_kl_tm');
+  if(fKt && s3._kt!==undefined && s3._kt!=='') fKt.value=Math.round(n(s3._kt)*100)/100;
+  if(fTm && s3._tm!==undefined && s3._tm!=='') fTm.value=Math.round(n(s3._tm)*100)/100;
+  const maC=(s3._maC)||(state['3_1']||{})._maC||'CB250501';
+  setRO('d1_ma_c',maC);
+  setRO('d1_ma_nk','F03N-'+pad((state['4_0']||{})._stt||1,3));
+  const kt=n(fKt?.value), tm=n(fTm?.value), tong=kt+tm;
+  setRO('d1_kl', tong? fmt(tong) : '');
+  state['4_0']=Object.assign({},state['4_0'],{_kl:tong,_kt:kt,_tm:tm,_maD:'TP-'+maC});
+  save();
+}
+
+function calcD2(){
+  setRO('d2_ma_d',(state['4_0']||{})._maD||'');
+  const rows=readTable('d1_lo');
+  let kl=0, le=0, soLo=0;
+  rows.forEach(function(r,i){
+    const tu=n(r.tu), den=n(r.den);
+    const cell=cellEl('d1_lo',i,'kl');
+    let v=0;
+    if(tu>0 && den>=tu){ const sl=den-tu+1; v=sl*KG_LO; soLo+=sl; if(cell) cell.value=Math.round(v*100)/100; }
+    else { if(cell) cell.value=''; if(tu>0 && n(r.le)>0) soLo+=1; }
+    kl+=v; le+=n(r.le);
+  });
+  setM('d1_m_lo',soLo); setM('d1_m_kl',fmt(kl)); setM('d1_m_le',fmt(le));
+  const tong=kl+le, nhap=n((state['4_0']||{})._kl);
+  setRO('d2_so_lo',soLo);
+  setRO('d2_tong_lo', tong? fmt(tong) : '');
+  setRO('d2_kl_nhap', nhap? fmt(nhap) : '');
+  setRO('d2_check', (!tong||!nhap)? '' : (Math.abs(tong-nhap)<0.01? '✓ Khớp tổng KL thành phẩm thực tế'
+        : '⚠ Lệch '+fmt(tong-nhap)+' kg so với KL thành phẩm — kiểm tra lại số lô hoặc lô lẻ'));
+  state['4_1']=Object.assign({},state['4_1'],{_lo:soLo,_kl:tong});
+  save();
+}
+
+
+
+
+// Comment 9: số bành = KL / 35, cảnh báo nếu không chia hết
+function kiemTraBanh(kl, idBanh){
+  setRO(idBanh, kl? fmt(kl/KG_BANH)+' bành' : '');
+}
+
+function calcX1(){
+  kiemTraBanh(n(document.getElementById('x1_kl')?.value),'x1_so_banh');
+}
+
+function calcX2(){
+  const d=dparts(document.getElementById('x2_ngay')?.value);
+  const stt=pad((state['5_1']||{})._stt||1,3);
+  const e=document.getElementById('x2_ma_lenh'); if(e) e.value='LXH-'+stt;
+  kiemTraBanh(n(document.getElementById('x2_kl')?.value)||n((state['5_0']||{}).x1_kl),'x2_so_banh');
+  state['5_1']=Object.assign({},state['5_1'],{_maLenh:'LXH-'+stt,_maPhieu:d?'F03X-'+d.y4+'-'+stt:'F03X-'+stt}); save();
+}
+
+function calcX3(){
+  const can=n((state['5_1']||{}).x2_kl)||n((state['5_0']||{}).x1_kl);
+  const rows=readTable('x3_ton');
+  let chon=0,kt=0,tm=0,ton=0;
+  rows.forEach(r=>{ ton+=n(r.ton);
+    const k=n(r.kl); if(k>0){ chon+=k; if(r.nguon==='Thu mua') tm+=k; else kt+=k; } });
+  setM('x3_m_can',can?fmt(can):'—');
+  setM('x3_m_ton',fmt(ton));
+  setM('x3_m_chon',fmt(chon));
+  setM('x3_m_thieu', can? (can-chon>0? '−'+fmt(can-chon) : '+'+fmt(chon-can)) : '—');
+  setRO('x3_tl_kt', chon? fmt(kt/chon*100)+' %' : ''); setRO('x3_tl_tm', chon? fmt(tm/chon*100)+' %' : '');
+  state['5_2']=Object.assign({},state['5_2'],{_chon:chon,_kt:kt,_tm:tm}); save();
+}
+
+function calcX4(){
+  const s2=state['5_1']||{}, s3=state['5_2']||{};
+  setRO('x4_ma_phieu',s2._maPhieu||'');
+  setRO('x4_kl',fmt(n(s3._chon)));
+  const kt=n(s3._kt), tm=n(s3._tm), tot=kt+tm;
+
+  const rows=readTable('x4_lo');
+  let kl=0,a=0,b=0; rows.forEach(r=>{ const v=n(r.kl)||0; kl+=v; if(r.nguon==='Thu mua') b+=v; else a+=v; });
+  setM('x4_m_kl',fmt(kl));
+  setRO('x4_tl_kt', kl? fmt(a/kl*100)+' %' : ''); setRO('x4_tl_tm', kl? fmt(b/kl*100)+' %' : '');
+}
+
+
+/* ============================================================
+   TRANG TỔNG QUAN
+   ============================================================ */
+function chainHTML(){
+  const box=(x,label,code,color)=>
+    '<g><rect x="'+x+'" y="26" width="112" height="52" rx="9" fill="'+color+'14" stroke="'+color+'" stroke-width="1"/>'
+    +'<text x="'+(x+56)+'" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="'+color+'" font-family="Be Vietnam Pro,sans-serif">'+code+'</text>'
+    +'<text x="'+(x+56)+'" y="65" text-anchor="middle" font-size="9.5" fill="#374151" font-family="Be Vietnam Pro,sans-serif">'+label+'</text></g>';
+  const arrow=(x)=>'<line x1="'+x+'" y1="52" x2="'+(x+18)+'" y2="52" stroke="#9CA3AF" stroke-width="1.4" marker-end="url(#ch-a)"/>';
+  return '<div style="overflow-x:auto;margin:6px 0 16px"><svg width="100%" viewBox="0 0 800 110" style="min-width:720px">'
+   +'<defs><marker id="ch-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">'
+   +'<path d="M2 1L8 5L2 9" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/></marker></defs>'
+   +'<text x="8" y="16" font-size="10" fill="#9CA3AF" font-family="Be Vietnam Pro,sans-serif">Truy ngược: Đơn hàng → Phiếu xuất kho → Lô thành phẩm → Mã C → Mã B → Phiếu nhập kho NL → Mã A → Phiếu cân + Phiếu giao nhận → Lô/Polygon vùng trồng</text>'
+   +box(8,'Vườn / tổ','Vườn','#3B6D11')+arrow(120)
+   +box(146,'Phiếu cân + DRC','Mã A','#185FA5')+arrow(258)
+   +box(284,'Lô bãi ủ','Mã B','#1A7A5E')+arrow(396)
+   +box(422,'Chế biến','Mã C','#7B2FA0')+arrow(534)
+   +box(560,'Lô thành phẩm','Lô D','#C25B10')+arrow(672)
+   +box(688,'Xuất kho','Mã XK','#8B2252')
+   +'</svg></div>';
+}
+
+function goOverview(){
+  saveForm(); cf=-1; save(); renderTabs();
+  document.getElementById('hdr-wrap').innerHTML =
+    '<div class="hdr" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">'
+    +'<div class="hdr-badge">Truy xuất nguồn gốc cao su · EUDR / PEFC CoC</div>'
+    +'<h1>Tây Ninh Siêm Riệp PTCS — Luồng truy xuất</h1>'
+    +'<p>6 quy trình · 26 bước · Toàn chuỗi tính theo khối lượng QUY KHÔ</p></div>';
+  document.getElementById('step-nav').innerHTML='';
+  const card = (i)=>{
+    const fl=FLOWS[i], c=['#185FA5','#1A7A5E','#7B2FA0','#C25B10','#8B2252','#2F4B9B'][i];
+    return '<div onclick="goFlow('+i+')" style="cursor:pointer;border:1px solid '+c+';border-left:4px solid '+c+';border-radius:10px;padding:14px 16px;margin-bottom:10px;background:'+c+'0A">'
+      +'<div style="font-size:14px;font-weight:600;color:'+c+';margin-bottom:3px">'+esc(fl.label)
+        +(fl.ngoai?'<span style="margin-left:8px;font-size:10px;font-weight:700;background:#FAEEDA;color:#854F0B;border:1px solid #854F0B;border-radius:10px;padding:1px 7px">NGOÀI BASE · '+esc(fl.ngoai)+'</span>':'')+'</div>'
+      +'<div style="font-size:12px;color:var(--g500);margin-bottom:8px">'+esc(fl.sub)+'</div>'
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap">'+fl.steps.map((s,j)=>
+        '<span style="font-size:11px;padding:2px 9px;border-radius:12px;background:'+((state[i+'_'+j]||{}).done?'#EAF3DE':'#fff')+';border:1px solid '+((state[i+'_'+j]||{}).done?'#3B6D11':'#D1D5DB')+';color:'+((state[i+'_'+j]||{}).done?'#3B6D11':'#6B7280')+'">'+esc(s.code)+' '+esc(s.title)+'</span>').join('')+'</div></div>';
+  };
+  document.getElementById('sc').innerHTML='<div style="padding:22px">'
+    +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200)">Chuỗi mã — xương sống hệ thống</div>'
+    + chainHTML()
+    +'<div class="callout co-info"><span class="co-t">Bốn nguyên tắc bất biến</span>'
+    +'1. Mã sau luôn lưu <b>danh sách mã trước</b>, không chỉ lưu tổng khối lượng.<br/>'
+    +'2. Từ Mã A trở đi, mọi con số là <b>khối lượng quy khô</b>. Việc có ghi nhận thêm mủ tươi ở khâu vận chuyển hay không <b>đang chờ khách xác nhận</b>.<br/>'
+    +'3. Một Mã C phải chạy hết chuỗi (cân bằng → nhập kho → xuất kho) mới hoàn thành.<br/>'
+    +'4. Cơ cấu <b>khai thác / thu mua</b> theo dõi xuyên suốt từ Mã B đến Mã XK.</div>'
+    +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">Quy tắc sinh mã — PEFC-TNSR-04 (hiệu lực 01/05/2025)</div>'
+    +'<div class="tw"><table><thead><tr><th style="width:130px">Mã</th><th style="width:210px">Cấu trúc</th><th style="width:150px">Ví dụ</th><th>Sinh từ trường nào trên phiếu</th></tr></thead><tbody>'
+    +[['Plot_ID','Định danh lô đất','PLOT001 · PLOT_A02','Hệ thống Dữ liệu Lô Đất — tra theo To_So'],
+      ['Mã A (Ma_GiaoNhan_GN)','[YYYYMMDD][XX]','2025050101','Ngày cân + STT phiếu cân trong ngày'],
+      ['Mã B (Lô lưu trữ)','[B-][YY][XXXX]-KT/TM','B-250001-KT','Năm lưu trữ + STT (max+1) + hậu tố nguồn'],
+      ['Mã C (Lô chế biến)','CB[YYMMDD]','CB250501','Ngày chế biến'],
+      ['Chỉ định chế biến','CB · CBxxx · CBxx%','CB10000','100% tồn · xxx kg · xx% tồn của Mã B'],
+      ['Mã D (Lô thành phẩm)','[TP-][Mã C]','TP-CB250501','Kế thừa Mã C, chia lô .01 .02…'],
+      ['Mã XK','XK_[STT]','XK_001','STT lần xuất kho'],
+      ['Phiếu gom lô','PGL-[XXX]','PGL-001','Mẫu 04-PEFC04'],
+      ['Phiếu nhập kho TP','F03N-[…]','F03N-PYSX-001','Mẫu 08A-PEFC04'],
+      ['Phiếu xuất kho TP','F03X-[YYYY]-[XXX]','F03X-2025-001','Mẫu 08B-PEFC04']
+     ].map(r=>'<tr><td style="font-weight:600;font-size:12.5px">'+r[0]+'</td><td style="font-family:ui-monospace,monospace;font-size:12px">'+r[1]+'</td><td style="font-family:ui-monospace,monospace;font-size:12px;color:var(--blue)">'+r[2]+'</td><td style="font-size:12.5px;color:var(--g700)">'+r[3]+'</td></tr>').join('')
+    +'</tbody></table></div>'
+    +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">6 quy trình — bấm để mở form</div>'
+    + FLOWS.map((_,i)=>card(i)).join('')
+    +'<div class="callout co-auto" style="margin-top:6px"><span class="co-t">Định mức đóng lô (chốt tại buổi khảo sát)</span>'
+    +'1 bành = <b>35 kg</b> · 1 pallet = <b>36 bành</b> = 1.260 kg · 1 lô = <b>4 pallet (A/B/C/D)</b> = 144 bành = <b>5.040 kg</b>. Lô cuối thiếu bành vẫn giữ số lô riêng.</div>'
+    +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">'
+    +'<button class="btn" onclick="window.print()">🖨 In toàn bộ</button>'
+    +'<button class="btn" onclick="resetAll()">↺ Xoá dữ liệu nhập thử</button></div>'
+    +'</div>';
+  scrollTo(0,0);
+}
+
+
+
+function resetAll(){
+  if(!confirm('Xoá toàn bộ dữ liệu đã nhập thử trong trình duyệt?')) return;
+  state={}; try{ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); }catch(e){}
+  cs=FLOWS.map(()=>0); save(); goOverview();
+}
+
+/* BOOT */
+if(cf>=FLOWS.length) cf=-1;
+FLOWS.forEach((fl,i)=>{ if(!cs[i]||cs[i]>=fl.steps.length) cs[i]=0; });
+if(cf===-2||cf===-3) cf=-1;
+if(cf<0){ goOverview(); } else { renderAll(); }
+</script>
+</body>
+</html>

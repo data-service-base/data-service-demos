@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HEID × Base.vn – Giải pháp báo cáo Phòng Kinh doanh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#F3F5F8;--surface:#FFFFFF;--ink:#14203A;--muted:#5E6878;--faint:#8A93A3;--line:#E1E5EB;--soft:#F6F8FA;
+  --kd:#1F4F9E;--kd-bg:#E8EEF8;--deep:#0E2650;--deep-2:#163866;
+  --ctnd:#1E6B57;--mkt:#A35A0E;--io:#3E6A8A;--kt:#6A3C83;
+  --ok:#17795E;--ok-bg:#E3F2EC;--warn:#A85C08;--warn-bg:#FBEFDF;--bad:#B42318;--bad-bg:#FBE6E4;
+  --serif:"Literata",Georgia,serif;
+  --sans:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--bg:#0B0F16;--surface:#141A25;--ink:#E6EAF1;--muted:#9BA5B6;--faint:#6F7A8C;--line:#253042;--soft:#18202C;
+  --kd:#86AAF0;--kd-bg:#16233A;--deep:#081A38;--deep-2:#0F2A55;--ctnd:#5FC2A2;--mkt:#E6A458;--io:#8DB4D3;--kt:#C59EE3;
+  --ok:#5FC2A2;--ok-bg:#132A24;--warn:#E6A458;--warn-bg:#2E2318;--bad:#F97066;--bad-bg:#351C1C}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#0B0F16;--surface:#141A25;--ink:#E6EAF1;--muted:#9BA5B6;--faint:#6F7A8C;--line:#253042;--soft:#18202C;
+  --kd:#86AAF0;--kd-bg:#16233A;--deep:#081A38;--deep-2:#0F2A55;--ctnd:#5FC2A2;--mkt:#E6A458;--io:#8DB4D3;--kt:#C59EE3;
+  --ok:#5FC2A2;--ok-bg:#132A24;--warn:#E6A458;--warn-bg:#2E2318;--bad:#F97066;--bad-bg:#351C1C}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;display:flex;flex-direction:column}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--kd);outline-offset:2px;border-radius:6px}
+h1,h2,h3{margin:0;font-weight:600}
+.top{flex:none;display:flex;align-items:center;gap:14px;padding:10px 22px;background:var(--surface);border-bottom:1px solid var(--line);padding-top:calc(env(safe-area-inset-top,0px) + 10px)}
+.brand{font-weight:700;font-size:.78rem;letter-spacing:.05em;color:var(--kd);flex:none}
+.parts{display:flex;gap:2px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;justify-content:center}
+.part{appearance:none;border:0;background:none;padding:6px 12px;border-radius:999px;color:var(--faint);font-size:.82rem;white-space:nowrap}
+.part b{font-weight:600;margin-right:6px}
+.part[aria-current="true"]{background:var(--kd-bg);color:var(--kd)}
+.tools{display:flex;align-items:center;gap:6px;flex:none;font-size:.8rem;color:var(--faint)}
+.tools button{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;height:32px;min-width:32px;padding:0 10px;display:grid;place-items:center}
+.tools button:disabled{opacity:.35;cursor:default}
+.tools button[aria-pressed="true"]{background:var(--kd);color:var(--surface);border-color:var(--kd)}
+.prog{flex:none;height:2px;background:var(--line)}
+.prog i{display:block;height:100%;background:var(--kd);transition:width .25s}
+.deck{flex:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0;overflow-y:auto;display:flex;flex-direction:column}
+.in{width:100%;max-width:1260px;margin:0 auto;padding:44px 48px 28px;flex:1;display:flex;flex-direction:column}
+.sec{font-size:.74rem;font-weight:600;letter-spacing:.12em;color:var(--kd);text-transform:uppercase}
+.h{font-family:var(--serif);font-size:clamp(1.7rem,2.8vw,2.4rem);line-height:1.15;letter-spacing:-.015em;margin:8px 0 6px;max-width:40ch}
+.take{font-size:1.06rem;color:var(--muted);margin:0 0 28px;max-width:70ch;font-weight:300}
+.foot{display:flex;justify-content:space-between;font-size:.72rem;color:var(--faint);padding:14px 48px 18px;max-width:1260px;width:100%;margin:0 auto;letter-spacing:.03em}
+.cover{background:linear-gradient(135deg,var(--deep) 0%,var(--deep-2) 100%);color:#EEF3FB}
+.cover .in{justify-content:center}
+.cover .sec{color:#9DBDF2}
+.cover h1{font-family:var(--serif);font-size:clamp(2.4rem,5vw,4rem);line-height:1.05;letter-spacing:-.02em;max-width:16ch;margin:16px 0 18px;font-weight:600}
+.cover .sub{color:#B9C8DE;font-size:1.1rem;font-weight:300}
+.cover .rule{width:64px;height:3px;background:#5E8FE0;margin:36px 0 26px;border-radius:2px}
+.agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.ag{appearance:none;border:0;background:none;text-align:left;color:#EEF3FB;padding:0;border-top:1px solid #36578A;padding-top:14px}
+.ag i{font-style:normal;font-size:.78rem;color:#9DBDF2;font-weight:600;letter-spacing:.08em}
+.ag b{display:block;font-weight:500;font-size:1.02rem;margin:6px 0 4px;line-height:1.3}
+.ag span{font-size:.82rem;color:#9FB1CC}
+.ag:hover b{text-decoration:underline;text-underline-offset:4px}
+.cover .foot{color:#7F95B8}
+.vc{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:28px;align-items:start}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-bottom:12px}
+.stg{background:var(--deep-2);color:#EEF3FB;padding:10px 22px 10px 28px;margin-left:-10px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%);font-size:.86rem;font-weight:500}
+.stg:first-child{margin-left:0;padding-left:16px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%)}
+.stg:nth-child(2){background:#1C4A86}.stg:nth-child(3){background:var(--kd)}.stg:nth-child(4){background:#3567B6}
+.cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.col{display:flex;flex-direction:column;gap:8px}
+.step{appearance:none;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;position:relative;transition:border-color .15s,box-shadow .15s}
+.step code{font-family:var(--sans);font-size:.7rem;color:var(--faint);letter-spacing:.02em}
+.step b{font-size:.9rem;font-weight:500;line-height:1.3}
+.step.sv{border-color:color-mix(in srgb,var(--kd) 45%,var(--line))}
+.step.sv::after{content:"";position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--kd)}
+.step.nb code::after{content:"  ngoài Base";color:var(--warn);font-weight:600}
+.step[aria-pressed="true"]{border-color:var(--kd);box-shadow:0 0 0 3px color-mix(in srgb,var(--kd) 18%,transparent)}
+.keys{display:flex;gap:18px;font-size:.78rem;color:var(--faint);margin-top:14px;flex-wrap:wrap}
+.keys span{display:inline-flex;align-items:center;gap:6px}
+.keys i{width:8px;height:8px;border-radius:50%;background:var(--kd)}
+.keys em{font-style:normal;color:var(--warn);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.panel .code{font-size:.74rem;color:var(--faint);letter-spacing:.03em}
+.panel h3{font-size:1.15rem;font-weight:600;margin:2px 0 14px;line-height:1.3}
+.kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px 14px;font-size:.9rem}
+.kv dt{color:var(--faint);font-size:.8rem;padding-top:2px}
+.kv dd{margin:0}
+.kv dd.pain{color:var(--bad)}
+.kv .na{color:var(--faint)}
+.ask{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.ask small{font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--warn)}
+.ask ul{margin:6px 0 0;padding-left:1.1em;font-size:.9rem}
+.ask li{margin:4px 0}
+.cf{display:flex;gap:6px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.tg{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 14px;font-size:.8rem;color:var(--muted)}
+.tg[aria-pressed="true"].y{background:var(--ok);border-color:var(--ok);color:#fff}
+.tg[aria-pressed="true"].n{background:var(--warn);border-color:var(--warn);color:#fff}
+.cf input{flex:1 1 100%;margin-top:4px}
+input[type=text],select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 10px;font-size:.88rem}
+textarea{resize:vertical;min-height:40px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--kd);outline-offset:0;border-color:var(--kd)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:22px 24px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat b{display:block;font-family:var(--serif);font-size:3rem;line-height:1;font-weight:500;color:var(--kd);letter-spacing:-.02em}
+.stat span{display:block;margin-top:8px;font-size:.9rem;color:var(--muted)}
+.pipe{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:18px;margin-top:34px}
+.pc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.pc small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--faint);margin-bottom:8px;text-transform:uppercase}
+.pc .chips{display:flex;flex-wrap:wrap;gap:6px}
+.pc .chips span{font-size:.84rem;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:3px 12px}
+.pc.manual{border-color:color-mix(in srgb,var(--warn) 50%,var(--line));background:var(--warn-bg)}
+.pc.manual .chips span{background:var(--surface)}
+.ar{color:var(--faint);font-size:1.4rem;align-self:center}
+.defs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.def{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 16px;display:flex;flex-direction:column}
+.def i{font-style:normal;font-family:var(--serif);font-size:1.6rem;color:var(--line);line-height:1}
+.def b{font-size:.96rem;font-weight:600;margin:10px 0 10px;line-height:1.3}
+.def .big{font-family:var(--serif);font-size:1.25rem;line-height:1.25;color:var(--kd)}
+.def .s{font-size:.78rem;color:var(--faint);margin-top:4px;flex:1}
+.def .cf{margin-top:14px}
+.sw{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
+.swc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:110px}
+.swc b{display:block;font-size:.92rem;font-weight:600}
+.swc span{display:block;font-size:.8rem;color:var(--muted);margin-top:6px;line-height:1.35}
+.pains{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:30px;border-top:1px solid var(--line)}
+.pn{padding:20px 22px 0 0}
+.pn i{font-style:normal;font-family:var(--serif);font-size:1.1rem;color:var(--bad)}
+.pn p{margin:6px 0 0;font-size:1.02rem;line-height:1.4}
+.qs{display:grid;gap:0;border-top:1px solid var(--line)}
+.qrow{display:grid;grid-template-columns:40px minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.qrow i{font-style:normal;font-family:var(--serif);font-size:1.3rem;color:var(--faint)}
+.qrow b{font-weight:500;font-size:1.02rem}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rp{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 24px;display:flex;flex-direction:column}
+.rp .hd{display:flex;align-items:center;gap:12px}
+.rp .hd code{font-family:var(--sans);font-size:.78rem;font-weight:700;color:#fff;background:var(--kd);border-radius:6px;padding:3px 8px}
+.rp .hd b{font-family:var(--serif);font-size:1.35rem;font-weight:500}
+.rp .qs2{margin:14px 0 4px;display:flex;flex-direction:column;gap:4px}
+.rp .qs2 span{font-size:.86rem;color:var(--muted);font-style:italic}
+.rp ul{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--line)}
+.rp li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--soft);font-size:.94rem}
+.rp li.tabh{font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--kd);text-transform:uppercase;padding:12px 0 4px;border-bottom:0}
+.rp li .new{font-size:.68rem;font-weight:600;color:var(--kd);background:var(--kd-bg);border-radius:999px;padding:0 8px;margin-left:8px}
+.rp li .st{margin:0;white-space:nowrap}
+.rp .src{margin-top:12px;font-size:.8rem;color:var(--faint)}
+.st{display:inline-flex;align-items:center;gap:.45em;font-size:.8rem;font-weight:500;margin-top:8px}
+.st::before{content:"";width:.65em;height:.65em;border-radius:50%;border:1.5px solid currentColor}
+.st.ready{color:var(--ok)} .st.ready::before{background:currentColor}
+.st.partial{color:var(--warn)} .st.partial::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.st.collect{color:var(--bad)}
+.base0{margin-top:14px;display:flex;align-items:center;gap:14px;background:var(--kd-bg);border-radius:12px;padding:14px 18px;font-size:.92rem}
+.base0 code{font-family:var(--sans);font-weight:700;color:var(--kd)}
+.dtools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dseg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.dseg button{appearance:none;border:0;background:none;padding:8px 16px;font-size:.86rem;color:var(--muted)}
+.dseg button[aria-pressed="true"]{background:var(--kd);color:#fff;font-weight:500}
+.node.rep{padding:16px 16px}
+.node.rep b{font-size:1rem}
+.fbr.grp{background:var(--soft);border-bottom:1px solid var(--line);padding:9px 12px;margin-top:6px}
+.fbr.grp b{font-weight:600;font-size:1rem}
+.fbr.sub span:first-child{padding-left:28px}
+.demo{flex:1;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);min-height:560px}
+.demo iframe{flex:1;width:100%;border:0;background:var(--bg)}
+.demo iframe[hidden]{display:none}
+.dh{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:16px;flex-wrap:wrap}
+.dh .h{margin-bottom:0}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 16px;font-size:.86rem}
+.btn.pri{background:var(--kd);border-color:var(--kd);color:#fff;font-weight:500}
+.arch{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,.75fr) 48px minmax(0,1fr);align-items:center}
+.colx{display:flex;flex-direction:column;gap:8px}
+.node{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:.92rem;font-weight:500}
+.node small{display:block;font-weight:400;font-size:.78rem;color:var(--faint)}
+.node.o{border-left:3px solid var(--kd)}
+.hub{background:var(--deep);color:#EEF3FB;border-radius:16px;padding:22px 20px}
+.hub b{display:block;font-family:var(--serif);font-size:1.25rem;font-weight:500}
+.hub small{color:#9FB1CC}
+.hub ul{list-style:none;margin:16px 0 0;padding:0;font-size:.88rem}
+.hub li{padding:7px 0;border-top:1px solid #2A4677;display:flex;justify-content:space-between}
+.hub li em{font-style:normal;color:#9DBDF2;font-size:.78rem}
+.arrow{height:1px;background:var(--faint);position:relative;margin:0 8px}
+.arrow::after{content:"";position:absolute;right:-2px;top:-4px;border:4.5px solid transparent;border-left-color:var(--faint)}
+.fb{border-top:1px solid var(--line)}
+.fbr{display:grid;grid-template-columns:minmax(0,1.2fr) 284px 150px 84px minmax(0,.9fr);gap:16px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.fbr b{font-weight:500}
+.fbr code{font-family:var(--sans);font-size:.74rem;font-weight:700;color:var(--kd);margin-right:8px}
+.fbr.cat b{color:var(--muted)}
+.need{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.need button{appearance:none;border:0;background:var(--surface);padding:5px 12px;font-size:.78rem;color:var(--muted)}
+.need button+button{border-left:1px solid var(--line)}
+.need button[aria-pressed="true"]{background:var(--kd);color:#fff}
+.star{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;width:36px;height:30px;font-size:1rem;color:var(--faint)}
+.star[aria-pressed="true"]{background:var(--warn);border-color:var(--warn);color:#fff}
+.fbh{display:grid;grid-template-columns:minmax(0,1.2fr) 284px 150px 84px minmax(0,.9fr);gap:16px;font-size:.72rem;letter-spacing:.08em;color:var(--faint);text-transform:uppercase;padding-bottom:8px}
+.fbr.tabr{padding:8px 0 2px;border-bottom:0}
+.fbr.tabr span{grid-column:1 / -1;padding-left:16px;font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--kd);text-transform:uppercase}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.blk>small{display:block;font-size:.72rem;letter-spacing:.1em;color:var(--faint);text-transform:uppercase;margin:0 0 10px}
+.blk+.blk{margin-top:26px}
+.chk{display:flex;flex-wrap:wrap;gap:8px}
+.chk label{display:inline-flex;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:.86rem;cursor:pointer;user-select:none}
+.chk input{position:absolute;opacity:0;width:1px;height:1px}
+.chk label:has(input:checked){background:var(--kd);border-color:var(--kd);color:#fff}
+.chk label:has(input:focus-visible){outline:2px solid var(--kd);outline-offset:2px}
+.close{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px}
+.res ol{margin:0;padding-left:1.2em}
+.res li{margin:6px 0;font-size:.95rem}
+.res .na{color:var(--faint);font-style:italic;font-size:.9rem}
+.tag{font-size:.7rem;font-weight:600;border-radius:999px;padding:1px 8px;margin-left:6px}
+.tag.one{background:var(--warn);color:#fff}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:68px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.tl li{display:grid;grid-template-columns:56px 24px minmax(0,1fr) auto;gap:0 0;align-items:start;padding:7px 0}
+.tl time{font-size:.82rem;font-weight:600;color:var(--kd);padding-top:1px}
+.tl i{width:9px;height:9px;border-radius:50%;background:var(--surface);border:2px solid var(--kd);margin:6px 0 0 8px;position:relative;z-index:1}
+.tl b{font-weight:500;font-size:.94rem}
+.tl small{display:block;color:var(--faint);font-size:.78rem}
+.who{font-size:.7rem;font-weight:600;border-radius:999px;padding:1px 9px;margin-left:10px;white-space:nowrap}
+.who.w1{background:var(--warn-bg);color:var(--warn)}.who.w2{background:var(--kd-bg);color:var(--kd)}.who.w3{background:var(--ok-bg);color:var(--ok)}
+.cta{margin-top:28px;background:var(--deep);color:#EEF3FB;border-radius:14px;padding:20px 24px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.cta b{font-family:var(--serif);font-size:1.25rem;font-weight:500;display:block}
+.cta span{color:#9FB1CC;font-size:.9rem}
+.cta .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.cta .btn{background:transparent;color:#EEF3FB;border-color:#3A5A8C}
+.cta .btn.pri{background:#fff;color:var(--deep);border-color:#fff}
+.notes{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);transform:translateX(-50%);width:min(860px,calc(100% - 32px));background:var(--ink);color:var(--bg);border-radius:12px;padding:14px 18px;font-size:.9rem;z-index:40;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.notes small{display:block;font-size:.68rem;letter-spacing:.1em;opacity:.6;margin-bottom:4px}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:8px;font-size:.86rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.toast.show{opacity:1}
+@media (max-width:1100px){.defs{grid-template-columns:repeat(3,minmax(0,1fr))}.sw{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:820px){
+  .two{grid-template-columns:1fr}
+  .in{padding:28px 20px}.foot{padding:12px 20px}
+  .vc,.g2,.close{grid-template-columns:1fr}
+  .agenda,.stats,.pains,.cols,.stages{grid-template-columns:1fr 1fr}
+  .defs,.sw{grid-template-columns:1fr 1fr}
+  .pipe{grid-template-columns:1fr}.ar{display:none}
+  .arch{grid-template-columns:1fr}.arrow{display:none}
+  .fbr,.fbh{grid-template-columns:1fr 1fr}
+  .qrow{grid-template-columns:30px 1fr}.qrow input{grid-column:2}
+  .stat{border-left:0;padding-left:0}
+}
+@media print{.top,.prog,.notes{display:none}body{display:block;background:#fff}.deck{position:static}.slide{position:static;overflow:visible;break-after:page;min-height:100vh}.slide[hidden]{display:flex!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">HEID × BASE.VN</span>
+  <nav class="parts" id="parts" aria-label="Các phần"></nav>
+  <div class="tools">
+    <button type="button" id="noteBtn" aria-pressed="false" title="Ghi chú người trình bày (phím N)">Ghi chú</button>
+    <button type="button" id="prev" aria-label="Trang trước">‹</button><span id="pno"></span><button type="button" id="next" aria-label="Trang sau">›</button>
+  </div>
+</header>
+<div class="prog"><i id="prog"></i></div>
+<div class="deck" id="deck">
+
+<!-- 1 Bìa -->
+<section class="slide cover" data-part="0" data-note="Mở đầu 2 phút: mục tiêu buổi này là chốt báo cáo phòng cần, không phải trình bày sản phẩm. Nhấn mạnh demo dựng từ chính số liệu BC tuần 06/9 và 11/10 của phòng.">
+  <div class="in">
+    <span class="sec">HEID × Base.vn | Data Service Phase 3</span>
+    <h1>Giải pháp báo cáo quản trị Phòng Kinh doanh</h1>
+    <p class="sub">Buổi làm việc với Phòng Kinh doanh, tuần 26–30/10/2026</p>
+    <div class="rule"></div>
+    <div class="agenda" id="agenda"></div>
+  </div>
+  <div class="foot"><span>Bảo mật nội bộ HEID × Base.vn</span><span>Dựng từ phiếu khảo sát HEID-ASAF và BC tuần 06/9, 11/10/2026</span></div>
+</section>
+
+<!-- 2 Chuỗi giá trị -->
+<section class="slide" data-part="1" data-note="Đi từ trái sang phải. Dừng ở QT-KD-05 (đang mở sẵn): đây là vướng mắc phòng nêu rõ nhất. Bấm từng bước đã khảo sát để xác nhận, ghi ‘Cần sửa’ nếu phòng chỉnh.">
+  <div class="in">
+    <span class="sec">01 Vận hành hiện tại</span>
+    <h2 class="h">Chuỗi giá trị Phòng Kinh doanh</h2>
+    <p class="take">Vướng mắc tập trung ở khâu Cung ứng: chưa nối được quyết định in với nhập kho.</p>
+    <div class="vc">
+      <div>
+        <div class="stages" id="stages"></div>
+        <div class="cols" id="cols"></div>
+        <div class="keys"><span><i></i>Đã khảo sát trong phiếu</span><span><em>ngoài Base</em> chưa chạy trên Base</span></div>
+      </div>
+      <aside class="panel" id="detail" aria-live="polite"></aside>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 3 Báo cáo tuần -->
+<section class="slide" data-part="1" data-note="Hỏi thêm: báo cáo tuần gửi cho ai, họ dùng để quyết định gì? Đây là câu phiếu chưa trả lời.">
+  <div class="in">
+    <span class="sec">01 Báo cáo hiện tại</span>
+    <h2 class="h">Báo cáo tuần đang được làm thủ công</h2>
+    <p class="take">Mỗi tuần một người gom số từ 4 hệ thống ra 2 file.</p>
+    <div class="stats">
+      <div class="stat"><b>4</b><span>nguồn dữ liệu</span></div>
+      <div class="stat"><b>2 giờ</b><span>tổng hợp mỗi tuần</span></div>
+      <div class="stat"><b>~100 giờ</b><span>mỗi năm</span></div>
+      <div class="stat"><b>3</b><span>góc nhìn: HEID, Toàn quốc, Đơn vị đầu mối</span></div>
+    </div>
+    <div class="pipe">
+      <div class="pc"><small>Nguồn</small><div class="chips"><span>ERP</span><span>Base.vn</span><span>Hoclieu.vn</span><span>GlobalSpeak</span></div></div>
+      <span class="ar">→</span>
+      <div class="pc manual"><small>Xử lý tay</small><div class="chips"><span>Tải file</span><span>Gom nhiều file</span><span>Sao chép</span></div></div>
+      <span class="ar">→</span>
+      <div class="pc"><small>Đầu ra</small><div class="chips"><span>Word: công tác KD tuần</span><span>Excel: 3 sheet</span></div></div>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 4 Định nghĩa -->
+<section class="slide" data-part="1" data-note="Đọc lần lượt 5 điểm, phòng xác nhận Đúng hoặc Cần sửa. Đây là gốc của khó khăn ‘mỗi người hiểu một chỉ số theo một cách’. Chi tiết số liệu nằm trong tooltip từng thẻ.">
+  <div class="in">
+    <span class="sec">01 Số liệu</span>
+    <h2 class="h">5 điểm cần thống nhất định nghĩa</h2>
+    <p class="take">Base phát hiện khi đọc BC tuần 06/9 và 11/10.</p>
+    <div class="defs" id="defs"></div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 5 Phần mềm -->
+<section class="slide" data-part="1" data-note="Phòng tự đánh giá số liệu ‘hiếm khi sai’. Vấn đề là phân tán và lệch giữa các phòng, không phải chất lượng nhập liệu.">
+  <div class="in">
+    <span class="sec">01 Dữ liệu</span>
+    <h2 class="h">Dữ liệu nằm ở 7 nơi</h2>
+    <p class="take">Số liệu ít khi sai, nhưng phân tán và không khớp giữa các phòng.</p>
+    <div class="sw" id="sw"></div>
+    <div class="pains">
+      <div class="pn"><i>01</i><p>Dữ liệu rải rác nhiều nơi</p></div>
+      <div class="pn"><i>02</i><p>Số liệu giữa các phòng không khớp</p></div>
+      <div class="pn"><i>03</i><p>Mỗi người hiểu chỉ số một cách</p></div>
+      <div class="pn"><i>04</i><p>Không theo dõi được nhập kho theo QĐ in</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 6 Bổ sung -->
+<section class="slide" data-part="1" data-note="Ghi câu trả lời trực tiếp vào ô. Nội dung tự đưa vào biên bản ở slide cuối.">
+  <div class="in">
+    <span class="sec">01 Hỏi thêm</span>
+    <h2 class="h">Thông tin cần phòng bổ sung</h2>
+    <p class="take">Các phần phiếu khảo sát còn trống.</p>
+    <div class="qs" id="gaps"></div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 7 Đề xuất -->
+<section class="slide" data-part="2" data-note="Gom 5 câu hỏi của phòng thành 2 báo cáo, mỗi báo cáo 3 tab. BC1 nhìn đầu ra: Tổng quan, Kế hoạch so với thực tế, Nhu cầu đặt hàng và dự báo. BC2 nhìn hàng hóa: Tổng quan, Tồn kho (nhập kho, tồn, thiếu), Nhà cung cấp. Nhập kho theo QĐ in là phần mới, sinh ra từ vướng mắc phòng nêu. BC0 là nền chung.">
+  <div class="in">
+    <span class="sec">02 Giải pháp</span>
+    <h2 class="h">5 câu hỏi của phòng, 2 báo cáo</h2>
+    <p class="take">Một báo cáo cho đầu ra bán hàng, một báo cáo cho hàng hóa và kho vận. Mỗi báo cáo 3 tab, mỗi tab đọc theo thứ tự chỉ số chính, biểu đồ, bảng chi tiết.</p>
+    <div class="two" id="two"></div>
+    <div class="base0"><code>BC0</code><span><b>Từ điển chỉ số dùng chung</b>: một định nghĩa cho phát hành, kế hoạch, toàn quốc, nhập kho, tồn khả dụng giữa P. KD, P. QL In – KV và P. KT-TV.</span></div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 8 Demo -->
+<section class="slide" data-part="2" data-note="BC1: Tổng quan (đổi 3 góc nhìn: địa bàn HEID, toàn quốc, đơn vị đầu mối) → Kế hoạch so với thực tế (theo mảng, kênh, tỉnh) → Nhu cầu đặt hàng và dự báo. BC2: Tổng quan (việc cần xử lý) → Tồn kho (nhập kho theo QĐ in, tồn, thiếu hàng) → Nhà cung cấp. Khối viền đứt là số minh họa, chờ dữ liệu ERP; tổng của phần minh họa khớp số thật.">
+  <div class="in">
+    <div class="dh"><div><span class="sec">02 Demo</span><h2 class="h">Dựng từ chính BC tuần của phòng</h2></div>
+      <div class="dtools"><div class="dseg" id="dseg"><button type="button" data-d="1" aria-pressed="true">BC1 Hoạt động kinh doanh</button><button type="button" data-d="2" aria-pressed="false">BC2 Hàng hóa, kho vận</button></div><button type="button" class="btn" id="openDemo">Mở toàn màn hình</button></div></div>
+    <div class="demo"><iframe id="demo1" title="BC1 Báo cáo hoạt động kinh doanh" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;vi&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, viewport-fit=cover&quot;&gt;
+&lt;title&gt;HEID – BC1 Báo cáo hoạt động kinh doanh (demo)&lt;/title&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap&amp;subset=vietnamese&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#EEF2F7;--surface:#FFFFFF;--ink:#16203A;--muted:#5A6476;--line:#DCE3EC;--soft:#F3F6FA;
+  --kd:#13438A;--kd-2:#7EA2DD;--kd-bg:#E6EEF9;--sky:#0A8ED0;
+  --ok:#17795E;--ok-bg:#E2F2EC;--warn:#A85C08;--warn-bg:#FBEEDC;--bad:#B42318;--bad-bg:#FBE4E2;
+  --ill:#A85C08;
+  --sans:&quot;Be Vietnam Pro&quot;,&quot;Segoe UI&quot;,system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --lift:0 1px 2px rgba(15,37,71,.05),0 10px 26px -18px rgba(15,37,71,.3);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme=&quot;light&quot;]){
+  color-scheme:dark;--bg:#0C1017;--surface:#151B26;--ink:#E5E9F0;--muted:#9BA5B6;--line:#2A3343;--soft:#1B2230;
+  --kd:#86AAF0;--kd-2:#3D5E97;--kd-bg:#18243B;--sky:#5CC0F0;--ok:#5FC2A2;--ok-bg:#163029;--warn:#E6A458;--warn-bg:#33261A;--bad:#F97066;--bad-bg:#3A1D1D;--ill:#E6A458;--lift:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme=&quot;dark&quot;]{
+  color-scheme:dark;--bg:#0C1017;--surface:#151B26;--ink:#E5E9F0;--muted:#9BA5B6;--line:#2A3343;--soft:#1B2230;
+  --kd:#86AAF0;--kd-2:#3D5E97;--kd-bg:#18243B;--sky:#5CC0F0;--ok:#5FC2A2;--ok-bg:#163029;--warn:#E6A458;--warn-bg:#33261A;--bad:#F97066;--bad-bg:#3A1D1D;--ill:#E6A458;--lift:0 1px 2px rgba(0,0,0,.4)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--kd);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+header.app{background:#13438A;color:#fff}
+.hrow{display:flex;align-items:center;gap:16px;padding:18px 0 14px;flex-wrap:wrap}
+.logo{width:54px;height:54px;border-radius:12px;background:#fff;padding:4px;flex:none}
+.hrow h1{margin:0;font-size:1.4rem;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.hrow p{margin:3px 0 0;color:#C7DAF3;font-size:.86rem}
+.rtitle{display:flex;align-items:center;gap:10px}
+.rtitle .code{font-size:.72rem;font-weight:700;color:#13438A;background:#fff;border-radius:6px;padding:2px 8px}
+.chips{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;padding:4px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;white-space:nowrap}
+.chip.real::before{content:&quot;&quot;;width:8px;height:8px;border-radius:50%;background:#7FD1C9}
+.chip.ill{border-style:dashed;border-color:#F5C27A;color:#F5C27A}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tab{appearance:none;border:0;background:none;padding:10px 16px 11px;border-radius:12px 12px 0 0;color:#C7DAF3;font-weight:500;white-space:nowrap;text-align:left;line-height:1.25}
+.tab small{display:block;font-size:.7rem;font-weight:400;opacity:.85}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab[aria-selected=&quot;true&quot;]{background:var(--bg);color:var(--kd);font-weight:700}
+.tab[aria-selected=&quot;true&quot;] small{color:var(--muted)}
+main{padding:20px 0 40px}
+.qbar{display:flex;gap:12px;align-items:flex-start;background:var(--kd-bg);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.qbar b{flex:none;font-size:.72rem;letter-spacing:.04em;color:var(--kd);padding-top:3px}
+.qbar span{font-size:1.04rem;line-height:1.4;font-weight:600}
+.ctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{appearance:none;border:0;background:none;padding:7px 12px;font-size:.84rem;color:var(--muted)}
+.seg button[aria-pressed=&quot;true&quot;]{background:var(--kd);color:var(--surface);font-weight:600}
+.ctl label{font-size:.8rem;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--lift)}
+.kpi.ill{border-style:dashed;border-color:color-mix(in srgb,var(--ill) 60%,var(--line))}
+.kpi small{display:block;font-size:.78rem;color:var(--muted)}
+.kpi b{display:block;font-size:1.55rem;font-weight:700;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.kpi.good b{color:var(--ok)} .kpi.mid b{color:var(--warn)} .kpi.low b{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.grid2.eq{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;min-width:0;box-shadow:var(--lift)}
+.card.ill{border-style:dashed;border-color:color-mix(in srgb,var(--ill) 60%,var(--line))}
+.card h3{margin:0 0 2px;font-size:1rem}
+.card .sub{margin:0 0 10px;font-size:.8rem;color:var(--muted)}
+.tag{font-size:.7rem;font-weight:600;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.tag.real{background:var(--kd-bg);color:var(--kd)} .tag.ill{border:1px dashed var(--ill);color:var(--ill)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.84rem;font-variant-numeric:tabular-nums}
+th{text-align:right;font-size:.74rem;font-weight:600;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child,th.tl,td.tl{text-align:left}
+td{padding:7px 8px;border-bottom:1px solid var(--soft);text-align:right;white-space:nowrap}
+tr.l0 td{font-weight:600;background:var(--soft)}
+tr.l1 td:first-child{padding-left:24px;color:var(--muted)}
+tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+tr.l0 td:first-child button{appearance:none;border:0;background:none;padding:0;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+tr.l0 td:first-child button::before{content:&quot;&quot;;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+tr.l0.open td:first-child button::before{transform:rotate(45deg)}
+.pct{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end;min-width:104px}
+.pct i{position:relative;display:block;width:52px;height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
+.pct i em{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.c-good{color:var(--ok)} .c-mid{color:var(--warn)} .c-low{color:var(--bad)} .c-na{color:var(--muted)}
+.bg-good{background:var(--ok)} .bg-mid{background:var(--warn)} .bg-low{background:var(--bad)} .bg-na{background:var(--line)}
+.thr{font-size:.76rem;color:var(--muted);margin-top:8px}
+.ins{list-style:none;margin:0;padding:0}
+.ins li{padding:9px 0 9px 26px;border-top:1px solid var(--soft);position:relative;font-size:.86rem}
+.ins li:first-child{border-top:0}
+.ins li::before{content:&quot;&quot;;position:absolute;left:4px;top:15px;width:10px;height:10px;border-radius:50%}
+.ins li.low::before{background:var(--bad)} .ins li.mid::before{background:var(--warn)} .ins li.good::before{background:var(--ok)} .ins li.info::before{background:var(--kd)}
+.bars .row{display:grid;grid-template-columns:minmax(110px,200px) minmax(0,1fr) 92px;gap:10px;align-items:center;padding:5px 0;font-size:.84rem}
+.bars .track{height:16px;background:var(--soft);border-radius:5px;position:relative;overflow:hidden}
+.bars .fill{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.bars .mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.55}
+.bars .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.pipe .prow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--soft)}
+.pipe .prow:first-child{border-top:0}
+.pipe .pname b{display:block;font-size:.9rem}
+.pipe .pname small{color:var(--muted);font-size:.76rem}
+.stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stg{border-radius:8px;padding:6px 8px;background:var(--soft);font-size:.76rem;position:relative;overflow:hidden}
+.stg .f{position:absolute;inset:auto 0 0 0;height:4px;background:var(--kd)}
+.stg b{display:block;font-size:.88rem;font-variant-numeric:tabular-nums}
+.stg span{color:var(--muted)}
+.stg.warnc{background:var(--bad-bg)} .stg.warnc .f{background:var(--bad)}
+.flag{display:inline-block;font-size:.72rem;font-weight:600;border-radius:999px;padding:1px 8px}
+.flag.good{background:var(--ok-bg);color:var(--ok)} .flag.mid{background:var(--warn-bg);color:var(--warn)} .flag.low{background:var(--bad-bg);color:var(--bad)}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted);margin-top:6px}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px}
+.note{font-size:.8rem;color:var(--muted);background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:10px}
+.note b{color:var(--ink)}
+.big3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--soft);font-size:.86rem}
+.alert:first-child{border-top:0}
+.alert .flag{flex:none;margin-top:2px;min-width:96px;text-align:center}
+.alert small{display:block;color:var(--muted);font-size:.76rem}
+.stack{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:6px 0 10px}
+.stack span{display:block;height:100%}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.method{font-size:.8rem;color:var(--muted);border-left:3px solid var(--ill);padding:8px 12px;margin-top:10px;background:var(--warn-bg);border-radius:0 8px 8px 0}
+.need{list-style:none;margin:0;padding:0;font-size:.85rem}
+.need li{padding:7px 0 7px 22px;border-top:1px solid var(--soft);position:relative}
+.need li:first-child{border-top:0}
+.need li::before{content:&quot;&quot;;position:absolute;left:3px;top:13px;width:9px;height:9px;border:2px solid var(--kd);border-radius:3px}
+footer{color:var(--muted);font-size:.78rem;padding:10px 0 30px}
+footer b{color:var(--ink);font-weight:600}
+@media (max-width:900px){.kpis{grid-template-columns:1fr 1fr}.grid2,.grid2.eq{grid-template-columns:1fr}.stages{grid-template-columns:1fr 1fr}.pipe .prow{grid-template-columns:1fr}.big3{grid-template-columns:1fr}.chips{margin-left:0}}
+@media print{.tabs,.ctl{display:none}.panel[hidden]{display:block!important}body{background:#fff}}
+.sech{font-size:1.08rem;font-weight:700;margin:26px 0 12px;display:flex;align-items:center;gap:10px;color:var(--kd)}
+.sech::after{content:&quot;&quot;;flex:1;height:1px;background:var(--line)}
+.qbar+.ctl,.qbar+.kpis{margin-top:0}
+.grid2{align-items:stretch}
+.grid2&gt;.card{display:flex;flex-direction:column}
+.grid2&gt;div:not(.card){display:flex;flex-direction:column}
+.grid2&gt;div:not(.card)&gt;.card:last-child{flex:1}
+.mixh{font-size:.76rem;font-weight:600;color:var(--muted);margin:10px 0 2px}
+.mixh:first-child{margin-top:0}
+.ins.cols2,.need.cols2{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+.ins.cols2 li:nth-child(2),.need.cols2 li:nth-child(2){border-top:0}
+@media (max-width:900px){.ins.cols2,.need.cols2{grid-template-columns:1fr}}
+.kpis+.kpis{margin-top:-4px}
+.alerts2{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.alerts2 .alert:nth-child(2){border-top:0}
+@media (max-width:900px){.alerts2{grid-template-columns:1fr}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header class=&quot;app&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;
+  &lt;div class=&quot;hrow&quot;&gt;
+    &lt;img class=&quot;logo&quot; alt=&quot;Logo HEID&quot; src=&quot;data:image/png;base64,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&quot;&gt;
+    &lt;div&gt;&lt;h1 class=&quot;rtitle&quot;&gt;&lt;span class=&quot;code&quot;&gt;BC1&lt;/span&gt;Báo cáo hoạt động kinh doanh&lt;/h1&gt;&lt;p&gt;Phòng Kinh doanh · Số liệu đến 11/10/2026&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&quot;chips&quot;&gt;&lt;span class=&quot;chip real&quot;&gt;Số thật: BC tuần 06/9 và 11/10&lt;/span&gt;&lt;span class=&quot;chip ill&quot;&gt;Viền đứt: minh họa, chờ dữ liệu ERP&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;nav class=&quot;tabs&quot; role=&quot;tablist&quot; id=&quot;tabs&quot;&gt;&lt;/nav&gt;
+&lt;/div&gt;&lt;/header&gt;
+
+&lt;main class=&quot;wrap&quot;&gt;
+  &lt;!-- 1. Tổng quan --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-tq&quot; role=&quot;tabpanel&quot;&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Đang bán được bao nhiêu, theo mảng, theo tháng, qua kênh nào, tăng hay giảm so với cùng kỳ?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;ctl&quot;&gt;
+      &lt;label&gt;Góc nhìn&lt;/label&gt;
+      &lt;div class=&quot;seg&quot; id=&quot;segView&quot;&gt;&lt;button type=&quot;button&quot; data-v=&quot;heid&quot; aria-pressed=&quot;true&quot;&gt;Địa bàn HEID phụ trách&lt;/button&gt;&lt;button type=&quot;button&quot; data-v=&quot;full&quot; aria-pressed=&quot;false&quot;&gt;Toàn quốc&lt;/button&gt;&lt;button type=&quot;button&quot; data-v=&quot;dvdm&quot; aria-pressed=&quot;false&quot;&gt;Đơn vị đầu mối&lt;/button&gt;&lt;/div&gt;
+      &lt;label&gt;Đơn vị&lt;/label&gt;
+      &lt;div class=&quot;seg&quot; id=&quot;segUnit&quot;&gt;&lt;button type=&quot;button&quot; data-u=&quot;sl&quot; aria-pressed=&quot;true&quot;&gt;Số lượng (bản)&lt;/button&gt;&lt;button type=&quot;button&quot; data-u=&quot;gb&quot; aria-pressed=&quot;false&quot;&gt;Giá bìa (tỷ đồng)&lt;/button&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiSL&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiSnap&quot;&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Cơ cấu theo mảng&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot; id=&quot;mixSub&quot;&gt;&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsMix&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Địa bàn HEID và đơn vị đầu mối&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Phát hành đến 11/10/2026 theo mảng, số lượng bản.&lt;/p&gt;&lt;div class=&quot;stack&quot; id=&quot;stackKe&quot;&gt;&lt;/div&gt;&lt;div class=&quot;chart&quot; id=&quot;colKe&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legKe&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Phát hành theo tháng&lt;span class=&quot;tag ill&quot;&gt;Phân bổ minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Tổng 10 tháng khớp số thật 69.115.362 bản (2026) và 50.112.484 bản (cùng kỳ). Chia theo tháng chờ dữ liệu ERP theo ngày phát hành.&lt;/p&gt;
+      &lt;div class=&quot;chart&quot; id=&quot;colTh&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legTh&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Phát hành theo mảng sách&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot; id=&quot;slSub&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblSL&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;p class=&quot;thr&quot;&gt;Bấm tên mảng để xem chi tiết. Phát hành đã trừ hàng trả lại.&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&quot;grid2&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Theo kênh và mảng&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblKe&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div&gt;
+        &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Lũy kế tại các kỳ báo cáo&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Địa bàn HEID phụ trách.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblSnap&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Sản phẩm số&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblSo&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- 2. Kế hoạch so với thực tế --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-kh&quot; role=&quot;tabpanel&quot; hidden&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Bán được so với kế hoạch thế nào, mảng nào, tỉnh nào còn chậm?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;ctl&quot;&gt;&lt;label&gt;So với&lt;/label&gt;
+      &lt;div class=&quot;seg&quot; id=&quot;segPlan&quot;&gt;&lt;button type=&quot;button&quot; data-v=&quot;heid&quot; aria-pressed=&quot;true&quot;&gt;Kế hoạch điều chỉnh (địa bàn HEID)&lt;/button&gt;&lt;button type=&quot;button&quot; data-v=&quot;full&quot; aria-pressed=&quot;false&quot;&gt;Kế hoạch toàn quốc&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiKH&quot;&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;% kế hoạch theo dòng sách&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Vạch đen là mốc 100% kế hoạch.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsKHp&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;% kế hoạch theo tỉnh, sách giáo khoa&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Các tỉnh được nhắc trong BC tuần 06/9. Vạch đen là tiến độ bình quân.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsTinh&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Lũy kế so với kế hoạch năm&lt;span class=&quot;tag ill&quot;&gt;Phân bổ minh họa&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;chart&quot; id=&quot;lineCum&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legCum&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Tiến độ kế hoạch theo mảng&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot; id=&quot;khSub&quot;&gt;&lt;/p&gt;
+      &lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblKH&quot;&gt;&lt;/table&gt;&lt;/div&gt;
+      &lt;p class=&quot;thr&quot;&gt;Màu % kế hoạch: &lt;span class=&quot;c-good&quot;&gt;xanh từ 95%&lt;/span&gt;, &lt;span class=&quot;c-mid&quot;&gt;cam 80–95%&lt;/span&gt;, &lt;span class=&quot;c-low&quot;&gt;đỏ dưới 80%&lt;/span&gt;. Bấm tên mảng để xem chi tiết.&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Tiếng Anh, GDQP&amp;amp;AN: đơn vị đầu mối và địa bàn HEID&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblTA&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Kế hoạch đã điều chỉnh&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Kế hoạch điều chỉnh ở BC 06/9 so với BC 11/10.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblAdj&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Chi tiết theo tỉnh&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblTinh&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;p class=&quot;thr&quot;&gt;Tỉnh chậm: dưới 90% kế hoạch và thấp hơn bình quân 5 điểm %.&lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- 3. Nhu cầu đặt hàng và dự báo --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-nc&quot; role=&quot;tabpanel&quot; hidden&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Nhu cầu đặt hàng đang thay đổi thế nào, các tuần tới sẽ đặt bao nhiêu?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiNC&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiDB&quot;&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Bán thêm trong 5 tuần, 07/9–11/10&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Chênh lũy kế giữa hai kỳ báo cáo, so với cùng giai đoạn 2025.&lt;/p&gt;&lt;div class=&quot;chart&quot; id=&quot;colDelta&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legDelta&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Còn lại so với kế hoạch điều chỉnh&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Phần kế hoạch chưa phát hành đến 11/10, địa bàn HEID.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsRemain&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Đơn đặt hàng mới theo tuần và dự báo&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Tuần 32–41 thực tế (tổng 5 tuần 37–41 khớp số thật), tuần 42–52 dự báo. Rê chuột để xem số từng tuần.&lt;/p&gt;
+      &lt;div class=&quot;chart&quot; id=&quot;lineFc&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legFc&quot;&gt;&lt;/div&gt;
+      &lt;p class=&quot;method&quot;&gt;&lt;b&gt;Cách dự báo:&lt;/b&gt; lấy hình dạng mùa vụ cùng kỳ 2025 theo tuần, nhân với tỷ lệ tăng trưởng thật của 5 tuần gần nhất so với cùng kỳ (&lt;span id=&quot;gRate&quot;&gt;&lt;/span&gt;); khoảng dự báo ±15%. Khi có dữ liệu đơn hàng ERP 2–3 năm sẽ dự báo riêng từng mảng, từng đối tác.&lt;/p&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Đối tác đặt so với kế hoạch&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblOrder&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Bán thêm 5 tuần theo mảng&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblDelta&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer class=&quot;wrap&quot;&gt;&lt;b&gt;Nguồn:&lt;/b&gt; “BC tuần 11.10.xlsx” (sheet HEID, Full, ĐVĐM) và “Báo cáo công tác kinh doanh tuần, 06/9/2026” của P. Kinh doanh. Khối viền đứt là số minh họa để thể hiện dạng báo cáo; tổng của các phân bổ minh họa khớp số thật.&lt;/footer&gt;
+
+&lt;script&gt;
+const $ = (s, r = document) =&gt; r.querySelector(s), $$ = (s, r = document) =&gt; [...r.querySelectorAll(s)];
+const esc = s =&gt; String(s ?? &#x27;&#x27;).replace(/[&amp;&lt;&gt;&quot;]/g, c =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;}[c]));
+const fN = n =&gt; n == null ? &#x27;–&#x27; : Math.round(n).toLocaleString(&#x27;vi-VN&#x27;);
+const fT = n =&gt; n == null ? &#x27;–&#x27; : (n / 1e9).toLocaleString(&#x27;vi-VN&#x27;, {minimumFractionDigits:1, maximumFractionDigits:1});
+const fM = n =&gt; n == null ? &#x27;–&#x27; : (n / 1e6).toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:2}) + &#x27; tr&#x27;;
+const fP = p =&gt; p == null || !isFinite(p) ? &#x27;–&#x27; : Math.round(p * 100) + &#x27;%&#x27;;
+const cls = p =&gt; p == null ? &#x27;na&#x27; : p &gt;= .95 ? &#x27;good&#x27; : p &gt;= .8 ? &#x27;mid&#x27; : &#x27;low&#x27;;
+const pctCell = (p, cap = 1.2) =&gt; `&lt;span class=&quot;pct&quot;&gt;&lt;b class=&quot;c-${cls(p)}&quot;&gt;${fP(p)}&lt;/b&gt;&lt;i&gt;&lt;em class=&quot;bg-${cls(p)}&quot; style=&quot;width:${p == null ? 0 : Math.min(p / cap, 1) * 100}%&quot;&gt;&lt;/em&gt;&lt;/i&gt;&lt;/span&gt;`;
+const kpiHtml = list =&gt; list.map(k =&gt; `&lt;div class=&quot;kpi ${k.c || &#x27;&#x27;}${k.ill ? &#x27; ill&#x27; : &#x27;&#x27;}&quot;&gt;&lt;small&gt;${k.l}${k.ill ? &#x27; &lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&#x27; : &#x27;&#x27;}&lt;/small&gt;&lt;b&gt;${k.v}&lt;/b&gt;&lt;span&gt;${k.s}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+function initTabs(list){
+  $(&#x27;#tabs&#x27;).innerHTML = list.map(([id, t, q], i) =&gt; `&lt;button class=&quot;tab&quot; role=&quot;tab&quot; type=&quot;button&quot; data-t=&quot;${id}&quot; aria-selected=&quot;${i === 0}&quot; aria-controls=&quot;p-${id}&quot;&gt;${t}${q ? `&lt;small&gt;${q}&lt;/small&gt;` : &#x27;&#x27;}&lt;/button&gt;`).join(&#x27;&#x27;);
+  $(&#x27;#tabs&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;.tab&#x27;); if (!b) return;
+    $$(&#x27;.tab&#x27;).forEach(x =&gt; x.setAttribute(&#x27;aria-selected&#x27;, String(x === b))); $$(&#x27;.panel&#x27;).forEach(p =&gt; p.hidden = p.id !== &#x27;p-&#x27; + b.dataset.t); });
+}
+function seg(sel, cb){
+  $(sel).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;button&#x27;); if (!b) return;
+    $$(sel + &#x27; button&#x27;).forEach(x =&gt; x.setAttribute(&#x27;aria-pressed&#x27;, String(x === b))); cb(b); });
+}
+function bars(sel, rows, o = {}){
+  const mx = o.max || Math.max(...rows.map(r =&gt; r[1]), 1);
+  $(sel).innerHTML = rows.map(r =&gt; `&lt;div class=&quot;row&quot;${r[5] ? ` title=&quot;${esc(r[5])}&quot;` : &#x27;&#x27;}&gt;&lt;span&gt;${esc(r[0])}&lt;/span&gt;&lt;span class=&quot;track&quot;&gt;&lt;span class=&quot;fill ${r[2] &amp;&amp; r[2].startsWith(&#x27;bg-&#x27;) ? r[2] : &#x27;&#x27;}&quot; style=&quot;${r[2] &amp;&amp; !r[2].startsWith(&#x27;bg-&#x27;) ? `background:${r[2]};` : &#x27;&#x27;}width:${Math.max(0, Math.min(r[1] / mx, 1)) * 100}%&quot;&gt;&lt;/span&gt;${o.mark != null ? `&lt;span class=&quot;mark&quot; style=&quot;left:${o.mark / mx * 100}%&quot;&gt;&lt;/span&gt;` : &#x27;&#x27;}&lt;/span&gt;&lt;span class=&quot;v&quot;&gt;${r[3] ?? fN(r[1])}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;) + (o.note ? `&lt;p class=&quot;thr&quot;&gt;${o.note}&lt;/p&gt;` : &#x27;&#x27;);
+}
+function lineChart(sel, o){
+  const W = o.W || 680, H = o.H || 250, L = 56, R = 14, T = 14, B = 30, n = o.labels.length;
+  const all = o.series.flatMap(s =&gt; s.data.filter(v =&gt; v != null)).concat(o.band ? o.band.hi.filter(v =&gt; v != null) : []);
+  const mx = Math.max(...all) * 1.1 || 1;
+  const x = i =&gt; L + i * (W - L - R) / (n - 1), y = v =&gt; T + (1 - v / mx) * (H - T - B);
+  let g = &#x27;&#x27;;
+  for (let k = 0; k &lt;= 4; k++) { const v = mx * k / 4; g += `&lt;line x1=&quot;${L}&quot; x2=&quot;${W - R}&quot; y1=&quot;${y(v)}&quot; y2=&quot;${y(v)}&quot; stroke=&quot;var(--line)&quot;/&gt;&lt;text x=&quot;${L - 6}&quot; y=&quot;${y(v) + 4}&quot; text-anchor=&quot;end&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${o.fmtAxis ? o.fmtAxis(v) : Math.round(v / 1000) + &#x27;k&#x27;}&lt;/text&gt;`; }
+  if (o.fcFrom != null) { const xf = x(o.fcFrom); g += `&lt;rect x=&quot;${xf}&quot; y=&quot;${T}&quot; width=&quot;${W - R - xf}&quot; height=&quot;${H - T - B}&quot; fill=&quot;var(--soft)&quot;/&gt;&lt;text x=&quot;${xf + 6}&quot; y=&quot;${T + 12}&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;Dự báo&lt;/text&gt;`; }
+  if (o.shade) o.shade.forEach(sh =&gt; { const x1 = x(sh[0]) - (W - L - R) / (n - 1) / 2, x2 = x(sh[1]) + (W - L - R) / (n - 1) / 2; g += `&lt;rect x=&quot;${x1}&quot; y=&quot;${T}&quot; width=&quot;${x2 - x1}&quot; height=&quot;${H - T - B}&quot; fill=&quot;var(--kd-bg)&quot;/&gt;&lt;text x=&quot;${x1 + 6}&quot; y=&quot;${T + 12}&quot; font-size=&quot;10&quot; fill=&quot;var(--kd)&quot;&gt;${esc(sh[2])}&lt;/text&gt;`; });
+  if (o.band) { const idx = o.band.lo.map((v, i) =&gt; v == null ? null : i).filter(i =&gt; i != null);
+    g += `&lt;polygon fill=&quot;var(--kd)&quot; opacity=&quot;.12&quot; points=&quot;${idx.map(i =&gt; x(i) + &#x27;,&#x27; + y(o.band.hi[i])).join(&#x27; &#x27;)} ${idx.slice().reverse().map(i =&gt; x(i) + &#x27;,&#x27; + y(o.band.lo[i])).join(&#x27; &#x27;)}&quot;/&gt;`; }
+  const step = Math.ceil(n / 12);
+  o.labels.forEach((w, i) =&gt; { if (i % step === 0 || i === n - 1) g += `&lt;text x=&quot;${x(i)}&quot; y=&quot;${H - 10}&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${esc(w)}&lt;/text&gt;`; });
+  o.series.forEach(s =&gt; {
+    const pts = s.data.map((v, i) =&gt; v == null ? null : [x(i), y(v), v, i]).filter(Boolean);
+    g += `&lt;polyline fill=&quot;none&quot; stroke=&quot;${s.color}&quot; stroke-width=&quot;2.5&quot; stroke-linejoin=&quot;round&quot;${s.dash ? &#x27; stroke-dasharray=&quot;6 5&quot;&#x27; : &#x27;&#x27;} points=&quot;${pts.map(p =&gt; p[0] + &#x27;,&#x27; + p[1]).join(&#x27; &#x27;)}&quot;/&gt;`;
+    g += pts.map(p =&gt; `&lt;circle cx=&quot;${p[0]}&quot; cy=&quot;${p[1]}&quot; r=&quot;${s.dash ? 2.5 : 3.5}&quot; fill=&quot;${s.color}&quot;&gt;&lt;title&gt;${esc(s.name)}, ${esc(o.labels[p[3]])}: ${fN(p[2])}${o.unit || &#x27;&#x27;}&lt;/title&gt;&lt;/circle&gt;`).join(&#x27;&#x27;);
+  });
+  $(sel).innerHTML = `&lt;svg viewBox=&quot;0 0 ${W} ${H}&quot; role=&quot;img&quot; aria-label=&quot;${esc(o.aria || &#x27;Biểu đồ&#x27;)}&quot;&gt;${g}&lt;/svg&gt;`;
+  if (o.legend) $(o.legend).innerHTML = o.series.map(s =&gt; `&lt;span&gt;&lt;i style=&quot;background:${s.color}&quot;&gt;&lt;/i&gt;${esc(s.name)}&lt;/span&gt;`).join(&#x27;&#x27;) + (o.band ? &#x27;&lt;span&gt;&lt;i style=&quot;background:var(--kd);opacity:.25;height:8px&quot;&gt;&lt;/i&gt;Khoảng dự báo&lt;/span&gt;&#x27; : &#x27;&#x27;);
+}
+function colChart(sel, o){
+  const W = o.W || 680, H = o.H || 250, L = 56, R = 10, T = 14, B = 30, n = o.labels.length, k = o.series.length;
+  const mx = Math.max(...o.series.flatMap(s =&gt; s.data)) * 1.1 || 1;
+  const gw = (W - L - R) / n, bw = Math.min(22, gw * .8 / k), y = v =&gt; T + (1 - v / mx) * (H - T - B);
+  let g = &#x27;&#x27;;
+  for (let j = 0; j &lt;= 4; j++) { const v = mx * j / 4; g += `&lt;line x1=&quot;${L}&quot; x2=&quot;${W - R}&quot; y1=&quot;${y(v)}&quot; y2=&quot;${y(v)}&quot; stroke=&quot;var(--line)&quot;/&gt;&lt;text x=&quot;${L - 6}&quot; y=&quot;${y(v) + 4}&quot; text-anchor=&quot;end&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${o.fmtAxis ? o.fmtAxis(v) : fN(v)}&lt;/text&gt;`; }
+  o.labels.forEach((lab, i) =&gt; {
+    const cx = L + gw * i + gw / 2;
+    o.series.forEach((s, j) =&gt; { const v = s.data[i]; if (v == null) return; const bx = cx - (k * bw) / 2 + j * bw;
+      g += `&lt;rect x=&quot;${bx}&quot; y=&quot;${y(v)}&quot; width=&quot;${bw - 2}&quot; height=&quot;${H - B - y(v)}&quot; rx=&quot;3&quot; fill=&quot;${s.color}&quot;&gt;&lt;title&gt;${esc(s.name)}, ${esc(lab)}: ${fN(v)}${o.unit || &#x27;&#x27;}&lt;/title&gt;&lt;/rect&gt;`; });
+    g += `&lt;text x=&quot;${cx}&quot; y=&quot;${H - 10}&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${esc(lab)}&lt;/text&gt;`;
+  });
+  $(sel).innerHTML = `&lt;svg viewBox=&quot;0 0 ${W} ${H}&quot; role=&quot;img&quot; aria-label=&quot;${esc(o.aria || &#x27;Biểu đồ cột&#x27;)}&quot;&gt;${g}&lt;/svg&gt;`;
+  if (o.legend) $(o.legend).innerHTML = o.series.map(s =&gt; `&lt;span&gt;&lt;i style=&quot;background:${s.color};height:8px;width:12px&quot;&gt;&lt;/i&gt;${esc(s.name)}&lt;/span&gt;`).join(&#x27;&#x27;);
+}
+
+const D = {&quot;HEID&quot;: [[&quot;A&quot;, &quot;Sách giáo khoa&quot;, 0, 35482071, 48846437, 48839406, 668020413700, 29019218, 429878269800], [&quot;A1&quot;, &quot;SGK nhập mua NXB&quot;, 1, 35046928, 48262344, 48227548, 661375325100, 28528596, 423255293900], [&quot;A2&quot;, &quot;SGK GDQP&amp;AN&quot;, 1, 435143, 584093, 608332, 6478228600, 484211, 6224073200], [&quot;A3&quot;, &quot;SGK Ngoại ngữ 1, 2&quot;, 1, null, null, 3526, 166860000, 6411, 398902700], [&quot;B&quot;, &quot;Sách bổ trợ&quot;, 0, 9353441, 10242869, 10854956, 215827946000, 10095940, 142908068000], [&quot;B1&quot;, &quot;SBT nhập mua NXB&quot;, 1, 3523844, 4413272, 4352458, 63453891000, 10081057, 142720418000], [&quot;B2&quot;, &quot;SBT GDQP&amp;AN&quot;, 1, 16597, 16597, 4148, 53249000, 14883, 187650000], [&quot;B3&quot;, &quot;SBT nhập mua PN&quot;, 1, 827000, 827000, 695407, 12998728000, null, null], [&quot;B4&quot;, &quot;SBT HEID sản xuất&quot;, 1, 4986000, 4986000, 5802943, 139322078000, null, null], [&quot;C&quot;, &quot;Sách giáo viên&quot;, 0, null, null, null, null, 2281, 78738000], [&quot;D&quot;, &quot;Sách tiếng Anh&quot;, 0, 5700283, 7388657, 7719509, 268501160900, 9165554, 447917630700], [&quot;D1&quot;, &quot;Sách học sinh&quot;, 1, 3795923, 5110641, 5306532, 128339422900, 5724426, 263134976700], [&quot;D2&quot;, &quot;Sách bài tập&quot;, 1, 1904360, 2278016, 2412916, 140156562000, 3440689, 184744950000], [&quot;D3&quot;, &quot;Sách giáo viên&quot;, 1, null, null, 61, 5176000, 439, 37704000], [&quot;E&quot;, &quot;Sách tham khảo và SP khác&quot;, 0, 2500000, 2500000, 1701491, 70826149127, 1829491, 71861193000], [&quot;E1&quot;, &quot;STK HEID sản xuất&quot;, 1, 2000000, 2000000, 1525233, 60846974000, 1814586, 71104869000], [&quot;E2&quot;, &quot;STK nhập mua&quot;, 1, 500000, 500000, 144136, 6545333000, null, null], [&quot;E3&quot;, &quot;Sản phẩm số&quot;, 1, null, null, 31388, 3304338127, 10684, 538979000], [&quot;E4&quot;, &quot;Sản phẩm khác&quot;, 1, null, null, 734, 129504000, 4221, 217345000]], &quot;HEID_T&quot;: [53035795, 68977963, 69115362, 1223175669727, 50112484, 1092643899500], &quot;FULL&quot;: [[&quot;A&quot;, &quot;Sách giáo khoa&quot;, 0, 35482071, 36854071, 50636292, 687224838100, 29019218, 429878269800], [&quot;A1&quot;, &quot;SGK nhập mua NXB&quot;, 1, 35046928, 35046928, 48227548, 661375325100, 28528596, 423255293900], [&quot;A2&quot;, &quot;SGK GDQP&amp;AN&quot;, 1, 435143, 1807143, 2405218, 25682653000, 484211, 6224073200], [&quot;A3&quot;, &quot;SGK Ngoại ngữ 1, 2&quot;, 1, null, null, 3526, 166860000, 6411, 398902700], [&quot;B&quot;, &quot;Sách bổ trợ&quot;, 0, 9353441, 9356441, 10859672, 215884118000, 10095940, 142908068000], [&quot;B1&quot;, &quot;SBT nhập mua NXB&quot;, 1, 3523844, 3523844, 4352458, 63453891000, 10081057, 142720418000], [&quot;B2&quot;, &quot;SBT GDQP&amp;AN&quot;, 1, 16597, 19597, 8864, 109421000, 14883, 187650000], [&quot;B3&quot;, &quot;SBT nhập mua PN&quot;, 1, 827000, 827000, 695407, 12998728000, null, null], [&quot;B4&quot;, &quot;SBT HEID sản xuất&quot;, 1, 4986000, 4986000, 5802943, 139322078000, null, null], [&quot;C&quot;, &quot;Sách giáo viên&quot;, 0, null, null, null, null, 2281, 78738000], [&quot;D&quot;, &quot;Sách tiếng Anh&quot;, 0, 5700283, 21371923, 29368876, 871444664000, 9165554, 447917630700], [&quot;D1&quot;, &quot;Sách học sinh&quot;, 1, 3795923, 17791923, 24448721, 586256865000, 5724426, 263134976700], [&quot;D2&quot;, &quot;Sách bài tập&quot;, 1, 1904360, 3580000, 4920094, 285182623000, 3440689, 184744950000], [&quot;D3&quot;, &quot;Sách giáo viên&quot;, 1, null, null, 61, 5176000, 439, 37704000], [&quot;E&quot;, &quot;Sách tham khảo và SP khác&quot;, 0, 2500000, 2500000, 1701491, 70826149127, 1829491, 71861193000], [&quot;E1&quot;, &quot;STK HEID sản xuất&quot;, 1, 2000000, 2000000, 1525233, 60846974000, 1814586, 71104869000], [&quot;E2&quot;, &quot;STK nhập mua&quot;, 1, 500000, 500000, 144136, 6545333000, null, null], [&quot;E3&quot;, &quot;Sản phẩm số&quot;, 1, null, null, 31388, 3304338127, 10684, 538979000], [&quot;E4&quot;, &quot;Sản phẩm khác&quot;, 1, null, null, 734, 129504000, 4221, 217345000]], &quot;FULL_T&quot;: [53035795, 70082435, 92566331, 1845379769227, 50112484, 1092643899500], &quot;DVDM&quot;: [[&quot;A&quot;, &quot;Sách giáo khoa&quot;, 0, null, null, 1830312, 19658388100, 258067, 3367052100], [&quot;A1&quot;, &quot;SGK nhập mua NXB&quot;, 1, null, null, 33426, 453963700, 16867, 265058100], [&quot;A2&quot;, &quot;SGK GDQP&amp;AN&quot;, 1, null, null, 1796886, 19204424400, 241200, 3101994000], [&quot;A3&quot;, &quot;SGK Ngoại ngữ 1, 2&quot;, 1, null, null, null, null, null, null], [&quot;B&quot;, &quot;Sách bổ trợ&quot;, 0, null, null, 93157, 1217616000, 27001, 387673000], [&quot;B1&quot;, &quot;SBT nhập mua NXB&quot;, 1, null, null, 79617, 962436000, 23922, 349093000], [&quot;B2&quot;, &quot;SBT GDQP&amp;AN&quot;, 1, null, null, 4716, 56172000, 3079, 38580000], [&quot;B3&quot;, &quot;SBT nhập mua PN&quot;, 1, null, null, null, null, null, null], [&quot;B4&quot;, &quot;SBT HEID sản xuất&quot;, 1, null, null, 8824, 199008000, null, null], [&quot;C&quot;, &quot;Sách giáo viên&quot;, 0, null, null, null, null, 350, 8187000], [&quot;D&quot;, &quot;Sách tiếng Anh&quot;, 0, null, null, 21649427, 602948603100, 225620, 11013386000], [&quot;D1&quot;, &quot;Sách học sinh&quot;, 1, null, null, 19142189, 457917442100, 147337, 6798330000], [&quot;D2&quot;, &quot;Sách bài tập&quot;, 1, null, null, 2507178, 145026061000, 78094, 4201041000], [&quot;D3&quot;, &quot;Sách giáo viên&quot;, 1, null, null, 60, 5100000, 189, 14015000], [&quot;E&quot;, &quot;Sách tham khảo và SP khác&quot;, 0, null, null, 62793, 2966037000, 77476, 2926628000], [&quot;E1&quot;, &quot;STK HEID sản xuất&quot;, 1, null, null, 62793, 2966037000, 77469, 2908748000], [&quot;E2&quot;, &quot;STK nhập mua&quot;, 1, null, null, null, null, null, null], [&quot;E3&quot;, &quot;Sản phẩm số&quot;, 1, null, null, null, null, null, null], [&quot;E4&quot;, &quot;Sản phẩm khác&quot;, 1, null, null, null, null, 7, 17880000]], &quot;DVDM_T&quot;: [null, null, 23635689, 626790644200, 588514, 17702926100], &quot;SEP&quot;: {&quot;A&quot;: [35482071, 48112737, 45290747, 618315092400, 28702802, 425612216000], &quot;A1&quot;: [35046928, 47544744, 44704594, 612005995700, 28456371, 422151324500], &quot;A2&quot;: [435143, 567993, 584275, 6216773700, 240850, 3094279800], &quot;A3&quot;: [null, null, 1878, 92323000, 5581, 366611700], &quot;B&quot;: [9353441, 10242869, 10366742, 205048052000, 10003802, 141597811000], &quot;B1&quot;: [3523844, 4413272, 4330891, 63195702000, 9991998, 141448741000], &quot;B2&quot;: [16597, 16597, 3215, 39838000, 11804, 149070000], &quot;B3&quot;: [827000, 827000, 645003, 12052939000, null, null], &quot;B4&quot;: [4986000, 4986000, 5387633, 129759573000, null, null], &quot;C&quot;: [null, null, null, null, 2068, 71478000], &quot;D&quot;: [5700283, 7144930, 7337165, 254593011100, 5374185, 262813300600], &quot;D1&quot;: [3795923, 5240570, 5094900, 123457542100, 3378096, 155565513600], &quot;D2&quot;: [1904360, 1904360, 2242204, 131130293000, 1995706, 107215051000], &quot;D3&quot;: [null, null, 61, 5176000, 383, 32736000], &quot;E&quot;: [2500000, 2500000, 1475021, 60964529541, 1620395, 64477550000], &quot;E1&quot;: [2000000, 2000000, 1386070, 55651698000, 1605499, 63726266000], &quot;E2&quot;: [500000, 500000, 71522, 3476639000, null, null], &quot;E3&quot;: [null, null, 16714, 1709458541, 10684, 538979000], &quot;E4&quot;: [null, null, 715, 126734000, 4212, 212305000], &quot;T&quot;: [53035795, 68000536, 64469675, 1138920685041, 45703252, 894572355600]}, &quot;ORDER&quot;: [[&quot;SGK KNTT&quot;, 47544744, 47333177, 44704594], [&quot;SBT KNTT&quot;, 4413272, 6943386, 4330891], [&quot;SBT nhập mua PN&quot;, 827000, 674669, 645003], [&quot;SBT Ôn luyện thông minh&quot;, 4986000, 5397492, 5387633], [&quot;SGK Tiếng Anh&quot;, 5240570, 5175013, 5094900], [&quot;SBT Tiếng Anh&quot;, 1904360, 2288535, 2242204], [&quot;SGK GDQP&amp;AN&quot;, 567993, 589802, 584275], [&quot;SBT GDQP&amp;AN&quot;, 16597, 9735, 3215]], &quot;TA&quot;: [[&quot;SGK Tiếng Anh&quot;, 16618000, 17534527, 5240570, 5175013, 5094900], [&quot;SGK GDQP&amp;AN&quot;, 1446000, 1553653, 567993, 589802, 584275], [&quot;SBT Tiếng Anh&quot;, 1675640, 2441264, 1904360, 2288535, 2242204], [&quot;SBT GDQP&amp;AN&quot;, 0, 0, 16597, 9735, 3215]], &quot;TINH&quot;: [[&quot;Hà Nội&quot;, 14200000, 13980000, 11900000], [&quot;Quảng Ninh&quot;, 2600000, 2570000, 2210000], [&quot;Lạng Sơn&quot;, 1150000, 1010000, 960000], [&quot;Lào Cai&quot;, 1280000, 1090000, 1040000], [&quot;Cao Bằng&quot;, 820000, 655000, 690000], [&quot;Hà Tĩnh&quot;, 1900000, 1840000, 1600000], [&quot;Phú Thọ&quot;, 2450000, 2290000, 1980000]], &quot;MONTH&quot;: {&quot;labels&quot;: [&quot;T1&quot;, &quot;T2&quot;, &quot;T3&quot;, &quot;T4&quot;, &quot;T5&quot;, &quot;T6&quot;, &quot;T7&quot;, &quot;T8&quot;, &quot;T9&quot;, &quot;T10*&quot;], &quot;y26&quot;: [180000, 210000, 820000, 2400000, 6100000, 11800000, 19500000, 22490000, 4650000, 965362], &quot;y25&quot;: [150000, 170000, 600000, 1800000, 4400000, 8600000, 14200000, 16300000, 3200000, 692484]}, &quot;WEEK&quot;: {&quot;y26&quot;: [1130000, 1284000, 1762000, 2121000, 1426000, 930000, 658000, 571000, 501000, 469000], &quot;y25&quot;: [1163262, 1255290, 1678119, 1967212, 1309054, 852361, 602301, 513717, 447710, 392992, 347840, 312252, 287955, 263655, 252368, 239357, 237635, 260210, 307085, 365249, 412124]}};
+initTabs([[&#x27;tq&#x27;, &#x27;Tổng quan&#x27;, &#x27;Bán bao nhiêu, theo tháng, theo kênh&#x27;], [&#x27;kh&#x27;, &#x27;Kế hoạch so với thực tế&#x27;, &#x27;Theo mảng, kênh, tỉnh&#x27;], [&#x27;nc&#x27;, &#x27;Nhu cầu đặt hàng và dự báo&#x27;, &#x27;Thay đổi ra sao, các tuần tới&#x27;]]);
+const PARENTS = [&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;D&#x27;, &#x27;E&#x27;];
+const SHORT = {&#x27;Sách giáo khoa&#x27;: &#x27;SGK&#x27;, &#x27;Sách bổ trợ&#x27;: &#x27;SBT&#x27;, &#x27;Sách giáo viên&#x27;: &#x27;SGV&#x27;, &#x27;Sách tiếng Anh&#x27;: &#x27;Tiếng Anh&#x27;, &#x27;Sách tham khảo và SP khác&#x27;: &#x27;STK, SP khác&#x27;};
+const fAx = v =&gt; (v / 1e6).toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:1}) + &#x27; tr&#x27;;
+const row = (rows, code) =&gt; rows.find(r =&gt; r[0] === code);
+const VIEWS = {
+  heid: {rows: D.HEID, tot: D.HEID_T, kh: &#x27;Kế hoạch điều chỉnh&#x27;, desc: &#x27;Địa bàn HEID phụ trách.&#x27;},
+  full: {rows: D.FULL, tot: D.FULL_T, kh: &#x27;Kế hoạch toàn quốc&#x27;, desc: &#x27;Toàn quốc: địa bàn HEID cộng đơn vị đầu mối ở mảng Tiếng Anh và GDQP&amp;AN.&#x27;},
+  dvdm: {rows: D.DVDM, tot: D.DVDM_T, kh: &#x27;&#x27;, desc: &#x27;Phát hành qua đơn vị đầu mối.&#x27;}
+};
+
+// ---------- 1. Bán được bao nhiêu ----------
+let view = &#x27;heid&#x27;, unit = &#x27;sl&#x27;;
+const openG = new Set();
+function renderSL(){
+  const V = VIEWS[view], f = unit === &#x27;sl&#x27; ? fN : fT, T = V.tot, iP = unit === &#x27;sl&#x27; ? 5 : 6, iC = unit === &#x27;sl&#x27; ? 7 : 8;
+  const tot = T[iP - 3], totC = T[iC - 3];
+  $(&#x27;#slSub&#x27;).textContent = V.desc + (unit === &#x27;gb&#x27; ? &#x27; Đơn vị: tỷ đồng giá bìa.&#x27; : &#x27; Đơn vị: bản.&#x27;);
+  let h = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng sách&lt;/th&gt;&lt;th&gt;Phát hành&lt;/th&gt;&lt;th&gt;Tỷ trọng&lt;/th&gt;&lt;th&gt;Cùng kỳ 2025&lt;/th&gt;&lt;th&gt;% cùng kỳ&lt;/th&gt;&lt;th&gt;Tăng, giảm&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`, par = null;
+  V.rows.forEach(r =&gt; { if (r[2] === 0) par = r[0];
+    const ph = r[iP], ck = r[iC];
+    if (r[2] === 1 &amp;&amp; (!openG.has(par) || (ph == null &amp;&amp; ck == null))) return;
+    if (r[2] === 0 &amp;&amp; ph == null &amp;&amp; ck == null) return;
+    const pc = ph != null &amp;&amp; ck ? ph / ck : null, d = (ph || 0) - (ck || 0);
+    const nm = r[2] === 0 ? `&lt;button type=&quot;button&quot; data-g=&quot;${r[0]}&quot; aria-expanded=&quot;${openG.has(r[0])}&quot;&gt;${esc(r[1])}&lt;/button&gt;` : esc(r[1]);
+    h += `&lt;tr class=&quot;l${r[2]}${openG.has(r[0]) ? &#x27; open&#x27; : &#x27;&#x27;}&quot;&gt;&lt;td&gt;${nm}&lt;/td&gt;&lt;td&gt;${f(ph)}&lt;/td&gt;&lt;td&gt;${ph != null ? fP(ph / tot) : &#x27;–&#x27;}&lt;/td&gt;&lt;td&gt;${f(ck)}&lt;/td&gt;&lt;td class=&quot;c-${pc == null ? &#x27;na&#x27; : pc &gt;= 1 ? &#x27;good&#x27; : pc &gt;= .8 ? &#x27;mid&#x27; : &#x27;low&#x27;}&quot;&gt;${fP(pc)}&lt;/td&gt;&lt;td class=&quot;c-${d &gt;= 0 ? &#x27;good&#x27; : &#x27;low&#x27;}&quot;&gt;${d &gt;= 0 ? &#x27;+&#x27; : &#x27;−&#x27;}${f(Math.abs(d))}&lt;/td&gt;&lt;/tr&gt;`; });
+  h += `&lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Tổng cộng&lt;/td&gt;&lt;td&gt;${f(tot)}&lt;/td&gt;&lt;td&gt;100%&lt;/td&gt;&lt;td&gt;${f(totC)}&lt;/td&gt;&lt;td&gt;${fP(tot / totC)}&lt;/td&gt;&lt;td class=&quot;c-good&quot;&gt;+${f(tot - totC)}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  $(&#x27;#tblSL&#x27;).innerHTML = h;
+  const d5 = view === &#x27;heid&#x27; ? D.HEID_T[2] - D.SEP.T[2] : null, d5c = view === &#x27;heid&#x27; ? D.HEID_T[4] - D.SEP.T[4] : null;
+  $(&#x27;#kpiSL&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Phát hành lũy kế đến 11/10&#x27;, v: fN(T[2]), s: &#x27;bản, đã trừ hàng trả lại&#x27;},
+    {l: &#x27;Giá trị theo giá bìa&#x27;, v: fT(T[3]) + &#x27; tỷ&#x27;, s: &#x27;Cùng kỳ &#x27; + fT(T[5]) + &#x27; tỷ đồng&#x27;},
+    {l: &#x27;So với cùng kỳ 2025&#x27;, v: fP(T[2] / T[4]), s: (T[2] &gt;= T[4] ? &#x27;Tăng &#x27; : &#x27;Giảm &#x27;) + fN(Math.abs(T[2] - T[4])) + &#x27; bản&#x27;, c: T[2] &gt;= T[4] ? &#x27;good&#x27; : &#x27;low&#x27;},
+    {l: &#x27;Bán thêm 5 tuần, 07/9–11/10&#x27;, v: d5 == null ? &#x27;–&#x27; : fN(d5), s: d5 == null ? &#x27;Chỉ có ở góc nhìn địa bàn HEID&#x27; : &#x27;Cùng giai đoạn 2025: &#x27; + fN(d5c) + &#x27; bản&#x27;}
+  ]);
+  const P = V.rows.filter(r =&gt; r[2] === 0 &amp;&amp; r[5] != null), CC = [&#x27;var(--kd)&#x27;, &#x27;var(--sky)&#x27;, &#x27;var(--ok)&#x27;, &#x27;var(--warn)&#x27;, &#x27;#8E5BB5&#x27;];
+  $(&#x27;#mixSub&#x27;).textContent = &#x27;Tỷ trọng phát hành theo số lượng và theo giá bìa.&#x27;;
+  const mk = (idx, t) =&gt; P.map((r, i) =&gt; `&lt;div class=&quot;row&quot;&gt;&lt;span&gt;${esc(SHORT[r[1]] || r[1])}&lt;/span&gt;&lt;span class=&quot;track&quot;&gt;&lt;span class=&quot;fill&quot; style=&quot;background:${CC[i]};width:${r[idx] / t * 100}%&quot;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;v&quot;&gt;${fP(r[idx] / t)}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+  $(&#x27;#barsMix&#x27;).innerHTML = `&lt;div class=&quot;mixh&quot;&gt;Theo số lượng&lt;/div&gt;${mk(5, T[2])}&lt;div class=&quot;mixh&quot;&gt;Theo giá bìa&lt;/div&gt;${mk(6, T[3])}`;
+}
+$(&#x27;#tblSL&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;[data-g]&#x27;); if (!b) return; const g = b.dataset.g; openG.has(g) ? openG.delete(g) : openG.add(g); renderSL(); });
+seg(&#x27;#segView&#x27;, b =&gt; { view = b.dataset.v; renderSL(); });
+seg(&#x27;#segUnit&#x27;, b =&gt; { unit = b.dataset.u; renderSL(); });
+
+// ---------- 2. So với kế hoạch ----------
+let plan = &#x27;heid&#x27;;
+const openK = new Set();
+function renderKH(){
+  const V = VIEWS[plan], T = V.tot;
+  $(&#x27;#khSub&#x27;).textContent = V.desc + &#x27; Số lượng bản.&#x27;;
+  let h = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng sách&lt;/th&gt;&lt;th&gt;KH Ban điều hành giao&lt;/th&gt;&lt;th&gt;${V.kh}&lt;/th&gt;&lt;th&gt;Phát hành&lt;/th&gt;&lt;th&gt;% kế hoạch&lt;/th&gt;&lt;th&gt;Còn thiếu&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;`, par = null;
+  V.rows.forEach(r =&gt; { if (r[2] === 0) par = r[0];
+    if (r[2] === 1 &amp;&amp; !openK.has(par)) return;
+    if (r[5] == null &amp;&amp; r[4] == null) return;
+    const p = r[4] &amp;&amp; r[5] != null ? r[5] / r[4] : null, left = r[4] ? r[4] - (r[5] || 0) : null;
+    const nm = r[2] === 0 ? `&lt;button type=&quot;button&quot; data-g=&quot;${r[0]}&quot; aria-expanded=&quot;${openK.has(r[0])}&quot;&gt;${esc(r[1])}&lt;/button&gt;` : esc(r[1]);
+    h += `&lt;tr class=&quot;l${r[2]}${openK.has(r[0]) ? &#x27; open&#x27; : &#x27;&#x27;}&quot;&gt;&lt;td&gt;${nm}&lt;/td&gt;&lt;td&gt;${fN(r[3])}&lt;/td&gt;&lt;td&gt;${r[4] == null ? &#x27;&lt;span class=&quot;c-na&quot;&gt;Chưa giao&lt;/span&gt;&#x27; : fN(r[4])}&lt;/td&gt;&lt;td&gt;${fN(r[5])}&lt;/td&gt;&lt;td&gt;${pctCell(p)}&lt;/td&gt;&lt;td&gt;${left == null ? &#x27;–&#x27; : left &gt; 0 ? `&lt;span class=&quot;c-low&quot;&gt;${fN(left)}&lt;/span&gt;` : `&lt;span class=&quot;c-good&quot;&gt;Vượt ${fN(-left)}&lt;/span&gt;`}&lt;/td&gt;&lt;/tr&gt;`; });
+  h += `&lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Tổng cộng&lt;/td&gt;&lt;td&gt;${fN(T[0])}&lt;/td&gt;&lt;td&gt;${fN(T[1])}&lt;/td&gt;&lt;td&gt;${fN(T[2])}&lt;/td&gt;&lt;td&gt;${pctCell(T[2] / T[1])}&lt;/td&gt;&lt;td class=&quot;c-good&quot;&gt;${T[1] - T[2] &gt; 0 ? fN(T[1] - T[2]) : &#x27;Vượt &#x27; + fN(T[2] - T[1])}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  $(&#x27;#tblKH&#x27;).innerHTML = h;
+  const subs = V.rows.filter(r =&gt; r[2] === 1 &amp;&amp; r[4] &amp;&amp; r[5] != null), under = subs.filter(r =&gt; r[5] / r[4] &lt; .95);
+  bars(&#x27;#barsKHp&#x27;, [...subs].sort((a, b) =&gt; a[5] / a[4] - b[5] / b[4]).map(r =&gt; [r[1], r[5] / r[4], &#x27;bg-&#x27; + cls(r[5] / r[4]), fP(r[5] / r[4]), null, `${r[1]}: ${fN(r[5])}/${fN(r[4])} bản`]), {max: 1.3, mark: 1});
+  $(&#x27;#kpiKH&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;% &#x27; + V.kh.toLowerCase(), v: fP(T[2] / T[1]), s: fN(T[2]) + &#x27; / &#x27; + fN(T[1]) + &#x27; bản&#x27;, c: cls(T[2] / T[1])},
+    {l: &#x27;% kế hoạch Ban điều hành giao&#x27;, v: fP(T[2] / T[0]), s: &#x27;Kế hoạch đầu năm &#x27; + fN(T[0]) + &#x27; bản&#x27;, c: cls(T[2] / T[0])},
+    {l: &#x27;Dòng sách dưới 95% kế hoạch&#x27;, v: under.length + &#x27;/&#x27; + subs.length, s: &#x27;Còn thiếu &#x27; + fN(under.reduce((s, r) =&gt; s + r[4] - r[5], 0)) + &#x27; bản&#x27;, c: under.length ? &#x27;mid&#x27; : &#x27;good&#x27;},
+    {l: &#x27;Dòng sách vượt kế hoạch&#x27;, v: subs.filter(r =&gt; r[5] &gt; r[4]).length, s: &#x27;Có thể cần điều chỉnh kế hoạch&#x27;}
+  ]);
+}
+$(&#x27;#tblKH&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;[data-g]&#x27;); if (!b) return; const g = b.dataset.g; openK.has(g) ? openK.delete(g) : openK.add(g); renderKH(); });
+seg(&#x27;#segPlan&#x27;, b =&gt; { plan = b.dataset.v; renderKH(); });
+(function(){
+  const rows = PARENTS.map(c =&gt; [c, row(D.HEID, c)[1], D.SEP[c][1], row(D.HEID, c)[4]]).filter(r =&gt; r[2] != null || r[3] != null);
+  rows.push([&#x27;T&#x27;, &#x27;Tổng cộng&#x27;, D.SEP.T[1], D.HEID_T[1]]);
+  $(&#x27;#tblAdj&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;BC 06/9&lt;/th&gt;&lt;th&gt;BC 11/10&lt;/th&gt;&lt;th&gt;Thay đổi&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${rows.map(r =&gt; { const d = (r[3] || 0) - (r[2] || 0);
+    return `&lt;tr${r[0] === &#x27;T&#x27; ? &#x27; class=&quot;tot&quot;&#x27; : &#x27;&#x27;}&gt;&lt;td&gt;${esc(r[1])}&lt;/td&gt;&lt;td&gt;${fN(r[2])}&lt;/td&gt;&lt;td&gt;${fN(r[3])}&lt;/td&gt;&lt;td class=&quot;${d ? (d &gt; 0 ? &#x27;c-good&#x27; : &#x27;c-low&#x27;) : &#x27;c-na&#x27;}&quot;&gt;${d ? (d &gt; 0 ? &#x27;+&#x27; : &#x27;−&#x27;) + fN(Math.abs(d)) : &#x27;0&#x27;}&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+
+// ---------- 3. Theo tháng ----------
+(function(){
+  const s = D.SEP.T, t = D.HEID_T;
+  $(&#x27;#tblSnap&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mốc&lt;/th&gt;&lt;th&gt;2026&lt;/th&gt;&lt;th&gt;Cùng kỳ 2025&lt;/th&gt;&lt;th&gt;% CK&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Đến 06/9&lt;/td&gt;&lt;td&gt;${fN(s[2])}&lt;/td&gt;&lt;td&gt;${fN(s[4])}&lt;/td&gt;&lt;td&gt;${fP(s[2] / s[4])}&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Đến 11/10&lt;/td&gt;&lt;td&gt;${fN(t[2])}&lt;/td&gt;&lt;td&gt;${fN(t[4])}&lt;/td&gt;&lt;td&gt;${fP(t[2] / t[4])}&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Bán thêm 5 tuần&lt;/td&gt;&lt;td&gt;${fN(t[2] - s[2])}&lt;/td&gt;&lt;td&gt;${fN(t[4] - s[4])}&lt;/td&gt;&lt;td&gt;${fP((t[2] - s[2]) / (t[4] - s[4]))}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  const M = D.MONTH;
+  colChart(&#x27;#colTh&#x27;, {W: 1100, H: 260, labels: M.labels, series: [{name: &#x27;2026&#x27;, color: &#x27;var(--kd)&#x27;, data: M.y26}, {name: &#x27;Cùng kỳ 2025&#x27;, color: &#x27;var(--kd-2)&#x27;, data: M.y25}], unit: &#x27; bản&#x27;, fmtAxis: v =&gt; (v / 1e6).toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:1}) + &#x27; tr&#x27;, legend: &#x27;#legTh&#x27;, aria: &#x27;Phát hành theo tháng&#x27;});
+  const cum = a =&gt; a.reduce((r, v) =&gt; (r.push((r.length ? r[r.length - 1] : 0) + v), r), []);
+  lineChart(&#x27;#lineCum&#x27;, {W: 1000, H: 260, labels: M.labels, series: [{name: &#x27;Lũy kế 2026&#x27;, color: &#x27;var(--kd)&#x27;, data: cum(M.y26)}, {name: &#x27;Lũy kế 2025&#x27;, color: &#x27;var(--kd-2)&#x27;, data: cum(M.y25)}, {name: &#x27;Kế hoạch điều chỉnh cả năm&#x27;, color: &#x27;var(--warn)&#x27;, data: M.labels.map(() =&gt; D.HEID_T[1]), dash: true}],
+    unit: &#x27; bản&#x27;, fmtAxis: v =&gt; Math.round(v / 1e6) + &#x27; tr&#x27;, legend: &#x27;#legCum&#x27;, aria: &#x27;Lũy kế so với kế hoạch&#x27;});
+})();
+
+// ---------- 4. Theo kênh ----------
+(function(){
+  const rows = PARENTS.map(c =&gt; { const h = row(D.HEID, c), d = row(D.DVDM, c); return [h[1], h[5] || 0, d[5] || 0, d[7] || 0]; }).filter(r =&gt; r[1] || r[2]);
+  const tH = D.HEID_T[2], tD = D.DVDM_T[2], tot = tH + tD;
+  $(&#x27;#stackKe&#x27;).innerHTML = `&lt;span style=&quot;background:var(--kd);width:${tH / tot * 100}%&quot; title=&quot;Địa bàn HEID: ${fP(tH / tot)}&quot;&gt;&lt;/span&gt;&lt;span style=&quot;background:var(--sky);width:${tD / tot * 100}%&quot; title=&quot;Đơn vị đầu mối: ${fP(tD / tot)}&quot;&gt;&lt;/span&gt;`;
+  colChart(&#x27;#colKe&#x27;, {W: 620, H: 230, labels: rows.map(r =&gt; SHORT[r[0]] || r[0]), series: [{name: &#x27;Địa bàn HEID&#x27;, color: &#x27;var(--kd)&#x27;, data: rows.map(r =&gt; r[1])}, {name: &#x27;Đơn vị đầu mối&#x27;, color: &#x27;var(--sky)&#x27;, data: rows.map(r =&gt; r[2])}], unit: &#x27; bản&#x27;, fmtAxis: fAx, legend: &#x27;#legKe&#x27;, aria: &#x27;Phát hành theo kênh và mảng&#x27;});
+  $(&#x27;#kpiSnap&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Tiếng Anh qua đơn vị đầu mối&#x27;, v: fM(row(D.DVDM, &#x27;D&#x27;)[5]), s: &#x27;bản, cùng kỳ &#x27; + fN(row(D.DVDM, &#x27;D&#x27;)[7])},
+    {l: &#x27;Đơn vị đầu mối&#x27;, v: fM(tD), s: &#x27;bản, cùng kỳ &#x27; + fN(D.DVDM_T[4]), c: &#x27;good&#x27;},
+    {l: &#x27;Sản phẩm số&#x27;, v: fN(row(D.HEID, &#x27;E3&#x27;)[5]), s: &#x27;bản, &#x27; + fP(row(D.HEID, &#x27;E3&#x27;)[5] / row(D.HEID, &#x27;E3&#x27;)[7]) + &#x27; cùng kỳ&#x27;, c: &#x27;good&#x27;},
+    {l: &#x27;Tháng cao điểm&#x27;, v: &#x27;T8&#x27;, s: &#x27;Theo phân bổ minh họa&#x27;, ill: true}
+  ]);
+  $(&#x27;#tblKe&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--kd)&quot;&gt;&lt;/span&gt;Địa bàn HEID&lt;/th&gt;&lt;th&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--sky)&quot;&gt;&lt;/span&gt;Đơn vị đầu mối&lt;/th&gt;&lt;th&gt;Tỷ trọng đầu mối&lt;/th&gt;&lt;th&gt;Đầu mối cùng kỳ&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${rows.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${esc(r[0])}&lt;/td&gt;&lt;td&gt;${fN(r[1])}&lt;/td&gt;&lt;td&gt;${fN(r[2])}&lt;/td&gt;&lt;td&gt;${fP(r[2] / (r[1] + r[2]))}&lt;/td&gt;&lt;td&gt;${fN(r[3])}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Tổng&lt;/td&gt;&lt;td&gt;${fN(tH)}&lt;/td&gt;&lt;td&gt;${fN(tD)}&lt;/td&gt;&lt;td&gt;${fP(tD / tot)}&lt;/td&gt;&lt;td&gt;${fN(D.DVDM_T[4])}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  const now = row(D.HEID, &#x27;E3&#x27;), sep = D.SEP.E3;
+  $(&#x27;#tblSo&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Chỉ số&lt;/th&gt;&lt;th&gt;Đến 06/9&lt;/th&gt;&lt;th&gt;Đến 11/10&lt;/th&gt;&lt;th&gt;Cùng kỳ&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Số lượng (bản)&lt;/td&gt;&lt;td&gt;${fN(sep[2])}&lt;/td&gt;&lt;td&gt;${fN(now[5])}&lt;/td&gt;&lt;td&gt;${fN(now[7])}&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Giá bìa (tỷ đồng)&lt;/td&gt;&lt;td&gt;${fT(sep[3])}&lt;/td&gt;&lt;td&gt;${fT(now[6])}&lt;/td&gt;&lt;td&gt;${fT(now[8])}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  $(&#x27;#tblTA&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th rowspan=&quot;2&quot;&gt;Mảng&lt;/th&gt;&lt;th colspan=&quot;3&quot; style=&quot;text-align:center&quot;&gt;Cho đơn vị đầu mối&lt;/th&gt;&lt;th colspan=&quot;4&quot; style=&quot;text-align:center&quot;&gt;Tại địa bàn HEID phụ trách&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Kế hoạch&lt;/th&gt;&lt;th&gt;Đã phát hành&lt;/th&gt;&lt;th&gt;% KH&lt;/th&gt;&lt;th&gt;KH sau ĐC&lt;/th&gt;&lt;th&gt;Khách đặt&lt;/th&gt;&lt;th&gt;Đã phát hành&lt;/th&gt;&lt;th&gt;% KH&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${D.TA.map(t =&gt; `&lt;tr&gt;&lt;td&gt;${esc(t[0])}&lt;/td&gt;&lt;td&gt;${fN(t[1])}&lt;/td&gt;&lt;td&gt;${fN(t[2])}&lt;/td&gt;&lt;td&gt;${t[1] ? pctCell(t[2] / t[1], 1.5) : &#x27;–&#x27;}&lt;/td&gt;&lt;td&gt;${fN(t[3])}&lt;/td&gt;&lt;td&gt;${fN(t[4])}&lt;/td&gt;&lt;td&gt;${fN(t[5])}&lt;/td&gt;&lt;td&gt;${pctCell(t[5] / t[3])}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+
+// ---------- 5. Theo tỉnh (minh họa) ----------
+(function(){
+  const T = D.TINH, avg = T.reduce((s, x) =&gt; s + x[2], 0) / T.reduce((s, x) =&gt; s + x[1], 0), srt = [...T].sort((a, b) =&gt; a[2] / a[1] - b[2] / b[1]);
+  bars(&#x27;#barsTinh&#x27;, srt.map(x =&gt; [x[0], x[2] / x[1], &#x27;bg-&#x27; + cls(x[2] / x[1]), fP(x[2] / x[1]), null, `${x[0]}: ${fN(x[2])}/${fN(x[1])} bản`]), {max: 1.1, mark: avg});
+  $(&#x27;#tblTinh&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Tỉnh&lt;/th&gt;&lt;th&gt;Kế hoạch&lt;/th&gt;&lt;th&gt;Phát hành&lt;/th&gt;&lt;th&gt;% KH&lt;/th&gt;&lt;th&gt;% cùng kỳ&lt;/th&gt;&lt;th&gt;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${srt.map(x =&gt; { const p = x[2] / x[1], slow = p &lt; .9 &amp;&amp; p &lt; avg - .05;
+    return `&lt;tr&gt;&lt;td&gt;${esc(x[0])}&lt;/td&gt;&lt;td&gt;${fN(x[1])}&lt;/td&gt;&lt;td&gt;${fN(x[2])}&lt;/td&gt;&lt;td&gt;${pctCell(p)}&lt;/td&gt;&lt;td&gt;${fP(x[2] / x[3])}&lt;/td&gt;&lt;td&gt;${slow ? &#x27;&lt;span class=&quot;flag low&quot;&gt;Chậm&lt;/span&gt;&#x27; : &#x27;&#x27;}&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+
+// ---------- 6. Nhu cầu đặt hàng ----------
+const W = (function(){
+  const lab = []; for (let w = 32; w &lt;= 52; w++) lab.push(&#x27;T&#x27; + w);
+  const scale = (arr, from, to, target) =&gt; { const s = arr.slice(from, to).reduce((a, b) =&gt; a + b, 0); return arr.map((v, i) =&gt; i &gt;= from &amp;&amp; i &lt; to ? Math.round(v * target / s) : v); };
+  const y26 = scale(D.WEEK.y26, 5, 10, D.HEID_T[2] - D.SEP.T[2]);
+  const y25 = scale(D.WEEK.y25, 5, 10, D.HEID_T[4] - D.SEP.T[4]);
+  return {lab, y26, y25, g: (D.HEID_T[2] - D.SEP.T[2]) / (D.HEID_T[4] - D.SEP.T[4])};
+})();
+(function(){
+  const dl = PARENTS.map(c =&gt; [row(D.HEID, c)[1], (row(D.HEID, c)[5] || 0) - (D.SEP[c][2] || 0), (row(D.HEID, c)[7] || 0) - (D.SEP[c][4] || 0)]).filter(r =&gt; r[1] || r[2]);
+  colChart(&#x27;#colDelta&#x27;, {W: 640, H: 240, labels: dl.map(r =&gt; SHORT[r[0]] || r[0]), series: [{name: &#x27;07/9–11/10/2026&#x27;, color: &#x27;var(--kd)&#x27;, data: dl.map(r =&gt; r[1])}, {name: &#x27;Cùng giai đoạn 2025&#x27;, color: &#x27;var(--kd-2)&#x27;, data: dl.map(r =&gt; r[2])}], unit: &#x27; bản&#x27;, fmtAxis: v =&gt; (v / 1e6).toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:1}) + &#x27; tr&#x27;, legend: &#x27;#legDelta&#x27;, aria: &#x27;Bán thêm 5 tuần theo mảng&#x27;});
+  $(&#x27;#tblDelta&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;2026&lt;/th&gt;&lt;th&gt;Cùng kỳ 2025&lt;/th&gt;&lt;th&gt;Chênh lệch&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${dl.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${esc(SHORT[r[0]] || r[0])}&lt;/td&gt;&lt;td&gt;${fN(r[1])}&lt;/td&gt;&lt;td&gt;${fN(r[2])}&lt;/td&gt;&lt;td class=&quot;c-${r[1] &gt;= r[2] ? &#x27;good&#x27; : &#x27;low&#x27;}&quot;&gt;${r[1] &gt;= r[2] ? &#x27;+&#x27; : &#x27;−&#x27;}${fN(Math.abs(r[1] - r[2]))}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Tổng&lt;/td&gt;&lt;td&gt;${fN(dl.reduce((a, r) =&gt; a + r[1], 0))}&lt;/td&gt;&lt;td&gt;${fN(dl.reduce((a, r) =&gt; a + r[2], 0))}&lt;/td&gt;&lt;td class=&quot;c-good&quot;&gt;+${fN(dl.reduce((a, r) =&gt; a + r[1] - r[2], 0))}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  const ta = dl.find(r =&gt; r[0] === &#x27;Sách tiếng Anh&#x27;), sgk = dl.find(r =&gt; r[0] === &#x27;Sách giáo khoa&#x27;);
+  const O = D.ORDER;
+  $(&#x27;#tblOrder&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;Kế hoạch&lt;/th&gt;&lt;th&gt;Đối tác đặt&lt;/th&gt;&lt;th&gt;Đặt / KH&lt;/th&gt;&lt;th&gt;Đã phát hành&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${O.map(o =&gt; { const p = o[2] / o[1];
+    return `&lt;tr&gt;&lt;td&gt;${esc(o[0])}&lt;/td&gt;&lt;td&gt;${fN(o[1])}&lt;/td&gt;&lt;td&gt;${fN(o[2])}&lt;/td&gt;&lt;td class=&quot;c-${p &gt; 1.05 ? &#x27;low&#x27; : p &gt;= .95 ? &#x27;good&#x27; : &#x27;mid&#x27;}&quot;&gt;&lt;b&gt;${fP(p)}&lt;/b&gt;&lt;/td&gt;&lt;td&gt;${fN(o[3])}&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+  const sbt = O.find(o =&gt; o[0] === &#x27;SBT KNTT&#x27;), sbtTA = O.find(o =&gt; o[0] === &#x27;SBT Tiếng Anh&#x27;);
+  $(&#x27;#kpiNC&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Bán thêm 5 tuần gần nhất&#x27;, v: fN(D.HEID_T[2] - D.SEP.T[2]), s: (W.g &gt;= 1 ? &#x27;+&#x27; : &#x27;&#x27;) + fP(W.g - 1) + &#x27; so với cùng giai đoạn 2025&#x27;, c: W.g &gt;= 1 ? &#x27;good&#x27; : &#x27;mid&#x27;},
+    {l: &#x27;Bình quân mỗi tuần&#x27;, v: fN((D.HEID_T[2] - D.SEP.T[2]) / 5), s: &#x27;bản, 07/9–11/10&#x27;},
+    {l: &#x27;SBT KNTT: đối tác đặt so với KH&#x27;, v: fP(sbt[2] / sbt[1]), s: &#x27;Đặt &#x27; + fN(sbt[2]) + &#x27; / KH &#x27; + fN(sbt[1]), c: &#x27;low&#x27;},
+    {l: &#x27;SBT Tiếng Anh: khách đặt so với KH&#x27;, v: fP(sbtTA[2] / sbtTA[1]), s: &#x27;Đặt &#x27; + fN(sbtTA[2]) + &#x27; / KH &#x27; + fN(sbtTA[1]), c: &#x27;mid&#x27;}
+  ]);
+})();
+
+// ---------- 7. Dự báo ----------
+(function(){
+  const n = W.lab.length, fc = 10;
+  const act = W.lab.map((_, i) =&gt; i &lt; fc ? W.y26[i] : null);
+  const f = W.lab.map((_, i) =&gt; i === fc - 1 ? W.y26[i] : i &gt;= fc ? Math.round(W.y25[i] * W.g) : null);
+  lineChart(&#x27;#lineFc&#x27;, {W: 1000, H: 280, labels: W.lab, fcFrom: fc, series: [{name: &#x27;Thực tế 2026&#x27;, color: &#x27;var(--kd)&#x27;, data: act}, {name: &#x27;Dự báo&#x27;, color: &#x27;var(--kd)&#x27;, data: f, dash: true}, {name: &#x27;Cùng kỳ 2025&#x27;, color: &#x27;var(--muted)&#x27;, data: W.y25}],
+    band: {lo: f.map((v, i) =&gt; v == null || i &lt; fc ? null : v * .85), hi: f.map((v, i) =&gt; v == null || i &lt; fc ? null : v * 1.15)}, unit: &#x27; bản&#x27;, fmtAxis: fAx, legend: &#x27;#legFc&#x27;, aria: &#x27;Dự báo đơn đặt hàng&#x27;});
+  $(&#x27;#gRate&#x27;).textContent = fP(W.g) + &#x27; cùng kỳ&#x27;;
+  const next = f.slice(fc).reduce((a, b) =&gt; a + b, 0), nov = f.slice(13, 17).reduce((a, b) =&gt; a + b, 0), dec = f.slice(17).reduce((a, b) =&gt; a + b, 0);
+  $(&#x27;#kpiDB&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Tỷ lệ so với cùng kỳ, 5 tuần gần nhất&#x27;, v: fP(W.g), s: &#x27;Số thật, dùng làm hệ số dự báo&#x27;, c: W.g &gt;= 1 ? &#x27;good&#x27; : &#x27;mid&#x27;},
+    {l: &#x27;Dự báo tuần 42–52&#x27;, v: fM(next), s: &#x27;Khoảng &#x27; + fM(next * .85) + &#x27; đến &#x27; + fM(next * 1.15), ill: true},
+    {l: &#x27;Dự báo tháng 11&#x27;, v: fM(nov), s: &#x27;bản, tuần 45–48&#x27;, ill: true},
+    {l: &#x27;Dự báo tháng 12&#x27;, v: fM(dec), s: &#x27;bản, tuần 49–52&#x27;, ill: true}
+  ]);
+  const rem = D.HEID.filter(r =&gt; r[2] === 1 &amp;&amp; r[4] &amp;&amp; r[5] != null &amp;&amp; r[4] &gt; r[5]).map(r =&gt; [r[1], r[4] - r[5]]).sort((a, b) =&gt; b[1] - a[1]);
+  bars(&#x27;#barsRemain&#x27;, rem.map(r =&gt; [r[0], r[1], &#x27;var(--warn)&#x27;, fN(r[1])]));
+})();
+renderSL(); renderKH();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe><iframe id="demo2" title="BC2 Báo cáo kiểm soát hàng hóa và kho vận" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;vi&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, viewport-fit=cover&quot;&gt;
+&lt;title&gt;HEID – BC2 Báo cáo kiểm soát hàng hóa và kho vận (demo)&lt;/title&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
+&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap&amp;subset=vietnamese&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;style&gt;
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#EEF2F7;--surface:#FFFFFF;--ink:#16203A;--muted:#5A6476;--line:#DCE3EC;--soft:#F3F6FA;
+  --kd:#13438A;--kd-2:#7EA2DD;--kd-bg:#E6EEF9;--sky:#0A8ED0;
+  --ok:#17795E;--ok-bg:#E2F2EC;--warn:#A85C08;--warn-bg:#FBEEDC;--bad:#B42318;--bad-bg:#FBE4E2;
+  --ill:#A85C08;
+  --sans:&quot;Be Vietnam Pro&quot;,&quot;Segoe UI&quot;,system-ui,-apple-system,Roboto,Arial,sans-serif;
+  --lift:0 1px 2px rgba(15,37,71,.05),0 10px 26px -18px rgba(15,37,71,.3);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme=&quot;light&quot;]){
+  color-scheme:dark;--bg:#0C1017;--surface:#151B26;--ink:#E5E9F0;--muted:#9BA5B6;--line:#2A3343;--soft:#1B2230;
+  --kd:#86AAF0;--kd-2:#3D5E97;--kd-bg:#18243B;--sky:#5CC0F0;--ok:#5FC2A2;--ok-bg:#163029;--warn:#E6A458;--warn-bg:#33261A;--bad:#F97066;--bad-bg:#3A1D1D;--ill:#E6A458;--lift:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme=&quot;dark&quot;]{
+  color-scheme:dark;--bg:#0C1017;--surface:#151B26;--ink:#E5E9F0;--muted:#9BA5B6;--line:#2A3343;--soft:#1B2230;
+  --kd:#86AAF0;--kd-2:#3D5E97;--kd-bg:#18243B;--sky:#5CC0F0;--ok:#5FC2A2;--ok-bg:#163029;--warn:#E6A458;--warn-bg:#33261A;--bad:#F97066;--bad-bg:#3A1D1D;--ill:#E6A458;--lift:0 1px 2px rgba(0,0,0,.4)}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--kd);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+header.app{background:#13438A;color:#fff}
+.hrow{display:flex;align-items:center;gap:16px;padding:18px 0 14px;flex-wrap:wrap}
+.logo{width:54px;height:54px;border-radius:12px;background:#fff;padding:4px;flex:none}
+.hrow h1{margin:0;font-size:1.4rem;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.hrow p{margin:3px 0 0;color:#C7DAF3;font-size:.86rem}
+.rtitle{display:flex;align-items:center;gap:10px}
+.rtitle .code{font-size:.72rem;font-weight:700;color:#13438A;background:#fff;border-radius:6px;padding:2px 8px}
+.chips{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;padding:4px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;white-space:nowrap}
+.chip.real::before{content:&quot;&quot;;width:8px;height:8px;border-radius:50%;background:#7FD1C9}
+.chip.ill{border-style:dashed;border-color:#F5C27A;color:#F5C27A}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tab{appearance:none;border:0;background:none;padding:10px 16px 11px;border-radius:12px 12px 0 0;color:#C7DAF3;font-weight:500;white-space:nowrap;text-align:left;line-height:1.25}
+.tab small{display:block;font-size:.7rem;font-weight:400;opacity:.85}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab[aria-selected=&quot;true&quot;]{background:var(--bg);color:var(--kd);font-weight:700}
+.tab[aria-selected=&quot;true&quot;] small{color:var(--muted)}
+main{padding:20px 0 40px}
+.qbar{display:flex;gap:12px;align-items:flex-start;background:var(--kd-bg);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.qbar b{flex:none;font-size:.72rem;letter-spacing:.04em;color:var(--kd);padding-top:3px}
+.qbar span{font-size:1.04rem;line-height:1.4;font-weight:600}
+.ctl{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:14px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{appearance:none;border:0;background:none;padding:7px 12px;font-size:.84rem;color:var(--muted)}
+.seg button[aria-pressed=&quot;true&quot;]{background:var(--kd);color:var(--surface);font-weight:600}
+.ctl label{font-size:.8rem;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--lift)}
+.kpi.ill{border-style:dashed;border-color:color-mix(in srgb,var(--ill) 60%,var(--line))}
+.kpi small{display:block;font-size:.78rem;color:var(--muted)}
+.kpi b{display:block;font-size:1.55rem;font-weight:700;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.kpi.good b{color:var(--ok)} .kpi.mid b{color:var(--warn)} .kpi.low b{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}
+.grid2.eq{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;min-width:0;box-shadow:var(--lift)}
+.card.ill{border-style:dashed;border-color:color-mix(in srgb,var(--ill) 60%,var(--line))}
+.card h3{margin:0 0 2px;font-size:1rem}
+.card .sub{margin:0 0 10px;font-size:.8rem;color:var(--muted)}
+.tag{font-size:.7rem;font-weight:600;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.tag.real{background:var(--kd-bg);color:var(--kd)} .tag.ill{border:1px dashed var(--ill);color:var(--ill)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.84rem;font-variant-numeric:tabular-nums}
+th{text-align:right;font-size:.74rem;font-weight:600;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child,th.tl,td.tl{text-align:left}
+td{padding:7px 8px;border-bottom:1px solid var(--soft);text-align:right;white-space:nowrap}
+tr.l0 td{font-weight:600;background:var(--soft)}
+tr.l1 td:first-child{padding-left:24px;color:var(--muted)}
+tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+tr.l0 td:first-child button{appearance:none;border:0;background:none;padding:0;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+tr.l0 td:first-child button::before{content:&quot;&quot;;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+tr.l0.open td:first-child button::before{transform:rotate(45deg)}
+.pct{display:inline-flex;align-items:center;gap:6px;justify-content:flex-end;min-width:104px}
+.pct i{position:relative;display:block;width:52px;height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
+.pct i em{position:absolute;inset:0 auto 0 0;border-radius:4px}
+.c-good{color:var(--ok)} .c-mid{color:var(--warn)} .c-low{color:var(--bad)} .c-na{color:var(--muted)}
+.bg-good{background:var(--ok)} .bg-mid{background:var(--warn)} .bg-low{background:var(--bad)} .bg-na{background:var(--line)}
+.thr{font-size:.76rem;color:var(--muted);margin-top:8px}
+.ins{list-style:none;margin:0;padding:0}
+.ins li{padding:9px 0 9px 26px;border-top:1px solid var(--soft);position:relative;font-size:.86rem}
+.ins li:first-child{border-top:0}
+.ins li::before{content:&quot;&quot;;position:absolute;left:4px;top:15px;width:10px;height:10px;border-radius:50%}
+.ins li.low::before{background:var(--bad)} .ins li.mid::before{background:var(--warn)} .ins li.good::before{background:var(--ok)} .ins li.info::before{background:var(--kd)}
+.bars .row{display:grid;grid-template-columns:minmax(110px,200px) minmax(0,1fr) 92px;gap:10px;align-items:center;padding:5px 0;font-size:.84rem}
+.bars .track{height:16px;background:var(--soft);border-radius:5px;position:relative;overflow:hidden}
+.bars .fill{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.bars .mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink);opacity:.55}
+.bars .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.pipe .prow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--soft)}
+.pipe .prow:first-child{border-top:0}
+.pipe .pname b{display:block;font-size:.9rem}
+.pipe .pname small{color:var(--muted);font-size:.76rem}
+.stages{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stg{border-radius:8px;padding:6px 8px;background:var(--soft);font-size:.76rem;position:relative;overflow:hidden}
+.stg .f{position:absolute;inset:auto 0 0 0;height:4px;background:var(--kd)}
+.stg b{display:block;font-size:.88rem;font-variant-numeric:tabular-nums}
+.stg span{color:var(--muted)}
+.stg.warnc{background:var(--bad-bg)} .stg.warnc .f{background:var(--bad)}
+.flag{display:inline-block;font-size:.72rem;font-weight:600;border-radius:999px;padding:1px 8px}
+.flag.good{background:var(--ok-bg);color:var(--ok)} .flag.mid{background:var(--warn-bg);color:var(--warn)} .flag.low{background:var(--bad-bg);color:var(--bad)}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.78rem;color:var(--muted);margin-top:6px}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px}
+.note{font-size:.8rem;color:var(--muted);background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:10px}
+.note b{color:var(--ink)}
+.big3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--soft);font-size:.86rem}
+.alert:first-child{border-top:0}
+.alert .flag{flex:none;margin-top:2px;min-width:96px;text-align:center}
+.alert small{display:block;color:var(--muted);font-size:.76rem}
+.stack{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:6px 0 10px}
+.stack span{display:block;height:100%}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.method{font-size:.8rem;color:var(--muted);border-left:3px solid var(--ill);padding:8px 12px;margin-top:10px;background:var(--warn-bg);border-radius:0 8px 8px 0}
+.need{list-style:none;margin:0;padding:0;font-size:.85rem}
+.need li{padding:7px 0 7px 22px;border-top:1px solid var(--soft);position:relative}
+.need li:first-child{border-top:0}
+.need li::before{content:&quot;&quot;;position:absolute;left:3px;top:13px;width:9px;height:9px;border:2px solid var(--kd);border-radius:3px}
+footer{color:var(--muted);font-size:.78rem;padding:10px 0 30px}
+footer b{color:var(--ink);font-weight:600}
+@media (max-width:900px){.kpis{grid-template-columns:1fr 1fr}.grid2,.grid2.eq{grid-template-columns:1fr}.stages{grid-template-columns:1fr 1fr}.pipe .prow{grid-template-columns:1fr}.big3{grid-template-columns:1fr}.chips{margin-left:0}}
+@media print{.tabs,.ctl{display:none}.panel[hidden]{display:block!important}body{background:#fff}}
+.sech{font-size:1.08rem;font-weight:700;margin:26px 0 12px;display:flex;align-items:center;gap:10px;color:var(--kd)}
+.sech::after{content:&quot;&quot;;flex:1;height:1px;background:var(--line)}
+.qbar+.ctl,.qbar+.kpis{margin-top:0}
+.grid2{align-items:stretch}
+.grid2&gt;.card{display:flex;flex-direction:column}
+.grid2&gt;div:not(.card){display:flex;flex-direction:column}
+.grid2&gt;div:not(.card)&gt;.card:last-child{flex:1}
+.mixh{font-size:.76rem;font-weight:600;color:var(--muted);margin:10px 0 2px}
+.mixh:first-child{margin-top:0}
+.ins.cols2,.need.cols2{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+.ins.cols2 li:nth-child(2),.need.cols2 li:nth-child(2){border-top:0}
+@media (max-width:900px){.ins.cols2,.need.cols2{grid-template-columns:1fr}}
+.kpis+.kpis{margin-top:-4px}
+.alerts2{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.alerts2 .alert:nth-child(2){border-top:0}
+@media (max-width:900px){.alerts2{grid-template-columns:1fr}}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header class=&quot;app&quot;&gt;&lt;div class=&quot;wrap&quot;&gt;
+  &lt;div class=&quot;hrow&quot;&gt;
+    &lt;img class=&quot;logo&quot; alt=&quot;Logo HEID&quot; src=&quot;data:image/png;base64,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&quot;&gt;
+    &lt;div&gt;&lt;h1 class=&quot;rtitle&quot;&gt;&lt;span class=&quot;code&quot;&gt;BC2&lt;/span&gt;Báo cáo kiểm soát hàng hóa và kho vận&lt;/h1&gt;&lt;p&gt;Phòng Kinh doanh, P. Quản lý In – Kho vận · Số liệu đến 06/9/2026&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&quot;chips&quot;&gt;&lt;span class=&quot;chip real&quot;&gt;Số thật: BC tuần 06/9&lt;/span&gt;&lt;span class=&quot;chip ill&quot;&gt;Viền đứt: minh họa, chờ dữ liệu ERP&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;nav class=&quot;tabs&quot; role=&quot;tablist&quot; id=&quot;tabs&quot;&gt;&lt;/nav&gt;
+&lt;/div&gt;&lt;/header&gt;
+
+&lt;main class=&quot;wrap&quot;&gt;
+  &lt;!-- 1. Tổng quan --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-tq&quot; role=&quot;tabpanel&quot;&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Hàng có về kịp không, đang thiếu ở đâu, việc gì cần xử lý tuần này?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiTop&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Danh sách cảnh báo&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Các mục vượt ngưỡng, xếp theo mức độ.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblAlert&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Từ kế hoạch đến tay đối tác&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Tổng 3 mảng SGK KNTT, SBT KNTT, SBT nhập mua PN.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsFunnel&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Đặt của đối tác chưa được đáp ứng&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Tổng đặt của đối tác trừ đã phát hành.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsGap&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Đặt hàng và phát hành theo mảng&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblFill&quot;&gt;&lt;/table&gt;&lt;/div&gt;
+&lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- 2. Tồn kho --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-tk&quot; role=&quot;tabpanel&quot; hidden&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Lô in đã nhập kho đến đâu, sách nào đang tồn cao, sách nào đang thiếu?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiTK&quot;&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;% nhập kho theo lô in&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Sắp theo hạn nhập; màu theo trạng thái.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsLot&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;SBT Ôn luyện thông minh&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Từ kế hoạch tới phát hành.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsOLTM&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Tuổi tồn theo mảng&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;div id=&quot;aging&quot;&gt;&lt;/div&gt;&lt;div class=&quot;legend&quot; id=&quot;legAge&quot;&gt;&lt;/div&gt;
+        &lt;p class=&quot;thr&quot;&gt;Giá trị tồn ước tính theo giá bìa bình quân thật &lt;span id=&quot;avgP&quot;&gt;&lt;/span&gt; đồng/bản (BC 11/10).&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Đầu sách đang thiếu&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Số bản còn thiếu sau khi trừ tồn và hàng đang in.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsShort&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Theo dõi lô in theo quyết định in&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Trễ hạn: quá hạn nhập mà chưa nhập đủ. Sắp đến hạn: còn 7 ngày, nhập dưới 80%.&lt;/p&gt;
+      &lt;div class=&quot;ctl&quot; style=&quot;margin:0 0 8px&quot;&gt;&lt;div class=&quot;seg&quot; id=&quot;segLot&quot;&gt;&lt;button type=&quot;button&quot; data-f=&quot;all&quot; aria-pressed=&quot;true&quot;&gt;Tất cả&lt;/button&gt;&lt;button type=&quot;button&quot; data-f=&quot;low&quot; aria-pressed=&quot;false&quot;&gt;Trễ hạn&lt;/button&gt;&lt;button type=&quot;button&quot; data-f=&quot;mid&quot; aria-pressed=&quot;false&quot;&gt;Sắp đến hạn&lt;/button&gt;&lt;button type=&quot;button&quot; data-f=&quot;good&quot; aria-pressed=&quot;false&quot;&gt;Đã đủ&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblLot&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;grid2 eq&quot;&gt;
+      &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Hàng đã về nhưng chưa phát hành&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblLeft&quot;&gt;&lt;/table&gt;&lt;/div&gt;
+        &lt;p class=&quot;thr&quot;&gt;¹ Theo số đã nhập kho. ² Theo số đã in.&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Đầu sách tồn kho cao&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Số tháng tồn = tồn hiện tại chia phát hành bình quân 3 tháng gần nhất.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblStock&quot;&gt;&lt;/table&gt;&lt;/div&gt;
+        &lt;p class=&quot;thr&quot;&gt;Đỏ: trên 12 tháng, cam: 6–12 tháng.&lt;/p&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Đầu sách đang thiếu&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Thiếu = đặt chưa giao − tồn khả dụng − đang in chưa nhập.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblShort&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;!-- 3. Nhà cung cấp --&gt;
+  &lt;section class=&quot;panel&quot; id=&quot;p-cu&quot; role=&quot;tabpanel&quot; hidden&gt;
+    &lt;div class=&quot;qbar&quot;&gt;&lt;b&gt;CÂU HỎI&lt;/b&gt;&lt;span&gt;Tiến độ cung ứng của nhà cung cấp ra sao, đã đặt đủ chưa, giao có đúng hạn không?&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;kpis&quot; id=&quot;kpiNCC&quot;&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Biểu đồ&lt;/h2&gt;
+    &lt;div class=&quot;card&quot;&gt;&lt;h3&gt;Chuỗi cung ứng SGK, SBT nhập mua&lt;span class=&quot;tag real&quot;&gt;Số thật, BC 06/9&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Ô đỏ: đã đặt nhà cung cấp dưới 90% kế hoạch, hoặc đã phát hành dưới 90% lượng đối tác đặt.&lt;/p&gt;&lt;div class=&quot;pipe&quot; id=&quot;pipe&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;% đã giao theo nhà cung cấp&lt;span class=&quot;tag ill&quot;&gt;Phân bổ minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Vạch đen là tỷ lệ giao bình quân.&lt;/p&gt;&lt;div class=&quot;bars&quot; id=&quot;barsNcc&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;h2 class=&quot;sech&quot;&gt;Bảng chi tiết&lt;/h2&gt;
+    &lt;div class=&quot;card ill&quot;&gt;&lt;h3&gt;Tiến độ theo nhà cung cấp&lt;span class=&quot;tag ill&quot;&gt;Phân bổ minh họa&lt;/span&gt;&lt;/h3&gt;&lt;p class=&quot;sub&quot;&gt;Tổng đã đặt, đã giao khớp số thật của SGK KNTT, SBT KNTT, SBT nhập mua PN. Chia theo NXBGD miền chờ dữ liệu đơn đặt hàng NCC trên ERP.&lt;/p&gt;&lt;div class=&quot;tw&quot;&gt;&lt;table id=&quot;tblNcc&quot;&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer class=&quot;wrap&quot;&gt;&lt;b&gt;Nguồn:&lt;/b&gt; “Báo cáo công tác kinh doanh tuần, 06/9/2026” của P. Kinh doanh, “BC tuần 11.10.xlsx”, phiếu khảo sát nhu cầu báo cáo của P. Kinh doanh. Khi triển khai: quyết định in trên Base (QT-KD-05), nhập – xuất – tồn và đơn hàng trên ERP, shop.heid.vn. Khối viền đứt là số minh họa.&lt;/footer&gt;
+
+&lt;script&gt;
+const $ = (s, r = document) =&gt; r.querySelector(s), $$ = (s, r = document) =&gt; [...r.querySelectorAll(s)];
+const esc = s =&gt; String(s ?? &#x27;&#x27;).replace(/[&amp;&lt;&gt;&quot;]/g, c =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;}[c]));
+const fN = n =&gt; n == null ? &#x27;–&#x27; : Math.round(n).toLocaleString(&#x27;vi-VN&#x27;);
+const fT = n =&gt; n == null ? &#x27;–&#x27; : (n / 1e9).toLocaleString(&#x27;vi-VN&#x27;, {minimumFractionDigits:1, maximumFractionDigits:1});
+const fM = n =&gt; n == null ? &#x27;–&#x27; : (n / 1e6).toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:2}) + &#x27; tr&#x27;;
+const fP = p =&gt; p == null || !isFinite(p) ? &#x27;–&#x27; : Math.round(p * 100) + &#x27;%&#x27;;
+const cls = p =&gt; p == null ? &#x27;na&#x27; : p &gt;= .95 ? &#x27;good&#x27; : p &gt;= .8 ? &#x27;mid&#x27; : &#x27;low&#x27;;
+const pctCell = (p, cap = 1.2) =&gt; `&lt;span class=&quot;pct&quot;&gt;&lt;b class=&quot;c-${cls(p)}&quot;&gt;${fP(p)}&lt;/b&gt;&lt;i&gt;&lt;em class=&quot;bg-${cls(p)}&quot; style=&quot;width:${p == null ? 0 : Math.min(p / cap, 1) * 100}%&quot;&gt;&lt;/em&gt;&lt;/i&gt;&lt;/span&gt;`;
+const kpiHtml = list =&gt; list.map(k =&gt; `&lt;div class=&quot;kpi ${k.c || &#x27;&#x27;}${k.ill ? &#x27; ill&#x27; : &#x27;&#x27;}&quot;&gt;&lt;small&gt;${k.l}${k.ill ? &#x27; &lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&#x27; : &#x27;&#x27;}&lt;/small&gt;&lt;b&gt;${k.v}&lt;/b&gt;&lt;span&gt;${k.s}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;);
+function initTabs(list){
+  $(&#x27;#tabs&#x27;).innerHTML = list.map(([id, t, q], i) =&gt; `&lt;button class=&quot;tab&quot; role=&quot;tab&quot; type=&quot;button&quot; data-t=&quot;${id}&quot; aria-selected=&quot;${i === 0}&quot; aria-controls=&quot;p-${id}&quot;&gt;${t}${q ? `&lt;small&gt;${q}&lt;/small&gt;` : &#x27;&#x27;}&lt;/button&gt;`).join(&#x27;&#x27;);
+  $(&#x27;#tabs&#x27;).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;.tab&#x27;); if (!b) return;
+    $$(&#x27;.tab&#x27;).forEach(x =&gt; x.setAttribute(&#x27;aria-selected&#x27;, String(x === b))); $$(&#x27;.panel&#x27;).forEach(p =&gt; p.hidden = p.id !== &#x27;p-&#x27; + b.dataset.t); });
+}
+function seg(sel, cb){
+  $(sel).addEventListener(&#x27;click&#x27;, e =&gt; { const b = e.target.closest(&#x27;button&#x27;); if (!b) return;
+    $$(sel + &#x27; button&#x27;).forEach(x =&gt; x.setAttribute(&#x27;aria-pressed&#x27;, String(x === b))); cb(b); });
+}
+function bars(sel, rows, o = {}){
+  const mx = o.max || Math.max(...rows.map(r =&gt; r[1]), 1);
+  $(sel).innerHTML = rows.map(r =&gt; `&lt;div class=&quot;row&quot;${r[5] ? ` title=&quot;${esc(r[5])}&quot;` : &#x27;&#x27;}&gt;&lt;span&gt;${esc(r[0])}&lt;/span&gt;&lt;span class=&quot;track&quot;&gt;&lt;span class=&quot;fill ${r[2] &amp;&amp; r[2].startsWith(&#x27;bg-&#x27;) ? r[2] : &#x27;&#x27;}&quot; style=&quot;${r[2] &amp;&amp; !r[2].startsWith(&#x27;bg-&#x27;) ? `background:${r[2]};` : &#x27;&#x27;}width:${Math.max(0, Math.min(r[1] / mx, 1)) * 100}%&quot;&gt;&lt;/span&gt;${o.mark != null ? `&lt;span class=&quot;mark&quot; style=&quot;left:${o.mark / mx * 100}%&quot;&gt;&lt;/span&gt;` : &#x27;&#x27;}&lt;/span&gt;&lt;span class=&quot;v&quot;&gt;${r[3] ?? fN(r[1])}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;) + (o.note ? `&lt;p class=&quot;thr&quot;&gt;${o.note}&lt;/p&gt;` : &#x27;&#x27;);
+}
+function lineChart(sel, o){
+  const W = o.W || 680, H = o.H || 250, L = 56, R = 14, T = 14, B = 30, n = o.labels.length;
+  const all = o.series.flatMap(s =&gt; s.data.filter(v =&gt; v != null)).concat(o.band ? o.band.hi.filter(v =&gt; v != null) : []);
+  const mx = Math.max(...all) * 1.1 || 1;
+  const x = i =&gt; L + i * (W - L - R) / (n - 1), y = v =&gt; T + (1 - v / mx) * (H - T - B);
+  let g = &#x27;&#x27;;
+  for (let k = 0; k &lt;= 4; k++) { const v = mx * k / 4; g += `&lt;line x1=&quot;${L}&quot; x2=&quot;${W - R}&quot; y1=&quot;${y(v)}&quot; y2=&quot;${y(v)}&quot; stroke=&quot;var(--line)&quot;/&gt;&lt;text x=&quot;${L - 6}&quot; y=&quot;${y(v) + 4}&quot; text-anchor=&quot;end&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${o.fmtAxis ? o.fmtAxis(v) : Math.round(v / 1000) + &#x27;k&#x27;}&lt;/text&gt;`; }
+  if (o.fcFrom != null) { const xf = x(o.fcFrom); g += `&lt;rect x=&quot;${xf}&quot; y=&quot;${T}&quot; width=&quot;${W - R - xf}&quot; height=&quot;${H - T - B}&quot; fill=&quot;var(--soft)&quot;/&gt;&lt;text x=&quot;${xf + 6}&quot; y=&quot;${T + 12}&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;Dự báo&lt;/text&gt;`; }
+  if (o.shade) o.shade.forEach(sh =&gt; { const x1 = x(sh[0]) - (W - L - R) / (n - 1) / 2, x2 = x(sh[1]) + (W - L - R) / (n - 1) / 2; g += `&lt;rect x=&quot;${x1}&quot; y=&quot;${T}&quot; width=&quot;${x2 - x1}&quot; height=&quot;${H - T - B}&quot; fill=&quot;var(--kd-bg)&quot;/&gt;&lt;text x=&quot;${x1 + 6}&quot; y=&quot;${T + 12}&quot; font-size=&quot;10&quot; fill=&quot;var(--kd)&quot;&gt;${esc(sh[2])}&lt;/text&gt;`; });
+  if (o.band) { const idx = o.band.lo.map((v, i) =&gt; v == null ? null : i).filter(i =&gt; i != null);
+    g += `&lt;polygon fill=&quot;var(--kd)&quot; opacity=&quot;.12&quot; points=&quot;${idx.map(i =&gt; x(i) + &#x27;,&#x27; + y(o.band.hi[i])).join(&#x27; &#x27;)} ${idx.slice().reverse().map(i =&gt; x(i) + &#x27;,&#x27; + y(o.band.lo[i])).join(&#x27; &#x27;)}&quot;/&gt;`; }
+  const step = Math.ceil(n / 12);
+  o.labels.forEach((w, i) =&gt; { if (i % step === 0 || i === n - 1) g += `&lt;text x=&quot;${x(i)}&quot; y=&quot;${H - 10}&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${esc(w)}&lt;/text&gt;`; });
+  o.series.forEach(s =&gt; {
+    const pts = s.data.map((v, i) =&gt; v == null ? null : [x(i), y(v), v, i]).filter(Boolean);
+    g += `&lt;polyline fill=&quot;none&quot; stroke=&quot;${s.color}&quot; stroke-width=&quot;2.5&quot; stroke-linejoin=&quot;round&quot;${s.dash ? &#x27; stroke-dasharray=&quot;6 5&quot;&#x27; : &#x27;&#x27;} points=&quot;${pts.map(p =&gt; p[0] + &#x27;,&#x27; + p[1]).join(&#x27; &#x27;)}&quot;/&gt;`;
+    g += pts.map(p =&gt; `&lt;circle cx=&quot;${p[0]}&quot; cy=&quot;${p[1]}&quot; r=&quot;${s.dash ? 2.5 : 3.5}&quot; fill=&quot;${s.color}&quot;&gt;&lt;title&gt;${esc(s.name)}, ${esc(o.labels[p[3]])}: ${fN(p[2])}${o.unit || &#x27;&#x27;}&lt;/title&gt;&lt;/circle&gt;`).join(&#x27;&#x27;);
+  });
+  $(sel).innerHTML = `&lt;svg viewBox=&quot;0 0 ${W} ${H}&quot; role=&quot;img&quot; aria-label=&quot;${esc(o.aria || &#x27;Biểu đồ&#x27;)}&quot;&gt;${g}&lt;/svg&gt;`;
+  if (o.legend) $(o.legend).innerHTML = o.series.map(s =&gt; `&lt;span&gt;&lt;i style=&quot;background:${s.color}&quot;&gt;&lt;/i&gt;${esc(s.name)}&lt;/span&gt;`).join(&#x27;&#x27;) + (o.band ? &#x27;&lt;span&gt;&lt;i style=&quot;background:var(--kd);opacity:.25;height:8px&quot;&gt;&lt;/i&gt;Khoảng dự báo&lt;/span&gt;&#x27; : &#x27;&#x27;);
+}
+function colChart(sel, o){
+  const W = o.W || 680, H = o.H || 250, L = 56, R = 10, T = 14, B = 30, n = o.labels.length, k = o.series.length;
+  const mx = Math.max(...o.series.flatMap(s =&gt; s.data)) * 1.1 || 1;
+  const gw = (W - L - R) / n, bw = Math.min(22, gw * .8 / k), y = v =&gt; T + (1 - v / mx) * (H - T - B);
+  let g = &#x27;&#x27;;
+  for (let j = 0; j &lt;= 4; j++) { const v = mx * j / 4; g += `&lt;line x1=&quot;${L}&quot; x2=&quot;${W - R}&quot; y1=&quot;${y(v)}&quot; y2=&quot;${y(v)}&quot; stroke=&quot;var(--line)&quot;/&gt;&lt;text x=&quot;${L - 6}&quot; y=&quot;${y(v) + 4}&quot; text-anchor=&quot;end&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${o.fmtAxis ? o.fmtAxis(v) : fN(v)}&lt;/text&gt;`; }
+  o.labels.forEach((lab, i) =&gt; {
+    const cx = L + gw * i + gw / 2;
+    o.series.forEach((s, j) =&gt; { const v = s.data[i]; if (v == null) return; const bx = cx - (k * bw) / 2 + j * bw;
+      g += `&lt;rect x=&quot;${bx}&quot; y=&quot;${y(v)}&quot; width=&quot;${bw - 2}&quot; height=&quot;${H - B - y(v)}&quot; rx=&quot;3&quot; fill=&quot;${s.color}&quot;&gt;&lt;title&gt;${esc(s.name)}, ${esc(lab)}: ${fN(v)}${o.unit || &#x27;&#x27;}&lt;/title&gt;&lt;/rect&gt;`; });
+    g += `&lt;text x=&quot;${cx}&quot; y=&quot;${H - 10}&quot; text-anchor=&quot;middle&quot; font-size=&quot;10&quot; fill=&quot;var(--muted)&quot;&gt;${esc(lab)}&lt;/text&gt;`;
+  });
+  $(sel).innerHTML = `&lt;svg viewBox=&quot;0 0 ${W} ${H}&quot; role=&quot;img&quot; aria-label=&quot;${esc(o.aria || &#x27;Biểu đồ cột&#x27;)}&quot;&gt;${g}&lt;/svg&gt;`;
+  if (o.legend) $(o.legend).innerHTML = o.series.map(s =&gt; `&lt;span&gt;&lt;i style=&quot;background:${s.color};height:8px;width:12px&quot;&gt;&lt;/i&gt;${esc(s.name)}&lt;/span&gt;`).join(&#x27;&#x27;);
+}
+
+const D = {&quot;PIPE&quot;: [[&quot;SGK KNTT&quot;, 47544744, 43859616, 41205510, 47333177, 44704594], [&quot;SBT KNTT&quot;, 4413272, 2170228, 2169032, 6943386, 4330891], [&quot;SBT nhập mua PN&quot;, 827000, 662600, 659939, 674669, 645003]], &quot;TA&quot;: [[&quot;SGK Tiếng Anh&quot;, 16618000, 17534527, 5240570, 5175013, 5094900], [&quot;SGK GDQP&amp;AN&quot;, 1446000, 1553653, 567993, 589802, 584275], [&quot;SBT Tiếng Anh&quot;, 1675640, 2441264, 1904360, 2288535, 2242204], [&quot;SBT GDQP&amp;AN&quot;, 0, 0, 16597, 9735, 3215]], &quot;OLTM&quot;: [4986000, 5680000, 5397492, 5387633], &quot;LOT&quot;: [[&quot;QĐ-IN 041/2026&quot;, &quot;SBT Toán 1 OLTM, tập 1&quot;, &quot;Nhà in A&quot;, &quot;12/08/2026&quot;, 420000, 420000, &quot;05/09/2026&quot;, -36], [&quot;QĐ-IN 044/2026&quot;, &quot;SBT Tiếng Việt 2 OLTM, tập 1&quot;, &quot;Nhà in B&quot;, &quot;15/08/2026&quot;, 380000, 352000, &quot;10/09/2026&quot;, -31], [&quot;QĐ-IN 047/2026&quot;, &quot;SBT Toán 3 OLTM, tập 2&quot;, &quot;Nhà in A&quot;, &quot;02/09/2026&quot;, 300000, 186000, &quot;05/10/2026&quot;, -6], [&quot;QĐ-IN 049/2026&quot;, &quot;Tập viết 1, tập 2&quot;, &quot;Nhà in C&quot;, &quot;05/09/2026&quot;, 260000, 260000, &quot;08/10/2026&quot;, -3], [&quot;QĐ-IN 052/2026&quot;, &quot;SBT Ngữ văn 6 OLTM, tập 1&quot;, &quot;Nhà in B&quot;, &quot;12/09/2026&quot;, 220000, 121000, &quot;15/10/2026&quot;, 4], [&quot;QĐ-IN 053/2026&quot;, &quot;SBT Toán 7 OLTM, tập 2&quot;, &quot;Nhà in C&quot;, &quot;15/09/2026&quot;, 180000, 154000, &quot;18/10/2026&quot;, 7], [&quot;QĐ-IN 055/2026&quot;, &quot;SBT Tiếng Anh 8&quot;, &quot;Nhà in A&quot;, &quot;20/09/2026&quot;, 240000, 96000, &quot;25/10/2026&quot;, 14], [&quot;QĐ-IN 058/2026&quot;, &quot;Thẻ Ôn luyện thông minh (các môn khác)&quot;, &quot;Nhà in B&quot;, &quot;25/09/2026&quot;, 12000, 12000, &quot;10/10/2026&quot;, -1], [&quot;QĐ-IN 060/2026&quot;, &quot;STK Toán 9 nâng cao&quot;, &quot;Nhà in C&quot;, &quot;01/10/2026&quot;, 60000, 0, &quot;30/10/2026&quot;, 19]], &quot;SHORT&quot;: [[&quot;SBT Toán 4 KNTT, tập 1&quot;, 185000, 62000, 80000], [&quot;SBT Tiếng Việt 5 KNTT, tập 2&quot;, 142000, 30000, 60000], [&quot;SBT Khoa học 4 KNTT&quot;, 98000, 21000, 40000], [&quot;SBT Tiếng Anh 3&quot;, 76000, 58000, 0], [&quot;SBT Lịch sử và Địa lí 5 KNTT&quot;, 64000, 70000, 0], [&quot;SBT Toán 8 KNTT, tập 2&quot;, 58000, 12000, 30000]], &quot;STOCK&quot;: [[&quot;STK Toán 9 ôn thi vào 10&quot;, 86000, 3100], [&quot;STK Ngữ văn 7 nâng cao&quot;, 54000, 2800], [&quot;SBT GDQP&amp;AN 10&quot;, 41000, 3600], [&quot;STK Tiếng Anh 6 bổ trợ&quot;, 38000, 4200], [&quot;Sách giáo viên Tiếng Anh 9&quot;, 9500, 1100], [&quot;STK Toán 5 tư duy&quot;, 27000, 4600]], &quot;NCC&quot;: [[&quot;NXBGD miền Bắc&quot;, 26400000, 24800000, 0.92, 6], [&quot;NXBGD miền Trung&quot;, 9100000, 8650000, 0.88, 3], [&quot;NXBGD miền Nam&quot;, 8359616, 7755510, 0.81, 4], [&quot;NXBGD (SBT KNTT)&quot;, 2170228, 2169032, 0.99, 1], [&quot;NXB nhập mua PN&quot;, 662600, 659939, 0.97, 1]], &quot;AGING&quot;: [[&quot;SGK&quot;, 1850000, 420000, 160000], [&quot;SBT&quot;, 980000, 260000, 140000], [&quot;Tiếng Anh&quot;, 640000, 210000, 90000], [&quot;STK, khác&quot;, 410000, 330000, 290000]], &quot;AVG_PRICE&quot;: 17698};
+initTabs([[&#x27;tq&#x27;, &#x27;Tổng quan&#x27;, &#x27;Việc cần xử lý, đáp ứng đặt hàng&#x27;], [&#x27;tk&#x27;, &#x27;Tồn kho&#x27;, &#x27;Nhập kho, tồn, thiếu hàng&#x27;], [&#x27;cu&#x27;, &#x27;Nhà cung cấp&#x27;, &#x27;Đặt hàng, giao hàng&#x27;]]);
+const lotSt = l =&gt; l[5] &gt;= l[4] ? &#x27;good&#x27; : l[7] &lt; 0 ? &#x27;low&#x27; : l[7] &lt;= 7 &amp;&amp; l[5] / l[4] &lt; .8 ? &#x27;mid&#x27; : &#x27;ok&#x27;;
+const gaps = D.PIPE.map(p =&gt; [p[0], p[4] - p[5], p[4]]).concat(D.TA.map(t =&gt; [t[0] + &#x27; (địa bàn HEID)&#x27;, t[4] - t[5], t[4]])).filter(g =&gt; g[1] &gt; 0).sort((a, b) =&gt; b[1] - a[1]);
+const shortOf = s =&gt; s[1] - s[2] - s[3];
+const LAB = [&#x27;Kế hoạch sau ĐC&#x27;, &#x27;Đã đặt NCC&#x27;, &#x27;Đã nhập kho&#x27;, &#x27;Đối tác đặt&#x27;, &#x27;Đã phát hành&#x27;];
+
+// ---------- chỉ số chung ----------
+(function(){
+  const P = D.PIPE, sum = i =&gt; P.reduce((s, p) =&gt; s + p[i], 0);
+  const late = D.LOT.filter(l =&gt; lotSt(l) === &#x27;low&#x27;), soon = D.LOT.filter(l =&gt; lotSt(l) === &#x27;mid&#x27;);
+  const gapT = gaps.reduce((s, g) =&gt; s + g[1], 0), shortN = D.SHORT.filter(s =&gt; shortOf(s) &gt; 0);
+  $(&#x27;#kpiTop&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Nhập kho so với đã đặt NCC&#x27;, v: fP(sum(3) / sum(2)), s: fN(sum(3)) + &#x27; / &#x27; + fN(sum(2)) + &#x27; bản&#x27;, c: cls(sum(3) / sum(2))},
+    {l: &#x27;Đặt của đối tác chưa đáp ứng&#x27;, v: fM(gapT), s: &#x27;bản, &#x27; + fP(gapT / (sum(4) + D.TA.reduce((s, t) =&gt; s + t[4], 0))) + &#x27; tổng đặt&#x27;, c: &#x27;mid&#x27;},
+    {l: &#x27;Lô in trễ hạn nhập kho&#x27;, v: late.length, s: soon.length + &#x27; lô sắp đến hạn&#x27;, c: late.length ? &#x27;low&#x27; : &#x27;good&#x27;, ill: true},
+    {l: &#x27;Đầu sách đang thiếu&#x27;, v: shortN.length, s: &#x27;Thiếu &#x27; + fN(shortN.reduce((s, x) =&gt; s + shortOf(x), 0)) + &#x27; bản&#x27;, c: shortN.length ? &#x27;low&#x27; : &#x27;good&#x27;, ill: true}
+  ]);
+  const A = [];
+  P.filter(p =&gt; p[2] / p[1] &lt; .9).forEach(p =&gt; A.push([&#x27;low&#x27;, &#x27;Đặt NCC thấp&#x27;, p[0], `Đặt NCC ${fP(p[2] / p[1])} KH · ${fN(p[2])} / ${fN(p[1])} bản`, false]));
+  gaps.filter(g =&gt; g[1] / g[2] &gt; .1).forEach(g =&gt; A.push([&#x27;low&#x27;, &#x27;Chưa đáp ứng&#x27;, g[0], `${fN(g[1])} bản · ${fP(g[1] / g[2])} lượng đặt`, false]));
+  late.forEach(l =&gt; A.push([&#x27;low&#x27;, &#x27;Trễ hạn&#x27;, `${l[0]} · ${l[1]}`, `Nhập ${fN(l[5])} / ${fN(l[4])} · quá hạn ${-l[7]} ngày`, true]));
+  shortN.slice(0, 3).forEach(s =&gt; A.push([&#x27;mid&#x27;, &#x27;Thiếu hàng&#x27;, s[0], `Thiếu ${fN(shortOf(s))} bản`, true]));
+  soon.forEach(l =&gt; A.push([&#x27;mid&#x27;, &#x27;Sắp đến hạn&#x27;, `${l[0]} · ${l[1]}`, `Nhập ${fP(l[5] / l[4])} · còn ${l[7]} ngày`, true]));
+  $(&#x27;#tblAlert&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th class=&quot;tl&quot;&gt;Loại&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Đối tượng&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Số liệu&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Nguồn&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${A.map(a =&gt; `&lt;tr&gt;&lt;td class=&quot;tl&quot;&gt;&lt;span class=&quot;flag ${a[0]}&quot;&gt;${a[1]}&lt;/span&gt;&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${esc(a[2])}&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${esc(a[3])}&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${a[4] ? &#x27;&lt;span class=&quot;tag ill&quot;&gt;Minh họa&lt;/span&gt;&#x27; : &#x27;&lt;span class=&quot;tag real&quot;&gt;Số thật&lt;/span&gt;&#x27;}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+
+// ---------- 1. Cung ứng ----------
+(function(){
+  $(&#x27;#pipe&#x27;).innerHTML = D.PIPE.map(p =&gt; { const mx = Math.max(...p.slice(1));
+    return `&lt;div class=&quot;prow&quot;&gt;&lt;div class=&quot;pname&quot;&gt;&lt;b&gt;${esc(p[0])}&lt;/b&gt;&lt;small&gt;Nhập kho / đặt NCC: ${fP(p[3] / p[2])}&lt;br&gt;Phát hành / đối tác đặt: ${fP(p[5] / p[4])}&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;stages&quot;&gt;${p.slice(1).map((v, i) =&gt; {
+      const al = (i === 1 &amp;&amp; v / p[1] &lt; .9) || (i === 4 &amp;&amp; v / p[4] &lt; .9);
+      return `&lt;div class=&quot;stg${al ? &#x27; warnc&#x27; : &#x27;&#x27;}&quot;&gt;&lt;span&gt;${LAB[i]}&lt;/span&gt;&lt;b&gt;${fN(v)}&lt;/b&gt;&lt;span&gt;${i ? fP(v / p[1]) + &#x27; KH&#x27; : &#x27;bản&#x27;}&lt;/span&gt;&lt;i class=&quot;f&quot; style=&quot;width:${v / mx * 100}%&quot;&gt;&lt;/i&gt;&lt;/div&gt;`; }).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`; }).join(&#x27;&#x27;);
+  $(&#x27;#tblNcc&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Nhà cung cấp&lt;/th&gt;&lt;th&gt;Đã đặt&lt;/th&gt;&lt;th&gt;Đã giao&lt;/th&gt;&lt;th&gt;% giao&lt;/th&gt;&lt;th&gt;Giao đúng hạn&lt;/th&gt;&lt;th&gt;Đơn đang mở&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${D.NCC.map(n =&gt; `&lt;tr&gt;&lt;td&gt;${esc(n[0])}&lt;/td&gt;&lt;td&gt;${fN(n[1])}&lt;/td&gt;&lt;td&gt;${fN(n[2])}&lt;/td&gt;&lt;td&gt;${pctCell(n[2] / n[1], 1)}&lt;/td&gt;&lt;td class=&quot;c-${cls(n[3])}&quot;&gt;${fP(n[3])}&lt;/td&gt;&lt;td&gt;${n[4]}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}
+    &lt;tr class=&quot;tot&quot;&gt;&lt;td&gt;Tổng (khớp số thật)&lt;/td&gt;&lt;td&gt;${fN(D.NCC.reduce((s, n) =&gt; s + n[1], 0))}&lt;/td&gt;&lt;td&gt;${fN(D.NCC.reduce((s, n) =&gt; s + n[2], 0))}&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  const sum = i =&gt; D.PIPE.reduce((s, p) =&gt; s + p[i], 0);
+  const nO = D.NCC.reduce((a, n) =&gt; a + n[1], 0), nG = D.NCC.reduce((a, n) =&gt; a + n[2], 0);
+  bars(&#x27;#barsNcc&#x27;, D.NCC.map(n =&gt; [n[0], n[2] / n[1], &#x27;bg-&#x27; + cls(n[2] / n[1]), fP(n[2] / n[1]), null, `Đúng hạn ${fP(n[3])}, ${n[4]} đơn đang mở`]), {max: 1, mark: nG / nO});
+  $(&#x27;#kpiNCC&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Đã đặt NCC so với kế hoạch&#x27;, v: fP(sum(2) / sum(1)), s: fN(sum(2)) + &#x27; / &#x27; + fN(sum(1)) + &#x27; bản&#x27;, c: cls(sum(2) / sum(1))},
+    {l: &#x27;Đã nhập kho so với đã đặt&#x27;, v: fP(sum(3) / sum(2)), s: &#x27;Còn &#x27; + fN(sum(2) - sum(3)) + &#x27; bản chưa về&#x27;, c: cls(sum(3) / sum(2))},
+    {l: &#x27;Mảng đặt NCC dưới 90% KH&#x27;, v: D.PIPE.filter(p =&gt; p[2] / p[1] &lt; .9).length + &#x27;/&#x27; + D.PIPE.length, s: D.PIPE.filter(p =&gt; p[2] / p[1] &lt; .9).map(p =&gt; p[0]).join(&#x27;, &#x27;), c: &#x27;low&#x27;},
+    {l: &#x27;Đơn NCC đang mở&#x27;, v: D.NCC.reduce((a, n) =&gt; a + n[4], 0), s: &#x27;Giao đúng hạn &#x27; + fP(D.NCC.reduce((a, n) =&gt; a + n[3] * n[1], 0) / nO) + &#x27; bình quân&#x27;, ill: true}
+  ]);
+  bars(&#x27;#barsFunnel&#x27;, LAB.map((l, i) =&gt; [l, sum(i + 1), i === 1 || i === 2 ? &#x27;var(--sky)&#x27; : &#x27;var(--kd)&#x27;, fM(sum(i + 1))]));
+})();
+
+// ---------- 2. Nhập kho ----------
+(function(){
+  const stl = {good: &#x27;Đã đủ&#x27;, low: &#x27;Trễ hạn&#x27;, mid: &#x27;Sắp đến hạn&#x27;, ok: &#x27;Đang nhập&#x27;};
+  let lf = &#x27;all&#x27;;
+  function lots(){
+    $(&#x27;#tblLot&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Số QĐ in&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Đầu sách&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Nhà in&lt;/th&gt;&lt;th&gt;SL in&lt;/th&gt;&lt;th&gt;Đã nhập&lt;/th&gt;&lt;th&gt;% nhập&lt;/th&gt;&lt;th&gt;Hạn nhập&lt;/th&gt;&lt;th&gt;Trạng thái&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${D.LOT.filter(l =&gt; lf === &#x27;all&#x27; || lotSt(l) === lf).map(l =&gt; { const s = lotSt(l);
+      return `&lt;tr&gt;&lt;td&gt;${esc(l[0])}&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${esc(l[1])}&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${esc(l[2])}&lt;/td&gt;&lt;td&gt;${fN(l[4])}&lt;/td&gt;&lt;td&gt;${fN(l[5])}&lt;/td&gt;&lt;td&gt;${pctCell(l[5] / l[4], 1)}&lt;/td&gt;&lt;td&gt;${esc(l[6])}&lt;/td&gt;&lt;td&gt;${s === &#x27;ok&#x27; ? &#x27;&lt;span class=&quot;c-na&quot;&gt;Đang nhập&lt;/span&gt;&#x27; : `&lt;span class=&quot;flag ${s}&quot;&gt;${stl[s]}&lt;/span&gt;`}&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+  }
+  seg(&#x27;#segLot&#x27;, b =&gt; { lf = b.dataset.f; lots(); }); lots();
+  const colOf = s =&gt; s === &#x27;low&#x27; ? &#x27;bg-low&#x27; : s === &#x27;mid&#x27; ? &#x27;bg-mid&#x27; : s === &#x27;good&#x27; ? &#x27;bg-good&#x27; : &#x27;var(--kd)&#x27;;
+  bars(&#x27;#barsLot&#x27;, D.LOT.map(l =&gt; [l[0].replace(&#x27;QĐ-IN &#x27;, &#x27;QĐ &#x27;) + &#x27; · &#x27; + l[2], l[5] / l[4], colOf(lotSt(l)), fP(l[5] / l[4]), null, `${l[1]}: ${fN(l[5])}/${fN(l[4])} bản, hạn ${l[6]}`]), {max: 1});
+  bars(&#x27;#barsShort&#x27;, D.SHORT.filter(x =&gt; shortOf(x) &gt; 0).sort((a, b) =&gt; shortOf(b) - shortOf(a)).map(x =&gt; [x[0], shortOf(x), &#x27;bg-low&#x27;, fN(shortOf(x))]));
+  const pn = D.PIPE.find(p =&gt; p[0] === &#x27;SBT nhập mua PN&#x27;), oo = D.OLTM, late = D.LOT.filter(l =&gt; lotSt(l) === &#x27;low&#x27;), soon = D.LOT.filter(l =&gt; lotSt(l) === &#x27;mid&#x27;), slow = D.STOCK.filter(x =&gt; x[1] / x[2] &gt; 12);
+  $(&#x27;#kpiTK&#x27;).innerHTML = kpiHtml([
+    {l: &#x27;Hàng đã về chưa phát hành&#x27;, v: fN(pn[3] - pn[5] + oo[1] - oo[3]), s: &#x27;bản, SBT nhập mua PN và SBT OLTM&#x27;, c: &#x27;mid&#x27;},
+    {l: &#x27;Lô in trễ hạn nhập kho&#x27;, v: late.length, s: soon.length + &#x27; lô sắp đến hạn&#x27;, c: late.length ? &#x27;low&#x27; : &#x27;good&#x27;, ill: true},
+    {l: &#x27;Đầu sách tồn trên 12 tháng bán&#x27;, v: slow.length, s: fN(slow.reduce((a, x) =&gt; a + x[1], 0)) + &#x27; bản&#x27;, c: slow.length ? &#x27;low&#x27; : &#x27;good&#x27;, ill: true},
+    {l: &#x27;Đầu sách đang thiếu&#x27;, v: D.SHORT.filter(x =&gt; shortOf(x) &gt; 0).length, s: &#x27;Thiếu &#x27; + fN(D.SHORT.reduce((a, x) =&gt; a + Math.max(0, shortOf(x)), 0)) + &#x27; bản&#x27;, c: &#x27;low&#x27;, ill: true}
+  ]);
+  const o = D.OLTM;
+  bars(&#x27;#barsOLTM&#x27;, [[&#x27;Kế hoạch 2026&#x27;, o[0]], [&#x27;Đã in&#x27;, o[1]], [&#x27;Khách hàng đã đặt&#x27;, o[2]], [&#x27;Đã phát hành&#x27;, o[3]]].map(x =&gt; [x[0], x[1], &#x27;var(--kd)&#x27;, fM(x[1])]),
+    {});
+  const FILL = D.PIPE.map(p =&gt; [p[0], p[1], p[4], p[5]]).concat(D.TA.map(t =&gt; [t[0] + &#x27; (địa bàn HEID)&#x27;, t[3], t[4], t[5]]));
+  $(&#x27;#tblFill&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;Kế hoạch&lt;/th&gt;&lt;th&gt;Đối tác đặt&lt;/th&gt;&lt;th&gt;Đã phát hành&lt;/th&gt;&lt;th&gt;% KH&lt;/th&gt;&lt;th&gt;% lượng đặt&lt;/th&gt;&lt;th&gt;Chưa đáp ứng&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${FILL.map(r =&gt; `&lt;tr&gt;&lt;td&gt;${esc(r[0])}&lt;/td&gt;&lt;td&gt;${fN(r[1])}&lt;/td&gt;&lt;td&gt;${fN(r[2])}&lt;/td&gt;&lt;td&gt;${fN(r[3])}&lt;/td&gt;&lt;td&gt;${pctCell(r[3] / r[1])}&lt;/td&gt;&lt;td&gt;${pctCell(r[3] / r[2], 1)}&lt;/td&gt;&lt;td class=&quot;${r[2] &gt; r[3] ? &#x27;c-low&#x27; : &#x27;c-good&#x27;}&quot;&gt;${r[2] &gt; r[3] ? fN(r[2] - r[3]) : &#x27;Đủ&#x27;}&lt;/td&gt;&lt;/tr&gt;`).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+
+// ---------- 3. Tồn kho ----------
+(function(){
+  const pn = D.PIPE.find(p =&gt; p[0] === &#x27;SBT nhập mua PN&#x27;), o = D.OLTM;
+  $(&#x27;#tblLeft&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Mảng&lt;/th&gt;&lt;th&gt;Đã về&lt;/th&gt;&lt;th&gt;Đã PH&lt;/th&gt;&lt;th&gt;Còn lại&lt;/th&gt;&lt;th&gt;Đặt chưa giao&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;SBT nhập mua PN¹&lt;/td&gt;&lt;td&gt;${fN(pn[3])}&lt;/td&gt;&lt;td&gt;${fN(pn[5])}&lt;/td&gt;&lt;td&gt;&lt;b&gt;${fN(pn[3] - pn[5])}&lt;/b&gt;&lt;/td&gt;&lt;td&gt;${fN(pn[4] - pn[5])}&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;SBT Ôn luyện TM²&lt;/td&gt;&lt;td&gt;${fN(o[1])}&lt;/td&gt;&lt;td&gt;${fN(o[3])}&lt;/td&gt;&lt;td&gt;&lt;b&gt;${fN(o[1] - o[3])}&lt;/b&gt;&lt;/td&gt;&lt;td&gt;${fN(o[2] - o[3])}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;`;
+  const S = D.STOCK, AG = D.AGING;
+  $(&#x27;#tblStock&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Đầu sách&lt;/th&gt;&lt;th&gt;Tồn&lt;/th&gt;&lt;th&gt;PH/tháng&lt;/th&gt;&lt;th&gt;Số tháng tồn&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${S.map(s =&gt; { const m = s[1] / s[2];
+    return `&lt;tr&gt;&lt;td&gt;${esc(s[0])}&lt;/td&gt;&lt;td&gt;${fN(s[1])}&lt;/td&gt;&lt;td&gt;${fN(s[2])}&lt;/td&gt;&lt;td class=&quot;c-${m &gt; 12 ? &#x27;low&#x27; : m &gt; 6 ? &#x27;mid&#x27; : &#x27;good&#x27;}&quot;&gt;&lt;b&gt;${m.toLocaleString(&#x27;vi-VN&#x27;, {maximumFractionDigits:1})}&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+  const C = [&#x27;var(--ok)&#x27;, &#x27;var(--warn)&#x27;, &#x27;var(--bad)&#x27;];
+  $(&#x27;#aging&#x27;).innerHTML = AG.map(a =&gt; { const t = a[1] + a[2] + a[3];
+    return `&lt;div style=&quot;margin:8px 0&quot;&gt;&lt;div style=&quot;display:flex;justify-content:space-between;font-size:.84rem&quot;&gt;&lt;span&gt;${esc(a[0])}&lt;/span&gt;&lt;b&gt;${fN(t)} bản · ${fT(t * D.AVG_PRICE)} tỷ&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;stack&quot;&gt;${[a[1], a[2], a[3]].map((v, i) =&gt; `&lt;span style=&quot;background:${C[i]};width:${v / t * 100}%&quot; title=&quot;${fN(v)} bản&quot;&gt;&lt;/span&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;/div&gt;`; }).join(&#x27;&#x27;);
+  $(&#x27;#legAge&#x27;).innerHTML = [&#x27;Dưới 6 tháng&#x27;, &#x27;6–12 tháng&#x27;, &#x27;Trên 12 tháng&#x27;].map((l, i) =&gt; `&lt;span&gt;&lt;i style=&quot;background:${C[i]};height:8px&quot;&gt;&lt;/i&gt;${l}&lt;/span&gt;`).join(&#x27;&#x27;);
+  $(&#x27;#avgP&#x27;).textContent = fN(D.AVG_PRICE);
+})();
+
+// ---------- 4. Thiếu hàng ----------
+(function(){
+  bars(&#x27;#barsGap&#x27;, gaps.map(g =&gt; [g[0], g[1], &#x27;bg-&#x27; + (g[1] / g[2] &gt; .1 ? &#x27;low&#x27; : g[1] / g[2] &gt; .03 ? &#x27;mid&#x27; : &#x27;good&#x27;), fN(g[1])]),
+    {note: &#x27;Màu theo tỷ lệ chưa đáp ứng trên tổng đặt: đỏ trên 10%, cam 3–10%, xanh dưới 3%.&#x27;});
+  $(&#x27;#tblShort&#x27;).innerHTML = `&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Đầu sách&lt;/th&gt;&lt;th&gt;Đặt chưa giao&lt;/th&gt;&lt;th&gt;Tồn khả dụng&lt;/th&gt;&lt;th&gt;Đang in&lt;/th&gt;&lt;th&gt;Thiếu&lt;/th&gt;&lt;th class=&quot;tl&quot;&gt;Đề xuất&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;${D.SHORT.map(s =&gt; { const th = shortOf(s);
+    return `&lt;tr&gt;&lt;td&gt;${esc(s[0])}&lt;/td&gt;&lt;td&gt;${fN(s[1])}&lt;/td&gt;&lt;td&gt;${fN(s[2])}&lt;/td&gt;&lt;td&gt;${fN(s[3])}&lt;/td&gt;&lt;td class=&quot;c-${th &gt; 0 ? &#x27;low&#x27; : &#x27;good&#x27;}&quot;&gt;&lt;b&gt;${th &gt; 0 ? fN(th) : &#x27;Đủ&#x27;}&lt;/b&gt;&lt;/td&gt;&lt;td class=&quot;tl&quot;&gt;${th &gt; 0 ? (s[3] &gt; 0 ? &#x27;Đẩy nhanh lô đang in&#x27; : &#x27;Lập QĐ in bổ sung&#x27;) : &#x27;&#x27;}&lt;/td&gt;&lt;/tr&gt;`; }).join(&#x27;&#x27;)}&lt;/tbody&gt;`;
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" hidden></iframe></div>
+  </div>
+</section>
+
+<!-- 9 Kiến trúc -->
+<section class="slide" data-part="2" data-note="Điều kiện để báo cáo tự cập nhật: các hệ thống dùng chung 4 mã. Số QĐ in là khóa còn thiếu trên phiếu nhập kho ERP, quyết định phần Nhập kho trong tab Tồn kho của BC2.">
+  <div class="in">
+    <span class="sec">02 Dữ liệu</span>
+    <h2 class="h">Một kho dữ liệu, bốn khóa nối</h2>
+    <p class="take">Hai báo cáo tự cập nhật hằng ngày, thay 2 giờ tổng hợp tay mỗi tuần.</p>
+    <div class="arch">
+      <div class="colx">
+        <div class="node">ERP (VsERP)<small>Bán hàng, đặt hàng, kho</small></div>
+        <div class="node">Base.vn<small>Quyết định in, tờ trình</small></div>
+        <div class="node">shop.heid.vn<small>Đơn đặt hàng</small></div>
+        <div class="node">Hoclieu.vn, GlobalSpeak<small>Sản phẩm số</small></div>
+        <div class="node">Excel<small>Kế hoạch, chỉ tiêu</small></div>
+      </div>
+      <div class="arrow"></div>
+      <div class="hub"><b>Kho dữ liệu HEID</b><small>Cập nhật hằng ngày</small>
+        <ul><li>Mã đầu sách<em>có</em></li><li>Mã đối tác, kênh<em>có</em></li><li>Mã tỉnh<em>cần xác nhận</em></li><li>Số quyết định in<em>còn thiếu</em></li></ul></div>
+      <div class="arrow"></div>
+      <div class="colx">
+        <div class="node o rep"><b>BC1 Hoạt động kinh doanh</b><small>Tổng quan; Kế hoạch so với thực tế; Nhu cầu đặt hàng và dự báo</small></div>
+        <div class="node o rep"><b>BC2 Hàng hóa, kho vận</b><small>Tổng quan; Tồn kho (nhập kho theo QĐ in, tồn, thiếu); Nhà cung cấp</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 10 Feedback -->
+<section class="slide" data-part="3" data-note="Chấm từng phần của 2 báo cáo, theo đúng 3 tab của mỗi báo cáo. Bấm ★ ở dòng tiêu đề để chọn báo cáo làm trước trong tháng 12. Phần nào ‘Không cần’ sẽ bỏ khỏi phạm vi.">
+  <div class="in">
+    <span class="sec">03 Feedback</span>
+    <h2 class="h">Phòng cần những phần nào?</h2>
+    <p class="take">Chấm từng phần, chọn ★ báo cáo làm trước.</p>
+    <div class="fbh"><span>Phần báo cáo</span><span>Mức cần thiết</span><span>Tần suất</span><span>Làm trước</span><span>Góp ý</span></div>
+    <div class="fb" id="fb"></div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 11 Chi tiết báo cáo làm trước -->
+<section class="slide" data-part="3" data-note="Chỉ hỏi cho báo cáo được chọn ★. Ngưỡng cảnh báo nên có số cụ thể: tỉnh dưới bao nhiêu % kế hoạch, lô in quá hạn bao nhiêu ngày.">
+  <div class="in">
+    <span class="sec">03 Báo cáo làm trước</span>
+    <h2 class="h" id="oneTitle">Chốt cách xem báo cáo làm trước</h2>
+    <p class="take">Chọn nhanh, ghi ngưỡng cảnh báo nếu có.</p>
+    <div class="g2">
+      <div>
+        <div class="blk"><small>Xem theo</small><div class="chk" id="dims"></div></div>
+        <div class="blk"><small>So sánh với</small><div class="chk" id="cmp"></div></div>
+      </div>
+      <div>
+        <div class="blk"><small>Tần suất cập nhật</small><div class="chk" id="freq"></div></div>
+        <div class="blk"><small>Ngưỡng cảnh báo</small><input type="text" id="thr" placeholder="Ví dụ: tỉnh dưới 85% kế hoạch; lô in quá hạn nhập 3 ngày"></div>
+        <div class="blk"><small>Người xem</small><input type="text" id="viewers" placeholder="Ví dụ: Ban lãnh đạo xem toàn bộ; NV KD xem tỉnh phụ trách"></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+<!-- 12 Chốt -->
+<section class="slide" data-part="4" data-note="Đọc lại kết quả phòng đã chấm. Bước tiếp theo: Base tiếp nhận feedback, sửa BC1, BC2, chốt scope với phòng ngày 06/11. Tải biên bản gửi email sau họp.">
+  <div class="in">
+    <span class="sec">04 Chốt</span>
+    <h2 class="h">Kết quả và bước tiếp theo</h2>
+    <p class="take">Mục tiêu: chốt scope báo cáo với Phòng Kinh doanh trong tuần 2–6/11.</p>
+    <div class="close">
+      <div class="res"><div class="blk"><small>Phần phòng cần</small><div id="sumRep"></div></div><div class="blk"><small>Điểm cần sửa</small><div id="sumConf"></div></div></div>
+      <div class="blk"><small>Bước tiếp theo</small><ul class="tl" id="tl"></ul></div>
+    </div>
+    <div class="cta">
+      <div><b>Base sửa báo cáo theo feedback, chốt scope ngày 06/11</b><span>Gửi biên bản buổi này để hai bên cùng theo dõi các điểm cần sửa.</span></div>
+      <div class="acts"><button type="button" class="btn" id="copyMin">Sao chép biên bản</button><button type="button" class="btn pri" id="dlMin">Tải biên bản</button></div>
+    </div>
+  </div>
+  <div class="foot"><span>HEID × Base.vn</span><span class="pg"></span></div>
+</section>
+
+</div>
+<div class="notes" id="notes" hidden><small>GHI CHÚ NGƯỜI TRÌNH BÀY</small><span id="noteTxt"></span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const M = {"stages": ["Hoạch định", "Tiếp cận, bán hàng", "Cung ứng", "Sau bán hàng"], "steps": [{"id": "kd01", "g": 0, "code": "QT-KD-01", "name": "Kế hoạch kinh doanh", "full": "Hoạch định kế hoạch kinh doanh", "base": true, "sv": true, "tools": ["Base", "ERP", "Excel", "Sổ sách"], "num": "Chính xác, kịp thời", "pain": "", "ask": ["Kế hoạch được chia tới cấp nào: mảng, đầu sách, tỉnh, đối tác?", "Ai duyệt kế hoạch điều chỉnh, lịch sử lưu ở đâu?"]}, {"id": "kd02", "g": 0, "code": "QT-KD-02", "name": "Chính sách KD, HĐ mẫu", "full": "Chính sách kinh doanh và hợp đồng mẫu", "base": true, "sv": false, "tools": [], "num": "", "pain": "", "ask": ["Mức chiết khấu theo đối tác có trên ERP không?"]}, {"id": "kd04", "g": 1, "code": "QT-KD-04", "name": "Giới thiệu, tập huấn", "full": "Giới thiệu, tập huấn sản phẩm", "base": true, "sv": false, "tools": [], "num": "", "pain": "", "ask": ["Có cần đo tập huấn ra đơn hàng ở Phase 3 không?"]}, {"id": "kd03", "g": 1, "code": "QT-KD-03", "name": "Đàm phán, ký HĐ", "full": "Đàm phán và ký kết hợp đồng", "base": true, "sv": false, "tools": [], "num": "", "pain": "", "ask": ["Sản lượng cam kết theo HĐ có nhập vào ERP không?"]}, {"id": "kd05", "g": 2, "code": "QT-KD-05", "name": "Nhu cầu, đặt in, mua", "full": "Tổng hợp nhu cầu, đặt in, mua sách", "base": true, "sv": true, "tools": ["ERP", "Excel"], "num": "Đầy đủ, kịp thời theo NCC và khách hàng", "pain": "Chưa theo dõi được nhập kho theo từng QĐ in, đơn đặt NCC", "ask": ["Số QĐ in có ghi trên phiếu nhập kho ERP không?", "Một QĐ in nhập kho mấy đợt, hạn nhập ghi ở đâu?"]}, {"id": "kd06", "g": 2, "code": "QT-KD-06", "name": "Xử lý đơn hàng", "full": "Xử lý và theo dõi đơn hàng", "base": false, "sv": true, "tools": ["ERP", "shop.heid.vn"], "num": "Đầy đủ, kịp thời", "pain": "", "ask": ["Đơn shop.heid.vn có tự sang ERP không?", "Đơn hàng có gắn tỉnh, đối tác, đầu sách không?"]}, {"id": "kd0710", "g": 3, "code": "QT-KD-07 → 10", "name": "Kiểm soát HĐ, đổi trả", "full": "Kiểm soát HĐ, thưởng phạt, đổi trả, khuyến mãi", "base": true, "sv": true, "tools": ["ERP", "Excel", "Sổ sách"], "num": "", "pain": "", "ask": ["Phần nào còn ghi sổ giấy?", "Thưởng phạt tính trên Excel hay ERP?"]}, {"id": "kd11", "g": 3, "code": "QT-KD-11", "name": "Phản hồi khách hàng", "full": "Xử lý phản hồi khách hàng", "base": false, "sv": false, "tools": ["Subiz", "Hoclieu.vn", "GlobalSpeak"], "num": "", "pain": "", "ask": ["Subiz có xuất được phản hồi theo nhóm vấn đề không?"]}, {"id": "kd12", "g": 3, "code": "QT-KD-12", "name": "Hoạt động xã hội", "full": "Tổ chức hoạt động xã hội", "base": true, "sv": false, "tools": [], "num": "", "pain": "", "ask": ["Ngoài phạm vi Phase 3."]}],
+"defs": [{"t": "Phạm vi “Toàn quốc”", "n": "Chỉ cộng ĐVĐM ở TA, GDQP&AN", "s": "Các mảng khác bằng số HEID", "tip": "Sheet ĐVĐM vẫn có SGK nhập mua 33.426 bản, SBT 93.157 bản, STK 62.793 bản nhưng không cộng vào sheet Toàn quốc (tổng 184.720 bản)."}, {"t": "Phát hành vượt nhập kho", "n": "44,70 tr / 41,21 tr bản", "s": "SGK KNTT, BC 06/9", "tip": "SBT KNTT: phát hành 4,33 triệu, nhập kho 2,17 triệu. Phần chênh là giao thẳng từ NXB miền hay tồn đầu kỳ?"}, {"t": "Đặt bổ sung SBT KNTT", "n": "6,94 tr / 2,17 tr bản", "s": "Đối tác đặt so với đã đặt NCC", "tip": "Đã đặt NCC mới bằng 49% kế hoạch điều chỉnh 4,41 triệu bản."}, {"t": "Cách tính tỷ lệ", "n": "Ghi 100%, tính ra 106%", "s": "SGK Tiếng Anh đầu mối", "tip": "SGK Tiếng Anh: 17.534.527 / 16.618.000 = 105,5%. SBT Tiếng Anh ghi 140%, tính ra 146%. Tỷ lệ có bị chặn hoặc làm tròn không?"}, {"t": "Phiên bản kế hoạch", "n": "68,00 → 68,98 tr bản", "s": "Kế hoạch điều chỉnh, 06/9 và 11/10", "tip": "Báo cáo tự động cần biết dùng bản kế hoạch nào và lưu lịch sử điều chỉnh."}],
+"sw": [["ERP (VsERP)", "Bán hàng, đặt hàng, kho, vận chuyển"], ["Base.vn", "Quản lý công việc"], ["Hoclieu.vn", "Kích hoạt, tài khoản"], ["GlobalSpeak", "Kích hoạt, tài khoản"], ["shop.heid.vn", "Đơn đặt hàng"], ["Subiz", "Phản hồi người dùng"], ["Excel", "Kế hoạch, thị trường"]],
+"gaps": [["Chỉ tiêu, KPI năm 2026 của phòng", "Sản lượng, doanh thu, sản phẩm số"], ["Ai nhận báo cáo tuần, để quyết định gì?", "Ví dụ: PTGĐ, họp giao ban thứ Hai"], ["Cấp chi tiết cần xem", "Tỉnh, đối tác, đầu sách, nhân viên?"], ["Phân bổ sản lượng theo ngày đang làm ở đâu?", "Excel, ERP?"], ["Nhà cung cấp, nhà in cần theo dõi", "NXB miền, nhà in, hạn giao"]],
+"reps": [{"id": "BC1", "n": "Báo cáo hoạt động kinh doanh", "q": ["Bán bao nhiêu, ở đâu, tỉnh nào chậm?", "Nhu cầu đặt hàng thay đổi ra sao?"], "src": "ERP bán hàng, đơn hàng; shop.heid.vn; Hoclieu.vn, GlobalSpeak; kế hoạch Excel", "sec": [
+  {"id": "1a", "tab": "Tổng quan", "n": "Phát hành theo mảng, so cùng kỳ", "st": "ready", "f": "Hằng tuần"},
+  {"id": "1b", "tab": "Tổng quan", "n": "Phát hành theo tháng", "st": "ready", "f": "Hằng tháng"},
+  {"id": "1c", "tab": "Tổng quan", "n": "Theo kênh, sản phẩm số", "st": "partial", "f": "Hằng tháng"},
+  {"id": "1d", "tab": "Kế hoạch so với thực tế", "n": "Tiến độ kế hoạch theo mảng", "st": "ready", "f": "Hằng tuần"},
+  {"id": "1e", "tab": "Kế hoạch so với thực tế", "n": "Theo tỉnh, tỉnh chậm", "st": "partial", "f": "Hằng tuần"},
+  {"id": "1f", "tab": "Nhu cầu đặt hàng và dự báo", "n": "Biến động nhu cầu đặt hàng", "st": "partial", "f": "Hằng tuần"},
+  {"id": "1g", "tab": "Nhu cầu đặt hàng và dự báo", "n": "Dự báo nhu cầu đặt hàng", "st": "collect", "f": "Hằng tháng"}]},
+ {"id": "BC2", "n": "Báo cáo kiểm soát hàng hóa và kho vận", "q": ["Tiến độ NCC, nhập kho các lô đã in?", "Sách nào tồn cao, sách nào thiếu?"], "src": "Base (quyết định in); ERP nhập – xuất – tồn, đơn đặt hàng", "sec": [
+  {"id": "2a", "tab": "Tổng quan", "n": "Việc cần xử lý, đáp ứng đặt hàng", "st": "partial", "f": "Hằng tuần"},
+  {"id": "2b", "tab": "Tồn kho", "n": "Nhập kho theo quyết định in", "st": "partial", "f": "Hằng tuần", "new": true},
+  {"id": "2c", "tab": "Tồn kho", "n": "Tồn kho, tuổi tồn", "st": "ready", "f": "Hằng tuần"},
+  {"id": "2d", "tab": "Tồn kho", "n": "Thiếu hàng theo đầu sách", "st": "partial", "f": "Hằng tuần"},
+  {"id": "2e", "tab": "Nhà cung cấp", "n": "Cung ứng của nhà cung cấp", "st": "partial", "f": "Hằng tuần"}]}],
+"next": [["Tiếp nhận feedback", "Theo biên bản buổi này: phần phòng cần, tần suất, góp ý, điểm cần sửa", "Base", "30/10"], ["Sửa BC1, BC2 theo feedback", "Ưu tiên báo cáo được chọn làm trước", "Base", "2–4/11"], ["Chốt scope với Phòng Kinh doanh", "Danh sách báo cáo, phần báo cáo và nguồn dữ liệu đưa vào triển khai", "Hai bên", "06/11"]]};
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const state = {steps:{}, defs:{}, gaps:{}, rep:{}, one:'', dims:[], cmp:[], freq:[], thr:'', viewers:''};
+const toast = t => { const e = $('#toast'); e.textContent = t; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2200); };
+const cf = (grp, key) => `<div class="cf" data-grp="${grp}" data-key="${esc(key)}"><button type="button" class="tg y" aria-pressed="false" data-v="Đúng">Đúng</button><button type="button" class="tg n" aria-pressed="false" data-v="Cần sửa">Cần sửa</button><input type="text" placeholder="Phòng điều chỉnh thế nào?" hidden></div>`;
+// nhóm các phần theo tab của báo cáo
+const byTab = secs => secs.reduce((a, x) => { const g = a.find(t => t.tab === x.tab); g ? g.items.push(x) : a.push({tab: x.tab, items: [x]}); return a; }, []);
+
+// ---------- điều hướng ----------
+const PARTS = [['', 'Mở đầu'], ['01', 'Vận hành'], ['02', 'Giải pháp'], ['03', 'Feedback'], ['04', 'Chốt']];
+const slides = $$('.slide');
+let cur = 0, showNotes = false;
+$('#parts').innerHTML = PARTS.map((p, i) => `<button type="button" class="part" data-p="${i}">${p[0] ? `<b>${p[0]}</b>` : ''}${p[1]}</button>`).join('');
+slides.forEach((s, i) => { const pg = $('.pg', s); if (pg) pg.textContent = String(i + 1).padStart(2, '0'); });
+function go(n){
+  cur = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, i) => s.hidden = i !== cur);
+  const p = slides[cur].dataset.part;
+  $$('.part').forEach(b => b.setAttribute('aria-current', String(b.dataset.p === p)));
+  $('#pno').textContent = `${cur + 1}/${slides.length}`;
+  $('#prev').disabled = cur === 0; $('#next').disabled = cur === slides.length - 1;
+  $('#prog').style.width = ((cur + 1) / slides.length * 100) + '%';
+  $('#noteTxt').textContent = slides[cur].dataset.note || '';
+  slides[cur].scrollTop = 0;
+  if (p === '4') summary();
+  if (slides[cur].querySelector('#oneTitle')) { const r = M.reps.find(x => x.id === state.one); $('#oneTitle').textContent = r ? `Chốt cách xem: ${r.id} ${r.n}` : 'Chốt cách xem báo cáo làm trước'; }
+  try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {}
+}
+const toggleNotes = () => { showNotes = !showNotes; $('#notes').hidden = !showNotes; $('#noteBtn').setAttribute('aria-pressed', String(showNotes)); };
+$('#noteBtn').onclick = toggleNotes;
+$('#parts').addEventListener('click', e => { const b = e.target.closest('.part'); if (b) go(slides.findIndex(s => s.dataset.part === b.dataset.p)); });
+$('#prev').onclick = () => go(cur - 1); $('#next').onclick = () => go(cur + 1);
+document.addEventListener('keydown', e => {
+  if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+  if (e.key === 'n' || e.key === 'N') toggleNotes();
+  if (e.key === 'Home') go(0); if (e.key === 'End') go(slides.length - 1);
+});
+window.addEventListener('hashchange', () => { const n = parseInt(location.hash.slice(1), 10); if (n > 0 && n - 1 !== cur) go(n - 1); });
+
+// ---------- bìa ----------
+const AG = [['01', 'Vận hành và báo cáo hiện tại', '30 phút', 1], ['02', 'Giải pháp báo cáo và demo', '25 phút', 2], ['03', 'Feedback, báo cáo cần dùng', '20 phút', 3], ['04', 'Chốt và bước tiếp theo', '15 phút', 4]];
+$('#agenda').innerHTML = AG.map(a => `<button type="button" class="ag" data-p="${a[3]}"><i>${a[0]}</i><b>${a[1]}</b><span>${a[2]}</span></button>`).join('');
+$('#agenda').addEventListener('click', e => { const b = e.target.closest('.ag'); if (b) go(slides.findIndex(s => s.dataset.part === b.dataset.p)); });
+
+// ---------- chuỗi giá trị ----------
+$('#stages').innerHTML = M.stages.map(s => `<div class="stg">${esc(s)}</div>`).join('');
+$('#cols').innerHTML = M.stages.map((s, i) => `<div class="col">${M.steps.filter(x => x.g === i).map(x => `<button type="button" class="step${x.sv ? ' sv' : ''}${x.base ? '' : ' nb'}" data-id="${x.id}" aria-pressed="false"><code>${esc(x.code)}</code><b>${esc(x.name)}</b></button>`).join('')}</div>`).join('');
+function showStep(id){
+  const x = M.steps.find(s => s.id === id), st = state.steps[id] || {};
+  $$('.step').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  $('#detail').innerHTML = `<span class="code">${esc(x.code)}${x.base ? '' : ', chưa chạy trên Base'}</span><h3>${esc(x.full)}</h3>
+    <dl class="kv"><dt>Theo dõi ở</dt><dd>${x.tools.length ? esc(x.tools.join(', ')) : '<span class="na">Chưa khảo sát</span>'}</dd>
+    <dt>Đang đo</dt><dd>${x.num ? esc(x.num) : '<span class="na">Chưa ghi</span>'}</dd>
+    <dt>Vướng mắc</dt><dd class="${x.pain ? 'pain' : ''}">${x.pain ? esc(x.pain) : '<span class="na">Chưa ghi</span>'}</dd></dl>
+    <div class="ask"><small>CẦN LÀM RÕ</small><ul>${x.ask.map(a => `<li>${esc(a)}</li>`).join('')}</ul></div>
+    ${x.sv ? cf('steps', id) : ''}`;
+  if (st.v) { const box = $('#detail .cf'); $(`.tg[data-v="${st.v}"]`, box).setAttribute('aria-pressed', 'true'); const i = $('input', box); i.hidden = st.v !== 'Cần sửa'; i.value = st.note || ''; }
+}
+$('#cols').addEventListener('click', e => { const b = e.target.closest('.step'); if (b) showStep(b.dataset.id); });
+showStep('kd05');
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('.cf .tg'); if (!b) return;
+  const box = b.parentElement, grp = box.dataset.grp, key = box.dataset.key, on = b.getAttribute('aria-pressed') !== 'true';
+  $$('.tg', box).forEach(x => x.setAttribute('aria-pressed', 'false')); if (on) b.setAttribute('aria-pressed', 'true');
+  const inp = $('input', box); inp.hidden = !(on && b.dataset.v === 'Cần sửa'); if (!inp.hidden) inp.focus();
+  state[grp][key] = {...(state[grp][key] || {}), v: on ? b.dataset.v : ''};
+});
+document.addEventListener('input', e => { const box = e.target.closest('.cf'); if (box) { const g = box.dataset.grp, k = box.dataset.key; state[g][k] = {...(state[g][k] || {}), note: e.target.value}; } });
+
+// ---------- định nghĩa, phần mềm, bổ sung ----------
+$('#defs').innerHTML = M.defs.map((d, i) => `<div class="def" title="${esc(d.tip)}"><i>${String(i + 1).padStart(2, '0')}</i><b>${esc(d.t)}</b><span class="big">${esc(d.n)}</span><span class="s">${esc(d.s)}</span>${cf('defs', 'd' + i)}</div>`).join('');
+$('#sw').innerHTML = M.sw.map(s => `<div class="swc"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join('');
+$('#gaps').innerHTML = M.gaps.map((g, i) => `<div class="qrow"><i>${String(i + 1).padStart(2, '0')}</i><b>${esc(g[0])}</b><input type="text" data-gap="g${i}" placeholder="${esc(g[1])}" aria-label="${esc(g[0])}"></div>`).join('');
+$('#gaps').addEventListener('input', e => { const k = e.target.dataset.gap; if (k) state.gaps[k] = e.target.value; });
+
+// ---------- đề xuất: 2 báo cáo, mỗi báo cáo 3 tab ----------
+const STL = {ready: 'Sẵn nguồn', partial: 'Một phần', collect: 'Cần thu thập'};
+$('#two').innerHTML = M.reps.map(r => `<div class="rp"><div class="hd"><code>${esc(r.id)}</code><b>${esc(r.n)}</b></div>
+  <div class="qs2">${r.q.map(q => `<span>“${esc(q)}”</span>`).join('')}</div>
+  <ul>${byTab(r.sec).map((t, i) => `<li class="tabh">Tab ${i + 1}. ${esc(t.tab)}</li>` + t.items.map(x => `<li><span>${esc(x.n)}${x.new ? '<span class="new">Mới</span>' : ''}</span><span class="st ${x.st}">${STL[x.st]}</span></li>`).join('')).join('')}</ul>
+  <span class="src">Nguồn: ${esc(r.src)}</span></div>`).join('');
+
+// ---------- demo ----------
+let dcur = '1';
+$('#dseg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; dcur = b.dataset.d;
+  $$('#dseg button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); $('#demo1').hidden = dcur !== '1'; $('#demo2').hidden = dcur !== '2'; });
+$('#openDemo').onclick = () => window.open(URL.createObjectURL(new Blob([$('#demo' + dcur).srcdoc], {type: 'text/html'})), '_blank');
+
+// ---------- feedback ----------
+const NEED = ['Không cần', 'Nên có', 'Cần', 'Rất cần'], FREQ = ['Hằng ngày', 'Hằng tuần', 'Hằng tháng', 'Theo đợt'];
+$('#fb').innerHTML = M.reps.map(r => `<div class="fbr grp" data-g="${esc(r.id)}"><span style="grid-column:1 / 4"><code>${esc(r.id)}</code><b>${esc(r.n)}</b></span>
+  <button type="button" class="star" aria-pressed="false" aria-label="Chọn ${esc(r.n)} làm trước">★</button><span></span></div>` +
+  byTab(r.sec).map((t, i) => `<div class="fbr tabr"><span>Tab ${i + 1}. ${esc(t.tab)}</span></div>` + t.items.map(x => `<div class="fbr sub" data-r="${esc(x.id)}"><span><b>${esc(x.n)}</b></span>
+  <span class="need">${NEED.map(n => `<button type="button" aria-pressed="false" data-n="${n}">${n}</button>`).join('')}</span>
+  <select data-f="freq" aria-label="Tần suất ${esc(x.n)}">${FREQ.map(f => `<option${f === x.f ? ' selected' : ''}>${f}</option>`).join('')}</select><span></span>
+  <input type="text" data-f="note" placeholder="Góp ý" aria-label="Góp ý ${esc(x.n)}"></div>`).join('')).join('')).join('');
+const SECS = M.reps.flatMap(r => r.sec.map(x => ({...x, rep: r.id})));
+SECS.forEach(x => state.rep[x.id] = {need: '', freq: x.f, note: ''});
+$('#fb').addEventListener('click', e => {
+  const st = e.target.closest('.star');
+  if (st) { const on = st.getAttribute('aria-pressed') !== 'true'; $$('.star').forEach(x => x.setAttribute('aria-pressed', 'false')); if (on) st.setAttribute('aria-pressed', 'true'); state.one = on ? st.closest('.fbr').dataset.g : ''; return; }
+  const nb = e.target.closest('.need button'); if (!nb) return; const row = nb.closest('.fbr'), id = row.dataset.r;
+  const on = nb.getAttribute('aria-pressed') !== 'true'; $$('.need button', row).forEach(x => x.setAttribute('aria-pressed', 'false')); if (on) nb.setAttribute('aria-pressed', 'true'); state.rep[id].need = on ? nb.dataset.n : '';
+});
+$('#fb').addEventListener('change', e => { const row = e.target.closest('.fbr'); if (row && e.target.dataset.f === 'freq') state.rep[row.dataset.r].freq = e.target.value; });
+$('#fb').addEventListener('input', e => { const row = e.target.closest('.fbr'); if (row && e.target.dataset.f === 'note') state.rep[row.dataset.r].note = e.target.value; });
+
+// ---------- chi tiết ----------
+const chk = (id, list, key) => { $(id).innerHTML = list.map(x => `<label><input type="checkbox" value="${esc(x)}">${esc(x)}</label>`).join('');
+  $(id).addEventListener('change', () => state[key] = $$('input:checked', $(id)).map(i => i.value)); };
+chk('#dims', ['Mảng sách', 'Đầu sách', 'Tỉnh', 'Đối tác', 'Đơn vị đầu mối', 'Nhân viên KD', 'Nhà in, NCC', 'Số QĐ in'], 'dims');
+chk('#cmp', ['KH BĐH giao', 'KH điều chỉnh', 'KH toàn quốc', 'Cùng kỳ', 'Kỳ trước', 'Đối tác đặt'], 'cmp');
+chk('#freq', ['Hằng ngày', 'Hằng tuần', 'Hằng tháng'], 'freq');
+['thr', 'viewers'].forEach(k => $('#' + k).addEventListener('input', e => state[k] = e.target.value));
+
+// ---------- chốt ----------
+$('#tl').innerHTML = M.next.map(n => `<li><time>${esc(n[3])}</time><i></i><span><b>${esc(n[0])}</b><small>${esc(n[1])}</small></span><span class="who ${n[2] === 'HEID' ? 'w1' : n[2] === 'Base' ? 'w2' : 'w3'}">${esc(n[2])}</span></li>`).join('');
+function summary(){
+  const ord = {'Rất cần': 0, 'Cần': 1, 'Nên có': 2};
+  const html = M.reps.map(r => { const xs = r.sec.filter(x => ord[state.rep[x.id].need] != null).sort((a, b) => ord[state.rep[a.id].need] - ord[state.rep[b.id].need]);
+    return xs.length ? `<p style="margin:0 0 4px;font-weight:600">${esc(r.id)} ${esc(r.n)}${state.one === r.id ? '<span class="tag one">★ Làm trước</span>' : ''}</p><ol>${xs.map(x => `<li>${esc(x.tab)}: ${esc(x.n)}: <b>${esc(state.rep[x.id].need)}</b>, ${esc(state.rep[x.id].freq.toLowerCase())}</li>`).join('')}</ol>` : ''; }).join('');
+  $('#sumRep').innerHTML = html || '<p class="na">Chưa chấm ở phần 03.</p>';
+  const fix = [];
+  M.steps.forEach(x => { const s = state.steps[x.id]; if (s && s.v === 'Cần sửa') fix.push(`${x.code}${s.note ? ': ' + s.note : ''}`); });
+  M.defs.forEach((d, i) => { const s = state.defs['d' + i]; if (s && s.v === 'Cần sửa') fix.push(`${d.t}${s.note ? ': ' + s.note : ''}`); });
+  $('#sumConf').innerHTML = fix.length ? `<ol>${fix.map(f => `<li>${esc(f)}</li>`).join('')}</ol>` : '<p class="na">Không có điểm cần sửa.</p>';
+}
+function minutes(){
+  const L = ['BIÊN BẢN LÀM VIỆC: HEID × BASE.VN, PHÒNG KINH DOANH', 'Ngày: ' + new Date().toLocaleDateString('vi-VN'), '', '1. XÁC NHẬN QUY TRÌNH'];
+  M.steps.filter(x => x.sv).forEach(x => { const s = state.steps[x.id] || {}; L.push(`- ${x.code} ${x.name}: ${s.v || 'chưa xác nhận'}${s.note ? ' | ' + s.note : ''}`); });
+  L.push('', '2. ĐỊNH NGHĨA SỐ LIỆU'); M.defs.forEach((d, i) => { const s = state.defs['d' + i] || {}; L.push(`- ${d.t} (${d.n}): ${s.v || 'chưa xác nhận'}${s.note ? ' | ' + s.note : ''}`); });
+  L.push('', '3. THÔNG TIN BỔ SUNG'); M.gaps.forEach((g, i) => L.push(`- ${g[0]}: ${state.gaps['g' + i] || '(trống)'}`));
+  L.push('', '4. BÁO CÁO PHÒNG CẦN'); M.reps.forEach(r => { L.push(`${r.id} ${r.n}${state.one === r.id ? ' (làm trước)' : ''}`); r.sec.forEach(x => { const s = state.rep[x.id]; L.push(`- [${x.tab}] ${x.n}: ${s.need || 'chưa chấm'}, ${s.freq}${s.note ? ' | ' + s.note : ''}`); }); });
+  L.push(`Báo cáo làm trước: ${state.one ? state.one + ' ' + M.reps.find(r => r.id === state.one).n : '(chưa chọn)'}`, `Xem theo: ${state.dims.join(', ') || '-'}`, `So sánh với: ${state.cmp.join(', ') || '-'}`, `Tần suất: ${state.freq.join(', ') || '-'}`, `Ngưỡng cảnh báo: ${state.thr || '-'}`, `Người xem: ${state.viewers || '-'}`);
+  L.push('', '5. BƯỚC TIẾP THEO'); M.next.forEach(n => L.push(`- ${n[3]} | ${n[0]} (${n[2]}): ${n[1]}`));
+  return L.join('\n');
+}
+$('#dlMin').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + minutes()], {type: 'text/plain;charset=utf-8'})); a.download = 'HEID_KD_bien_ban.txt'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 300); toast('Đã tải biên bản.'); };
+$('#copyMin').onclick = async () => { try { await navigator.clipboard.writeText(minutes()); toast('Đã sao chép biên bản.'); } catch (e) { toast('Trình duyệt chặn sao chép, hãy dùng nút Tải biên bản.'); } };
+
+const h0 = parseInt((location.hash || '').slice(1), 10);
+go(h0 > 0 ? h0 - 1 : 0);
+</script>
+</body>
+</html>

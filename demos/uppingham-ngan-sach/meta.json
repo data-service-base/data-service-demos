@@ -1,0 +1,21 @@
+{
+  "slug": "uppingham-ngan-sach",
+  "title": "Uppingham Edu Vietnam — Báo cáo ngân sách",
+  "type": "dashboard",
+  "industry": "Giáo dục",
+  "department": "Tài chính",
+  "description": "Ngân sách và chi phí theo phòng ban, mã chi phí và phiếu đề xuất.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Uppingham_Demo/",
+  "source_repo": "https://github.com/tbinh-06/Uppingham_Demo",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "ngân sách",
+    "chi phí"
+  ]
+}

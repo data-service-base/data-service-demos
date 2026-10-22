@@ -34,7 +34,7 @@ catalog.json      sinh tự động, không sửa tay
 | slug | có | trùng tên thư mục |
 | title | có | tên báo cáo |
 | type | có | `dashboard`, `proposal`, `deck`, `tool` |
-| industry | có | một trong: General, FnB, Sản xuất, Xây dựng, BĐS - CĐT - Nhà thầu, Vận tải, Thời trang, Cao su |
+| industry | có | một trong: General, FnB, Sản xuất, Xây dựng, BĐS - CĐT - Nhà thầu, Vận tải, Thời trang, Cao su, Bán lẻ, Giáo dục, Năng lượng |
 | department | có | ví dụ HR, Kinh doanh, Tài chính, Vận hành, MKT, Supply Chain, Chuỗi cung ứng, Chăm sóc khách hàng, All |
 | description | nên có | 1 đến 2 câu: báo cáo trả lời câu hỏi gì |
 | tools | nên có | HTML, Chart.js, ECharts, D3, Power BI… |

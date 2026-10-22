@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STRONGER TOGETHER · Trung tâm điều hành kinh doanh — ST HOME</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-sans:'Inter',-apple-system,'Segoe UI',system-ui,sans-serif;
+  --ink:#f2f7ff; --ink-2:rgba(234,242,255,.84); --ink-3:rgba(234,242,255,.66);
+  --line:rgba(255,255,255,.12); --line-2:rgba(255,255,255,.075);
+  --glass:rgba(255,255,255,.05); --glass-2:rgba(255,255,255,.085);
+  --blue:#1E7BE8; --sky:#5FC8FF; --ice:#CFE6FF; --gold:#F5A623; --gold-2:#FFD98A;
+  --green:#22C55E; --green-2:#7FE9BA; --red:#FF5B7F; --amber:#FFC46B;
+  --u1:#F97316; --u2:#2563EB; --u3:#EC4899; --u4:#22C55E; --u5:#14B8A6; --u6:#EF4444;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font-sans);color:var(--ink);background:#051736;overflow-x:hidden}
+::selection{background:rgba(95,200,255,.3)}
+a{color:inherit;text-decoration:none}
+
+/* ---------- animation utilities ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes core{0%,100%{opacity:.62}50%{opacity:1}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(255,91,127,.55)}70%{box-shadow:0 0 0 12px rgba(255,91,127,0)}100%{box-shadow:0 0 0 0 rgba(255,91,127,0)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes dashMove{to{stroke-dashoffset:-40}}
+@keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:0}12%{opacity:1}100%{transform:translateY(-120px) rotate(220deg);opacity:0}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+.rise{animation:rise .8s cubic-bezier(.2,.75,.25,1) both}
+.reveal{opacity:0;transform:translateY(26px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .75s cubic-bezier(.2,.75,.25,1),transform .75s cubic-bezier(.2,.75,.25,1)}
+
+.bar{position:relative;height:8px;border-radius:8px;background:rgba(255,255,255,.09);overflow:hidden}
+.bar > i{display:block;height:100%;width:0;border-radius:8px;transition:width 1.15s cubic-bezier(.2,.75,.25,1)}
+.pulse{animation:pulseRing 2s infinite}
+.blink{animation:blink 1.6s infinite}
+
+/* ---------- glass ---------- */
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(10px)}
+.glass-hd{display:flex;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid var(--line-2)}
+.card-hover{transition:transform .25s cubic-bezier(.2,0,0,1),box-shadow .25s,border-color .25s}
+.card-hover:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(0,0,0,.45);border-color:rgba(143,211,255,.35)}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;font:600 11px/1 var(--font-sans);letter-spacing:.2em;color:#BFDCFF;text-transform:uppercase}
+.h2{margin:14px 0 0;font:800 clamp(27px,3.5vw,42px)/1.08 var(--font-sans);letter-spacing:-.025em}
+.grad{background:linear-gradient(180deg,#fff,#cfe6ff 58%,#7FC0FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.grad-gold{background:linear-gradient(180deg,#fff,#FFD98A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.num{font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font:600 11px/1 var(--font-sans);border:1px solid var(--line)}
+.chip.ok{background:rgba(34,197,94,.14);border-color:rgba(127,233,186,.34);color:var(--green-2)}
+.chip.warn{background:rgba(255,196,107,.14);border-color:rgba(255,196,107,.34);color:var(--amber)}
+.chip.bad{background:rgba(255,91,127,.14);border-color:rgba(255,91,127,.34);color:var(--red)}
+.chip.info{background:rgba(95,200,255,.12);border-color:rgba(95,200,255,.3);color:#8FD3FF}
+
+.row-hover{transition:background .18s}
+.row-hover:hover{background:rgba(255,255,255,.05)}
+
+/* ---------- topbar ---------- */
+.topbar{position:sticky;top:0;z-index:80;background:rgba(5,18,42,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line-2)}
+.topbar-in{max-width:1240px;margin:0 auto;padding:14px 56px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.tab{position:relative;padding:9px 4px;font:600 13.5px/1 var(--font-sans);color:rgba(255,255,255,0.8);cursor:pointer;transition:color .2s;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab.active{color:#fff}
+.tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,#1E7BE8,#CFE6FF);box-shadow:0 0 12px rgba(95,200,255,.7)}
+
+.page{display:none}
+.page.active{display:block;animation:pageIn .55s cubic-bezier(.2,.75,.25,1) both}
+.wrap{max-width:1240px;margin:0 auto;padding:0 56px}
+
+/* ---------- misc from v1 ---------- */
+.st-runner{position:absolute;transform:translate(-50%,-50%);z-index:2;transition:left 1.4s cubic-bezier(.2,.75,.25,1),transform .18s}
+.st-runner:hover{z-index:30}
+.st-runner:hover .st-av{transform:scale(1.18)}
+.st-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px/1 var(--font-sans);border:2px solid rgba(255,255,255,.85);transition:transform .18s cubic-bezier(.2,0,0,1)}
+.st-tip,.hiker-tip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);white-space:nowrap;background:#08152f;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:7px 11px;font:500 12px/1.3 var(--font-sans);opacity:0;pointer-events:none;transition:opacity .18s;box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.st-runner:hover .st-tip{opacity:1}
+.hiker{z-index:4}
+.hiker:hover{z-index:20}
+.hiker:hover .hiker-dot{transform:scale(1.3)}
+.hiker:hover .hiker-tip{opacity:1}
+.hiker-dot{animation:bob 4.5s ease-in-out infinite}
+.mtn-stage{z-index:6}
+.mtn-card{transition:transform .2s}
+.mtn-stage:hover .mtn-card{transform:translateY(-50%) scale(1.05)}
+#sanMarker{z-index:8}
+.pod{position:relative}
+
+
+/* ---------- đếm ngược ---------- */
+.cdbox{min-width:74px;text-align:center;padding:12px 10px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,214,140,.24)}
+.cdv{font:800 30px/1 var(--font-sans);font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#FFD98A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cdl{font:500 10.5px/1 var(--font-sans);letter-spacing:.12em;color:rgba(255,255,255,0.7);margin-top:8px;text-transform:uppercase}
+.cdsep{align-self:center;font:800 22px/1 var(--font-sans);color:rgba(255,214,140,.45);animation:blink 1.6s infinite}
+
+/* ---------- bục vinh danh ---------- */
+.pod-block{position:relative;height:0;transition:height 1.05s cubic-bezier(.2,.75,.25,1);margin-top:26px}
+.pod-top{position:absolute;left:-3%;right:-3%;top:-13px;height:15px;clip-path:polygon(6% 0,94% 0,100% 100%,0 100%);}
+.pod-face{position:absolute;inset:0;border-radius:10px 10px 0 0;overflow:hidden}
+.pod-face .sheen{position:absolute;top:0;bottom:0;width:34%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);transform:translateX(-160%);animation:sweep 4.2s ease-in-out infinite}
+@keyframes sweep{0%{transform:translateX(-170%)}45%,100%{transform:translateX(360%)}}
+.pod-num{position:absolute;left:0;right:0;text-align:center;font-weight:800;letter-spacing:-.03em;font-family:var(--font-sans)}
+.pod-edge{position:absolute;left:0;right:0;top:0;height:38%;background:linear-gradient(180deg,rgba(255,255,255,.34),transparent)}
+
+.pod-gold .pod-top{background:linear-gradient(180deg,#FFE9B8,#E8B25A)}
+.pod-gold .pod-face{background:linear-gradient(180deg,#FFD98A,#B87A22);box-shadow:inset 0 -22px 40px rgba(80,44,0,.4)}
+.pod-gold .pod-num{color:rgba(96,55,0,.5);-webkit-text-stroke:1px rgba(255,244,214,.45)}
+.pod-silver .pod-top{background:linear-gradient(180deg,#F4F8FE,#B9C7DA)}
+.pod-silver .pod-face{background:linear-gradient(180deg,#E4ECF8,#7D8FA8);box-shadow:inset 0 -20px 36px rgba(20,36,60,.36)}
+.pod-silver .pod-num{color:rgba(36,58,90,.42);-webkit-text-stroke:1px rgba(255,255,255,.5)}
+.pod-bronze .pod-top{background:linear-gradient(180deg,#F7D6B2,#C58C4E)}
+.pod-bronze .pod-face{background:linear-gradient(180deg,#EFC194,#93602C);box-shadow:inset 0 -20px 36px rgba(70,38,6,.4)}
+.pod-bronze .pod-num{color:rgba(84,46,6,.44);-webkit-text-stroke:1px rgba(255,236,212,.42)}
+
+/* lấp lánh quanh quán quân */
+.spk{position:absolute;pointer-events:none;opacity:0;animation:spk 2.6s ease-in-out infinite}
+@keyframes spk{0%,100%{opacity:0;transform:scale(.4) rotate(0)}40%{opacity:1;transform:scale(1) rotate(35deg)}70%{opacity:0;transform:scale(.5) rotate(70deg)}}
+.crown-glow{animation:bob 3.4s ease-in-out infinite}
+
+/* ánh sáng chảy trên đường + đích */
+.goal-pulse{animation:goalPulse 2.4s ease-in-out infinite}
+@keyframes goalPulse{0%,100%{box-shadow:0 10px 26px rgba(0,0,0,.45),0 0 0 0 rgba(255,214,140,.55)}55%{box-shadow:0 10px 26px rgba(0,0,0,.45),0 0 0 14px rgba(255,214,140,0)}}
+.now-pulse{animation:nowPulse 2.2s ease-in-out infinite}
+@keyframes nowPulse{0%,100%{box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 0 rgba(95,200,255,.6)}60%{box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 18px rgba(95,200,255,0)}}
+
+
+/* ---------- menu thả xuống trên tab ---------- */
+.tab-wrap{position:relative;padding-bottom:14px;margin-bottom:-14px}
+.tab-menu{position:absolute;top:100%;left:50%;transform:translate(-50%,8px);min-width:196px;padding:8px;border-radius:16px;
+  background:rgba(6,18,44,.96);border:1px solid rgba(255,255,255,.12);box-shadow:0 22px 50px rgba(0,0,0,.55);
+  backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .18s,transform .18s,visibility .18s;z-index:90}
+.tab-wrap:hover .tab-menu,.tab-menu:hover{opacity:1;visibility:visible;transform:translate(-50%,6px)}
+.tab-menu::before{content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:rgba(6,18,44,.96);border-left:1px solid rgba(255,255,255,.12);border-top:1px solid rgba(255,255,255,.12)}
+.tmi{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;font:500 13px/1.3 var(--font-sans);color:rgba(255,255,255,0.92);cursor:pointer;transition:background .16s,color .16s}
+.tmi:hover{background:rgba(255,255,255,.08);color:#fff}
+.tmi i{width:7px;height:7px;border-radius:50%;flex:none;display:block}
+.tmi small{display:block;font:400 11px/1.3 var(--font-sans);color:rgba(255,255,255,0.6);margin-top:3px}
+
+/* ---------- segmented ---------- */
+.seg{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.seg button{border:0;background:transparent;color:rgba(255,255,255,0.8);font:600 12.5px/1 var(--font-sans);padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .2s}
+.seg button.on{background:linear-gradient(180deg,#3f97ef,#1E7BE8);color:#fff;box-shadow:0 6px 18px rgba(30,123,232,.4)}
+.seg button:not(.on):hover{color:#fff;background:rgba(255,255,255,.07)}
+
+/* ---------- vòng tròn tiến độ ---------- */
+.ringc{transition:stroke-dashoffset 1.3s cubic-bezier(.2,.75,.25,1)}
+
+/* ---------- tên trên bục ---------- */
+.pod-name{position:absolute;left:8%;right:8%;bottom:14px;text-align:center;font:800 12.5px/1.25 var(--font-sans);letter-spacing:.06em;text-transform:uppercase}
+.pod-sub{position:absolute;left:8%;right:8%;bottom:0;text-align:center;font:600 10px/1 var(--font-sans)}
+
+/* ---------- dòng sáng trên đường ---------- */
+@keyframes flowMove{to{stroke-dashoffset:-72}}
+.road-stream{animation:flowMove 1.25s linear infinite;opacity:0;transition:opacity .8s}
+
+
+/* ---------- ô tìm kiếm ---------- */
+#lbSearch{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:999px;color:#fff;
+  font:500 13.5px/1 var(--font-sans);padding:13px 18px 13px 44px;outline:none;transition:border-color .2s,background .2s}
+#lbSearch::placeholder{color:rgba(255,255,255,0.62)}
+#lbSearch:focus{border-color:rgba(95,200,255,.6);background:rgba(255,255,255,.1)}
+
+/* ---------- hồ sơ nhân sự ---------- */
+#profOverlay{position:fixed;inset:0;z-index:200;background:rgba(3,12,30,.72);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .24s,visibility .24s}
+#profOverlay.open{opacity:1;visibility:visible}
+#profCard{width:min(560px,100%);border-radius:24px;background:linear-gradient(160deg,#123a78,#0a2350 60%,#071c40);
+  border:1px solid rgba(255,255,255,.16);box-shadow:0 40px 90px rgba(0,0,0,.6);overflow:hidden;
+  transform:scale(.94) translateY(14px);transition:transform .28s cubic-bezier(.2,.75,.25,1)}
+#profOverlay.open #profCard{transform:none}
+.prof-close{position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s}
+.prof-close:hover{background:rgba(255,255,255,.16)}
+.prof-stat{padding:13px 14px;border-radius:13px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
+.prof-stat .v{font:800 18px/1 var(--font-sans);font-variant-numeric:tabular-nums}
+.prof-stat .l{font:400 10.5px/1.3 var(--font-sans);color:rgba(255,255,255,0.7);margin-top:7px}
+.lb-click{cursor:pointer}
+
+
+/* ---------- thiên hà ---------- */
+@keyframes gx-spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes gx-spin-r{to{transform:translate(-50%,-50%) rotate(-360deg)}}
+@keyframes gx-core{0%,100%{opacity:.62;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+@keyframes gx-tw{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes nebula{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(26px,-18px) scale(1.08)}}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-22px,16px)}}
+
+.gx-stage{position:relative;height:540px;overflow:hidden;border-radius:20px;
+  background:radial-gradient(ellipse at 50% 50%,#123a7d 0%,#0b2455 38%,#061735 70%,#04102a 100%)}
+.gx-arm{position:absolute;left:50%;top:50%;width:104%;height:30%;border-radius:50%;
+  transform:translate(-50%,-50%);filter:blur(20px);pointer-events:none;transform-origin:50% 50%}
+.gx-core{position:absolute;left:50%;top:50%;width:150px;height:150px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,#fff 0%,rgba(255,244,214,.95) 12%,rgba(143,211,255,.62) 30%,rgba(30,123,232,.26) 54%,transparent 74%);
+  filter:blur(4px);animation:gx-core 6s ease-in-out infinite}
+.gx-dust{position:absolute;border-radius:50%;background:#dbeeff;pointer-events:none;animation:gx-tw 4s ease-in-out infinite}
+.gx-star{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:opacity .35s ease;z-index:3}
+.gx-star.dim{opacity:.09;pointer-events:none}
+.gx-star:hover{z-index:40}
+.gx-dot{border-radius:50%;animation:gx-tw 3.4s ease-in-out infinite;transition:transform .22s cubic-bezier(.2,0,0,1)}
+.gx-star:hover .gx-dot{transform:scale(1.55)}
+.gx-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
+  background:rgba(8,20,44,.95);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:8px 12px;white-space:nowrap;
+  font:500 12px/1.4 var(--font-sans);color:#fff;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  box-shadow:0 12px 30px rgba(0,0,0,.55)}
+.gx-star:hover .gx-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.gx-tip b{color:#FFD98A}
+.gx-links{position:absolute;inset:0;pointer-events:none;z-index:2}
+.gx-legend{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;padding:16px 22px;border-top:1px solid var(--line-2)}
+
+/* ---------- tinh vân nền ---------- */
+.neb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(38px);animation:nebula 18s ease-in-out infinite}
+.neb2{animation:drift 24s ease-in-out infinite}
+
+@media(max-width:1080px){
+  .wrap,.topbar-in{padding-left:22px;padding-right:22px}
+  .g2,.g3,.g4{grid-template-columns:1fr !important}
+  .tabs-scroll{overflow-x:auto}
+}
+@media(max-width:900px){
+  .podium-wrap{grid-template-columns:1fr !important;justify-items:center}
+  .pod-block{display:none}
+  .mtn-card{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+.gx-flare{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;
+  width:190px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);filter:blur(1px);animation:gx-core 6s ease-in-out infinite}
+.gx-flare.v{width:2px;height:120px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.3),transparent)}
+.gx-ring{position:absolute;left:50%;top:50%;width:76%;height:56%;border-radius:50%;transform:translate(-50%,-50%);
+  border:1px solid rgba(143,211,255,.14);pointer-events:none;animation:gx-spin 220s linear infinite}
+.gx-vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,transparent 44%,rgba(4,16,42,.55) 82%,rgba(4,16,42,.9) 100%)}
+.gx-name{position:absolute;top:calc(50% + 18px);left:50%;transform:translateX(-50%);white-space:nowrap;width:max-content;
+  font:700 10.5px/1 var(--font-sans);color:rgba(255,255,255,.82);text-shadow:0 2px 8px rgba(0,0,0,.8);pointer-events:none}
+
+/* ================= NÂNG CẤP VŨ TRỤ ================= */
+@keyframes auroraMove{0%,100%{transform:translate(0,0) rotate(-8deg) scale(1)}50%{transform:translate(46px,-30px) rotate(7deg) scale(1.14)}}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+@keyframes ringDash{to{stroke-dashoffset:-140}}
+@keyframes beamPulse{0%,100%{opacity:.22}50%{opacity:.42}}
+
+/* tinh vân dải sáng */
+.aurora{position:absolute;pointer-events:none;filter:blur(48px);border-radius:50%;animation:auroraMove 26s ease-in-out infinite}
+
+/* hành tinh + quỹ đạo trong hero */
+.orbit-wrap{position:absolute;pointer-events:none}
+.orbit-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(143,211,255,.18);animation:orbitSpin 46s linear infinite}
+.orbit-ring.two{inset:-30px;border-color:rgba(255,214,140,.12);animation-duration:74s;animation-direction:reverse}
+.orbit-moon{position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;
+  background:#CFE6FF;box-shadow:0 0 14px #8FD3FF,0 0 30px rgba(143,211,255,.6)}
+.planet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:104px;height:104px;border-radius:50%;
+  background:radial-gradient(circle at 32% 28%,#7FC0FF,#1E7BE8 46%,#0a2b5f 78%,#061a3e 100%);
+  box-shadow:inset -14px -12px 34px rgba(0,0,0,.6),0 0 46px rgba(30,123,232,.55)}
+.planet::after{content:"";position:absolute;left:50%;top:50%;width:186px;height:44px;transform:translate(-50%,-50%) rotate(-18deg);
+  border-radius:50%;border:2px solid rgba(191,220,255,.34);border-bottom-color:transparent;box-shadow:0 0 22px rgba(143,211,255,.25)}
+
+/* viền sáng trên thẻ kính */
+.glass{position:relative}
+.glass::before{content:"";position:absolute;left:14%;right:14%;top:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(143,211,255,.55),transparent)}
+.card-hover:hover{box-shadow:0 22px 50px rgba(0,0,0,.45),0 0 0 1px rgba(143,211,255,.28),0 0 46px rgba(95,200,255,.14)}
+
+/* chữ gradient phát sáng */
+.grad{filter:drop-shadow(0 0 22px rgba(95,200,255,.32))}
+.grad-gold{filter:drop-shadow(0 0 20px rgba(255,196,107,.32))}
+
+/* đầu sao chổi trên thanh tiến độ */
+.bar > i{position:relative}
+.bar > i::after{content:"";position:absolute;right:0;top:50%;transform:translate(-24%,-50%);width:11px;height:11px;
+  border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(255,255,255,.6) 36%,rgba(255,255,255,0) 72%)}
+
+/* ô đếm ngược */
+.cdbox{position:relative;overflow:hidden}
+.cdbox::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  background:radial-gradient(circle at 50% -30%,rgba(255,214,140,.28),transparent 70%)}
+
+/* chùm sáng dưới bục */
+.pod-beam{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);width:210px;height:360px;pointer-events:none;
+  clip-path:polygon(2% 0,98% 0,66% 100%,34% 100%);filter:blur(18px);animation:beamPulse 5s ease-in-out infinite;z-index:0}
+
+/* vòng quỹ đạo quanh quán quân */
+.champ-orbit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.champ-orbit circle{animation:ringDash 12s linear infinite}
+
+.fbar > i::after{width:14px;height:14px}
+.fbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+
+/* ================= HÀNH TINH NHÂN SỰ ================= */
+.pl-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.pl-sphere{position:relative;z-index:2;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:inset -13px -11px 28px rgba(0,0,0,.55), inset 9px 9px 24px rgba(255,255,255,.22), 0 0 42px var(--pc,#fff)}
+.pl-sphere::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 30% 24%,rgba(255,255,255,.55),rgba(255,255,255,.06) 42%,transparent 62%)}
+.pl-sphere::before{content:"";position:absolute;inset:-1px;border-radius:50%;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(255,255,255,.28) inset}
+.pl-atm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,var(--pc) 0%,transparent 68%);opacity:.34;filter:blur(9px)}
+.pl-ring{position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none;
+  border:3px solid var(--pc);border-left-color:rgba(255,255,255,.85);border-right-color:rgba(255,255,255,.55)}
+.pl-ring.back{clip-path:inset(0 0 52% 0);z-index:1;opacity:.55}
+.pl-ring.front{clip-path:inset(48% 0 0 0);z-index:3;opacity:.95}
+.pl-ring2{border-width:1.5px;opacity:.35}
+.pl-orbit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:4;
+  animation:orbitSpin 16s linear infinite}
+.pl-orbit i{position:absolute;top:-5px;left:50%;margin-left:-5px;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff,#cfe6ff);box-shadow:0 0 12px #cfe6ff,0 0 26px rgba(143,211,255,.6)}
+.pl-orbit.slow{animation-duration:26s;animation-direction:reverse}
+.pl-orbit.slow i{width:7px;height:7px;margin-left:-3.5px;top:-3.5px;background:radial-gradient(circle at 34% 30%,#fff,#FFD98A);box-shadow:0 0 10px #FFD98A}
+
+/* biến thể nhỏ trong bảng */
+.pl-mini{box-shadow:inset -5px -4px 11px rgba(0,0,0,.52), inset 3px 3px 9px rgba(255,255,255,.3), 0 0 0 1px rgba(255,255,255,.12)}
+.pl-mini::after,.pl-mini::before{display:none}
+.st-av{box-shadow:inset -4px -3px 9px rgba(0,0,0,.48), inset 3px 3px 8px rgba(255,255,255,.3) !important}
+.st-runner:hover .st-av{box-shadow:inset -4px -3px 9px rgba(0,0,0,.48), inset 3px 3px 8px rgba(255,255,255,.3), 0 0 22px currentColor !important}
+.gx-dot{box-shadow:inset -2px -2px 5px rgba(0,0,0,.45), inset 1.5px 1.5px 4px rgba(255,255,255,.4)}
+
+
+/* ---------- điều hướng phụ trong trang ---------- */
+.subnav{display:flex;gap:6px;flex-wrap:wrap;margin-top:26px;padding:6px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);width:max-content;max-width:100%}
+.subnav button{border:0;cursor:pointer;background:transparent;color:var(--ink-2);font:600 13px/1 var(--font-sans);
+  padding:11px 20px;border-radius:999px;display:inline-flex;align-items:center;gap:9px;transition:all .2s;white-space:nowrap}
+.subnav button .d{width:7px;height:7px;border-radius:50%;display:block;opacity:.55;transition:opacity .2s,box-shadow .2s}
+.subnav button:hover{color:#fff;background:rgba(255,255,255,.06)}
+.subnav button.on{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.07));color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+.subnav button.on .d{opacity:1;box-shadow:0 0 10px currentColor}
+.subpage{display:none}
+.subpage.active{display:block;animation:pageIn .45s cubic-bezier(.2,.75,.25,1) both}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div style="display:flex;align-items:center;gap:13px;">
+      <span style="width:11px;height:11px;border-radius:50%;background:linear-gradient(180deg,#CFE6FF,#1E7BE8);box-shadow:0 0 14px rgba(90,180,255,.9);animation:core 4s ease-in-out infinite;"></span>
+      <span style="font:800 18px/1 var(--font-sans);letter-spacing:-.01em;">ST HOME</span>
+      <span style="font:600 10px/1 var(--font-sans);letter-spacing:.14em;color:#BFDCFF;border:1px solid rgba(191,220,255,.35);border-radius:999px;padding:5px 9px;">SÀN F1</span>
+    </div>
+    <div class="tabs-scroll" style="display:flex;align-items:center;gap:28px;">
+      <div class="tab-wrap">
+        <div class="tab active" data-page="p-vinhdanh">Vinh danh</div>
+        <div class="tab-menu">
+          <div class="tmi" data-go="p-vinhdanh" data-anchor="vinhdanh"><i style="background:#FFD98A"></i><span>Bục vinh danh</span></div>
+          <div class="tmi" data-go="p-vinhdanh" data-anchor="hanhtrinh"><i style="background:#5FC8FF"></i><span>Hành trình 88 tỷ</span></div>
+          <div class="tmi" data-go="p-vinhdanh" data-anchor="donvi"><i style="background:#F97316"></i><span>Đóng góp 6 đơn vị</span></div>
+        </div>
+      </div>
+      <div class="tab-wrap">
+        <div class="tab" data-page="p-bxh">Bảng xếp hạng</div>
+        <div class="tab-menu">
+          <div class="tmi" data-go="p-bxh" data-anchor="thienha"><i style="background:#8FD3FF"></i><span>Thiên hà nhân sự</span></div>
+          <div class="tmi" data-go="p-bxh" data-anchor="bxh"><i style="background:#FFD98A"></i><span>Xếp hạng cá nhân</span></div>
+          <div class="tmi" data-go="p-bxh" data-anchor="duacanhan"><i style="background:#5FC8FF"></i><span>Ai đang ở đâu</span></div>
+        </div>
+      </div>
+      <div class="tab-wrap">
+        <div class="tab" data-page="p-sale">Quản lý kinh doanh</div>
+        <div class="tab-menu">
+          <div class="tmi" data-go="p-sale" data-sub="sp-day"><i style="background:#FF5B7F"></i><span>Tiến độ liên hệ</span></div>
+          <div class="tmi" data-go="p-sale" data-sub="sp-funnel"><i style="background:#5FC8FF"></i><span>Chuyển đổi</span></div>
+          <div class="tmi" data-go="p-sale" data-sub="sp-team"><i style="background:#7FE9BA"></i><span>Chất lượng cuộc gọi</span></div>
+        </div>
+      </div>
+      <div class="tab-wrap">
+        <div class="tab" data-page="p-me">Khu vực cá nhân</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.7);">
+      <span style="width:7px;height:7px;border-radius:50%;background:#22C55E;" class="blink"></span>19/08/2026
+    </div>
+  </div>
+</div>
+
+<section class="page active" id="p-vinhdanh">
+<!-- ==================== HERO ==================== -->
+<section style="position:relative;overflow:hidden;background:linear-gradient(180deg,#030a1c 0%,#06153a 42%,#0b2a63 74%,#14539e 100%);color:#fff;padding-bottom:70px;margin-top:-1px;">
+  <canvas id="bg" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+  <div style="position:absolute;right:-140px;top:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(90,180,255,.42),rgba(30,123,232,0) 68%);filter:blur(8px);animation:st-core 7s ease-in-out infinite;pointer-events:none;"></div>
+  <div class="aurora" style="left:-6%;top:6%;width:56%;height:340px;background:linear-gradient(100deg,rgba(95,200,255,.30),rgba(167,139,250,.22),transparent 76%);"></div>
+  <div class="aurora" style="right:-4%;top:34%;width:52%;height:300px;background:linear-gradient(260deg,rgba(255,196,107,.16),rgba(95,200,255,.20),transparent 74%);animation-delay:-11s;"></div>
+  <div class="orbit-wrap" style="right:-56px;top:26px;width:238px;height:238px;">
+    <div class="orbit-ring"><span class="orbit-moon"></span></div>
+    <div class="orbit-ring two"></div>
+    <div class="planet"></div>
+  </div>
+  <div style="position:absolute;left:-120px;bottom:-180px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(143,211,255,.22),rgba(30,123,232,0) 70%);pointer-events:none;"></div>
+
+
+  <div class="pad" style="position:relative;z-index:5;max-width:1240px;margin:0 auto;padding:44px 56px 0;">
+    <div class="rise" style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:26px;">
+      <div style="display:inline-flex;align-items:center;gap:9px;font:600 12px/1 var(--font-sans);letter-spacing:.2em;color:#BFDCFF;text-transform:uppercase;"><span style="display:inline-flex;align-items:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M15 8h5v5"/></svg></span>Chương trình thi đua kinh doanh · Công văn 13/2026/TB-STH</div>
+      <div style="text-align:right;font:600 13px/1.5 var(--font-sans);color:rgba(255,255,255,0.8);white-space:nowrap;">Kỳ 01/08 – 19/08/2026<br>Chốt giải 23:59 · 30.09.2026</div>
+    </div>
+    <h1 class="rise" style="margin:0;animation-delay:.08s;font-weight:800;font-size:clamp(38px,6.4vw,92px);line-height:.94;letter-spacing:-.03em;background:linear-gradient(180deg,#fff 0%,#dbeeff 55%,#7FC0FF 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">STRONGER TOGETHER</h1>
+    
+
+    <!-- flagship prize banner -->
+    <div id="heroStats"><div class="rise" style="animation-delay:.24s;margin-top:32px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;padding:26px 30px;border-radius:22px;background:linear-gradient(120deg,rgba(90,180,255,.16),rgba(30,123,232,.05));border:1px solid rgba(143,211,255,.32);backdrop-filter:blur(8px);">
+      <div style="flex:none;width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#7FC0FF,#1E7BE8);box-shadow:0 10px 30px rgba(30,123,232,.45);"><span style="display:inline-flex;align-items:center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#06213f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4.6a2.4 2.4 0 0 0 0 4.8H7"/><path d="M17 5h2.4a2.4 2.4 0 0 1 0 4.8H17"/><path d="M12 14v3"/><path d="M8.5 20h7"/><path d="M10 17h4l.6 3h-5.2Z"/></svg></span></div>
+      <div>
+        <div style="font:600 11px/1 var(--font-sans);letter-spacing:.16em;color:#BFDCFF;text-transform:uppercase;margin-bottom:7px;">Đường đua cá nhân · Giải thưởng lớn nhất</div>
+        <div style="font-weight:800;font-size:24px;letter-spacing:-.01em;">Ngôi vô địch — 1 xe VinFast VF 3</div>
+        <div style="font-size:14.5px;color:rgba(255,255,255,0.92);margin-top:5px;">Hạng 2 nhận iPhone 18 Pro Max, hạng 3 nhận iPad Pro.</div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+        <div style="text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);min-width:64px;"><div style="font-weight:800;font-size:26px;color:#BFDCFF;" class="num"><span data-count="3">0</span></div><div style="font:500 11px/1 var(--font-sans);color:rgba(255,255,255,0.8);margin-top:4px;">Giải cá nhân</div></div>
+        <div style="text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);min-width:64px;"><div style="font-weight:800;font-size:26px;color:#BFDCFF;" class="num"><span data-count="3">0</span></div><div style="font:500 11px/1 var(--font-sans);color:rgba(255,255,255,0.8);margin-top:4px;">Chặng tiếp sức</div></div>
+        <div style="text-align:center;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);min-width:64px;"><div style="font-weight:800;font-size:26px;color:#BFDCFF;" class="num"><span data-count="200">0</span><span style="font-size:15px;">tr</span></div><div style="font:500 11px/1 var(--font-sans);color:rgba(255,255,255,0.8);margin-top:4px;">Thưởng đã mở</div></div>
+      </div>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="rise" style="animation-delay:.32s;margin-top:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div style="padding:20px 22px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);">
+        <div style="display:flex;align-items:center;gap:8px;color:#4FD1A0;margin-bottom:12px;"><span style="display:inline-flex;align-items:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="16" height="10" rx="2"/><circle cx="10" cy="11" r="2.4"/><path d="M21 8v9a2 2 0 0 1-2 2H6"/></svg></span><span style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.82);">Doanh số bán ra toàn sàn</span></div>
+        <div style="font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;"><span data-count="14.47" data-dec="2">0</span> Tỷ</div>
+      </div>
+      <div style="padding:20px 22px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);">
+        <div style="display:flex;align-items:center;gap:8px;color:#7FC0FF;margin-bottom:12px;"><span style="display:inline-flex;align-items:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a7 7 0 0 1 7-7h3a7 7 0 0 1 6.7 5H21a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-1.2A7 7 0 0 1 17 17v2h-3v-1.3A7 7 0 0 1 12 18h-1v1H8v-1.6A7 7 0 0 1 3 12Z"/><circle cx="8" cy="10.5" r=".9" fill="currentColor" stroke="none"/></svg></span><span style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.82);">Phí môi giới ghi nhận</span></div>
+        <div style="font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;"><span data-count="578.7" data-dec="1">0</span> Tr</div>
+      </div>
+      <div style="padding:20px 22px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);">
+        <div style="display:flex;align-items:center;gap:8px;color:#FFC46B;margin-bottom:12px;"><span style="display:inline-flex;align-items:center;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1.4 1.4 0 0 0 2 0 1.4 1.4 0 0 0 0-2"/><path d="m15 17 1.5 1.5a1.4 1.4 0 0 0 2-2L14 12"/><path d="M2 10 6 6l4 1 4-2 8 5"/><path d="M6 6 2 10l4 4 3-3"/></svg></span><span style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.82);">Giao dịch đã ký</span></div>
+        <div style="font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;"><span data-count="18">0</span></div>
+      </div>
+      <div style="padding:20px 22px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);">
+        <div style="display:flex;align-items:center;gap:8px;color:#CFE6FF;margin-bottom:12px;"><span style="display:inline-flex;align-items:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22V4"/><path d="M5 5h12l-1.8 3.6L17 12H5"/></svg></span><span style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.82);">Chặng tiếp sức đã mở</span></div>
+        <div style="font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums;"><span data-count="3">0</span><span style="font-size:20px;color:rgba(255,255,255,0.7);">/4</span></div>
+      </div>
+    </div>
+    
+
+    </div>
+    <div class="rise" id="cdBlock" style="animation-delay:.4s;margin-top:20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 28px;border-radius:20px;background:linear-gradient(120deg,rgba(255,214,140,.12),rgba(255,255,255,.04));border:1px solid rgba(255,214,140,.28);backdrop-filter:blur(8px);">
+      <div>
+        <div style="font:600 11px/1 var(--font-sans);letter-spacing:.18em;color:#FFD98A;text-transform:uppercase;">Đếm ngược tới hết chiến dịch</div>
+        <div style="font:700 17px/1 var(--font-sans);margin-top:9px;">23:59 · 30.09.2026</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-left:auto;flex-wrap:wrap;">
+        <div class="cdbox"><div class="cdv" id="cdD">--</div><div class="cdl">Ngày</div></div>
+        <div class="cdsep">:</div>
+        <div class="cdbox"><div class="cdv" id="cdH">--</div><div class="cdl">Giờ</div></div>
+        <div class="cdsep">:</div>
+        <div class="cdbox"><div class="cdv" id="cdM">--</div><div class="cdl">Phút</div></div>
+        <div class="cdsep">:</div>
+        <div class="cdbox"><div class="cdv" id="cdS">--</div><div class="cdl">Giây</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==================== KHỐI TỐI: BỤC VINH DANH + HÀNH TRÌNH ==================== -->
+<section style="position:relative;background:linear-gradient(180deg,#14539e 0%,#0f4189 20%,#0b2c6a 56%,#082049 100%);color:#fff;overflow:hidden;padding-bottom:10px;">
+  <canvas id="snow" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;"></canvas>
+
+  <!-- ===== BỤC VINH DANH ===== -->
+  <div id="vinhdanh" class="pad" style="position:relative;z-index:3;max-width:1240px;margin:0 auto;padding:76px 56px 0;scroll-margin-top:0;">
+    <div style="text-align:center;">
+      <div style="display:inline-flex;align-items:center;gap:9px;font:600 11px/1 var(--font-sans);letter-spacing:.2em;color:#BFDCFF;text-transform:uppercase;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#BFDCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        Đường đua cá nhân · Giải thưởng 01
+      </div>
+      <h2 style="margin:14px 0 0;font:800 clamp(30px,4vw,46px)/1.06 var(--font-sans);letter-spacing:-.025em;background:linear-gradient(180deg,#fff,#cfe6ff 60%,#7FC0FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Bục vinh danh</h2>
+      
+    </div>
+
+    <div class="podium-wrap" style="position:relative;margin-top:56px;display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:clamp(10px,2.4vw,34px);max-width:960px;margin-left:auto;margin-right:auto;">
+      <!-- spotlights -->
+      <canvas id="confetti" style="position:absolute;left:0;right:0;top:-70px;bottom:-10px;width:100%;height:calc(100% + 80px);pointer-events:none;z-index:9;"></canvas>
+        <div style="position:absolute;left:50%;top:-90px;transform:translateX(-50%);width:min(760px,96%);height:420px;background:radial-gradient(ellipse at 50% 0%,rgba(127,192,255,.30),rgba(127,192,255,0) 65%);pointer-events:none;filter:blur(6px);"></div>
+
+      <!-- #2 -->
+      <div class="pod" data-pod="2" style="text-align:center;">
+        <div class="pod-beam" style="background:linear-gradient(180deg,transparent,#2563EBaa);"></div>
+        <div class="pl-wrap" style="--pc:#2563EB;margin-bottom:16px;width:180px;height:118px;">
+          <div class="pl-atm" style="width:126px;height:126px;"></div>
+          <div class="pl-ring back" style="width:168px;height:52px;transform:translate(-50%,-50%) rotate(-16deg);"></div>
+          <div class="pl-sphere" style="width:78px;height:78px;background:radial-gradient(circle at 32% 26%,#9dc0ff,#2563EB 48%,#0e2f78 100%);font:700 24px/1 var(--font-sans);">ĐP</div>
+          <div class="pl-ring front" style="width:168px;height:52px;transform:translate(-50%,-50%) rotate(-16deg);"></div>
+          <div class="pl-orbit" style="width:112px;height:112px;animation-duration:20s;"><i style="width:7px;height:7px;margin-left:-3.5px;top:-3.5px;"></i></div>
+        </div>
+        <div style="font:700 16px/1.25 var(--font-sans);">Đinh Tiến Phong</div>
+        <div style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.75);margin-top:6px;">Bảo Lộc · 6 hợp đồng</div>
+        <div style="font:800 clamp(19px,2.2vw,25px)/1 var(--font-sans);margin-top:12px;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#bcd7ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">199,4 Tr</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);font:600 11.5px/1 var(--font-sans);color:#dbeaff;">iPhone 18 Pro Max</div>
+        <div class="pod-block pod-silver" style="--h:126px;"><div class="pod-top"></div><div class="pod-face"><span class="sheen"></span><div class="pod-num" style="top:16px;font-size:46px;">2</div><div class="pod-name" style="color:rgba(30,50,80,.72);bottom:26px;">ĐINH TIẾN PHONG</div><div class="pod-sub" style="color:rgba(30,50,80,.5);bottom:11px;">Bảo Lộc · 199,4 Tr</div><div class="pod-edge"></div></div></div>
+      </div>
+
+      <!-- #1 -->
+      <div class="pod" data-pod="1" style="text-align:center;">
+        <div class="pod-beam" style="background:linear-gradient(180deg,transparent,#F97316aa);"></div>
+        <div style="margin-bottom:8px;display:flex;justify-content:center;">
+          <svg width="42" height="30" viewBox="0 0 48 34" fill="none"><path d="M4 30h40l3-22-11 8-13-14-13 14-11-8 3 22Z" fill="url(#crownG)" stroke="rgba(255,255,255,0.7)" stroke-width="1.4" stroke-linejoin="round"/><defs><linearGradient id="crownG" x1="0" y1="0" x2="0" y2="34"><stop stop-color="#FFE9B8"/><stop offset="1" stop-color="#F5A623"/></linearGradient></defs></svg>
+        </div>
+        <div class="pl-wrap" style="--pc:#F97316;margin-bottom:16px;width:230px;height:150px;">
+          <div class="pl-atm" style="width:170px;height:170px;"></div>
+          <svg class="champ-orbit" width="188" height="188" viewBox="0 0 188 188" fill="none" style="z-index:0;">
+            <circle cx="94" cy="94" r="88" stroke="rgba(255,255,255,.16)" stroke-width="1" stroke-dasharray="2 12"/>
+          </svg>
+          <div class="pl-ring back" style="width:224px;height:70px;transform:translate(-50%,-50%) rotate(-19deg);"></div>
+          <div class="pl-ring pl-ring2 back" style="width:262px;height:84px;transform:translate(-50%,-50%) rotate(-19deg);"></div>
+          <div id="pod1Av" class="pl-sphere" style="width:106px;height:106px;background:radial-gradient(circle at 32% 26%,#ffcf9a,#F97316 46%,#a63f06 100%);font:700 32px/1 var(--font-sans);">ĐH</div>
+          <div class="pl-ring front" style="width:224px;height:70px;transform:translate(-50%,-50%) rotate(-19deg);"></div>
+          <div class="pl-ring pl-ring2 front" style="width:262px;height:84px;transform:translate(-50%,-50%) rotate(-19deg);"></div>
+          <div class="pl-orbit" style="width:150px;height:150px;"><i></i></div>
+          <div class="pl-orbit slow" style="width:196px;height:196px;"><i></i></div>
+        </div>
+        <div style="font:700 19px/1.25 var(--font-sans);">Đậu Thị Hằng</div>
+        <div style="font:500 12.5px/1 var(--font-sans);color:rgba(255,255,255,0.78);margin-top:6px;">Vạn Phúc · 8 hợp đồng</div>
+        <div style="font:800 clamp(26px,3.2vw,38px)/1 var(--font-sans);margin-top:12px;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#FFD98A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">249,9 Tr</div>
+        <div style="display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:8px 16px;border-radius:999px;background:linear-gradient(180deg,rgba(255,214,140,.28),rgba(245,166,35,.18));border:1px solid rgba(255,214,140,.5);font:700 12.5px/1 var(--font-sans);color:#FFE9C8;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFD98A" stroke-width="2" stroke-linecap="round"><path d="M5 17h14M6 17l-1.2-5.1a2 2 0 0 1 .3-1.6l1.6-2.4A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.7.9l1.6 2.4a2 2 0 0 1 .3 1.6L18 17"/><circle cx="8" cy="17.5" r="1.6"/><circle cx="16" cy="17.5" r="1.6"/></svg>
+          1 xe VinFast VF 3
+        </div>
+        <div class="pod-block pod-gold" style="--h:188px;"><div class="pod-top"></div><div class="pod-face"><span class="sheen"></span><div class="pod-num" style="top:22px;font-size:66px;">1</div><div class="pod-name" style="color:rgba(96,55,0,.72);bottom:30px;">ĐẬU THỊ HẰNG</div><div class="pod-sub" style="color:rgba(96,55,0,.5);bottom:14px;">Vạn Phúc · 249,9 Tr</div><div class="pod-edge"></div></div></div>
+      </div>
+
+      <!-- #3 -->
+      <div class="pod" data-pod="3" style="text-align:center;">
+        <div class="pod-beam" style="background:linear-gradient(180deg,transparent,#EC4899aa);"></div>
+        <div class="pl-wrap" style="--pc:#EC4899;margin-bottom:16px;width:170px;height:112px;">
+          <div class="pl-atm" style="width:118px;height:118px;"></div>
+          <div class="pl-ring back" style="width:156px;height:48px;transform:translate(-50%,-50%) rotate(14deg);"></div>
+          <div class="pl-sphere" style="width:72px;height:72px;background:radial-gradient(circle at 32% 26%,#ffb2d9,#EC4899 48%,#8a1250 100%);font:700 22px/1 var(--font-sans);">NS</div>
+          <div class="pl-ring front" style="width:156px;height:48px;transform:translate(-50%,-50%) rotate(14deg);"></div>
+          <div class="pl-orbit" style="width:104px;height:104px;animation-duration:23s;animation-direction:reverse;"><i style="width:6px;height:6px;margin-left:-3px;top:-3px;"></i></div>
+        </div>
+        <div style="font:700 16px/1.25 var(--font-sans);">Nguyễn Thị Sim</div>
+        <div style="font:500 12px/1 var(--font-sans);color:rgba(255,255,255,0.75);margin-top:6px;">BO Bán Hàng · 3 hợp đồng</div>
+        <div style="font:800 clamp(18px,2vw,23px)/1 var(--font-sans);margin-top:12px;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#ffc8e4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">113,9 Tr</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);font:600 11.5px/1 var(--font-sans);color:#ffd9ec;">iPad Pro</div>
+        <div class="pod-block pod-bronze" style="--h:98px;"><div class="pod-top"></div><div class="pod-face"><span class="sheen"></span><div class="pod-num" style="top:12px;font-size:40px;">3</div><div class="pod-name" style="color:rgba(74,40,4,.75);bottom:26px;">NGUYỄN THỊ SIM</div><div class="pod-sub" style="color:rgba(74,40,4,.52);bottom:11px;">BO Bán Hàng · 113,9 Tr</div><div class="pod-edge"></div></div></div>
+      </div>
+    </div>
+    <div style="max-width:960px;margin:0 auto;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,rgba(191,220,255,.6),transparent);box-shadow:0 0 26px rgba(143,211,255,.5);"></div><div style="max-width:900px;margin:0 auto;height:60px;background:radial-gradient(ellipse at 50% 0%,rgba(143,211,255,.20),transparent 70%);"></div>
+
+    <!-- giải khuyến khích -->
+    <div style="max-width:960px;margin:26px auto 0;display:flex;align-items:center;gap:16px;padding:16px 22px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.13);backdrop-filter:blur(6px);">
+      <div class="pl-sphere pl-mini" style="--pc:#22C55E;flex:none;width:44px;height:44px;background:radial-gradient(circle at 32% 26%,#a7f3c6,#22C55E 48%,#0b5a2c 100%);font:700 14px/1 var(--font-sans);box-shadow:inset -6px -5px 13px rgba(0,0,0,.5),inset 4px 4px 10px rgba(255,255,255,.25),0 0 22px #22C55E66;">NM</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font:600 11px/1 var(--font-sans);letter-spacing:.14em;color:#9FE8C0;text-transform:uppercase;">Giải khuyến khích · 6.800.000đ</div>
+        <div style="font:700 15.5px/1.3 var(--font-sans);margin-top:6px;">Nguyễn Thị Minh — nhân sự có giao dịch đầu tiên của đơn vị Central</div>
+      </div>
+      <div style="text-align:right;flex:none;"><div style="font:800 19px/1 var(--font-sans);color:#9FE8C0;font-variant-numeric:tabular-nums;">15,5 Tr</div><div style="font:400 11px/1 var(--font-sans);color:rgba(255,255,255,0.7);margin-top:5px;">doanh thu phí</div></div>
+    </div>
+  </div>
+
+  <!-- ===== HÀNH TRÌNH 88 TỶ ===== -->
+  <div id="hanhtrinh" class="pad" style="position:relative;z-index:3;max-width:1240px;margin:0 auto;padding:84px 56px 70px;scroll-margin-top:0;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:9px;font:600 11px/1 var(--font-sans);letter-spacing:.2em;color:#BFDCFF;text-transform:uppercase;margin-bottom:12px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#BFDCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4"/><path d="M4 5h11l-1.6 3.4L15 12H4"/></svg>
+          Giải thưởng 02 · Thưởng tập thể
+        </div>
+        <h2 style="margin:0;font:800 clamp(28px,3.6vw,42px)/1.08 var(--font-sans);letter-spacing:-.025em;">Hành trình chinh phục <span style="background:linear-gradient(180deg,#fff,#7FC0FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">88 Tỷ</span></h2>
+      </div>
+      <div style="text-align:right;">
+        <div style="font:800 30px/1 var(--font-sans);font-variant-numeric:tabular-nums;">14,47 Tỷ</div>
+        <div style="font:500 12.5px/1 var(--font-sans);color:rgba(255,255,255,0.8);margin-top:8px;">đã qua 3/4 chặng · còn 73,53 Tỷ</div>
+      </div>
+    </div>
+
+    <div class="reveal" style="position:relative;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(8,30,72,.5),rgba(3,12,34,.6));box-shadow:0 30px 70px rgba(0,0,0,.4);">
+      <div id="mountainWrap" style="position:relative;width:100%;">
+        <svg id="mtn" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;height:auto;">
+          <defs>
+            <linearGradient id="mBack" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4d96" stop-opacity=".55"/><stop offset="1" stop-color="#061634" stop-opacity=".2"/></linearGradient>
+            <linearGradient id="mMid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f7fd6" stop-opacity=".75"/><stop offset="1" stop-color="#08234f" stop-opacity=".35"/></linearGradient>
+            <linearGradient id="mFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f3b7d"/><stop offset="1" stop-color="#04102a"/></linearGradient>
+            <linearGradient id="auroraA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5FC8FF" stop-opacity=".0"/><stop offset=".35" stop-color="#7FE9BA" stop-opacity=".45"/><stop offset=".7" stop-color="#8FD3FF" stop-opacity=".35"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></linearGradient>
+            <linearGradient id="auroraB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a78bfa" stop-opacity="0"/><stop offset=".4" stop-color="#5FC8FF" stop-opacity=".32"/><stop offset="1" stop-color="#7FE9BA" stop-opacity="0"/></linearGradient>
+            <radialGradient id="moonG" cx="38%" cy="32%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9dcf2"/></radialGradient>
+            <filter id="auroraBlur" x="-20%" y="-40%" width="140%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+            <linearGradient id="peakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9f0ff"/><stop offset="1" stop-color="#4d9be8" stop-opacity=".5"/></linearGradient>
+            <linearGradient id="gRoad" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#1668d0"/><stop offset=".55" stop-color="#2f95ec"/><stop offset="1" stop-color="#5FC8FF"/></linearGradient>
+            <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- sky glow -->
+          <ellipse cx="880" cy="90" rx="300" ry="180" fill="#5FC8FF" opacity=".14"/>
+          <!-- cực quang -->
+          <g filter="url(#auroraBlur)" opacity=".9">
+            <path d="M40 150 C 260 60, 520 210, 760 96 C 940 12, 1080 130, 1200 70 L1200 200 C 1060 250, 900 150, 740 210 C 520 290, 260 180, 40 250 Z" fill="url(#auroraA)">
+              <animate attributeName="opacity" values=".45;.85;.45" dur="9s" repeatCount="indefinite"/>
+            </path>
+            <path d="M0 220 C 240 140, 460 280, 700 190 C 900 116, 1060 220, 1200 170 L1200 268 C 1040 320, 880 230, 700 288 C 470 360, 240 260, 0 320 Z" fill="url(#auroraB)">
+              <animate attributeName="opacity" values=".7;.3;.7" dur="12s" repeatCount="indefinite"/>
+            </path>
+          </g>
+          <!-- mặt trăng -->
+          <g opacity=".9">
+            <circle cx="196" cy="118" r="46" fill="#8FD3FF" opacity=".13"/>
+            <circle cx="196" cy="118" r="30" fill="url(#moonG)"/>
+            <circle cx="184" cy="108" r="5" fill="#b9d8f5" opacity=".55"/>
+            <circle cx="206" cy="126" r="7" fill="#b9d8f5" opacity=".4"/>
+            <circle cx="199" cy="103" r="3.4" fill="#b9d8f5" opacity=".45"/>
+          </g>
+          <g id="mtnStars"></g>
+
+          <!-- back range -->
+          <path d="M0 640 L0 430 L130 300 L250 400 L360 250 L470 380 L600 200 L760 360 L880 60 L1010 320 L1120 250 L1200 340 L1200 640 Z" fill="url(#mBack)"/>
+          <!-- mid range -->
+          <path d="M0 640 L0 500 L150 380 L300 470 L430 330 L560 450 L700 300 L880 120 L1030 400 L1200 300 L1200 640 Z" fill="url(#mMid)"/>
+          <!-- peak facets -->
+          <path d="M880 120 L960 300 L880 268 Z" fill="url(#peakG)" opacity=".5"/>
+          <path d="M880 120 L800 300 L880 268 Z" fill="#eaf7ff" opacity=".28"/>
+          <!-- front range -->
+          <path d="M0 640 L0 560 L180 470 L330 545 L470 460 L620 540 L780 440 L930 520 L1070 455 L1200 520 L1200 640 Z" fill="url(#mFront)"/>
+          <!-- facet lines -->
+          <g stroke="#8fd3ff" stroke-opacity=".18" stroke-width="1" fill="none">
+            <path d="M880 120 L1010 320 M880 120 L760 360 M600 200 L700 300 M430 330 L560 450 M180 470 L330 545 M780 440 L930 520"/>
+          </g>
+
+          <!-- road base -->
+          <path id="roadPath" d="M280 612 C 420 606 566 596 596 552 C 630 504 486 476 476 430 C 464 380 664 384 716 342 C 768 300 640 260 666 212 C 690 168 788 160 820 122 C 838 100 848 90 860 78"
+                fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="26" stroke-linecap="round"/>
+          <!-- road done -->
+          <path id="roadDoneP" d="M280 612 C 420 606 566 596 596 552 C 630 504 486 476 476 430 C 464 380 664 384 716 342 C 768 300 640 260 666 212 C 690 168 788 160 820 122 C 838 100 848 90 860 78"
+                fill="none" stroke="url(#gRoad)" stroke-width="26" stroke-linecap="round" filter="url(#glow)" opacity=".95"/>
+          <!-- dashed center -->
+          <path id="roadDash" d="M280 612 C 420 606 566 596 596 552 C 630 504 486 476 476 430 C 464 380 664 384 716 342 C 768 300 640 260 666 212 C 690 168 788 160 820 122 C 838 100 848 90 860 78"
+                fill="none" stroke="#0a1f45" stroke-width="2.6" stroke-dasharray="9 11" stroke-linecap="round" opacity=".55"/>
+
+          <g id="flowStream"></g>
+          <!-- summit flag -->
+          <circle cx="860" cy="78" r="26" fill="#FFD98A" opacity=".18">
+            <animate attributeName="r" values="18;40;18" dur="2.8s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".3;0;.3" dur="2.8s" repeatCount="indefinite"/>
+          </circle>
+          <g transform="translate(858,36)">
+            <line x1="0" y1="0" x2="0" y2="44" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/>
+            <path fill="#FFD98A" d="M2 2 C 12 6, 22 -2, 34 4 L 34 17 C 22 23, 12 15, 2 19 Z">
+              <animate attributeName="d" dur="1.9s" repeatCount="indefinite"
+                values="M2 2 C 12 6, 22 -2, 34 4 L 34 17 C 22 23, 12 15, 2 19 Z;
+                        M2 2 C 12 -3, 22 8, 34 1 L 34 14 C 22 21, 12 10, 2 19 Z;
+                        M2 2 C 12 6, 22 -2, 34 4 L 34 17 C 22 23, 12 15, 2 19 Z"/>
+            </path>
+          </g>
+        </svg>
+
+        <!-- overlay markers -->
+        <div id="mtnOverlay" style="position:absolute;inset:0;pointer-events:none;"></div>
+      </div>
+
+      <!-- milestone cards -->
+      <div class="stage-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:0 26px 26px;">
+        <div style="border-radius:14px;padding:16px 18px;background:rgba(0,245,160,.08);border:1px solid rgba(0,245,160,.3);">
+          <div style="display:flex;align-items:center;gap:7px;font:700 11px/1 var(--font-sans);letter-spacing:.1em;color:#7FE9BA;text-transform:uppercase;">✓ Chặng 1 · đã mở</div>
+          <div style="font:700 18px/1.25 var(--font-sans);margin-top:10px;">7,5 Tỷ → thưởng 50.000.000đ</div>
+          <div style="font:400 12px/1 var(--font-sans);color:rgba(255,255,255,0.75);margin-top:7px;">Đạt ngày 09/08/2026</div>
+        </div>
+        <div style="border-radius:14px;padding:16px 18px;background:rgba(0,245,160,.08);border:1px solid rgba(0,245,160,.3);">
+          <div style="display:flex;align-items:center;gap:7px;font:700 11px/1 var(--font-sans);letter-spacing:.1em;color:#7FE9BA;text-transform:uppercase;">✓ Chặng 2 · đã mở</div>
+          <div style="font:700 18px/1.25 var(--font-sans);margin-top:10px;">10 Tỷ → thưởng 50.000.000đ</div>
+          <div style="font:400 12px/1 var(--font-sans);color:rgba(255,255,255,0.75);margin-top:7px;">Đạt ngày 14/08/2026</div>
+        </div>
+        <div style="border-radius:14px;padding:16px 18px;background:rgba(0,245,160,.08);border:1px solid rgba(0,245,160,.3);">
+          <div style="display:flex;align-items:center;gap:7px;font:700 11px/1 var(--font-sans);letter-spacing:.1em;color:#7FE9BA;text-transform:uppercase;">✓ Chặng 3 · đã mở</div>
+          <div style="font:700 18px/1.25 var(--font-sans);margin-top:10px;">12 Tỷ → thưởng 100.000.000đ</div>
+          <div style="font:400 12px/1 var(--font-sans);color:rgba(255,255,255,0.75);margin-top:7px;">Đạt ngày 17/08/2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- đóng góp 6 đơn vị -->
+    <div id="donvi" class="reveal" style="margin-top:26px;scroll-margin-top:80px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:18px;">
+        <div>
+          <div class="eyebrow">Đóng góp theo đơn vị</div>
+          <div style="font:800 26px/1.15 var(--font-sans);letter-spacing:-.02em;margin-top:11px;">Doanh số của 6 đơn vị</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font:800 24px/1 var(--font-sans);" class="num">14,47 Tỷ</div>
+          <div style="font:500 12px/1 var(--font-sans);color:var(--ink-3);margin-top:7px;">tổng doanh số toàn sàn</div>
+        </div>
+      </div>
+
+      <div class="glass" style="padding:24px 26px;">
+        <div id="shareBar" style="display:flex;height:22px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.07);"></div>
+        <div id="shareLegend" style="display:flex;flex-wrap:wrap;gap:16px 22px;margin-top:16px;"></div>
+      </div>
+
+      <div id="unitCards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;"></div>
+    </div>
+  </div>
+</section>
+
+</section>
+<!-- ==================== TRANG 2 · BẢNG XẾP HẠNG ==================== -->
+<section class="page" id="p-bxh" style="position:relative;background:linear-gradient(180deg,#0f4189 0%,#0b2c6a 24%,#082049 58%,#051736 100%);padding-bottom:80px;overflow:hidden;">
+  <canvas id="bg2" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;"></canvas>
+    <div class="neb" style="left:-140px;top:180px;width:520px;height:420px;background:radial-gradient(circle,rgba(167,139,250,.20),transparent 68%);"></div>
+    <div class="neb neb2" style="right:-180px;top:900px;width:600px;height:480px;background:radial-gradient(circle,rgba(95,200,255,.17),transparent 70%);"></div>
+    <div class="neb" style="left:20%;bottom:340px;width:560px;height:420px;background:radial-gradient(circle,rgba(249,115,22,.11),transparent 70%);animation-delay:-7s;"></div>
+
+  <div style="position:absolute;right:-160px;top:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(90,180,255,.28),transparent 68%);filter:blur(10px);animation:core 8s ease-in-out infinite;pointer-events:none;"></div>
+  <div style="position:absolute;left:-180px;top:520px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.13),transparent 70%);pointer-events:none;"></div>
+
+  <div class="wrap" style="position:relative;z-index:3;padding-top:64px;">
+    <div class="eyebrow">Bảng xếp hạng trực tiếp</div>
+    <h2 class="h2">Toàn bộ <span class="grad">đường đua cá nhân</span></h2>
+    <p style="max-width:620px;margin:14px 0 0;font-size:15px;line-height:1.65;color:var(--ink-2);">35 nhân sự kinh doanh, xếp theo phí môi giới ghi nhận. Cập nhật ngay khi có hợp đồng mới.</p>
+
+    <!-- KPI mini -->
+    <div class="g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px;">
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Tổng doanh thu phí</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num grad-gold"><span data-count="578.7" data-dec="1">0</span> Tr</div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">18 hợp đồng · 14,47 Tỷ GTV</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Đã có giao dịch</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num"><span data-count="4">0</span><span style="color:var(--ink-3);font-size:19px;">/35</span></div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">31 nhân sự chưa phát sinh doanh số</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Khoảng cách top 1–2</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num"><span data-count="50.5" data-dec="1">0</span> Tr</div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">Tương đương một giao dịch</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Cuộc gọi toàn sàn</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num"><span data-count="3329">0</span></div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">Kỳ 01–19/08 · 892 lead</div>
+      </div>
+    </div>
+
+    <!-- thiên hà nhân sự -->
+    <div id="thienha" class="reveal" style="margin-top:40px;scroll-margin-top:80px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
+        <div>
+          <div class="eyebrow">Thiên hà nhân sự</div>
+          <h2 class="h2">35 ngôi sao <span class="grad">của ST HOME</span></h2>
+        </div>
+        <div style="font:500 12.5px/1.6 var(--font-sans);color:var(--ink-2);text-align:right;">
+          Kích thước ngôi sao theo doanh thu phí môi giới<br>Màu sắc theo đơn vị · di chuột để xem, bấm để mở hồ sơ
+        </div>
+      </div>
+      <div class="glass" style="overflow:hidden;padding:0;">
+        <div class="gx-stage" id="galaxyStage"></div>
+        <div class="gx-legend" id="galaxyLegend"></div>
+      </div>
+    </div>
+
+    <!-- leaderboard -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:30px;">
+      <div style="position:relative;flex:1;min-width:240px;max-width:340px;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="2.2" stroke-linecap="round" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input id="lbSearch" type="text" placeholder="Tìm theo tên nhân sự hoặc đơn vị" autocomplete="off">
+      </div>
+      <div class="seg" id="lbSeg">
+        <button class="on" data-mode="all">Toàn sàn</button>
+        <button data-mode="unit">Theo khu vực</button>
+      </div>
+    </div>
+    <div class="glass reveal" style="margin-top:14px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:64px 1fr 210px 130px;gap:14px;padding:16px 26px;border-bottom:1px solid var(--line-2);background:rgba(255,255,255,.03);font:600 10.5px/1 var(--font-sans);letter-spacing:.12em;color:var(--ink-3);text-transform:uppercase;">
+        <div style="text-align:center;">Hạng</div><div>Nhân sự</div><div>So với hạng 1</div><div style="text-align:right;">Doanh thu</div>
+      </div>
+      <div id="lbRows"></div>
+      <div id="lbEmpty" style="display:none;padding:34px 26px;text-align:center;font:500 13px/1.6 var(--font-sans);color:var(--ink-3);">Không tìm thấy nhân sự nào khớp với từ khoá.</div>
+      <div style="padding:15px 26px;border-top:1px solid var(--line-2);font:400 12.5px/1.5 var(--font-sans);color:var(--ink-3);">Hiển thị 10/35 nhân sự · 25 người còn lại chưa phát sinh doanh thu và chưa có lead vào vòng hẹn gặp.</div>
+    </div>
+
+    <!-- race lanes -->
+    <div id="duacanhan" style="margin-top:64px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow">Cột mốc cá nhân</div>
+      <h2 class="h2">Vị trí từng nhân sự <span class="grad">trên đường đua</span></h2>
+      <div class="glass" style="margin-top:26px;padding:28px 32px 32px;overflow:hidden;position:relative;">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 85% 0%,rgba(95,200,255,.10),transparent 62%);pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="position:relative;height:26px;margin-left:132px;margin-bottom:10px;" id="raceGateLabels"></div>
+          <div id="raceLanes"></div>
+          <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--line-2);">
+            <div style="font:500 12.5px/1.5 var(--font-sans);color:var(--ink-2);">Di chuột vào avatar để xem doanh số. Nhân sự chưa có giao dịch được đặt tại vạch xuất phát.</div>
+            <div id="raceLegend" style="display:flex;gap:16px;margin-left:auto;flex-wrap:wrap;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- effort -->
+  </div>
+</section>
+
+<!-- ==================== TRANG 3 · QUẢN LÝ ĐỘI SALE ==================== -->
+<section class="page" id="p-sale" style="position:relative;background:linear-gradient(180deg,#0e3f85 0%,#0b2c6a 24%,#082049 58%,#051736 100%);padding-bottom:80px;overflow:hidden;">
+  <canvas id="bg3" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;"></canvas>
+    <div class="neb" style="right:-160px;top:220px;width:560px;height:440px;background:radial-gradient(circle,rgba(95,200,255,.18),transparent 68%);"></div>
+    <div class="neb neb2" style="left:-180px;top:1100px;width:620px;height:500px;background:radial-gradient(circle,rgba(34,197,94,.13),transparent 70%);"></div>
+    <div class="neb" style="right:12%;bottom:420px;width:520px;height:400px;background:radial-gradient(circle,rgba(236,72,153,.11),transparent 70%);animation-delay:-9s;"></div>
+
+  <div style="position:absolute;left:-160px;top:-140px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.16),transparent 68%);filter:blur(10px);animation:core 9s ease-in-out infinite;pointer-events:none;"></div>
+
+  <div class="wrap" style="position:relative;z-index:3;padding-top:64px;">
+    <div class="eyebrow">Quản lý đội ngũ kinh doanh · Kỳ 01–19/08/2026</div>
+    <h2 class="h2">Từ chi phí quảng cáo đến <span class="grad">hợp đồng ký mới</span></h2>
+    
+
+    <div class="subnav" id="saleSub">
+      <button class="on" data-sub="sp-day"><span class="d" style="background:#FF5B7F"></span>Tiến độ liên hệ</button>
+      <button data-sub="sp-funnel"><span class="d" style="background:#5FC8FF"></span>Chuyển đổi</button>
+      <button data-sub="sp-team"><span class="d" style="background:#7FE9BA"></span>Chất lượng gọi</button>
+    </div>
+
+    <div class="subpage active" id="sp-day">
+    <!-- KPI -->
+    <div class="g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px;">
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Dữ liệu tiếp nhận trong kỳ</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num"><span data-count="6240">0</span></div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">1.680 lead quảng cáo + 4.560 dữ liệu telesale</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Tỷ lệ liên hệ</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;color:var(--green-2);" class="num"><span data-count="86.7" data-dec="1">0</span>%</div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">Đã liên hệ 5.412 · tồn 828</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Dữ liệu → Lead hợp lệ</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;color:#8FD3FF;" class="num"><span data-count="14.3" data-dec="1">0</span>%</div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">892 lead từ 6.240 dữ liệu</div>
+      </div>
+      <div class="glass card-hover" style="padding:20px 22px;">
+        <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">Lead → Khách ký</div>
+        <div style="font:800 30px/1 var(--font-sans);margin-top:12px;" class="num grad-gold"><span data-count="2.02" data-dec="2">0</span>%</div>
+        <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:9px;">18 hợp đồng · CPA 26,7 Tr</div>
+      </div>
+    </div>
+
+    <!-- ===== HÔM NAY ===== -->
+    <div id="homnay" style="margin-top:40px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow"><span class="blink" style="width:7px;height:7px;border-radius:50%;background:#22C55E;display:inline-block;"></span>Theo dõi trong ngày · cập nhật 16:40</div>
+      <h2 class="h2">Tiến độ liên hệ <span class="grad">dữ liệu tiếp nhận trong ngày</span></h2>
+
+      <div class="g2" style="display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start;margin-top:26px;">
+        <!-- gauge -->
+        <div class="glass" style="padding:28px 26px;text-align:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(95,200,255,.16),transparent 62%);pointer-events:none;"></div>
+          <div style="position:relative;">
+            <div style="font:600 11px/1 var(--font-sans);letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase;">Tỷ lệ liên hệ trong ngày</div>
+            <div style="position:relative;width:200px;height:200px;margin:16px auto 4px;">
+              <svg viewBox="0 0 200 200" style="width:200px;height:200px;display:block;transform:rotate(-90deg);">
+                <defs><linearGradient id="gauGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E7BE8"/><stop offset="1" stop-color="#5FC8FF"/></linearGradient></defs>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="16"/>
+                <circle id="gaugeArc" cx="100" cy="100" r="80" fill="none" stroke="url(#gauGrad)" stroke-width="16" stroke-linecap="round"
+                        stroke-dasharray="502.65" stroke-dashoffset="502.65" style="transition:stroke-dashoffset 1.8s cubic-bezier(.2,.75,.25,1);filter:drop-shadow(0 0 10px rgba(95,200,255,.6));"/>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                <div style="font:800 38px/1 var(--font-sans);" class="num"><span data-count="75.8" data-dec="1">0</span>%</div>
+                <div style="font:500 11.5px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;text-align:center;">291/384 dữ liệu<br>đã liên hệ lần đầu</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;">
+              <div style="padding:12px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid var(--line-2);"><div style="font:800 20px/1 var(--font-sans);color:var(--amber);" class="num"><span data-count="93">0</span></div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:6px;">chưa liên hệ</div></div>
+              <div style="padding:12px;border-radius:13px;background:rgba(255,91,127,.09);border:1px solid rgba(255,91,127,.26);"><div style="font:800 20px/1 var(--font-sans);color:var(--red);" class="num"><span data-count="37">0</span></div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:6px;">quá hạn SLA 4 giờ</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- lots -->
+        <div class="glass" style="overflow:hidden;">
+          <div class="glass-hd" style="justify-content:space-between;">
+            <div><div style="font:700 15.5px/1.2 var(--font-sans);">Các đợt dữ liệu tiếp nhận trong ngày</div><div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Mỗi dòng là một đợt tiếp nhận · trạng thái cập nhật theo SLA</div></div>
+            <div class="chip info">5 đợt · 384 dữ liệu</div>
+          </div>
+          <div id="lotRows"></div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap;padding:16px 24px;border-top:1px solid var(--line-2);">
+            <span class="chip">SLA liên hệ lần đầu <b style="color:#8FD3FF;margin-left:4px;">≤ 4 giờ</b></span>
+            <span class="chip">Gọi lại tối thiểu <b style="color:#8FD3FF;margin-left:4px;">3 lần / 48 giờ</b></span>
+            <span class="chip">Quá <b style="color:#8FD3FF;margin:0 4px;">24 giờ</b> hệ thống thu hồi và phân bổ lại</span>
+            <span class="chip">Tỷ lệ liên hệ <b style="color:#8FD3FF;margin:0 4px;">dưới 80%</b> sẽ tạm dừng phân bổ dữ liệu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- hourly -->
+      <div class="g2" style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;margin-top:20px;">
+        <div class="glass" style="padding:24px 26px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;">
+            <div><div style="font:700 15.5px/1.2 var(--font-sans);">Dữ liệu tiếp nhận và cuộc gọi theo khung giờ</div><div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">Cột: dữ liệu tiếp nhận và cuộc gọi lần đầu · đường: tỷ lệ liên hệ lũy kế</div></div>
+            <div style="display:flex;gap:14px;font:500 11.5px/1 var(--font-sans);color:var(--ink-2);">
+              <span style="display:flex;align-items:center;gap:6px;"><i style="width:10px;height:10px;border-radius:3px;background:#667eea;display:block;"></i>Dữ liệu tiếp nhận</span>
+              <span style="display:flex;align-items:center;gap:6px;"><i style="width:10px;height:10px;border-radius:3px;background:#FFC46B;display:block;"></i>Đã liên hệ</span>
+              <span style="display:flex;align-items:center;gap:6px;"><i style="width:14px;height:3px;border-radius:3px;background:#7FE9BA;display:block;"></i>Tỷ lệ liên hệ</span>
+            </div>
+          </div>
+          <svg id="hourChart" viewBox="0 0 640 260" style="width:100%;height:auto;margin-top:16px;display:block;"></svg>
+        </div>
+
+        <div class="glass" style="padding:24px 26px;">
+          <div style="font:700 15.5px/1.2 var(--font-sans);">Kết quả 612 cuộc gọi hôm nay</div>
+          <div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;margin-bottom:18px;">Nhân sự ghi nhận kết quả trên phiếu chăm sóc</div>
+          <div id="callResults"></div>
+        </div>
+      </div>
+
+      <!-- nhân sự còn dữ liệu tồn -->
+      <div class="glass" style="margin-top:20px;overflow:hidden;">
+        <div class="glass-hd" style="justify-content:space-between;">
+          <div><div style="font:700 15.5px/1.2 var(--font-sans);">Nhân sự còn dữ liệu chưa xử lý</div><div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Hệ thống gửi nhắc việc cho trưởng nhóm lúc 11:00 và 16:00 hằng ngày</div></div>
+          <div class="chip bad pulse">6 nhân sự cần nhắc việc</div>
+        </div>
+        <div id="idleRows"></div>
+      </div>
+    </div>
+
+    <!-- ===== PHỄU ===== -->
+    </div>
+
+    <div class="subpage" id="sp-funnel">
+    <div id="phieu" style="margin-top:8px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow">Lũy kế kỳ 01–19/08</div>
+      <h2 class="h2">Chuyển đổi 6.240 dữ liệu khách hàng</h2>
+      <div class="glass" style="margin-top:26px;padding:30px 32px;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 12% 0%,rgba(95,200,255,.12),transparent 58%);pointer-events:none;"></div>
+        <div id="bigFunnel" style="position:relative;"></div>
+      </div>
+
+      <!-- 2 nguồn -->
+      <div class="g2" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+        <div class="glass card-hover" style="padding:26px;border-color:rgba(95,200,255,.28);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div style="font:700 16px/1.2 var(--font-sans);">Lead quảng cáo</div><div class="chip info">190.000đ / dữ liệu</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;">
+            <div><div style="font:800 24px/1 var(--font-sans);" class="num">1.680</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">dữ liệu tiếp nhận</div></div>
+            <div><div style="font:800 24px/1 var(--font-sans);color:#8FD3FF;" class="num">604</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">lead hợp lệ · 36,0%</div></div>
+            <div><div style="font:800 24px/1 var(--font-sans);color:var(--green-2);" class="num">12</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">khách ký · 1,99%</div></div>
+          </div>
+          <div class="bar" style="margin-top:18px;"><i data-w="36" style="background:linear-gradient(90deg,#1E7BE8,#5FC8FF)"></i></div>
+          <div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-2);margin-top:12px;">Chi phí cao gấp 16 lần nhưng tỷ lệ ra lead cao gấp 5,7 lần. Tỷ lệ liên hệ đạt 95% do nhân sự xử lý ngay khi tiếp nhận.</div>
+        </div>
+        <div class="glass card-hover" style="padding:26px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div style="font:700 16px/1.2 var(--font-sans);">Dữ liệu telesale</div><div class="chip">12.000đ / dữ liệu</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;">
+            <div><div style="font:800 24px/1 var(--font-sans);" class="num">4.560</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">dữ liệu tiếp nhận</div></div>
+            <div><div style="font:800 24px/1 var(--font-sans);color:#8FD3FF;" class="num">288</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">lead hợp lệ · 6,3%</div></div>
+            <div><div style="font:800 24px/1 var(--font-sans);color:var(--green-2);" class="num">6</div><div style="font:400 11.5px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">khách ký · 2,08%</div></div>
+          </div>
+          <div class="bar" style="margin-top:18px;"><i data-w="6.3" style="background:linear-gradient(90deg,#7117ea,#a78bfa)"></i></div>
+          <div style="font:400 12px/1.5 var(--font-sans);color:var(--ink-2);margin-top:12px;">Tỷ lệ ra lead thấp hơn 5,7 lần, nhưng lead đã lọc thì tỷ lệ chốt tương đương. Vấn đề nằm ở khâu sàng, không phải khâu bán.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== KÊNH QUẢNG CÁO ===== -->
+
+    <div id="kenh" style="margin-top:56px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow">Nguồn lead · 320 triệu chi phí</div>
+      <h2 class="h2">Hiệu quả từng <span class="grad-gold">kênh quảng cáo</span></h2>
+      <div class="glass" style="margin-top:26px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1.3fr .8fr .7fr .9fr .7fr 1.4fr;gap:14px;padding:16px 26px;border-bottom:1px solid var(--line-2);background:rgba(255,255,255,.03);font:600 10.5px/1 var(--font-sans);letter-spacing:.1em;color:var(--ink-3);text-transform:uppercase;">
+          <div>Kênh</div><div style="text-align:right;">Chi phí</div><div style="text-align:right;">Lead</div><div style="text-align:right;">Lead hợp lệ</div><div style="text-align:right;">Khách</div><div style="text-align:right;">ROAS phí môi giới</div>
+        </div>
+        <div id="chanRows"></div>
+      </div>
+
+      <div class="g4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;">
+        <div class="glass" style="padding:20px 22px;text-align:center;"><div style="font:800 28px/1 var(--font-sans);color:#f0a6fb;" class="num">100đ</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;">chi cho quảng cáo</div></div>
+        <div class="glass" style="padding:20px 22px;text-align:center;"><div style="font:800 28px/1 var(--font-sans);color:#8FD3FF;" class="num">36đ</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;">vào lead hợp lệ<br>64đ rơi vào lead không hợp lệ</div></div>
+        <div class="glass" style="padding:20px 22px;text-align:center;"><div style="font:800 28px/1 var(--font-sans);color:var(--amber);" class="num">11đ</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;">vào khách đi xem dự án</div></div>
+        <div class="glass" style="padding:20px 22px;text-align:center;border-color:rgba(127,233,186,.3);background:rgba(34,197,94,.08);"><div style="font:800 28px/1 var(--font-sans);color:var(--green-2);" class="num">123đ</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;">phí môi giới thu về<br>lãi 23đ</div></div>
+      </div>
+    </div>
+
+    <!-- ===== ĐỘ PHỦ THEO SALE ===== -->
+    </div>
+
+    <div class="subpage" id="sp-team">
+    <div id="nolluc" style="margin-top:8px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow">Bảng phụ · chất lượng gọi</div>
+      <h2 class="h2">Chất lượng <span class="grad-gold">cuộc gọi</span></h2>
+      <p style="max-width:660px;margin:14px 0 0;font-size:14.5px;line-height:1.65;color:var(--ink-2);">Số lượng cuộc gọi chưa phản ánh hiệu quả. Cần xem thêm thời lượng đàm thoại, thời gian trung bình mỗi cuộc và tỷ lệ kết nối.</p>
+
+      <div class="g2" style="display:grid;grid-template-columns:1.45fr 1fr;gap:20px;align-items:start;margin-top:26px;">
+        <div class="glass" style="overflow:hidden;">
+          <div class="glass-hd">
+            <div style="width:38px;height:38px;border-radius:11px;background:rgba(95,200,255,.14);display:flex;align-items:center;justify-content:center;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5FC8FF" stroke-width="2" stroke-linecap="round"><path d="M2 12h3l2.5-7 4 14 3-9 2 5h5.5"/></svg>
+            </div>
+            <div style="flex:1;"><div style="font:700 15.5px/1.2 var(--font-sans);">Chất lượng cuộc gọi</div><div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Xếp theo tổng thời lượng đàm thoại · dữ liệu tổng đài kỳ 01–19/08</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:26px 1fr 80px 74px 74px 94px;gap:10px;padding:12px 22px;border-bottom:1px solid var(--line-2);background:rgba(255,255,255,.03);font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;">
+            <div></div><div>Nhân sự</div><div style="text-align:right;">Thời lượng</div><div style="text-align:right;">TB/cuộc</div><div style="text-align:right;">Kết nối</div><div style="text-align:right;">Cuộc · Lead</div>
+          </div>
+          <div id="effortRows"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div class="glass" style="padding:24px;">
+            <div style="font:700 15.5px/1.2 var(--font-sans);">Chuyển đổi qua từng bước</div>
+            <div style="font:400 12.5px/1.6 var(--font-sans);color:var(--ink-2);margin:8px 0 18px;">892 lead hợp lệ, 18 hợp đồng. Rơi nhiều nhất ở khâu từ lịch hẹn sang buổi xem thực tế.</div>
+            <div id="funnelMini"></div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div id="kyluat" style="margin-top:64px;scroll-margin-top:80px;" class="reveal">
+      <div class="eyebrow">Tuân thủ quy định liên hệ</div>
+      <h2 class="h2">Tỷ lệ liên hệ theo nhân sự</h2>
+      <div class="glass" style="margin-top:26px;overflow:hidden;">
+        <div id="covRows"></div>
+      </div>
+      
+    </div>
+
+    
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TRANG 4 · KHU VỰC CÁ NHÂN ==================== -->
+<section class="page" id="p-me" style="position:relative;background:linear-gradient(180deg,#0f4189 0%,#0b2c6a 24%,#082049 58%,#051736 100%);padding-bottom:80px;overflow:hidden;">
+  <canvas id="bg4" style="position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;"></canvas>
+  <div class="neb" style="left:-150px;top:200px;width:540px;height:430px;background:radial-gradient(circle,rgba(167,139,250,.18),transparent 68%);"></div>
+  <div class="neb neb2" style="right:-170px;top:820px;width:580px;height:470px;background:radial-gradient(circle,rgba(95,200,255,.16),transparent 70%);"></div>
+
+  <!-- ===== MÀN ĐĂNG NHẬP ===== -->
+  <div class="wrap" id="meLogin" style="position:relative;z-index:3;padding-top:70px;">
+    <div style="max-width:520px;margin:0 auto;text-align:center;">
+      <div class="pl-wrap" style="--pc:#5FC8FF;width:220px;height:150px;margin-bottom:10px;">
+        <div class="pl-atm" style="width:150px;height:150px;"></div>
+        <div class="pl-ring back" style="width:200px;height:62px;transform:translate(-50%,-50%) rotate(-18deg);"></div>
+        <div class="pl-sphere" style="width:96px;height:96px;background:radial-gradient(circle at 32% 26%,#cdefff,#1E7BE8 48%,#062a5e 100%);">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/><circle cx="12" cy="15.6" r="1.5"/></svg>
+        </div>
+        <div class="pl-ring front" style="width:200px;height:62px;transform:translate(-50%,-50%) rotate(-18deg);"></div>
+        <div class="pl-orbit" style="width:140px;height:140px;animation-duration:18s;"><i></i></div>
+      </div>
+
+      <div class="eyebrow" style="justify-content:center;">Khu vực cá nhân</div>
+      <h2 class="h2">Nhập mã <span class="grad">nhân viên</span></h2>
+      <p style="margin:14px 0 0;font-size:14.5px;line-height:1.65;color:var(--ink-2);">Mỗi nhân sự có một mã riêng để xem doanh số, hoa hồng và công việc của mình.</p>
+
+      <div class="glass" style="margin-top:28px;padding:26px;text-align:left;">
+        <label style="display:block;font:600 11px/1 var(--font-sans);letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;margin-bottom:11px;">Mã nhân viên</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <input id="meCode" type="text" placeholder="ST-0000" autocomplete="off" spellcheck="false"
+            style="flex:1;min-width:200px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:14px;color:#fff;
+                   font:700 18px/1 var(--font-sans);letter-spacing:.12em;padding:16px 18px;outline:none;text-transform:uppercase;">
+          <button id="meGo" style="border:0;cursor:pointer;border-radius:14px;padding:0 26px;font:700 14px/1 var(--font-sans);color:#fff;
+                   background:linear-gradient(180deg,#3f97ef,#1E7BE8);box-shadow:0 10px 26px rgba(30,123,232,.45);">Đăng nhập</button>
+        </div>
+        <div id="meErr" style="display:none;margin-top:12px;font:500 12.5px/1.5 var(--font-sans);color:#FF5B7F;">Mã không đúng. Vui lòng kiểm tra lại.</div>
+        <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--line-2);">
+          <div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);margin-bottom:11px;">Mã dùng thử cho bản demo</div>
+          <div id="meHints" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NỘI DUNG CÁ NHÂN ===== -->
+  <div class="wrap" id="meApp" style="position:relative;z-index:3;padding-top:56px;display:none;"></div>
+</section>
+
+
+<div id="profOverlay">
+  <div id="profCard" style="position:relative;">
+    <div class="prof-close" id="profClose"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
+    <div id="profBody"></div>
+  </div>
+</div>
+
+
+<footer style="background:#041129;border-top:1px solid rgba(255,255,255,.07);color:rgba(234,242,255,.55);padding:38px 56px;">
+  <div style="max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+    <div style="display:flex;align-items:center;gap:10px;"><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(180deg,#CFE6FF,#1E7BE8);"></span><span style="font:600 14px/1 var(--font-sans);color:#fff;">STRONGER TOGETHER</span><span style="font-size:14px;">· Trung tâm điều hành kinh doanh</span></div>
+    <div style="font-size:13px;">ST HOME · Sàn phân phối F1 · 2026</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ================= DỮ LIỆU ================= */
+  var UNITS=[
+    {key:'VP',name:'Vạn Phúc',    color:'#F97316', gtv:6.25, fee:249.9, deals:8, head:9},
+    {key:'BL',name:'Bảo Lộc',     color:'#2563EB', gtv:4.98, fee:199.4, deals:6, head:8},
+    {key:'BO',name:'BO Bán Hàng', color:'#EC4899', gtv:2.85, fee:113.9, deals:3, head:6},
+    {key:'CT',name:'Central',     color:'#22C55E', gtv:0.39, fee:15.5,  deals:1, head:5},
+    {key:'LG',name:'Legacy',      color:'#14B8A6', gtv:0,    fee:0,     deals:0, head:4},
+    {key:'RT',name:'Race Track',  color:'#EF4444', gtv:0,    fee:0,     deals:0, head:3}
+  ];
+  var U={}; UNITS.forEach(function(u){U[u.key]=u;});
+
+  var SALES=[
+    ['Đậu Thị Hằng',   'VP',249.9,6.25,8,486,58,21,210,205],
+    ['Đinh Tiến Phong','BL',199.4,4.98,6,442,51,18,198,191],
+    ['Nguyễn Thị Sim', 'BO',113.9,2.85,3,391,44,15,186,172],
+    ['Nguyễn Thị Minh','CT',15.5, 0.39,1,318,32,11,174,152],
+    ['Trần Quốc Huy',  'VP',0,0,0,428,41,12,195,188],
+    ['Vũ Thị Hoa',     'BL',0,0,0,377,38,10,182,170],
+    ['Phạm Văn Đạt',   'RT',0,0,0,296,6, 2, 148,142],
+    ['Hoàng Minh Tuấn','BO',0,0,0,241,19,6, 176,128],
+    ['Ngô Thanh Tùng', 'CT',0,0,0,186,12,4, 164,104],
+    ['Lê Thị Ngọc Ánh','LG',0,0,0,164,14,5, 168,96]
+  ].map(function(a){return{name:a[0],unit:a[1],fee:a[2],gtv:a[3],deals:a[4],calls:a[5],leads:a[6],meets:a[7],data:a[8],called:a[9]};});
+
+  // chất lượng cuộc gọi: [giây trung bình mỗi cuộc, % kết nối]
+  var CALLQ={'Đậu Thị Hằng':[96,62],'Đinh Tiến Phong':[92,60],'Nguyễn Thị Sim':[88,58],
+    'Nguyễn Thị Minh':[84,57],'Trần Quốc Huy':[71,55],'Vũ Thị Hoa':[74,56],
+    'Phạm Văn Đạt':[22,31],'Hoàng Minh Tuấn':[63,52],'Ngô Thanh Tùng':[41,44],'Lê Thị Ngọc Ánh':[58,49]};
+  SALES.forEach(function(s){
+    var q=CALLQ[s.name]||[60,50];
+    s.avg=q[0]; s.conn=q[1];
+    s.mins=Math.round(s.calls*s.avg/60);
+  });
+
+  var LOTS=[
+    {id:'DL-0819-01',src:'Facebook Lead Form',prj:'ST Garden Bảo Lộc',t:'08:15',n:86,team:'VP',called:82,late:0,lead:18,st:'ok'},
+    {id:'DL-0819-02',src:'Google Search',prj:'ST Riverside Vạn Phúc',t:'09:40',n:64,team:'BL',called:61,late:0,lead:15,st:'ok'},
+    {id:'DL-0819-03',src:'TikTok Lead',prj:'ST Garden Bảo Lộc',t:'10:20',n:92,team:'BO',called:68,late:11,lead:9,st:'warn'},
+    {id:'DL-0819-04',src:'Dữ liệu tồn Q2/2026',prj:'Tổng hợp',t:'11:05',n:78,team:'CT',called:46,late:21,lead:8,st:'bad'},
+    {id:'DL-0819-05',src:'Zalo Form',prj:'ST Central Park',t:'14:10',n:64,team:'LG',called:34,late:5,lead:4,st:'run'}
+  ];
+
+  var IDLE=[
+    ['Ngô Thanh Tùng','Central',21,'11:05 · 5g35p trước',9,30.0,'bad','Thu hồi 21 dữ liệu lúc 11:05 ngày mai'],
+    ['Hoàng Minh Tuấn','BO Bán Hàng',14,'10:20 · 6g20p trước',12,46.2,'warn','Đã nhắc 2 lần'],
+    ['Lê Thị Ngọc Ánh','Legacy',13,'14:10 · 2g30p trước',8,38.1,'warn','Còn trong SLA'],
+    ['Trần Bảo Khanh','Central',11,'11:05 · 5g35p trước',7,38.9,'bad','Tạm dừng phân bổ dữ liệu'],
+    ['Phan Thị Thu','BO Bán Hàng',10,'10:20 · 6g20p trước',14,58.3,'warn','Đã nhắc 1 lần'],
+    ['Đỗ Văn Kiên','Legacy',9,'14:10 · 2g30p trước',6,40.0,'warn','Còn trong SLA']
+  ];
+
+  var CHANNELS=[
+    {n:'Google Search', cost:96, lead:318, cpl:'302K', ql:186, qlp:58.5, kh:5, roas:1.83, c:'#5FC8FF'},
+    {n:'Zalo Form',     cost:24, lead:134, cpl:'179K', ql:91,  qlp:67.9, kh:1, roas:1.33, c:'#7FE9BA'},
+    {n:'TikTok Lead',   cost:52, lead:486, cpl:'107K', ql:96,  qlp:19.8, kh:2, roas:1.15, c:'#FFC46B'},
+    {n:'Facebook Lead', cost:148,lead:742, cpl:'199K', ql:231, qlp:31.1, kh:4, roas:0.84, c:'#FF5B7F'}
+  ];
+
+  var HOURS=['08h','09h','10h','11h','12h','13h','14h','15h','16h'];
+  var H_IN=[86,64,92,78,0,0,64,0,0], H_CALL=[32,68,74,41,12,28,22,8,6], H_COV=[37.2,66.7,71.9,67.2,70.9,79.7,72.1,74.2,75.8];
+
+  var CALLRES=[
+    ['Không kết nối được',246,'#667eea'],['Từ chối ngay',132,'#FF5B7F'],['Hẹn gọi lại',92,'#FFC46B'],
+    ['Sai số hoặc thuê bao không tồn tại',58,'#64748b'],['Quan tâm → lead',54,'#5FC8FF'],['Đặt lịch tham quan dự án',30,'#22C55E']
+  ];
+
+  var BIGFUNNEL=[
+    ['Dữ liệu tiếp nhận',6240,'#667eea',''],
+    ['Đã liên hệ',5412,'#8b93f0','86,7%'],
+    ['Kết nối được',3187,'#4facfe','58,9%'],
+    ['Lead hợp lệ',892,'#5FC8FF','28,0%'],
+    ['Hẹn gặp',264,'#a78bfa','29,6%'],
+    ['Tham quan thực tế',148,'#FFC46B','56,1%'],
+    ['Cọc / giữ chỗ',46,'#34d399','31,1%'],
+    ['Khách ký hợp đồng',18,'#22C55E','39,1%']
+  ];
+
+  var TOTAL=14.47;
+
+  /* ================= HELPER ================= */
+  function sphere(c){return 'radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),'+c+' 52%,rgba(0,0,0,.5) 100%)';}
+  function initials(n){var w=n.trim().split(/\s+/);return (w[0][0]+w[w.length-1][0]).toUpperCase();}
+  function fmtFee(v){return v>0? v.toFixed(1).replace('.',',')+' Tr':'—';}
+  function fmtGtv(v){return v>0? v.toFixed(2).replace('.',',')+' Tỷ':'0';}
+  function d1(v){return v.toFixed(1).replace('.',',');}
+  function grp(n){return n.toLocaleString('vi-VN');}
+  function el(tag,css,html){var e=document.createElement(tag); if(css) e.style.cssText=css; if(html!=null) e.innerHTML=html; return e;}
+
+  /* ================= COUNT UP ================= */
+  function countUp(node){
+    var target=parseFloat(node.dataset.count), dec=parseInt(node.dataset.dec||'0',10);
+    var t0=null, dur=1200;
+    function step(t){
+      if(!t0) t0=t;
+      var p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+      var v=target*e;
+      node.textContent = dec>0 ? v.toFixed(dec).replace('.',',') : grp(Math.round(v));
+      if(p<1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ================= TRANG 1: NÚI & BỤC ================= */
+  var RELAY=[[0,3],[7.5,26],[10,44],[12,60],[88,97]];
+  function relayPct(v){
+    if(v>=88) return 97;
+    for(var i=1;i<RELAY.length;i++){ if(v<=RELAY[i][0]){var a=RELAY[i-1],b=RELAY[i];return a[1]+(v-a[0])/(b[0]-a[0])*(b[1]-a[1]);} }
+    return 97;
+  }
+  var road=document.getElementById('roadPath');
+  var doneP=document.getElementById('roadDoneP');
+  var overlay=document.getElementById('mtnOverlay');
+  var L=road.getTotalLength();
+  doneP.style.strokeDasharray=L+' '+L;
+  doneP.style.strokeDashoffset=L;
+  function ptAt(p){var q=road.getPointAtLength(L*p/100);return{x:q.x/1200*100,y:q.y/640*100};}
+
+  (function(){
+    var g=document.getElementById('mtnStars');
+    for(var i=0;i<70;i++){
+      var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',(Math.random()*1200).toFixed(1));
+      c.setAttribute('cy',(Math.random()*300).toFixed(1));
+      c.setAttribute('r',(Math.random()*1.4+.3).toFixed(2));
+      c.setAttribute('fill','#dbeeff');
+      c.setAttribute('opacity',(Math.random()*.6+.2).toFixed(2));
+      var an=document.createElementNS('http://www.w3.org/2000/svg','animate');
+      an.setAttribute('attributeName','opacity');
+      an.setAttribute('values','.2;.9;.2');
+      an.setAttribute('dur',(2+Math.random()*4).toFixed(1)+'s');
+      an.setAttribute('repeatCount','indefinite');
+      c.appendChild(an); g.appendChild(c);
+    }
+  })();
+
+  var STAGES=[
+    {pct:26,title:'CHẶNG 1',v:'7,5 TỶ',bonus:'+50.000.000đ',done:true},
+    {pct:44,title:'CHẶNG 2',v:'10 TỶ',bonus:'+50.000.000đ',done:true},
+    {pct:60,title:'CHẶNG 3',v:'12 TỶ',bonus:'+100.000.000đ',done:true},
+    {pct:97,title:'ĐÍCH',v:'88 TỶ',bonus:'Cán đích chương trình',done:false}
+  ];
+  STAGES.forEach(function(s,i){
+    var p=ptAt(s.pct), side=(i%2===0)?'right':'left';
+    var card='<div class="mtn-card'+(s.done?'':' goal-pulse')+'" style="position:absolute;'+(side==='right'?'left:26px;':'right:26px;')+'top:50%;transform:translateY(-50%);white-space:nowrap;padding:9px 14px;border-radius:12px;background:'+(s.done?'linear-gradient(135deg,rgba(11,42,99,.95),rgba(21,78,150,.9))':'linear-gradient(135deg,rgba(255,214,140,.96),rgba(245,166,35,.93))')+';border:1px solid '+(s.done?'rgba(143,211,255,.42)':'rgba(255,236,190,.7)')+';box-shadow:0 10px 26px rgba(0,0,0,.45);">'+
+      '<div style="font:700 10.5px/1 var(--font-sans);letter-spacing:.14em;color:'+(s.done?'#8FD3FF':'#5a3400')+';">'+s.title+(s.done?' · ĐÃ QUA':'')+'</div>'+
+      '<div style="font:800 15px/1 var(--font-sans);color:'+(s.done?'#fff':'#3a2100')+';margin-top:6px;">'+s.v+'</div>'+
+      '<div style="font:500 11px/1 var(--font-sans);color:'+(s.done?'rgba(255,255,255,.66)':'rgba(58,33,0,.72)')+';margin-top:5px;">'+s.bonus+'</div></div>';
+    var e=el('div','position:absolute;left:'+p.x+'%;top:'+p.y+'%;transform:translate(-50%,-50%);pointer-events:auto;',
+      '<div style="position:relative;width:20px;height:20px;border-radius:50%;background:'+(s.done?'#5FC8FF':'#FFD98A')+';border:3px solid #0a1f45;box-shadow:0 0 0 4px '+(s.done?'rgba(95,200,255,.28)':'rgba(255,217,138,.3)')+';"></div>'+card);
+    e.className='mtn-stage';
+    overlay.appendChild(e);
+  });
+
+  (function(){
+    var p=ptAt(relayPct(TOTAL));
+    var e=el('div','position:absolute;left:'+p.x+'%;top:'+p.y+'%;transform:translate(-72%,-100%);pointer-events:none;opacity:0;transition:opacity .6s .9s;',
+      '<div class="now-pulse" style="position:relative;padding:12px 20px;border-radius:16px;background:linear-gradient(180deg,#fff,#dceeff);color:#0a2b5f;text-align:center;">'+
+      '<div style="font:700 9.5px/1 var(--font-sans);letter-spacing:.16em;color:#1E7BE8;">VỊ TRÍ HIỆN TẠI TOÀN SÀN</div>'+
+      '<div style="font:800 20px/1 var(--font-sans);margin-top:6px;" class="num">14,47 Tỷ</div></div>'+
+      '<div style="width:2px;height:46px;margin:0 auto;background:linear-gradient(180deg,#fff,rgba(255,255,255,.25));"></div>');
+    e.id='sanMarker';
+    overlay.appendChild(e);
+  })();
+
+  UNITS.forEach(function(u,i){
+    var p=ptAt(relayPct(u.gtv));
+    var dx=(i%2===0?-1:1)*(10+(i%3)*7), dy=(i%2===0?-1:1)*14-6;
+    var e=el('div','position:absolute;left:'+p.x+'%;top:'+p.y+'%;transform:translate(-50%,-50%);pointer-events:auto;opacity:0;transition:opacity .5s '+(600+i*110)+'ms;',
+      '<div style="position:relative;transform:translate('+dx+'px,'+dy+'px);">'+
+      '<div class="hiker-dot" style="width:26px;height:26px;border-radius:50%;background:'+u.color+';border:2.5px solid rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(0,0,0,.45),0 0 0 4px '+u.color+'33;display:flex;align-items:center;justify-content:center;font:700 9.5px/1 var(--font-sans);color:#fff;animation-delay:'+(i*.4)+'s;">'+u.key+'</div>'+
+      '<div class="hiker-tip">'+u.name+' · <b>'+(u.gtv>0?fmtGtv(u.gtv):'chưa có doanh số')+'</b></div></div>');
+    e.className='hiker';
+    overlay.appendChild(e);
+  });
+
+
+  /* dòng sáng chảy dọc đoạn đường đã đi */
+  var streamG=null;
+  (function(){
+    var NS='http://www.w3.org/2000/svg';
+    var g=document.getElementById('flowStream'); if(!g) return;
+    var d=road.getAttribute('d'), svg=document.getElementById('mtn');
+    var pct=relayPct(TOTAL);
+
+    var defs=svg.querySelector('defs');
+    var mask=document.createElementNS(NS,'mask');
+    mask.setAttribute('id','doneMask');
+    mask.setAttribute('maskUnits','userSpaceOnUse');
+    var mp=document.createElementNS(NS,'path');
+    mp.setAttribute('d',d); mp.setAttribute('fill','none');
+    mp.setAttribute('stroke','#fff'); mp.setAttribute('stroke-width','30');
+    mp.setAttribute('stroke-linecap','round');
+    mp.setAttribute('pathLength','1000');
+    mp.setAttribute('stroke-dasharray',(pct*10).toFixed(0)+' 1000');
+    mask.appendChild(mp); defs.appendChild(mask);
+
+    var grad=document.createElementNS(NS,'linearGradient');
+    grad.setAttribute('id','gStream');
+    grad.setAttribute('gradientUnits','userSpaceOnUse');
+    grad.setAttribute('spreadMethod','repeat');
+    grad.setAttribute('x1','0'); grad.setAttribute('y1','0');
+    grad.setAttribute('x2','150'); grad.setAttribute('y2','-150');
+    [['0','rgba(95,200,255,0)'],['0.32','rgba(143,230,255,.35)'],['0.5','rgba(255,255,255,.92)'],
+     ['0.68','rgba(143,230,255,.35)'],['1','rgba(95,200,255,0)']].forEach(function(c){
+      var st=document.createElementNS(NS,'stop');
+      st.setAttribute('offset',c[0]); st.setAttribute('stop-color',c[1]); grad.appendChild(st);
+    });
+    var gt=document.createElementNS(NS,'animateTransform');
+    gt.setAttribute('attributeName','gradientTransform');
+    gt.setAttribute('type','translate');
+    gt.setAttribute('from','0 0'); gt.setAttribute('to','150 -150');
+    gt.setAttribute('dur','2.6s'); gt.setAttribute('repeatCount','indefinite');
+    grad.appendChild(gt);
+    defs.appendChild(grad);
+
+    g.setAttribute('mask','url(#doneMask)');
+    var flow=document.createElementNS(NS,'path');
+    flow.setAttribute('d',d); flow.setAttribute('fill','none');
+    flow.setAttribute('stroke','url(#gStream)'); flow.setAttribute('stroke-width','24');
+    flow.setAttribute('stroke-linecap','round');
+    flow.setAttribute('class','road-stream');
+    g.appendChild(flow);
+    streamG=flow;
+  })();
+
+  /* ---------- đóng góp 6 đơn vị ---------- */
+  (function(){
+    var sb=document.getElementById('shareBar'), sl=document.getElementById('shareLegend'), uc=document.getElementById('unitCards');
+    if(!sb) return;
+    var ranked=UNITS.slice().sort(function(a,b){return b.gtv-a.gtv;});
+    var maxG=ranked[0].gtv||1;
+
+    ranked.forEach(function(u,i){
+      var pct=u.gtv/TOTAL*100;
+      if(pct>0){
+        var seg=el('div','width:0;background:linear-gradient(180deg,'+u.color+',' +u.color+'aa);transition:width 1.2s cubic-bezier(.2,.75,.25,1) '+(i*110)+'ms;box-shadow:0 0 18px '+u.color+'77, inset 0 1px 0 rgba(255,255,255,.35);position:relative;border-right:2px solid rgba(5,18,42,.55);');
+        seg.className='shareseg'; seg.dataset.w=pct.toFixed(2);
+        seg.title=u.name+' · '+d1(pct)+'%';
+        sb.appendChild(seg);
+      }
+      sl.appendChild(el('div','display:flex;align-items:center;gap:8px;',
+        '<span style="width:11px;height:11px;border-radius:3px;background:'+u.color+';box-shadow:0 0 8px '+u.color+'88;"></span>'+
+        '<span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">'+u.name+'</span>'+
+        '<b style="font:700 12.5px/1 var(--font-sans);color:'+(u.gtv>0?'#fff':'var(--ink-3)')+';">'+(u.gtv>0?d1(pct)+'%':'0%')+'</b>'));
+    });
+
+    var C=2*Math.PI*32;
+    ranked.forEach(function(u,i){
+      var pct=u.gtv/maxG*100, share=u.gtv/TOTAL*100;
+      var medal=i===0?'linear-gradient(160deg,#FFDD9B,#C1832A)':i===1?'linear-gradient(160deg,#E9F0FA,#8496AE)':i===2?'linear-gradient(160deg,#F2C79B,#9E6733)':'';
+      var badge=i<3
+        ? '<div style="width:24px;height:24px;border-radius:8px;flex:none;background:'+medal+';display:flex;align-items:center;justify-content:center;font:800 11.5px/1 var(--font-sans);color:#2a1800;">'+(i+1)+'</div>'
+        : '<div style="width:24px;height:24px;border-radius:8px;flex:none;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font:700 11.5px/1 var(--font-sans);color:var(--ink-3);">'+(i+1)+'</div>';
+      function stat(v,l,strong){
+        return '<div style="flex:1;text-align:center;">'+
+          '<div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">'+l+'</div>'+
+          '<div style="font:700 14px/1 var(--font-sans);margin-top:8px;color:'+(strong?'var(--ink)':'var(--ink-2)')+';" class="num">'+v+'</div></div>';
+      }
+      var card=el('div','position:relative;overflow:hidden;'+(u.gtv>0?'':'opacity:.86;'),
+        '<div style="position:absolute;left:-50px;top:-30px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,'+u.color+'26,transparent 70%);pointer-events:none;"></div>'+
+        '<div style="position:relative;display:flex;align-items:center;gap:18px;padding:20px 22px 18px;">'+
+          '<div style="position:relative;width:76px;height:76px;flex:none;">'+
+            '<svg viewBox="0 0 76 76" style="width:76px;height:76px;transform:rotate(-90deg);">'+
+              '<circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="6"/>'+
+              '<circle class="ringc" cx="38" cy="38" r="32" fill="none" stroke="'+u.color+'" stroke-width="6" stroke-linecap="round" '+
+              'stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+C.toFixed(1)+'" data-ring="'+pct.toFixed(1)+'" style="filter:drop-shadow(0 0 5px '+u.color+'88);"/>'+
+            '</svg>'+
+            '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 15px/1 var(--font-sans);" class="num">'+(u.gtv>0?d1(share)+'%':'—')+'</div>'+
+          '</div>'+
+          '<div style="min-width:0;flex:1;">'+
+            '<div style="display:flex;align-items:center;gap:9px;">'+badge+
+              '<span style="width:9px;height:9px;border-radius:50%;background:'+u.color+';box-shadow:0 0 8px '+u.color+';flex:none;"></span>'+
+              '<span style="font:600 14.5px/1.2 var(--font-sans);">'+u.name+'</span></div>'+
+            '<div style="font:800 26px/1 var(--font-sans);margin-top:12px;" class="num">'+fmtGtv(u.gtv)+'</div>'+
+            '<div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:7px;">doanh số bán ra</div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="display:flex;border-top:1px solid var(--line-2);padding:14px 12px;background:rgba(255,255,255,.02);">'+
+          stat(fmtFee(u.fee),'Phí môi giới',u.fee>0)+
+          '<div style="width:1px;background:var(--line-2);"></div>'+
+          stat((u.deals||'—'),'Hợp đồng',u.deals>0)+
+          '<div style="width:1px;background:var(--line-2);"></div>'+
+          stat(u.head,'Nhân sự',true)+
+        '</div>');
+      card.className='glass card-hover';
+      uc.appendChild(card);
+    });
+  })();
+
+  /* ---------- lấp lánh + pháo giấy bục vinh danh ---------- */
+  (function(){
+    var av=document.getElementById('pod1Av');
+    if(av && av.parentElement){
+      var host=av.parentElement;
+      for(var i=0;i<9;i++){
+        var a=(i/9)*Math.PI*2, R=68+Math.random()*34;
+        var sz=(i%3===0)?14:9;
+        var sp=el('div','left:calc(50% + '+(Math.cos(a)*R).toFixed(0)+'px);top:calc(50% + '+(Math.sin(a)*R).toFixed(0)+'px);width:'+sz+'px;height:'+sz+'px;margin:-'+(sz/2)+'px 0 0 -'+(sz/2)+'px;animation-delay:'+(i*.28).toFixed(2)+'s;',
+          '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'"><path d="M12 0 L14.6 9.4 24 12 14.6 14.6 12 24 9.4 14.6 0 12 9.4 9.4 Z" fill="'+(i%2?'#FFD98A':'#ffffff')+'"/></svg>');
+        sp.className='spk';
+        host.appendChild(sp);
+      }
+    }
+  })();
+
+  function confettiBurst(){
+    var cv=document.getElementById('confetti'); if(!cv||cv.dataset.done) return;
+    cv.dataset.done='1';
+    var ctx=cv.getContext('2d'), r=cv.getBoundingClientRect();
+    if(r.width<2) { cv.dataset.done=''; return; }
+    cv.width=r.width*devicePixelRatio; cv.height=r.height*devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    var cols=['#FFD98A','#F5A623','#5FC8FF','#ffffff','#F97316','#7FE9BA'], P=[];
+    for(var i=0;i<150;i++){
+      var a=-Math.PI/2+(Math.random()-.5)*1.5, sp=5+Math.random()*9;
+      P.push({x:r.width*(.28+Math.random()*.44),y:r.height*.42,
+        vx:Math.cos(a)*sp*(.7+Math.random()),vy:Math.sin(a)*sp,
+        w:4+Math.random()*6,h:6+Math.random()*8,rot:Math.random()*6.28,vr:(Math.random()-.5)*.32,
+        c:cols[(Math.random()*cols.length)|0],life:0,max:130+Math.random()*90});
+    }
+    (function frame(){
+      ctx.clearRect(0,0,r.width,r.height);
+      var alive=false;
+      P.forEach(function(p){
+        if(p.life>p.max) return;
+        alive=true; p.life++;
+        p.vy+=.22; p.vx*=.992; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+        var op=Math.max(0,1-p.life/p.max);
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+        ctx.globalAlpha=op; ctx.fillStyle=p.c;
+        ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+      });
+      if(alive) requestAnimationFrame(frame); else ctx.clearRect(0,0,r.width,r.height);
+    })();
+  }
+
+  /* ================= TRANG 2 ================= */
+  var ranked=SALES.slice().sort(function(a,b){return (b.fee-a.fee)||(b.leads-a.leads);});
+  var lead0=ranked[0].fee;
+  var lb=document.getElementById('lbRows');
+
+  function rowFor(s,rank,showBar){
+    var u=U[s.unit];
+    var medal=rank===1?'linear-gradient(160deg,#FFDD9B,#C1832A)':rank===2?'linear-gradient(160deg,#E9F0FA,#8496AE)':rank===3?'linear-gradient(160deg,#F2C79B,#9E6733)':'';
+    var rankEl=rank<=3
+      ? '<div style="width:36px;height:36px;margin:0 auto;border-radius:12px;background:'+medal+';display:flex;align-items:center;justify-content:center;font:800 15px/1 var(--font-sans);color:#2a1800;box-shadow:0 8px 20px rgba(0,0,0,.35);">'+rank+'</div>'
+      : '<div style="text-align:center;font:700 15px/1 var(--font-sans);color:var(--ink-3);">'+rank+'</div>';
+    var barPct=lead0>0? s.fee/lead0*100:0;
+    var gap=(s.fee>0 && s.fee>=lead0)?'Dẫn đầu toàn sàn':(s.fee>0?'kém '+d1(lead0-s.fee)+' Tr so với hạng 1':'chưa có doanh số');
+    var right=s.fee>0
+      ? '<div style="font:800 18px/1 var(--font-sans);" class="num grad-gold">'+fmtFee(s.fee)+'</div><div style="font:600 11px/1 var(--font-sans);color:var(--green-2);margin-top:7px;">'+s.deals+' hợp đồng</div>'
+      : '<div style="font:700 17px/1 var(--font-sans);color:var(--ink-3);">—</div><div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:7px;">'+s.leads+' lead · '+s.meets+' hẹn</div>';
+    var e=el('div','display:grid;grid-template-columns:64px 1fr 210px 130px;gap:14px;align-items:center;padding:15px 26px;border-bottom:1px solid var(--line-2);'+((rank===1&&showBar)?'background:linear-gradient(90deg,rgba(255,196,107,.10),transparent 60%);':''),
+      rankEl+
+      '<div style="display:flex;align-items:center;gap:13px;min-width:0;">'+
+        '<div class="pl-sphere pl-mini" style="flex:none;width:42px;height:42px;background:'+sphere(u.color)+';color:#fff;font:700 13px/1 var(--font-sans);'+(s.fee>0?'':'opacity:.45;')+'">'+initials(s.name)+'</div>'+
+        '<div style="min-width:0;"><div style="font:600 15px/1.2 var(--font-sans);">'+s.name+'</div>'+
+        '<div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:'+u.color+';"></span>'+u.name+' · '+fmtGtv(s.gtv)+'</div></div></div>'+
+      '<div><div class="bar"><i data-w="'+barPct.toFixed(1)+'" style="background:linear-gradient(90deg,'+u.color+'66,'+u.color+');box-shadow:0 0 12px '+u.color+'55;"></i></div>'+
+      '<div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);margin-top:8px;">'+gap+'</div></div>'+
+      '<div style="text-align:right;">'+right+'</div>');
+    e.className='row-hover lb-click';
+    e.dataset.key=(s.name+' '+u.name).toLowerCase();
+    e.addEventListener('click',function(){ openProfile(s.name); });
+    return e;
+  }
+
+  function renderLB(mode){
+    lb.innerHTML='';
+    if(mode==='unit'){
+      UNITS.slice().sort(function(a,b){return b.fee-a.fee;}).forEach(function(u){
+        var mem=SALES.filter(function(s){return s.unit===u.key;}).sort(function(a,b){return (b.fee-a.fee)||(b.leads-a.leads);});
+        var hd=el('div','display:flex;align-items:center;gap:12px;padding:14px 26px;background:linear-gradient(90deg,'+u.color+'22,transparent 70%);border-bottom:1px solid var(--line-2);border-left:3px solid '+u.color+';',
+          '<span style="width:11px;height:11px;border-radius:50%;background:'+u.color+';box-shadow:0 0 12px '+u.color+';"></span>'+
+          '<span style="font:700 14.5px/1 var(--font-sans);">'+u.name+'</span>'+
+          '<span style="font:400 12px/1 var(--font-sans);color:var(--ink-3);">'+u.head+' nhân sự · '+mem.length+' người trong bảng</span>'+
+          '<span style="margin-left:auto;font:800 15px/1 var(--font-sans);color:'+(u.fee>0?'#FFD98A':'var(--ink-3)')+';" class="num">'+fmtFee(u.fee)+'</span>'+
+          '<span style="font:400 12px/1 var(--font-sans);color:var(--ink-3);">'+(u.deals||0)+' hợp đồng</span>');
+        hd.dataset.group=u.key;
+        lb.appendChild(hd);
+        mem.forEach(function(s,k){ lb.appendChild(rowFor(s,k+1,false)); });
+        if(u.head>mem.length){
+          lb.appendChild(el('div','padding:11px 26px 11px 84px;border-bottom:1px solid var(--line-2);font:400 12px/1 var(--font-sans);color:var(--ink-3);',
+            '+ '+(u.head-mem.length)+' nhân sự khác chưa phát sinh lead vào vòng hẹn gặp'));
+        }
+      });
+    } else {
+      ranked.forEach(function(s,i){ lb.appendChild(rowFor(s,i+1,true)); });
+    }
+    lb.querySelectorAll('.bar > i[data-w]').forEach(function(b){
+      requestAnimationFrame(function(){ b.style.width=b.dataset.w+'%'; });
+    });
+  }
+  renderLB('all');
+  setTimeout(function(){ if(typeof applyFilter==='function') applyFilter(); },0);
+  document.querySelectorAll('#lbSeg button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#lbSeg button').forEach(function(b){b.classList.toggle('on',b===btn);});
+      renderLB(btn.dataset.mode); applyFilter();
+    });
+  });
+
+
+
+  /* ================= THIÊN HÀ NHÂN SỰ ================= */
+  var GX=[];
+  (function(){
+    var stage=document.getElementById('galaxyStage'); if(!stage) return;
+
+    // cánh thiên hà
+    var armCol=['rgba(95,200,255,.42)','rgba(167,139,250,.34)','rgba(249,115,22,.24)','rgba(34,197,94,.20)','rgba(236,72,153,.20)'];
+    for(var a=0;a<5;a++){
+      var arm=el('div','background:linear-gradient(90deg,transparent 4%,'+armCol[a]+' 34%,'+armCol[a]+' 52%,transparent 92%);'+
+        'transform:translate(-50%,-50%) rotate('+(a*36)+'deg);'+
+        'animation:'+(a%2?'gx-spin-r':'gx-spin')+' '+(180+a*40)+'s linear infinite;');
+      arm.className='gx-arm';
+      stage.appendChild(arm);
+    }
+    stage.appendChild(el('div','')).className='gx-ring';
+    stage.appendChild(el('div','')).className='gx-core';
+    stage.appendChild(el('div','')).className='gx-flare';
+    var fv=el('div',''); fv.className='gx-flare v'; stage.appendChild(fv);
+
+    // bụi sao
+    for(var i=0;i<170;i++){
+      var t=Math.random(), ang=Math.random()*6.283, rr=Math.pow(t,.62);
+      var d=el('div','left:'+(50+Math.cos(ang)*rr*48).toFixed(2)+'%;top:'+(50+Math.sin(ang)*rr*42).toFixed(2)+'%;'+
+        'width:'+(Math.random()*1.9+.6).toFixed(1)+'px;height:'+(Math.random()*1.9+.6).toFixed(1)+'px;'+
+        'opacity:'+(Math.random()*.55+.25).toFixed(2)+';animation-delay:'+(Math.random()*4).toFixed(1)+'s;');
+      d.className='gx-dust';
+      stage.appendChild(d);
+    }
+
+    // danh sách ngôi sao: 10 nhân sự có tên + phần còn lại theo quân số đơn vị
+    var list=SALES.map(function(x){return {name:x.name,unit:x.unit,fee:x.fee,gtv:x.gtv,real:true};});
+    UNITS.forEach(function(u){
+      var have=SALES.filter(function(x){return x.unit===u.key;}).length;
+      for(var k=0;k<u.head-have;k++) list.push({name:null,unit:u.key,fee:0,gtv:0,real:false});
+    });
+    var maxFee=249.9;
+
+    // rải theo 4 cánh xoắn ốc
+    function seed(i){var x=Math.sin(i*127.1)*43758.5453;return x-Math.floor(x);}
+    var links={};
+    list.forEach(function(p,i){
+      var u=U[p.unit];
+      var armI=i%4;
+      var t=.20+ .80*seed(i*3+1);
+      var ang=armI*(Math.PI/2) + t*3.45 + (seed(i*7+2)-.5)*.34;
+      var rx=t*46, ry=t*40;
+      var jx=(seed(i*11+3)-.5)*3.2, jy=(seed(i*13+4)-.5)*3.2;
+      var left=50+Math.cos(ang)*rx+jx, top=50+Math.sin(ang)*ry+jy;
+      left=Math.max(4,Math.min(96,left)); top=Math.max(7,Math.min(93,top));
+
+      var size = p.fee>0 ? 9+ (p.fee/maxFee)*17 : (p.real? 8 : 5+seed(i*17)*2.5);
+      var glow = p.fee>0 ? size*1.9 : size*1.5;
+      var rank3 = p.real && p.fee>0 ? ranked.filter(function(x){return x.fee>0;}).slice(0,3).map(function(x){return x.name;}).indexOf(p.name) : -1;
+      var st=el('div','left:'+left.toFixed(2)+'%;top:'+top.toFixed(2)+'%;width:34px;height:34px;'+(p.real?'':'cursor:default;'),
+        '<div class="gx-dot" style="width:'+size.toFixed(1)+'px;height:'+size.toFixed(1)+'px;background:'+u.color+';'+
+          'box-shadow:0 0 '+glow.toFixed(0)+'px '+u.color+', 0 0 '+(glow*2).toFixed(0)+'px '+u.color+'55;'+
+          'animation-delay:'+(seed(i*19)*4).toFixed(1)+'s;"></div>'+
+        (rank3===0?'<div class="pl-ring back" style="--pc:'+u.color+';width:'+(size*3.1).toFixed(0)+'px;height:'+(size*1.05).toFixed(0)+'px;border-width:2px;transform:translate(-50%,-50%) rotate(-18deg);"></div>'+
+          '<div class="pl-ring front" style="--pc:'+u.color+';width:'+(size*3.1).toFixed(0)+'px;height:'+(size*1.05).toFixed(0)+'px;border-width:2px;transform:translate(-50%,-50%) rotate(-18deg);"></div>'+
+          '<div class="pl-orbit" style="width:'+(size*3.6).toFixed(0)+'px;height:'+(size*3.6).toFixed(0)+'px;animation-duration:15s;"><i style="width:5px;height:5px;margin-left:-2.5px;top:-2.5px;"></i></div>':'')+
+        (rank3>=0?'<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:'+(size*2.6).toFixed(0)+'px;height:'+(size*2.6).toFixed(0)+'px;border-radius:50%;border:1px solid '+u.color+'66;pointer-events:none;"></div>'+
+          '<div class="gx-name">'+p.name.split(' ').slice(-2).join(' ')+'</div>':'')+
+        '<div class="gx-tip">'+(p.real? p.name+' · <b>'+(p.fee>0?fmtFee(p.fee):'chưa phát sinh doanh số')+'</b><br><span style="color:rgba(255,255,255,.62)">'+u.name+'</span>'
+                                     : u.name+' · <b>chưa phát sinh doanh số</b>')+'</div>');
+      st.className='gx-star';
+      st.dataset.key=((p.name||'')+' '+u.name).toLowerCase();
+      if(p.real) st.addEventListener('click',function(){ openProfile(p.name); });
+      stage.appendChild(st);
+      if(p.fee>0) links[p.name]=[left,top];
+      GX.push(st);
+    });
+
+    // nối 3 ngôi sao sáng nhất
+    var top3=ranked.filter(function(x){return x.fee>0;}).slice(0,3).map(function(x){return links[x.name];}).filter(Boolean);
+    if(top3.length===3){
+      var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('viewBox','0 0 100 100');
+      svg.setAttribute('preserveAspectRatio','none');
+      svg.setAttribute('class','gx-links');
+      svg.innerHTML='<polyline points="'+top3.map(function(p){return p[0]+','+p[1];}).join(' ')+
+        '" fill="none" stroke="rgba(255,217,138,.3)" stroke-width="1.3" stroke-dasharray="4 5" vector-effect="non-scaling-stroke"/>';
+      stage.appendChild(svg);
+    }
+
+    stage.appendChild(el('div','')).className='gx-vig';
+    var lg=document.getElementById('galaxyLegend');
+    UNITS.forEach(function(u){
+      lg.appendChild(el('div','display:flex;align-items:center;gap:8px;',
+        '<span style="width:10px;height:10px;border-radius:50%;background:'+u.color+';box-shadow:0 0 10px '+u.color+';"></span>'+
+        '<span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">'+u.name+'</span>'));
+    });
+    lg.appendChild(el('div','margin-left:auto;display:flex;align-items:center;gap:10px;',
+      '<span style="width:7px;height:7px;border-radius:50%;background:#8FD3FF;display:block;"></span>'+
+      '<span style="width:13px;height:13px;border-radius:50%;background:#8FD3FF;display:block;"></span>'+
+      '<span style="width:20px;height:20px;border-radius:50%;background:#8FD3FF;display:block;box-shadow:0 0 14px #8FD3FF;"></span>'+
+      '<span style="font:500 12px/1 var(--font-sans);color:var(--ink-3);margin-left:4px;">sao càng lớn, doanh thu càng cao</span>'));
+  })();
+
+  /* ---------- tìm kiếm ---------- */
+  function applyFilter(){
+    var inp=document.getElementById('lbSearch'); if(!inp) return;
+    var q=inp.value.trim().toLowerCase();
+    var shown=0;
+    lb.querySelectorAll('.lb-click').forEach(function(r){
+      var ok=!q || r.dataset.key.indexOf(q)>-1;
+      r.style.display=ok?'grid':'none';
+      if(ok) shown++;
+    });
+    lb.querySelectorAll('[data-group]').forEach(function(hd){
+      var n=hd.nextElementSibling, any=false;
+      while(n && !n.dataset.group){
+        if(n.classList.contains('lb-click') && n.style.display!=='none') any=true;
+        if(!n.classList.contains('lb-click') && !n.dataset.group) n.style.display=(q?'none':'block');
+        n=n.nextElementSibling;
+      }
+      hd.style.display=(!q||any)?'flex':'none';
+    });
+    GX.forEach(function(st){ st.classList.toggle('dim', !!q && st.dataset.key.indexOf(q)<0); });
+    var em=document.getElementById('lbEmpty');
+    if(em) em.style.display=shown?'none':'block';
+  }
+  var si=document.getElementById('lbSearch');
+  if(si) si.addEventListener('input',applyFilter);
+
+  /* ---------- hồ sơ nhân sự ---------- */
+  function openProfile(name){
+    var s=SALES.filter(function(x){return x.name===name;})[0]; if(!s) return;
+    var u=U[s.unit], rank=ranked.indexOf(s)+1;
+    var cov=s.called/s.data*100;
+    var medal=rank===1?'linear-gradient(160deg,#FFDD9B,#C1832A)':rank===2?'linear-gradient(160deg,#E9F0FA,#8496AE)':rank===3?'linear-gradient(160deg,#F2C79B,#9E6733)':'rgba(255,255,255,.1)';
+    function st(v,l,c){return '<div class="prof-stat"><div class="v" style="color:'+(c||'#fff')+'">'+v+'</div><div class="l">'+l+'</div></div>';}
+    document.getElementById('profBody').innerHTML=
+      '<div style="padding:32px 30px 26px;background:linear-gradient(160deg,'+u.color+'44,transparent 70%);">'+
+        '<div style="display:flex;align-items:center;gap:18px;">'+
+          '<div class="pl-wrap" style="--pc:'+u.color+';flex:none;width:132px;height:96px;">'+
+            '<div class="pl-atm" style="width:104px;height:104px;"></div>'+
+            '<div class="pl-ring back" style="width:128px;height:40px;transform:translate(-50%,-50%) rotate(-17deg);"></div>'+
+            '<div class="pl-sphere" style="width:74px;height:74px;background:'+sphere(u.color)+';font:700 24px/1 var(--font-sans);color:#fff;">'+initials(s.name)+'</div>'+
+            '<div class="pl-ring front" style="width:128px;height:40px;transform:translate(-50%,-50%) rotate(-17deg);"></div>'+
+            '<div class="pl-orbit" style="width:96px;height:96px;animation-duration:18s;"><i style="width:7px;height:7px;margin-left:-3.5px;top:-3.5px;"></i></div>'+
+          '</div>'+
+          '<div style="min-width:0;">'+
+            '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'+
+              '<span style="padding:5px 11px;border-radius:9px;background:'+medal+';color:'+(rank<=3?'#2a1800':'rgba(255,255,255,.7)')+';font:800 11.5px/1 var(--font-sans);">HẠNG '+rank+'</span>'+
+              '<span style="display:flex;align-items:center;gap:7px;font:500 12.5px/1 var(--font-sans);color:rgba(255,255,255,0.9);"><i style="width:8px;height:8px;border-radius:50%;background:'+u.color+';display:block;"></i>'+u.name+'</span></div>'+
+            '<div style="font:800 25px/1.2 var(--font-sans);margin-top:11px;">'+s.name+'</div>'+
+          '</div></div>'+
+        '<div style="margin-top:22px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">'+
+          '<div style="font:800 40px/1 var(--font-sans);" class="num grad-gold">'+(s.fee>0?fmtFee(s.fee):'Chưa có doanh thu')+'</div>'+
+          '<div style="font:500 12.5px/1 var(--font-sans);color:rgba(255,255,255,0.75);">'+(s.fee>0?'phí môi giới ghi nhận · '+fmtGtv(s.gtv)+' doanh số':'chưa phát sinh doanh số')+'</div>'+
+        '</div>'+
+        (s.fee>0?'<div class="bar" style="margin-top:16px;height:9px;"><i style="width:'+(s.fee/lead0*100).toFixed(1)+'%;background:linear-gradient(90deg,'+u.color+'66,'+u.color+');"></i></div>'+
+          '<div style="font:500 11.5px/1 var(--font-sans);color:rgba(255,255,255,0.7);margin-top:9px;">'+(rank===1?'Đang dẫn đầu toàn sàn':'Kém hạng 1 '+d1(lead0-s.fee)+' Tr')+'</div>':'')+
+      '</div>'+
+      '<div style="padding:22px 30px 30px;">'+
+        '<div style="font:600 10.5px/1 var(--font-sans);letter-spacing:.14em;color:rgba(255,255,255,0.65);text-transform:uppercase;margin-bottom:14px;">Chỉ số kỳ 01–19/08</div>'+
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">'+
+          st(s.deals||'—','Hợp đồng',s.deals?'#7FE9BA':null)+
+          st(s.leads,'Lead hợp lệ','#8FD3FF')+
+          st(s.meets,'Lịch hẹn')+
+          st(grp(s.calls),'Cuộc gọi')+
+          st(grp(s.mins)+"'",'Phút đàm thoại')+
+          st(s.avg+'s','TB mỗi cuộc',s.avg<45?'#FF5B7F':(s.avg>=85?'#7FE9BA':null))+
+          st(s.conn+'%','Tỷ lệ kết nối',s.conn<45?'#FF5B7F':null)+
+          st(d1(cov)+'%','Tỷ lệ liên hệ',cov<80?'#FF5B7F':(cov>=90?'#7FE9BA':'#FFC46B'))+
+        '</div>'+
+        '<div style="margin-top:16px;font:400 12px/1.6 var(--font-sans);color:rgba(255,255,255,0.7);">Tiếp nhận '+s.data+' dữ liệu, đã liên hệ '+s.called+' dữ liệu. Từ '+s.leads+' lead phát sinh '+s.meets+' lịch hẹn và '+(s.deals||0)+' hợp đồng.</div>'+
+      '</div>';
+    document.getElementById('profOverlay').classList.add('open');
+  }
+  var ov=document.getElementById('profOverlay');
+  if(ov){
+    ov.addEventListener('click',function(e){ if(e.target===ov) ov.classList.remove('open'); });
+    document.getElementById('profClose').addEventListener('click',function(){ ov.classList.remove('open'); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') ov.classList.remove('open'); });
+  }
+
+  var RGATES=[{label:'500 Tr',pos:14},{label:'1 Tỷ',pos:30},{label:'2 Tỷ',pos:48},{label:'4 Tỷ',pos:71},{label:'6 Tỷ',pos:93}];
+  function racePos(v){
+    var A=[[0,3],[0.5,14],[1,30],[2,48],[4,71],[6,93]];
+    if(v>=6) return 97;
+    for(var i=1;i<A.length;i++){ if(v<=A[i][0]){var a=A[i-1],b=A[i];return a[1]+(v-a[0])/(b[0]-a[0])*(b[1]-a[1]);} }
+    return 97;
+  }
+  var gl=document.getElementById('raceGateLabels');
+  RGATES.forEach(function(g){
+    gl.appendChild(el('div','position:absolute;left:'+g.pos+'%;transform:translateX(-50%);',
+      '<span style="font:700 12px/1 var(--font-sans);color:var(--ink-2);white-space:nowrap;">'+g.label+'</span>'));
+  });
+
+  var lanesWrap=document.getElementById('raceLanes'), delay=0;
+  UNITS.forEach(function(u){
+    var runners=SALES.filter(function(s){return s.unit===u.key;});
+    var idle=u.head-runners.length;
+    var lane=el('div','position:relative;display:flex;align-items:center;height:78px;border-top:1px solid var(--line-2);');
+    var inner='<div style="width:132px;flex:none;display:flex;align-items:center;gap:9px;padding-right:14px;">'+
+      '<span style="width:10px;height:10px;border-radius:50%;background:'+u.color+';box-shadow:0 0 12px '+u.color+';"></span>'+
+      '<span style="font:700 13.5px/1 var(--font-sans);">'+u.name+'</span></div>'+
+      '<div style="position:relative;flex:1;height:100%;" data-track>'+
+      '<div style="position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:4px;border-radius:999px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 10px,transparent 10px 18px);"></div>';
+    var best=runners.reduce(function(m,s){return Math.max(m,s.gtv);},0);
+    if(best>0) inner+='<div class="trail" data-w="'+racePos(best)+'" style="position:absolute;left:3%;top:50%;transform:translateY(-50%);height:7px;width:0;border-radius:999px;background:linear-gradient(90deg,'+u.color+'11,'+u.color+');box-shadow:0 0 20px '+u.color+'88;transition:width 1.4s cubic-bezier(.2,.75,.25,1);"></div>';
+    RGATES.forEach(function(g){ inner+='<div style="position:absolute;left:'+g.pos+'%;top:12px;bottom:12px;width:1px;background:rgba(255,255,255,.12);"></div>'; });
+    inner+='<div style="position:absolute;left:97%;top:8px;bottom:8px;width:0;border-left:2px dashed rgba(255,214,140,.6);"></div>'+
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFD98A" stroke-width="2" stroke-linecap="round" style="position:absolute;left:97%;top:2px;transform:translateX(-30%);"><path d="M5 22V4"/><path d="M5 5h12l-1.8 3.6L17 12H5"/></svg>';
+    if(idle>0) inner+='<div style="position:absolute;left:3%;top:calc(50% + 25px);transform:translateX(-50%);font:500 10.5px/1 var(--font-sans);color:var(--ink-3);white-space:nowrap;">+'+idle+' chưa có doanh số</div>';
+    inner+='</div>';
+    lane.innerHTML=inner;
+    lanesWrap.appendChild(lane);
+    var track=lane.querySelector('[data-track]');
+    runners.forEach(function(s,k){
+      var r=el('div','left:3%;top:'+(50+(k%2===0?-9:9))+'%;transition-delay:'+delay+'ms;',
+        '<div class="st-av" style="background:'+u.color+';'+(s.gtv>0?'box-shadow:0 4px 18px '+u.color+'99;':'opacity:.45;')+'">'+initials(s.name)+'</div>'+
+        '<div class="st-tip">'+s.name+' · <b>'+(s.gtv>0?fmtGtv(s.gtv):'chưa có giao dịch')+'</b></div>');
+      r.className='st-runner'; r.dataset.pos=racePos(s.gtv);
+      track.appendChild(r); delay+=90;
+    });
+  });
+
+  var lgd=document.getElementById('raceLegend');
+  UNITS.forEach(function(u){
+    lgd.appendChild(el('div','display:flex;align-items:center;gap:7px;',
+      '<span style="width:10px;height:10px;border-radius:50%;background:'+u.color+';box-shadow:0 0 8px '+u.color+';"></span><span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">'+u.name+'</span>'));
+  });
+
+  var effort=SALES.slice().sort(function(a,b){return b.mins-a.mins;});
+  var maxMins=effort[0].mins, er=document.getElementById('effortRows');
+  effort.forEach(function(s,i){
+    var u=U[s.unit];
+    var tag = s.avg<45 ? ['bad','Cuộc gọi quá ngắn'] : (s.avg>=85 ? ['ok','Chất lượng'] : ['','Ổn định']);
+    var avgCol = s.avg<45?'#FF5B7F':(s.avg>=85?'#7FE9BA':'var(--ink)');
+    var connCol = s.conn<45?'#FF5B7F':(s.conn>=58?'#7FE9BA':'var(--ink)');
+    var e=el('div','display:grid;grid-template-columns:26px 1fr 80px 74px 74px 94px;gap:10px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line-2);',
+      '<div style="text-align:center;font:700 13px/1 var(--font-sans);color:var(--ink-3);">'+(i+1)+'</div>'+
+      '<div style="display:flex;align-items:center;gap:11px;min-width:0;">'+
+        '<div class="pl-sphere pl-mini" style="flex:none;width:34px;height:34px;background:'+sphere(u.color)+';color:#fff;font:600 11.5px/1 var(--font-sans);">'+initials(s.name)+'</div>'+
+        '<div style="min-width:0;flex:1;">'+
+          '<div style="font:600 13.5px/1.2 var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+s.name+'</div>'+
+          '<div style="display:flex;align-items:center;gap:9px;margin-top:8px;">'+
+            '<div class="bar" style="height:6px;flex:1;max-width:150px;"><i data-w="'+(s.mins/maxMins*100).toFixed(1)+'" style="background:linear-gradient(90deg,'+u.color+'55,'+u.color+');"></i></div>'+
+            (tag[0]?'<span class="chip '+tag[0]+'" style="padding:3px 8px;font-size:9.5px;">'+tag[1]+'</span>':'<span style="font:400 10.5px/1 var(--font-sans);color:var(--ink-3);">'+u.name+'</span>')+
+          '</div></div></div>'+
+      '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);" class="num">'+grp(s.mins)+'</div><div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">phút</div></div>'+
+      '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);color:'+avgCol+';" class="num">'+s.avg+'s</div><div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">mỗi cuộc</div></div>'+
+      '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);color:'+connCol+';" class="num">'+s.conn+'%</div><div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">kết nối</div></div>'+
+      '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);" class="num">'+s.calls+' · <span style="color:#8FD3FF;">'+s.leads+'</span></div><div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">cuộc · lead</div></div>');
+    e.className='row-hover';
+    er.appendChild(e);
+  });
+
+  (function(){
+    var F=[['Lead hợp lệ',892,'#5FC8FF'],['Lịch hẹn',264,'#4facfe'],['Tham quan thực tế',148,'#a78bfa'],['Cọc / giữ chỗ',46,'#FFC46B'],['Hợp đồng',18,'#22C55E']];
+    var w=document.getElementById('funnelMini');
+    F.forEach(function(f,i){
+      var pct=Math.max(7,Math.pow(f[1]/F[0][1],.45)*100);
+      var rate=i>0? d1(f[1]/F[i-1][1]*100)+'%':'100%';
+      w.appendChild(el('div','margin-bottom:13px;',
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;"><span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">'+f[0]+'</span>'+
+        '<span style="font:700 13px/1 var(--font-sans);" class="num">'+f[1]+' <span style="font:500 11px/1 var(--font-sans);color:var(--ink-3);">'+rate+'</span></span></div>'+
+        '<div class="bar" style="height:10px;"><i data-w="'+pct.toFixed(1)+'" style="background:linear-gradient(90deg,'+f[2]+'55,'+f[2]+');box-shadow:0 0 12px '+f[2]+'66;"></i></div>'));
+    });
+  })();
+
+  /* ================= TRANG 3 ================= */
+  (function(){
+    var w=document.getElementById('lotRows');
+    LOTS.forEach(function(l){
+      var u=U[l.team], cov=l.called/l.n*100;
+      var chip = l.st==='ok'?'<span class="chip ok">Đạt</span>'
+               : l.st==='warn'?'<span class="chip warn">Chậm</span>'
+               : l.st==='bad'?'<span class="chip bad pulse">Trễ SLA</span>'
+               : '<span class="chip info">Đang xử lý</span>';
+      var barc = cov>=90?'#22C55E':cov>=70?'#FFC46B':'#FF5B7F';
+      var e=el('div','display:grid;grid-template-columns:1.5fr 1fr 62px 150px 66px 88px;gap:12px;align-items:center;padding:15px 24px;border-bottom:1px solid var(--line-2);',
+        '<div><div style="font:700 13px/1 var(--font-sans);">'+l.id+'</div><div style="font:400 11.5px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">'+l.src+' · '+l.t+'</div></div>'+
+        '<div style="display:flex;align-items:center;gap:8px;"><span style="width:9px;height:9px;border-radius:50%;background:'+u.color+';box-shadow:0 0 8px '+u.color+';"></span><span style="font:500 12.5px/1.3 var(--font-sans);color:var(--ink-2);">'+u.name+'</span></div>'+
+        '<div style="text-align:right;font:700 14px/1 var(--font-sans);" class="num">'+l.n+'</div>'+
+        '<div><div class="bar" style="height:9px;"><i data-w="'+cov.toFixed(1)+'" style="background:linear-gradient(90deg,'+barc+'55,'+barc+');box-shadow:0 0 10px '+barc+'66;"></i></div>'+
+        '<div style="font:600 11px/1 var(--font-sans);color:'+barc+';margin-top:7px;">'+d1(cov)+'% · '+l.called+'/'+l.n+' đã liên hệ</div></div>'+
+        '<div style="text-align:center;">'+(l.late>0?'<span style="font:800 15px/1 var(--font-sans);color:#FF5B7F;">'+l.late+'</span><div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">quá hạn SLA</div>':'<span style="font:700 14px/1 var(--font-sans);color:var(--green-2);">0</span>')+'</div>'+
+        '<div style="text-align:right;">'+chip+'<div style="font:400 10.5px/1 var(--font-sans);color:var(--ink-3);margin-top:7px;">'+l.lead+' lead</div></div>');
+      e.className='row-hover';
+      w.appendChild(e);
+    });
+  })();
+
+  (function(){
+    var w=document.getElementById('callResults'), tot=612;
+    CALLRES.forEach(function(r){
+      var pct=r[1]/tot*100;
+      w.appendChild(el('div','margin-bottom:14px;',
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">'+
+        '<span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">'+r[0]+'</span>'+
+        '<span style="font:700 13px/1 var(--font-sans);" class="num">'+r[1]+' <span style="font:500 11px/1 var(--font-sans);color:var(--ink-3);">'+d1(pct)+'%</span></span></div>'+
+        '<div class="bar" style="height:9px;"><i data-w="'+pct.toFixed(1)+'" style="background:linear-gradient(90deg,'+r[2]+'44,'+r[2]+');box-shadow:0 0 10px '+r[2]+'55;"></i></div>'));
+    });
+  })();
+
+  (function(){
+    var w=document.getElementById('idleRows');
+    IDLE.forEach(function(r){
+      var tone=r[6]==='bad'?'#FF5B7F':'#FFC46B';
+      var e=el('div','display:grid;grid-template-columns:1.3fr 1fr 90px 1.2fr 90px 1.5fr;gap:12px;align-items:center;padding:14px 24px;border-bottom:1px solid var(--line-2);',
+        '<div style="font:600 13.5px/1 var(--font-sans);">'+r[0]+'</div>'+
+        '<div style="font:400 12.5px/1 var(--font-sans);color:var(--ink-3);">'+r[1]+'</div>'+
+        '<div style="text-align:center;font:800 17px/1 var(--font-sans);color:'+tone+';">'+r[2]+'<div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">dữ liệu tồn</div></div>'+
+        '<div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);">Cũ nhất: '+r[3]+'</div>'+
+        '<div style="text-align:center;font:700 13.5px/1 var(--font-sans);color:'+tone+';">'+d1(r[5])+'%<div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">tỷ lệ liên hệ</div></div>'+
+        '<div style="text-align:right;"><span class="chip '+(r[6]==='bad'?'bad':'warn')+'">'+r[7]+'</span></div>');
+      e.className='row-hover';
+      w.appendChild(e);
+    });
+  })();
+
+  (function(){
+    var w=document.getElementById('bigFunnel'), max=BIGFUNNEL[0][1];
+    BIGFUNNEL.forEach(function(f,i){
+      var pct=Math.max(9,Math.pow(f[1]/max,.42)*100);
+      var e=el('div','display:grid;grid-template-columns:170px 1fr 96px;gap:16px;align-items:center;margin-bottom:'+(i===BIGFUNNEL.length-1?'0':'14px')+';',
+        '<div><div style="font:600 13px/1.2 var(--font-sans);color:var(--ink);">'+f[0]+'</div>'+
+        (f[3]?'<div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">giữ lại '+f[3]+'</div>':'<div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">dữ liệu đầu vào</div>')+'</div>'+
+        '<div class="bar fbar" style="height:36px;border-radius:12px;"><i data-w="'+pct.toFixed(1)+'" style="border-radius:12px;background:linear-gradient(90deg,'+f[2]+'2e,'+f[2]+' 88%);box-shadow:0 0 26px '+f[2]+'66, inset 0 1px 0 rgba(255,255,255,.45);"></i></div>'+
+        '<div style="text-align:right;font:800 19px/1 var(--font-sans);color:'+f[2]+';" class="num">'+grp(f[1])+'</div>');
+      w.appendChild(e);
+    });
+  })();
+
+  (function(){
+    var w=document.getElementById('chanRows'), maxRoas=2;
+    CHANNELS.forEach(function(c){
+      var tone=c.roas>=1.5?'ok':c.roas>=1?'warn':'bad';
+      var col=c.roas>=1.5?'#7FE9BA':c.roas>=1?'#FFC46B':'#FF5B7F';
+      var e=el('div','display:grid;grid-template-columns:1.3fr .8fr .7fr .9fr .7fr 1.4fr;gap:14px;align-items:center;padding:15px 26px;border-bottom:1px solid var(--line-2);',
+        '<div style="display:flex;align-items:center;gap:10px;"><span style="width:10px;height:10px;border-radius:50%;background:'+c.c+';box-shadow:0 0 10px '+c.c+';"></span><span style="font:600 14px/1 var(--font-sans);">'+c.n+'</span></div>'+
+        '<div style="text-align:right;font:700 14px/1 var(--font-sans);" class="num">'+d1(c.cost)+' Tr</div>'+
+        '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);" class="num">'+c.lead+'</div><div style="font:400 10.5px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">CPL '+c.cpl+'</div></div>'+
+        '<div style="text-align:right;"><div style="font:700 14px/1 var(--font-sans);color:#8FD3FF;" class="num">'+c.ql+'</div><div style="font:400 10.5px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">lọc '+d1(c.qlp)+'%</div></div>'+
+        '<div style="text-align:right;font:800 16px/1 var(--font-sans);color:var(--green-2);" class="num">'+c.kh+'</div>'+
+        '<div style="display:flex;align-items:center;gap:12px;justify-content:flex-end;"><div class="bar" style="flex:1;max-width:150px;height:9px;"><i data-w="'+(c.roas/maxRoas*100).toFixed(1)+'" style="background:linear-gradient(90deg,'+col+'44,'+col+');box-shadow:0 0 12px '+col+'66;"></i></div><span class="chip '+tone+'" style="min-width:52px;justify-content:center;">'+c.roas.toFixed(2).replace('.',',')+'</span></div>');
+      e.className='row-hover';
+      w.appendChild(e);
+    });
+  })();
+
+  (function(){
+    var w=document.getElementById('covRows');
+    var list=SALES.slice().sort(function(a,b){return (a.called/a.data)-(b.called/b.data);});
+    list.forEach(function(s){
+      var u=U[s.unit], cov=s.called/s.data*100;
+      var col=cov>=90?'#7FE9BA':cov>=80?'#FFC46B':'#FF5B7F';
+      var note=cov>=90?'Đạt yêu cầu':cov>=80?'Cần xử lý hết tồn':'Tạm dừng phân bổ dữ liệu';
+      var e=el('div','display:grid;grid-template-columns:1.4fr 1fr 110px 1fr 150px;gap:14px;align-items:center;padding:14px 26px;border-bottom:1px solid var(--line-2);',
+        '<div style="display:flex;align-items:center;gap:11px;"><div style="flex:none;width:34px;height:34px;border-radius:50%;background:'+u.color+';color:#fff;display:flex;align-items:center;justify-content:center;font:600 11.5px/1 var(--font-sans);">'+initials(s.name)+'</div>'+
+        '<div><div style="font:600 13.5px/1.2 var(--font-sans);">'+s.name+'</div><div style="font:400 11.5px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;">'+u.name+'</div></div></div>'+
+        '<div style="font:400 12.5px/1 var(--font-sans);color:var(--ink-3);">tiếp nhận <b style="color:var(--ink);">'+s.data+'</b> · liên hệ <b style="color:var(--ink);">'+s.called+'</b></div>'+
+        '<div style="font:800 17px/1 var(--font-sans);color:'+col+';" class="num">'+d1(cov)+'%</div>'+
+        '<div class="bar" style="height:9px;"><i data-w="'+cov.toFixed(1)+'" style="background:linear-gradient(90deg,'+col+'44,'+col+');box-shadow:0 0 10px '+col+'55;"></i></div>'+
+        '<div style="text-align:right;"><span class="chip '+(cov>=90?'ok':cov>=80?'warn':'bad')+'">'+note+'</span></div>');
+      e.className='row-hover';
+      w.appendChild(e);
+    });
+  })();
+
+
+  /* ---------- trang trí vòng tỷ lệ liên hệ ---------- */
+  (function(){
+    var arc=document.getElementById('gaugeArc'); if(!arc) return;
+    var svg=arc.ownerSVGElement, NS='http://www.w3.org/2000/svg';
+    var pct=0.758, cx=100, cy=100;
+
+    var defs=document.createElementNS(NS,'defs');
+    defs.innerHTML='<filter id="gauGlow" x="-80%" y="-80%" width="260%" height="260%">'+
+      '<feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+    svg.insertBefore(defs, svg.firstChild);
+
+    // vạch chia quanh vòng
+    var ticks=document.createElementNS(NS,'g');
+    for(var i=0;i<48;i++){
+      var a=i/48*Math.PI*2, on=(i/48)<=pct;
+      var r1=93, r2=on?97.5:96;
+      var l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',(cx+Math.cos(a)*r1).toFixed(2)); l.setAttribute('y1',(cy+Math.sin(a)*r1).toFixed(2));
+      l.setAttribute('x2',(cx+Math.cos(a)*r2).toFixed(2)); l.setAttribute('y2',(cy+Math.sin(a)*r2).toFixed(2));
+      l.setAttribute('stroke', on?'#5FC8FF':'rgba(255,255,255,.16)');
+      l.setAttribute('stroke-width', on?'2':'1.4');
+      l.setAttribute('stroke-linecap','round');
+      if(on) l.setAttribute('opacity','.75');
+      ticks.appendChild(l);
+    }
+    svg.appendChild(ticks);
+
+    // vòng nét đứt xoay chậm
+    var dash=document.createElementNS(NS,'circle');
+    dash.setAttribute('cx',cx); dash.setAttribute('cy',cy); dash.setAttribute('r','66');
+    dash.setAttribute('fill','none'); dash.setAttribute('stroke','rgba(143,211,255,.22)');
+    dash.setAttribute('stroke-width','1'); dash.setAttribute('stroke-dasharray','2 10');
+    dash.innerHTML='<animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="34s" repeatCount="indefinite"/>';
+    svg.appendChild(dash);
+
+    // đầu vòng phát sáng
+    var a2=pct*Math.PI*2;
+    var head=document.createElementNS(NS,'g');
+    head.setAttribute('opacity','0');
+    head.setAttribute('style','transition:opacity .5s 1.6s');
+    head.id='gaugeHead';
+    var hx=(cx+Math.cos(a2)*80).toFixed(2), hy=(cy+Math.sin(a2)*80).toFixed(2);
+    head.innerHTML='<circle cx="'+hx+'" cy="'+hy+'" r="11" fill="#5FC8FF" opacity=".28" filter="url(#gauGlow)">'+
+      '<animate attributeName="r" values="8;15;8" dur="2.6s" repeatCount="indefinite"/></circle>'+
+      '<circle cx="'+hx+'" cy="'+hy+'" r="5.6" fill="#ffffff" filter="url(#gauGlow)"/>';
+    svg.appendChild(head);
+  })();
+
+  /* ---------- biểu đồ giờ ---------- */
+  (function(){
+    var svg=document.getElementById('hourChart');
+    var W=640,H=260,ml=36,mb=32,mt=12,mr=10;
+    var pw=W-ml-mr, ph=H-mt-mb, n=HOURS.length, slot=pw/n, bw=Math.min(20,slot/3);
+    var out='<defs>'+
+      '<linearGradient id="gIn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9b0ff"/><stop offset=".55" stop-color="#7b84f2"/><stop offset="1" stop-color="#5b62d8" stop-opacity=".28"/></linearGradient>'+
+      '<linearGradient id="gCall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9B8"/><stop offset=".55" stop-color="#FFC46B"/><stop offset="1" stop-color="#E8A03C" stop-opacity=".28"/></linearGradient>'+
+      '<linearGradient id="gArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7FE9BA" stop-opacity=".55"/><stop offset="1" stop-color="#7FE9BA" stop-opacity=".02"/></linearGradient>'+
+      '<linearGradient id="gGrid" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".02"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".13"/><stop offset="1" stop-color="#ffffff" stop-opacity=".02"/></linearGradient>'+
+      '<linearGradient id="gNow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5FC8FF" stop-opacity=".16"/><stop offset="1" stop-color="#5FC8FF" stop-opacity="0"/></linearGradient>'+
+      '<filter id="barGlow" x="-60%" y="-30%" width="220%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
+      '<filter id="dotGlow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'+
+      '</defs>';
+
+    // cột nền cho khung giờ hiện tại
+    var nowX=ml+slot*(n-1);
+    out+='<rect x="'+nowX+'" y="'+mt+'" width="'+slot+'" height="'+ph+'" fill="url(#gNow)" rx="6"/>';
+
+    [0,25,50,75,100].forEach(function(v){
+      var y=mt+ph-(v/100*ph);
+      out+='<line x1="'+ml+'" y1="'+y+'" x2="'+(W-mr)+'" y2="'+y+'" stroke="url(#gGrid)" stroke-width="1"/>';
+      out+='<text x="'+(ml-8)+'" y="'+(y+4)+'" text-anchor="end" font-family="Inter,sans-serif" font-size="10" fill="rgba(234,242,255,0.6)">'+v+'</text>';
+    });
+
+    HOURS.forEach(function(h,i){
+      var cx=ml+slot*i+slot/2;
+      var hIn=H_IN[i]/100*ph, hCa=H_CALL[i]/100*ph;
+      if(hIn>0){
+        out+='<rect class="hb" x="'+(cx-bw-2)+'" y="'+(mt+ph-hIn)+'" width="'+bw+'" height="'+hIn+'" rx="5" fill="url(#gIn)" filter="url(#barGlow)" style="transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.75,.25,1) '+(i*60)+'ms"/>';
+        out+='<rect class="hb" x="'+(cx-bw-2)+'" y="'+(mt+ph-hIn)+'" width="'+bw+'" height="3" rx="1.5" fill="#dfe3ff" opacity=".9" style="transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.75,.25,1) '+(i*60)+'ms"/>';
+      }
+      if(hCa>0){
+        out+='<rect class="hb" x="'+(cx+2)+'" y="'+(mt+ph-hCa)+'" width="'+bw+'" height="'+hCa+'" rx="5" fill="url(#gCall)" filter="url(#barGlow)" style="transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.75,.25,1) '+(i*60+120)+'ms"/>';
+        out+='<rect class="hb" x="'+(cx+2)+'" y="'+(mt+ph-hCa)+'" width="'+bw+'" height="3" rx="1.5" fill="#fff3d6" opacity=".9" style="transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;transition:transform .9s cubic-bezier(.2,.75,.25,1) '+(i*60+120)+'ms"/>';
+      }
+      out+='<text x="'+cx+'" y="'+(H-10)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="'+(i===n-1?'#8FD3FF':'rgba(234,242,255,0.62)')+'" font-weight="'+(i===n-1?'700':'400')+'">'+h+'</text>';
+    });
+
+    // vùng nền dưới đường độ phủ
+    var pts=H_COV.map(function(v,i){return (ml+slot*i+slot/2)+','+(mt+ph-(v/100*ph));});
+    var areaD='M'+(ml+slot/2)+','+(mt+ph)+' L'+pts.join(' L')+' L'+(ml+slot*(n-1)+slot/2)+','+(mt+ph)+' Z';
+    out+='<path id="covArea" d="'+areaD+'" fill="url(#gArea)" style="opacity:0;transition:opacity .8s 1.1s"/>';
+    out+='<polyline id="covLine" points="'+pts.join(' ')+'" fill="none" stroke="#7FE9BA" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#dotGlow)"/>';
+    H_COV.forEach(function(v,i){
+      var cx=ml+slot*i+slot/2, cy=mt+ph-(v/100*ph);
+      out+='<circle class="covdot" cx="'+cx+'" cy="'+cy+'" r="6" fill="#7FE9BA" opacity="0" style="transition:opacity .3s '+(900+i*60)+'ms"/>';
+      out+='<circle class="covdot" cx="'+cx+'" cy="'+cy+'" r="3.4" fill="#0a1f45" stroke="#7FE9BA" stroke-width="2" opacity="0" style="transition:opacity .3s '+(900+i*60)+'ms"/>';
+    });
+    var last=H_COV.length-1, lx=ml+slot*last+slot/2, ly=mt+ph-(H_COV[last]/100*ph);
+    out+='<circle class="covdot" cx="'+lx+'" cy="'+ly+'" r="11" fill="#7FE9BA" opacity="0" style="transition:opacity .4s 1.5s" filter="url(#dotGlow)"><animate attributeName="r" values="8;14;8" dur="2.6s" repeatCount="indefinite"/><animate attributeName="fill-opacity" values=".35;0;.35" dur="2.6s" repeatCount="indefinite"/></circle>';
+
+    var y85=mt+ph-(85/100*ph);
+    out+='<line x1="'+ml+'" y1="'+y85+'" x2="'+(W-mr)+'" y2="'+y85+'" stroke="rgba(127,233,186,.5)" stroke-width="1.4" stroke-dasharray="6 6"/>';
+    out+='<text x="'+(W-mr)+'" y="'+(y85-7)+'" text-anchor="end" font-family="Inter,sans-serif" font-size="10" font-weight="600" fill="#7FE9BA">cam kết 85%</text>';
+    svg.innerHTML=out;
+  })();
+
+  /* ================= SAO NỀN ================= */
+  function starfield(id,opts){
+    var cv=document.getElementById(id); if(!cv) return;
+    var ctx=cv.getContext('2d'), items=[], shoot=null, raf, on=true;
+    function resize(){
+      var r=cv.parentElement.getBoundingClientRect();
+      if(r.width<2||r.height<2) return;
+      cv.width=r.width*devicePixelRatio; cv.height=r.height*devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      items=[];
+      var n=Math.min(340,Math.round(r.width*r.height/(opts.density||7000)));
+      for(var i=0;i<n;i++) items.push({x:Math.random()*r.width,y:Math.random()*r.height,r:Math.random()*1.3+.25,a:Math.random(),sp:Math.random()*.018+.004,vy:Math.random()*.22+.06});
+    }
+    function draw(){
+      if(!on) return;
+      var r=cv.parentElement.getBoundingClientRect();
+      ctx.clearRect(0,0,r.width,r.height);
+      items.forEach(function(s){
+        if(opts.drift){ s.y+=s.vy; s.x+=Math.sin(s.y/60)*.16; if(s.y>r.height){s.y=-4;s.x=Math.random()*r.width;} }
+        s.a+=s.sp; var o=.26+Math.abs(Math.sin(s.a))*.6;
+        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.284);
+        ctx.fillStyle='rgba(214,236,255,'+o.toFixed(3)+')'; ctx.fill();
+      });
+      if(opts.shoot){
+        if(!shoot && Math.random()<0.004) shoot={x:Math.random()*r.width*.7,y:Math.random()*r.height*.4,len:0};
+        if(shoot){
+          shoot.x+=7; shoot.y+=3; shoot.len=Math.min(shoot.len+7,150);
+          var g=ctx.createLinearGradient(shoot.x,shoot.y,shoot.x-shoot.len,shoot.y-shoot.len*.43);
+          g.addColorStop(0,'rgba(220,240,255,.9)'); g.addColorStop(1,'rgba(220,240,255,0)');
+          ctx.strokeStyle=g; ctx.lineWidth=1.7; ctx.beginPath();
+          ctx.moveTo(shoot.x,shoot.y); ctx.lineTo(shoot.x-shoot.len,shoot.y-shoot.len*.43); ctx.stroke();
+          if(shoot.x>r.width+160) shoot=null;
+        }
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    resize(); draw();
+    window.addEventListener('resize',function(){resize();});
+    return {refresh:function(){resize();}};
+  }
+  var sf={};
+  sf.bg=starfield('bg',{shoot:true,density:7000});
+  sf.snow=starfield('snow',{drift:true,density:14000});
+
+  /* ================= ĐẾM NGƯỢC ================= */
+  var TARGET=Date.UTC(2026,8,30,16,59,0);
+  function tick(){
+    var diff=Math.max(0,TARGET-Date.now()), s=Math.floor(diff/1000);
+    var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=s%60;
+    var e1=document.getElementById('cdD'); if(!e1) return;
+    e1.textContent=d;
+    document.getElementById('cdH').textContent=String(h).padStart(2,'0');
+    document.getElementById('cdM').textContent=String(m).padStart(2,'0');
+    document.getElementById('cdS').textContent=String(sec).padStart(2,'0');
+  }
+  tick(); setInterval(tick,1000);
+
+  /* ================= ANIMATION ENGINE ================= */
+  function playIn(el){
+    el.querySelectorAll('.bar > i[data-w]').forEach(function(b){ b.style.width=b.dataset.w+'%'; });
+    el.querySelectorAll('.trail[data-w]').forEach(function(b){ b.style.width=(parseFloat(b.dataset.w)-3)+'%'; });
+    el.querySelectorAll('.st-runner[data-pos]').forEach(function(r){ r.style.left=r.dataset.pos+'%'; });
+    el.querySelectorAll('[data-ring]').forEach(function(c){ var C=2*Math.PI*parseFloat(c.getAttribute('r')); c.style.strokeDashoffset=C*(1-parseFloat(c.dataset.ring)/100); });
+    el.querySelectorAll('.shareseg[data-w]').forEach(function(x){ x.style.width=x.dataset.w+'%'; });
+    el.querySelectorAll('[data-count]').forEach(function(c){ if(!c.dataset.done){ c.dataset.done='1'; countUp(c); } });
+    if(el.querySelector('#gaugeArc')||el.id==='p-sale'){
+      var arc=document.getElementById('gaugeArc');
+      if(arc && !arc.dataset.done){ arc.dataset.done='1'; arc.style.strokeDashoffset=502.65*(1-0.758);
+        var gh=document.getElementById('gaugeHead'); if(gh) gh.style.opacity='1'; }
+    }
+    if(el.querySelector('#hourChart')){
+      el.querySelectorAll('#hourChart .hb').forEach(function(r){ r.style.transform='scaleY(1)'; });
+      el.querySelectorAll('#hourChart .covdot').forEach(function(c){ c.style.opacity='1'; });
+      var ar=document.getElementById('covArea'); if(ar) ar.style.opacity='1';
+      var line=document.getElementById('covLine');
+      if(line && !line.dataset.done){
+        line.dataset.done='1';
+        var len=line.getTotalLength();
+        line.style.strokeDasharray=len+' '+len;
+        line.style.strokeDashoffset=len;
+        line.getBoundingClientRect();
+        line.style.transition='stroke-dashoffset 1.6s cubic-bezier(.2,.75,.25,1) .4s';
+        line.style.strokeDashoffset=0;
+      }
+    }
+  }
+
+  var io=new IntersectionObserver(function(en){
+    en.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var t=e.target; io.unobserve(t);
+      t.classList.add('in');
+      setTimeout(function(){ playIn(t); },140);
+    });
+  },{threshold:.12});
+
+  function playPage1(){
+    var v=document.getElementById('vinhdanh'), j=document.getElementById('hanhtrinh');
+    var hs=document.getElementById('heroStats');
+    if(hs && !hs.dataset.done){ hs.dataset.done='1'; setTimeout(function(){ playIn(hs); },500); }
+    if(v && !v.dataset.done){
+      v.dataset.done='1';
+      v.querySelectorAll('.pod-block').forEach(function(p,i){
+        setTimeout(function(){ p.style.height=getComputedStyle(p).getPropertyValue('--h'); },260+i*180);
+      });
+      setTimeout(confettiBurst,900);
+    }
+    if(j && !j.dataset.done){
+      j.dataset.done='1';
+      setTimeout(function(){
+        doneP.style.transition='stroke-dashoffset 2.4s cubic-bezier(.25,.7,.3,1)';
+        doneP.style.strokeDashoffset=L*(1-relayPct(TOTAL)/100);
+        var sm=document.getElementById('sanMarker'); if(sm) sm.style.opacity=1;
+        setTimeout(function(){ if(streamG) streamG.style.opacity='.85'; },1400);
+        document.querySelectorAll('.hiker').forEach(function(h){ h.style.opacity=1; });
+      },420);
+      playIn(j);
+    }
+  }
+
+
+  /* ================= TRANG CÁ NHÂN ================= */
+  (function(){
+    var loginBox=document.getElementById('meLogin');
+    var appBox=document.getElementById('meApp');
+    if(!loginBox) return;
+
+    var TARGET={'Đậu Thị Hằng':300,'Đinh Tiến Phong':250,'Nguyễn Thị Sim':180,'Nguyễn Thị Minh':120,
+      'Trần Quốc Huy':150,'Vũ Thị Hoa':150,'Phạm Văn Đạt':100,'Hoàng Minh Tuấn':120,'Ngô Thanh Tùng':100,'Lê Thị Ngọc Ánh':100};
+    var PROJ=['ST Garden Bảo Lộc','ST Riverside Vạn Phúc','ST Central Park','ST Legacy Villas'];
+    var CUST=['Nguyễn Văn Thắng','Trần Thị Loan','Lê Quang Hưng','Phạm Minh Đức','Vũ Thị Hồng','Đỗ Trung Kiên',
+      'Ngô Bích Ngọc','Hoàng Văn Sơn','Bùi Thanh Hà','Đặng Quốc Bảo'];
+    var RATE=0.35;   // nhân sự hưởng 35% phí môi giới
+    var ADV=0.4;     // đã tạm ứng 40% phần đủ điều kiện
+
+    var EMP={};
+    SALES.forEach(function(s,i){
+      var code='ST-'+(1001+i);
+      EMP[code]={code:code, s:s};
+    });
+
+    function sd(i){var x=Math.sin(i*91.7)*43758.5453;return x-Math.floor(x);}
+
+    function buildDeals(s){
+      var out=[], n=s.deals; if(!n) return out;
+      var base=s.gtv/n, rest=s.gtv;
+      for(var k=0;k<n;k++){
+        var g = (k===n-1)? rest : +(base*(0.72+sd(k+s.calls)*0.62)).toFixed(2);
+        if(g>rest*0.92) g=+(rest*0.6).toFixed(2);
+        rest=+(rest-g).toFixed(2);
+        var pay=[10,15,20,30,35,50,70,100][Math.floor(sd(k*3+s.leads)*8)];
+        out.push({
+          id:'GD-08'+(10+k)+'-'+(s.name.length*7+k),
+          cust:CUST[(k+s.meets)%CUST.length],
+          proj:PROJ[(k+s.calls)%3],
+          date:(9+k*2>19?19:9+k*2)+'/08',
+          gtv:g, fee:+(g*40).toFixed(1), pay:pay
+        });
+      }
+      return out;
+    }
+
+    function buildTodos(s){
+      var t=[
+        {t:'Gọi '+Math.max(4,Math.round(s.data*0.09))+' dữ liệu mới nhận trong ngày', tag:'Dữ liệu', tone:'info', done:false},
+        {t:'Gọi lại '+(s.data-s.called)+' dữ liệu chưa liên hệ được', tag:'SLA', tone:(s.called/s.data<0.8?'bad':'warn'), done:false},
+        {t:'Cập nhật trạng thái '+Math.max(2,Math.round(s.leads*0.18))+' lead đang chăm', tag:'Lead', tone:'', done:false},
+        {t:'Xác nhận lịch hẹn dẫn khách cuối tuần', tag:'Lịch hẹn', tone:'', done:true}
+      ];
+      if(s.deals>0) t.push({t:'Bổ sung chứng từ thanh toán để đủ điều kiện thu phí', tag:'Hồ sơ', tone:'warn', done:false});
+      else t.push({t:'Làm việc với trưởng nhóm về kịch bản chốt khách', tag:'Kèm cặp', tone:'info', done:false});
+      t.push({t:'Ghi nhận kết quả cuộc gọi trước 17:30', tag:'Cuối ngày', tone:'', done:false});
+      return t;
+    }
+
+    function buildAppts(s){
+      var A=[
+        {h:'09:30', d:'Ngày mai', c:CUST[(s.leads)%CUST.length], p:PROJ[s.calls%3], k:'Dẫn khách tham quan'},
+        {h:'14:00', d:'Ngày mai', c:CUST[(s.leads+3)%CUST.length], p:PROJ[(s.calls+1)%3], k:'Tư vấn tại văn phòng'},
+        {h:'10:00', d:'22/08',    c:CUST[(s.leads+6)%CUST.length], p:PROJ[(s.calls+2)%3], k:'Ký hồ sơ đặt cọc'}
+      ];
+      return A.slice(0, s.meets>12?3:2);
+    }
+
+    // gợi ý mã
+    var hints=document.getElementById('meHints');
+    ['ST-1001','ST-1002','ST-1005','ST-1009'].forEach(function(c){
+      var b=el('div','cursor:pointer;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);font:600 12px/1 var(--font-sans);color:var(--ink-2);transition:all .18s;',
+        c+' <span style="color:var(--ink-3);font-weight:500;">· '+EMP[c].s.name+'</span>');
+      b.addEventListener('click',function(){ document.getElementById('meCode').value=c; login(); });
+      b.addEventListener('mouseenter',function(){b.style.background='rgba(95,200,255,.16)';b.style.borderColor='rgba(95,200,255,.45)';});
+      b.addEventListener('mouseleave',function(){b.style.background='rgba(255,255,255,.06)';b.style.borderColor='rgba(255,255,255,.16)';});
+      hints.appendChild(b);
+    });
+
+    function login(){
+      var v=(document.getElementById('meCode').value||'').trim().toUpperCase();
+      var e=EMP[v];
+      if(!e){ document.getElementById('meErr').style.display='block'; return; }
+      document.getElementById('meErr').style.display='none';
+      render(e);
+      loginBox.style.display='none';
+      appBox.style.display='block';
+      window.scrollTo({top:0});
+    }
+    document.getElementById('meGo').addEventListener('click',login);
+    document.getElementById('meCode').addEventListener('keydown',function(ev){ if(ev.key==='Enter') login(); });
+
+    function render(e){
+      var s=e.s, u=U[s.unit];
+      var rank=ranked.indexOf(s)+1;
+      var target=TARGET[s.name]||100;
+      var pctTarget=Math.min(100, s.fee/target*100);
+      var comm=+(s.fee*RATE).toFixed(1);
+      var deals=buildDeals(s);
+      var eligible=deals.filter(function(d){return d.pay>=30;});
+      var eligFee=eligible.reduce(function(a,d){return a+d.fee;},0);
+      var advPaid=+(eligFee*RATE*ADV).toFixed(1);
+      var todos=buildTodos(s);
+      var appts=buildAppts(s);
+      var cov=s.called/s.data*100;
+
+      function kpi(label,val,sub,color){
+        return '<div class="glass card-hover" style="padding:20px 22px;">'+
+          '<div style="font:500 11.5px/1 var(--font-sans);color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;">'+label+'</div>'+
+          '<div style="font:800 28px/1 var(--font-sans);margin-top:12px;'+(color?'color:'+color+';':'')+'" class="num">'+val+'</div>'+
+          '<div style="font:400 12px/1.4 var(--font-sans);color:var(--ink-3);margin-top:9px;">'+sub+'</div></div>';
+      }
+
+      var html =
+      // ---- header ----
+      '<div class="glass" style="padding:26px 28px;display:flex;align-items:center;gap:26px;flex-wrap:wrap;overflow:hidden;position:relative;">'+
+        '<div style="position:absolute;right:-90px;top:-90px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,'+u.color+'2e,transparent 70%);pointer-events:none;"></div>'+
+        '<div class="pl-wrap" style="--pc:'+u.color+';width:170px;height:118px;flex:none;">'+
+          '<div class="pl-atm" style="width:120px;height:120px;"></div>'+
+          '<div class="pl-ring back" style="width:158px;height:48px;transform:translate(-50%,-50%) rotate(-17deg);"></div>'+
+          '<div class="pl-sphere" style="width:86px;height:86px;background:'+sphere(u.color)+';font:700 27px/1 var(--font-sans);color:#fff;">'+initials(s.name)+'</div>'+
+          '<div class="pl-ring front" style="width:158px;height:48px;transform:translate(-50%,-50%) rotate(-17deg);"></div>'+
+          '<div class="pl-orbit" style="width:112px;height:112px;animation-duration:19s;"><i style="width:7px;height:7px;margin-left:-3.5px;top:-3.5px;"></i></div>'+
+        '</div>'+
+        '<div style="flex:1;min-width:240px;position:relative;">'+
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'+
+            '<span class="chip info">'+e.code+'</span>'+
+            '<span style="display:flex;align-items:center;gap:7px;font:500 12.5px/1 var(--font-sans);color:var(--ink-2);"><i style="width:8px;height:8px;border-radius:50%;background:'+u.color+';display:block;box-shadow:0 0 8px '+u.color+';"></i>'+u.name+'</span>'+
+            (s.fee>0?'<span class="chip warn">Hạng '+rank+' toàn sàn</span>':'<span class="chip">Chưa có doanh số</span>')+
+          '</div>'+
+          '<div style="font:800 30px/1.2 var(--font-sans);margin-top:12px;">'+s.name+'</div>'+
+          '<div style="font:400 13px/1.5 var(--font-sans);color:var(--ink-2);margin-top:9px;">Kỳ 01/08 – 19/08/2026 · chương trình STRONGER TOGETHER</div>'+
+        '</div>'+
+        '<button id="meOut" style="border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--ink-2);cursor:pointer;'+
+          'border-radius:12px;padding:11px 18px;font:600 12.5px/1 var(--font-sans);align-self:flex-start;">Thoát</button>'+
+      '</div>'+
+
+      // ---- KPI ----
+      '<div class="g4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px;">'+
+        kpi('Doanh số bán ra', fmtGtv(s.gtv), s.deals+' hợp đồng đã ký','')+
+        kpi('Phí môi giới ghi nhận', fmtFee(s.fee), 'cơ sở tính hoa hồng','#FFD98A')+
+        kpi('Hoa hồng tạm tính', (comm>0?d1(comm)+' Tr':'—'), 'hưởng '+(RATE*100)+'% phí môi giới','#7FE9BA')+
+        kpi('Đã tạm ứng', (advPaid>0?d1(advPaid)+' Tr':'—'), 'còn '+(comm-advPaid>0?d1(comm-advPaid):'0')+' Tr chờ đủ hồ sơ','#8FD3FF')+
+      '</div>'+
+
+      // ---- chỉ tiêu + công việc ----
+      '<div class="g2" style="display:grid;grid-template-columns:1fr 1.45fr;gap:18px;margin-top:18px;align-items:start;">'+
+
+        '<div class="glass" style="padding:26px;text-align:center;position:relative;overflow:hidden;">'+
+          '<div style="font:600 11px/1 var(--font-sans);letter-spacing:.14em;color:var(--ink-3);text-transform:uppercase;">Chỉ tiêu phí môi giới tháng</div>'+
+          '<div style="position:relative;width:190px;height:190px;margin:18px auto 6px;">'+
+            '<svg viewBox="0 0 190 190" style="width:190px;height:190px;transform:rotate(-90deg);">'+
+              '<circle cx="95" cy="95" r="78" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="14"/>'+
+              '<circle cx="95" cy="95" r="78" fill="none" stroke="'+u.color+'" stroke-opacity=".18" stroke-width="26" style="filter:blur(7px)"/>'+
+              '<circle class="ringc" cx="95" cy="95" r="78" fill="none" stroke="'+u.color+'" stroke-width="14" stroke-linecap="round" '+
+                'stroke-dasharray="490.1" stroke-dashoffset="490.1" data-ring="'+pctTarget.toFixed(1)+'" style="filter:drop-shadow(0 0 8px '+u.color+'99)"/>'+
+            '</svg>'+
+            '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">'+
+              '<div style="font:800 32px/1 var(--font-sans);" class="num">'+d1(pctTarget)+'%</div>'+
+              '<div style="font:500 11.5px/1.4 var(--font-sans);color:var(--ink-3);margin-top:8px;text-align:center;">'+fmtFee(s.fee)+'<br>/ '+target+' Tr</div>'+
+            '</div>'+
+          '</div>'+
+          '<div style="font:400 12.5px/1.6 var(--font-sans);color:var(--ink-2);margin-top:8px;">'+
+            (s.fee>=target?'Đã hoàn thành chỉ tiêu tháng.':'Còn thiếu <b style="color:#fff;">'+d1(target-s.fee)+' Tr</b> để đạt chỉ tiêu.')+'</div>'+
+        '</div>'+
+
+        '<div class="glass" style="overflow:hidden;">'+
+          '<div class="glass-hd" style="justify-content:space-between;">'+
+            '<div><div style="font:700 15.5px/1.2 var(--font-sans);">Công việc hôm nay</div>'+
+            '<div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Bấm để đánh dấu hoàn thành</div></div>'+
+            '<div class="chip info" id="todoCount"></div>'+
+          '</div>'+
+          '<div id="todoList"></div>'+
+        '</div>'+
+      '</div>'+
+
+      // ---- lịch hẹn + dữ liệu đang giữ ----
+      '<div class="g2" style="display:grid;grid-template-columns:1.45fr 1fr;gap:18px;margin-top:18px;align-items:start;">'+
+        '<div class="glass" style="overflow:hidden;">'+
+          '<div class="glass-hd"><div><div style="font:700 15.5px/1.2 var(--font-sans);">Lịch hẹn sắp tới</div>'+
+          '<div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Đồng bộ từ phiếu chăm sóc khách hàng</div></div></div>'+
+          (appts.length? appts.map(function(a){
+            return '<div class="row-hover" style="display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;padding:15px 24px;border-bottom:1px solid var(--line-2);">'+
+              '<div><div style="font:800 17px/1 var(--font-sans);" class="num">'+a.h+'</div><div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">'+a.d+'</div></div>'+
+              '<div><div style="font:600 13.5px/1.2 var(--font-sans);">'+a.c+'</div><div style="font:400 11.5px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">'+a.p+'</div></div>'+
+              '<div><span class="chip">'+a.k+'</span></div></div>';
+          }).join('') : '<div style="padding:30px 24px;text-align:center;font:500 13px/1.6 var(--font-sans);color:var(--ink-3);">Chưa có lịch hẹn nào được đặt.</div>')+
+        '</div>'+
+
+        '<div class="glass" style="padding:24px;">'+
+          '<div style="font:700 15.5px/1.2 var(--font-sans);">Dữ liệu đang giữ</div>'+
+          '<div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:5px;margin-bottom:20px;">Kỳ 01–19/08</div>'+
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;">'+
+            '<span style="font:500 12.5px/1 var(--font-sans);color:var(--ink-2);">Tỷ lệ liên hệ</span>'+
+            '<span style="font:800 15px/1 var(--font-sans);color:'+(cov>=90?'#7FE9BA':cov>=80?'#FFC46B':'#FF5B7F')+';" class="num">'+d1(cov)+'%</span></div>'+
+          '<div class="bar" style="height:10px;"><i data-w="'+cov.toFixed(1)+'" style="background:linear-gradient(90deg,'+u.color+'55,'+u.color+');box-shadow:0 0 14px '+u.color+'66;"></i></div>'+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;">'+
+            '<div style="padding:14px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid var(--line-2);"><div style="font:800 20px/1 var(--font-sans);" class="num">'+s.data+'</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">dữ liệu được giao</div></div>'+
+            '<div style="padding:14px;border-radius:13px;background:rgba(255,91,127,.09);border:1px solid rgba(255,91,127,.24);"><div style="font:800 20px/1 var(--font-sans);color:#FF5B7F;" class="num">'+(s.data-s.called)+'</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">chưa liên hệ</div></div>'+
+            '<div style="padding:14px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid var(--line-2);"><div style="font:800 20px/1 var(--font-sans);color:#8FD3FF;" class="num">'+s.leads+'</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">lead hợp lệ</div></div>'+
+            '<div style="padding:14px;border-radius:13px;background:rgba(255,255,255,.05);border:1px solid var(--line-2);"><div style="font:800 20px/1 var(--font-sans);color:#7FE9BA;" class="num">'+s.meets+'</div><div style="font:400 11px/1.3 var(--font-sans);color:var(--ink-3);margin-top:7px;">lịch hẹn đã đặt</div></div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+
+      // ---- hoa hồng theo hợp đồng ----
+      '<div class="glass" style="margin-top:18px;overflow:hidden;">'+
+        '<div class="glass-hd" style="justify-content:space-between;">'+
+          '<div><div style="font:700 15.5px/1.2 var(--font-sans);">Hoa hồng theo từng hợp đồng</div>'+
+          '<div style="font:400 12px/1 var(--font-sans);color:var(--ink-3);margin-top:4px;">Đủ điều kiện chi khi khách thanh toán từ 30% giá trị</div></div>'+
+          '<div class="chip ok">Tổng '+(comm>0?d1(comm)+' Tr':'0')+'</div>'+
+        '</div>'+
+        (deals.length?
+          '<div style="display:grid;grid-template-columns:1.1fr 1.2fr 1.2fr 84px 96px 110px 120px;gap:12px;padding:13px 24px;border-bottom:1px solid var(--line-2);background:rgba(255,255,255,.03);font:600 10px/1.3 var(--font-sans);letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;">'+
+            '<div>Mã GD</div><div>Khách hàng</div><div>Dự án</div><div style="text-align:right;">GTV</div><div style="text-align:right;">Phí MG</div><div style="text-align:right;">Hoa hồng</div><div style="text-align:right;">Thanh toán</div></div>'+
+          deals.map(function(d){
+            var ok=d.pay>=30;
+            return '<div class="row-hover" style="display:grid;grid-template-columns:1.1fr 1.2fr 1.2fr 84px 96px 110px 120px;gap:12px;align-items:center;padding:14px 24px;border-bottom:1px solid var(--line-2);">'+
+              '<div><div style="font:700 12.5px/1 var(--font-sans);">'+d.id+'</div><div style="font:400 11px/1 var(--font-sans);color:var(--ink-3);margin-top:6px;">ký '+d.date+'</div></div>'+
+              '<div style="font:500 13px/1.3 var(--font-sans);">'+d.cust+'</div>'+
+              '<div style="font:400 12.5px/1.3 var(--font-sans);color:var(--ink-2);">'+d.proj+'</div>'+
+              '<div style="text-align:right;font:700 13px/1 var(--font-sans);" class="num">'+d1(d.gtv*1000)+' Tr</div>'+
+              '<div style="text-align:right;font:600 13px/1 var(--font-sans);color:#FFD98A;" class="num">'+d1(d.fee)+' Tr</div>'+
+              '<div style="text-align:right;font:800 14px/1 var(--font-sans);color:#7FE9BA;" class="num">'+d1(d.fee*RATE)+' Tr</div>'+
+              '<div style="text-align:right;"><span class="chip '+(ok?'ok':'warn')+'">'+d.pay+'%</span>'+
+                '<div style="font:400 10px/1 var(--font-sans);color:var(--ink-3);margin-top:7px;">'+(ok?'đủ điều kiện':'chờ thanh toán')+'</div></div>'+
+            '</div>';
+          }).join('')
+          : '<div style="padding:36px 24px;text-align:center;font:500 13.5px/1.7 var(--font-sans);color:var(--ink-3);">Chưa có hợp đồng nào trong kỳ.<br>Hoàn thành công việc hôm nay để đưa lead vào vòng hẹn gặp.</div>')+
+      '</div>';
+
+      appBox.innerHTML=html;
+
+      // đăng xuất
+      document.getElementById('meOut').addEventListener('click',function(){
+        appBox.style.display='none'; loginBox.style.display='block';
+        document.getElementById('meCode').value='';
+        window.scrollTo({top:0});
+      });
+
+      // danh sách việc
+      var tl=document.getElementById('todoList');
+      function refreshCount(){
+        var done=todos.filter(function(x){return x.done;}).length;
+        document.getElementById('todoCount').textContent=done+'/'+todos.length+' hoàn thành';
+      }
+      todos.forEach(function(td,idx){
+        var row=el('div','display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--line-2);cursor:pointer;');
+        row.className='row-hover';
+        function paint(){
+          row.innerHTML='<div style="flex:none;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;'+
+            (td.done?'background:linear-gradient(180deg,#4ade80,#22C55E);border:0;':'border:1.6px solid rgba(255,255,255,.3);')+'">'+
+            (td.done?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06301a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4 10-11"/></svg>':'')+'</div>'+
+            '<div style="flex:1;font:500 13.5px/1.4 var(--font-sans);'+(td.done?'color:var(--ink-3);text-decoration:line-through;':'')+'">'+td.t+'</div>'+
+            '<span class="chip '+(td.tone||'')+'">'+td.tag+'</span>';
+        }
+        paint();
+        row.addEventListener('click',function(){ td.done=!td.done; paint(); refreshCount(); });
+        tl.appendChild(row);
+      });
+      refreshCount();
+
+      // chạy animation
+      setTimeout(function(){ playIn(appBox); },120);
+    }
+  })();
+
+
+  /* ---------- điều hướng phụ trang Quản lý kinh doanh ---------- */
+  var subPlayed={};
+  function showSub(id){
+    var nav=document.getElementById('saleSub'); if(!nav) return;
+    document.querySelectorAll('#p-sale .subpage').forEach(function(x){ x.classList.toggle('active', x.id===id); });
+    nav.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b.dataset.sub===id); });
+    var sec=document.getElementById(id);
+    if(sec){
+      sec.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); });
+      if(!subPlayed[id]){ subPlayed[id]=1; setTimeout(function(){ playIn(sec); },120); }
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  (function(){
+    var nav=document.getElementById('saleSub'); if(!nav) return;
+    nav.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){ showSub(b.dataset.sub); });
+    });
+  })();
+
+  /* ================= ROUTER ================= */
+  var started={};
+  function activate(pid){
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('active', p.id===pid); });
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active', t.dataset.page===pid); });
+    window.scrollTo({top:0,behavior:'auto'});
+    var page=document.getElementById(pid);
+    if(!page) return;
+    setTimeout(function(){
+      if(pid==='p-bxh' && !sf.bg2) sf.bg2=starfield('bg2',{density:8000,shoot:true});
+      if(pid==='p-sale' && !sf.bg3) sf.bg3=starfield('bg3',{density:8000,shoot:true});
+      if(pid==='p-me' && !sf.bg4) sf.bg4=starfield('bg4',{density:8000,shoot:true});
+      Object.keys(sf).forEach(function(k){ if(sf[k]&&sf[k].refresh) sf[k].refresh(); });
+      if(!started[pid]){
+        started[pid]=1;
+        page.querySelectorAll('.reveal').forEach(function(r){ io.observe(r); });
+        // phần tử ngoài .reveal
+        if(pid==='p-vinhdanh') playPage1();
+      }
+      // kích hoạt ngay những khối đã nằm trong khung nhìn
+      page.querySelectorAll('.reveal:not(.in)').forEach(function(r){
+        var b=r.getBoundingClientRect();
+        if(b.top < innerHeight*0.92){ io.unobserve(r); r.classList.add('in'); setTimeout(function(){playIn(r);},140); }
+      });
+      if(pid==='p-vinhdanh') playPage1();
+    },60);
+  }
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){ activate(t.dataset.page); });
+  });
+  document.querySelectorAll('.tmi').forEach(function(m){
+    m.addEventListener('click',function(){
+      var pg=m.dataset.go, an=m.dataset.anchor, sb=m.dataset.sub;
+      var same=document.getElementById(pg).classList.contains('active');
+      if(!same) activate(pg);
+      setTimeout(function(){
+        if(sb){ showSub(sb); return; }
+        var t=document.getElementById(an);
+        if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+      }, same?40:420);
+      m.blur();
+      var w=m.closest('.tab-wrap');
+      if(w){ w.style.pointerEvents='none'; setTimeout(function(){w.style.pointerEvents='';},500); }
+    });
+  });
+  activate('p-vinhdanh');
+})();
+
+</script>
+</body>
+</html>

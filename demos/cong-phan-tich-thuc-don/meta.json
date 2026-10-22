@@ -1,0 +1,22 @@
+{
+  "slug": "cong-phan-tich-thuc-don",
+  "title": "Cộng — Phân tích thực đơn",
+  "type": "dashboard",
+  "industry": "FnB",
+  "department": "Kinh doanh",
+  "description": "Cấu trúc menu, sản lượng và biên lợi nhuận gộp theo nhóm sản phẩm.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Cong_Demo/",
+  "source_repo": "https://github.com/tbinh-06/Cong_Demo",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "menu",
+    "biên lợi nhuận",
+    "đồ uống"
+  ]
+}

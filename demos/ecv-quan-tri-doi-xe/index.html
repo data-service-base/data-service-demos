@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản trị Đội xe — Dashboard vận hành & bảo dưỡng</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --color-background-primary:#FFFFFF;--color-background-secondary:#F0F3F8;
+  --color-background-danger:#FCEAEA;--color-background-warning:#FBF1DD;--color-background-success:#E8F6EE;--color-background-info:#E9F2FC;
+  --color-border-tertiary:#E2E7F0;--color-border-secondary:#CCD5E2;--color-border-info:#A9CBF0;
+  --color-text-primary:#1A2230;--color-text-secondary:#5A6678;--color-text-tertiary:#8A95A8;
+  --color-text-info:#2F6FE0;--color-text-success:#1E9E57;--color-text-danger:#E24B4A;--color-text-warning:#D98200;
+  --border-radius-md:8px;--border-radius-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:rgba(0,0,0,.04)}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--color-border-tertiary);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto;display:flex;flex-direction:column}
+.main{flex:1;min-width:0;padding:18px 24px 40px}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand .nm{font-weight:600;font-size:14px}.brand .sub{font-size:10.5px;color:var(--color-text-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 11px;border:none;background:transparent;border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--color-background-secondary)}
+.nav button.on{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.user{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--color-text-secondary);padding:12px 8px 2px;border-top:0.5px solid var(--color-border-tertiary)}
+.sfil{margin-top:14px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
+.sfil .ttl{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--color-text-tertiary);font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.sfil label{display:block;font-size:10.5px;color:var(--color-text-tertiary);margin:9px 0 3px}
+.sfil select{width:100%;border:0.5px solid var(--color-border-tertiary);background:#fff;border-radius:var(--border-radius-md);padding:7px 9px;font-family:inherit;font-size:12px;color:var(--color-text-primary);cursor:pointer;outline:none}
+.user .av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#5B9BE0,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.filterbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 0;font-size:12.5px;color:var(--color-text-secondary)}
+.filterbar .fl{display:flex;align-items:center;gap:6px;background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:6px 10px}
+.filterbar select{border:none;background:transparent;font-family:inherit;font-size:12.5px;color:var(--color-text-primary);font-weight:500;cursor:pointer;outline:none}
+.filterbar .lbl{color:var(--color-text-tertiary)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.titlebar .t{font-size:17px;font-weight:600}
+.mock{font-size:11px;color:var(--color-text-tertiary)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;position:relative}
+.kpi .ic{position:absolute;top:13px;left:15px;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.kpi.hi{padding-left:56px}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi:has(.chg) .ttl{padding-right:48px}
+.kpi .big{font-size:22px;font-weight:600;margin:4px 0 2px}
+.kpi .sub{font-size:11px;color:var(--color-text-tertiary)}
+.kpi .chg{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px}
+.kpi .chg.u{color:var(--color-text-success);background:var(--color-background-success)}
+.kpi .chg.d{color:var(--color-text-danger);background:var(--color-background-danger)}
+.card{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.hd{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13px;margin-bottom:10px}
+.hd i{font-size:17px;color:var(--color-text-info)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--color-text-secondary);margin-bottom:8px}
+.legend .dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.legend .dash{display:inline-block;width:16px;border-top:2px dashed;margin-right:4px;vertical-align:middle}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:14px}
+.tab{padding:5px 11px;border:0.5px solid var(--color-border-tertiary);background:#fff;border-radius:999px;font-size:11.5px;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+table.rk{width:100%;border-collapse:collapse;font-size:12px}
+table.rk th{font-size:10.5px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.3px;text-align:right;padding:7px 8px;border-bottom:0.5px solid var(--color-border-secondary);white-space:nowrap}
+table.rk td{padding:8px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-variant-numeric:tabular-nums}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:600;background:var(--color-background-secondary)}
+.mono{font-variant-numeric:tabular-nums}
+.s2{font-size:11px;color:var(--color-text-tertiary)}
+.tg{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:999px;white-space:nowrap;font-weight:500}
+.hm{width:100%;border-collapse:separate;border-spacing:4px;font-size:11.5px;table-layout:fixed}
+.hm th{font-size:10px;font-weight:500;color:var(--color-text-secondary);padding:3px 4px;text-align:center}
+.hm th:first-child,.hm td:first-child{text-align:left}
+.hcell{border-radius:7px;padding:9px 4px;text-align:center;font-variant-numeric:tabular-nums;font-weight:500}
+.pipe{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.pstep{flex:1;min-width:150px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;position:relative}
+.pstep .pn{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.pstep .pc{font-size:22px;font-weight:600;margin:3px 0}
+.pstep .pv{font-size:11.5px;color:var(--color-text-tertiary)}
+.parrow{display:flex;align-items:center;color:var(--color-text-tertiary);font-size:22px;padding:0 6px}
+.page{display:none}.page.on{display:block}
+.bar-inline{height:7px;border-radius:4px;background:var(--color-background-secondary);overflow:hidden;min-width:40px}
+.bar-inline>div{height:100%;border-radius:4px}
+@media(max-width:720px){.layout{flex-direction:column}.sidebar{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;padding:12px}.brand{padding:0 8px 0 0}.nav{flex-direction:row;flex-wrap:wrap;margin-top:0;flex:1}.nav button{width:auto}.sfil{width:100%;border-top:none;margin-top:0;padding-top:0;display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px}.sfil .ttl,.sfil .mock{width:100%}.sfil label{margin:0}.sfil select{width:auto;flex:1;min-width:120px}.user{margin-top:0;border-top:none;padding:0}.main{padding:14px}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo"><i class="ti ti-truck"></i></div>
+      <div><div class="nm">Quản trị Đội xe</div><div class="sub">Vận hành · Bảo dưỡng</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="ops"><i class="ti ti-gauge"></i> Tổng quan vận hành</button>
+      <button data-page="maint"><i class="ti ti-tool"></i> Bảo dưỡng &amp; sửa chữa</button>
+    </nav>
+    <div class="sfil">
+      <div class="ttl"><i class="ti ti-filter"></i> Bộ lọc</div>
+      <label>Thời gian</label><select><option>Tháng 05/2026</option><option>Quý 2/2026</option><option>Lũy kế 2026</option></select>
+      <label>Nhóm</label><select><option>Tất cả</option><option>Xe văn phòng</option><option>Xe dự án</option></select>
+      <label>Loại</label><select><option>Tất cả</option><option>Ô tô</option><option>Xe máy</option></select>
+      <label>Công trình</label><select><option>Tất cả dự án</option><option>CT Sân bay Long Thành</option><option>CT Vành đai 3 HCM</option><option>CT Cao tốc Bắc Nam</option></select>
+      <div class="mock" style="margin-top:10px">● Số liệu minh hoạ</div>
+    </div>
+    <div class="user"><div class="av">SC</div><span>Sarah Chen</span></div>
+  </aside>
+  <main class="main">
+
+  <!-- ============ TAB 1: TỔNG QUAN VẬN HÀNH ============ -->
+  <section class="page on" id="pg-ops">
+    <div class="titlebar"><div class="t">Tổng quan vận hành đội xe</div><span class="mock"><i class="ti ti-calendar"></i> Kỳ: Tháng 05/2026</span></div>
+
+    <div class="kpi-grid">
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-info);color:var(--color-text-info)"><i class="ti ti-car"></i></div>
+        <div class="ttl">Tổng phương tiện</div><div class="big">120 xe</div><div class="sub">75 ô tô · 45 xe máy</div></div>
+      <div class="kpi hi"><div class="chg u">▲ 2.1%</div><div class="ic" style="background:var(--color-background-success);color:var(--color-text-success)"><i class="ti ti-activity"></i></div>
+        <div class="ttl">Tỷ lệ hoạt động</div><div class="big">94.2%</div><div class="sub">so với T4</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-info);color:var(--color-text-info)"><i class="ti ti-route"></i></div>
+        <div class="ttl">Tổng số chuyến</div><div class="big">421</div><div class="sub">chuyến trong kỳ</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-info);color:var(--color-text-info)"><i class="ti ti-map-pin"></i></div>
+        <div class="ttl">Tổng quãng đường</div><div class="big">95.300</div><div class="sub">km</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-warning);color:var(--color-text-warning)"><i class="ti ti-gas-station"></i></div>
+        <div class="ttl">Chi phí vận hành</div><div class="big">110,5M</div><div class="sub">Xăng + cầu đường + khác</div></div>
+      <div class="kpi hi"><div class="chg u">Hợp lý</div><div class="ic" style="background:var(--color-background-success);color:var(--color-text-success)"><i class="ti ti-coin"></i></div>
+        <div class="ttl">Chi phí bình quân</div><div class="big">1.159 đ/km</div><div class="sub">toàn đội xe</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Chi phí vận hành &amp; chi phí/km theo tháng</div>
+        <div class="legend"><span><span class="dot" style="background:#0C447C"></span>Nhiên liệu</span><span><span class="dot" style="background:#EF9F27"></span>Cầu đường</span><span><span class="dot" style="background:#8FBEEC"></span>Khác</span><span><span class="dot" style="background:#5B9BE0"></span>Bảo dưỡng &amp; sửa chữa</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Chi phí/km</span></div>
+        <div style="position:relative;height:240px"><canvas id="ops_cost"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-line"></i> Mức độ sử dụng đội xe theo tháng</div>
+        <div class="legend"><span><span class="dot" style="background:#8FBEEC"></span>Tổng số chuyến</span><span><span class="dot" style="background:#E67E22;height:3px;width:16px"></span>Tổng Km</span></div>
+        <div style="position:relative;height:240px"><canvas id="ops_usage"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="hd"><i class="ti ti-layout-grid"></i> Ma trận hiệu quả theo nhóm xe</div>
+        <div style="overflow-x:auto"><table class="hm" id="ops_mtx"></table></div>
+        <div class="s2" style="margin-top:8px">Xanh dương = quy mô (xe · chuyến · km, đậm hơn = lớn hơn) · CP/km &amp; Công suất: xanh lá = tốt, đỏ = cần cải thiện.</div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-building-bridge"></i> Top công trình tốn chi phí xe nhất (xe dự án)</div>
+        <div class="legend"><span><span class="dot" style="background:#0C447C"></span>Nhiên liệu</span><span><span class="dot" style="background:#EF9F27"></span>Cầu đường</span><span><span class="dot" style="background:#8FBEEC"></span>Khác</span></div>
+        <div style="position:relative;height:260px"><canvas id="ops_proj"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-dots"></i> Mức tiêu hao nhiên liệu bất thường</div>
+        <div class="s2" style="margin:-2px 0 8px">Mỗi điểm = 1 ô tô · trục ngang: Km trong kỳ · trục dọc: lít/100km. Điểm đỏ = tiêu hao vượt ngưỡng — gồm 30A-112.33 &amp; 51F-882.11 (cũng là xe chi phí/km cao ở biểu đồ Top).</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Vùng chuẩn</span><span><span class="dot" style="background:#E24B4A"></span>Hao xăng</span></div>
+        <div style="position:relative;height:250px"><canvas id="ops_scatter"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd" style="justify-content:space-between"><span><i class="ti ti-alert-triangle"></i> Top phương tiện chi phí cao cần kiểm tra</span>
+          <div style="display:flex;gap:6px"><button class="tab topmode on" data-m="all">Chi phí/km</button><button class="tab topmode" data-m="ab">Bất thường</button></div></div>
+        <div style="position:relative;height:250px"><canvas id="ops_top"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd" style="justify-content:space-between"><span><i class="ti ti-clipboard-list"></i> Nhật trình theo xe <span class="s2" style="font-weight:400">· bấm 1 xe để xem chuyến đi &amp; lịch sử sửa chữa</span></span><span class="s2"><i class="ti ti-file-export"></i> Xuất Excel</span></div>
+      <div style="overflow-x:auto"><table class="rk" style="min-width:1140px"><thead><tr>
+        <th style="width:8%">Ngày</th><th style="text-align:left">Biển số · Tài xế</th><th style="text-align:left">Nhóm · Loại</th><th style="text-align:left">Tuyến · Nội dung</th><th>Số chuyến</th><th>Km</th><th>Nhiên liệu (lít)</th><th>Phí cầu đường</th><th>Chi phí khác</th><th>BD-SC</th><th>CP/Km</th><th style="text-align:center">Trạng thái</th>
+      </tr></thead><tbody id="veh_log"></tbody></table></div>
+      <div class="s2" style="margin-top:8px">Dòng đậm = tổng hợp tháng theo từng xe · dòng con = các chuyến gần nhất (số hóa nhật trình).</div>
+    </div>
+  </section>
+
+  <!-- ============ TAB 2: BẢO DƯỠNG & SỬA CHỮA ============ -->
+  <section class="page" id="pg-maint">
+    <div class="titlebar"><div class="t">Bảo dưỡng &amp; sửa chữa</div><span class="mock"><i class="ti ti-calendar"></i> Kỳ: Tháng 05/2026</span></div>
+
+    <div class="kpi-grid">
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-warning);color:var(--color-text-warning)"><i class="ti ti-cash"></i></div>
+        <div class="ttl">Chi phí BD-SC trong kỳ</div><div class="big">18,5M</div><div class="sub">định kỳ + đột xuất</div></div>
+      <div class="kpi hi"><div class="chg d">5 chờ</div><div class="ic" style="background:var(--color-background-info);color:var(--color-text-info)"><i class="ti ti-file-text"></i></div>
+        <div class="ttl">Phiếu chờ duyệt</div><div class="big">5</div><div class="sub">/ 24 phiếu trong kỳ</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-success);color:var(--color-text-success)"><i class="ti ti-calendar-repeat"></i></div>
+        <div class="ttl">BD định kỳ</div><div class="big">11,0M</div><div class="sub">60% chi phí BD-SC</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-danger);color:var(--color-text-danger)"><i class="ti ti-urgent"></i></div>
+        <div class="ttl">Sửa chữa đột xuất</div><div class="big">7,5M</div><div class="sub">40% chi phí BD-SC</div></div>
+      <div class="kpi hi"><div class="ic" style="background:var(--color-background-secondary);color:var(--color-text-secondary)"><i class="ti ti-engine"></i></div>
+        <div class="ttl">Xe đang sửa</div><div class="big">5 xe</div><div class="sub">2 ô tô · 3 xe máy</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd"><i class="ti ti-route-2"></i> Quy trình bảo dưỡng &amp; sửa chữa</div>
+      <div class="pipe">
+        <div class="pstep"><div class="pn"><i class="ti ti-edit"></i> Đề xuất</div><div class="pc">24</div><div class="pv">phiếu · 22,4M</div></div>
+        <div class="parrow"><i class="ti ti-chevron-right"></i></div>
+        <div class="pstep"><div class="pn"><i class="ti ti-checkup-list"></i> Phê duyệt</div><div class="pc">18</div><div class="pv">phiếu · 17,1M</div></div>
+        <div class="parrow"><i class="ti ti-chevron-right"></i></div>
+        <div class="pstep" style="background:var(--color-background-success)"><div class="pn" style="color:var(--color-text-success)"><i class="ti ti-receipt"></i> Thanh toán</div><div class="pc" style="color:var(--color-text-success)">14</div><div class="pv">phiếu · 13,2M</div></div>
+      </div>
+      <div class="s2" style="margin-top:10px">Áp dụng cho 2 nhóm (xe văn phòng · xe dự án) và 2 loại (ô tô · xe máy), cho cả bảo dưỡng <b>định kỳ</b> và sửa chữa <b>đột xuất</b>.</div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Chi phí BD-SC theo tháng — định kỳ vs đột xuất</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Định kỳ</span><span><span class="dot" style="background:#E24B4A"></span>Đột xuất</span></div>
+        <div style="position:relative;height:240px"><canvas id="mt_trend"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-pie"></i> Cơ cấu chi phí theo hạng mục</div>
+        <div style="display:flex;align-items:center;gap:16px;height:240px"><div style="position:relative;width:175px;height:175px;flex-shrink:0"><canvas id="mt_donut"></canvas></div><div id="mt_dlg" style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;align-content:center;font-size:11.5px"></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd"><i class="ti ti-calendar-due"></i> Lịch bảo dưỡng định kỳ sắp đến hạn</div>
+      <div style="overflow-x:auto"><table class="rk" style="min-width:760px"><thead><tr><th>Biển số</th><th style="text-align:left">Nhóm / Loại</th><th>Km hiện tại</th><th>Km đến hạn</th><th>Còn lại</th><th>Ngày dự kiến</th><th style="text-align:center">Mức độ</th></tr></thead><tbody id="mt_due"></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <div class="hd" style="justify-content:space-between"><span><i class="ti ti-list-details"></i> Danh sách phiếu bảo dưỡng &amp; sửa chữa</span>
+        <div style="display:flex;gap:6px"><button class="tab mtf on" data-s="all">Tất cả</button><button class="tab mtf" data-s="cho">Chờ duyệt</button><button class="tab mtf" data-s="duyet">Đã duyệt</button><button class="tab mtf" data-s="tt">Đã thanh toán</button></div></div>
+      <div style="overflow-x:auto"><table class="rk" style="min-width:1060px"><thead><tr><th>Mã phiếu</th><th>Biển số</th><th style="text-align:left">Nhóm / Loại</th><th style="text-align:left">Phân loại</th><th style="text-align:left">Hạng mục</th><th style="text-align:left">Nguyên nhân</th><th>Chi phí</th><th>Ngày đề xuất</th><th style="text-align:left">Người duyệt</th><th style="text-align:center">Trạng thái</th></tr></thead><tbody id="mt_tb"></tbody></table></div>
+    </div>
+  </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const NAVY='#0C447C',BL='#2E7CD6',SKY='#5B9BE0',LT='#8FBEEC',AM='#EF9F27',OR='#E67E22',RD='#E24B4A',GR='#5F5E5A',GN='#1E9E57';
+  const grid='rgba(0,0,0,.05)';
+  const MON=['T12','T01','T02','T03','T04','T05'];
+  const nf=n=>Math.round(n).toLocaleString('en-US');           // 95,300
+  const m1=n=>n.toLocaleString('vi-VN',{minimumFractionDigits:1,maximumFractionDigits:1}); // 18,5
+  const fM=n=>m1(n)+'M';
+  Chart.defaults.font.family="Inter,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color='#5A6678';
+
+  /* ---------- DỮ LIỆU VẬN HÀNH ---------- */
+  const fuel=[58,60,62,65,68,72], tolls=[18,18.5,19.5,20.5,21.5,22], others=[16,16.5,17,17.5,18,16.5];
+  const bdsc=[15,15.7,16.8,16.8,17.9,18.5];
+  const km=[88000,89500,90500,92000,94000,95300];
+  const trips=[404,409,413,417,420,421];
+  const costPerKm=km.map((k,i)=>Math.round((fuel[i]+tolls[i]+others[i])*1e6/k));
+
+  const groups=[
+    {n:'Ô tô VP',xe:40,chuyen:180,km:40000,cpkm:1200,cs:94},
+    {n:'Ô tô DA',xe:35,chuyen:150,km:42000,cpkm:1280,cs:90},
+    {n:'Xe máy VP',xe:15,chuyen:70,km:8000,cpkm:700,cs:86},
+    {n:'Xe máy DA',xe:30,chuyen:21,km:5300,cpkm:600,cs:58}
+  ];
+  const topVeh=[
+    {bs:'30A-112.33',g:'Ô tô VP',cpkm:3450,ab:true},
+    {bs:'51F-882.11',g:'Ô tô DA',cpkm:2800,ab:true},
+    {bs:'29C-001.23',g:'Ô tô DA',cpkm:1950,ab:false},
+    {bs:'30G-445.10',g:'Ô tô VP',cpkm:1820,ab:false},
+    {bs:'51A-223.55',g:'Ô tô DA',cpkm:1760,ab:false},
+    {bs:'29B-778.02',g:'Xe máy DA',cpkm:1540,ab:false},
+    {bs:'30E-119.88',g:'Ô tô VP',cpkm:1490,ab:false},
+    {bs:'51H-330.21',g:'Ô tô DA',cpkm:1450,ab:false},
+    {bs:'29D-556.77',g:'Ô tô VP',cpkm:1380,ab:false},
+    {bs:'30K-902.14',g:'Xe máy VP',cpkm:1310,ab:false}
+  ];
+  const proj=[
+    {n:'CT Sân bay Long Thành',f:28,t:9,o:5.5},
+    {n:'CT Vành đai 3 HCM',f:18,t:6,o:4.1},
+    {n:'CT Cao tốc Bắc Nam',f:9.5,t:3.5,o:2.0},
+    {n:'CT Cảng Cái Mép',f:7,t:2.2,o:1.3},
+    {n:'CT Metro Bến Thành',f:5,t:1.6,o:1.0}
+  ];
+  const vehRows=[
+    {bs:'30A-112.33',g:'Ô tô VP',l:'Ô tô',ct:'Văn phòng',ch:28,km:3400,nl:9.2,bd:2.5,cpkm:3450,st:'canh',toll:360000,khac:480000},
+    {bs:'51F-882.11',g:'Ô tô DA',l:'Ô tô',ct:'CT Vành đai 3 HCM',ch:24,km:2800,nl:6.1,bd:1.7,cpkm:2800,st:'canh',toll:720000,khac:300000},
+    {bs:'29C-001.23',g:'Ô tô DA',l:'Ô tô',ct:'CT Sân bay Long Thành',ch:31,km:3900,nl:6.8,bd:0.8,cpkm:1950,st:'ok',toll:980000,khac:200000},
+    {bs:'30G-445.10',g:'Ô tô VP',l:'Ô tô',ct:'Văn phòng',ch:26,km:3100,nl:5.0,bd:0.6,cpkm:1820,st:'ok',toll:120000,khac:150000},
+    {bs:'51A-223.55',g:'Ô tô DA',l:'Ô tô',ct:'CT Cao tốc Bắc Nam',ch:22,km:3400,nl:5.4,bd:0.5,cpkm:1760,st:'ok',toll:860000,khac:240000},
+    {bs:'29B-778.02',g:'Xe máy DA',l:'Xe máy',ct:'CT Cảng Cái Mép',ch:5,km:520,nl:0.6,bd:0.2,cpkm:1540,st:'theo',toll:0,khac:90000},
+    {bs:'30E-119.88',g:'Ô tô VP',l:'Ô tô',ct:'Văn phòng',ch:20,km:2600,nl:3.6,bd:0.3,cpkm:1490,st:'ok',toll:80000,khac:100000},
+    {bs:'51H-330.21',g:'Ô tô DA',l:'Ô tô',ct:'CT Metro Bến Thành',ch:19,km:2500,nl:3.4,bd:0.2,cpkm:1450,st:'ok',toll:540000,khac:120000},
+    {bs:'30K-902.14',g:'Xe máy VP',l:'Xe máy',ct:'Văn phòng',ch:12,km:980,nl:0.9,bd:0.4,cpkm:1310,st:'ok',toll:0,khac:80000}
+  ];
+  const drivers={'30A-112.33':'Trần Quốc Bảo','51F-882.11':'Lê Minh Cường','29C-001.23':'Nguyễn Văn An','30G-445.10':'Hoàng Thị Em','51A-223.55':'Phạm Văn Dũng','29B-778.02':'Đỗ Văn Giang','30E-119.88':'Bùi Thanh Hà','51H-330.21':'Võ Thành Phát','30K-902.14':'Ngô Văn Khoa'};
+
+  /* ---------- DỮ LIỆU BẢO DƯỠNG ---------- */
+  const mtDinhky=[9,9.5,10,9.8,10.5,11], mtDotxuat=[6,6.2,6.8,7.0,7.4,7.5];
+  const mtHM=[
+    {n:'Dầu nhớt & lọc',v:4.2,c:NAVY},{n:'Lốp & săm',v:3.8,c:BL},{n:'Phanh',v:2.6,c:SKY},
+    {n:'Động cơ',v:3.1,c:LT},{n:'Điện & điều hòa',v:2.0,c:AM},{n:'Đồng & sơn',v:1.6,c:OR},{n:'Khác',v:1.2,c:'#BBD7F6'}
+  ];
+  const mtTickets=[
+    {ma:'BS-0612',bs:'30A-112.33',g:'Ô tô VP',pl:'Đột xuất',hm:'Động cơ',nn:'Máy nóng, hao nhớt',v:2.5,d:'18/05',ng:'P. Kỹ thuật',st:'tt'},
+    {ma:'BS-0611',bs:'51F-882.11',g:'Ô tô DA',pl:'Đột xuất',hm:'Phanh',nn:'Bó phanh, kêu lạ',v:1.7,d:'16/05',ng:'P. Kỹ thuật',st:'duyet'},
+    {ma:'BS-0610',bs:'29C-001.23',g:'Ô tô DA',pl:'Định kỳ',hm:'Dầu nhớt & lọc',nn:'Đến hạn 10.000 km',v:0.8,d:'15/05',ng:'P. Kỹ thuật',st:'tt'},
+    {ma:'BS-0609',bs:'30G-445.10',g:'Ô tô VP',pl:'Định kỳ',hm:'Lốp & săm',nn:'Mòn lốp theo định kỳ',v:1.2,d:'14/05',ng:'—',st:'cho'},
+    {ma:'BS-0608',bs:'30K-902.14',g:'Xe máy VP',pl:'Đột xuất',hm:'Điện & điều hòa',nn:'Điều hòa không mát',v:0.4,d:'12/05',ng:'—',st:'cho'},
+    {ma:'BS-0607',bs:'51A-223.55',g:'Ô tô DA',pl:'Định kỳ',hm:'Phanh',nn:'Kiểm tra phanh định kỳ',v:0.9,d:'10/05',ng:'P. Kỹ thuật',st:'tt'},
+    {ma:'BS-0606',bs:'29B-778.02',g:'Xe máy DA',pl:'Đột xuất',hm:'Lốp & săm',nn:'Thủng lốp dọc đường',v:0.3,d:'08/05',ng:'P. Kỹ thuật',st:'duyet'},
+    {ma:'BS-0605',bs:'30E-119.88',g:'Ô tô VP',pl:'Định kỳ',hm:'Dầu nhớt & lọc',nn:'Đến hạn thay nhớt',v:0.8,d:'05/05',ng:'—',st:'cho'}
+  ];
+  const mtDue=[
+    {bs:'51A-223.55',gl:'Ô tô DA · Ô tô',km:60500,due:60000,date:'Quá hạn',md:'qua'},
+    {bs:'29C-001.23',gl:'Ô tô DA · Ô tô',km:48200,due:50000,date:'02/06',md:'sap'},
+    {bs:'30G-445.10',gl:'Ô tô VP · Ô tô',km:39600,due:40000,date:'06/06',md:'sap'},
+    {bs:'30K-902.14',gl:'Xe máy VP · Xe máy',km:18800,due:20000,date:'14/06',md:'on'},
+    {bs:'51H-330.21',gl:'Ô tô DA · Ô tô',km:33100,due:40000,date:'28/06',md:'on'}
+  ];
+
+  /* ---------- HELPERS ---------- */
+  const tg=(txt,bg,col)=>'<span class="tg" style="background:'+bg+';color:'+col+'">'+txt+'</span>';
+  const statTag=s=>({canh:tg('CẢNH BÁO','var(--color-background-danger)','var(--color-text-danger)'),
+                     theo:tg('Theo dõi','var(--color-background-warning)','var(--color-text-warning)'),
+                     ok:tg('Bình thường','var(--color-background-success)','var(--color-text-success)')})[s];
+  const mtStatTag=s=>({cho:tg('Chờ duyệt','var(--color-background-warning)','var(--color-text-warning)'),
+                       duyet:tg('Đã duyệt','var(--color-background-info)','var(--color-text-info)'),
+                       tt:tg('Đã thanh toán','var(--color-background-success)','var(--color-text-success)'),
+                       dx:tg('Đề xuất','var(--color-background-secondary)','var(--color-text-secondary)')})[s];
+  const cpColor=v=>{const t=Math.max(0,Math.min(1,(v-600)/(1300-600)));
+    return v>=1280?'#FAD9D6':v>=1100?'#FBEBD5':'#E1EFDD';};
+  const cpText=v=>v>=1280?'var(--color-text-danger)':v>=1100?'var(--color-text-warning)':'var(--color-text-success)';
+  const dongK=v=>v===0?'0':nf(v)+' đ';
+
+  /* ---------- RENDER BẢNG / HEATMAP ---------- */
+  function renderMtx(){
+    const maxXe=Math.max(...groups.map(g=>g.xe)),maxCh=Math.max(...groups.map(g=>g.chuyen)),maxKm=Math.max(...groups.map(g=>g.km));
+    const cpv=groups.map(g=>g.cpkm),cpMin=Math.min(...cpv),cpMax=Math.max(...cpv);
+    const blue=(v,mx)=>{const a=0.14+0.6*v/mx;return 'background:rgba(46,124,214,'+a.toFixed(2)+');color:'+(a>0.5?'#fff':'var(--color-text-primary)');};
+    const perf=g=>{const h=Math.round(Math.max(0,Math.min(1,g))*130);return 'background:hsl('+h+',60%,90%);color:hsl('+h+',55%,30%)';};
+    const cpGood=v=>1-(v-cpMin)/Math.max(1,cpMax-cpMin);
+    const csGood=v=>(v-50)/50;
+    let h='<thead><tr><th style="text-align:left;width:20%">Nhóm xe</th><th>Số xe</th><th>Số chuyến</th><th>Tổng Km</th><th>CP/km</th><th>Công suất sử dụng</th></tr></thead><tbody>';
+    groups.forEach(g=>{h+='<tr><td style="font-weight:500">'+g.n+'</td>'+
+      '<td><div class="hcell" style="'+blue(g.xe,maxXe)+'">'+g.xe+'</div></td>'+
+      '<td><div class="hcell" style="'+blue(g.chuyen,maxCh)+'">'+nf(g.chuyen)+'</div></td>'+
+      '<td><div class="hcell" style="'+blue(g.km,maxKm)+'">'+nf(g.km)+'</div></td>'+
+      '<td><div class="hcell" style="'+perf(cpGood(g.cpkm))+'">'+nf(g.cpkm)+'</div></td>'+
+      '<td><div class="hcell" style="'+perf(csGood(g.cs))+'">'+g.cs+'%</div></td></tr>';});
+    const tx=groups.reduce((s,g)=>s+g.xe,0),tc=groups.reduce((s,g)=>s+g.chuyen,0),tk=groups.reduce((s,g)=>s+g.km,0);
+    const tcp=Math.round(groups.reduce((s,g)=>s+g.km*g.cpkm,0)/tk);
+    const tcs=Math.round(groups.reduce((s,g)=>s+g.cs*g.xe,0)/tx);
+    h+='<tr class="tot"><td>TỔNG / BQ</td><td style="text-align:center">'+tx+'</td><td style="text-align:center">'+nf(tc)+'</td><td style="text-align:center">'+nf(tk)+'</td><td style="text-align:center">'+nf(tcp)+'</td><td style="text-align:center">'+tcs+'%</td></tr></tbody>';
+    $('ops_mtx').innerHTML=h;
+  }
+  let openVeh=new Set();
+  function tripRoute(v,rnd){
+    if(v.ct==='Văn phòng'){
+      const ds=['Sở GTVT','Ngân hàng BIDV','Kho VP phẩm Q7','CN Bình Dương','Sân bay Tân Sơn Nhất','Đối tác Long An'];
+      return 'Văn phòng → '+ds[Math.floor(rnd()*ds.length)];
+    }
+    const ori=['Văn phòng','Kho vật tư','Mỏ đá Hóa An','Trạm trộn bê tông'][Math.floor(rnd()*4)];
+    return rnd()<0.5?(ori+' → '+v.ct):(v.ct+' → '+ori);
+  }
+  function genTrips(v){
+    let s=0;for(const ch of v.bs)s+=ch.charCodeAt(0);const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+    const n=Math.min(4,Math.max(2,v.ch)),per=v.km/Math.max(1,v.ch),out=[];
+    for(let i=0;i<n;i++){
+      const km=Math.max(8,Math.round(per*(0.7+rnd()*0.8)));
+      const lit=+(km*(v.l==='Ô tô'?0.12:0.022)).toFixed(1);
+      const toll=(v.l==='Ô tô'&&v.ct!=='Văn phòng')?Math.round(km*0.04)*1000:(rnd()<0.3?40000:0);
+      const khac=rnd()<0.25?50000*(1+Math.floor(rnd()*2)):0;
+      out.push({d:(24-i)+'/05',tx:drivers[v.bs]||'Tài xế nội bộ',route:tripRoute(v,rnd),km:km,lit:lit,toll:toll,khac:khac});
+    }
+    return out;
+  }
+  function renderVehLog(){
+    let h='';
+    vehRows.forEach((v,i)=>{
+      const open=openVeh.has(i),lit=Math.round(v.nl*1e6/23000);
+      h+='<tr class="vrow" data-i="'+i+'" style="cursor:pointer;background:var(--color-background-secondary)">'
+        +'<td class="s2">T05/2026</td>'
+        +'<td style="text-align:left;font-weight:600"><span style="color:var(--color-text-tertiary);font-size:10px;margin-right:5px">'+(open?'▾':'▸')+'</span>'+v.bs+'</td>'
+        +'<td style="text-align:left">'+v.g+' · '+v.l+'</td>'
+        +'<td style="text-align:left">'+v.ct+'</td>'
+        +'<td>'+v.ch+'</td><td>'+nf(v.km)+'</td><td>'+nf(lit)+'</td><td>'+dongK(v.toll)+'</td><td>'+dongK(v.khac)+'</td>'
+        +'<td>'+m1(v.bd)+' tr</td>'
+        +'<td style="font-weight:600;color:'+(v.cpkm>=2500?'var(--color-text-danger)':'var(--color-text-primary)')+'">'+nf(v.cpkm)+' đ</td>'
+        +'<td style="text-align:center">'+statTag(v.st)+'</td></tr>';
+      if(open){
+        h+='<tr><td colspan="12" style="text-align:left;background:#fff;padding:6px 10px;font-weight:600;font-size:11px;color:var(--color-text-secondary)"><i class="ti ti-route"></i> Chuyến đi trong kỳ (số hóa nhật trình)</td></tr>';
+        genTrips(v).forEach(t=>{
+          h+='<tr><td class="s2">'+t.d+'</td>'
+            +'<td style="text-align:left;color:var(--color-text-secondary);padding-left:24px"><i class="ti ti-user" style="font-size:12px;margin-right:4px;color:var(--color-text-tertiary)"></i>'+t.tx+'</td>'
+            +'<td></td><td style="text-align:left;color:var(--color-text-secondary)">'+t.route+'</td>'
+            +'<td>1</td><td>'+nf(t.km)+'</td><td>'+m1(t.lit)+'</td><td>'+dongK(t.toll)+'</td><td>'+dongK(t.khac)+'</td><td></td><td></td><td></td></tr>';
+        });
+        const mh=mtTickets.filter(t=>t.bs===v.bs);
+        h+='<tr><td colspan="12" style="text-align:left;background:#fff;padding:6px 10px;font-weight:600;font-size:11px;color:var(--color-text-secondary)"><i class="ti ti-tool"></i> Lịch sử sửa chữa (BD-SC)</td></tr>';
+        if(mh.length){
+          mh.forEach(t=>{
+            h+='<tr><td class="s2">'+t.d+'</td>'
+              +'<td style="text-align:left;color:var(--color-text-secondary);padding-left:24px"><i class="ti ti-file-text" style="font-size:12px;margin-right:4px;color:var(--color-text-tertiary)"></i>'+t.ma+'</td>'
+              +'<td style="text-align:left">'+(t.pl==='Đột xuất'?tg('Đột xuất','var(--color-background-danger)','var(--color-text-danger)'):tg('Định kỳ','var(--color-background-info)','var(--color-text-info)'))+'</td>'
+              +'<td style="text-align:left;color:var(--color-text-secondary)">'+t.hm+' — '+t.nn+'</td>'
+              +'<td></td><td></td><td></td><td></td><td></td>'
+              +'<td>'+m1(t.v)+' tr</td><td></td><td style="text-align:center">'+mtStatTag(t.st)+'</td></tr>';
+          });
+        } else {
+          h+='<tr><td colspan="12" class="s2" style="text-align:center;padding:8px;color:var(--color-text-tertiary)">Không có phiếu BD-SC trong kỳ</td></tr>';
+        }
+      }
+    });
+    $('veh_log').innerHTML=h;
+  }
+  function renderMtTb(filter){
+    const list=mtTickets.filter(t=>filter==='all'||t.st===filter);
+    $('mt_tb').innerHTML=list.map(t=>'<tr><td style="font-weight:500">'+t.ma+'</td><td>'+t.bs+'</td><td style="text-align:left">'+t.g+'</td><td style="text-align:left">'+(t.pl==='Đột xuất'?tg('Đột xuất','var(--color-background-danger)','var(--color-text-danger)'):tg('Định kỳ','var(--color-background-info)','var(--color-text-info)'))+'</td><td style="text-align:left">'+t.hm+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+t.nn+'</td><td>'+m1(t.v)+' tr</td><td class="s2">'+t.d+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+t.ng+'</td><td style="text-align:center">'+mtStatTag(t.st)+'</td></tr>').join('')||'<tr><td colspan="10" class="s2" style="text-align:center;padding:16px">Không có phiếu</td></tr>';
+  }
+  function renderMtDue(){
+    const md=m=>({qua:tg('Quá hạn','var(--color-background-danger)','var(--color-text-danger)'),sap:tg('Sắp đến hạn','var(--color-background-warning)','var(--color-text-warning)'),on:tg('Trong hạn','var(--color-background-success)','var(--color-text-success)')})[m];
+    $('mt_due').innerHTML=mtDue.map(r=>{const left=r.due-r.km;return '<tr><td style="font-weight:500">'+r.bs+'</td><td style="text-align:left">'+r.gl+'</td><td>'+nf(r.km)+'</td><td>'+nf(r.due)+'</td><td style="color:'+(left<=0?'var(--color-text-danger)':left<2000?'var(--color-text-warning)':'var(--color-text-primary)')+'">'+(left<=0?'vượt '+nf(-left):nf(left))+' km</td><td class="s2">'+r.date+'</td><td style="text-align:center">'+md(r.md)+'</td></tr>';}).join('');
+  }
+
+  /* ---------- CHARTS ---------- */
+  let opsBuilt=false,mtBuilt=false,topChart;
+  function buildOps(){
+    new Chart($('ops_cost'),{data:{labels:MON,datasets:[
+      {type:'bar',label:'Nhiên liệu',data:fuel,backgroundColor:NAVY,stack:'c',order:3},
+      {type:'bar',label:'Cầu đường',data:tolls,backgroundColor:AM,stack:'c',order:3},
+      {type:'bar',label:'Khác',data:others,backgroundColor:LT,stack:'c',order:3},
+      {type:'bar',label:'Bảo dưỡng & sửa chữa',data:bdsc,backgroundColor:SKY,stack:'c',borderRadius:4,order:3},
+      {type:'line',label:'Chi phí/km',data:costPerKm,yAxisID:'y1',borderColor:NAVY,backgroundColor:NAVY,borderWidth:2,pointRadius:3,tension:.3,order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.yAxisID==='y1'?nf(c.parsed.y)+' đ/km':fM(c.parsed.y))}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+'M'}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>nf(v)}}}}});
+
+    new Chart($('ops_usage'),{data:{labels:MON,datasets:[
+      {type:'bar',label:'Tổng số chuyến',data:trips,backgroundColor:LT,borderRadius:4,order:2},
+      {type:'line',label:'Tổng Km',data:km,yAxisID:'y1',borderColor:OR,backgroundColor:OR,borderWidth:2,pointRadius:3,tension:.3,order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.yAxisID==='y1'?nf(c.parsed.y)+' km':nf(c.parsed.y)+' chuyến')}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{callback:v=>nf(v/1000)+'k'}}}}});
+
+    buildTop('all');
+
+    // scatter — mỗi điểm = 1 ô tô; xe nổi bật trùng với các bảng khác
+    const named=[
+      {bs:'30A-112.33',x:3400,y:17.2,ab:true},
+      {bs:'51F-882.11',x:2800,y:16.0,ab:true},
+      {bs:'29C-001.23',x:3900,y:13.4},
+      {bs:'30G-445.10',x:3100,y:11.6},
+      {bs:'51A-223.55',x:3400,y:12.1},
+      {bs:'30E-119.88',x:2600,y:10.4},
+      {bs:'51H-330.21',x:2500,y:11.0},
+      {bs:'29D-556.77',x:2300,y:10.0}
+    ];
+    const prov=['30A','30G','30E','51F','51A','51H','29C','29D'];
+    let sd=137;const r=()=>{sd=(sd*9301+49297)%233280;return sd/233280;};
+    const fleet=named.slice();
+    for(let i=0;i<18;i++){
+      const x=Math.round(500+r()*3000);
+      const ab=(i===5||i===12);
+      const y=ab?+(15+r()*2.5).toFixed(1):+(8.5+r()*5).toFixed(1);
+      const bs=prov[Math.floor(r()*prov.length)]+'-'+(200+Math.floor(r()*700))+'.'+String(10+Math.floor(r()*89));
+      fleet.push({bs:bs,x:x,y:y,ab:ab});
+    }
+    const norm=fleet.filter(f=>!f.ab),hao=fleet.filter(f=>f.ab);
+    new Chart($('ops_scatter'),{type:'scatter',data:{datasets:[
+      {label:'Vùng chuẩn',data:norm,backgroundColor:'rgba(46,124,214,.55)',pointRadius:4},
+      {label:'Hao xăng',data:hao,backgroundColor:RD,pointRadius:6,pointStyle:'triangle'}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.bs+': '+nf(c.parsed.x)+' km · '+c.parsed.y+' L/100km'}}},
+        scales:{x:{title:{display:true,text:'Tổng Km trong kỳ'},grid:{color:grid},ticks:{callback:v=>nf(v)}},y:{title:{display:true,text:'Lít / 100km'},grid:{color:grid}}}}});
+
+    new Chart($('ops_proj'),{data:{labels:proj.map(p=>p.n),datasets:[
+      {label:'Nhiên liệu',data:proj.map(p=>p.f),backgroundColor:NAVY,stack:'p'},
+      {label:'Cầu đường',data:proj.map(p=>p.t),backgroundColor:AM,stack:'p'},
+      {label:'Khác',data:proj.map(p=>p.o),backgroundColor:LT,stack:'p',borderRadius:4}]},
+      type:'bar',options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fM(c.parsed.x)}}},
+        scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+'M'}},y:{stacked:true,grid:{display:false},ticks:{font:{size:10}}}}}});
+    opsBuilt=true;
+  }
+  function buildTop(mode){
+    const list=(mode==='ab'?topVeh.filter(v=>v.ab):topVeh.slice()).sort((a,b)=>b.cpkm-a.cpkm);
+    if(topChart)topChart.destroy();
+    const col=v=>mode==='ab'?RD:(v.cpkm>=2500?RD:v.cpkm>=1900?OR:BL);
+    topChart=new Chart($('ops_top'),{type:'bar',data:{labels:list.map(v=>v.bs+' ('+(v.g.includes('VP')?'VP':'DA')+')'),
+      datasets:[{data:list.map(v=>v.cpkm),backgroundColor:list.map(col),borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>nf(c.parsed.x)+' đ/km'+(mode==='ab'?' · ⚠ tiêu hao bất thường':'')}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>nf(v)}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+  }
+  function buildMaint(){
+    new Chart($('mt_trend'),{data:{labels:MON,datasets:[
+      {type:'bar',label:'Định kỳ',data:mtDinhky,backgroundColor:BL,stack:'m',order:2},
+      {type:'bar',label:'Đột xuất',data:mtDotxuat,backgroundColor:RD,stack:'m',borderRadius:4,order:2}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fM(c.parsed.y)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+'M'}}}}});
+    const tot=mtHM.reduce((s,h)=>s+h.v,0);
+    new Chart($('mt_donut'),{type:'doughnut',data:{labels:mtHM.map(h=>h.n),datasets:[{data:mtHM.map(h=>h.v),backgroundColor:mtHM.map(h=>h.c),borderWidth:2,borderColor:'#fff'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+m1(c.parsed)+'M ('+Math.round(c.parsed/tot*100)+'%)'}}}}});
+    $('mt_dlg').innerHTML=mtHM.map(h=>'<div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:'+h.c+';flex-shrink:0"></span><span style="flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+h.n+'</span><span class="mono" style="color:var(--color-text-secondary);white-space:nowrap">'+m1(h.v)+'M · '+Math.round(h.v/tot*100)+'%</span></div>').join('');
+    renderMtTb('all');renderMtDue();
+    mtBuilt=true;
+  }
+
+  /* ---------- TAB SWITCH ---------- */
+  function show(pg){
+    document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id==='pg-'+pg));
+    document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===pg));
+    if(pg==='maint'&&!mtBuilt)buildMaint();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
+  document.querySelectorAll('.topmode').forEach(b=>b.addEventListener('click',function(){document.querySelectorAll('.topmode').forEach(x=>x.classList.toggle('on',x===b));buildTop(b.dataset.m);}));
+  document.querySelectorAll('.mtf').forEach(b=>b.addEventListener('click',function(){document.querySelectorAll('.mtf').forEach(x=>x.classList.toggle('on',x===b));renderMtTb(b.dataset.s);}));
+
+  $('veh_log').addEventListener('click',e=>{const r=e.target.closest('.vrow');if(!r)return;const i=+r.dataset.i;openVeh.has(i)?openVeh.delete(i):openVeh.add(i);renderVehLog();});
+
+  /* init */
+  renderMtx();renderVehLog();buildOps();
+})();
+</script>
+</body>
+</html>

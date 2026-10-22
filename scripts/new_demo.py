@@ -9,7 +9,7 @@ Sau đó: thêm thumb.jpg (ảnh chụp 16:10), chạy check_demo.py, rồi buil
 import argparse, datetime, json, pathlib, re, shutil, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-INDUSTRIES = ["General", "FnB", "Sản xuất", "Xây dựng", "BĐS - CĐT - Nhà thầu", "Vận tải", "Thời trang", "Cao su"]
+INDUSTRIES = ["General", "FnB", "Sản xuất", "Xây dựng", "BĐS - CĐT - Nhà thầu", "Vận tải", "Thời trang", "Cao su", "Bán lẻ", "Giáo dục", "Năng lượng"]
 
 def main():
     p = argparse.ArgumentParser()

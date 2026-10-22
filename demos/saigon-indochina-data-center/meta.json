@@ -1,0 +1,22 @@
+{
+  "slug": "saigon-indochina-data-center",
+  "title": "Saigon Indochina — Sơ đồ Data Center",
+  "type": "proposal",
+  "industry": "Bán lẻ",
+  "department": "All",
+  "description": "Data Center gom dữ liệu bán hàng nhiều kênh về một nền tảng, data mart và báo cáo.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/DongDuongSG_Sodogp/",
+  "source_repo": "https://github.com/tbinh-06/DongDuongSG_Sodogp",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "data center",
+    "sơ đồ giải pháp",
+    "đơn hàng"
+  ]
+}

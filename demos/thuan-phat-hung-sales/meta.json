@@ -1,0 +1,22 @@
+{
+  "slug": "thuan-phat-hung-sales",
+  "title": "Thuận Phát Hưng — Sales Expansion",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "Kinh doanh",
+  "description": "Doanh thu so kế hoạch, báo giá & chốt đơn, mua lại & giữ chân khách, cross-sell và chiến dịch.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Thuan_Phat_Hung/",
+  "source_repo": "https://github.com/tbinh-06/Thuan_Phat_Hung",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "doanh thu",
+    "báo giá",
+    "cross-sell"
+  ]
+}

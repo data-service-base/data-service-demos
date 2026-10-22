@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEID — Báo cáo 02: Tiến độ đơn hàng &amp; khách hàng</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F0F3F8;
+  --color-background-danger:#FCEAEA;
+  --color-background-warning:#FBF1DD;
+  --color-background-success:#E8F6EE;
+  --color-background-info:#E9F2FC;
+  --color-border-tertiary:#E2E7F0;
+  --color-border-secondary:#CCD5E2;
+  --color-border-info:#A9CBF0;
+  --color-text-primary:#1A2230;
+  --color-text-secondary:#5A6678;
+  --color-text-tertiary:#8A95A8;
+  --color-text-info:#2F6FE0;
+  --color-text-success:#1E9E57;
+  --color-text-danger:#E24B4A;
+  --color-text-warning:#D98200;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--color-border-tertiary);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.brand .nm{font-weight:600;font-size:14px}.brand .sub{font-size:10.5px;color:var(--color-text-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;background:transparent;border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--color-background-secondary)}
+.nav button.on{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.nav button:disabled{color:var(--color-text-tertiary);cursor:default;opacity:.7}
+.nav button:disabled:hover{background:transparent}
+.nav .soon{margin-left:auto;font-size:9.5px;background:var(--color-background-secondary);color:var(--color-text-tertiary);padding:1px 6px;border-radius:6px}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;position:relative}
+.kpi .chg{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;line-height:1.45}
+.kpi .chg.u{color:var(--color-text-success);background:var(--color-background-success)}
+.kpi .chg.d{color:var(--color-text-danger);background:var(--color-background-danger)}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi .big{font-size:23px;font-weight:500;margin:5px 0 9px}
+.kpi .row{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:3px 0}
+.kpi .row .l{color:var(--color-text-secondary)}.kpi .row .v{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.hd{font-size:13px;font-weight:500;margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.up{color:var(--color-text-success)}.dn{color:var(--color-text-danger)}.wn{color:var(--color-text-warning)}.prow{cursor:pointer}
+.bdg{font-size:10.5px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.bM{background:var(--color-background-warning);color:var(--color-text-warning)}.bG{background:var(--color-background-success);color:var(--color-text-success)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.dash{width:16px;height:0;border-top:2px dashed;display:inline-block}
+.tab{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.ptab{font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.ptab.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+table.rk{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11.5px}
+table.rk th{text-align:right;font-weight:500;color:var(--color-text-secondary);padding:6px 7px;font-size:11px;position:sticky;top:0;background:var(--color-background-secondary)}
+table.rk td{padding:9px 7px;border-top:0.5px solid var(--color-border-tertiary);text-align:right;vertical-align:middle}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:500;background:var(--color-background-secondary)}
+table.dvt td,table.dvt th{border-left:0.5px solid var(--color-border-tertiary)}
+table.dvt td:first-child,table.dvt th:first-child{border-left:none}
+table.txl td,table.txl th{text-align:left}
+table.tk th:not(:first-child),table.tk td:not(:first-child){text-align:center}
+.mono{font-variant-numeric:tabular-nums}.s2{font-size:11px;color:var(--color-text-tertiary)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.titlebar .t{font-size:18px;font-weight:600}
+.warn{display:flex;gap:10px;align-items:flex-start;background:var(--color-background-warning);border:0.5px solid #E0AA4E;border-radius:var(--border-radius-lg);padding:12px 15px;margin-bottom:14px;font-size:12.5px;color:#7a5212}
+.warn b{color:#5e3f0c}
+table.hm{width:100%;border-collapse:separate;border-spacing:3px;font-size:10.5px;min-width:840px}
+table.hm.hmfix{table-layout:fixed}
+table.hm.hmfix td,table.hm.hmfix th{overflow:hidden;text-overflow:ellipsis}
+table.hm th{font-weight:500;color:var(--color-text-secondary);font-size:10px;padding:3px;text-align:center}
+table.hm th:first-child,table.hm td:first-child{text-align:left}
+.hcell{border-radius:7px;padding:8px 2px;text-align:center;font-variant-numeric:tabular-nums;font-weight:500;color:var(--color-text-primary)}
+.hcell.over{outline:1.5px solid #E24B4A;outline-offset:-1.5px}
+.dname{padding:6px 8px;font-size:11px;font-weight:500;white-space:nowrap}
+.tbtog{cursor:pointer;color:var(--color-text-info)!important;background:var(--color-background-info);border-radius:6px}
+.ccell{padding:6px 3px;text-align:center;font-variant-numeric:tabular-nums;color:var(--color-text-secondary);font-size:10.5px}
+table.mx{width:100%;border-collapse:collapse;font-size:11.5px;min-width:560px}
+table.mx th{font-weight:500;color:var(--color-text-secondary);font-size:10.5px;padding:7px 8px;text-align:right;white-space:nowrap;background:var(--color-background-secondary);position:sticky;top:0}
+table.mx th:first-child{text-align:left}
+table.mx td{padding:0;border-top:0.5px solid var(--color-border-tertiary);text-align:right}
+table.mx td .c{padding:8px;font-variant-numeric:tabular-nums}
+table.mx td:first-child{text-align:left;font-weight:500;padding:8px;white-space:nowrap}
+table.mx tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:600;background:var(--color-background-secondary)}
+.tg{display:inline-block;font-size:10px;padding:1px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.cpgt{font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.cpgt.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+.sidefilter{margin-top:14px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
+.sftitle{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 11px 9px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:10px;padding:0 11px}
+.fitem{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fdrow{display:flex;gap:6px}.fdrow .fitem{flex:1;min-width:0}
+.flabel{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.fsel,.fdate,.msbtn{font-size:12px;font-family:inherit;width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 9px;color:var(--color-text-primary);cursor:pointer;outline:none}
+.fdate{cursor:text;min-width:0}
+.fdate:disabled{opacity:.45;cursor:not-allowed}
+.ms{position:relative}
+.msbtn{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.msbtn .cv{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msdrop{margin-top:5px;max-height:190px;overflow:auto;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px;display:none}
+.ms.open .msdrop{display:block}
+.msopt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--color-text-secondary)}
+.msopt:hover{background:var(--color-background-secondary)}
+.msopt input{accent-color:var(--color-text-info);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.msall{border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:3px;color:var(--color-text-primary);font-weight:500}
+.freset{font-size:11.5px;color:var(--color-text-info);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:5px;padding:4px 0;margin-top:2px}
+.freset:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">HEID</div><div><div class="nm">HEID</div><div class="sub">Tiến độ đơn hàng &amp; KH</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="issue"><i class="ti ti-book"></i> Kinh doanh - phát hành</button>
+      <button data-page="order"><i class="ti ti-shopping-cart"></i> Đơn hàng &amp; khách hàng</button>
+      <button data-page="digital"><i class="ti ti-device-laptop"></i> Tài khoản số</button>
+    </nav>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar">
+        <div class="fitem"><span class="flabel">Kỳ báo cáo</span>
+          <select class="fsel"><option>YTD 2026</option><option>Quý II/2026</option><option>Tháng 07/2026</option></select></div>
+        <div class="fitem"><span class="flabel">Nhóm sản phẩm</span>
+          <select class="fsel"><option>Tất cả</option><option>Sách HEID in</option><option>Sách HEID nhập mua</option><option>Hoclieu.vn</option><option>GlobalSpeak</option></select></div>
+        <div class="fitem"><span class="flabel">Khu vực</span>
+          <select class="fsel"><option>Toàn quốc</option><option>Miền Bắc</option><option>Miền Trung</option><option>Miền Nam</option></select></div>
+        <div class="fitem"><span class="flabel">Kênh bán</span>
+          <select class="fsel"><option>Tất cả kênh</option><option>CT Sách &amp; TBTH tỉnh</option><option>Đại lý / nhà sách</option><option>Trực tiếp trường học / Sở GD</option><option>Thương mại điện tử (B2C)</option></select></div>
+        <button class="freset"><i class="ti ti-rotate-2"></i> Đặt lại bộ lọc</button>
+      </div>
+    </div>
+  </aside>
+  <main class="main">
+
+  <!-- ===================== KINH DOANH - PHÁT HÀNH ===================== -->
+  <section class="page" id="page-issue" style="display:block">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Kinh doanh - phát hành</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT sản lượng: nghìn bản · doanh số: triệu đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px" id="is_kpi"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span><i class="ti ti-chart-bar"></i> Sản lượng phát hành: thực hiện · kế hoạch · cùng kỳ</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="is_c1" data-v="month">Tháng</button><button class="tab cum" data-c="is_c1" data-v="cumu">Lũy kế</button></div>
+        </div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Thực hiện</span><span><span class="dash" style="border-color:#5F5E5A"></span>Kế hoạch</span><span><span class="dot" style="background:#8FBEEC;height:3px;width:16px"></span>Cùng kỳ</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="is_c1"></canvas></div>
+        <div class="s2" style="margin-top:8px">% hoàn thành = Thực hiện ÷ Kế hoạch lũy kế.</div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Cơ cấu sản lượng phát hành theo nhóm sản phẩm</div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="is_c2"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-users"></i> Kênh phát hành: HEID tự doanh vs đơn vị đối tác</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Thực hiện</span><span><span class="dot" style="background:#CCD5E2"></span>Kế hoạch</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="is_c3"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-map-pin"></i> Sản lượng phát hành theo khu vực</span>
+        <div style="display:flex;gap:6px"><button class="tab kvtab on" data-v="val">Sản lượng</button><button class="tab kvtab" data-v="pct">% theo khu vực</button></div>
+      </div>
+      <div class="legend"><span>Ô càng đậm = sản lượng càng lớn</span><span style="color:var(--color-text-tertiary)">· ĐVT: nghìn bản</span></div>
+      <div style="overflow-x:auto"><table class="hm hmfix"><thead id="is_kvh"></thead><tbody id="is_kvb"></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-list-details"></i> Sản lượng &amp; doanh số theo nhóm và mảng sản phẩm <span class="s2" style="font-weight:400">· bấm vào nhóm để xem mảng</span></span>
+        <div style="display:flex;gap:6px"><button class="tab" id="is_all">Mở tất cả</button><button class="tab" id="is_none">Gộp tất cả</button></div>
+      </div>
+      <div style="max-height:420px;overflow:auto"><table class="rk dvt" style="min-width:680px"><thead><tr><th>Nhóm / mảng sản phẩm</th><th>Sản lượng</th><th>Tỷ trọng</th><th>Giá bìa BQ</th><th>Doanh số</th><th>So CK</th></tr></thead><tbody id="is_tb"></tbody></table></div>
+      <div class="s2" style="margin-top:8px">Giá bìa bình quân = Doanh số ÷ Sản lượng. Doanh số sách giấy <b>94.850 triệu đồng</b> khớp với Báo cáo 01 (SP HEID in 52.900 + SP HEID mua 41.950).</div>
+    </div>
+  </section>
+
+  <!-- ===================== ĐỐI TÁC ĐẶT HÀNG ===================== -->
+  <section class="page" id="page-order">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Đơn hàng &amp; khách hàng</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT sản lượng: nghìn bản · giá trị: triệu đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px" id="or_kpi"></div>
+    <div class="s2" style="margin-bottom:14px">Sản lượng đối tác đặt hàng là nhu cầu dự trù cho giai đoạn tới, không cùng kỳ đo với sản lượng phát hành thực tế ở trang Kinh doanh - phát hành nên hai số liệu không so sánh trực tiếp.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Cơ cấu sản lượng đặt hàng theo nhóm sản phẩm</div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="or_c0"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-printer"></i> Đối tác đặt hàng - sách HEID in</div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="or_c1"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-shopping-bag"></i> Đối tác đặt hàng - sách HEID nhập mua</div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="or_c2"></canvas></div>
+      </div>
+    </div>
+
+
+    <div class="titlebar" style="margin-top:24px"><div style="display:flex;align-items:center;gap:8px"><span class="t" style="font-size:15px">Phân tích đơn hàng &amp; khách hàng</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT giá trị: triệu đồng</span></div></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px" id="co_kpi"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span><i class="ti ti-chart-bar"></i> Số đơn &amp; giá trị đơn hàng theo tháng</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="co_c1" data-v="month">Theo tháng</button><button class="tab cum" data-c="co_c1" data-v="cumu">Lũy kế</button></div>
+        </div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Số đơn hàng (trục trái)</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Giá trị đơn hàng (trục phải)</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="co_c1"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Trạng thái thực hiện đơn hàng</div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="co_c2"></canvas></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-shopping-cart"></i> Giá trị đơn hàng theo kênh bán</div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="co_c3"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-users-group"></i> Giá trị đơn hàng theo nhóm khách hàng</div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="co_c4"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd"><i class="ti ti-package"></i> Giá trị đơn hàng theo nhóm &amp; mảng sản phẩm</div>
+      <div style="max-height:340px;overflow:auto"><table class="rk dvt" style="min-width:560px"><thead><tr><th>Nhóm / mảng sản phẩm</th><th>Giá trị đơn hàng</th><th>Tỷ trọng</th></tr></thead><tbody id="co_tb"></tbody></table></div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd"><i class="ti ti-circle-dot"></i> Phân nhóm khách hàng: số đơn × doanh thu <span class="s2" style="font-weight:400">· kích cỡ bong bóng = giá trị đơn BQ</span></div>
+      <div class="legend" id="co_bleg"></div>
+      <div style="position:relative;width:100%;height:320px"><canvas id="co_c5"></canvas></div>
+      <div class="s2" style="margin-top:8px">Khách hàng <b>Ưu tiên</b> = nhiều đơn, doanh thu cao · <b>Tiềm năng</b> = doanh thu cao nhưng tần suất chưa ổn định · <b>Ổn định</b> = đều đặn nhưng quy mô nhỏ · <b>Theo dõi</b> = ít giao dịch, doanh thu thấp.</div>
+    </div>
+
+    <div class="card">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-users"></i> Chi tiết khách hàng <span class="s2" style="font-weight:400">· bấm vào khách hàng để xem đơn hàng</span></span>
+        <div style="display:flex;gap:6px"><button class="tab cotab on" data-k="all">Tất cả</button><button class="tab cotab" data-k="up">Ưu tiên</button><button class="tab cotab" data-k="tn">Tiềm năng</button><button class="tab cotab" data-k="od">Ổn định</button></div>
+      </div>
+      <div style="max-height:480px;overflow:auto"><table class="rk dvt" style="min-width:780px"><thead><tr><th>Khách hàng</th><th>Nhóm</th><th>Khu vực</th><th>Số đơn</th><th>Giá trị TB/đơn</th><th>Tổng doanh thu</th><th>Hoàn thành vs tiền về</th><th>Còn phải thu</th></tr></thead><tbody id="co_top"></tbody></table></div>
+      <div class="s2" style="margin-top:8px">Hoàn thành = % đơn giao xong · Tiền về = % đã thanh toán. <b>Ngưỡng:</b> Tốt = đúng hạn ≥ 90% · Theo dõi = 80–90% · Cần xử lý = &lt; 80%.</div>
+    </div>
+
+  </section>
+
+  <!-- ===================== TÀI KHOẢN SỐ ===================== -->
+  <section class="page" id="page-digital">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Tài khoản số</span><span style="font-size:11px;color:var(--color-text-tertiary)">· Hoclieu.vn &amp; GlobalSpeak · doanh thu: triệu đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="ptab dgtab on" data-p="all">Cả 2 nền tảng</button>
+      <button class="ptab dgtab" data-p="hl">Hoclieu.vn</button>
+      <button class="ptab dgtab" data-p="gs">GlobalSpeak</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px" id="dg_kpi"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span><i class="ti ti-chart-bar"></i> Doanh thu theo tháng</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="dg_c1" data-v="month">Theo tháng</button><button class="tab cum" data-c="dg_c1" data-v="cumu">Lũy kế</button></div>
+        </div>
+        <div class="legend" id="dg_lg"></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="dg_c1"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Doanh thu theo gói sản phẩm</div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="dg_c2"></canvas></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-map-pin"></i> Tài khoản &amp; doanh thu theo khu vực</div>
+        <div style="position:relative;width:100%;height:230px"><canvas id="dg_c3"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-gauge"></i> Mức độ hoạt động tài khoản</div>
+        <div style="position:relative;width:100%;height:230px"><canvas id="dg_c4"></canvas></div>
+        <div class="s2" style="margin-top:8px">Hoạt động = có đăng nhập/sử dụng trong 30 ngày gần nhất.</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-trending-up"></i> Top trường học sử dụng nhiều nhất</div>
+        <div style="overflow-x:auto"><table class="rk"><thead><tr><th>Trường / đơn vị</th><th>Nền tảng</th><th>Tài khoản</th><th>Người dùng trả phí</th></tr></thead><tbody id="dg_top"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-trending-down"></i> Top trường học sử dụng ít nhất <span class="s2" style="font-weight:400">· có tài khoản nhưng gần như không hoạt động</span></div>
+        <div style="overflow-x:auto"><table class="rk"><thead><tr><th>Trường / đơn vị</th><th>Nền tảng</th><th>Tài khoản</th><th>% hoạt động</th></tr></thead><tbody id="dg_bot"></tbody></table></div>
+        <div class="s2" style="margin-top:8px"><b>Cần xử lý:</b> nhóm này đã trả phí/được cấp nhưng gần như không dùng — <b>Phòng CSKH số</b> liên hệ hỗ trợ triển khai lại.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="s2" style="margin-top:18px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)">
+    Ghi chú: toàn bộ số liệu trong bản này là <b>số minh họa</b> phục vụ thiết kế giao diện. Doanh số sách giấy và cơ cấu SP số khớp với <b>Báo cáo 01 - Tài chính</b>; sản lượng khớp với trang Kinh doanh - phát hành trong chính báo cáo này.
+    Nguồn: ERP (bán hàng, đặt hàng, khách hàng) · Hoclieu.vn + GlobalSpeak (tài khoản, gói, mức sử dụng).
+    Kỳ YTD 2026 (01/01–31/07/2026), số tạm tính chưa chốt sổ. Mốc so sánh: Kế hoạch (KH) 2026 và cùng kỳ (CK) 2025.
+    Phân quyền: báo cáo dành cho BOD và khối kinh doanh — xem toàn bộ, không áp RLS.
+  </div>
+
+  </main>
+</div>
+
+<script>
+/* ============ HÀM DÙNG CHUNG (giữ pattern template) ============ */
+const grid='rgba(128,128,128,0.18)',tickc='rgba(128,128,128,0.85)',zero='rgba(128,128,128,0.55)';
+const BL='#2E7CD6',BLL='#8FBEEC',RD='#E24B4A',NV='#0C447C',GR='#5F5E5A',OR='#EF9F27',GN='#1E9E57',GY='#CCD5E2';
+const SH=['#0C447C','#185FA5','#2E7CD6','#5B9BE0','#8FBEEC','#BBD7F6'];
+Chart.defaults.font.family="Inter,-apple-system,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color=tickc;
+const R=v=>Math.round(v*10)/10, pc=(a,b)=>Math.round(a/b*100);
+const nf=v=>Math.round(v).toLocaleString('vi-VN');
+const bn=v=>nf(v)+' ngh bản';
+const pp=v=>v.toFixed(1).replace('.',',');
+const el=id=>document.getElementById(id);
+const sgn=v=>(v>=0?'↑ ':'↓ ')+Math.abs(v).toFixed(1).replace('.',',')+'%';
+const cls=v=>v>=0?'up':'dn';
+const MON=['T01','T02','T03','T04','T05','T06','T07'];
+const bdg=(t,k)=>'<span class="bdg '+(k==='g'?'bG':'bM')+'">'+t+'</span>';
+const caret=o=>'<span style="color:var(--color-text-tertiary);font-size:10px;width:9px;display:inline-block">'+(o?'▾':'▸')+'</span>';
+const blueA=a=>'rgba(46,124,214,'+a.toFixed(2)+')';
+
+const cumu=a=>{let s=0;return a.map(v=>R(s+=v));};
+const _cum={};
+function regCum(id,chart,recolor){_cum[id]={chart,base:chart.data.datasets.map(d=>d.data.slice()),recolor};}
+function setCum(id,v){const e=_cum[id];if(!e)return;e.chart.data.datasets.forEach((d,i)=>{d.data=(v==='cumu')?cumu(e.base[i]):e.base[i].slice();});if(e.recolor)e.recolor(e.chart);e.chart.update();
+  document.querySelectorAll('.cum[data-c="'+id+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));}
+document.addEventListener('click',e=>{const b=e.target.closest?e.target.closest('.cum'):null;if(b)setCum(b.dataset.c,b.dataset.v);});
+
+/* ============ DỮ LIỆU DÙNG CHUNG — mọi tổng đã đối soát chéo với BC01 & trang 1 ============ */
+const GRP=[
+ {n:'Sách HEID in', c:SH[0], m:[
+   {n:'STA',v:1085,dt:21700,ck:9.8},{n:'GDQPAN',v:700,dt:12600,ck:5.4},
+   {n:'SBT OLTM',v:775,dt:12400,ck:7.2},{n:'STK và SP khác',v:280,dt:6200,ck:-2.1}]},
+ {n:'Sách HEID nhập mua', c:SH[2], m:[
+   {n:'SGK',v:1750,dt:26300,ck:6.8},{n:'SBT',v:580,dt:9850,ck:-3.6},{n:'STK',v:290,dt:5800,ck:4.8}]}
+];
+const gV =g=>g.m.reduce((a,x)=>a+x.v,0);
+const gDT=g=>g.m.reduce((a,x)=>a+x.dt,0);
+const SL=GRP.reduce((a,g)=>a+gV(g),0);      /* 5.460 nghìn bản */
+const DS=GRP.reduce((a,g)=>a+gDT(g),0);     /* 94.850 triệu đồng — khớp Báo cáo 01 */
+const KH=6600, CK=5055;
+const slM=[660,730,850,780,710,810,920], khM=[900,920,940,950,960,960,970], ckM=[610,675,790,720,660,750,850];
+const CHN=[{n:'HEID tự doanh',kh:4000,th:3350},{n:'Đơn vị đối tác phát hành',kh:2600,th:2110}];
+const KV=[{n:'KV1 · Hà Nội & phụ cận',d:[620,540]},{n:'KV2 · Đông Bắc',d:[420,390]},
+          {n:'KV3 · Tây Bắc',d:[300,280]},{n:'KV4 · Bắc Trung Bộ',d:[330,300]},
+          {n:'KV5 · Nam Trung Bộ & Tây Nguyên',d:[340,310]},{n:'KV6 · TP.HCM & Đông Nam Bộ',d:[500,460]},
+          {n:'KV7 · Tây Nam Bộ',d:[330,340]}];
+/* Đối tác đặt hàng (chỉ phần đặt hàng — chuẩn bị hàng/tồn kho thuộc Báo cáo 03) */
+const ORD=[{k:'in',n:'Sách HEID in',ord:5240,
+            m:[{n:'STA',v:1986},{n:'GDQPAN',v:1263},{n:'SBT mới',v:1446},{n:'STK',v:545}]},
+           {k:'mua',n:'Sách HEID nhập mua',ord:3660,
+            m:[{n:'SGK',v:1830},{n:'SBT NXB',v:1017},{n:'SBT Phương Nam',v:487},{n:'STK nhập mua',v:326}]}];
+/* ============ TRANG KINH DOANH - PHÁT HÀNH ============ */
+(function(){
+  const iExp=new Set(); let kvMode='val', built=false;
+  function kpi(){
+    el('is_kpi').innerHTML=
+      '<div class="kpi"><div class="chg u">'+sgn(R((SL/CK-1)*100))+'</div><div class="ttl">Sản lượng phát hành</div><div class="big" style="color:var(--color-text-info)">'+nf(SL)+'</div>'
+      +'<div class="row"><span class="l">Cùng kỳ 2025</span><span class="v">'+nf(CK)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Kế hoạch sản lượng</div><div class="big" style="color:var(--color-text-info)">'+nf(KH)+'</div>'
+      +'<div class="row"><span class="l">Còn lại để đạt KH</span><span class="v">'+nf(KH-SL)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">% hoàn thành kế hoạch</div><div class="big" style="color:var(--color-text-info)">'+pp(SL/KH*100)+'%</div>'
+      +'<div class="row"><span class="l">Tiến độ thời gian</span><span class="v">58,3%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Doanh số phát hành</div><div class="big" style="color:var(--color-text-info)">'+nf(DS)+'</div>'
+      +'<div class="row"><span class="l">Khớp Báo cáo 01</span><span class="v">✓</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Giá bìa bình quân</div><div class="big" style="color:var(--color-text-info)">'+pp(DS/SL)+'</div>'
+      +'<div class="row"><span class="l">nghìn đồng / bản</span><span class="v"></span></div></div>'
+      +'<div class="kpi"><div class="ttl">SL qua kênh đối tác phát hành</div><div class="big" style="color:var(--color-text-info)">'+nf(CHN[1].th)+'</div>'
+      +'<div class="row"><span class="l">Tỷ trọng / tổng SL</span><span class="v">'+pp(CHN[1].th/SL*100)+'%</span></div></div>';
+  }
+  function tables(){
+    renderKV();
+    /* bảng nhóm/mảng bung gộp */
+    let h='';
+    GRP.forEach((g,gi)=>{
+      const v=gV(g), d=gDT(g), open=iExp.has(gi);
+      const ck=R(g.m.reduce((a,x)=>a+x.v*x.ck,0)/v);
+      h+='<tr class="prow" data-g="'+gi+'" style="background:var(--color-background-secondary)">'
+       +'<td style="font-weight:600"><div style="display:flex;align-items:center;gap:6px">'+caret(open)
+       +'<span class="dot" style="background:'+g.c+'"></span>'+g.n+'</div></td>'
+       +'<td class="mono" style="font-weight:600;color:var(--color-text-info)">'+nf(v)+'</td>'
+       +'<td class="mono" style="font-weight:600">'+pp(v/SL*100)+'%</td>'
+       +'<td class="mono" style="font-weight:600">'+pp(d/v)+'</td>'
+       +'<td class="mono" style="font-weight:600">'+nf(d)+'</td>'
+       +'<td class="mono '+cls(ck)+'" style="font-weight:600">'+sgn(ck)+'</td></tr>';
+      g.m.forEach(x=>{
+        h+='<tr class="isub" style="display:'+(open?'':'none')+'">'
+         +'<td style="padding-left:34px;color:var(--color-text-secondary)">'+x.n+'</td>'
+         +'<td class="mono">'+nf(x.v)+'</td><td class="mono">'+pp(x.v/SL*100)+'%</td>'
+         +'<td class="mono">'+pp(x.dt/x.v)+'</td><td class="mono">'+nf(x.dt)+'</td>'
+         +'<td class="mono '+cls(x.ck)+'">'+sgn(x.ck)+'</td></tr>';
+      });
+    });
+    h+='<tr class="tot"><td>TỔNG CỘNG</td><td class="mono">'+nf(SL)+'</td><td class="mono">100%</td>'
+      +'<td class="mono">'+pp(DS/SL)+'</td><td class="mono">'+nf(DS)+'</td><td class="mono up">↑ 8,0%</td></tr>';
+    el('is_tb').innerHTML=h;
+    document.querySelectorAll('#is_tb .prow').forEach(r=>r.addEventListener('click',function(){
+      const gi=+r.dataset.g; if(iExp.has(gi))iExp.delete(gi); else iExp.add(gi); tables();}));
+  }
+  function renderKV(){
+    const cols=GRP.map(g=>g.n);
+    const colTot=cols.map((_,ci)=>KV.reduce((a,k)=>a+k.d[ci],0));
+    const mx=Math.max.apply(null,KV.map(k=>Math.max.apply(null,k.d)));
+    el('is_kvh').innerHTML='<tr><th style="text-align:left;width:34%">Khu vực</th>'+cols.map(c=>'<th>'+c+'</th>').join('')+'<th style="width:14%">Tổng</th></tr>';
+    el('is_kvb').innerHTML=KV.map(k=>{const rt=k.d.reduce((a,b)=>a+b,0);
+      return '<tr><td class="dname">'+k.n+'</td>'+k.d.map(v=>{
+        const a=0.10+0.60*(v/mx), dark=a>0.55;
+        const txt=kvMode==='val'?nf(v):pp(v/rt*100)+'%';
+        return '<td><div class="hcell" style="background:'+blueA(a)+(dark?';color:#fff':'')+'">'+txt+'</div></td>';}).join('')
+        +'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'
+        +(kvMode==='val'?nf(rt):'100%')+'</div></td></tr>';}).join('')
+      +'<tr><td class="dname" style="font-weight:600;background:var(--color-background-secondary)">TỔNG CỘNG</td>'
+      +colTot.map(v=>'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'
+        +(kvMode==='val'?nf(v):pp(v/SL*100)+'%')+'</div></td>').join('')
+      +'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'+(kvMode==='val'?nf(SL):'100%')+'</div></td></tr>';
+    document.querySelectorAll('.kvtab').forEach(b=>b.classList.toggle('on',b.dataset.v===kvMode));
+  }
+  window.isBuild=function(){
+    kpi(); tables();
+    if(built)return;
+    document.querySelectorAll('.kvtab').forEach(b=>b.addEventListener('click',()=>{kvMode=b.dataset.v;renderKV();}));
+    const bx=(id,n)=>{const b=el(id);if(b)b.addEventListener('click',()=>{iExp.clear();if(n)for(let i=0;i<n;i++)iExp.add(i);tables();});};
+    bx('is_all',GRP.length); bx('is_none',0);
+
+    let c1=new Chart(el('is_c1'),{data:{labels:MON,datasets:[
+        {type:'bar',label:'Thực hiện',data:slM,backgroundColor:BL,borderRadius:4,order:3},
+        {type:'line',label:'Kế hoạch',data:khM,borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:1},
+        {type:'line',label:'Cùng kỳ 2025',data:ckM,borderColor:BLL,borderWidth:2.5,tension:.35,pointRadius:3,order:2}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+bn(c.parsed.y)}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},grace:'12%',ticks:{callback:v=>nf(v)}}}}});
+    regCum('is_c1',c1);
+    new Chart(el('is_c2'),{type:'doughnut',data:{labels:GRP.map(g=>g.n),datasets:[{data:GRP.map(gV),backgroundColor:GRP.map(g=>g.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.label+': '+bn(c.parsed)+' ('+pp(c.parsed/SL*100)+'%)'}}}}});
+    new Chart(el('is_c3'),{type:'bar',data:{labels:CHN.map(c=>c.n),datasets:[
+        {label:'Kế hoạch',data:CHN.map(c=>c.kh),backgroundColor:GY,borderRadius:4},
+        {label:'Thực hiện',data:CHN.map(c=>c.th),backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+bn(c.parsed.x)}}},
+        scales:{x:{grid:{color:grid},max:4000,grace:0,ticks:{callback:v=>nf(v)}},y:{grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}}}});
+    built=true;
+  };
+})();
+
+
+
+/* ============ TRANG ĐỐI TÁC ĐẶT HÀNG ============ */
+(function(){
+  const ORDT=ORD.reduce((a,o)=>a+o.ord,0);
+  let built=false;
+  window.orBuild=function(){
+    el('or_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng SL đối tác đặt hàng</div><div class="big" style="color:var(--color-text-info)">'+nf(ORDT)+'</div>'
+      +'<div class="row"><span class="l">Sách HEID in</span><span class="v">'+nf(ORD[0].ord)+'</span></div>'
+      +'<div class="row"><span class="l">Sách HEID nhập mua</span><span class="v">'+nf(ORD[1].ord)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đặt SL Sách HEID in</div><div class="big" style="color:var(--color-text-info)">'+nf(ORD[0].ord)+'</div>'
+      +'<div class="row"><span class="l">Tỷ trọng</span><span class="v">'+pp(ORD[0].ord/ORDT*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đặt SL Sách HEID nhập mua</div><div class="big" style="color:var(--color-text-info)">'+nf(ORD[1].ord)+'</div>'
+      +'<div class="row"><span class="l">Tỷ trọng</span><span class="v">'+pp(ORD[1].ord/ORDT*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Số mảng sản phẩm được đặt</div><div class="big" style="color:var(--color-text-info)">'+ORD.reduce((a,o)=>a+o.m.length,0)+'</div>'
+      +'<div class="row"><span class="l">Nhóm sản phẩm</span><span class="v">'+ORD.length+'</span></div></div>';
+
+    if(built)return;
+    new Chart(el('or_c0'),{type:'doughnut',data:{labels:ORD.map(o=>o.n),datasets:[{data:ORD.map(o=>o.ord),backgroundColor:GRP.map(g=>g.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:14,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+bn(c.parsed)+' ('+pp(c.parsed/ORDT*100)+'%)'}}}}});
+    [0,1].forEach(i=>{const o=ORD[i];
+      new Chart(el('or_c'+(i+1)),{type:'bar',data:{labels:o.m.map(x=>x.n),datasets:[{data:o.m.map(x=>x.v),backgroundColor:BL,borderRadius:4}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:c=>bn(c.parsed.x)+' ('+pp(c.parsed.x/o.ord*100)+'%)'}}},
+          scales:{x:{grid:{color:grid},max:Math.max.apply(null,o.m.map(x=>x.v)),grace:0,ticks:{callback:v=>nf(v)}},
+                  y:{grid:{display:false},ticks:{crossAlign:'far',autoSkip:false,font:{size:10}}}}}});});
+    if(window.coInit)coInit();
+    built=true;
+  };
+  window.orBuildExt=window.coBuild; // called from merged page
+})();
+
+/* ============ TRANG ĐƠN HÀNG & KHÁCH HÀNG (merged vào order) ============ */
+(function(){
+  const DT=DS; /* 94.850 — giá trị đơn hàng = doanh số sách giấy, khớp BC01 & trang 1 */
+  const soM=[2400,2500,2900,2650,2450,2800,2900];      /* tổng 18.600 đơn */
+  const gtM=[11464,12680,14764,13549,12333,14070,15990];/* tổng 94.850 tr đồng */
+  const SO=soM.reduce((a,b)=>a+b,0);
+  const ST=[{n:'Đã giao đúng hạn',v:15800,c:GN},{n:'Đã giao trễ hẹn',v:1650,c:RD},{n:'Đang xử lý',v:1150,c:OR}];
+  const CH=[{n:'CT Sách & TBTH tỉnh',v:41800},{n:'Đại lý / nhà sách',v:26200},{n:'Trực tiếp trường học / Sở GD',v:15600},
+            {n:'Thương mại điện tử (B2C)',v:7200},{n:'Kênh khác',v:4050}];
+  const CU=[{n:'CT Sách & TBTH tỉnh',v:41800},{n:'Đại lý / nhà sách',v:26200},{n:'Trường học',v:13900},
+            {n:'Sở/Phòng GD&ĐT',v:6200},{n:'Khách hàng cá nhân (B2C)',v:5650},{n:'Doanh nghiệp / tổ chức',v:1100}];
+  const TOP=[{n:'CT Sách & TBTH Hà Nội',g:'CT Sách & TBTH tỉnh',r:'Miền Bắc',so:186,v:9850,tre:6,dh:96.8},
+             {n:'CT Sách & TBTH Đà Nẵng',g:'CT Sách & TBTH tỉnh',r:'Miền Trung',so:98,v:5120,tre:14,dh:85.7},
+             {n:'Đại lý Phương Nam',g:'Đại lý / nhà sách',r:'Miền Nam',so:142,v:6480,tre:9,dh:93.7},
+             {n:'CT Sách & TBTH Nghệ An',g:'CT Sách & TBTH tỉnh',r:'Miền Trung',so:76,v:4020,tre:11,dh:85.5},
+             {n:'Đại lý nhà sách Bình Dương',g:'Đại lý / nhà sách',r:'Miền Nam',so:88,v:3610,tre:16,dh:81.8},
+             {n:'Sở GD&ĐT Hải Phòng',g:'Sở/Phòng GD&ĐT',r:'Miền Bắc',so:34,v:2890,tre:3,dh:91.2}];
+  const lvl=v=>v>=90?['Tốt','g']:v>=80?['Theo dõi','m']:['Cần xử lý','m'];
+  let built=false;
+  window.coBuild=window.coInit=function(){
+    el('co_kpi').innerHTML=
+      '<div class="kpi"><div class="chg u">'+sgn(8.0)+'</div><div class="ttl">Tổng số đơn hàng</div><div class="big" style="color:var(--color-text-info)">'+nf(SO)+'</div>'
+      +'<div class="row"><span class="l">BQ / tháng</span><span class="v">'+nf(SO/7)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng giá trị đơn hàng</div><div class="big" style="color:var(--color-text-info)">'+nf(DT)+'</div>'
+      +'<div class="row"><span class="l">Khớp doanh số sách giấy</span><span class="v">✓</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Giá trị đơn bình quân</div><div class="big" style="color:var(--color-text-info)">'+pp(DT/SO)+'</div>'
+      +'<div class="row"><span class="l">triệu đồng / đơn</span><span class="v"></span></div></div>'
+      +'<div class="kpi"><div class="ttl">% đơn giao đúng hạn</div><div class="big '+(ST[0].v/SO>=0.9?'up':'dn')+'">'+pp(ST[0].v/SO*100)+'%</div>'
+      +'<div class="row"><span class="l">Đơn trễ hẹn</span><span class="v dn">'+nf(ST[1].v)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đơn đang xử lý</div><div class="big" style="color:var(--color-text-info)">'+nf(ST[2].v)+'</div>'
+      +'<div class="row"><span class="l">Tỷ trọng</span><span class="v">'+pp(ST[2].v/SO*100)+'%</span></div></div>';
+
+    const rows=[]; GRP.forEach((g,gi)=>g.m.forEach(x=>rows.push({n:x.n,seg:g.n,v:x.dt})));
+    rows.sort((a,b)=>b.v-a.v);
+    el('co_tb').innerHTML=GRP.map((g,gi)=>'<tr style="background:var(--color-background-secondary)"><td style="font-weight:600"><span class="dot" style="background:'+g.c+'"></span> '+g.n+'</td>'
+        +'<td class="mono" style="font-weight:600;color:var(--color-text-info)">'+nf(gDT(g))+'</td><td class="mono" style="font-weight:600">'+pp(gDT(g)/DT*100)+'%</td></tr>'
+        +g.m.map(x=>'<tr><td style="padding-left:34px;color:var(--color-text-secondary)">'+x.n+'</td><td class="mono">'+nf(x.dt)+'</td><td class="mono">'+pp(x.dt/DT*100)+'%</td></tr>').join('')).join('')
+      +'<tr class="tot"><td>TỔNG CỘNG</td><td class="mono">'+nf(DT)+'</td><td class="mono">100%</td></tr>';
+
+    /* ===== bubble chart & drill-down (new) ===== */
+    const CUST_GRP=[
+      {k:'up',n:'Ưu tiên',c:'#0C447C',cus:[
+        {n:'CT Sách & TBTH Hà Nội',so:186,v:9850,done:94,paid:72,ar:2760,
+          orders:[{id:'DH-2026/1042',dt:1200,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/1085',dt:980,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/1112',dt:860,st:'Trễ hẹn',done:100,paid:45,ar:473},
+                  {id:'DH-2026/1138',dt:1540,st:'Đang xử lý',done:62,paid:0,ar:1540}]},
+        {n:'Đại lý Phương Nam',so:142,v:6480,done:91,paid:80,ar:1296,
+          orders:[{id:'DH-2026/0998',dt:920,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/1056',dt:780,st:'Đúng hạn',done:100,paid:78,ar:171},
+                  {id:'DH-2026/1099',dt:1100,st:'Đang xử lý',done:45,paid:0,ar:1100}]}]},
+      {k:'tn',n:'Tiềm năng',c:'#2E7CD6',cus:[
+        {n:'CT Sách & TBTH Đà Nẵng',so:98,v:5120,done:88,paid:70,ar:1536,
+          orders:[{id:'DH-2026/1021',dt:640,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/1068',dt:820,st:'Trễ hẹn',done:100,paid:60,ar:328},
+                  {id:'DH-2026/1103',dt:1280,st:'Đang xử lý',done:55,paid:0,ar:1280}]},
+        {n:'Sở GD&ĐT Hải Phòng',so:34,v:2890,done:92,paid:82,ar:520,
+          orders:[{id:'DH-2026/0870',dt:960,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/0945',dt:720,st:'Đúng hạn',done:100,paid:82,ar:130}]}]},
+      {k:'od',n:'Ổn định',c:'#8FBEEC',cus:[
+        {n:'Đại lý nhà sách Bình Dương',so:88,v:3610,done:84,paid:71,ar:1047,
+          orders:[{id:'DH-2026/0912',dt:680,st:'Trễ hẹn',done:100,paid:65,ar:238},
+                  {id:'DH-2026/0987',dt:490,st:'Đúng hạn',done:100,paid:100,ar:0},
+                  {id:'DH-2026/1044',dt:820,st:'Đang xử lý',done:40,paid:0,ar:820}]}]}
+    ];
+    const grpColor=k=>({up:'#0C447C',tn:'#2E7CD6',od:'#8FBEEC'}[k]||'#ccc');
+    const grpName=k=>({up:'Ưu tiên',tn:'Tiềm năng',od:'Ổn định'}[k]);
+    let coFilter='all';
+    const coExp=new Set();
+
+    function renderCo(){
+      const groups=coFilter==='all'?CUST_GRP:CUST_GRP.filter(g=>g.k===coFilter);
+      let h='';
+      groups.forEach(g=>g.cus.forEach(c=>{
+        const id=g.k+'-'+c.n;
+        const open=coExp.has(id);
+        const hbar=(p,col)=>'<div style="height:7px;border-radius:3px;background:var(--color-background-secondary);width:100%;position:relative"><div style="height:100%;width:'+Math.min(p,100)+'%;background:'+col+';border-radius:3px;position:absolute"></div></div>';
+        h+='<tr class="prow" data-id="'+id+'" style="cursor:pointer;background:var(--color-background-secondary)">'
+          +'<td style="font-weight:600"><div style="display:flex;align-items:center;gap:6px">'+caret(open)
+          +'<span class="tg" style="background:'+(g.c)+'22;color:'+g.c+';font-size:9.5px">'+g.n+'</span>'
+          +c.n+'</div></td>'
+          +'<td><span class="tg" style="background:'+g.c+'22;color:'+g.c+'">'+g.n+'</span></td>'
+          +'<td>'+({up:'Miền Bắc',tn:'Miền Trung',od:'Miền Nam'}[g.k])+'</td>'
+          +'<td class="mono">'+c.so+'</td>'
+          +'<td class="mono">'+pp(c.v/c.so)+'</td>'
+          +'<td class="mono" style="color:var(--color-text-info)">'+nf(c.v)+'</td>'
+          +'<td><div style="font-size:9.5px;color:var(--color-text-tertiary);margin-bottom:2px">Thu '+c.paid+'% '+hbar(c.paid,GN)+'</div><div style="font-size:9.5px;color:var(--color-text-tertiary);margin-top:4px">HT '+c.done+'% '+hbar(c.done,BL)+'</div></td>'
+          +'<td class="mono'+(c.ar>0?' dn':'')+'">'+nf(c.ar)+'</td></tr>';
+        if(open){
+          c.orders.forEach(o=>{
+            const sc=o.st==='Đúng hạn'?GN:o.st==='Trễ hẹn'?RD:OR;
+            const st=o.st==='Đúng hạn'?bdg('Đúng hạn','g'):o.st==='Trễ hẹn'?bdg('Trễ hẹn','m'):bdg('Đang xử lý','m');
+            h+='<tr style="background:var(--color-background-info)">'
+              +'<td style="padding-left:44px;color:var(--color-text-info)"><i class="ti ti-file-invoice" style="margin-right:6px;font-size:11px"></i>'+o.id+'</td>'
+              +'<td>'+st+'</td><td>—</td><td>—</td><td class="mono">'+pp(o.dt)+'</td>'
+              +'<td class="mono">'+nf(o.dt)+'</td>'
+              +'<td><div style="font-size:9.5px;color:var(--color-text-tertiary);margin-bottom:2px">Thu '+o.paid+'%</div><div style="height:6px;background:var(--color-background-secondary);border-radius:3px"><div style="height:100%;width:'+o.paid+'%;background:'+GN+';border-radius:3px"></div></div>'
+              +'<div style="font-size:9.5px;color:var(--color-text-tertiary);margin-top:3px">HT '+o.done+'%</div><div style="height:6px;background:var(--color-background-secondary);border-radius:3px"><div style="height:100%;width:'+o.done+'%;background:'+BL+';border-radius:3px"></div></div></td>'
+              +'<td class="mono'+(o.ar>0?' dn':'')+'">'+nf(o.ar)+'</td></tr>';
+          });
+        }
+      }));
+      el('co_top').innerHTML=h;
+      document.querySelectorAll('.prow[data-id]').forEach(r=>r.addEventListener('click',function(){
+        const id=r.dataset.id; if(coExp.has(id))coExp.delete(id); else coExp.add(id); renderCo();}));
+      document.querySelectorAll('.cotab').forEach(b=>b.classList.toggle('on',b.dataset.k===coFilter));
+    }
+
+    /* bubble legend */
+    el('co_bleg').innerHTML=CUST_GRP.map(g=>'<span><span class="dot" style="background:'+g.c+'"></span>'+g.n+' ('+g.cus.length+')</span>').join('');
+
+    renderCo();
+
+    if(built)return;
+    /* wire filter tabs */
+    document.querySelectorAll('.cotab').forEach(b=>b.addEventListener('click',()=>{coFilter=b.dataset.k;renderCo();}));
+
+    /* bubble chart */
+    const bds=CUST_GRP.map(g=>({label:g.n,data:g.cus.map(c=>({x:c.so,y:c.v,r:Math.max(6,Math.sqrt(c.v/c.so)*2)})),
+      backgroundColor:g.c+'99',borderColor:g.c,borderWidth:1.5}));
+    new Chart(el('co_c5'),{type:'bubble',data:{datasets:bds},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>{const d=c.raw;return c.dataset.label+': '+c.label||''
+          +' '+nf(d.y)+' tr đ · '+d.x+' đơn · BQ '+pp(d.y/d.x)+' tr/đơn';}}}},
+        scales:{x:{grid:{color:grid},title:{display:true,text:'Số đơn (tần suất mua)',font:{size:10.5}}},
+                y:{grid:{color:grid},ticks:{callback:v=>nf(v)},
+                   title:{display:true,text:'Tổng doanh thu (tr đ)',font:{size:10.5}}}}}});
+
+    let c1=new Chart(el('co_c1'),{data:{labels:MON,datasets:[
+        {type:'bar',label:'Số đơn hàng',data:soM.slice(),backgroundColor:BL,borderRadius:4,order:2,yAxisID:'y'},
+        {type:'line',label:'Giá trị đơn hàng',data:gtM.slice(),borderColor:NV,borderWidth:2.5,tension:.3,pointRadius:3,order:1,yAxisID:'y1'}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.datasetIndex===0?nf(c.parsed.y)+' đơn':nf(c.parsed.y)+' tr đ')}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},grace:'12%',ticks:{callback:v=>nf(v)}},
+                y1:{position:'right',grid:{display:false},grace:'20%',ticks:{callback:v=>nf(v),color:NV}}}}});
+    regCum('co_c1',c1);
+    new Chart(el('co_c2'),{type:'doughnut',data:{labels:ST.map(s=>s.n),datasets:[{data:ST.map(s=>s.v),backgroundColor:ST.map(s=>s.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:14,font:{size:11}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+nf(c.parsed)+' đơn ('+pp(c.parsed/SO*100)+'%)'}}}}});
+    const hb=(cid,rows)=>new Chart(el(cid),{type:'bar',data:{labels:rows.map(r=>r.n),datasets:[{data:rows.map(r=>r.v),backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>nf(c.parsed.x)+' tr đ ('+pp(c.parsed.x/DT*100)+'%)'}}},
+        scales:{x:{grid:{color:grid},max:Math.max.apply(null,rows.map(r=>r.v)),grace:0,ticks:{callback:v=>nf(v)}},
+                y:{grid:{display:false},ticks:{crossAlign:'far',autoSkip:false,font:{size:9.5}}}}}});
+    hb('co_c3',CH); hb('co_c4',CU);
+    built=true;
+  };
+})();
+
+/* ============ TRANG TÀI KHOẢN SỐ ============ */
+(function(){
+  let scope='all', built=false;
+  const HL={n:'Hoclieu.vn',c:'#2E7CD6',dt:18500,mon:[2100,2500,3100,2800,2500,3000,2500],
+    tk:245680,gv:18450,hs:220830,truong:6400,tra_phi:72600,hoat_dong:0.68,
+    goi:[{n:'Gói học liệu trường học',v:9800},{n:'Gói học sinh (B2C)',v:5400},{n:'Gói giáo viên',v:2100},{n:'Dịch vụ & khác',v:1200}],
+    kv:[{n:'Miền Bắc',v:9800},{n:'Miền Trung',v:2900},{n:'Miền Nam',v:5800}]};
+  const GS={n:'GlobalSpeak',c:'#EF9F27',dt:12300,mon:[1100,1400,1600,1700,1600,1900,3000],
+    tk:68450,gv:0,hs:0,truong:1850,tra_phi:24300,hoat_dong:0.54,
+    goi:[{n:'Premium 12 tháng',v:6800},{n:'Premium 6 tháng',v:3240},{n:'Premium 3 tháng',v:1560},{n:'Gói doanh nghiệp / trường',v:700}],
+    kv:[{n:'Miền Bắc',v:6200},{n:'Miền Trung',v:1600},{n:'Miền Nam',v:4500}]};
+  const PL=[HL,GS];
+  const sel=()=>scope==='all'?PL:(scope==='hl'?[HL]:[GS]);
+  const sumK=k=>sel().reduce((a,p)=>a+p[k],0);
+  const TOP_HI=[{n:'THCS Nguyễn Du (Hà Nội)',pf:'Hoclieu.vn',tk:2840,tp:1980},
+                {n:'TH Kim Đồng (Đà Nẵng)',pf:'Hoclieu.vn',tk:2210,tp:1540},
+                {n:'THPT Chuyên Lê Hồng Phong (HCM)',pf:'GlobalSpeak',tk:1860,tp:1420},
+                {n:'TH-THCS Việt Đức (Hải Phòng)',pf:'Hoclieu.vn',tk:1750,tp:1120},
+                {n:'THPT Chu Văn An (Hà Nội)',pf:'GlobalSpeak',tk:1520,tp:1080}];
+  const TOP_LO=[{n:'TH Xã Đông Sơn (Thanh Hóa)',pf:'Hoclieu.vn',tk:640,pct:8.4},
+                {n:'THCS Yên Bình (Yên Bái)',pf:'Hoclieu.vn',tk:520,pct:6.1},
+                {n:'TH Cẩm Thủy (Thanh Hóa)',pf:'GlobalSpeak',tk:410,pct:5.5},
+                {n:'THCS Mường Lát (Thanh Hóa)',pf:'Hoclieu.vn',tk:380,pct:4.8}];
+
+  function kpis(){
+    const dt=sumK('dt'), tk=sumK('tk'), tp=sumK('tra_phi');
+    const hd=sel().reduce((a,p)=>a+p.hoat_dong*p.tk,0)/tk;
+    el('dg_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng tài khoản</div><div class="big" style="color:var(--color-text-info)">'+nf(tk)+'</div>'
+      +sel().map(p=>'<div class="row"><span class="l">'+p.n+'</span><span class="v">'+nf(p.tk)+'</span></div>').join('')+'</div>'
+      +'<div class="kpi"><div class="ttl">Người dùng trả phí</div><div class="big" style="color:var(--color-text-info)">'+nf(tp)+'</div>'
+      +'<div class="row"><span class="l">Tỷ lệ chuyển đổi</span><span class="v">'+pp(tp/tk*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Trường học sử dụng</div><div class="big" style="color:var(--color-text-info)">'+nf(sumK('truong'))+'</div>'
+      +'<div class="row"><span class="l">GV / HS (Hoclieu.vn)</span><span class="v">'+nf(HL.gv)+' / '+nf(HL.hs)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Mức độ hoạt động</div><div class="big '+(hd>=0.6?'up':'dn')+'">'+pp(hd*100)+'%</div>'
+      +'<div class="row"><span class="l">Có dùng trong 30 ngày</span><span class="v"></span></div></div>'
+      +'<div class="kpi"><div class="chg u">'+sgn(scope==='gs'?13.1:(scope==='hl'?18.6:16.2))+'</div><div class="ttl">Doanh thu</div><div class="big" style="color:var(--color-text-info)">'+nf(dt)+'</div>'
+      +'<div class="row"><span class="l">Khớp SP số ở BC01 (30.800)</span><span class="v">✓</span></div></div>';
+  }
+  function tables(){
+    el('dg_top').innerHTML=TOP_HI.filter(x=>scope==='all'||x.pf===(scope==='hl'?'Hoclieu.vn':'GlobalSpeak'))
+      .map(x=>'<tr><td>'+x.n+'</td><td>'+x.pf+'</td><td class="mono">'+nf(x.tk)+'</td><td class="mono">'+nf(x.tp)+'</td></tr>').join('');
+    el('dg_bot').innerHTML=TOP_LO.filter(x=>scope==='all'||x.pf===(scope==='hl'?'Hoclieu.vn':'GlobalSpeak'))
+      .map(x=>'<tr><td>'+x.n+'</td><td>'+x.pf+'</td><td class="mono">'+nf(x.tk)+'</td><td class="mono dn">'+x.pct+'%</td></tr>').join('');
+  }
+  let c1,c2,c3,c4;
+  function charts(){
+    el('dg_lg').innerHTML=sel().map(p=>'<span><span class="dot" style="background:'+p.c+'"></span>'+p.n+'</span>').join('');
+    if(c1)c1.destroy();
+    c1=new Chart(el('dg_c1'),{type:'bar',data:{labels:MON,datasets:sel().map(p=>({label:p.n,data:p.mon.slice(),backgroundColor:p.c,stack:'d',borderRadius:3}))},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' tr đ'}}},
+        scales:{x:{stacked:scope==='all',grid:{display:false}},y:{stacked:scope==='all',grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    regCum('dg_c1',c1);
+    document.querySelectorAll('.cum[data-c="dg_c1"]').forEach(b=>b.classList.toggle('on',b.dataset.v==='month'));
+
+    const goiAll=[]; sel().forEach(p=>p.goi.forEach(g=>goiAll.push({n:g.n+' ('+p.n+')',v:g.v,c:p.c})));
+    if(c2)c2.destroy();
+    c2=new Chart(el('dg_c2'),{type:'doughnut',data:{labels:goiAll.map(g=>g.n),datasets:[{data:goiAll.map(g=>g.v),
+        backgroundColor:goiAll.map((g,i)=>g.c+Math.round((255-i%4*40)).toString(16).padStart(2,'0').slice(0,2)),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:8,boxHeight:8,padding:8,font:{size:9.5}}},
+        tooltip:{callbacks:{label:c=>c.label+': '+nf(c.parsed)+' tr đ'}}}}});
+
+    const kvNames=HL.kv.map(k=>k.n);
+    const kvVals=kvNames.map((n,i)=>sel().reduce((a,p)=>a+p.kv[i].v,0));
+    if(c3)c3.destroy();
+    c3=new Chart(el('dg_c3'),{type:'bar',data:{labels:kvNames,datasets:[{data:kvVals,backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>nf(c.parsed.x)+' tr đ'}}},
+        scales:{x:{grid:{color:grid},max:Math.max.apply(null,kvVals),grace:0,ticks:{callback:v=>nf(v)}},y:{grid:{display:false}}}}});
+
+    if(c4)c4.destroy();
+    c4=new Chart(el('dg_c4'),{type:'bar',data:{labels:sel().map(p=>p.n),datasets:[
+        {label:'Hoạt động',data:sel().map(p=>Math.round(p.hoat_dong*p.tk)),backgroundColor:GN,stack:'s',borderRadius:4},
+        {label:'Không hoạt động',data:sel().map(p=>Math.round((1-p.hoat_dong)*p.tk)),backgroundColor:GY,stack:'s',borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.x)}}},
+        scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>nf(v)}},y:{stacked:true,grid:{display:false}}}}});
+  }
+  window.dgBuild=function(){
+    kpis(); tables(); charts();
+    if(built)return;
+    document.querySelectorAll('.dgtab').forEach(b=>b.addEventListener('click',()=>{
+      scope=b.dataset.p; document.querySelectorAll('.dgtab').forEach(x=>x.classList.toggle('on',x===b));
+      kpis(); tables(); charts();}));
+    built=true;
+  };
+})();
+
+/* ============ ĐIỀU HƯỚNG ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='issue'&&window.isBuild)isBuild();
+  if(id==='order'&&window.orBuild)orBuild();
+  if(id==='digital'&&window.dgBuild)dgBuild();
+}
+document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+showPage('issue');
+
+</script>
+</body>
+</html>

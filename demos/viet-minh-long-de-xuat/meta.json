@@ -1,0 +1,22 @@
+{
+  "slug": "viet-minh-long-de-xuat",
+  "title": "Việt Minh Long — Đề xuất số hóa thi công & sản xuất",
+  "type": "proposal",
+  "industry": "Xây dựng",
+  "department": "All",
+  "description": "Phân tích doanh nghiệp, sơ đồ quy trình phòng ban trên Base Service và đối chiếu dữ liệu Excel hiện tại.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Viet-Minh-Long/",
+  "source_repo": "https://github.com/tbinh-06/Viet-Minh-Long",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "đề xuất",
+    "quy trình",
+    "Base Service"
+  ]
+}

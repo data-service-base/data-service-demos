@@ -1,0 +1,22 @@
+{
+  "slug": "asel-kinh-doanh-ky-thuat",
+  "title": "ASEL — Báo cáo kinh doanh & kỹ thuật",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "Kinh doanh",
+  "description": "Công việc, thời lượng và forecast doanh thu phòng Kinh doanh; công việc phòng Kỹ thuật theo nhân viên.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/ASEL/",
+  "source_repo": "https://github.com/tbinh-06/ASEL",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "forecast",
+    "công việc",
+    "thời lượng"
+  ]
+}

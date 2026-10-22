@@ -1,0 +1,21 @@
+{
+  "slug": "sapoche-huong-dan-phan-quyen",
+  "title": "Sapoche — Hướng dẫn xem báo cáo & cấp quyền",
+  "type": "tool",
+  "industry": "Sản xuất",
+  "department": "All",
+  "description": "Hướng dẫn người dùng vào trung tâm báo cáo, cấp quyền lần đầu và xem báo cáo hằng ngày.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Sapoche_HuongdanPhanquyen/",
+  "source_repo": "https://github.com/tbinh-06/Sapoche_HuongdanPhanquyen",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "hướng dẫn",
+    "phân quyền"
+  ]
+}

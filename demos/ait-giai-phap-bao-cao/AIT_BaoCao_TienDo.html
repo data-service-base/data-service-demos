@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIT CORP · Tiến độ dự án</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+:root{--navy:#152238;--navy-2:#1e3050;--steel:#2E6FB0;--steel-lt:#5b93cf;--amber:#E8A33D;--rework:#D2564A;--done:#3FA875;--purple:#8b6fb0;--ink:#1b2431;--muted:#7c899b;--line:#e3e9f1;--bg:#eef2f7;--card:#fff;--shadow:0 1px 2px rgba(21,34,56,.04),0 6px 18px rgba(21,34,56,.06);--dim:#d7dee8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.topbar{background:linear-gradient(100deg,var(--navy),var(--navy-2));color:#fff;padding:14px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo-wrap{background:#fff;border-radius:8px;padding:5px 12px;display:flex;align-items:center;height:40px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.brand .logo-img{height:100%;width:auto;display:block}
+.brand h1{font-family:'Archivo';font-size:16px;font-weight:700;line-height:1}
+.brand .sub{font-size:10.5px;color:#9fb2cc;text-transform:uppercase;margin-top:3px;letter-spacing:.03em}
+.hint{margin-left:auto;display:flex;align-items:center;gap:10px}
+#repdate{font-size:10.5px;color:#9fb2cc}
+.tabs{display:flex;gap:2px;background:#fff;padding:0 22px;border-bottom:1px solid var(--line);position:sticky;top:66px;z-index:40}
+.tabs button{border:0;background:transparent;padding:13px 18px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:'Inter';border-bottom:2.5px solid transparent}
+.tabs button.on{color:var(--steel);border-color:var(--steel)}
+.slicers{background:linear-gradient(100deg,var(--navy-2),#24395e);padding:11px 22px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;position:sticky;top:66px;z-index:39}
+.sg{display:flex;flex-direction:column;gap:4px}
+.sg label{font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:#8fa3c0;font-weight:600}
+.slicers select,.slicers input{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:7px;padding:7px 11px;font-size:11.5px;font-family:'Inter';min-width:140px}
+.slicers input::placeholder{color:#9fb2cc}
+.slicers select option{color:#1b2431}
+main{padding:18px 22px 40px}
+.page{display:none}.page.on{display:block}
+.grid{display:grid;gap:16px}
+.kpirow{grid-template-columns:repeat(4,1fr);margin-bottom:16px}
+.kpirow5{grid-template-columns:repeat(5,1fr);margin-bottom:16px}
+.kpirow6{grid-template-columns:repeat(6,1fr);margin-bottom:16px}
+.row2{grid-template-columns:1fr 1fr}.row3{grid-template-columns:1fr 1fr 1fr}.row21{grid-template-columns:2fr 1fr}.row12{grid-template-columns:1fr 2fr}.row13{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:1150px){.row3,.row21,.row2,.row12,.row13{grid-template-columns:1fr}.kpirow{grid-template-columns:repeat(2,1fr)}.kpirow5{grid-template-columns:repeat(3,1fr)}.kpirow6{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpirow5{grid-template-columns:repeat(2,1fr)}.kpirow6{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px;border:1px solid var(--line);margin-bottom:16px}
+.card h2{font-family:'Archivo';font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.card h2 .d{width:7px;height:7px;border-radius:50%;background:var(--steel)}
+.card .desc{font-size:10.5px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.kpi{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;border:1px solid var(--line);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--steel)}
+.kpi.a::before{background:var(--amber)}.kpi.g::before{background:var(--done)}.kpi.r::before{background:var(--rework)}
+.kpi .lbl{font-size:10.2px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600}
+.kpi .val{font-family:'Archivo';font-size:23px;font-weight:800;margin:5px 0 3px}
+.kpi .unit{font-size:11.5px;color:var(--muted);font-weight:600}
+.cmp{font-size:10.2px;color:var(--muted);margin-top:2px;font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:right;font-weight:600;color:var(--muted);font-size:10.5px;text-transform:uppercase;padding:9px 10px;border-bottom:1.5px solid var(--line);white-space:nowrap;position:sticky;top:0;background:#fff}
+thead th:first-child,tbody td:first-child{text-align:left}
+tbody td{padding:9px 10px;text-align:right;border-bottom:1px solid #f1f5f9;white-space:nowrap}
+tbody tr:hover{background:#f7fafd}
+.tot td{background:var(--navy);color:#fff;font-weight:700;border:0}.tot td .mono{color:#fff}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11.5px}
+.chip{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600}
+.c-amber{background:#fbefd8;color:#b57912}.c-red{background:#fbe4e2;color:var(--rework)}.c-green{background:#e0f3ea;color:#2e7d54}.c-purple{background:#ece7f5;color:#6a4f96}.c-steel{background:#dce8f7;color:var(--steel)}
+.tablewrap{max-height:420px;overflow:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--muted)}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px}
+.note{font-size:10.5px;color:var(--muted);background:#f6f9fc;border-left:3px solid var(--steel-lt);padding:8px 11px;border-radius:0 7px 7px 0;margin-top:10px;line-height:1.5}
+.footer{text-align:center;color:var(--muted);font-size:10.5px;padding:22px}
+.bar-track{width:76px;height:6px;background:var(--dim);border-radius:999px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.bar-fill{height:100%;border-radius:999px;display:block}
+.health-pill{display:inline-flex;min-width:30px;justify-content:center;padding:2px 8px;border-radius:999px;font-weight:700;font-size:11px}
+.chart-box{height:250px}
+/* RAG classification table */
+.rag-table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:12.5px}
+.rag-table th{text-align:center;font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 10px 4px}
+.rag-row{cursor:default}
+.rag-row td{padding:11px 12px;border:none;text-align:center}
+.rag-row td:first-child{border-radius:8px 0 0 8px;font-weight:700;text-align:center}
+.rag-row td:last-child{border-radius:0 8px 8px 0}
+.rag-cell{cursor:pointer;border-radius:6px;padding:4px 10px;display:inline-block;font-weight:700;transition:transform .1s}
+.rag-cell:hover{transform:scale(1.06)}
+.rag-cell.active{outline:2px solid var(--navy)}
+.rag-red{background:rgba(210,86,74,.09)}.rag-yellow{background:rgba(232,163,61,.10)}.rag-green{background:rgba(63,168,117,.09)}
+.rag-red td:first-child{color:var(--rework)}.rag-yellow td:first-child{color:#a8720f}.rag-green td:first-child{color:#2e7d54}
+/* heatmap table: center header + all cells (overrides default left-first-column rule) */
+.heatcell{text-align:center!important;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fff;border-radius:5px;padding:5px 4px}
+.heat-table thead th{text-align:center!important}
+.heat-table tbody td{text-align:center!important}
+/* procurement segmented bar */
+.proc-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #f1f5f9}
+.proc-row:last-child{border-bottom:none}
+.proc-name{width:270px;flex:none}
+.proc-name p.n{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+.proc-name p.m{font-size:10px;color:var(--muted)}
+.proc-bar{flex:1;display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--dim)}
+.proc-seg{height:100%}
+.proc-count{width:120px;flex:none;text-align:right;font-size:11px;color:var(--muted)}
+.filter-tag{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:#fff;font-size:11px;font-weight:600;padding:5px 10px;border-radius:20px;margin-bottom:10px}
+.filter-tag button{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;cursor:pointer;line-height:1}
+/* detail table (tab1) alignment overrides */
+.tablewrap-fit{width:100%}
+.detail-table thead th{text-align:center}
+.detail-table tbody td{text-align:center}
+.detail-table tbody td.col-right{text-align:right}
+.detail-table tbody td.col-left{text-align:left}
+.detail-table tbody td.col-center{text-align:center}
+.stage-done{background:var(--done)}
+.stage-progress{background:var(--steel)}
+.stage-late{background:var(--rework)}
+.stage-todo{background:var(--dim)}
+.photo-card{aspect-ratio:4/3;border-radius:10px;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:7px}
+/* phase heatmap (tab 2) — enlarged, no name/PM note, code as label */
+.ph-wrap{overflow-x:auto}
+.ph-head{display:flex;position:sticky;top:0;background:#fff;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:6px;min-width:max-content}
+.ph-head .ph-name{width:160px;flex:none;font-size:10.5px;color:var(--muted);text-transform:uppercase;font-weight:600}
+.ph-head-cell{width:64px;flex:none;font-size:9.5px;color:var(--muted);text-align:center;line-height:1.25;font-weight:600}
+.ph-body{min-width:max-content}
+.ph-row{display:flex;align-items:center;padding:5px 0}
+.ph-row:hover{background:#f6f9fc}
+.ph-name{width:160px;flex:none;padding-right:8px}
+.ph-name p.n{font-size:12.5px;font-weight:700;color:var(--steel);font-family:'JetBrains Mono',monospace}
+.ph-cell{width:56px;height:26px;border-radius:5px;flex:none;margin-right:8px;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace}
+/* drill-down expand row in detail table */
+/* (drill-down styles removed) */
+
+/* heatmap giai đoạn: các cột chia đều hết chiều rộng, không để trống bên phải */
+.ph-head{min-width:0}
+.ph-body{min-width:0}
+.ph-head #phHeadCells{flex:1 1 auto;gap:8px;min-width:0}
+.ph-row>div:last-child{flex:1 1 auto;gap:8px;min-width:0}
+.ph-head-cell{flex:1 1 0;width:auto;min-width:0}
+.ph-cell{flex:1 1 0;width:auto;min-width:0;margin-right:0}
+@media(max-width:900px){
+  .ph-head,.ph-body{min-width:max-content}
+  .ph-head-cell{flex:none;width:64px}
+  .ph-cell{flex:none;width:56px;margin-right:8px}
+  .ph-head #phHeadCells,.ph-row>div:last-child{gap:0}
+}
+
+.gt-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:2px 0 12px}
+.gt-legend span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.gt-legend i{width:11px;height:11px;border-radius:50%;display:block}
+.gt-badge{margin-left:auto;background:#eaf1fa;color:var(--steel);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:6px}
+.gt-wrap{border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.gt-head{display:flex;background:#f4f7fc;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.gt-hn{width:230px;flex:none;padding:9px 14px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.gt-hm{flex:1 1 0;min-width:0;padding:9px 4px;font-size:10.5px;font-weight:700;color:var(--muted);text-align:center;border-left:1px solid #e8edf5}
+.gt-row{display:flex;border-bottom:1px solid #f0f3f8;align-items:stretch}
+.gt-row:last-child{border-bottom:none}
+.gt-row:hover{background:#f8fafd}
+.gt-name{width:230px;flex:none;padding:11px 14px}
+.gt-code{font-size:12px;font-weight:700;color:var(--steel);font-family:'JetBrains Mono',monospace}
+.gt-meta{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--muted);margin-top:4px}
+.gt-bar{height:6px;background:#e9edf5;border-radius:3px;margin-top:6px;overflow:hidden}
+.gt-bar i{display:block;height:100%;border-radius:3px;background:var(--purple)}
+.gt-cell{flex:1 1 0;min-width:0;border-left:1px solid #f0f3f8;padding:11px 3px;display:flex;align-items:center;justify-content:center}
+.gt-pill{width:100%;border-radius:12px;padding:5px 2px;font-size:9.5px;font-weight:700;color:#fff;text-align:center;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gt-pill.none{background:#eef1f6;color:#aab4c2}
+.gt-dash{color:#d5dbe5;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo-wrap"><img class="logo-img" src="data:image/png;base64,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" alt="AIT CORP"></div>
+    <div>
+      <h1>Tiến độ dự án</h1>
+      <div class="sub">AIT CORP · Base WeWork ↔ WorkFlow</div>
+    </div>
+  </div>
+  <div class="hint"><span id="repdate">06/08/2026</span></div>
+</div>
+
+
+<div class="slicers">
+  <div class="sg"><label>Tìm dự án</label><input id="fSearch" type="text" placeholder="Mã, tên dự án..."></div>
+  <div class="sg"><label>Chủ đầu tư</label><select id="fInvestor"></select></div>
+  <div class="sg"><label>PM</label><select id="fPm"></select></div>
+  <div class="sg"><label>Trạng thái</label>
+    <select id="fStatus">
+      <option value="all">Tất cả</option>
+      <option value="on_time">Đúng tiến độ</option>
+      <option value="late">Chậm tiến độ</option>
+      <option value="done">Hoàn thành</option>
+    </select>
+  </div>
+  <div class="sg"><label>Năm bắt đầu dự án</label>
+    <select id="fYear">
+      <option value="2026" selected>2026</option>
+      <option value="2025">2025</option>
+    </select>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ TAB 1: TỔNG QUAN ĐIỀU HÀNH ============ -->
+<section class="page on" id="tab-progress">
+
+  <div class="grid kpirow5" id="kpiGrid2"></div>
+
+  <div class="grid row2">
+    <div class="card">
+      <h2><span class="d"></span>Số dự án theo giai đoạn &amp; trạng thái tiến độ</h2>
+      <div class="desc">Mỗi giai đoạn chia theo số dự án đúng tiến độ / chậm tiến độ</div>
+      <div id="chartStageStatus" class="chart-box"></div>
+    </div>
+    <div class="card">
+      <h2><span class="d"></span>Tỷ lệ hoàn thành công việc theo ngày</h2>
+      <div class="desc">Tổng hợp từ báo cáo thi công hằng ngày các công trường (14 ngày gần nhất)</div>
+      <div id="chartDaily" class="chart-box"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="d"></span>Gantt tiến độ toàn bộ dự án</h2>
+    <div class="gt-legend">
+      <span><i style="background:var(--done)"></i>Đã làm</span>
+      <span><i style="background:var(--steel)"></i>Đang làm</span>
+      <span><i style="background:#dfe5ee"></i>Chưa làm</span>
+      <span><i style="background:var(--purple)"></i>Liên giai đoạn</span>
+      <span class="gt-badge">Tiến độ 12 tháng năm 2026</span>
+    </div>
+    <div class="gt-wrap">
+      <div class="gt-head"><div class="gt-hn">Dự án</div><div class="gt-hm">T1</div><div class="gt-hm">T2</div><div class="gt-hm">T3</div><div class="gt-hm">T4</div><div class="gt-hm">T5</div><div class="gt-hm">T6</div><div class="gt-hm">T7</div><div class="gt-hm">T8</div><div class="gt-hm">T9</div><div class="gt-hm">T10</div><div class="gt-hm">T11</div><div class="gt-hm">T12</div></div>
+      <div id="gtBody"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="d"></span>Bảng chi tiết dự án</h2>
+    <div class="desc">Đang hiển thị <span id="dtCount">26</span> / 26 dự án</div>
+    <div class="tablewrap">
+    <table class="detail-table">
+      <thead><tr><th>Mã dự án</th><th>PM</th><th>Giai đoạn</th><th>% tiến độ</th><th>Ngày chậm</th><th>CV hoàn thành</th><th>CV mở</th><th>CV quá hạn</th><th>Mua sắm</th><th>Thi công</th></tr></thead>
+      <tbody id="dtBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<div class="footer">AIT CORP · Trung tâm điều hành dự án — bản demo giao diện · dữ liệu minh họa, không phản ánh số liệu thực tế</div>
+
+<script>
+const PROJECTS = [{"code": "AIT-2610-001", "name": "Đường dây 110kV Thanh Hóa - Thái Nguyên", "investor": "EVNNPT", "pm": "Nguyễn Đình Linh", "stage": "Đấu thầu", "percent": 22, "status": "on_time", "contract": 108, "collected": 23.2, "spent": 20.4, "procurement": "Đã đặt hàng", "health": 84, "eta": "08/09/2026", "stageStatuses": {"Đấu thầu": "in_progress", "Ký hợp đồng": "not_started", "Lập kế hoạch": "not_started", "Thiết kế": "not_started", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 8, "overdueTasks": 0, "procurementProgress": 27, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 104.8, "budgetUsedPct": 19.5, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 4, "procurementBreakdown": {"done": 1, "late": 0, "in_progress": 1, "pending": 2}, "paymentBand": "green", "paymentPct": 21.5, "completedTasks": 9}, {"code": "AIT-2611-002", "name": "Trạm biến áp và lưới điện KCN Bắc Ninh", "investor": "EVN SPC", "pm": "Đặng Hoàng Hùng", "stage": "Nghiệm thu", "percent": 74, "status": "on_time", "contract": 45, "collected": 31.1, "spent": 26.6, "procurement": "Đã giao", "health": 79, "eta": "07/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "done", "Nghiệm thu": "in_progress", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 4, "overdueTasks": 0, "procurementProgress": 98, "constructionProgress": 71, "todaySite": null, "startYear": 2026, "budget": 47.3, "budgetUsedPct": 56.2, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 5, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 0}, "paymentBand": "green", "paymentPct": 69.1, "completedTasks": 21}, {"code": "AIT-2612-003", "name": "Hạ tầng điện Nhà máy Bắc Giang", "investor": "EVN NPC", "pm": "Lê Thanh Sơn", "stage": "Sản xuất", "percent": 57, "status": "on_time", "contract": 178, "collected": 85.3, "spent": 94.2, "procurement": "Đang mua", "health": 78, "eta": "05/08/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "in_progress", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 12, "overdueTasks": 1, "procurementProgress": 41, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 174.9, "budgetUsedPct": 53.9, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 6, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 1}, "paymentBand": "yellow", "paymentPct": 47.9, "completedTasks": 25}, {"code": "AIT-2613-004", "name": "Nhà máy điện mặt trời Nam Định", "investor": "EVN HANOI", "pm": "Ngô Thị Mận", "stage": "Mua sắm vật tư", "percent": 20, "status": "late", "contract": 108, "collected": 19.9, "spent": 17.4, "procurement": "Đang mua", "health": 45, "eta": "12/07/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "late", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 44, "openTasks": 14, "overdueTasks": 3, "procurementProgress": 42, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 80.0, "budgetUsedPct": 21.7, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 6, "procurementBreakdown": {"done": 2, "late": 2, "in_progress": 1, "pending": 1}, "paymentBand": "green", "paymentPct": 18.4, "completedTasks": 6}, {"code": "AIT-2614-005", "name": "Đường dây 220kV Phú Thọ - Ninh Bình", "investor": "PV Power", "pm": "Nguyễn Kim Quý", "stage": "Thi công", "percent": 64, "status": "on_time", "contract": 178, "collected": 87.8, "spent": 81.1, "procurement": "Đã giao", "health": 88, "eta": "05/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 19, "overdueTasks": 1, "procurementProgress": 91, "constructionProgress": 63, "todaySite": {"weather": "Mưa rào chiều", "manpower": 25, "machinery": 5, "plannedVol": 120, "actualVol": 110, "pctToday": 83.2, "pace": 0.92, "workDone": "Đổ bê tông móng trụ, lắp đặt cốt thép giằng", "tomorrowPlan": "Đấu nối nhị thứ, chạy thử không tải thiết bị", "slow": false}, "startYear": 2025, "budget": 179.2, "budgetUsedPct": 45.3, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 10, "procurementBreakdown": {"done": 8, "late": 0, "in_progress": 1, "pending": 1}, "paymentBand": "yellow", "paymentPct": 49.3, "completedTasks": 20}, {"code": "AIT-2615-006", "name": "Đường dây 110kV Hải Hà - Phú Bình", "investor": "Trung Nam Group", "pm": "Phạm Duy Tùng", "stage": "Thi công", "percent": 73, "status": "on_time", "contract": 52, "collected": 31.8, "spent": 32.2, "procurement": "Đã giao", "health": 91, "eta": "17/08/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 13, "overdueTasks": 0, "procurementProgress": 90, "constructionProgress": 77, "todaySite": {"weather": "Mưa rào chiều", "manpower": 25, "machinery": 6, "plannedVol": 300, "actualVol": 230, "pctToday": 72.3, "pace": 0.77, "workDone": "Lắp đặt kết cấu thép khung TBA, siết bulong liên kết", "tomorrowPlan": "Căng dây các khoảng còn lại, nghiệm thu nội bộ pha đã kéo", "slow": true}, "startYear": 2026, "budget": 52.6, "budgetUsedPct": 61.2, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 8, "procurementBreakdown": {"done": 7, "late": 0, "in_progress": 1, "pending": 0}, "paymentBand": "yellow", "paymentPct": 61.2, "completedTasks": 28}, {"code": "AIT-2616-007", "name": "Nhà máy điện mặt trời Gia Lộc", "investor": "BIM Group", "pm": "Đặng Ngọc Trang", "stage": "Thi công", "percent": 60, "status": "on_time", "contract": 61, "collected": 33.2, "spent": 30.5, "procurement": "Đã giao", "health": 93, "eta": "25/05/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 16, "overdueTasks": 0, "procurementProgress": 91, "constructionProgress": 64, "todaySite": {"weather": "Nắng gián đoạn", "manpower": 49, "machinery": 8, "plannedVol": 260, "actualVol": 193, "pctToday": 67.3, "pace": 0.74, "workDone": "Lắp dựng cột thép, căn chỉnh cao độ theo thiết kế", "tomorrowPlan": "Kiểm tra tổng thể hệ thống PCCC, hoàn công hồ sơ", "slow": true}, "startYear": 2025, "budget": 63.8, "budgetUsedPct": 47.8, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 7, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 2}, "paymentBand": "green", "paymentPct": 54.4, "completedTasks": 26}, {"code": "AIT-2617-008", "name": "Trạm biến áp và lưới điện KCN Thái Nguyên", "investor": "Formosa Hà Tĩnh", "pm": "Trần Như Toàn", "stage": "Hoàn thành", "percent": 100, "status": "done", "contract": 118, "collected": 100.3, "spent": 96.0, "procurement": "Đã giao", "health": 93, "eta": "17/11/2025", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "done", "Nghiệm thu": "done", "Thanh toán": "done", "Quyết toán": "done"}, "daysLate": 0, "openTasks": 0, "overdueTasks": 0, "procurementProgress": 99, "constructionProgress": 100, "todaySite": null, "startYear": 2026, "budget": 108.3, "budgetUsedPct": 88.6, "budgetStatus": "yellow", "progressBand": "green", "paymentStatus": "red", "paymentLabel": "Chậm thanh toán", "procurementRequestCount": 6, "procurementBreakdown": {"done": 6, "late": 0, "in_progress": 0, "pending": 0}, "paymentBand": "red", "paymentPct": 85.0, "completedTasks": 49}, {"code": "AIT-2618-009", "name": "Đường dây 110kV Nghệ An - Hải Dương", "investor": "Samsung Electronics VN", "pm": "Vũ Minh Đức", "stage": "Hoàn thành", "percent": 100, "status": "done", "contract": 118, "collected": 111.3, "spent": 97.6, "procurement": "Đã giao", "health": 93, "eta": "12/10/2025", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "done", "Nghiệm thu": "done", "Thanh toán": "done", "Quyết toán": "done"}, "daysLate": 0, "openTasks": 0, "overdueTasks": 0, "procurementProgress": 95, "constructionProgress": 100, "todaySite": null, "startYear": 2026, "budget": 91.7, "budgetUsedPct": 106.4, "budgetStatus": "red", "progressBand": "green", "paymentStatus": "red", "paymentLabel": "Chậm thanh toán", "procurementRequestCount": 8, "procurementBreakdown": {"done": 8, "late": 0, "in_progress": 0, "pending": 0}, "paymentBand": "red", "paymentPct": 94.3, "completedTasks": 48}, {"code": "AIT-2619-010", "name": "Đường dây 110kV Long An - Nam Sách", "investor": "Texhong Việt Nam", "pm": "Hoàng Thị Hương", "stage": "Mua sắm vật tư", "percent": 17, "status": "late", "contract": 38, "collected": 5.7, "spent": 5.3, "procurement": "Chậm giao", "health": 38, "eta": "27/06/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "late", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 27, "openTasks": 13, "overdueTasks": 8, "procurementProgress": 44, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 28.3, "budgetUsedPct": 18.7, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 7, "procurementBreakdown": {"done": 2, "late": 2, "in_progress": 1, "pending": 2}, "paymentBand": "green", "paymentPct": 15.0, "completedTasks": 5}, {"code": "AIT-2620-011", "name": "Nhà máy điện mặt trời Vĩnh Phúc", "investor": "Hòa Phát", "pm": "Bùi Văn Sáng", "stage": "Mua sắm vật tư", "percent": 41, "status": "on_time", "contract": 95, "collected": 37.1, "spent": 36.5, "procurement": "Đang mua", "health": 73, "eta": "24/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "in_progress", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 14, "overdueTasks": 0, "procurementProgress": 58, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 93.1, "budgetUsedPct": 39.2, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 6, "procurementBreakdown": {"done": 3, "late": 0, "in_progress": 1, "pending": 2}, "paymentBand": "green", "paymentPct": 39.1, "completedTasks": 18}, {"code": "AIT-2621-012", "name": "Đường dây 500kV Ninh Bình - Hưng Yên", "investor": "KCN VSIP Bắc Ninh", "pm": "Đỗ Quang Huy", "stage": "Nghiệm thu", "percent": 75, "status": "on_time", "contract": 68, "collected": 39.8, "spent": 41.8, "procurement": "Đã giao", "health": 96, "eta": "06/09/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "done", "Nghiệm thu": "in_progress", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 8, "overdueTasks": 1, "procurementProgress": 97, "constructionProgress": 76, "todaySite": null, "startYear": 2026, "budget": 63.6, "budgetUsedPct": 65.7, "budgetStatus": "green", "progressBand": "green", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 4, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 0, "pending": 0}, "paymentBand": "yellow", "paymentPct": 58.5, "completedTasks": 32}, {"code": "AIT-2622-013", "name": "Nhà máy điện mặt trời Phú Bình", "investor": "KCN Nomura Hải Phòng", "pm": "Nguyễn Đình Linh", "stage": "Sản xuất", "percent": 60, "status": "on_time", "contract": 82, "collected": 45.0, "spent": 39.3, "procurement": "Đang mua", "health": 78, "eta": "21/11/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "in_progress", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 14, "overdueTasks": 0, "procurementProgress": 59, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 77.3, "budgetUsedPct": 50.8, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 6, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 1}, "paymentBand": "green", "paymentPct": 54.9, "completedTasks": 24}, {"code": "AIT-2623-014", "name": "Trạm biến áp và lưới điện KCN Quảng Ninh", "investor": "T&T Group", "pm": "Đặng Hoàng Hùng", "stage": "Thi công", "percent": 74, "status": "on_time", "contract": 168, "collected": 96.7, "spent": 94.0, "procurement": "Đã giao", "health": 88, "eta": "01/06/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 14, "overdueTasks": 0, "procurementProgress": 98, "constructionProgress": 76, "todaySite": {"weather": "Mưa nhỏ", "manpower": 44, "machinery": 2, "plannedVol": 150, "actualVol": 149, "pctToday": 90.8, "pace": 0.99, "workDone": "Kéo dây dẫn pha A-B, căng lèo cột số 12-18", "tomorrowPlan": "Căn chỉnh và siết lực bulong theo tiêu chuẩn, kiểm tra lại cao độ", "slow": false}, "startYear": 2026, "budget": 148.8, "budgetUsedPct": 63.2, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 7, "procurementBreakdown": {"done": 6, "late": 0, "in_progress": 1, "pending": 0}, "paymentBand": "yellow", "paymentPct": 57.6, "completedTasks": 25}, {"code": "AIT-2624-015", "name": "Hạ tầng điện Nhà máy Tây Ninh", "investor": "Sao Mai Group", "pm": "Lê Thanh Sơn", "stage": "Đấu thầu", "percent": 15, "status": "on_time", "contract": 95, "collected": 10.7, "spent": 12.5, "procurement": "Đã đặt hàng", "health": 90, "eta": "08/01/2026", "stageStatuses": {"Đấu thầu": "in_progress", "Ký hợp đồng": "not_started", "Lập kế hoạch": "not_started", "Thiết kế": "not_started", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 8, "overdueTasks": 2, "procurementProgress": 26, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 99.7, "budgetUsedPct": 12.5, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 4, "procurementBreakdown": {"done": 1, "late": 0, "in_progress": 1, "pending": 2}, "paymentBand": "yellow", "paymentPct": 11.3, "completedTasks": 7}, {"code": "AIT-2625-016", "name": "TBA 110kV Hải Dương", "investor": "Sun Group", "pm": "Ngô Thị Mận", "stage": "Thiết kế", "percent": 8, "status": "late", "contract": 95, "collected": 6.2, "spent": 6.2, "procurement": "Đang mua", "health": 24, "eta": "24/03/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "late", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 50, "openTasks": 13, "overdueTasks": 7, "procurementProgress": 65, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 64.9, "budgetUsedPct": 9.6, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 3, "procurementBreakdown": {"done": 1, "late": 1, "in_progress": 1, "pending": 0}, "paymentBand": "yellow", "paymentPct": 6.5, "completedTasks": 3}, {"code": "AIT-2626-017", "name": "Hạ tầng điện Nhà máy Nam Sách", "investor": "EVNNPT", "pm": "Nguyễn Kim Quý", "stage": "Thi công", "percent": 75, "status": "on_time", "contract": 178, "collected": 124.9, "spent": 99.8, "procurement": "Đã giao", "health": 79, "eta": "22/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 20, "overdueTasks": 0, "procurementProgress": 91, "constructionProgress": 75, "todaySite": {"weather": "Âm u", "manpower": 59, "machinery": 9, "plannedVol": 200, "actualVol": 194, "pctToday": 88.0, "pace": 0.97, "workDone": "Thi công hệ thống tiếp địa, rải cáp ngầm", "tomorrowPlan": "Đấu nối nhị thứ, chạy thử không tải thiết bị", "slow": false}, "startYear": 2025, "budget": 158.5, "budgetUsedPct": 63.0, "budgetStatus": "green", "progressBand": "green", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 10, "procurementBreakdown": {"done": 9, "late": 0, "in_progress": 1, "pending": 0}, "paymentBand": "green", "paymentPct": 70.2, "completedTasks": 29}, {"code": "AIT-2627-018", "name": "Hệ thống điện nhị thứ TBA Hà Nam", "investor": "EVN SPC", "pm": "Phạm Duy Tùng", "stage": "Thiết kế", "percent": 8, "status": "late", "contract": 168, "collected": 12.8, "spent": 9.6, "procurement": "Đang mua", "health": 35, "eta": "04/11/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "late", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 54, "openTasks": 11, "overdueTasks": 3, "procurementProgress": 70, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 127.6, "budgetUsedPct": 7.5, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 3, "procurementBreakdown": {"done": 1, "late": 1, "in_progress": 1, "pending": 0}, "paymentBand": "green", "paymentPct": 7.6, "completedTasks": 3}, {"code": "AIT-2628-019", "name": "TBA 220kV Hưng Yên & đường dây đấu nối", "investor": "EVN NPC", "pm": "Đặng Ngọc Trang", "stage": "Thiết kế", "percent": 8, "status": "late", "contract": 61, "collected": 3.9, "spent": 3.6, "procurement": "Chậm giao", "health": 32, "eta": "14/03/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "late", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 41, "openTasks": 11, "overdueTasks": 4, "procurementProgress": 39, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 49.7, "budgetUsedPct": 7.2, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 5, "procurementBreakdown": {"done": 1, "late": 1, "in_progress": 1, "pending": 2}, "paymentBand": "yellow", "paymentPct": 6.4, "completedTasks": 3}, {"code": "AIT-2629-020", "name": "Đường dây 110kV Hòa Bình - Thanh Hóa", "investor": "EVN HANOI", "pm": "Trần Như Toàn", "stage": "Hoàn thành", "percent": 100, "status": "done", "contract": 168, "collected": 135.7, "spent": 156.4, "procurement": "Đã giao", "health": 96, "eta": "02/09/2025", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "done", "Nghiệm thu": "done", "Thanh toán": "done", "Quyết toán": "done"}, "daysLate": 0, "openTasks": 0, "overdueTasks": 0, "procurementProgress": 91, "constructionProgress": 100, "todaySite": null, "startYear": 2025, "budget": 140.8, "budgetUsedPct": 111.1, "budgetStatus": "red", "progressBand": "green", "paymentStatus": "red", "paymentLabel": "Chậm thanh toán", "procurementRequestCount": 5, "procurementBreakdown": {"done": 5, "late": 0, "in_progress": 0, "pending": 0}, "paymentBand": "red", "paymentPct": 80.8, "completedTasks": 52}, {"code": "AIT-2630-021", "name": "TBA nâng công suất Đồng Nai", "investor": "PV Power", "pm": "Vũ Minh Đức", "stage": "Mua sắm vật tư", "percent": 34, "status": "on_time", "contract": 95, "collected": 25.5, "spent": 26.5, "procurement": "Đang mua", "health": 74, "eta": "28/04/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "in_progress", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 11, "overdueTasks": 0, "procurementProgress": 64, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 86.2, "budgetUsedPct": 30.7, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 6, "procurementBreakdown": {"done": 2, "late": 0, "in_progress": 1, "pending": 3}, "paymentBand": "yellow", "paymentPct": 26.8, "completedTasks": 9}, {"code": "AIT-2631-022", "name": "Hệ thống điện nhị thứ TBA Sông Mã", "investor": "Trung Nam Group", "pm": "Hoàng Thị Hương", "stage": "Sản xuất", "percent": 48, "status": "on_time", "contract": 145, "collected": 52.2, "spent": 55.5, "procurement": "Đang mua", "health": 77, "eta": "10/08/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "in_progress", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 11, "overdueTasks": 0, "procurementProgress": 63, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 141.1, "budgetUsedPct": 39.3, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 8, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 3}, "paymentBand": "yellow", "paymentPct": 36.0, "completedTasks": 16}, {"code": "AIT-2632-023", "name": "Hệ thống điện nhị thứ TBA Cẩm Phả", "investor": "BIM Group", "pm": "Bùi Văn Sáng", "stage": "Thiết kế", "percent": 8, "status": "late", "contract": 178, "collected": 11.2, "spent": 11.0, "procurement": "Chậm giao", "health": 47, "eta": "24/10/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "late", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 27, "openTasks": 12, "overdueTasks": 6, "procurementProgress": 35, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 141.0, "budgetUsedPct": 7.8, "budgetStatus": "green", "progressBand": "red", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 6, "procurementBreakdown": {"done": 2, "late": 2, "in_progress": 1, "pending": 1}, "paymentBand": "yellow", "paymentPct": 6.3, "completedTasks": 3}, {"code": "AIT-2633-024", "name": "TBA nâng công suất Trị Lai", "investor": "Formosa Hà Tĩnh", "pm": "Đỗ Quang Huy", "stage": "Đấu thầu", "percent": 9, "status": "on_time", "contract": 126, "collected": 8.7, "spent": 9.6, "procurement": "Đã đặt hàng", "health": 95, "eta": "28/09/2026", "stageStatuses": {"Đấu thầu": "in_progress", "Ký hợp đồng": "not_started", "Lập kế hoạch": "not_started", "Thiết kế": "not_started", "Mua sắm vật tư": "not_started", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 4, "overdueTasks": 0, "procurementProgress": 29, "constructionProgress": null, "todaySite": null, "startYear": 2026, "budget": 130.3, "budgetUsedPct": 7.4, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "yellow", "paymentLabel": "Đang thanh toán", "procurementRequestCount": 4, "procurementBreakdown": {"done": 0, "late": 0, "in_progress": 1, "pending": 3}, "paymentBand": "yellow", "paymentPct": 6.9, "completedTasks": 3}, {"code": "AIT-2634-025", "name": "TBA nâng công suất Lộc Bình", "investor": "Samsung Electronics VN", "pm": "Nguyễn Đình Linh", "stage": "Mua sắm vật tư", "percent": 39, "status": "on_time", "contract": 52, "collected": 19.2, "spent": 14.5, "procurement": "Đang mua", "health": 73, "eta": "22/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "in_progress", "Sản xuất": "not_started", "Thi công": "not_started", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 17, "overdueTasks": 1, "procurementProgress": 48, "constructionProgress": null, "todaySite": null, "startYear": 2025, "budget": 47.0, "budgetUsedPct": 30.9, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 9, "procurementBreakdown": {"done": 4, "late": 0, "in_progress": 1, "pending": 4}, "paymentBand": "green", "paymentPct": 36.9, "completedTasks": 16}, {"code": "AIT-2635-026", "name": "Đường dây 220kV Bình Dương - Gia Lộc", "investor": "Texhong Việt Nam", "pm": "Đặng Hoàng Hùng", "stage": "Thi công", "percent": 72, "status": "on_time", "contract": 95, "collected": 60.4, "spent": 48.6, "procurement": "Đã giao", "health": 75, "eta": "14/02/2026", "stageStatuses": {"Đấu thầu": "done", "Ký hợp đồng": "done", "Lập kế hoạch": "done", "Thiết kế": "done", "Mua sắm vật tư": "done", "Sản xuất": "done", "Thi công": "in_progress", "Nghiệm thu": "not_started", "Thanh toán": "not_started", "Quyết toán": "not_started"}, "daysLate": 0, "openTasks": 15, "overdueTasks": 1, "procurementProgress": 98, "constructionProgress": 72, "todaySite": {"weather": "Mưa nhỏ", "manpower": 32, "machinery": 4, "plannedVol": 260, "actualVol": 226, "pctToday": 81.4, "pace": 0.87, "workDone": "Kéo dây dẫn pha A-B, căng lèo cột số 12-18", "tomorrowPlan": "Lắp đặt phần còn lại kết cấu thép, chuẩn bị mặt bằng lắp MBA", "slow": false}, "startYear": 2026, "budget": 83.6, "budgetUsedPct": 58.1, "budgetStatus": "green", "progressBand": "yellow", "paymentStatus": "steel", "paymentLabel": "Đúng tiến độ", "procurementRequestCount": 9, "procurementBreakdown": {"done": 8, "late": 0, "in_progress": 1, "pending": 0}, "paymentBand": "green", "paymentPct": 63.6, "completedTasks": 28}];
+const DAILY_SERIES = [{"date": "24/07", "pct": 73.3}, {"date": "25/07", "pct": 73.0}, {"date": "26/07", "pct": 71.3}, {"date": "27/07", "pct": 74.0}, {"date": "28/07", "pct": 71.6}, {"date": "29/07", "pct": 72.1}, {"date": "30/07", "pct": 75.0}, {"date": "31/07", "pct": 73.0}, {"date": "01/08", "pct": 73.8}, {"date": "02/08", "pct": 75.0}, {"date": "03/08", "pct": 72.7}, {"date": "04/08", "pct": 72.5}, {"date": "05/08", "pct": 74.2}, {"date": "06/08", "pct": 74.5}];
+const STAGES = ["Đấu thầu","Ký hợp đồng","Lập kế hoạch","Thiết kế","Mua sắm vật tư","Sản xuất","Thi công","Nghiệm thu","Thanh toán","Quyết toán"];
+const STAGE_SHORT = ["Đấu thầu","Ký HĐ","Lập KH","Thiết kế","Mua sắm","Sản xuất","Thi công","Nghiệm thu","Th.toán","Quyết toán"];
+const fmt = n => new Intl.NumberFormat('vi-VN',{maximumFractionDigits:1}).format(n);
+const TODAY = new Date(2026,7,6);
+function parseEta(s){ const [d,m,y]=s.split('/').map(Number); return new Date(y,m-1,d); }
+function healthChipClass(h){ if(h>=70) return 'c-green'; if(h>=40) return 'c-amber'; return 'c-red'; }
+function bandChip(band, label){
+  const map = {green:'c-green',yellow:'c-amber',red:'c-red'};
+  return `<span class="chip ${map[band]}">${label}</span>`;
+}
+function statusChip(s){
+  if(s==='on_time') return '<span class="chip c-green">Đúng tiến độ</span>';
+  if(s==='late') return '<span class="chip c-red">Chậm tiến độ</span>';
+  return '<span class="chip c-steel">Hoàn thành</span>';
+}
+function procChip(p){
+  const map = {'Đã giao':'c-green','Đang mua':'c-steel','Đã đặt hàng':'c-amber','Chậm giao':'c-red'};
+  return `<span class="chip ${map[p]||'c-steel'}">${p}</span>`;
+}
+function progColor(pct,status){ if(status==='late') return 'var(--rework)'; if(pct>=90) return 'var(--done)'; return 'var(--steel)'; }
+function stageCellClass(status){
+  if(status==='done') return 'stage-cell stage-done';
+  if(status==='in_progress') return 'stage-cell stage-progress';
+  if(status==='late') return 'stage-cell stage-late';
+  return 'stage-cell stage-todo';
+}
+function labelStatus(s){ return {done:'Hoàn thành',in_progress:'Đang thực hiện',late:'Chậm tiến độ',not_started:'Chưa bắt đầu'}[s]; }
+function uniq(arr){ return [...new Set(arr)]; }
+function bandColor(b){ return {green:'#3FA875',yellow:'#E8A33D',red:'#D2564A'}[b]; }
+
+function populateFilters(){
+  const inv = uniq(PROJECTS.map(p=>p.investor)).sort();
+  const pms = uniq(PROJECTS.map(p=>p.pm)).sort();
+  document.getElementById('fInvestor').innerHTML = '<option value="all">Tất cả chủ đầu tư</option>' + inv.map(v=>`<option value="${v}">${v}</option>`).join('');
+  document.getElementById('fPm').innerHTML = '<option value="all">Tất cả PM</option>' + pms.map(v=>`<option value="${v}">${v}</option>`).join('');
+}
+
+// core filter (search/investor/pm/status), with optional year override
+function baseFiltered(yearOverride){
+  const q = document.getElementById('fSearch').value.trim().toLowerCase();
+  const inv = document.getElementById('fInvestor').value;
+  const pm = document.getElementById('fPm').value;
+  const st = document.getElementById('fStatus').value;
+  const yr = yearOverride !== undefined ? yearOverride : document.getElementById('fYear').value;
+  return PROJECTS.filter(p=>{
+    const mq = !q || p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.investor.toLowerCase().includes(q);
+    const mi = inv==='all' || p.investor===inv;
+    const mp = pm==='all' || p.pm===pm;
+    const ms = st==='all' || p.status===st;
+    const my = yr==='all' || String(p.startYear)===String(yr);
+    return mq && mi && mp && ms && my;
+  });
+}
+function getFiltered(){ return baseFiltered(); }
+
+let ragFilter = null; // {dim:'progress'|'budget'|'payment', band:'red'|'yellow'|'green'}
+const RAG_FIELD = {progress:'progressBand', budget:'budgetStatus', payment:'paymentBand'};
+function getFilteredWithRag(){
+  let list = getFiltered();
+  if(ragFilter){
+    const field = RAG_FIELD[ragFilter.dim];
+    list = list.filter(p => p[field]===ragFilter.band);
+  }
+  return list;
+}
+
+/* ================= TAB 1 ================= */
+function aggregate(list){
+  const total=list.length;
+  const onTime=list.filter(p=>p.status==='on_time').length;
+  const late=list.filter(p=>p.status==='late').length;
+  const contractSum=list.reduce((a,p)=>a+p.contract,0);
+  const collectedSum=list.reduce((a,p)=>a+p.collected,0);
+  const spentSum=list.reduce((a,p)=>a+p.spent,0);
+  const receivable=contractSum-collectedSum;
+  const payable=spentSum*0.22;
+  return {total,onTime,late,contractSum,collectedSum,spentSum,receivable,payable};
+}
+function deltaHtml(cur, prev, invert){
+  if(prev===null || prev===0) return '<span class="cmp">— chưa có dữ liệu năm trước</span>';
+  const diff = cur-prev;
+  const pct = Math.round(Math.abs(diff)/Math.abs(prev)*100);
+  const dir = diff>0?'up':(diff<0?'down':'flat');
+  const good = invert ? dir==='down' : dir==='up';
+  const color = dir==='flat' ? 'var(--muted)' : (good?'var(--done)':'var(--rework)');
+  const arrow = dir==='up'?'▲':(dir==='down'?'▼':'—');
+  return `<span class="cmp"><span style="color:${color};font-weight:700">${arrow} ${pct}%</span> so với ${prevLabelGlobal}</span>`;
+}
+let prevLabelGlobal = '2025';
+function renderKpis1(list){
+  const year = document.getElementById('fYear').value;
+  const cur = aggregate(list);
+  let prev = null;
+  if(year!=='all'){
+    const prevYear = Number(year)-1;
+    prevLabelGlobal = String(prevYear);
+    const prevList = baseFiltered(prevYear);
+    prev = aggregate(prevList);
+  }
+  const cards = [
+    {label:'Tổng số dự án',value:cur.total,unit:'dự án',delta:prev?deltaHtml(cur.total,prev.total,false):'<span class="cmp">Toàn bộ các năm</span>',cls:''},
+    {label:'Đúng tiến độ',value:cur.onTime,unit:'dự án',delta:prev?deltaHtml(cur.onTime,prev.onTime,false):'<span class="cmp">Toàn bộ các năm</span>',cls:'g'},
+    {label:'Chậm tiến độ',value:cur.late,unit:'dự án',delta:prev?deltaHtml(cur.late,prev.late,true):'<span class="cmp">Toàn bộ các năm</span>',cls:'r'},
+    {label:'Tổng giá trị hợp đồng',value:fmt(cur.contractSum),unit:'tỷ',delta:prev?deltaHtml(cur.contractSum,prev.contractSum,false):'<span class="cmp">Toàn bộ các năm</span>',cls:''},
+    {label:'Tổng tiền đã thu',value:fmt(cur.collectedSum),unit:'tỷ',delta:prev?deltaHtml(cur.collectedSum,prev.collectedSum,false):'<span class="cmp">Toàn bộ các năm</span>',cls:'g'},
+    {label:'Tổng tiền đã chi',value:fmt(cur.spentSum),unit:'tỷ',delta:prev?deltaHtml(cur.spentSum,prev.spentSum,true):'<span class="cmp">Toàn bộ các năm</span>',cls:'a'},
+    {label:'Công nợ phải thu',value:fmt(cur.receivable),unit:'tỷ',delta:prev?deltaHtml(cur.receivable,prev.receivable,true):'<span class="cmp">Toàn bộ các năm</span>',cls:''},
+    {label:'Công nợ phải trả',value:fmt(cur.payable),unit:'tỷ',delta:prev?deltaHtml(cur.payable,prev.payable,true):'<span class="cmp">Toàn bộ các năm</span>',cls:'r'},
+  ];
+  document.getElementById('kpiGrid1').innerHTML = cards.map(c=>`
+    <div class="kpi ${c.cls}">
+      <div class="lbl">${c.label}</div>
+      <div class="val">${c.value} <span class="unit">${c.unit}</span></div>
+      ${c.delta}
+    </div>`).join('');
+  return cur;
+}
+
+function renderChartsTab1(list){
+  const stages6 = ["Đấu thầu","Thiết kế","Mua sắm vật tư","Sản xuất","Thi công","Nghiệm thu"];
+  const counts = stages6.map(s=>list.filter(p=>p.stage===s).length);
+  echarts.init(document.getElementById('chartStage')).setOption({
+    textStyle:{fontFamily:'Inter'}, tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    grid:{left:100,right:24,top:10,bottom:20},
+    xAxis:{type:'value',axisLabel:{fontSize:10,color:'#7c899b'},splitLine:{lineStyle:{color:'#f1f5f9'}}},
+    yAxis:{type:'category',data:[...stages6].reverse(),axisLabel:{fontSize:11,color:'#1b2431'},axisLine:{lineStyle:{color:'#e3e9f1'}}},
+    series:[{type:'bar',barWidth:'55%',data:[...counts].reverse().map(v=>({value:v,itemStyle:{color:'#2E6FB0',borderRadius:[0,4,4,0]}})),
+      label:{show:true,position:'right',fontSize:11,color:'#1b2431',fontWeight:600}}]
+  });
+
+  const months = ['01/2026','02/2026','03/2026','04/2026','05/2026','06/2026','07/2026','08/2026'];
+  const thu=[58,66,72,80,95,120,108,92], chi=[50,58,64,72,86,104,98,84];
+  echarts.init(document.getElementById('chartCashflow')).setOption({
+    textStyle:{fontFamily:'Inter'}, tooltip:{trigger:'axis'},
+    legend:{bottom:6,itemGap:20,textStyle:{fontSize:11,color:'#7c899b'}},
+    grid:{left:36,right:12,top:16,bottom:52},
+    xAxis:{type:'category',data:months,axisLine:{lineStyle:{color:'#e3e9f1'}},axisLabel:{fontSize:9.5,color:'#7c899b'}},
+    yAxis:{type:'value',splitLine:{lineStyle:{color:'#f1f5f9'}},axisLabel:{fontSize:10,color:'#7c899b'}},
+    series:[{name:'Tiền thu',type:'bar',data:thu,itemStyle:{color:'#2E6FB0',borderRadius:[4,4,0,0]},barWidth:'32%'},
+            {name:'Tiền chi',type:'bar',data:chi,itemStyle:{color:'#E8A33D',borderRadius:[4,4,0,0]},barWidth:'32%'}]
+  });
+}
+
+function renderRagTable(list){
+  const bands = [
+    {band:'red', label:'Cần chú ý'},
+    {band:'yellow', label:'Trung bình'},
+    {band:'green', label:'Tốt'},
+  ];
+  document.getElementById('ragBody').innerHTML = bands.map(b=>{
+    const pCount = list.filter(p=>p.progressBand===b.band).length;
+    const bCount = list.filter(p=>p.budgetStatus===b.band).length;
+    const payCount = list.filter(p=>p.paymentBand===b.band).length;
+    const act = dim => (ragFilter && ragFilter.dim===dim && ragFilter.band===b.band) ? 'active':'';
+    return `<tr class="rag-row rag-${b.band}">
+      <td>${b.label}</td>
+      <td><span class="rag-cell rag-${b.band} ${act('progress')}" data-dim="progress" data-band="${b.band}">${pCount} dự án</span></td>
+      <td><span class="rag-cell rag-${b.band} ${act('budget')}" data-dim="budget" data-band="${b.band}">${bCount} dự án</span></td>
+      <td><span class="rag-cell rag-${b.band} ${act('payment')}" data-dim="payment" data-band="${b.band}">${payCount} dự án</span></td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('.rag-cell').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const dim = el.dataset.dim, band = el.dataset.band;
+      if(ragFilter && ragFilter.dim===dim && ragFilter.band===band){ ragFilter = null; }
+      else { ragFilter = {dim, band}; }
+      renderTab1Dependents();
+    });
+  });
+}
+
+function renderFilterTag(elId){
+  const el = document.getElementById(elId);
+  if(!ragFilter){ el.innerHTML=''; return; }
+  const dimLabel = ragFilter.dim==='progress' ? 'Tiến độ' : 'Ngân sách';
+  const bandLabel = {red:'Cần chú ý',yellow:'Trung bình',green:'Tốt'}[ragFilter.band];
+  el.innerHTML = `<span class="filter-tag">Đang lọc: ${dimLabel} — ${bandLabel} <button id="clearRag_${elId}">✕</button></span>`;
+  document.getElementById('clearRag_'+elId).addEventListener('click', ()=>{ ragFilter=null; renderTab1Dependents(); });
+}
+
+function renderHeatmap(list){
+  document.getElementById('heatBody').innerHTML = list.map(p=>`
+    <tr>
+      <td class="mono">${p.code}</td>
+      <td><div class="heatcell" style="background:${bandColor(p.progressBand)}">${p.percent}%</div></td>
+      <td><div class="heatcell" style="background:${bandColor(p.budgetStatus)}">${p.budgetUsedPct}%</div></td>
+      <td><div class="heatcell" style="background:${bandColor(p.paymentBand)}">${p.paymentPct}%</div></td>
+    </tr>`).join('');
+}
+
+function renderProcurement(list){
+  const order = ['done','late','in_progress','pending'];
+  const colors = {done:'var(--done)',late:'var(--amber)',in_progress:'var(--steel)',pending:'var(--dim)'};
+  document.getElementById('procList').innerHTML = list.map(p=>{
+    const b = p.procurementBreakdown, n = p.procurementRequestCount;
+    const segs = order.map(k=> b[k]>0 ? `<div class="proc-seg" style="width:${b[k]/n*100}%;background:${colors[k]}" title="${k}: ${b[k]}"></div>` : '').join('');
+    return `<div class="proc-row">
+      <div class="proc-name"><p class="n">${p.name}</p><p class="m mono">${p.code}</p></div>
+      <div class="proc-bar">${segs}</div>
+      <div class="proc-count">${b.done}/${n} hoàn thành</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTable1(list){
+  document.getElementById('rowCount').textContent = list.length;
+  document.getElementById('tbody1').innerHTML = list.map(p=>`
+    <tr>
+      <td class="col-right mono" style="color:var(--steel)">${p.code}</td>
+      <td class="col-left"><div style="font-weight:600;color:var(--ink)">${p.name}</div><div style="font-size:10.5px;color:var(--muted)">${p.investor}</div></td>
+      <td class="col-left">${p.pm}</td>
+      <td class="col-center"><span class="chip c-steel">${p.stage}</span></td>
+      <td class="col-center"><span class="bar-track"><span class="bar-fill" style="width:${p.percent}%;background:${progColor(p.percent,p.status)}"></span></span>${p.percent}%</td>
+      <td class="col-center">${statusChip(p.status)}</td>
+      <td class="col-center mono">${fmt(p.contract)} tỷ</td>
+      <td class="col-center mono">${fmt(p.collected)} tỷ</td>
+      <td class="col-center mono">${fmt(p.spent)} tỷ</td>
+      <td class="col-center">${bandChip(p.budgetStatus, p.budgetStatus==='red'?'Vượt ngân sách':(p.budgetStatus==='yellow'?'Cần theo dõi':'Trong ngân sách'))}</td>
+      <td class="col-center">${bandChip(p.paymentStatus==='steel'?'green':p.paymentStatus, p.paymentLabel)}</td>
+    </tr>`).join('');
+}
+
+function renderTab1Dependents(){
+  const list = getFilteredWithRag();
+  renderRagTable(getFiltered());
+  renderFilterTag('ragFilterTag');
+  renderHeatmap(list);
+  renderProcurement(list);
+  renderTable1(list);
+  renderFilterTag('detailFilterTag1');
+}
+
+/* ================= TAB 2 (unchanged logic) ================= */
+function aggregate2(list){
+  const total=list.length;
+  const avgPct = total? Math.round(list.reduce((a,p)=>a+p.percent,0)/total) : 0;
+  const late=list.filter(p=>p.status==='late').length;
+  const risky=list.filter(p=>p.health<40).length;
+  const overdue=list.reduce((a,p)=>a+p.overdueTasks,0);
+  return {total,avgPct,late,risky,overdue};
+}
+function renderKpis2(list){
+  const year = document.getElementById('fYear').value;
+  const cur = aggregate2(list);
+  let prev = null;
+  if(year!=='all'){
+    const prevYear = Number(year)-1;
+    prevLabelGlobal = String(prevYear);
+    prev = aggregate2(baseFiltered(prevYear));
+  }
+  const na = '<span class="cmp">Toàn bộ các năm</span>';
+  const cards = [
+    {label:'Tổng số dự án',value:cur.total,unit:'dự án',delta:prev?deltaHtml(cur.total,prev.total,false):na,cls:''},
+    {label:'Tiến độ trung bình',value:cur.avgPct+'%',unit:'',delta:prev?deltaHtml(cur.avgPct,prev.avgPct,false):na,cls:''},
+    {label:'Dự án chậm',value:cur.late,unit:'dự án',delta:prev?deltaHtml(cur.late,prev.late,true):na,cls:'r'},
+    {label:'Dự án rủi ro',value:cur.risky,unit:'dự án',delta:prev?deltaHtml(cur.risky,prev.risky,true):na,cls:'a'},
+    {label:'Công việc quá hạn',value:cur.overdue,unit:'việc',delta:prev?deltaHtml(cur.overdue,prev.overdue,true):na,cls:'r'},
+  ];
+  document.getElementById('kpiGrid2').innerHTML = cards.map(c=>`
+    <div class="kpi ${c.cls}"><div class="lbl">${c.label}</div><div class="val">${c.value} <span class="unit">${c.unit}</span></div>${c.delta}</div>`).join('');
+}
+const STAGES6 = ["Đấu thầu","Thiết kế","Mua sắm vật tư","Sản xuất","Thi công","Nghiệm thu"];
+function renderChartsTab2(list){
+  const onTimeData = STAGES6.map(s=>list.filter(p=>p.stage===s && p.status==='on_time').length);
+  const lateData = STAGES6.map(s=>list.filter(p=>p.stage===s && p.status==='late').length);
+  echarts.init(document.getElementById('chartStageStatus')).setOption({
+    textStyle:{fontFamily:'Inter'}, tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    legend:{bottom:0,textStyle:{fontSize:11,color:'#7c899b'}},
+    grid:{left:100,right:24,top:10,bottom:34},
+    xAxis:{type:'value',axisLabel:{fontSize:10,color:'#7c899b'},splitLine:{lineStyle:{color:'#f1f5f9'}}},
+    yAxis:{type:'category',data:[...STAGES6].reverse(),axisLabel:{fontSize:11,color:'#1b2431'},axisLine:{lineStyle:{color:'#e3e9f1'}}},
+    series:[
+      {name:'Đúng tiến độ',type:'bar',stack:'total',barWidth:'55%',data:[...onTimeData].reverse(),itemStyle:{color:'#3FA875'}},
+      {name:'Chậm tiến độ',type:'bar',stack:'total',barWidth:'55%',data:[...lateData].reverse(),itemStyle:{color:'#D2564A'}},
+    ]
+  });
+
+  echarts.init(document.getElementById('chartDaily')).setOption({
+    textStyle:{fontFamily:'Inter'}, tooltip:{trigger:'axis',valueFormatter:v=>v+'%'},
+    grid:{left:36,right:16,top:16,bottom:32},
+    xAxis:{type:'category',data:DAILY_SERIES.map(d=>d.date),axisLabel:{fontSize:9.5,color:'#7c899b'},axisLine:{lineStyle:{color:'#e3e9f1'}}},
+    yAxis:{type:'value',min:50,max:100,axisLabel:{fontSize:10,color:'#7c899b',formatter:'{value}%'},splitLine:{lineStyle:{color:'#f1f5f9'}}},
+    series:[{type:'line',data:DAILY_SERIES.map(d=>d.pct),smooth:true,symbolSize:6,
+      lineStyle:{color:'#2E6FB0',width:2.5}, itemStyle:{color:'#2E6FB0'},
+      areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(46,111,176,.22)'},{offset:1,color:'rgba(46,111,176,0)'}]}}}]
+  });
+}
+
+function phaseValueAndColor(p, stage){
+  const st = p.stageStatuses[stage];
+  let val;
+  if(st==='done') val = 100;
+  else if(st==='not_started') val = null;
+  else val = p.percent; // in_progress or late -> use overall % as proxy for within-stage progress
+  let color;
+  if(val===null) color = 'var(--dim)';
+  else if(st==='late') color = 'var(--rework)';
+  else if(val>=90) color = 'var(--done)';
+  else if(val>=50) color = 'var(--steel)';
+  else color = 'var(--amber)';
+  return {val, color};
+}
+function renderPhaseHeatmapHeader(){
+  document.getElementById('phHeadCells').innerHTML = STAGE_SHORT.map(s=>`<div class="ph-head-cell">${s}</div>`).join('');
+}
+
+/* ─── Gantt tiến độ theo tháng ─── */
+var GT_SPAN  = [1,1,1,1,2,1,2,1,1,1];              // số tháng mỗi giai đoạn
+var GT_GROUP = [0,0,0,1,1,1,2,3,3,3];              // nhóm màu của giai đoạn
+var GT_COLOR = ['var(--amber)','var(--steel)','var(--done)','var(--purple)'];
+function gtHash(code){ var h=0; for(var i=0;i<code.length;i++) h=(h*31+code.charCodeAt(i))|0; return Math.abs(h); }
+function gtTimeline(p){
+  var off = gtHash(p.code)%3;                       // dự án khởi động lệch nhau 0-2 tháng
+  var merge = gtHash(p.code)%4===0 ? 4 : -1;        // một số dự án gộp Mua sắm + Sản xuất
+  var cells = new Array(12).fill(null), m = off, i = 0;
+  while(i<STAGES.length && m<12){
+    var isMerge = (i===merge && i+1<STAGES.length);
+    var span = isMerge ? Math.max(1, GT_SPAN[i]) : GT_SPAN[i];
+    var label = isMerge ? (STAGE_SHORT[i]+'/'+STAGE_SHORT[i+1]) : STAGE_SHORT[i];
+    var st = p.stageStatuses ? p.stageStatuses[STAGES[i]] : 'not_started';
+    if(isMerge){
+      var st2 = p.stageStatuses ? p.stageStatuses[STAGES[i+1]] : 'not_started';
+      if(st==='done' && st2!=='done') st='in_progress';
+    }
+    for(var k=0;k<span && m<12;k++,m++) cells[m] = {label:label, st:st, grp:GT_GROUP[i], merge:isMerge};
+    i += isMerge ? 2 : 1;
+  }
+  return cells;
+}
+function renderGantt(list){
+  var body = document.getElementById('gtBody');
+  if(!body) return;
+  body.innerHTML = list.map(function(p){
+    var cells = gtTimeline(p);
+    var tot = (p.completedTasks||0) + (p.openTasks||0);
+    var row = cells.map(function(c){
+      if(!c) return '<div class="gt-cell"><span class="gt-dash">—</span></div>';
+      var ico = c.st==='done' ? '✓' : (c.st==='in_progress' ? '◔' : '○');
+      var bg  = c.st==='not_started' ? '' : (c.merge ? 'var(--purple)' : GT_COLOR[c.grp]);
+      var cls = c.st==='not_started' ? 'gt-pill none' : 'gt-pill';
+      var sty = bg ? ' style="background:'+bg+'"' : '';
+      return '<div class="gt-cell"><div class="'+cls+'"'+sty+' title="'+p.code+' · '+c.label+'">'+ico+' '+c.label+'</div></div>';
+    }).join('');
+    return '<div class="gt-row">'
+      + '<div class="gt-name"><div class="gt-code">'+p.code+'</div>'
+      + '<div class="gt-meta"><span>'+p.percent+'% hoàn thành</span><span>'+(p.completedTasks||0)+'/'+tot+' đầu việc</span></div>'
+      + '<div class="gt-bar"><i style="width:'+p.percent+'%"></i></div></div>'
+      + row + '</div>';
+  }).join('');
+}
+
+function renderPhaseHeatmap(list){
+  document.getElementById('phaseHeatBody').innerHTML = list.map(p=>{
+    const cells = STAGES.map(s=>{
+      const {val,color} = phaseValueAndColor(p,s);
+      const txt = val===null ? '—' : val+'%';
+      return `<div class="ph-cell" style="background:${color}" title="${p.code} · ${s}: ${txt}">${txt}</div>`;
+    }).join('');
+    return `<div class="ph-row">
+      <div class="ph-name"><p class="n">${p.code}</p></div>
+      <div style="display:flex">${cells}</div>
+    </div>`;
+  }).join('');
+}
+function renderDetailTable2(list){
+  document.getElementById('dtCount').textContent = list.length;
+  document.getElementById('dtBody').innerHTML = list.map(p=>`
+    <tr>
+      <td class="col-left"><div style="font-weight:700;color:var(--steel)" class="mono">${p.code}</div><div style="font-size:10px;color:var(--muted)">${p.name}</div></td>
+      <td class="col-left">${p.pm}</td>
+      <td class="col-center"><span class="chip c-steel">${p.stage}</span></td>
+      <td class="col-center"><span class="bar-track"><span class="bar-fill" style="width:${p.percent}%;background:${progColor(p.percent,p.status)}"></span></span>${p.percent}%</td>
+      <td class="col-center mono" style="color:${p.daysLate>0?'var(--rework)':'var(--muted)'};font-weight:${p.daysLate>0?700:400}">${p.daysLate>0?p.daysLate+'d':'—'}</td>
+      <td class="col-center mono">${p.completedTasks}</td>
+      <td class="col-center mono">${p.openTasks}</td>
+      <td class="col-center mono" style="color:${p.overdueTasks>0?'var(--rework)':'var(--muted)'};font-weight:${p.overdueTasks>0?700:400}">${p.overdueTasks}</td>
+      <td class="col-center"><span class="bar-track"><span class="bar-fill" style="width:${p.procurementProgress}%;background:var(--steel)"></span></span>${p.procurementProgress}%</td>
+      <td class="col-center">${p.constructionProgress!==null?`<span class="bar-track"><span class="bar-fill" style="width:${p.constructionProgress}%;background:var(--done)"></span></span>${p.constructionProgress}%`:'—'}</td>
+    </tr>`).join('');
+}
+
+/* ================= MASTER RENDER ================= */
+function renderAll(){
+  const list = getFiltered();
+  renderKpis2(list);
+  renderChartsTab2(list);
+  renderGantt(list);
+  renderDetailTable2(list);
+}
+
+populateFilters();
+renderAll();
+
+['fSearch','fInvestor','fPm','fStatus','fYear'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{ ragFilter=null; renderAll(); });
+  document.getElementById(id).addEventListener('change', ()=>{ ragFilter=null; renderAll(); });
+});
+
+
+window.addEventListener('resize', ()=>{
+  ['chartStageStatus','chartDaily'].forEach(id=>{
+    const el = document.getElementById(id);
+    const inst = el && echarts.getInstanceByDom(el);
+    if(inst) inst.resize();
+  });
+});
+</script>
+</body>
+</html>

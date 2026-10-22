@@ -1,0 +1,22 @@
+{
+  "slug": "heid-bo-bao-cao",
+  "title": "HEID — Bộ 4 báo cáo quản trị",
+  "type": "dashboard",
+  "industry": "Giáo dục",
+  "department": "All",
+  "description": "Tài chính & hiệu quả kinh doanh, tiến độ đơn hàng, sản lượng vận hành, hành chính nhân sự.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/HEID_Baocao/",
+  "source_repo": "https://github.com/tbinh-06/HEID_Baocao",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "tài chính",
+    "đơn hàng",
+    "nhân sự"
+  ]
+}

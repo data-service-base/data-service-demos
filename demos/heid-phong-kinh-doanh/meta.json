@@ -1,0 +1,21 @@
+{
+  "slug": "heid-phong-kinh-doanh",
+  "title": "HEID — Giải pháp báo cáo phòng Kinh doanh",
+  "type": "proposal",
+  "industry": "Giáo dục",
+  "department": "Kinh doanh",
+  "description": "Chuỗi giá trị phòng Kinh doanh và giải pháp thay báo cáo tuần đang làm thủ công.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/HEID_PhongKinhdoanh/",
+  "source_repo": "https://github.com/tbinh-06/HEID_PhongKinhdoanh",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "báo cáo tuần",
+    "chuỗi giá trị"
+  ]
+}

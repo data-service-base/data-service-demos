@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Quy trình truy xuất nguồn gốc — Cao su Chư Sê (Gia Lai)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+:root{
+  --blue:#185FA5;--blue-dark:#0F3460;--blue-light:#E6F1FB;--blue-xl:#F0F6FD;
+  --teal:#1A7A5E;--teal-dark:#0A4D3C;--teal-light:#E1F5EE;--teal-xl:#F0FAF6;
+  --purple:#7B2FA0;--purple-dark:#3D1C72;--purple-light:#F0E8FA;--purple-xl:#F8F4FD;
+  --orange:#C25B10;--orange-dark:#7A3208;--orange-light:#FDE8D8;--orange-xl:#FEF4EE;
+  --amber:#854F0B;--amber-light:#FAEEDA;
+  --green:#3B6D11;--green-light:#EAF3DE;
+  --red:#A32D2D;--red-light:#FEE8E8;
+  --g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;
+  --g400:#9CA3AF;--g500:#6B7280;--g700:#374151;--g900:#111827;
+  --w:#fff;--r:8px;--sh:0 1px 4px rgba(0,0,0,.08);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--g100);color:var(--g900);font-size:14px}
+
+.hdr{padding:26px 36px;color:#fff}
+.hdr-0{background:linear-gradient(135deg,var(--blue-dark),var(--blue))}
+.hdr-1{background:linear-gradient(135deg,var(--teal-dark),var(--teal))}
+.hdr-2{background:linear-gradient(135deg,var(--purple-dark),var(--purple))}
+.hdr-3{background:linear-gradient(135deg,var(--orange-dark),var(--orange))}
+.hdr-badge{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+.hdr h1{font-size:21px;font-weight:700;margin-bottom:4px}
+.hdr p{font-size:13px;opacity:.75}
+
+.flow-tabs{background:var(--w);border-bottom:1px solid var(--g200);display:flex;overflow-x:auto}
+.ftab{padding:13px 18px;font-size:12.5px;font-weight:500;color:var(--g500);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;font-family:inherit;transition:all .15s}
+.ftab:hover{color:var(--g700)}
+.ftab.fa0{color:var(--blue);border-bottom-color:var(--blue)}
+.ftab.fa1{color:var(--teal);border-bottom-color:var(--teal)}
+.ftab.fa2{color:var(--purple);border-bottom-color:var(--purple)}
+.ftab.fa3{color:var(--orange);border-bottom-color:var(--orange)}
+.ftab.fa-ov{color:#1a1a2e;border-bottom-color:#1a1a2e;font-weight:600}
+
+.fk-tag{display:inline-block;border-radius:9px;padding:0 7px;font-size:9.5px;font-weight:700;margin-left:6px;vertical-align:middle}
+.t-fill{background:#FDE8D8;color:#7A3208;border:1px solid #C25B10}
+.t-auto{background:var(--g200);color:var(--g500);border:1px solid var(--g400)}
+.t-inh{background:var(--teal-light);color:var(--teal);border:1px solid var(--teal)}
+.fk-fill input,.fk-fill select,.fk-fill textarea{background:var(--w);border-color:#E3B892}
+.fk-fill input:hover,.fk-fill select:hover,.fk-fill textarea:hover{border-color:var(--orange)}
+
+.step-nav{background:var(--w);border-bottom:1px solid var(--g200);position:sticky;top:env(safe-area-inset-top,0px);z-index:100;overflow-x:auto}
+.snav-inner{display:flex;align-items:center;padding:10px 28px;min-width:max-content}
+.snav-item{display:flex;align-items:center;cursor:pointer}
+.snav-dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--g300);background:var(--w);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--g400);flex-shrink:0;transition:all .2s}
+.snav-label{font-size:10px;color:var(--g500);font-weight:500;margin-left:6px;margin-right:2px;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.snav-line{width:16px;height:2px;background:var(--g200);flex-shrink:0}
+.s0 .snav-item.sa .snav-dot{background:var(--blue);border-color:var(--blue);color:#fff}
+.s1 .snav-item.sa .snav-dot{background:var(--teal);border-color:var(--teal);color:#fff}
+.s2 .snav-item.sa .snav-dot{background:var(--purple);border-color:var(--purple);color:#fff}
+.s3 .snav-item.sa .snav-dot{background:var(--orange);border-color:var(--orange);color:#fff}
+.snav-item.sd .snav-dot{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.snav-item.sd .snav-line{background:var(--green)}
+
+.main{max-width:1080px;margin:26px auto;padding:0 18px 60px}
+.sc{background:var(--w);border:1px solid var(--g200);border-radius:12px;overflow:hidden;box-shadow:var(--sh)}
+.sc-hdr{padding:17px 22px;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:12px}
+.sc-hdr-0{background:var(--blue-xl)}.sc-hdr-1{background:var(--teal-xl)}.sc-hdr-2{background:var(--purple-xl)}.sc-hdr-3{background:var(--orange-xl)}
+.sc-badge{min-width:34px;height:34px;border-radius:50%;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.sb0{background:var(--blue)}.sb1{background:var(--teal)}.sb2{background:var(--purple)}.sb3{background:var(--orange)}
+.sc-title{font-size:15px;font-weight:600;margin-bottom:2px}
+.sc-title-0{color:var(--blue-dark)}.sc-title-1{color:var(--teal-dark)}.sc-title-2{color:var(--purple-dark)}.sc-title-3{color:var(--orange-dark)}
+.sc-desc{font-size:12px;color:var(--g500)}
+
+.ibar{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--g200)}
+.ibar-item{padding:9px 16px;border-right:1px solid var(--g200)}
+.ibar-item:last-child{border-right:none}
+.ilbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);margin-bottom:2px}
+.ival{font-size:12px;color:var(--g700);font-weight:500}
+
+.fb{padding:20px 22px}
+.fs{margin-bottom:22px}
+.fs:last-child{margin-bottom:0}
+.stitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:5px;border-bottom:2px solid}
+.st0{color:var(--blue);border-color:var(--blue-light)}.st1{color:var(--teal);border-color:var(--teal-light)}
+.st2{color:var(--purple);border-color:var(--purple-light)}.st3{color:var(--orange);border-color:var(--orange-light)}
+.fg{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.fgrp.full{grid-column:1/-1}
+.fgrp label{display:block;font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.fgrp input,.fgrp textarea,.fgrp select{width:100%;padding:7px 11px;border:1px solid var(--g300);border-radius:var(--r);font-family:inherit;font-size:13px;color:var(--g900);background:var(--g50);transition:border .15s;resize:vertical}
+.fgrp input:focus,.fgrp textarea:focus,.fgrp select:focus{outline:none;border-color:var(--blue);background:var(--w);box-shadow:0 0 0 2px rgba(24,95,165,.08)}
+.fgrp textarea{min-height:60px}
+.fgrp input[readonly]{background:var(--g100);color:var(--g700);font-weight:600}
+.req::after{content:' *';color:var(--red)}
+.fhint{font-size:10.5px;color:var(--g400);margin-top:3px;font-weight:400}
+
+.tw{overflow-x:auto;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--g100);padding:7px 8px;text-align:left;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--g500);border:1px solid var(--g200);white-space:nowrap}
+th .inh-note{display:block;font-weight:500;text-transform:none;letter-spacing:0;color:var(--teal);font-size:9.5px;margin-top:1px}
+td{padding:4px 5px;border:1px solid var(--g200);vertical-align:middle}
+td input,td select{width:100%;border:none;background:transparent;font-family:inherit;font-size:12.5px;color:var(--g900);padding:2px 3px;min-height:26px}
+td input:focus,td select:focus{outline:1px solid var(--blue);border-radius:3px;background:var(--blue-xl)}
+td input[readonly]{background:var(--teal-xl);color:var(--teal-dark);font-weight:600}
+select.pick{font-weight:600;color:var(--blue);background:var(--blue-xl);border-radius:4px}
+tfoot td{background:var(--g100);font-weight:700}
+.tadd{margin-top:6px;font-size:12px;cursor:pointer;font-weight:500;background:none;border:1px dashed;border-radius:6px;padding:5px 12px;width:100%;font-family:inherit}
+.tadd-0{color:var(--blue);border-color:var(--blue)}.tadd-1{color:var(--teal);border-color:var(--teal)}
+.tadd-2{color:var(--purple);border-color:var(--purple)}.tadd-3{color:var(--orange);border-color:var(--orange)}
+.tdel{background:none;border:none;color:var(--g400);cursor:pointer;font-size:15px;padding:0 4px}
+.tdel:hover{color:var(--red)}
+
+.callout{border-radius:8px;padding:11px 14px;font-size:12.5px;line-height:1.55;margin-bottom:14px}
+.co-warn{background:var(--amber-light);border:1px solid var(--amber);color:#5c3706}
+.co-info{background:var(--blue-light);border:1px solid var(--blue);color:var(--blue-dark)}
+.co-auto{background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark)}
+.co-t{font-weight:700;display:block;margin-bottom:2px}
+
+.ck-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--g100)}
+.tf{background:var(--g100);border-top:2px solid var(--g300);padding:6px 8px;font-size:12.5px;font-weight:700}
+.tf-lbl{font-size:10px;letter-spacing:.05em;color:var(--g500);text-align:center}
+.tv-blue{color:var(--blue)}.tv-teal{color:var(--teal)}.tv-amber{color:var(--amber)}.tv-green{color:var(--green)}.tv-brown{color:#6B4226}
+
+.navr{display:flex;justify-content:space-between;align-items:center;padding:13px 22px;border-top:1px solid var(--g200);background:var(--g50);gap:10px;flex-wrap:wrap}
+.navc{font-size:12px;color:var(--g500)}
+.navb{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:8px;border:1px solid var(--g300);background:var(--w);color:var(--g700);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn:hover{background:var(--g100)}
+.btn-p0{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-p1{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-p2{background:var(--purple);color:#fff;border-color:var(--purple)}
+.btn-p3{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn-ok{background:var(--green-light);color:var(--green);border-color:var(--green)}
+.num-right{text-align:right}
+@media print{.flow-tabs,.step-nav,.navr,.tadd,.tdel{display:none!important}.main{margin:0;max-width:100%}.sc{box-shadow:none}body{background:#fff}}
+@media(max-width:700px){
+  .fg,.ibar{grid-template-columns:1fr}
+  .ibar-item{border-right:none;border-bottom:1px solid var(--g200)}
+  .main{padding:0 10px 40px}.hdr{padding:18px}.snav-label{display:none}
+}
+
+.fk-legend{display:flex;flex-wrap:wrap;gap:16px;padding:8px 22px;border-bottom:1px solid var(--g200);background:var(--g50);font-size:11px;color:var(--g500);align-items:center}
+.fk-inh input[readonly],.fk-inh select{background:var(--teal-xl);border-color:#9fd6c3;color:var(--teal-dark);font-weight:600}
+.fk-auto input[readonly]{background:var(--g100)}
+th .th-k{display:block;font-weight:600;text-transform:none;letter-spacing:0;font-size:9.5px;margin-top:1px}
+.th-fill{color:#C25B10}.th-inh{color:var(--teal)}.th-auto{color:var(--g500)}
+td input.num-right[readonly]{text-align:right}
+.btn-line{margin:4px 0 10px;display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="hdr-wrap"></div>
+<div class="flow-tabs" id="flow-tabs"></div>
+<div class="step-nav" id="step-nav"></div>
+<div class="main"><div class="sc" id="sc"></div></div>
+
+<script>
+/* ============================================================
+   DEMO TRẢI NGHIỆM NHẬP LIỆU — Cao su Chư Sê (Gia Lai)
+   Kiến trúc thật: Base Table + n8n. Mỗi giai đoạn gồm:
+     Bước LỌC (chỉ có trường điền)  →  Bước BẢNG TRẢ VỀ (kế thừa + điền)  →  chốt/duyệt
+   Quy ước trường:  ✎ Điền (người dùng nhập) · ↩ Kế thừa (lấy từ bước trước, không sửa) · ⚙ Tự tính (n8n/hệ thống)
+   Số liệu mẫu lấy từ sổ BM02B/03/06B/07A/08A/09, phiếu nhập kho, lệnh SX, KHSX, bảng NL-TP, chứng chỉ, DDS.
+   ============================================================ */
+const DOI = ['Đội Ia Glai','Đội Ia Hlốp','Đội Ia Ko','Đội Ia Tiêm'];
+const HO_OPTS = ['','Hồ3/1/100p','Hồ4/1/100p','Hồ3/2/100p'];
+const LOAI_SVR = ['SVR3L','SVR5','SVR10','RSS3'];
+const KHU_LUU = ['B1 — Pallet','B2 — Pallet','A3 — Hàng rời'];
+const KQ = ['','✓ Đạt — chuyển bước sau','✗ Không đạt — xử lý lại'];
+const D1='2025-06-01', D2='2025-06-02', D3='2025-06-03';
+
+/* ---------- helpers dữ liệu ---------- */
+function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v);}catch(e){return null} }
+function esc(v){ return (v===undefined||v===null?'':String(v)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function n(v){ const x=parseFloat(String(v==null?'':v).replace(/,/g,'')); return isNaN(x)?0:x; }
+function fmt(x){ return (Math.round(x*100)/100).toLocaleString('vi-VN'); }
+function dm(d){ const m=/^\d{4}-(\d{2})-(\d{2})$/.exec(d||''); return m? m[2]+'/'+m[1] : ''; }
+function addDay(d,k){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d); return new Date(Date.UTC(+m[1],+m[2]-1,+m[3]+k)).toISOString().slice(0,10); }
+function setM(id,val){ const e=document.getElementById(id); if(e) e.innerHTML=val; }
+function setRO(id,v){ const e=document.getElementById(id); if(e) e.value=v; }
+
+/* ---------- Dữ liệu nguồn: BM02B (phiếu giao nhận mủ nước) ---------- */
+const PHIEU_RAW = [
+ [D1,'15733','10h50','Khu vực 1','Đội Ia Hlốp',4870,'Hồ3/1/100p'],
+ [D1,'15710','11h30','Khu vực 1','Đội Ia Glai',4800,'Hồ3/1/100p'],
+ [D1,'25304','11h50','Khu vực 3','Đội Ia Glai',5040,'Hồ3/1/100p'],
+ [D1,'25223','12h40','Khu vực 2','Đội Ia Hlốp',4850,'Hồ4/1/100p'],
+ [D1,'25396','13h20','Khu vực 4','Đội Ia Hlốp',2850,'Hồ4/1/100p'],
+ [D1,'15733','13h25','Khu vực 2','Đội Ia Glai',4850,'Hồ4/1/100p'],
+ [D1,'15528','14h00','Khu vực 4','Đội Ia Glai',4950,'Hồ3/2/100p'],
+ [D1,'25223','14h10','Khu vực 3','Đội Ia Hlốp',4810,'Hồ3/2/100p'],
+ [D2,'15733','10h50','Khu vực 1','Đội Ia Hlốp',4800,'Hồ3/1/100p'],
+ [D2,'15710','11h30','Khu vực 1','Đội Ia Glai',5120,'Hồ3/1/100p'],
+ [D2,'25304','11h50','Khu vực 3','Đội Ia Glai',5100,'Hồ3/1/100p'],
+ [D2,'25223','12h40','Khu vực 2','Đội Ia Hlốp',5100,'Hồ4/1/100p'],
+ [D2,'25396','12h50','Khu vực 2','Đội Ia Glai',5200,'Hồ4/1/100p'],
+ [D2,'15528','13h00','Khu vực 4','Đội Ia Glai',5000,'Hồ3/2/100p'],
+ [D2,'25223','13h10','Khu vực 3','Đội Ia Hlốp',5500,'Hồ3/2/100p']
+];
+const PHIEU = PHIEU_RAW.map((r,i,a)=>{
+  const seq=a.slice(0,i).filter(x=>x[0]===r[0]).length+1;
+  return {ma_phieu:'GN-'+r[0].slice(8,10)+r[0].slice(5,7)+'-'+String(seq).padStart(2,'0'),
+          ngay:r[0],so_xe:r[1],gio:r[2],kv:r[3],doi:r[4],kl_tuoi:String(r[5]),ho:r[6]};
+});
+/* DRC & quy khô ghi theo từng hồ trên sổ BM02B */
+const HO_LAB = {
+ '01/06 · Hồ3/1/100p':{drc:'30.8',kho:'4530'}, '01/06 · Hồ4/1/100p':{drc:'30.8',kho:'3865'}, '01/06 · Hồ3/2/100p':{drc:'30.8',kho:'3006'},
+ '02/06 · Hồ3/1/100p':{drc:'31.0',kho:'4648'}, '02/06 · Hồ4/1/100p':{drc:'31.0',kho:'3187'}, '02/06 · Hồ3/2/100p':{drc:'31.0',kho:'3249'}
+};
+
+/* ---------- Dữ liệu nguồn: BM09 / phiếu nhập kho (lô thành phẩm) ---------- */
+const LO_BASE = {sp:'SVR3L',tl_banh:'35 kg',dongoi:'Pa lét',tt_sp:'Tốt',khuluu:'B1 — Pallet',ghichu:'Pe; mỏng tem ngoài pa lét gỗ'};
+const LO = [
+ Object.assign({},LO_BASE,{ma_lo:'TP-0206-01',lo_so:'ĐM01',ngay:D2,tg_nk:'8h20',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0206-02',lo_so:'ĐM02',ngay:D2,tg_nk:'',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0206-03',lo_so:'ĐM03',ngay:D2,tg_nk:'',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0206-04',lo_so:'ĐM04',ngay:D2,tg_nk:'',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0206-05',lo_so:'',ngay:D2,tg_nk:'13h30',so_banh:'38',kl_kg:'1330',xeplop:'7',khuluu:'B2 — Pallet'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0306-01',lo_so:'ĐM05',ngay:D3,tg_nk:'8h20',so_banh:'34',kl_kg:'1190',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0306-02',lo_so:'ĐM06',ngay:D3,tg_nk:'',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0306-03',lo_so:'ĐM07',ngay:D3,tg_nk:'',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0306-04',lo_so:'ĐM08',ngay:D3,tg_nk:'12h00',so_banh:'72',kl_kg:'2520',xeplop:'6'}),
+ Object.assign({},LO_BASE,{ma_lo:'TP-0306-05',lo_so:'',ngay:D3,tg_nk:'13h20',tl_banh:'33.333 kg',so_banh:'70',kl_kg:'2333',dongoi:'Rời',xeplop:'6',khuluu:'A3 — Hàng rời',ghichu:'Pe; mỏng tem ngoài hàng rời'})
+];
+
+/* ---------- truy cập state các bước trước ---------- */
+let state = {};
+function SS(f,s){ return state[f+'_'+s]||{}; }
+function fv(f,s,id,def){ const v=SS(f,s)[id]; return (v===undefined||v==='')? def : v; }
+function rowsOr(f,s,tid,fb){ const r=SS(f,s)[tid]; return (r&&r.length)? r : fb(); }
+function mergeTpl(tpls,key,o){ const t=tpls.find(x=>String(x[key])===String(o[key])&&o[key]!==''); return t? Object.assign({},t,o) : o; }
+function expand(s){ const out=[]; String(s||'').split(/[,;]/).forEach(p=>{ const m=/(\d+)\s*[–-]\s*(\d+)/.exec(p); if(m){ for(let i=+m[1];i<=+m[2];i++) out.push(i); } else { const k=/\d+/.exec(p); if(k) out.push(+k[0]); } }); return out; }
+function inRange(d,tu,den){ return d>=tu && d<=den; }
+
+/* ---------- QT1: lọc phiếu → danh sách phiếu → gom hồ ---------- */
+function phieuPool(){
+  const tu=fv(0,0,'tn1_tu',D1), den=fv(0,0,'tn1_den',D2), doi=fv(0,0,'tn1_doi','Tất cả');
+  return PHIEU.filter(p=>inRange(p.ngay,tu,den)&&(doi==='Tất cả'||p.doi===doi));
+}
+function tn2Default(){ return phieuPool().map(p=>Object.assign({},p)); }
+function buildHoRows(rows){
+  const g={}, order=[];
+  rows.forEach(r=>{ if(!r.ho) return; const k=dm(r.ngay)+' · '+r.ho;
+    if(!g[k]){ g[k]={ma_ho:k,ngay:r.ngay,so_phieu:0,kl:0}; order.push(k); }
+    g[k].so_phieu++; g[k].kl+=n(r.kl_tuoi); });
+  return order.map(k=>{ const o=g[k], lab=HO_LAB[k]||{};
+    return {ma_ho:k,ngay:o.ngay,so_phieu:String(o.so_phieu),kl_tuoi:String(o.kl),drc:lab.drc||'',kho:lab.kho||'',
+            tinhtrang:lab.drc?'4':'',tapchat:lab.drc?'không':'',phanloai:lab.drc?'SVR3L':''}; });
+}
+function tn3Default(){ return buildHoRows(rowsOr(0,1,'tn2_list',tn2Default)); }
+function hoRows(){ return rowsOr(0,2,'tn3_list',tn3Default); }
+function hoPool(){ return hoRows(); }
+
+/* ---------- QT2: chế biến liền mạch — không có bước lọc (1 người nhập xuyên suốt) ---------- */
+const HOGRP=[['Hồ3/1/100p',18,24],['Hồ4/1/100p',25,28],['Hồ3/2/100p',29,32]];
+const DD_TIME={18:'12h00',24:'13h00',25:'13h10',28:'14h00',29:'14h10',32:'14h50'};
+function ddTpl(){ const out=[]; HOGRP.forEach(g=>{ for(let m=g[1];m<=g[2];m++){ const f=[18,25,29,32].indexOf(m)>=0;
+  out.push({ho:g[0],muong:m+'/100p',drc:f?'22':'',ph:f?'5.50':'',lech_ph:f?'không':'',con:f?'không':'',oxy:f?'không':'',tg:DD_TIME[m]||'',ghichu:''}); } }); return out; }
+/* Hồ đã tiếp nhận ở QT1 — mặc định lấy hồ cùng ngày với ngày đánh đông */
+function ddDefault(){
+  const ng=fv(1,0,'cb1_ngay',D2), pool=hoRows().filter(h=>h.ngay===ng);
+  return ddTpl().map(t=>{ const h=pool.find(p=>p.ma_ho.split(' · ')[1]===t.ho); return h? Object.assign({},t,{ma_ho:h.ma_ho,kl_tuoi:h.kl_tuoi}) : null; }).filter(Boolean);
+}
+const TH_T=[]; (function(){ const TIME={18:'7h00',23:'8h40',27:'10h00',32:'11h50'};
+  for(let m=18;m<=32;m++){ const a=(m-18)*2+1, blk=[18,23,29,32].indexOf(m)>=0;
+    TH_T.push({muong:m+'/100p',sp:blk?'SVR3L':'',gio_bd:TIME[m]||'',tinhtrang:blk?'Tốt':'',bedaymuong:blk?'200mm':'',bedaycankeo:blk?'20mm':'',bedaycuoi:blk?'4mm':'',tt_com:blk?'Tốt':'',thung:a+'–'+(a+1),ghichu:''}); } })();
+function thDerive(){ return rowsOr(1,0,'dd_list',ddDefault).map(r=>mergeTpl(TH_T,'muong',{ma_ho:r.ma_ho,muong:r.muong})); }
+const GN_T={1:{gio_bd:'7h40',gio_ralo:'11h00'},21:{gio_bd:'11h00',gio_ralo:''},30:{gio_bd:'12h30',gio_ralo:''}};
+function gnDerive(){
+  const out=[];
+  rowsOr(1,1,'th_list',thDerive).forEach(r=>{ expand(r.thung).forEach(t=>{
+    const tp=GN_T[t]; const row={thung:String(t),muong:r.muong};
+    if(tp) Object.assign(row,{gio_bd:tp.gio_bd,t1:'107',t2:'103',tg_say:'10',gio_ralo:tp.gio_ralo,danhgia:'Tốt',nguongoc:'KT',vesinh:'Tốt'});
+    out.push(row); }); });
+  return out;
+}
+const EK_BASE={nhietdo_ep:'40',kl_banh:'35',kt_catbanh:'v',danhgia:'Tốt',sp:'SVR3L'};
+const EK_T={1:Object.assign({gio_ralo:'8h00'},EK_BASE),
+  7:Object.assign({lo:'O1',somau:'7 mẫu/lô',dongoi:'pallet',noiluutru:'B1 — Pallet'},EK_BASE),
+  14:Object.assign({lo:'O2',somau:'7 mẫu/lô',dongoi:'pallet',noiluutru:'B1 — Pallet'},EK_BASE),
+  21:Object.assign({lo:'O3',somau:'7 mẫu/lô',dongoi:'pallet',noiluutru:'B1 — Pallet'},EK_BASE),
+  28:Object.assign({lo:'O4',somau:'7 mẫu/lô',dongoi:'pallet',noiluutru:'B1 — Pallet'},EK_BASE),
+  30:Object.assign({gio_ralo:'13h10',dongoi:'pallet',noiluutru:'B1 — Pallet'},EK_BASE)};
+/* Thùng đang nằm trong lò (chưa ghi ra lò) — gồm cả thùng gối đầu hôm trước */
+function ekDerive(){
+  const ns=dm(fv(1,2,'cb3_ngay',D2));
+  return rowsOr(1,2,'gn_list',gnDerive).map(r=>Object.assign({},EK_T[+r.thung]||{},{ngay_say:ns,thung:r.thung}));
+}
+
+/* ---------- QT3: nhập kho ---------- */
+function loPool(){
+  const tu=fv(2,0,'nk1_tu',D2), den=fv(2,0,'nk1_den',D2), kh=fv(2,0,'nk1_khu','Tất cả');
+  return LO.filter(l=>inRange(l.ngay,tu,den)&&(kh==='Tất cả'||l.khuluu===kh));
+}
+function nk2Default(){ return loPool().map(l=>Object.assign({},l)); }
+function loaiMu(r){ const w=String(r.tl_banh).replace(/[^\d.]/g,'')==='35'?'35kg':'33,333kg'; return (r.sp||'SVR3L')+' ('+(/pa/i.test(r.dongoi||'')?'P':'')+w+')'; }
+function nk3Default(){
+  const g={}, order=[];
+  rowsOr(2,1,'nk2_list',nk2Default).forEach(r=>{ const k=loaiMu(r); if(!g[k]){ g[k]={loai:k,banh:0,kg:0,lo:[]}; order.push(k); }
+    g[k].banh+=n(r.so_banh); g[k].kg+=n(r.kl_kg); if(r.lo_so) g[k].lo.push(r.lo_so); });
+  return order.map(k=>({loai:k,so_banh:String(g[k].banh),kl_kg:String(g[k].kg),chatluong:'',ghichu:g[k].lo.length?'Lô '+g[k].lo.join(', '):''}));
+}
+
+/* ---------- QT4: lệnh xuất → chọn lô → DDS tự sinh ---------- */
+const DT_VUNG={'Đội Ia Glai':'1453.03','Đội Ia Hlốp':'1023.64'};
+function loXuatPool(){
+  const tu=fv(3,0,'xh1_tu',D2), den=fv(3,0,'xh1_den',D3), qc=fv(3,0,'xh1_qc','35 kg');
+  return LO.filter(l=>inRange(l.ngay,tu,den)&&(qc==='Tất cả'||String(l.tl_banh).indexOf(qc.split(' ')[0])===0)).map(l=>Object.assign({},l,{kl_ton:l.kl_kg,kl_xuat:l.kl_kg}));
+}
+function xh2Default(){ return loXuatPool(); }
+function loXuat(){ return rowsOr(3,1,'xh2_list',xh2Default); }
+function loSoXuat(){ return loXuat().filter(r=>r.lo_so).map(r=>r.lo_so.replace('ĐM','')).join(';'); }
+function klXuatKg(){ return loXuat().reduce((s,r)=>s+n(r.kl_xuat),0); }
+/* Truy ngược: lô nhập kho ngày d ← nguyên liệu cấp ngày d-1 (theo bảng theo dõi cấp NL–TP của khách) */
+function truyNguoc(){
+  const g={}, order=[];
+  loXuat().forEach(r=>{ if(!r.ngay) return; if(!g[r.ngay]){ g[r.ngay]={lo:[],kl:0}; order.push(r.ngay); }
+    g[r.ngay].lo.push(r.lo_so||r.ma_lo); g[r.ngay].kl+=n(r.kl_xuat); });
+  return order.sort().map(d=>{ const nl=addDay(d,-1), ph=PHIEU.filter(p=>p.ngay===nl);
+    const by=name=>ph.filter(p=>p.doi===name).reduce((s,p)=>s+n(p.kl_tuoi),0);
+    const a=by(DOI[0]),b=by(DOI[1]),c=by(DOI[2]),e=by(DOI[3]);
+    return {ngay_nk:d,lo:g[d].lo.join(', '),kl_xuat:String(g[d].kl),ngay_nl:nl,so_phieu:String(ph.length),ia_glai:String(a),ia_hlop:String(b),ia_ko:String(c),ia_tiem:String(e),tong_nl:String(a+b+c+e)}; });
+}
+function vungDefault(){
+  const tot={}; truyNguoc().forEach(r=>{ [['Đội Ia Glai','ia_glai'],['Đội Ia Hlốp','ia_hlop'],['Đội Ia Ko','ia_ko'],['Đội Ia Tiêm','ia_tiem']].forEach(([d,k])=>{ tot[d]=(tot[d]||0)+n(r[k]); }); });
+  return DOI.filter(d=>tot[d]>0).map(d=>({doi:d,tinh:'Gia Lai',loai:'Cao su (Hevea brasiliensis)',kl_nl:String(tot[d]),dt:DT_VUNG[d]||'',toado:'Polygon từ AppSheet / bảng Lô vườn'}));
+}
+
+/* ---------- pool cho cột chọn (pick) ---------- */
+const POOL_KEY={phieu:'ma_phieu',ho:'ma_ho',lo:'ma_lo',loxuat:'ma_lo'};
+function poolOf(name){
+  if(name==='phieu') return phieuPool();
+  if(name==='ho') return hoPool();
+  if(name==='lo') return loPool();
+  if(name==='loxuat') return loXuatPool();
+  return [];
+}
+
+/* ============================================================
+   ĐỊNH NGHĨA — field: type text|num|date|sel|area|file|ro ; inh:[flow_step,id] ; get:fn
+   ============================================================ */
+const TB = 'Truy xuất nguồn gốc cao su · Cao su Chư Sê, Gia Lai';
+const FLOWS = [
+{ f:0, code:'QT1', label:'QT1 — Tiếp nhận nguyên liệu (BM02B)', badge:TB,
+  sub:'Lọc phiếu giao nhận mủ → danh sách phiếu hệ thống trả về → gom theo hồ hỗn hợp',
+  steps:[
+  { code:'TN-1', title:'Lọc phiếu giao nhận mủ', desc:'Chọn tiêu chí — chưa có bảng, bảng trả về ở bước sau',
+    nguoi:'Nhân sự trạm cân', sla:'Đầu mỗi ca tiếp nhận', duyet:'—',
+    body:[
+      {co:'info',t:'Nguồn nguyên liệu là các Đội nội bộ',x:'Mủ nước đến từ các Đội sản xuất của công ty (Ia Glai, Ia Hlốp, Ia Ko, Ia Tiêm) — không có luồng thu mua ngoài, nên không cần tách khai thác/thu mua.'},
+      {title:'Tiêu chí lọc phiếu giao nhận', fields:[
+        {id:'tn1_tu',label:'Ngày tiếp nhận — từ',type:'date',req:1,dflt:D1},
+        {id:'tn1_den',label:'Ngày tiếp nhận — đến',type:'date',req:1,dflt:D2},
+        {id:'tn1_doi',label:'Khu vực / Đội',type:'sel',opts:['Tất cả'].concat(DOI),dflt:'Tất cả'}
+      ]},
+      {co:'warn',t:'Phiếu giao nhận lấy từ AppSheet nguyên liệu',x:'Phiếu giao nhận (số xe, khu vực/đội, KL tươi) đến từ app nguyên liệu đang làm trên AppSheet, trên phiếu đã có <b>số lô vườn</b> (lô 1, lô 2 vườn 2014; lô 3, lô 4 vườn 2015…). n8n đồng bộ sang bảng Phiếu giao nhận để truy được tới lô vườn và polygon cho DDS.'}
+    ]},
+  { code:'TN-2', title:'Danh sách phiếu giao nhận hệ thống trả về', desc:'Bỏ bớt / thêm phiếu, chỉ định hồ hỗn hợp cho từng xe',
+    nguoi:'Nhân sự trạm cân', sla:'Ngay sau khi lọc', duyet:'—',
+    body:[
+      {title:'Tiêu chí đã lọc', fields:[
+        {id:'tn2_tu',label:'Ngày tiếp nhận — từ',type:'ro',inh:[ '0_0','tn1_tu'],inhLbl:'TN-1',get:()=>fv(0,0,'tn1_tu',D1)},
+        {id:'tn2_den',label:'Ngày tiếp nhận — đến',type:'ro',inh:['0_0','tn1_den'],inhLbl:'TN-1',get:()=>fv(0,0,'tn1_den',D2)},
+        {id:'tn2_doi',label:'Khu vực / Đội',type:'ro',inh:['0_0','tn1_doi'],inhLbl:'TN-1',get:()=>fv(0,0,'tn1_doi','Tất cả')},
+        {id:'tn2_n',label:'Số phiếu đã chọn',type:'ro'},
+        {id:'tn2_kl',label:'Tổng KL mủ tươi (kg)',type:'ro'}
+      ]},
+      {co:'auto',t:'Hệ thống trả về danh sách phiếu khớp tiêu chí',x:'Cột kế thừa (xanh) lấy từ bảng <b>Phiếu giao nhận</b>. Người dùng chỉ <b>chỉ định Hồ hỗn hợp</b> cho từng xe (xe nào đổ vào hồ nào), bấm × để bỏ phiếu, hoặc thêm phiếu khác từ danh sách. Đổi tiêu chí ở TN-1 thì bấm ↻ để lọc lại.'},
+      {btn:{label:'↻ Lọc lại theo tiêu chí ở TN-1',fn:"resetTable('tn2_list')"}},
+      {title:'Danh sách phiếu giao nhận', table:{id:'tn2_list',add:'+ Thêm phiếu — chọn từ danh sách',sumCols:['kl_tuoi'],derive:tn2Default,
+        cols:[{k:'ma_phieu',l:'Mã phiếu (hệ thống)',pick:'phieu',w:'125px'},
+              {k:'ngay',l:'Ngày',type:'date',ro:1,w:'115px'},{k:'so_xe',l:'Số xe',ro:1,w:'75px'},{k:'gio',l:'TG tiếp nhận',ro:1,w:'80px'},
+              {k:'kv',l:'Khu vực',ro:1,w:'90px'},{k:'doi',l:'Nguồn NL (Đội)',ro:1,w:'115px'},
+              {k:'kl_tuoi',l:'KL mủ tươi (kg)',type:'num',ro:1,w:'105px'},
+              {k:'ho',l:'Hồ hỗn hợp',type:'sel',opts:HO_OPTS,w:'115px'}],
+        foot:[{k:'ma_phieu',lbl:'Σ TỔNG'},{k:'kl_tuoi',id:'tn2_m_kl',c:'blue'}]}}
+    ]},
+  { code:'TN-3', title:'Gom theo hồ hỗn hợp & chốt sổ', desc:'n8n gom phiếu theo hồ — điền DRC, quy khô, tình trạng theo từng hồ',
+    nguoi:'Nhân sự trạm cân', sla:'Cuối mỗi đợt tiếp nhận', duyet:'Người phụ trách',
+    body:[
+      {co:'auto',t:'n8n gom nhóm theo Hồ hỗn hợp trên Base Table',x:'Số phiếu và tổng KL tươi từng hồ do n8n tính từ bảng Phiếu giao nhận (↩ kế thừa). DRC, quy khô, tình trạng, tạp chất, phân loại ghi theo từng hồ trên sổ giấy — người dùng điền.'},
+      {btn:{label:'↻ Gom lại theo danh sách phiếu ở TN-2',fn:"resetTable('tn3_list')"}},
+      {title:'Sổ theo dõi tiếp nhận — theo hồ hỗn hợp', table:{id:'tn3_list',add:'+ Thêm hồ',sumCols:['so_phieu','kl_tuoi','kho'],derive:tn3Default,
+        cols:[
+              {k:'ma_ho',l:'Hồ hỗn hợp (ngày · hồ)',ro:1,w:'150px'},{k:'ngay',l:'Ngày',type:'date',ro:1,w:'115px'},
+              {k:'so_phieu',l:'Số phiếu',type:'num',ro:1,auto:1,w:'70px'},{k:'kl_tuoi',l:'KL mủ tươi (kg)',type:'num',ro:1,auto:1,w:'105px'},
+              {k:'drc',l:'DRC (%)',type:'num',w:'70px'},{k:'kho',l:'Quy khô (kg)',type:'num',w:'95px'},
+              {k:'tinhtrang',l:'Tình trạng',w:'70px'},{k:'tapchat',l:'Loại tạp chất bị lẫn',w:'100px'},
+              {k:'phanloai',l:'Phân loại NL',type:'sel',opts:LOAI_SVR,w:'90px'}],
+        foot:[{k:'ma_ho',lbl:'Σ TỔNG'},{k:'so_phieu',id:'tn3_m_ph',c:'amber'},{k:'kl_tuoi',id:'tn3_m_kl',c:'blue'},{k:'kho',id:'tn3_m_kho',c:'teal'}]}},
+      {title:'Người lập & phụ trách', fields:[
+        {id:'tn3_lap',label:'Người lập biểu',type:'text'},
+        {id:'tn3_pt',label:'Người phụ trách',type:'text'},
+        {id:'tn3_kq',label:'Kết quả',type:'sel',opts:KQ},
+        {id:'tn3_ghichu',label:'Ghi chú',type:'area',full:1}
+      ]}
+    ]}
+]},
+
+{ f:1, code:'QT2', label:'QT2 — Chế biến (Đánh đông → Tạo hạt → Nhiệt → Ép kiện)', badge:TB,
+  sub:'Chạy liền mạch, một người nhập xuyên suốt — khâu sau kế thừa thẳng hồ → mương → thùng của khâu trước, không có bước lọc',
+  steps:[
+  { code:'CB-1', title:'Đánh đông theo mương', desc:'Chọn hồ hỗn hợp đã tiếp nhận → ghi mương nhận, pH, thời gian (BM03)', nguoi:'Người nhập liệu khâu chế biến', sla:'Khi bắt đầu đổ hồ xuống mương', duyet:'—',
+    body:[
+      {co:'info',t:'Vì sao khâu chế biến không có bước lọc',x:'Theo vận hành của nhà máy, chế biến chạy liền một mạch và <b>chỉ một người nhập</b> từ đánh đông tới ép kiện. Hồ → mương → thùng nối tiếp nhau trong ngày, nên khâu sau kế thừa thẳng danh sách của khâu trước — không cần chọn lại theo ngày.'},
+      {title:'Thông tin phiếu đánh đông', fields:[
+        {id:'cb1_ngay',label:'Ngày đánh đông',type:'date',req:1,dflt:D2},
+        {id:'cb1_nguoi',label:'Người lập biểu',type:'text'},
+        {id:'cb1_pt',label:'Người phụ trách',type:'text'}
+      ]},
+      {co:'auto',t:'Chọn hồ ngay trên từng dòng',x:'Cột <b>Hồ hỗn hợp</b> là danh sách hồ đã tiếp nhận ở QT1 (n8n đồng bộ). Mã hồ cố định, còn <b>mương không cố định</b> theo hồ — mỗi ngày đổ xuống mương nào thì ghi mương đó. Ghi chép bắt đầu khi đổ hồ xuống mương.'},
+      {title:'Sổ theo dõi đánh đông', table:{id:'dd_list',add:'+ Thêm mương — chọn hồ từ danh sách',derive:ddDefault,
+        cols:[{k:'ma_ho',l:'Hồ hỗn hợp',pick:'ho',w:'200px'},{k:'kl_tuoi',l:'KL tươi hồ (kg)',type:'num',ro:1,w:'95px'},
+              {k:'muong',l:'Mương/bak/mulo tiếp nhận',w:'105px'},{k:'drc',l:'DRC',type:'num',w:'60px'},{k:'ph',l:'pH đánh đông',type:'num',w:'80px'},
+              {k:'lech_ph',l:'Độ chênh lệch pH',w:'90px'},{k:'con',l:'Cợn bề mặt (m)',w:'85px'},{k:'oxy',l:'Oxy hóa (m)',w:'80px'},
+              {k:'tg',l:'TG đánh đông',w:'85px'},{k:'ghichu',l:'Ghi chú',w:'90px'}],
+        foot:[{k:'ma_ho',lbl:'Σ SỐ MƯƠNG'},{k:'muong',id:'dd_m',c:'blue',cnt:1}]}}
+    ]},
+  { code:'CB-2', title:'Gia công tạo hạt theo thùng', desc:'Mương kế thừa từ CB-1 → cán tạo hạt, gán thùng số (BM06B)', nguoi:'Người nhập liệu khâu chế biến', sla:'Sau khi đánh đông đạt', duyet:'—',
+    body:[
+      {title:'Thông tin phiếu tạo hạt', fields:[
+        {id:'cb2_ngay',label:'Ngày tạo hạt',type:'date',req:1,dflt:D2},
+        {id:'cb2_lap',label:'Người lập biểu',type:'ro',inh:['1_0','cb1_nguoi'],inhLbl:'CB-1',get:()=>fv(1,0,'cb1_nguoi','')},
+        {id:'cb2_pt',label:'Người phụ trách',type:'ro',inh:['1_0','cb1_pt'],inhLbl:'CB-1',get:()=>fv(1,0,'cb1_pt','')}
+      ]},
+      {co:'auto',t:'Hồ + mương kế thừa từ CB-1',x:'Mỗi mương ở bảng đánh đông tự thành một dòng. Chỉ điền chủng loại, thời gian, bề dày, trạng thái cốm và <b>thùng số</b> (mỗi mương thường ra 2 thùng, nhập dạng 1–2). Số thùng đi tiếp sang gia công nhiệt và ép kiện.'},
+      {btn:{label:'↻ Lấy lại danh sách mương từ CB-1',fn:"resetTable('th_list')"}},
+      {title:'Sổ theo dõi gia công tạo hạt', table:{id:'th_list',add:'+ Thêm dòng',derive:thDerive,
+        cols:[{k:'ma_ho',l:'Hồ hỗn hợp',ro:1,w:'180px'},{k:'muong',l:'Mương số',ro:1,w:'80px'},
+              {k:'sp',l:'Chủng loại SVR',type:'sel',opts:LOAI_SVR,w:'85px'},{k:'gio_bd',l:'TG bắt đầu',w:'70px'},
+              {k:'tinhtrang',l:'Tình trạng mủ đông',w:'85px'},{k:'bedaymuong',l:'Bề dày khối mủ trên mương',w:'95px'},
+              {k:'bedaycankeo',l:'Bề dày sau cán kéo',w:'90px'},{k:'bedaycuoi',l:'Bề dày tờ cuối',w:'80px'},
+              {k:'tt_com',l:'Trạng thái cốm',w:'75px'},{k:'thung',l:'Thùng số',w:'70px'},{k:'ghichu',l:'Ghi chú',w:'80px'}],
+        foot:[{k:'ma_ho',lbl:'Σ SỐ MƯƠNG'},{k:'muong',id:'th_m',c:'blue',cnt:1}]}}
+    ]},
+  { code:'CB-3', title:'Gia công nhiệt (sấy) theo thùng', desc:'Thùng kế thừa từ CB-2 → ghi nhiệt độ, thời gian sấy (BM07A)', nguoi:'Người nhập liệu khâu chế biến', sla:'Khi thùng vào lò', duyet:'—',
+    body:[
+      {title:'Thông tin phiếu gia công nhiệt', fields:[
+        {id:'cb3_ngay',label:'Ngày sấy',type:'date',req:1,dflt:D2}
+      ]},
+      {co:'auto',t:'Thùng số + mương kế thừa từ CB-2',x:'Khoảng thùng ở tạo hạt (1–2, 3–4…) được tách thành từng dòng thùng. Thùng vào lò giữ nguyên số, chỉ điền nhiệt độ T1/T2, thời gian sấy, nguồn gốc, vệ sinh thùng.'},
+      {btn:{label:'↻ Lấy lại danh sách thùng từ CB-2',fn:"resetTable('gn_list')"}},
+      {title:'Sổ theo dõi gia công nhiệt', table:{id:'gn_list',add:'+ Thêm dòng',derive:gnDerive,
+        cols:[{k:'thung',l:'Thùng số',ro:1,w:'65px'},{k:'muong',l:'Mương',ro:1,w:'75px'},
+              {k:'gio_bd',l:'TG bắt đầu sấy',w:'80px'},{k:'t1',l:'Nhiệt độ T1',type:'num',w:'75px'},{k:'t2',l:'Nhiệt độ T2',type:'num',w:'75px'},
+              {k:'tg_say',l:'TG sấy (phút)',type:'num',w:'80px'},{k:'gio_ralo',l:'TG ra lò',w:'70px'},{k:'danhgia',l:'Đánh giá',w:'65px'},
+              {k:'nguongoc',l:'Nguồn gốc',w:'65px'},{k:'vesinh',l:'Vệ sinh thùng',w:'75px'},{k:'ghichu',l:'Ghi chú',w:'80px'}],
+        foot:[{k:'thung',lbl:'Σ SỐ THÙNG'},{k:'muong',id:'gn_m',c:'blue',cnt:1}]}}
+    ]},
+  { code:'CB-4', title:'Ra lò, ép kiện, đóng gói → Lô số', desc:'Thùng đang trong lò (kế thừa, gồm thùng gối đầu hôm trước) → ép bành, gán lô (BM08A)', nguoi:'Người nhập liệu khâu chế biến', sla:'Khi thùng ra lò', duyet:'—',
+    body:[
+      {title:'Thông tin phiếu ép kiện', fields:[
+        {id:'cb4_ngay',label:'Ngày ra lò / ép kiện',type:'date',req:1,dflt:D2}
+      ]},
+      {co:'warn',t:'Thùng gối đầu qua ngày',x:'Cuối ngày còn thùng nằm trong lò (khoảng 17 thùng), hôm sau mới ra lò. Danh sách dưới đây là <b>thùng chưa ghi ra lò</b> do n8n giữ trạng thái, nên có thể lẫn thùng sấy từ hôm trước. Ghi nhận theo <b>thời gian ra lò thực tế</b>; cột "Ngày sấy" giữ nguồn gốc ngày của thùng.'},
+      {co:'auto',t:'Điểm sinh lô thành phẩm',x:'Điền nhiệt độ ép, KL bành, nơi lưu trữ (khu A/B/C…) và <b>Lô số</b> (1 lô lấy 7 mẫu). n8n sinh mã lô hệ thống (TP-ddmm-xx) vào bảng <b>Lô thành phẩm</b> để QT3 nhập kho.'},
+      {co:'warn',t:'Sổ giấy gọi cùng một lô bằng 2 ký hiệu',x:'BM08A ghi lô <b>O1–O8</b>, BM09 ghi <b>ĐM01–ĐM08</b>; chứng chỉ và phiếu nhập kho ghi <b>01–08</b>. Cần chốt 1 quy ước mã lô khi lên Base (đang giả định O1 ≡ ĐM01 ≡ 01).'},
+      {btn:{label:'↻ Lấy lại thùng đang trong lò',fn:"resetTable('ek_list')"}},
+      {title:'Sổ theo dõi ra lò, ép kiện, đóng gói', table:{id:'ek_list',add:'+ Thêm dòng',derive:ekDerive,
+        cols:[{k:'ngay_say',l:'Ngày sấy',ro:1,w:'70px'},{k:'thung',l:'Thùng số',ro:1,w:'65px'},{k:'gio_ralo',l:'TG ra lò',w:'70px'},
+              {k:'nhietdo_ep',l:'Nhiệt độ ép bành',type:'num',w:'85px'},{k:'kl_banh',l:'KL bành (kg)',type:'num',w:'80px'},
+              {k:'sobanh_thung',l:'Số bành/thùng',w:'80px'},{k:'kt_catbanh',l:'Kiểm tra cắt bành',w:'80px'},{k:'danhgia',l:'Đánh giá',w:'65px'},
+              {k:'sp',l:'Sản phẩm',type:'sel',opts:LOAI_SVR,w:'80px'},{k:'somau',l:'Số mẫu cắt',w:'80px'},{k:'dongoi',l:'Dạng đóng gói',w:'75px'},
+              {k:'noiluutru',l:'Nơi lưu trữ',type:'sel',opts:KHU_LUU,w:'95px'},{k:'hang',l:'Hạng dự kiến',w:'75px'},{k:'lo',l:'Lô số',w:'60px'}],
+        foot:[{k:'ngay_say',lbl:'Σ THÙNG'},{k:'thung',id:'ek_m',c:'blue',cnt:1}]}}
+    ]},
+  { code:'CB-5', title:'Duyệt toàn bộ khâu chế biến', desc:'Chốt một lần cho cả 4 khâu trước khi nhập kho', nguoi:'Người nhập liệu khâu chế biến', sla:'Cuối mỗi ngày chế biến', duyet:'Người phụ trách',
+    body:[
+      {title:'Tổng hợp từ các bảng', fields:[
+        {id:'cb5_ho',label:'Số hồ đưa vào đánh đông',type:'ro',inh:['1_0','dd_list'],inhLbl:'CB-1',get:()=>String(new Set(rowsOr(1,0,'dd_list',ddDefault).map(r=>r.ma_ho)).size)},
+        {id:'cb5_muong',label:'Số mương',type:'ro',inh:['1_0','dd_list'],inhLbl:'CB-1',get:()=>String(rowsOr(1,0,'dd_list',ddDefault).length)},
+        {id:'cb5_thung',label:'Số thùng sấy',type:'ro',inh:['1_2','gn_list'],inhLbl:'CB-3',get:()=>String(rowsOr(1,2,'gn_list',gnDerive).length)},
+        {id:'cb5_lo',label:'Lô ghi nhận ở ép kiện',type:'ro',inh:['1_3','ek_list'],inhLbl:'CB-4',get:()=>rowsOr(1,3,'ek_list',ekDerive).filter(r=>r.lo).map(r=>r.lo).join(', ')}
+      ]},
+      {title:'Checklist đối chiếu', check:[
+        'pH đánh đông nằm trong ngưỡng cho phép của từng hồ',
+        'Số thùng khớp liên tục qua tạo hạt → nhiệt → ép kiện',
+        'Thùng còn nằm trong lò cuối ngày được giữ lại cho ngày sau',
+        'Mỗi lô đã gán đúng nơi lưu trữ'
+      ]},
+      {title:'Phê duyệt', fields:[
+        {id:'cb5_nguoi',label:'Người duyệt',type:'text'},
+        {id:'cb5_kq',label:'Kết quả',type:'sel',opts:KQ},
+        {id:'cb5_ykien',label:'Ý kiến',type:'area',full:1}
+      ]}
+    ]}
+]},
+
+{ f:2, code:'QT3', label:'QT3 — Nhập kho thành phẩm (BM09 + BM03/CBCS)', badge:TB,
+  sub:'Lọc lô thành phẩm → danh sách lô trả về → phiếu nhập kho (4 chữ ký) → duyệt',
+  steps:[
+  { code:'NK-1', title:'Lọc lô thành phẩm & lập phiếu', desc:'Chọn lô cần nhập kho — chưa có bảng', nguoi:'Thủ kho thành phẩm', sla:'Cuối mỗi ca nhập kho', duyet:'—',
+    body:[
+      {title:'Tiêu chí lọc lô', fields:[
+        {id:'nk1_tu',label:'Ngày nhập kho — từ',type:'date',req:1,dflt:D2},
+        {id:'nk1_den',label:'Ngày nhập kho — đến',type:'date',req:1,dflt:D2},
+        {id:'nk1_khu',label:'Khu lưu trữ',type:'sel',opts:['Tất cả'].concat(KHU_LUU),dflt:'Tất cả'}
+      ]},
+      {title:'Thông tin phiếu nhập kho (BM03/CBCS-QT8.0)', fields:[
+        {id:'nk1_tg_tu',label:'TGNK từ',type:'text',dflt:'8h20'},
+        {id:'nk1_tg_den',label:'đến',type:'text',dflt:'13h30'},
+        {id:'nk1_ngay',label:'Ngày nhập kho',type:'date',dflt:D2},
+        {id:'nk1_donvi',label:'Đơn vị',type:'text',dflt:'Chư Sê'}
+      ]}
+    ]},
+  { code:'NK-2', title:'Danh sách lô hệ thống trả về', desc:'Lô thành phẩm (kế thừa từ ép kiện) → bổ sung thông tin nhập kho',
+    nguoi:'Thủ kho thành phẩm', sla:'Ngay sau khi lọc', duyet:'—',
+    body:[
+      {title:'Tiêu chí đã lọc', fields:[
+        {id:'nk2_tu',label:'Ngày nhập kho — từ',type:'ro',inh:['2_0','nk1_tu'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_tu',D2)},
+        {id:'nk2_den',label:'Ngày nhập kho — đến',type:'ro',inh:['2_0','nk1_den'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_den',D2)},
+        {id:'nk2_khu',label:'Khu lưu trữ',type:'ro',inh:['2_0','nk1_khu'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_khu','Tất cả')}
+      ]},
+      {co:'auto',t:'Lô lấy từ bảng Lô thành phẩm (n8n sinh ở CB-8)',x:'Mã lô hệ thống, lô số trên sổ, sản phẩm, ngày là dữ liệu kế thừa. Điền: thời gian nhập, trọng lượng/bành, số bành, khối lượng, tình trạng, xếp lớp, khu lưu trữ.'},
+      {co:'warn',t:'Dòng chưa có số lô trên sổ giấy',x:'Hai dòng trên BM09 (38 bành ngày 02/06 và 70 bành hàng rời ngày 03/06) <b>không ghi số lô</b>. Trên Base mỗi lô bắt buộc có mã — n8n đang gán mã hệ thống TP-ddmm-05.'},
+      {btn:{label:'↻ Lọc lại lô theo NK-1',fn:"resetTable('nk2_list')"}},
+      {title:'Sổ theo dõi nhập kho sản phẩm SVR/RSS', table:{id:'nk2_list',add:'+ Thêm lô — chọn từ danh sách',sumCols:['so_banh','kl_kg'],derive:nk2Default,
+        cols:[{k:'ma_lo',l:'Mã lô (hệ thống)',pick:'lo',w:'120px'},{k:'lo_so',l:'Lô số trên sổ',ro:1,w:'70px'},{k:'sp',l:'Hạng sản phẩm',ro:1,w:'80px'},
+              {k:'ngay',l:'Ngày',type:'date',ro:1,w:'115px'},{k:'tg_nk',l:'TG nhập kho',w:'70px'},{k:'tl_banh',l:'Trọng lượng/bành',w:'90px'},
+              {k:'so_banh',l:'Số lượng bành',type:'num',w:'80px'},{k:'kl_kg',l:'Khối lượng (kg)',type:'num',w:'90px'},
+              {k:'dongoi',l:'Tình trạng đóng gói',w:'85px'},{k:'tt_sp',l:'Tình trạng SP',w:'75px'},{k:'xeplop',l:'Số lượng xếp lớp',w:'75px'},
+              {k:'khuluu',l:'Khu lưu trữ',type:'sel',opts:KHU_LUU,w:'100px'},{k:'ghichu',l:'Ghi chú',w:'140px'}],
+        foot:[{k:'ma_lo',lbl:'Σ TỔNG'},{k:'so_banh',id:'nk2_m_banh',c:'blue'},{k:'kl_kg',id:'nk2_m_kg',c:'brown'}]}}
+    ]},
+  { code:'NK-3', title:'Phiếu nhập kho thành phẩm', desc:'Tổng hợp theo loại mủ (tự tính) + 4 chữ ký duyệt', nguoi:'Thủ kho thành phẩm', sla:'Cuối ca nhập kho', duyet:'Quản đốc · KCS · Phó Quản đốc · Thủ kho',
+    body:[
+      {title:'Thông tin phiếu', fields:[
+        {id:'nk3_tg_tu',label:'TGNK từ',type:'ro',inh:['2_0','nk1_tg_tu'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_tg_tu','8h20')},
+        {id:'nk3_tg_den',label:'đến',type:'ro',inh:['2_0','nk1_tg_den'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_tg_den','13h30')},
+        {id:'nk3_ngay',label:'Ngày nhập kho',type:'ro',inh:['2_0','nk1_ngay'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_ngay',D2)},
+        {id:'nk3_donvi',label:'Đơn vị',type:'ro',inh:['2_0','nk1_donvi'],inhLbl:'NK-1',get:()=>fv(2,0,'nk1_donvi','Chư Sê')}
+      ]},
+      {co:'warn',t:'Cột "Khối lượng (Tấn)" trên phiếu giấy đang ghi số kg',x:'Phiếu 02/06 ghi 11,410 ở cột (Tấn) — thực tế là 11.410 kg. Trên Base đặt đơn vị kg để khỏi nhầm.'},
+      {btn:{label:'↻ Tổng hợp lại từ NK-2',fn:"resetTable('nk3_list')"}},
+      {title:'Danh mục loại mủ nhập kho', table:{id:'nk3_list',add:'+ Thêm loại mủ',sumCols:['so_banh','kl_kg'],derive:nk3Default,
+        cols:[{k:'loai',l:'Loại mủ',ro:1,w:'170px'},{k:'so_banh',l:'Số bành',type:'num',ro:1,auto:1,w:'85px'},
+              {k:'kl_kg',l:'Khối lượng (kg)',type:'num',ro:1,auto:1,w:'110px'},{k:'chatluong',l:'Chất lượng',w:'110px'},{k:'ghichu',l:'Ghi chú',w:'180px'}],
+        foot:[{k:'loai',lbl:'Σ TỔNG'},{k:'so_banh',id:'nk3_m_banh',c:'blue'},{k:'kl_kg',id:'nk3_m_kg',c:'brown'}]}},
+      {title:'Ký duyệt (4 chữ ký)', fields:[
+        {id:'nk3_quandoc',label:'Quản đốc',type:'text'},
+        {id:'nk3_kcs',label:'KCS',type:'text',dflt:'Đặng Hoàng Phúc'},
+        {id:'nk3_pqd',label:'Phó Quản đốc',type:'text',dflt:'Đoàn Minh Chải'},
+        {id:'nk3_thukho',label:'Thủ kho',type:'text'}
+      ]}
+    ]},
+  { code:'NK-4', title:'Duyệt nhập kho', desc:'Duyệt xong mới ghi nhận tồn kho thành phẩm', nguoi:'Thủ kho trình ký', sla:'Cuối ngày', duyet:'Quản đốc nhà máy',
+    body:[
+      {title:'Checklist đối chiếu', check:[
+        'Tổng số bành trên phiếu khớp sổ theo dõi nhập kho (NK-2)',
+        'Mọi lô đã gán khu lưu trữ; không còn dòng thiếu số lô',
+        'Đủ 4 chữ ký trên phiếu nhập kho thành phẩm',
+        'Truy ngược được từ lô về thùng / mương / hồ nguồn'
+      ]},
+      {title:'Phê duyệt', fields:[
+        {id:'nk4_nguoi',label:'Người duyệt',type:'text'},
+        {id:'nk4_kq',label:'Kết quả',type:'sel',opts:KQ},
+        {id:'nk4_ykien',label:'Ý kiến',type:'area',full:1}
+      ]}
+    ]}
+]},
+
+{ f:3, code:'QT4', label:'QT4 — Xuất hàng & Báo cáo DDS EUDR', badge:'Truy xuất nguồn gốc cao su · PEFC CoC EUDR — Cao su Chư Sê, Gia Lai',
+  sub:'Lập lệnh xuất & lọc lô → chọn lô xuất → DDS tự sinh từ chuỗi đã có → duyệt xuất kho',
+  steps:[
+  { code:'XH-1', title:'Lập lệnh xuất hàng & lọc lô', desc:'Gộp thông tin đơn hàng, lệnh SX, thông báo, lệnh xuất — các văn bản gốc chỉ đính kèm', nguoi:'Kinh doanh · Tổ xuất hàng', sla:'Khi có đơn hàng', duyet:'—',
+    body:[
+      {co:'info',t:'Hồ sơ xuất hàng là chứng từ đính kèm',x:'Lệnh sản xuất, kế hoạch SX, thông báo giao hàng, lệnh xuất hàng là hồ sơ kèm theo khi xuất — không phải khâu tạo dữ liệu truy xuất. Chỉ lấy các trường cần cho truy xuất và DDS, văn bản gốc đính kèm file.'},
+      {title:'Đơn hàng & lệnh xuất', fields:[
+        {id:'xh1_so',label:'Số lệnh xuất hàng',type:'text',dflt:'20/2025/LXH'},
+        {id:'xh1_hd',label:'Hợp đồng số',type:'text',dflt:'20/HDMB-2025'},
+        {id:'xh1_kh',label:'Khách hàng',type:'text',dflt:'Sintex Chemical Corporation'},
+        {id:'xh1_dckh',label:'Địa chỉ khách hàng',type:'text',dflt:'10F2, No.306, Sec. 4, Hsin Yi Road, Taipei, Taiwan'},
+        {id:'xh1_order',label:'Order No.',type:'text',dflt:'R114052'},
+        {id:'xh1_po',label:'P.O. No.',type:'text',dflt:'51897'},
+        {id:'xh1_sp',label:'Sản phẩm',type:'sel',opts:LOAI_SVR,dflt:'SVR3L'},
+        {id:'xh1_kb',label:'Khai báo PEFC',type:'text',dflt:'PEFC-EUDR · 100% PEFC Certified'},
+        {id:'xh1_lenhsx',label:'Lệnh sản xuất số',type:'text',dflt:'15/2025'},
+        {id:'xh1_sl',label:'Số lượng (tấn)',type:'num',dflt:'20.16'},
+        {id:'xh1_ngay',label:'Ngày xuất hàng',type:'date',dflt:'2025-06-12'},
+        {id:'xh1_cont',label:'Số cont. / Số tàu (nếu có)',type:'text'}
+      ]},
+      {title:'Chứng từ đính kèm', fields:[
+        {id:'xh1_f_lsx',label:'Lệnh sản xuất + Kế hoạch SX',type:'file'},
+        {id:'xh1_f_tb',label:'Thông báo giao hàng',type:'file'},
+        {id:'xh1_f_lxh',label:'Lệnh xuất hàng đã ký',type:'file'},
+        {id:'xh1_f_cc',label:'Chứng chỉ chất lượng (Test Certificate)',type:'file'}
+      ]},
+      {co:'warn',t:'Số Order / P.O. không thống nhất giữa các văn bản',x:'Thông báo ghi Order <b>R114102</b>, P.O. <b>51987</b> (cuối văn bản lại ghi 51897); chứng chỉ và DDS ghi <b>R114052</b> / <b>51897</b>. Lệnh SX ghi ngày hợp đồng 25/5/<b>2026</b>. Cần đối chiếu với SI gốc của Sintex.'},
+      {title:'Tiêu chí lọc lô thành phẩm để xuất', fields:[
+        {id:'xh1_tu',label:'Ngày nhập kho — từ',type:'date',req:1,dflt:D2},
+        {id:'xh1_den',label:'Ngày nhập kho — đến',type:'date',req:1,dflt:D3},
+        {id:'xh1_qc',label:'Quy cách bành',type:'sel',opts:['35 kg','33.333 kg','Tất cả'],dflt:'35 kg',hint:'Thông báo giao hàng yêu cầu bành 35 kg'}
+      ]}
+    ]},
+  { code:'XH-2', title:'Chọn lô xuất — hệ thống trả về', desc:'Lô tồn khớp tiêu chí; chỉnh KL xuất, đối chiếu với số lượng lệnh', nguoi:'Thủ kho thành phẩm', sla:'Ngày xuất', duyet:'—',
+    body:[
+      {title:'Tiêu chí đã lọc', fields:[
+        {id:'xh2_tu',label:'Ngày nhập kho — từ',type:'ro',inh:['3_0','xh1_tu'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_tu',D2)},
+        {id:'xh2_den',label:'Ngày nhập kho — đến',type:'ro',inh:['3_0','xh1_den'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_den',D3)},
+        {id:'xh2_qc',label:'Quy cách bành',type:'ro',inh:['3_0','xh1_qc'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_qc','35 kg')},
+        {id:'xh2_can',label:'Số lượng cần xuất (kg)',type:'ro',inh:['3_0','xh1_sl'],inhLbl:'XH-1',get:()=>String(Math.round(n(fv(3,0,'xh1_sl','20.16'))*1000))}
+      ]},
+      {co:'auto',t:'Danh sách lô tồn khớp tiêu chí',x:'KL xuất mặc định bằng KL tồn — chỉnh lại theo nhu cầu, bấm × bỏ lô hoặc thêm lô khác. Xuất theo mã lô, lấy ở khu lưu trữ nào thì đã có sẵn trên lô.'},
+      {btn:{label:'↻ Lọc lại lô theo XH-1',fn:"resetTable('xh2_list')"}},
+      {title:'Tồn kho theo lô thành phẩm', table:{id:'xh2_list',add:'+ Thêm lô — chọn từ danh sách',sumCols:['kl_xuat'],derive:xh2Default,
+        cols:[{k:'ma_lo',l:'Mã lô (hệ thống)',pick:'loxuat',w:'125px'},{k:'lo_so',l:'Lô số',ro:1,w:'70px'},{k:'ngay',l:'Ngày nhập kho',type:'date',ro:1,w:'115px'},
+              {k:'tl_banh',l:'Bành',ro:1,w:'80px'},{k:'khuluu',l:'Khu lưu trữ',ro:1,w:'115px'},
+              {k:'kl_ton',l:'KL tồn (kg)',type:'num',ro:1,w:'90px'},{k:'kl_xuat',l:'KL xuất (kg)',type:'num',w:'95px'}],
+        foot:[{k:'ma_lo',lbl:'Σ ĐÃ CHỌN'},{k:'kl_ton',id:'xh2_m_ton',c:'amber'},{k:'kl_xuat',id:'xh2_m_chon',c:'teal'},{k:'khuluu',id:'xh2_m_thieu',c:'red',pre:'Thiếu/dư: '}]}}
+    ]},
+  { code:'XH-3', title:'Báo cáo DDS — tự sinh từ chuỗi truy xuất', desc:'n8n dựng DDS từ lô đã chọn: truy ngược nguyên liệu, vùng trồng; chỉ điền phần kết luận', nguoi:'Tổ phó PEFC CoC & EUDR', sla:'Trước khi xuất', duyet:'—',
+    body:[
+      {co:'auto',t:'Phần lớn DDS là dữ liệu kế thừa',x:'Thông tin đơn hàng lấy từ XH-1, lô và khối lượng từ XH-2. Bảng truy ngược do n8n dựng theo quy tắc của nhà máy: <b>lô nhập kho ngày D ← nguyên liệu cấp ngày D-1</b>, rồi lấy khối lượng theo Đội từ bảng Phiếu giao nhận. Thông tin công ty, vùng trồng, đánh giá rủi ro là danh mục chung — cập nhật khi đánh giá lại hằng năm.'},
+      {title:'1–2. Nhà cung cấp, sản phẩm, khách hàng', fields:[
+        {id:'xh3_ncc',label:'Nhà cung cấp',type:'ro',inh:['dm','cty'],inhLbl:'Danh mục',get:()=>'CÔNG TY TNHH MTV CAO SU CHƯ SÊ · MST 5900190497'},
+        {id:'xh3_pefc',label:'Giấy chứng nhận PEFC CoC',type:'ro',inh:['dm','cty'],inhLbl:'Danh mục',get:()=>'SGSCH-PEFC-CoC-370022 · hết hạn 08/06/2027'},
+        {id:'xh3_kh',label:'Khách hàng',type:'ro',inh:['3_0','xh1_kh'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_kh','Sintex Chemical Corporation')},
+        {id:'xh3_hd',label:'Order / Hợp đồng',type:'ro',inh:['3_0','xh1_order'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_order','R114052')+' · '+fv(3,0,'xh1_hd','20/HDMB-2025')},
+        {id:'xh3_sp',label:'Sản phẩm',type:'ro',inh:['3_0','xh1_sp'],inhLbl:'XH-1',get:()=>'Mủ cao su '+fv(3,0,'xh1_sp','SVR3L')+' — Natural Rubber Block'},
+        {id:'xh3_kl',label:'Khối lượng (tấn)',type:'ro',inh:['3_1','xh2_list'],inhLbl:'XH-2',get:()=>String(Math.round(klXuatKg())/1000)},
+        {id:'xh3_lo',label:'Lô sản xuất',type:'ro',inh:['3_1','xh2_list'],inhLbl:'XH-2',get:()=>loSoXuat()},
+        {id:'xh3_ngay',label:'Ngày giao hàng',type:'ro',inh:['3_0','xh1_ngay'],inhLbl:'XH-1',get:()=>fv(3,0,'xh1_ngay','2025-06-12')},
+        {id:'xh3_hs',label:'Mã HS',type:'text',hint:'DDS gốc chưa có mã HS (ô đang ghi "NO. R114052") — cần bổ sung'}
+      ]},
+      {title:'3a. Truy ngược nguyên liệu của các lô xuất', table:{id:'xh3_tn',add:'+ Thêm dòng',sumCols:['kl_xuat','ia_glai','ia_hlop','tong_nl'],derive:truyNguoc,
+        cols:[{k:'ngay_nk',l:'Ngày nhập kho',type:'date',ro:1,w:'115px'},{k:'lo',l:'Lô xuất',ro:1,w:'170px'},{k:'kl_xuat',l:'KL xuất (kg)',type:'num',ro:1,w:'90px'},
+              {k:'ngay_nl',l:'Ngày cấp NL',type:'date',ro:1,auto:1,w:'115px'},{k:'so_phieu',l:'Số phiếu GN',type:'num',ro:1,auto:1,w:'80px'},
+              {k:'ia_glai',l:'Ia Glai (kg)',type:'num',ro:1,auto:1,w:'85px'},{k:'ia_hlop',l:'Ia Hlốp (kg)',type:'num',ro:1,auto:1,w:'85px'},
+              {k:'ia_ko',l:'Ia Ko (kg)',type:'num',ro:1,auto:1,w:'75px'},{k:'ia_tiem',l:'Ia Tiêm (kg)',type:'num',ro:1,auto:1,w:'80px'},{k:'tong_nl',l:'Tổng NL tươi (kg)',type:'num',ro:1,auto:1,w:'100px'}],
+        foot:[{k:'ngay_nk',lbl:'Σ TỔNG'},{k:'kl_xuat',id:'xh3_m_kl',c:'teal'},{k:'ia_glai',id:'xh3_m_g',c:'blue'},{k:'ia_hlop',id:'xh3_m_h',c:'blue'},{k:'tong_nl',id:'xh3_m_nl',c:'amber'}]}},
+      {title:'3b. Vùng trồng cung cấp nguyên liệu', table:{id:'xh3_vung',add:'+ Thêm vùng trồng',derive:vungDefault,
+        cols:[{k:'doi',l:'Vùng trồng (Đội)',ro:1,auto:1,w:'120px'},{k:'tinh',l:'Tỉnh',ro:1,w:'75px'},{k:'loai',l:'Loài cây',ro:1,w:'190px'},
+              {k:'kl_nl',l:'KL NL tươi (kg)',type:'num',ro:1,auto:1,w:'100px'},{k:'dt',l:'Diện tích (ha)',ro:1,w:'90px'},{k:'toado',l:'Tọa độ GPS (WGS84)',ro:1,w:'220px'}]}},
+      {title:'4. Đánh giá rủi ro (danh mục — đánh giá hằng năm)', table:{id:'xh3_rr',add:'+ Thêm chỉ số',
+        def:[
+          {chiso:'Nguồn gốc nguyên liệu liên quan phá rừng sau 31/12/2020',muc:'Không đáng kể',bp:'Chứng nhận PEFC FM, kiểm tra ảnh vệ tinh và lịch sử sử dụng đất'},
+          {chiso:'Vi phạm pháp luật về quyền sử dụng đất, môi trường, lao động',muc:'Không đáng kể',bp:'Kiểm tra giấy tờ pháp lý và hồ sơ đất rừng vùng trồng'},
+          {chiso:'Khai thác vượt mức bền vững, sử dụng giống GMO',muc:'Không đáng kể',bp:'Vùng trồng được chứng nhận PEFC FM, không sử dụng GMO'},
+          {chiso:'Nguy cơ trộn lẫn với nguyên liệu không đủ điều kiện',muc:'Thấp',bp:'Tách biệt rõ trong thu mua, sản xuất, lưu kho; kiểm tra hồ sơ CoC'},
+          {chiso:'Dữ liệu định vị vùng trồng không đầy đủ hoặc thiếu minh bạch',muc:'Thấp',bp:'Cung cấp bản đồ, toạ độ GPS, xác minh thực địa'},
+          {chiso:'Thiếu hệ thống truy xuất nguồn gốc hiệu quả',muc:'Không đáng kể',bp:'Hệ thống CoC nội bộ tuân theo PEFC ST 2002:2020'}],
+        cols:[{k:'chiso',l:'Chỉ số đánh giá rủi ro',ro:1,w:'280px'},{k:'muc',l:'Mức độ',ro:1,w:'110px'},{k:'bp',l:'Biện pháp kiểm soát',ro:1,w:'320px'}]}},
+      {co:'warn',t:'DDS gốc tự mâu thuẫn ở mức độ rủi ro phá rừng',x:'Văn bản ghi <b>"Mức độ rủi ro phá rừng: Cao"</b>, trong khi bảng đánh giá đều là không đáng kể/thấp và kết luận là không liên quan phá rừng. Để trống ô dưới đây, cần chốt với khách.'},
+      {title:'5. Kết luận', fields:[
+        {id:'xh3_mucdo',label:'Mức độ rủi ro phá rừng',type:'sel',opts:['','Không đáng kể','Thấp','Đáng kể','Cao'],dflt:''},
+        {id:'xh3_nguoi',label:'Người lập báo cáo DDS',type:'text',dflt:'Nguyễn Văn Hoàng'},
+        {id:'xh3_kl_vb',label:'Kết luận',type:'area',full:1,dflt:'Lô hàng mủ cao su có nguồn gốc hợp pháp và không liên quan đến phá rừng, phù hợp Quy định (EU) 2023/1115 về sản phẩm không gây phá rừng.'}
+      ]}
+    ]},
+  { code:'XH-4', title:'Duyệt xuất kho & phát hành DDS', desc:'Duyệt xong mới trừ tồn lô và phát hành link truy xuất cho khách', nguoi:'Tổ xuất hàng trình ký', sla:'Trước ngày xuất', duyet:'Tổng Giám đốc',
+    body:[
+      {title:'Checklist đối chiếu', check:[
+        'Tổng KL lô đã chọn khớp số lượng lệnh xuất',
+        'Lô xuất đều có số lô và khu lưu trữ',
+        'Truy ngược được tới Đội và ngày cấp nguyên liệu cho mọi lô',
+        'Đã đính kèm lệnh xuất, thông báo, chứng chỉ chất lượng',
+        'Đã chốt mức độ rủi ro phá rừng và mã HS'
+      ]},
+      {title:'Phê duyệt', fields:[
+        {id:'xh4_nguoi',label:'Người duyệt',type:'text'},
+        {id:'xh4_ngay',label:'Ngày duyệt',type:'date',dflt:'2025-06-11'},
+        {id:'xh4_kq',label:'Kết quả',type:'sel',opts:['','✓ Duyệt — trừ tồn & phát hành DDS','✗ Trả lại — chọn lại lô / bổ sung hồ sơ']},
+        {id:'xh4_ykien',label:'Ý kiến',type:'area',full:1}
+      ]},
+      {co:'auto',t:'Sau khi duyệt',x:'n8n trừ tồn các lô đã chọn và sinh trang truy xuất (link / mã QR) cho đơn hàng — khách nhập mã là xem được chuỗi lô → thùng → hồ → Đội → polygon vùng trồng.'}
+    ]}
+]}
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORE_VER='cscs5';
+try{ if(sessionStorage.getItem('cs_ver')!==STORE_VER){ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); } }catch(e){}
+let cf = parseInt(ss('cs_cf')||'-1');
+let cs = FLOWS.map((_,i)=>parseInt(ss('cs_s'+i)||'0'));
+try{ state = JSON.parse(ss('cs_state')||'{}'); }catch(e){ state={}; }
+function save(){ ss('cs_cf',cf); cs.forEach((v,i)=>ss('cs_s'+i,v)); try{ ss('cs_state',JSON.stringify(state)); }catch(e){} }
+function key(){ return cf+'_'+cs[cf]; }
+function D(){ return state[key()]||{}; }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function fieldKind(f){
+  if(f.type!=='ro') return {cls:'fk-fill', tag:'<span class="fk-tag t-fill">✎ Điền</span>'};
+  if(f.inh) return {cls:'fk-inh', tag:'<span class="fk-tag t-inh">↩ Kế thừa'+(f.inhLbl?' · '+esc(f.inhLbl):'')+'</span>'};
+  return {cls:'fk-auto', tag:'<span class="fk-tag t-auto">⚙ Tự tính</span>'};
+}
+function fieldHTML(f,d){
+  let v = d[f.id]!==undefined && d[f.id]!=='' ? d[f.id] : '';
+  if(f.type==='ro' && f.get){ v=f.get(); }
+  else if(v==='' && f.get){ v=f.get(); }
+  if(v==='' && f.dflt!==undefined) v=f.dflt;
+  const kind=fieldKind(f);
+  const cls='fgrp'+(f.full?' full':'')+' '+kind.cls;
+  const lab='<label class="'+(f.req?'req':'')+'">'+esc(f.label)+kind.tag+'</label>';
+  const hint=f.hint?'<div class="fhint">'+f.hint+'</div>':'';
+  let inp='';
+  if(f.type==='sel'){
+    if(f.opts.indexOf(v)<0) v=(f.dflt!==undefined&&f.opts.indexOf(f.dflt)>=0)? f.dflt : f.opts[0];
+    inp='<select id="'+f.id+'">'+f.opts.map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+  } else if(f.type==='area'){ inp='<textarea id="'+f.id+'" placeholder="'+esc(f.ph||'')+'">'+esc(v)+'</textarea>';
+  } else if(f.type==='ro'){ inp='<input id="'+f.id+'" value="'+esc(v)+'" readonly/>';
+  } else if(f.type==='num'){ inp='<input id="'+f.id+'" type="number" step="any" value="'+esc(v)+'" placeholder="0"/>';
+  } else if(f.type==='date'){ inp='<input id="'+f.id+'" type="date" value="'+esc(v)+'"/>';
+  } else { inp='<input id="'+f.id+'" value="'+esc(v)+'" placeholder="'+esc(f.ph||'')+'"/>'; }
+  return '<div class="'+cls+'">'+lab+inp+hint+'</div>';
+}
+function cellHTML(c,row){
+  const v=row[c.k]!==undefined?row[c.k]:'';
+  if(c.pick){
+    const list=poolOf(c.pick), k=POOL_KEY[c.pick];
+    let opts='<option value="">— chọn —</option>';
+    if(v && !list.some(r=>r[k]===v)) opts+='<option selected>'+esc(v)+'</option>';
+    opts+=list.map(r=>'<option'+(r[k]===v?' selected':'')+'>'+esc(r[k])+'</option>').join('');
+    return '<select data-k="'+c.k+'" class="pick" onchange="pickRow(this,\''+c.pick+'\')">'+opts+'</select>';
+  }
+  if(c.type==='sel' && c.ro) return '<input data-k="'+c.k+'" value="'+esc(v)+'" readonly/>';
+  if(c.type==='sel') return '<select data-k="'+c.k+'">'+[''].concat(c.opts).map(o=>'<option'+(v===o?' selected':'')+'>'+esc(o)+'</option>').join('')+'</select>';
+  if(c.type==='num') return '<input type="number" step="any" data-k="'+c.k+'" value="'+esc(v)+'" class="num-right"'+(c.ro?' readonly':'')+' oninput="recalc()" onchange="recalc()"/>';
+  if(c.type==='date') return '<input type="date" data-k="'+c.k+'" value="'+esc(v)+'"'+(c.ro?' readonly':'')+'/>';
+  return '<input data-k="'+c.k+'" value="'+esc(v)+'"'+(c.ro?' readonly':'')+' oninput="recalc()"/>';
+}
+function rowHTML(t,row){
+  return '<tr>'+t.cols.map(c=>'<td'+(c.w?' style="width:'+c.w+'"':'')+'>'+cellHTML(c,row)+'</td>').join('')
+    +'<td style="width:26px"><button class="tdel" onclick="this.closest(\'tr\').remove();recalc()">×</button></td></tr>';
+}
+function thKind(c){
+  if(c.pick) return '<span class="th-k th-fill">✎ Chọn</span>';
+  if(c.ro) return c.auto? '<span class="th-k th-auto">⚙ Tự tính</span>' : '<span class="th-k th-inh">↩ Kế thừa</span>';
+  return '<span class="th-k th-fill">✎ Điền</span>';
+}
+function tableRows(t,d){
+  let rows=d[t.id];
+  if(rows===undefined) rows = t.derive? t.derive() : (t.def||[]);
+  return rows;
+}
+function tableHTML(t,d){
+  const rows=tableRows(t,d);
+  let foot='';
+  if(t.foot){
+    foot='<tfoot><tr>'+t.cols.map(c=>{
+      const f=t.foot.find(x=>x.k===c.k);
+      if(!f) return '<td class="tf"></td>';
+      if(f.lbl) return '<td class="tf tf-lbl">'+esc(f.lbl)+'</td>';
+      return '<td class="tf'+(c.type==='num'?' num-right':'')+' tv-'+(f.c||'blue')+'">'+(f.pre?'<span style="font-size:10px;font-weight:500;color:var(--g500)">'+esc(f.pre)+'</span>':'')+'<span id="'+f.id+'">—</span></td>';
+    }).join('')+'<td class="tf"></td></tr></tfoot>';
+  }
+  return '<div class="tw"><table><thead><tr>'+t.cols.map(c=>'<th'+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+thKind(c)+'</th>').join('')
+    +'<th style="width:26px"></th></tr></thead><tbody id="tb-'+t.id+'">'+rows.map(r=>rowHTML(t,r)).join('')+'</tbody>'+foot+'</table></div>'
+    +'<button class="tadd tadd-'+cf+'" onclick="addRow(\''+t.id+'\')">'+esc(t.add||'+ Thêm dòng')+'</button>';
+}
+function blockHTML(b,d){
+  if(b.co) return '<div class="callout co-'+b.co+'"><span class="co-t">'+b.t+'</span>'+b.x+'</div>';
+  if(b.btn) return '<div class="btn-line"><button class="btn" onclick="'+b.btn.fn+'">'+b.btn.label+'</button></div>';
+  let h='<div class="fs">';
+  if(b.title) h+='<div class="stitle st'+cf+'">'+esc(b.title)+'</div>';
+  if(b.fields) h+='<div class="fg">'+b.fields.map(f=>fieldHTML(f,d)).join('')+'</div>';
+  if(b.table) h+=tableHTML(b.table,d);
+  if(b.check) h+=b.check.map((c,i)=>'<div class="ck-row"><input type="checkbox" id="ck_'+i+'" '+(d['ck_'+i]?'checked':'')
+      +' style="width:16px;height:16px;flex-shrink:0"/><label for="ck_'+i+'" style="font-size:13px;cursor:pointer">'+esc(c)+'</label></div>').join('');
+  return h+'</div>';
+}
+function findTable(tid){ let t=null; FLOWS[cf].steps[cs[cf]].body.forEach(b=>{ if(b.table&&b.table.id===tid) t=b.table; }); return t; }
+function addRow(tid){ const t=findTable(tid); if(!t) return; document.getElementById('tb-'+tid).insertAdjacentHTML('beforeend',rowHTML(t,{})); recalc(); }
+function resetTable(tid){ const t=findTable(tid); if(!t) return; const rows=t.derive? t.derive() : (t.def||[]);
+  document.getElementById('tb-'+tid).innerHTML=rows.map(r=>rowHTML(t,r)).join(''); recalc(); }
+function readTable(tid){
+  const tb=document.getElementById('tb-'+tid); if(!tb) return [];
+  return Array.from(tb.rows).map(tr=>{ const o={}; tr.querySelectorAll('[data-k]').forEach(el=>{ o[el.dataset.k]=el.value; }); return o; });
+}
+function pickRow(el,pool){
+  const list=poolOf(pool), k=POOL_KEY[pool], rec=list.find(r=>r[k]===el.value), tr=el.closest('tr');
+  tr.querySelectorAll('[data-k]').forEach(c=>{ if(c===el) return; const key=c.dataset.k;
+    if(rec && rec[key]!==undefined) c.value=rec[key]; else if(!rec) c.value=''; });
+  recalc();
+}
+
+function renderTabs(){
+  document.getElementById('flow-tabs').innerHTML='<button class="ftab'+(cf===-1?' fa-ov':'')+'" onclick="goOverview()">🔗 Tổng quan chuỗi</button>'
+    +FLOWS.map((fl,i)=>'<button class="ftab'+(i===cf?' fa'+i:'')+'" onclick="goFlow('+i+')">'+esc(fl.label)+'</button>').join('');
+}
+function renderHeader(){
+  const fl=FLOWS[cf];
+  document.getElementById('hdr-wrap').innerHTML='<div class="hdr hdr-'+cf+'"><div class="hdr-badge">'+esc(fl.badge)+'</div><h1>'+esc(fl.label)+'</h1><p>'+esc(fl.sub)+'</p></div>';
+}
+function renderNav(){
+  const fl=FLOWS[cf], nav=document.getElementById('step-nav'); nav.className='step-nav s'+cf;
+  nav.innerHTML='<div class="snav-inner">'+fl.steps.map((s,i)=>{ const done=(state[cf+'_'+i]||{}).done, active=i===cs[cf];
+    return '<div class="snav-item'+(active?' sa':'')+(done?' sd':'')+'" onclick="goStep('+i+')" title="'+esc(s.title)+'"><div class="snav-dot">'+(done?'✓':(i+1))+'</div><span class="snav-label">'+esc(s.code)+' '+esc(s.title)+'</span>'+(i<fl.steps.length-1?'<div class="snav-line"></div>':'')+'</div>'; }).join('')+'</div>';
+}
+function renderCard(){
+  const fl=FLOWS[cf], c=cs[cf], step=fl.steps[c], d=D(), last=c===fl.steps.length-1;
+  document.getElementById('sc').innerHTML=
+    '<div class="sc-hdr sc-hdr-'+cf+'"><div class="sc-badge sb'+cf+'">'+(c+1)+'</div><div><div class="sc-title sc-title-'+cf+'">'+esc(step.code)+' — '+esc(step.title)+'</div><div class="sc-desc">'+esc(step.desc)+'</div></div></div>'
+    +'<div class="ibar"><div class="ibar-item"><div class="ilbl">Quy trình</div><div class="ival">'+esc(fl.code)+'</div></div>'
+    +'<div class="ibar-item"><div class="ilbl">Người thực hiện</div><div class="ival">'+esc(step.nguoi)+'</div></div>'
+    +'<div class="ibar-item"><div class="ilbl">Thời điểm / SLA</div><div class="ival">'+esc(step.sla)+'</div></div>'
+    +'<div class="ibar-item"><div class="ilbl">Người duyệt</div><div class="ival">'+esc(step.duyet)+'</div></div></div>'
+    +'<div class="fk-legend"><span><span class="fk-tag t-fill" style="margin:0">✎ Điền</span> người dùng nhập</span><span><span class="fk-tag t-inh" style="margin:0">↩ Kế thừa</span> lấy từ bước/bảng trước, không sửa</span><span><span class="fk-tag t-auto" style="margin:0">⚙ Tự tính</span> n8n / hệ thống tính</span></div>'
+    +'<div class="fb">'+step.body.map(b=>blockHTML(b,d)).join('')+'</div>'
+    +'<div class="navr"><span class="navc">Bước '+(c+1)+'/'+fl.steps.length+' · '+esc(fl.label)+'</span><div class="navb">'
+    +(c>0?'<button class="btn" onclick="prevStep()">← Bước trước</button>':'')
+    +'<button class="btn btn-ok" onclick="markDone()">✓ Đánh dấu hoàn thành</button>'
+    +(!last?'<button class="btn btn-p'+cf+'" onclick="nextStep()">Lưu & tiếp →</button>':'<button class="btn btn-p'+cf+'" onclick="nextFlow()">Sang quy trình sau →</button>')
+    +'</div></div>';
+  recalc();
+}
+function renderAll(){ renderHeader(); renderTabs(); renderNav(); renderCard(); }
+function goFlow(i){ saveForm(); cf=i; save(); renderAll(); scrollTo(0,0); }
+function goStep(i){ saveForm(); cs[cf]=i; save(); renderNav(); renderCard(); scrollTo(0,0); }
+function nextStep(){ saveForm(); if(cs[cf]<FLOWS[cf].steps.length-1){cs[cf]++;save();renderNav();renderCard();scrollTo(0,0);} }
+function prevStep(){ saveForm(); if(cs[cf]>0){cs[cf]--;save();renderNav();renderCard();scrollTo(0,0);} }
+function nextFlow(){ saveForm(); if(cf<FLOWS.length-1){ cf++; save(); renderAll(); scrollTo(0,0);} else { goOverview(); } }
+function markDone(){ saveForm(); if(!state[key()]) state[key()]={}; state[key()].done=true; save(); renderNav(); }
+function saveForm(){
+  if(cf<0) return;
+  const d={};
+  document.querySelectorAll('#sc input[id], #sc select[id], #sc textarea[id]').forEach(el=>{ d[el.id]= el.type==='checkbox'? el.checked : el.value; });
+  FLOWS[cf].steps[cs[cf]].body.forEach(b=>{ if(b.table) d[b.table.id]=readTable(b.table.id); });
+  state[key()]=Object.assign({},state[key()]||{},d); save();
+}
+
+/* ============================================================
+   TÍNH TOÁN
+   ============================================================ */
+function recalc(){
+  if(cf<0) return;
+  FLOWS[cf].steps[cs[cf]].body.forEach(b=>{
+    if(!b.table||!b.table.foot) return;
+    const rows=readTable(b.table.id);
+    b.table.foot.forEach(f=>{ if(!f.id) return;
+      if(f.cnt){ setM(f.id,String(rows.length)); }
+      else if((b.table.sumCols||[]).indexOf(f.k)>=0){ let s=0; rows.forEach(r=>s+=n(r[f.k])); setM(f.id,fmt(s)); }
+    });
+  });
+  const k=cf+'_'+cs[cf];
+  if(k==='0_1') calcTN2();
+  if(k==='3_1') calcXH2();
+}
+function calcTN2(){ const rows=readTable('tn2_list'); setRO('tn2_n',String(rows.length)); setRO('tn2_kl',fmt(rows.reduce((s,r)=>s+n(r.kl_tuoi),0))); }
+function calcXH2(){
+  const rows=readTable('xh2_list'); let ton=0,chon=0; rows.forEach(r=>{ ton+=n(r.kl_ton); chon+=n(r.kl_xuat); });
+  const e=document.getElementById('xh2_can'), can=n(e&&e.value);
+  setM('xh2_m_ton',fmt(ton)); setM('xh2_m_chon',fmt(chon));
+  const d=can-chon; setM('xh2_m_thieu', can? (d>0? '−'+fmt(d) : (d<0? '+'+fmt(-d) : '0 (khớp)')) : '—');
+}
+
+/* ============================================================
+   TỔNG QUAN
+   ============================================================ */
+function chainSVG(){
+  const box=(x,label,code,color)=>'<g><rect x="'+x+'" y="26" width="126" height="52" rx="9" fill="'+color+'14" stroke="'+color+'" stroke-width="1"/><text x="'+(x+63)+'" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="'+color+'" font-family="Be Vietnam Pro,sans-serif">'+code+'</text><text x="'+(x+63)+'" y="65" text-anchor="middle" font-size="9" fill="#374151" font-family="Be Vietnam Pro,sans-serif">'+label+'</text></g>';
+  const arrow=x=>'<line x1="'+x+'" y1="52" x2="'+(x+16)+'" y2="52" stroke="#9CA3AF" stroke-width="1.4" marker-end="url(#ch-a)"/>';
+  return '<div style="overflow-x:auto;margin:6px 0 16px"><svg width="100%" viewBox="0 0 760 110" style="min-width:680px"><defs><marker id="ch-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round"/></marker></defs>'
+   +'<text x="8" y="16" font-size="10" fill="#9CA3AF" font-family="Be Vietnam Pro,sans-serif">Truy ngược: Lô hàng xuất → Lô thành phẩm → Thùng/Mương/Hồ → Phiếu giao nhận/Đội</text>'
+   +box(8,'Đội (Ia Glai…)','Phiếu giao nhận','#2E6B34')+arrow(134)+box(150,'Tiếp nhận · QT1','Hồ hỗn hợp','#185FA5')+arrow(276)
+   +box(292,'Chế biến · QT2','Mương→Thùng→Lô','#1A7A5E')+arrow(418)+box(434,'Nhập kho · QT3','Kho TP','#7B2FA0')+arrow(560)+box(576,'Xuất hàng · DDS · QT4','Xuất/DDS','#C25B10')+'</svg></div>';
+}
+function goOverview(){
+  saveForm(); cf=-1; save(); renderTabs();
+  const total=FLOWS.reduce((s,f)=>s+f.steps.length,0);
+  document.getElementById('hdr-wrap').innerHTML='<div class="hdr" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"><div class="hdr-badge">Truy xuất nguồn gốc cao su · PEFC CoC EUDR</div><h1>Cao su Chư Sê (Gia Lai) — Luồng truy xuất từ sổ giấy sang Base</h1><p>4 nhóm Service · '+total+' bước · Đứng trên Base Table + n8n — lọc khi phải chọn dữ liệu, chế biến chạy liền mạch</p></div>';
+  document.getElementById('step-nav').innerHTML='';
+  const card=i=>{ const fl=FLOWS[i], c=['#185FA5','#1A7A5E','#7B2FA0','#C25B10'][i];
+    return '<div onclick="goFlow('+i+')" style="cursor:pointer;border:1px solid '+c+';border-left:4px solid '+c+';border-radius:10px;padding:14px 16px;margin-bottom:10px;background:'+c+'0A"><div style="font-size:14px;font-weight:600;color:'+c+';margin-bottom:3px">'+esc(fl.label)+'</div><div style="font-size:12px;color:var(--g500);margin-bottom:8px">'+esc(fl.sub)+'</div><div style="display:flex;gap:6px;flex-wrap:wrap">'
+    +fl.steps.map((s,j)=>{ const dn=(state[i+'_'+j]||{}).done; return '<span style="font-size:11px;padding:2px 9px;border-radius:12px;background:'+(dn?'#EAF3DE':'#fff')+';border:1px solid '+(dn?'#3B6D11':'#D1D5DB')+';color:'+(dn?'#3B6D11':'#6B7280')+'">'+esc(s.code)+' '+esc(s.title)+'</span>'; }).join('')+'</div></div>'; };
+  const row=r=>'<tr><td style="font-weight:600;font-size:12.5px">'+r[0]+'</td><td style="font-family:ui-monospace,monospace;font-size:12px;color:var(--blue)">'+r[1]+'</td><td style="font-size:12.5px;color:var(--g700)">'+r[2]+'</td></tr>';
+  document.getElementById('sc').innerHTML='<div style="padding:22px">'
+   +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200)">Chuỗi truy xuất — xương sống hệ thống</div>'+chainSVG()
+   +'<div class="callout co-info"><span class="co-t">Khi nào có bước Lọc, khi nào không</span>Chỉ đặt bước <b>Lọc</b> ở chỗ phải chọn dữ liệu từ nhiều ngày / nhiều nguồn: chọn phiếu giao nhận (QT1), chọn lô nhập kho (QT3), chọn lô xuất (QT4) — bảng trả về luôn nằm <b>sau</b> bước lọc. Khâu <b>chế biến (QT2)</b> chạy liền một mạch do một người nhập, khâu sau kế thừa thẳng hồ → mương → thùng của khâu trước nên không có bước lọc. Mỗi trường gắn nhãn <span class="fk-tag t-fill" style="margin:0">✎ Điền</span> <span class="fk-tag t-inh" style="margin:0">↩ Kế thừa</span> <span class="fk-tag t-auto" style="margin:0">⚙ Tự tính</span>.</div>'
+   +'<div class="callout co-warn"><span class="co-t">Kiến trúc thật: Base Table + n8n — demo chỉ mô phỏng trải nghiệm nhập liệu</span>Mỗi khối trong sơ đồ là một <b>Base Table</b>; các Service là giao diện nhập liệu từng bảng. Sinh mã, gom nhóm, nối liên kết, cân đối khối lượng do <b>n8n</b> chạy ngầm — các hàm kế thừa trong file này chỉ để hiển thị "nếu n8n đã đồng bộ xong thì Service sẽ thấy gì".</div>'
+   +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">Base Table &amp; n8n workflow tương ứng</div>'
+   +'<div class="tw"><table><thead><tr><th style="width:190px">Base Table</th><th style="width:170px">Mã khoá</th><th>n8n workflow xử lý</th></tr></thead><tbody>'
+   +[['Phiếu giao nhận','Mã phiếu (GN-ddmm-xx)','Bảng nguồn — TN-1/TN-2 lọc & chọn trực tiếp trên bảng này'],
+     ['Hồ hỗn hợp','Ngày · Hồ…/100p','WF1: gom phiếu theo hồ → số phiếu, KL tươi; DRC/quy khô lấy từ sổ'],
+     ['Mương · Thùng','Mương số · Thùng số','WF2: nối Hồ → Mương → Thùng, giữ thùng xuyên suốt tạo hạt → nhiệt → ép kiện'],
+     ['Lô thành phẩm','TP-ddmm-xx','WF3: sinh mã lô khi ép kiện xong, đẩy sang bảng Nhập kho; cảnh báo lô thiếu số'],
+     ['Nhập kho thành phẩm','Phiếu NK / Lô','WF3 (tiếp): đối chiếu lô ↔ khu lưu trữ, tổng hợp phiếu theo loại mủ'],
+     
+     ['Đơn hàng / Lệnh xuất / Lô xuất','Số lệnh XH','WF4: giữ lô xuất cho đơn, kiểm tra KL xuất khớp số lượng lệnh; trừ tồn khi duyệt'],
+     ['DDS · Trang truy xuất','Order / Số DDS','WF5: truy ngược lô xuất (lô ngày D ← NL ngày D-1) → Đội, vùng trồng, polygon; dựng DDS và link/QR cho khách']].map(row).join('')+'</tbody></table></div>'
+   +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">4 nhóm Service — bấm để xem giao diện nhập liệu</div>'+FLOWS.map((_,i)=>card(i)).join('')
+   +'<div class="stitle st0" style="color:var(--g700);border-color:var(--g200);margin-top:18px">Biểu mẫu nguồn</div>'
+   +'<div class="tw"><table><thead><tr><th style="width:70px">QT</th><th style="width:240px">Biểu mẫu</th><th>Nội dung</th></tr></thead><tbody>'
+   +[['QT1','BM 02B-QLCL-TCCS','Sổ theo dõi tiếp nhận nguyên liệu mủ nước'],
+     ['QT2','BM 03 · 06B · 07A · 08A-QLCL-TCCS','Đánh đông → Tạo hạt → Gia công nhiệt → Ra lò, ép kiện, đóng gói'],
+     ['QT3','BM 09-QLCL-TCCS + BM 03/CBCS-QT8.0','Sổ theo dõi nhập kho + Phiếu nhập kho thành phẩm'],
+     ['QT4','Lệnh XH · Thông báo · Chứng chỉ (đính kèm) · B07a.QT DDS-01','Lệnh xuất & chọn lô; DDS tự sinh từ chuỗi; lệnh SX, KHSX, thông báo, chứng chỉ chỉ là chứng từ đính kèm']].map(row).join('')+'</tbody></table></div>'
+   +'<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px"><button class="btn" onclick="window.print()">🖨 In toàn bộ</button><button class="btn" onclick="resetAll()">↺ Xoá dữ liệu nhập thử</button></div></div>';
+  scrollTo(0,0);
+}
+function resetAll(){ if(!confirm('Xoá toàn bộ dữ liệu đã nhập thử trong trình duyệt?')) return; state={}; try{ sessionStorage.clear(); sessionStorage.setItem('cs_ver',STORE_VER); }catch(e){} cs=FLOWS.map(()=>0); save(); goOverview(); }
+
+/* BOOT */
+if(cf>=FLOWS.length) cf=-1;
+FLOWS.forEach((fl,i)=>{ if(!cs[i]||cs[i]>=fl.steps.length) cs[i]=0; });
+if(cf<0){ goOverview(); } else { renderAll(); }
+
+</script>
+</body>
+</html>

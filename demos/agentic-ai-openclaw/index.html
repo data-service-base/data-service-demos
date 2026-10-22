@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic AI System – OpenClaw</title>
+<style>
+  :root{
+    --navy:#0a2540;
+    --navy-2:#13335c;
+    --light:#e8f1f8;
+    --light-2:#f4f8fc;
+    --orange:#ff6b1a;
+    --orange-soft:#ffe4d1;
+    --black:#111;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--light-2);color:var(--black);line-height:1.55}
+  header{background:var(--navy);color:var(--white);padding:22px 28px;border-bottom:5px solid var(--orange);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  header .title{margin:0;font-size:20px;letter-spacing:.5px;font-weight:700}
+  header .title .brand{color:var(--orange)}
+  header .subtitle{color:#cfd9e6;font-weight:400;font-size:15px;text-align:right}
+
+  nav.menu-bar{display:flex;background:var(--navy-2);border-bottom:2px solid var(--orange)}
+  nav.menu-bar button{
+    flex:1;
+    padding:16px 14px;
+    background:transparent;
+    color:var(--white);
+    border:none;
+    border-right:1px solid rgba(255,255,255,.12);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    transition:.2s;
+  }
+  nav.menu-bar button:last-child{border-right:none}
+  nav.menu-bar button:hover{background:var(--navy)}
+  nav.menu-bar button.active{background:var(--orange);color:var(--white)}
+
+  main{padding:28px;max-width:1280px;margin:0 auto}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  h3.sub{
+    color:var(--navy);
+    border-bottom:2px solid var(--orange);
+    padding-bottom:6px;
+    margin-top:26px;
+    font-size:16px;
+  }
+  h3.sub:first-child{margin-top:0}
+  h4.mini{color:var(--orange);margin:18px 0 6px;font-size:14px;text-transform:uppercase;letter-spacing:.3px}
+
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 12px 22px}
+  li{margin:5px 0}
+
+  .card{
+    background:var(--white);
+    border:1px solid #d6e0ec;
+    border-left:5px solid var(--orange);
+    padding:14px 18px;
+    margin:12px 0;
+    border-radius:4px;
+  }
+  .callout{
+    background:var(--light);
+    padding:12px 16px;
+    border-radius:4px;
+    margin:10px 0;
+  }
+
+  table{width:100%;border-collapse:collapse;margin:14px 0;background:var(--white);font-size:13.5px}
+  table th{
+    background:var(--navy);
+    color:var(--white);
+    padding:10px 12px;
+    text-align:left;
+    border:1px solid var(--navy-2);
+  }
+  table td{padding:10px 12px;border:1px solid #cfd9e6;vertical-align:top}
+  table tr:nth-child(even) td{background:var(--light-2)}
+  table .agent-name{color:var(--navy);font-weight:700}
+  table .tested{display:inline-block;background:var(--orange);color:var(--white);font-size:10.5px;padding:2px 6px;border-radius:3px;margin-left:6px;vertical-align:middle}
+
+  .tag-cat{
+    display:inline-block;
+    background:var(--orange);
+    color:var(--white);
+    padding:6px 14px;
+    border-radius:3px;
+    font-weight:700;
+    font-size:13px;
+    margin:18px 0 8px;
+  }
+
+  /* YouTube link – nổi bật */
+  a.yt{
+    display:inline-block;
+    margin-top:8px;
+    padding:7px 14px;
+    background:var(--orange);
+    color:var(--white)!important;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:700;
+    border-radius:4px;
+    border:2px solid #cc4f00;
+    box-shadow:0 2px 5px rgba(0,0,0,.18);
+    transition:.15s;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+  }
+  a.yt:hover{background:#cc4f00;transform:translateY(-1px);box-shadow:0 3px 7px rgba(0,0,0,.25)}
+  a.yt::before{content:"▶  ";font-size:11px}
+
+  /* Menu 4 specific */
+  .m4-table th:nth-child(1){width:34%}
+  .m4-table th:nth-child(2){width:46%}
+  .m4-table th:nth-child(3){width:20%}
+  .verdict{font-weight:700;text-align:center;display:block;padding:6px;border-radius:3px}
+  .v-no{background:#ffd9d9;color:#a30000}
+  .v-warn{background:#fff1cc;color:#7a5a00}
+  .v-ok{background:#d4f0d4;color:#1a6b1a}
+  .v-good{background:var(--orange-soft);color:#a64200}
+  .group-row td{background:var(--navy)!important;color:var(--white);font-weight:700;font-size:14px;letter-spacing:.3px}
+
+  .conclusion{
+    background:var(--navy);
+    color:var(--white);
+    padding:22px 26px;
+    margin:0 0 24px;
+    border-left:6px solid var(--orange);
+    border-radius:4px;
+  }
+  .conclusion .big-red{
+    display:block;
+    color:#ff6b6b;
+    font-size:15px;
+    font-weight:700;
+    margin:10px 0 4px;
+    font-style:italic;
+    line-height:1.4;
+  }
+
+  @media(max-width:780px){
+    nav.menu-bar{flex-wrap:wrap}
+    nav.menu-bar button{flex:1 1 50%;font-size:12px;padding:12px 8px}
+    main{padding:16px}
+    table{font-size:12px}
+    header{flex-direction:column;align-items:flex-start}
+    header .title{font-size:16px}
+    header .subtitle{font-size:13px;text-align:left}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="title">AGENTIC AI SYSTEM <span class="brand">– OPENCLAW</span></h1>
+  <div class="subtitle">Tài liệu nghiên cứu &amp; đánh giá ứng dụng cho Group ENC/SCI</div>
+</header>
+
+<nav class="menu-bar">
+  <button class="tab-btn active" data-tab="m1">1. Tổng quát chung</button>
+  <button class="tab-btn" data-tab="m2">2. Nội dung nghiên cứu</button>
+  <button class="tab-btn" data-tab="m3">3. Đánh giá OpenClaw</button>
+  <button class="tab-btn" data-tab="m4">4. Đánh giá thực tiễn &amp; Kết luận</button>
+</nav>
+
+<main>
+
+<!-- =================== MENU 1 =================== -->
+<section id="m1" class="panel active">
+
+  <h3 class="sub">Định nghĩa kỹ thuật về Agentic AI</h3>
+  <p><strong>Agentic AI</strong> (Trí tuệ nhân tạo dạng tác nhân) là hệ thống máy tính tự chủ được vận hành bởi các Mô hình ngôn ngữ lớn (LLM), có khả năng tự lập lộ trình thực hiện nhiệm vụ, tương tác với môi trường bên ngoài thông qua công cụ phần mềm và duy trì trạng thái dữ liệu để đạt mục tiêu cụ thể mà không cần sự can thiệp liên tục của con người.</p>
+
+  <h4 class="mini">4 thành phần kỹ thuật cốt lõi</h4>
+  <div class="card"><strong>1. Bộ não (Brain/LLM):</strong> Trung tâm xử lý ngôn ngữ và suy luận logic, nhận diện ý định và đưa ra quyết định.</div>
+  <div class="card"><strong>2. Bộ nhớ (Memory):</strong> Bộ nhớ ngắn hạn (Context window) duy trì hội thoại và bộ nhớ dài hạn (Vector DB/RAG) truy xuất tri thức doanh nghiệp.</div>
+  <div class="card"><strong>3. Lập kế hoạch (Planning):</strong> Phân rã mục tiêu phức tạp thành chuỗi nhiệm vụ con và tự phản hồi (self-reflection) để điều chỉnh hành vi.</div>
+  <div class="card"><strong>4. Công cụ/Kỹ năng (Tools/Skills):</strong> API hoặc mã thực thi cho phép AI tương tác với phần mềm, cơ sở dữ liệu và các hệ thống bên ngoài.</div>
+
+  <h3 class="sub">Nguyên lý vận hành – Cấu trúc 3 tầng thực thể</h3>
+  <p>Hệ thống vận hành dựa trên phân cấp quyền hạn tương tự như doanh nghiệp:</p>
+  <ul>
+    <li><strong>Chủ tịch HĐQT (Người dùng):</strong> Thực thể ra lệnh cao nhất. Thiết lập mục tiêu, đặt câu hỏi truy vấn và phê duyệt kết quả cuối cùng.</li>
+    <li><strong>Giám đốc điều hành (Orchestrator):</strong> Lớp điều phối trung tâm. Phân tích mệnh lệnh, lập sơ đồ phối hợp và điều động các Nhân viên AI chuyên trách. Chịu trách nhiệm về tính logic và thống nhất kết quả đầu ra.</li>
+    <li><strong>Nhân viên AI (Agents):</strong> Thực thể thực thi chuyên môn hoá. Mỗi nhân viên AI được cấu hình với bộ Skills và Memory riêng cho từng phần việc cụ thể (rà soát tin thầu, phân tích tài chính, soạn thảo văn bản…).</li>
+  </ul>
+
+  <h3 class="sub">4 thành tố cấu tạo nên một "Nhân sự số"</h3>
+  <ol>
+    <li><strong>Nhân viên (LLM):</strong> Mô hình như GPT-4 hoặc OpenClaw thực hiện suy luận, chuyển ngôn ngữ tự nhiên thành lệnh thực thi.</li>
+    <li><strong>Máy tính (Memory):</strong> Lưu dữ liệu lịch sử thầu, thông tin đối thủ, quy định nội bộ SCI – kế thừa dữ liệu xuyên dự án.</li>
+    <li><strong>Quy trình làm việc (Plan):</strong> Thuật toán điều hướng dạng "cây quyết định" – nếu gặp tình huống A xử lý theo bước B; nếu thiếu dữ liệu C thì quay lại bước tìm kiếm.</li>
+    <li><strong>Phần mềm trên máy tính (Skills):</strong> Module mã nguồn cho phép AI gửi tin nhắn Zalo, đọc PDF, trích xuất dữ liệu web, tính toán Excel…</li>
+  </ol>
+
+  <h3 class="sub">Cơ chế điều hành &amp; sự phối hợp</h3>
+  <h4 class="mini">Bản chất của "Plan" trong Agentic AI</h4>
+  <div class="callout"><strong>Plan linh hoạt (Dynamic):</strong> Dựa vào năng lực suy luận của LLM. Khi nhận mệnh lệnh mơ hồ, AI tự xác định các bước. Ví dụ: "Tìm dự án mới" → Vào web → Quét tin → Tải file → Đọc. Có khả năng tự điều chỉnh nếu bước trước thất bại.</div>
+  <div class="callout"><strong>Plan định hướng (Hard-coded/Guided):</strong> Lập trình viên thiết lập khung workflow để AI làm đúng quy trình SCI Group, không bỏ bước, không đi chệch khỏi các bước kiểm soát bắt buộc.</div>
+
+  <h4 class="mini">Cách Giám đốc AI điều hành Nhân viên AI</h4>
+  <p><strong>Bước 1 – Phân rã mục tiêu:</strong> Khi Chủ tịch ra lệnh "Sơ duyệt các gói thầu điện gió tại Lào", Giám đốc AI kích hoạt Plan, xác định cần 2 công đoạn:</p>
+  <ul>
+    <li>Công đoạn 1 – Thu thập (giao cho AI 1)</li>
+    <li>Công đoạn 2 – Thẩm định (giao cho AI 2)</li>
+  </ul>
+  <p><strong>Bước 2 – Chỉ đạo thực thi &amp; chuyển giao dữ liệu:</strong> Giám đốc ra lệnh AI 1 dùng Skill trình duyệt tải hồ sơ mời thầu mới nhất. Khi AI 1 hoàn tất, Giám đốc chuyển tệp đó cho AI 2 và ra lệnh tiếp theo, không để AI 1 báo cáo thẳng lên Chủ tịch.</p>
+</section>
+
+<!-- =================== MENU 2 =================== -->
+<section id="m2" class="panel">
+  <p>Các sub-agent đã nghiên cứu cụ thể. Tóm lược sơ bộ dưới đây và xem video YouTube để có chi tiết đầy đủ.</p>
+
+  <table>
+    <thead>
+      <tr><th style="width:26%">Sub-agent</th><th style="width:22%">Nội dung việc</th><th>Chi tiết công việc</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="agent-name">OpenClaw – cấu trúc</span><br>
+          <a class="yt" href="https://www.youtube.com/watch?v=G4FfJaaK5c8" target="_blank">Xem video</a>
+        </td>
+        <td>Nghiên cứu cấu trúc, nguyên lý hoạt động</td>
+        <td>Tìm hiểu lý thuyết, cài đặt, chạy thử và các tác vụ liên quan để đánh giá ưu/nhược điểm khi áp dụng thực tiễn trong doanh nghiệp.</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="agent-name">NV trợ giúp Pháp lý</span><br>
+          <a class="yt" href="https://www.youtube.com/watch?v=3bZWmMOK2RM" target="_blank">Xem video</a>
+        </td>
+        <td>Tư vấn pháp lý &amp; lưu trữ tài liệu</td>
+        <td>AI đọc các văn bản pháp lý, bóc tách heading và metadata để xác định ngày ký/hiệu lực, đề xuất thư mục và tên file lưu trữ. Khi cần đối chiếu điều khoản hoặc kiểm tra hiệu lực, dựa vào index Markdown/JSONL đã lưu để trả lời và dẫn nguồn. Khi cần đánh giá rủi ro hợp đồng, agent tổng hợp các phần liên quan để hỗ trợ ra quyết định.</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="agent-name">Thư ký Họp giao ban</span><br>
+          <a class="yt" href="https://www.youtube.com/watch?v=aWLCS92vdBM" target="_blank">Xem video</a>
+        </td>
+        <td>Quản lý vòng đời công việc &amp; báo cáo tuần</td>
+        <td>AI nhận phiếu giao việc từ Telegram, kiểm tra nội dung, tạo mã và gửi thông báo cho người thực hiện. Nhắc deadline cho công việc đến hạn/quá hạn. Khi báo "đã xong", cập nhật bảng, gửi xác nhận và ghi log. Cuối tuần tổng hợp tình hình theo nhóm ưu tiên, tạo file Excel và gửi báo cáo.</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="agent-name">NV Kinh doanh tìm gói thầu</span><br>
+          <a class="yt" href="https://www.youtube.com/watch?v=hAnoTFONEXk" target="_blank">Xem video</a>
+        </td>
+        <td>Quét và đánh giá gói thầu, làm báo cáo</td>
+        <td>Lấy dữ liệu từ web/email, chuẩn hoá thông tin gói thầu. Đánh giá mỗi gói bằng điểm và nhãn (A/B/C/D/NO), nêu ưu/nhược điểm. Khi cần báo cáo tuần/pipeline, tổng hợp số liệu, phân loại theo mức ưu tiên, tạo bảng/slide tóm tắt cho cuộc họp. Có thể chuyển nội dung DOCX thành catalogue HTML gửi cho khách hàng.</td>
+      </tr>
+      <tr>
+        <td>
+          <span class="agent-name">Quản lý Strava cá nhân &amp; tư vấn lịch tập</span><br>
+          <a class="yt" href="https://www.youtube.com/watch?v=6PRyjXYSLOk" target="_blank">Xem video</a>
+        </td>
+        <td>Đồng bộ dữ liệu tập luyện &amp; báo cáo</td>
+        <td>AI thu dữ liệu từ Strava (hoặc file FIT/TCX), lưu bản raw. Tính TRIMP/hrTSS, cadence, nhịp tim drift, phân zone, đánh dấu các buổi tập có chỉ số bất thường. Mỗi ngày/tuần/tháng gửi báo cáo tổng hợp tải, cảnh báo thiếu dữ liệu, đề xuất buổi tập kế tiếp phù hợp với trạng thái cơ thể. Khi chuẩn bị cho mục tiêu quan trọng, tổng hợp lịch sử để theo dõi tiến độ dài hạn.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- =================== MENU 3 =================== -->
+<section id="m3" class="panel">
+
+  <p style="font-size:15px;font-weight:600;color:var(--navy);background:var(--light);padding:14px 18px;border-left:5px solid var(--orange);border-radius:4px;margin-bottom:18px">Dưới đây là các nội dung trong tương lai gần AI Agent có thể đảm nhận được các công việc này.</p>
+
+  <span class="tag-cat">1. QUẢN TRỊ HÀNH CHÍNH VÀ PHÁP LÝ</span>
+  <table>
+    <thead><tr><th style="width:42%">Nội dung công việc</th><th>Chi tiết công việc</th></tr></thead>
+    <tbody>
+      <tr><td><span class="agent-name">Lưu trữ Hồ sơ</span><span class="tested">đã test demo</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Phân loại và lưu trữ hồ sơ dự án</div></td><td>Đặt tên và sắp xếp file vào kho lưu trữ bằng cách đọc nội dung file gửi qua các app nhắn tin và thực hiện lệnh trên máy chủ. Hỗ trợ tìm kiếm văn bản pháp lý theo dự án, kiểm tra sự tồn tại của bản vẽ, đổi tên hàng loạt file ảnh nghiệm thu theo cú pháp chuẩn. Phân loại hồ sơ thanh toán thành nhóm đủ/thiếu thông tin để hỗ trợ quy trình xử lý.</td></tr>
+      <tr><td><span class="agent-name">Hỗ trợ Pháp lý Lào – Việt</span><span class="tested">đã test demo</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tra cứu &amp; so sánh quy định pháp lý Việt – Lào</div></td><td>Đối soát quy định pháp luật giữa Việt Nam và Lào trong thủ tục đầu tư và tiêu chuẩn kỹ thuật. Lập bảng so sánh thuế phí, kiểm tra mẫu tờ trình, chỉ ra khác biệt trong quy trình xin giấy phép hoặc báo cáo môi trường giữa hai quốc gia.</td></tr>
+      <tr><td><span class="agent-name">Theo dõi Tiến độ Dự án</span><span class="tested">đã test demo</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Quản lý tiến độ và nhắc việc</div></td><td>Chuyển nội dung biên bản họp thành kế hoạch tiến độ và theo dõi lịch trình làm việc. Cập nhật trạng thái hạng mục, dự báo ngày hoàn thành, nhắn tin nhắc cá nhân phụ trách về hạn nộp hồ sơ.</td></tr>
+      <tr><td><span class="agent-name">Soạn thảo Văn bản Hành chính</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Soạn thảo văn bản theo biểu mẫu</div></td><td>Trích xuất dữ liệu từ file dự toán, hồ sơ dự án hoặc email để điền vào mẫu tờ trình, hợp đồng, công văn của Group. Hỗ trợ lập báo cáo tiến độ tháng và tạo thư mời họp định kỳ.</td></tr>
+    </tbody>
+  </table>
+
+  <span class="tag-cat">2. ĐẦU TƯ VÀ PHÁT TRIỂN DỰ ÁN</span>
+  <table>
+    <thead><tr><th style="width:42%">Nội dung công việc</th><th>Chi tiết công việc</th></tr></thead>
+    <tbody>
+      <tr><td><span class="agent-name">Đọc &amp; tóm tắt Hồ sơ Kỹ thuật</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Đọc và tóm tắt tài liệu kỹ thuật</div></td><td>Đọc và tóm tắt các bộ hồ sơ FS hoặc ESIA dài hàng nghìn trang, trích xuất các con số quan trọng và xác định rủi ro tiềm ẩn. Tìm kiếm điểm vướng về giải phóng mặt bằng, so sánh thông số lưu lượng nước qua các năm, liệt kê danh sách giấy phép bắt buộc kèm trích dẫn số trang để đối chiếu.</td></tr>
+      <tr><td><span class="agent-name">Phân tích Hợp đồng PPA</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Phân tích rủi ro pháp lý &amp; hợp đồng PPA</div></td><td>Rà soát dự thảo hợp đồng mua bán điện để xác định các điều khoản bất lợi về tỷ giá, thuế hoặc trách nhiệm thanh toán. Sử dụng phân loại xanh – vàng – đỏ để đánh giá mức rủi ro và giải thích lý do cụ thể, hỗ trợ lãnh đạo có cơ sở khi đàm phán.</td></tr>
+      <tr><td><span class="agent-name">Theo dõi Thị trường &amp; Đầu tư</span><span class="tested">đã test demo</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Theo dõi cơ hội dự án mới</div></td><td>Quét internet để xác định các thông tin mời thầu, quy hoạch năng lượng và tin tức về đối thủ cạnh tranh. Khi phát hiện tin tức khớp với tiêu chí đầu tư của Group, gửi thông báo kèm tóm tắt lý do liên quan.</td></tr>
+    </tbody>
+  </table>
+
+  <span class="tag-cat">3. THẨM TRA VÀ ĐỐI SOÁT KỸ THUẬT THIẾT KẾ</span>
+  <table>
+    <thead><tr><th style="width:42%">Nội dung công việc</th><th>Chi tiết công việc</th></tr></thead>
+    <tbody>
+      <tr><td><span class="agent-name">Kiểm soát Chất lượng (QC)</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Đối soát chéo bản vẽ và thuyết minh</div></td><td>Sử dụng thị giác máy tính để so sánh thông số kỹ thuật (mác thép, lớp bảo vệ, kích thước) giữa bản vẽ CAD/PDF và nội dung trong thuyết minh. Phát hiện sự không thống nhất hoặc các hạng mục bị thiếu sót.</td></tr>
+      <tr><td><span class="agent-name">Tra cứu Tiêu chuẩn Kỹ thuật</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tra cứu &amp; kiểm tra tuân thủ quy chuẩn</div></td><td>Đối chiếu phương án thiết kế với kho dữ liệu TCVN, tiêu chuẩn Lào và quốc tế (ASME, ISO, IEC). Xuất báo cáo tuân thủ kèm trích dẫn điều khoản pháp luật cụ thể.</td></tr>
+      <tr><td><span class="agent-name">Quản lý Phiên bản Hồ sơ</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Kiểm soát phiên bản và lưu trữ bản vẽ</div></td><td>Phân loại, đặt tên file và quản lý các phiên bản sửa đổi (Rev) để công trường sử dụng đúng bản vẽ mới nhất. Sao lưu, nén file và ghi nhật ký thao tác chi tiết.</td></tr>
+      <tr><td><span class="agent-name">Tiếp nhận Thông tin Hiện trường</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tiếp nhận &amp; phân loại yêu cầu kỹ thuật (RFI)</div></td><td>Nhận tin nhắn hoặc ghi âm từ hiện trường qua Zalo, chuyển thành văn bản và gắn thẻ đúng kỹ sư chuyên môn tại văn phòng. Theo dõi thời gian phản hồi, nhắc nhở nếu yêu cầu xử lý sự cố bị quá hạn hoặc trôi tin.</td></tr>
+      <tr><td><span class="agent-name">Soạn thảo Biên bản &amp; Hồ sơ Ban hành</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Soạn thảo biên bản họp &amp; hồ sơ ban hành</div></td><td>Chuyển ghi âm cuộc họp thành văn bản, lọc bỏ nội dung ngoài lề để trích xuất các quyết định kỹ thuật và thời hạn hoàn thành vào biên bản mẫu. Hỗ trợ lập tờ trình ban hành và hồ sơ bàn giao (Handover).</td></tr>
+      <tr><td><span class="agent-name">Quản lý Tiến độ Thiết kế</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Theo dõi deadline và nhắc việc</div></td><td>Đối soát lịch nộp hồ sơ thiết kế với tiến độ tổng thể của Group để phân loại công việc thành: đã xong, sắp đến hạn hoặc trễ hạn. Mỗi sáng gửi báo cáo tóm tắt cho lãnh đạo và nhắc riêng từng kỹ sư.</td></tr>
+    </tbody>
+  </table>
+
+  <span class="tag-cat">4. ĐIỀU HÀNH THI CÔNG VÀ QUẢN TRỊ HIỆN TRƯỜNG</span>
+  <table>
+    <thead><tr><th style="width:42%">Nội dung công việc</th><th>Chi tiết công việc</th></tr></thead>
+    <tbody>
+      <tr><td><span class="agent-name">Nhật ký Thi công Điện tử</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tổng hợp nhật ký và báo cáo tiến độ qua Zalo</div></td><td>Bóc tách thông tin từ tin nhắn thoại hoặc ảnh chụp nhật ký giấy để cập nhật khối lượng đào đắp, bê tông vào hệ thống quản lý. Kiểm tra tính logic của dữ liệu và gửi báo cáo tình trạng dự án hàng ngày cho Ban Lãnh đạo.</td></tr>
+      <tr><td><span class="agent-name">Giám sát An toàn qua Camera</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Giám sát ATLĐ và cảnh báo vi phạm</div></td><td>Kết nối với camera công trường để phát hiện vi phạm như không đội mũ bảo hiểm, không thắt dây an toàn hoặc đi vào vùng nguy hiểm. Thông báo kèm hình ảnh được gửi qua Zalo cho cán bộ an toàn.</td></tr>
+      <tr><td><span class="agent-name">Quản lý Vật tư &amp; Logistics</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Điều phối vật tư xuyên biên giới</div></td><td>Theo dõi tồn kho vật liệu chiến lược (thép, xi măng, thuốc nổ) và nhắc nhở khi mức dự trữ xuống thấp. Dự báo tốc độ tiêu thụ, tính toán thời gian vận chuyển/thông quan và soạn đơn đặt hàng.</td></tr>
+      <tr><td><span class="agent-name">Giám sát Rủi ro Thuỷ văn</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Cảnh báo sớm thuỷ văn và thiên tai thi công</div></td><td>Theo dõi mực nước trạm thượng nguồn và dự báo thời tiết vùng Mekong để cảnh báo lũ quét. Tính toán thời gian nước lũ về hiện trường và gửi thông báo khẩn cấp đa kênh (Zalo, SMS, thiết bị đeo).</td></tr>
+      <tr><td><span class="agent-name">Số hoá Hồ sơ Nghiệm thu</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Số hoá biên bản nghiệm thu</div></td><td>Số hoá và phân loại hàng nghìn biên bản nghiệm thu từ ảnh chụp. Kiểm tra tính đầy đủ của bộ hồ sơ hoàn công, nhận diện ngày ký/hạng mục và sắp xếp vào cây thư mục trên máy chủ.</td></tr>
+      <tr><td><span class="agent-name">Dự báo Rủi ro Tiến độ</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Phân tích rủi ro tiến độ và dự báo chậm trễ</div></td><td>Tổng hợp dữ liệu thời tiết, tốc độ thi công và hồ sơ tồn đọng để cảnh báo nguy cơ chậm các Milestone. Mô phỏng đường găng dự án, đề xuất tăng cường nhân lực để bù đắp tiến độ.</td></tr>
+      <tr><td><span class="agent-name">Giám sát Định mức &amp; Ngân sách</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Cảnh báo vượt ngân sách và chênh lệch định mức</div></td><td>Đối soát khối lượng thực tế với dự toán BOQ để xác định chênh lệch về thuốc nổ, bê tông, sắt thép khi sai lệch &gt; 5%. Phân tích nguyên nhân (do địa chất hay chủ quan) và dự báo tổng chi phí hoàn thành gói thầu.</td></tr>
+      <tr><td><span class="agent-name">Quản lý Hiệu suất Máy thi công</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Theo dõi vận hành thiết bị thi công</div></td><td>Theo dõi tình trạng và giờ làm việc của máy xúc, máy ủi để xác định trường hợp máy chạy không tải gây tiêu hao nhiên liệu. Tính toán số lượng xe máy phù hợp cho từng mũi thi công, lập lịch bảo trì dự phòng.</td></tr>
+      <tr><td><span class="agent-name">Điều phối Họp Giao ban</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Điều phối và tóm tắt họp công trường</div></td><td>Ghi âm cuộc họp giao ban, tóm tắt quyết định và chuyển thành danh sách đầu việc có hạn chót gửi vào Zalo từng người. Theo dõi phản hồi, nhắc nhở định kỳ.</td></tr>
+      <tr><td><span class="agent-name">Phân tích Chỉ số Rủi ro Tổng hợp</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Bản đồ rủi ro hiện trường và Risk Score</div></td><td>Hợp nhất dữ liệu an toàn, thời tiết, vật tư và tiến độ để chấm Điểm rủi ro cho từng dự án. Hiển thị biểu đồ nhiệt (Heat Map) cho lãnh đạo xem các dự án/mũi thi công có mức rủi ro cao.</td></tr>
+      <tr><td><span class="agent-name">Đo khối lượng bằng Drone</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Đối soát địa hình và khối lượng qua hình ảnh Drone</div></td><td>Sử dụng dữ liệu từ thiết bị bay để dựng mô hình 3D hiện trường và chồng lên bản vẽ thiết kế để tính khối lượng đào đắp thực tế. Phát hiện vị trí đào sai cao trình, vết nứt địa tầng.</td></tr>
+    </tbody>
+  </table>
+
+  <span class="tag-cat">5. VẬN HÀNH KHAI THÁC VÀ BẢO TRÌ NHÀ MÁY</span>
+  <table>
+    <thead><tr><th style="width:42%">Nội dung công việc</th><th>Chi tiết công việc</th></tr></thead>
+    <tbody>
+      <tr><td><span class="agent-name">Giám sát Vận hành SCADA</span><span class="tested">đã test demo</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tích hợp SCADA và giám sát tổ máy qua Zalo</div></td><td>Kết nối với hệ thống điều khiển trung tâm để cung cấp thông số công suất, nhiệt độ, áp lực tổ máy trên điện thoại. Chuyển dữ liệu máy móc thành báo cáo dạng văn bản, gửi biểu đồ vận hành và cảnh báo khi thông số vượt ngưỡng quy định.</td></tr>
+      <tr><td><span class="agent-name">Bảo trì Dự báo (PdM)</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Phân tích xu hướng và dự báo hỏng hóc sớm</div></td><td>Phân tích phổ rung động và nhiệt độ để xác định các dấu hiệu bất thường của thiết bị (mòn bạc lót, va chạm cơ khí) trước khi xảy ra sự cố. Tính tuổi thọ còn lại (RUL) và đề xuất lịch bảo trì theo tình trạng thực tế.</td></tr>
+      <tr><td><span class="agent-name">Báo cáo An toàn Đập</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Báo cáo an toàn đập và hồ chứa</div></td><td>Tổng hợp số liệu quan trắc độ thấm, mực nước để lập các bản báo cáo định kỳ gửi cơ quan chức năng theo Nghị định 114. Nhắc lịch, điền số liệu vào biểu mẫu chuẩn, cảnh báo nếu thông số vượt giới hạn thiết kế.</td></tr>
+      <tr><td><span class="agent-name">Tối ưu Sản lượng &amp; Doanh thu</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tối ưu điều tiết hồ chứa và thị trường điện</div></td><td>Theo dõi lượng mưa thượng nguồn Lào và nhu cầu điện tại Việt Nam để đề xuất thời điểm tích nước hoặc phát máy bán điện. Chạy nhiều phép thử để tối ưu lưu lượng xả, đảm bảo doanh thu mà vẫn an toàn hạ du và không dưới mực nước chết.</td></tr>
+      <tr><td><span class="agent-name">Báo cáo Vận hành Hàng ngày</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Nhật ký vận hành và cảnh báo sự cố</div></td><td>Tổng hợp báo cáo sản lượng 8h sáng hàng ngày và phát cảnh báo khẩn khi có sự cố dừng máy. Truy xuất dữ liệu lịch sử để đề xuất cách xử lý lỗi dựa trên các trường hợp tương tự trong quá khứ.</td></tr>
+      <tr><td><span class="agent-name">Đối soát Hiệu suất Đa nhà máy</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Đối soát hiệu suất cấp Group</div></td><td>Thu thập dữ liệu từ tất cả nhà máy để so sánh hiệu suất phát điện, tỷ lệ dừng máy sự cố và chi phí vận hành trên mỗi kWh. Xác định các đơn vị vận hành có hiệu suất thấp hoặc lượng nước xả lãng phí, chỉ ra nguyên nhân gốc rễ.</td></tr>
+      <tr><td><span class="agent-name">Đánh giá Tình trạng Tài sản</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Chấm điểm tình trạng tài sản tổng thể</div></td><td>Tổng hợp các chỉ số độ rung, nhiệt độ và lịch sử hỏng hóc để chấm chỉ số tình trạng (Asset Health Index) cho từng tổ máy. Lãnh đạo dùng chỉ số này để đánh giá tình trạng máy và ra quyết định đầu tư sửa chữa cho các thiết bị có rủi ro cao.</td></tr>
+      <tr><td><span class="agent-name">Báo cáo Carbon &amp; ESG</span><div style="margin-top:6px;color:#555;font-size:12.5px;font-style:italic">Tính tín chỉ carbon và báo cáo ESG</div></td><td>Quy đổi sản lượng điện sạch sang lượng CO₂ giảm thiểu và lập báo cáo ESG theo tiêu chuẩn quốc tế của World Bank. Hỗ trợ Group tiếp cận các quỹ đầu tư quốc tế và ước tính số lượng tín chỉ carbon có thể bán.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- =================== MENU 4 =================== -->
+<section id="m4" class="panel">
+
+  <div class="conclusion">
+    <strong>Kết luận.</strong> Nếu được ví AI Agent system OpenClaw là gì, thì có thể ví việc dùng AI chatbot sang dùng OpenClaw
+    <span class="big-red">GIỐNG NHƯ ĐANG DÙNG MS-DOS CHUYỂN QUA DÙNG WIN95 BẢN BETA MÀN HÌNH XANH LÈ CHẾT CHÓC</span>
+    Thà quay về dùng NC ổn định hiệu quả còn sung sướng hơn.
+  </div>
+
+  <div style="background:linear-gradient(135deg,var(--orange) 0%,#ff8c42 100%);color:var(--white);padding:28px 32px;margin:0 0 24px;border-radius:6px;border-left:8px solid #cc4f00;box-shadow:0 6px 18px rgba(255,107,26,.35);font-size:22px;font-weight:800;line-height:1.45;text-transform:uppercase;letter-spacing:.3px;text-align:center">
+    ➤ Trong tháng này nghiên cứu thêm <span style="background:var(--white);color:var(--orange);padding:2px 10px;border-radius:4px;display:inline-block;margin:2px 0">Claude Code – Cowork</span> và <span style="background:var(--white);color:var(--orange);padding:2px 10px;border-radius:4px;display:inline-block;margin:2px 0">n8n</span> để việc áp dụng AI Agent cho doanh nghiệp đạt mức độ khả thi và an toàn hơn.
+  </div>
+
+  <table class="m4-table">
+    <thead>
+      <tr><th>Vấn đề phân tích</th><th>Đánh giá vấn đề</th><th>Kết luận</th></tr>
+    </thead>
+    <tbody>
+
+      <tr class="group-row"><td colspan="3">1. HIỆU QUẢ KỸ THUẬT</td></tr>
+
+      <tr>
+        <td><strong>1.1 Độ chính xác &amp; Tin cậy:</strong> Tỷ lệ "ảo tưởng" (hallucination) và độ chính xác khi xử lý hồ sơ pháp lý, kỹ thuật chuyên sâu. Khả năng dẫn nguồn chính xác để đối soát.</td>
+        <td>Ảo tưởng vẫn là "bản chất" của mô hình; AI thường xuyên bịa đặt, lỗi cú pháp hoặc dẫn nguồn không tồn tại trong tài liệu. Mới dùng thấy hay ho, dùng lâu sẽ phát điên với nó.</td>
+        <td><span class="verdict v-no">Chưa thể áp dụng</span></td>
+      </tr>
+
+      <tr>
+        <td><strong>1.2 Hiệu suất &amp; Ngoại lệ:</strong> Tốc độ phản hồi và khả năng xử lý khi gặp dữ liệu lỗi, thiếu thông tin hoặc yêu cầu mơ hồ.</td>
+        <td>Cơ chế này giúp AI tự sửa lỗi tốt khi gặp sự cố trình duyệt, nhưng cực kỳ dễ rơi vào "vòng lặp suy luận" vô tận và cái đùng tốn hàng ngàn USD sau một ngày. Tuy nhiên, vấn đề này có thể chặn được bằng kỹ thuật.</td>
+        <td><span class="verdict v-warn">Phải cân nhắc khi áp dụng</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="3">2. ROI, NGUỒN LỰC &amp; CẠNH TRANH</td></tr>
+
+      <tr>
+        <td><strong>2.1 Hiệu quả kinh tế &amp; Lợi thế:</strong> Khả năng giảm tải giờ làm việc so với chi phí vận hành API/Token. Tốc độ phản hồi thầu và dự báo rủi ro tạo lợi thế.</td>
+        <td>Tiềm năng giảm chi phí cho các tác vụ lặp lại rất cao, nhưng chi phí API có thể cao gấp 100–1000 lần chatbot thông thường. Nó là máy nuốt tiền nếu vận dụng mô hình trả tiền không hiệu quả cho tác vụ đơn giản. Với mô hình LLM thông minh thì giá cắt cổ, còn mô hình SLM thì còn rất nhiều nghi ngờ.</td>
+        <td><span class="verdict v-no">Chưa thể áp dụng</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="3">3. TÍCH HỢP &amp; MỞ RỘNG</td></tr>
+
+      <tr>
+        <td><strong>3.1 Tính tương thích hệ thống:</strong> Khả năng kết nối giữa OpenClaw với Zalo, Drive và thực thi lệnh trực tiếp trên máy chủ (Shell Commands).</td>
+        <td>Tích hợp Zalo... là điểm sáng lớn nhất tại Việt Nam vì tính tiện dụng. Tuy nhiên, thực thi lệnh Shell trực tiếp bị coi là thảm hoạ nếu không được cô lập tuyệt đối trong môi trường Docker.</td>
+        <td><span class="verdict v-warn">Phải cân nhắc khi áp dụng</span></td>
+      </tr>
+
+      <tr>
+        <td><strong>3.2 Quản lý tri thức (RAG):</strong> Hiệu quả truy xuất dữ liệu từ kho tri thức cũ thông qua Đồ thị tri thức (Knowledge Graph).</td>
+        <td>Mảng này là tốt; con người có thể trực tiếp mở file để sửa "bộ nhớ" của AI thay vì đối mặt với các "hộp đen" dữ liệu vector truyền thống.</td>
+        <td><span class="verdict v-ok">Đã áp dụng được</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="3">4. AN TOÀN &amp; QUẢN TRỊ</td></tr>
+
+      <tr>
+        <td><strong>4.1 Hacker &amp; Rò rỉ dữ liệu:</strong> Nguy cơ bị tấn công mạng và rủi ro rò rỉ thông tin nội bộ khi tương tác với LLM bên ngoài.</td>
+        <td>Bị cộng đồng an ninh coi là "cơn ác mộng bảo mật"; khoảng 15% kỹ năng (skills) từ cộng đồng chứa mã độc hoặc chỉ thị ngầm để đánh cắp khoá API và dữ liệu doanh nghiệp.</td>
+        <td><span class="verdict v-no">Quá tệ chưa thể áp dụng</span></td>
+      </tr>
+
+      <tr>
+        <td><strong>4.2 Cơ chế kiểm soát:</strong> Tính hiệu quả của quy trình "Human-in-the-loop" (Con người phê duyệt) đối với các hành động nhạy cảm.</td>
+        <td>Quy trình phê duyệt dễ bị tê liệt bởi tình trạng "mệt mỏi vì phê duyệt" (approval fatigue), dẫn đến việc nhân sự bấm "Đồng ý" hàng loạt mà không thực sự kiểm soát được các hành động nguy hiểm của AI. Việc OK liên tục thành ra biến mình thành kẻ vô tri rất nhanh.</td>
+        <td><span class="verdict v-warn">Phải cân nhắc khi áp dụng</span></td>
+      </tr>
+
+      <tr class="group-row"><td colspan="3">5. VĂN HOÁ SỐ &amp; VẬN HÀNH</td></tr>
+
+      <tr>
+        <td><strong>5.1 Trải nghiệm &amp; Chấp nhận:</strong> Mức độ thân thiện của giao diện Zalo đối với nhân sự và tâm lý sẵn sàng phối hợp của tổ chức.</td>
+        <td>Giao diện Zalo giúp giảm rào cản tiếp cận nhờ sự quen thuộc.</td>
+        <td><span class="verdict v-good">Áp dụng tốt ở thực tại</span></td>
+      </tr>
+
+      <tr>
+        <td><strong>5.2 Bảo trì &amp; Cập nhật:</strong> Công sức bảo trì prompt, cập nhật biểu mẫu (Template) và điều chỉnh logic khi quy trình thay đổi.</td>
+        <td>Không phải giải pháp "cài một lần là xong"; đòi hỏi trình độ kỹ thuật cao để bảo trì liên tục và xử lý tình trạng "trôi dạt chỉ thị" (instruction drift) khi các mô hình LLM nền tảng cập nhật phiên bản mới.</td>
+        <td><span class="verdict v-warn">Phải cân nhắc khi áp dụng</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+
+<script>
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>

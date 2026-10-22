@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Shoes Bình Phú — Hệ thống Báo cáo KPI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --brand:#0065B3; --brand-dk:#004C87; --navy:#003862; --navy-2:#0A4E85;
+  --sky:#3E93D6; --sky-lt:#8FBFE4; --orange:#E4622B; --orange-lt:#F3A97F;
+  --green:#1F8A5B; --red:#C93A2E; --gray:#69798A; --ink:#16242F;
+  --bg:#F3F6F9; --card:#FFFFFF; --line:#DFE7EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;-webkit-font-smoothing:antialiased}
+#app{display:flex;min-height:100vh}
+
+aside{width:250px;background:var(--navy);color:#D2E2EE;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{padding:18px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand .cust{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.brand .cust .logo{width:46px;height:46px;flex-shrink:0;background:#fff;border-radius:9px;padding:4px;display:flex;align-items:center;justify-content:center}
+.brand .cust .logo img{width:100%;height:100%;object-fit:contain;display:block}
+.brand .cust .nm{min-width:0}
+.brand .cust .nm b{display:block;font-size:13.5px;font-weight:700;color:#fff;line-height:1.3;letter-spacing:.2px}
+.brand .cust .nm span{display:block;font-size:9.5px;color:#8CADC5;margin-top:3px;text-transform:uppercase;letter-spacing:.8px}
+.brand h1{font-size:14.5px;font-weight:700;color:#fff;letter-spacing:.3px;line-height:1.4}
+.brand p{font-size:10px;color:#8CADC5;margin-top:9px;text-transform:uppercase;letter-spacing:.85px;line-height:1.6}
+nav{padding:14px 10px}
+nav a{display:block;padding:11px 13px;margin-bottom:4px;border-radius:7px;color:#BED4E3;text-decoration:none;font-size:12.5px;font-weight:500;cursor:pointer;transition:.15s;line-height:1.4}
+nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+nav a.active{background:var(--brand);color:#fff;font-weight:600}
+nav .grp{font-size:9.5px;color:#7796AC;text-transform:uppercase;letter-spacing:1px;padding:14px 13px 7px;font-weight:600}
+.side-note{margin:12px;padding:12px;background:rgba(255,255,255,.05);border-radius:8px;font-size:10.5px;color:#96B2C6;line-height:1.65}
+
+main{flex:1;min-width:0}
+.topbar{background:#fff;border-bottom:1px solid var(--line);padding:15px 26px;position:sticky;top:0;z-index:20}
+.topbar-row{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.topbar h2{font-size:19px;font-weight:700;color:var(--navy)}
+.topbar .sub{font-size:11.5px;color:var(--gray);margin-top:4px}
+.filters{display:flex;gap:13px;align-items:flex-end;flex-wrap:wrap}
+.fl{display:flex;flex-direction:column;gap:5px}
+.fl label{font-size:9.5px;font-weight:600;color:var(--gray);text-transform:uppercase;letter-spacing:.6px}
+.fl select{border:1px solid var(--line);border-radius:7px;padding:7px 11px;font-size:12px;font-family:inherit;background:#fff;color:var(--ink);min-width:150px;cursor:pointer;font-weight:500}
+.fl select:focus{outline:none;border-color:var(--brand)}
+.seg{display:flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:7px 14px;font-size:12px;font-family:inherit;font-weight:500;cursor:pointer;color:var(--gray)}
+.seg button.on{background:var(--brand);color:#fff;font-weight:600}
+
+.wrap{padding:20px 26px 44px}
+.page{display:none}.page.show{display:block}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:1fr 1fr}
+.g21{grid-template-columns:1.3fr 1fr}
+@media(max-width:1280px){.g4{grid-template-columns:repeat(2,1fr)}.g2,.g21{grid-template-columns:1fr}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.card h3{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px}
+.card .cs{font-size:10.5px;color:var(--gray);margin-bottom:12px;line-height:1.55}
+.card .rd{font-size:11px;color:var(--brand);background:#EAF3FA;border-radius:6px;padding:7px 10px;margin-top:11px;line-height:1.55}
+.card .rd b{color:var(--navy-2)}
+
+.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:15px 17px;display:flex;flex-direction:column}
+.stat .lb{flex:none;font-size:9.5px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.75px;line-height:1.45}
+.stat .bd{flex:1;display:flex;align-items:center}
+.stat .vl{font-size:34px;font-weight:700;color:var(--navy);letter-spacing:-1px;line-height:1.1;padding:10px 0 4px}
+.stat .vl small{font-size:15px;font-weight:600;color:var(--gray);letter-spacing:0}
+.stat .ft{display:flex;margin-top:auto;padding-top:11px;border-top:1px solid var(--line)}
+.stat .ft>div{flex:1;min-width:0}
+.stat .ft>div+div{border-left:1px solid var(--line);padding-left:13px;margin-left:13px}
+.stat .ft span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--gray);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .ft b{display:block;font-size:15px;font-weight:700;color:var(--navy);margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.2}
+.up{color:var(--green)}.dn{color:var(--red)}.mut{color:var(--gray)}
+.stat.hl{background:var(--navy);border-color:var(--navy)}
+.stat.hl .lb{color:#8FB0C7}.stat.hl .vl{color:#fff}.stat.hl .vl small{color:#8FB0C7}
+.stat.hl .ft{border-top-color:rgba(255,255,255,.2)}
+.stat.hl .ft>div+div{border-left-color:rgba(255,255,255,.2)}
+.stat.hl .ft span{color:#8FB0C7}.stat.hl .ft b{color:#fff}
+.stat.gg-card{padding:15px 13px 13px}
+.stat.gg-card .bd{justify-content:center;padding:2px 0}
+.gg{width:100%;max-width:216px;display:block;margin:0 auto}
+
+
+.cw{position:relative;height:272px}
+.cw.sm{height:230px}
+.cw.lg{height:320px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#EDF3F8;color:var(--navy);font-weight:600;text-align:left;padding:9px 10px;border-bottom:2px solid var(--line);font-size:10px;text-transform:uppercase;letter-spacing:.45px;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #EFF3F7;vertical-align:top;line-height:1.5}
+tbody tr:hover{background:#F7FAFC}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tfoot td{font-weight:700;background:#EDF3F8;color:var(--navy);border-top:2px solid var(--line);border-bottom:0}
+.pill{display:inline-block;padding:2.5px 9px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.p-ok{background:#E1F1E9;color:var(--green)}
+.p-wn{background:#FCEDE4;color:#B4501F}
+.p-bd{background:#FAE5E3;color:var(--red)}
+.p-nu{background:#EDF1F5;color:var(--gray)}
+.p-bl{background:#E3EFF9;color:var(--brand)}
+.bar{height:6px;background:#EDF1F5;border-radius:4px;overflow:hidden;min-width:66px;margin-top:5px}
+.bar i{display:block;height:100%;border-radius:4px}
+
+.heatt{width:100%;border-collapse:separate;border-spacing:2px}
+.heatt th{background:#EDF3F8;border-bottom:0;border-radius:5px;padding:7px 8px;text-align:left}
+.heatt th.num{text-align:center}
+.heatt .thw{font-size:9px;font-weight:500;color:var(--gray);letter-spacing:0;text-transform:none;margin-top:2px}
+.heatt td{border-bottom:0;padding:8px 9px;background:#FAFCFD;border-radius:5px}
+.heatt td.hc{text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.heatt tbody tr:hover td{outline:1px solid #C9DCEA}
+.heatt tbody tr.sel td{outline:2px solid var(--brand)}
+.heatt tfoot td{background:#EDF3F8;border-top:0;font-weight:600}
+.heatt tfoot td.num{text-align:center}
+.hleg{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:10.5px;color:var(--gray)}
+.hleg span{font-weight:600}
+.hleg em{font-style:normal;display:inline-flex;align-items:center;gap:4px}
+.hleg em i{width:14px;height:10px;border-radius:3px;display:inline-block}
+.hleg b{margin-left:auto;font-weight:500;color:#9AABB8}
+
+tr.clk{cursor:pointer}
+tr.clk:hover td{background:#EFF5FA}
+.cr{display:inline-block;width:11px;color:var(--brand);font-size:10px}
+tr.drow{display:none}
+tr.drow.open{display:table-row}
+tr.drow>td{background:#F7FAFC;padding:0}
+tr.chr{display:none}
+tr.chr.open{display:table-row}
+tr.chr>td{background:#F7FAFC;font-size:11.5px;border-bottom:1px solid #E6EDF3}
+tr.chr:hover>td{background:#EFF5FA}
+.ind{display:inline-block;width:16px;border-left:2px solid #B6CDDF;height:11px;margin-right:6px;vertical-align:-1px}
+.sm{font-size:10.5px;color:var(--gray);margin-top:3px;line-height:1.45}
+.dwrap{padding:12px 14px}
+.dhead{font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:9px}
+.dhead em{display:block;font-style:normal;font-size:10.5px;font-weight:500;color:var(--gray);margin-top:3px}
+.heatt tr.dchr{display:none}
+.heatt tr.dchr.open{display:table-row}
+.heatt tr.dchr td{font-size:11px;padding:5px 8px}
+.heatt tr.dchr td.hc{font-weight:500}
+.heatt tr.dchr:hover td{outline:1px solid #C9DCEA}
+.note{background:#FDF3EE;border:1px solid #F5D9C7;border-radius:9px;padding:13px 15px;font-size:12px;line-height:1.65;color:#7A4326}
+.note b{color:#5B2F16}
+.note.info{background:#EAF3FA;border-color:#CCE1F1;color:#1F4E71}
+.note.info b{color:#003862}
+.mb14{margin-bottom:14px}.mt14{margin-top:14px}
+.footer{margin-top:24px;padding-top:14px;border-top:1px solid var(--line);font-size:10.5px;color:var(--gray);line-height:1.6}
+</style>
+</head>
+<body>
+<div id="app">
+<aside>
+  <div class="brand">
+    <div class="cust">
+      <div class="logo"><img src="data:image/png;base64,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" alt="New Shoes Bình Phú"></div>
+      <div class="nm"><b>New Shoes Bình Phú</b><span>Khách hàng</span></div>
+    </div>
+    <h1>HỆ THỐNG BÁO CÁO KPI</h1>
+    <p>Bản demo — Base.vn Data Service</p>
+  </div>
+  <nav>
+    <div class="grp">Báo cáo</div>
+    <a data-p="p1" class="active">Tổng quan KPI công ty</a>
+    <a data-p="p2">Phòng Định mức — BOM</a>
+    <a data-p="p3">Phòng Kỹ thuật — DEV/COM</a>
+  </nav>
+  <div class="side-note">
+    Toàn bộ chỉ số, trọng số và mục tiêu lấy đúng theo hai bảng KPI đã nhận. Chuỗi dữ liệu theo tháng và danh sách nhân sự là số mô phỏng để minh hoạ cách hệ thống vận hành.
+  </div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div class="topbar-row">
+      <div>
+        <h2 id="ttl">Tổng quan KPI công ty</h2>
+        <div class="sub" id="sub"></div>
+      </div>
+      <div class="filters">
+        <div class="fl"><label>Kỳ đánh giá</label><select id="fMonth"></select></div>
+        <div class="fl"><label>Cách tính</label>
+          <div class="seg"><button id="bM" class="on">Trong tháng</button><button id="bY">Luỹ kế</button></div>
+        </div>
+        <div class="fl" id="fdWrap"><label>Phòng ban</label>
+          <select id="fDept">
+            <option value="all">Cả hai phòng</option>
+            <option value="DM">Phòng Định mức — BOM</option>
+            <option value="KT">Phòng Kỹ thuật — DEV/COM</option>
+          </select>
+        </div>
+        <div class="fl" id="feWrap"><label>Nhân viên</label><select id="fEmp"></select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+  <!-- ===== P1 ===== -->
+  <section class="page show" id="p1">
+    <div class="grid g4 mb14" id="p1stats"></div>
+
+    <div class="grid g21 mb14">
+      <div class="card">
+        <h3>Điểm công ty hụt ở phòng nào</h3>
+        <div class="cs">Bắt đầu từ mốc chuẩn 100 điểm, trừ dần phần điểm mỗi phòng làm hụt. Điểm công ty là bình quân điểm hai phòng.</div>
+        <div class="cw"><canvas id="c1a"></canvas></div>
+        <div class="rd" id="r1a"></div>
+      </div>
+      <div class="card">
+        <h3>Điểm trung bình công ty theo tháng</h3>
+        <div class="cs">Bình quân điểm hai phòng qua từng tháng. Vạch đứt là ngưỡng Đạt 95 điểm.</div>
+        <div class="cw"><canvas id="c1c"></canvas></div>
+        <div class="rd" id="r1c"></div>
+      </div>
+    </div>
+
+    <div class="card mb14">
+      <h3>Toàn bộ chỉ số của hai phòng xếp theo điểm</h3>
+      <div class="cs">Mười hai chỉ số có trọng số của cả hai bảng KPI, gom theo từng phòng và xếp từ thấp đến cao trong mỗi nhóm. Vạch đứt là ngưỡng Đạt 95.</div>
+      <div class="cw lg"><canvas id="c1b"></canvas></div>
+      <div class="rd" id="r1b"></div>
+    </div>
+
+    <div class="card">
+      <h3>So sánh hai phòng</h3>
+      <div class="cs">Điểm đã chuẩn hoá về thang 100 nên so sánh trực tiếp được, dù tổng trọng số hai bảng khác nhau. Bấm vào tên phòng để mở drill-down xuống từng chỉ số, dùng đúng các cột của bảng này.</div>
+      <table>
+        <thead><tr id="p1th"></tr></thead>
+        <tbody id="p1tb"></tbody>
+        <tfoot id="p1tf"></tfoot>
+      </table>
+    </div>
+    <div class="note mt14"><b>Lưu ý khi đọc số:</b> Tổng trọng số bảng Phòng Kỹ thuật chỉ đạt 90% (20+20+15+15+10+10), thiếu 10% chưa phân bổ cho hai hạng mục ghi chú, trong khi bảng Phòng Định mức tròn 100%. Điểm hai phòng đã được chuẩn hoá về thang 100 để so sánh được, nhưng cần chốt lại trọng số trước khi vận hành chính thức. Trọng số giữa hai phòng cũng chưa được đặt nên điểm công ty đang lấy bình quân đơn giản.</div>
+  </section>
+
+  <!-- ===== P2 ===== -->
+  <section class="page" id="p2">
+    <div class="grid g4 mb14" id="p2stats"></div>
+
+    <div class="grid g2 mb14">
+      <div class="card">
+        <h3>Điểm trung bình phòng theo tháng</h3>
+        <div class="cs">Điểm phòng qua từng tháng. Khi chọn một nhân viên ở bộ lọc, đường cam là điểm của người đó đặt cạnh đường xám của phòng.</div>
+        <div class="cw"><canvas id="c2d"></canvas></div>
+        <div class="rd" id="r2d"></div>
+      </div>
+      <div class="card">
+        <h3>Chỉ số nào kéo điểm phòng xuống</h3>
+        <div class="cs">Từ mốc chuẩn 100 điểm, mỗi cột đỏ là phần điểm một chỉ số làm hụt sau khi nhân trọng số.</div>
+        <div class="cw"><canvas id="c2a"></canvas></div>
+        <div class="rd" id="r2a"></div>
+      </div>
+    </div>
+
+    <div class="card mb14">
+      <h3>Ma trận ưu tiên chỉ số</h3>
+      <div class="cs">Trục ngang là trọng số, trục dọc là điểm. Chỉ số nằm ở góc dưới bên phải là nguy hiểm nhất: trọng số lớn nhưng điểm thấp. Bong bóng càng to càng làm hụt nhiều điểm.</div>
+      <div class="cw lg"><canvas id="c2b"></canvas></div>
+      <div class="rd" id="r2b"></div>
+    </div>
+
+    <div class="card">
+      <h3>Ma trận điểm theo nhân viên</h3>
+      <div class="cs">Điểm từng nhân viên trên từng chỉ số, tô màu theo mức đạt. Bình quân các nhân viên đúng bằng điểm chỉ số của phòng. Bấm vào một dòng để mở drill-down xuống từng ngày trong tháng, mỗi ngày một dòng dùng đúng các cột của bảng này.</div>
+      <div id="heat2"></div>
+    </div>
+    <div class="note mt14"><b>Phát hiện khi rà bảng gốc:</b> Bảng Phòng Định mức chưa điền mục tiêu chi tiết theo quý (cột Quý 1 đến Quý 4 để trống) trong khi bảng Phòng Kỹ thuật đã có, nên hai phòng chưa cùng nhịp theo dõi. Toán tử mục tiêu cũng chưa nhất quán — chỉ số 1 ghi &gt;99,5% nhưng thực tế đang đúng 99,50%, về mặt kỹ thuật là chưa vượt ngưỡng. Chi tiết từng chỉ số nằm ở drill-down của bảng So sánh hai phòng, trang Tổng quan.</div>
+  </section>
+
+  <!-- ===== P3 ===== -->
+  <section class="page" id="p3">
+    <div class="grid g4 mb14" id="p3stats"></div>
+
+    <div class="grid g2 mb14">
+      <div class="card">
+        <h3>Điểm trung bình phòng theo tháng</h3>
+        <div class="cs">Điểm phòng qua từng tháng. Khi chọn một nhân viên ở bộ lọc, đường cam là điểm của người đó đặt cạnh đường xám của phòng.</div>
+        <div class="cw"><canvas id="c3d"></canvas></div>
+        <div class="rd" id="r3d"></div>
+      </div>
+      <div class="card">
+        <h3>Chỉ số nào kéo điểm phòng xuống</h3>
+        <div class="cs">Từ mốc chuẩn 100 điểm, mỗi cột đỏ là phần điểm một chỉ số làm hụt sau khi nhân trọng số. Chỉ số K3 là chỉ số đảo chiều, điểm tính bằng Mục tiêu chia Thực tế.</div>
+        <div class="cw"><canvas id="c3a"></canvas></div>
+        <div class="rd" id="r3a"></div>
+      </div>
+    </div>
+
+    <div class="card mb14">
+      <h3>Ma trận ưu tiên chỉ số</h3>
+      <div class="cs">Trục ngang là trọng số, trục dọc là điểm. Chỉ số nằm ở góc dưới bên phải là nguy hiểm nhất: trọng số lớn nhưng điểm thấp. Bong bóng càng to càng làm hụt nhiều điểm.</div>
+      <div class="cw lg"><canvas id="c3b"></canvas></div>
+      <div class="rd" id="r3b"></div>
+    </div>
+
+    <div class="card">
+      <h3>Ma trận điểm theo nhân viên</h3>
+      <div class="cs">Điểm từng nhân viên trên từng chỉ số, tô màu theo mức đạt. Bình quân các nhân viên đúng bằng điểm chỉ số của phòng. Bấm vào một dòng để mở drill-down xuống từng ngày trong tháng, mỗi ngày một dòng dùng đúng các cột của bảng này.</div>
+      <div id="heat3"></div>
+    </div>
+    <div class="note mt14"><b>Cảnh báo cấu trúc:</b> Tổng trọng số sáu chỉ số của Phòng Kỹ thuật bằng 90%, không phải 100% như dòng Tổng trong file gốc. Hai hạng mục "Tối ưu hóa Chi phí (80)" và "Sản phẩm trước khi đưa vào sản xuất hàng loạt có đầy đủ Tech-pack, PFC, Technical Guide và Color Swatches (100)" đang không có trọng số nên không vào điểm. Chi tiết từng chỉ số nằm ở drill-down của bảng So sánh hai phòng, trang Tổng quan.</div>
+  </section>
+
+  <div class="footer">
+    Bản demo xây dựng cho New Shoes Bình Phú, phục vụ trao đổi phương án, thực hiện bởi Base.vn Data Service. Chỉ số, trọng số và mục tiêu trích đúng theo hai bảng KPI đã nhận; chuỗi số theo tháng, số liệu theo ngày, danh sách nhân sự và phần dự báo là dữ liệu mô phỏng.
+  </div>
+  </div>
+</main>
+</div>
+
+<script>
+var MONTHS=['T1/2026','T2/2026','T3/2026','T4/2026','T5/2026','T6/2026','T7/2026','T8/2026'];
+var KPI_BOM=[
+ {id:'B1',name:'Lập Bill nguyên vật liệu đúng và đầy đủ, chính xác',uom:'ĐƠN',w:30,target:99.5,tgtTxt:'>99,5%',dir:'up',
+  s:[98.6,98.9,99.0,99.2,99.1,99.3,99.4,99.5],src:'Base Workflow — Yêu cầu lập BOM'},
+ {id:'B2',name:'Định mức nguyên phụ liệu chính xác cho từng mã hàng',uom:'MÃ HÀNG',w:25,target:99.5,tgtTxt:'>99,5%',dir:'up',
+  s:[97.8,98.1,98.3,98.5,98.6,98.8,98.9,99.0],src:'Bravo — Bảng định mức × Base Table Audit'},
+ {id:'B3',name:'Lập Bill đúng thời gian cho các bộ phận liên quan (SX, Mua hàng, Kho..)',uom:'ĐƠN',w:25,target:99.5,tgtTxt:'≥99,5%',dir:'up',
+  s:[96.2,96.8,97.1,97.4,97.5,97.7,97.9,98.0],src:'Base Workflow — mốc thời gian từng giai đoạn'},
+ {id:'B4',name:'Đồng bộ dữ liệu trên hệ thống đầy đủ, chính xác và đúng thời gian',uom:'ĐƠN',w:5,target:100,tgtTxt:'100%',dir:'up',
+  s:[42,46,50,53,55,57,58,60],src:'Data Service — đối soát Base × Bravo'},
+ {id:'B5',name:'Cải tiến quy trình, tối ưu định mức vật tư, thời gian',uom:'LẦN',w:5,target:99,tgtTxt:'≥99%',dir:'up',
+  s:[93,94,95,95.5,96,96.4,96.7,97],src:'Base Request — Đề xuất cải tiến'},
+ {id:'B6',name:'Cung cấp chứng từ, dữ liệu cho Kế toán đúng và đủ',uom:'BỘ',w:10,target:100,tgtTxt:'100%',dir:'up',
+  s:[98.2,98.4,98.6,98.8,98.9,99.0,99.1,99.2],src:'Misa — đối chiếu chứng từ nhận'}
+];
+var KPI_KT=[
+ {id:'K1',name:'Tỷ lệ Chuyển giao đúng hạn (On-Time Handover Rate)',uom:'%',w:20,target:99,tgtTxt:'99%',dir:'up',
+  s:[88,89,91,92,93,94,94.5,95],q:[85,87,95,99],src:'Base Workflow — Phát triển mẫu'},
+ {id:'K2',name:'Giá trị Tiết kiệm Chi phí (Cost Saving / Value Engineering)',uom:'%',w:20,target:95,tgtTxt:'95%',dir:'up',
+  s:[84,85,86,87,88,89,89.5,90],q:[85,87,90,95],src:'Base Table — Hồ sơ tiết kiệm chi phí'},
+ {id:'K3',name:'Tỷ lệ Lỗi Kỹ thuật khi lên Mass (First Production Quality Yield)',uom:'%',w:15,target:7,tgtTxt:'7%',dir:'down',
+  s:[13.5,13,12.4,12,11.5,11,10.4,10],q:[10,9,8,7],src:'Base Workflow — Biên bản QC lô đầu'},
+ {id:'K4',name:'Tiến độ Tooling & Quyết toán chi phí Khuôn',uom:'%',w:15,target:98,tgtTxt:'98%',dir:'up',
+  s:[78,79,80,81,82,83,84,85],q:[88,90,95,98],src:'Base Workflow — Quản lý khuôn × Misa'},
+ {id:'K5',name:'Tỷ lệ Hoàn thiện Bộ Tài liệu Kỹ thuật & CCDC Chuẩn',uom:'%',w:10,target:100,tgtTxt:'100%',dir:'up',
+  s:[90,91,92,93,94,95,95.5,96],q:[90,92,100,100],src:'Base Workflow — Checklist gate trước Mass'},
+ {id:'K6',name:'Đạt chỉ tiêu Thời gian Chuẩn (SMV) & Độ chính xác định mức vật tư',uom:'%',w:10,target:90,tgtTxt:'90%',dir:'up',
+  s:[79,80,81,82,83,84,84.5,85],q:[85,86,88,90],src:'Base Table — Bảng SMV nhập theo mã hàng'}
+];
+var NOTE_BOM=[
+ ['Đạt ≥99,5 – 99,8% dữ liệu BOM trên hệ thống ERP/MRP chính xác hoàn toàn (đúng mã vật tư, đúng size-run, đúng màu, đúng nhà cung cấp)','Thiếu ĐVT và trọng số, trùng nội dung với chỉ số 1 và 2'],
+ ['Chênh lệch giữa định mức BOM lý thuyết và mức tiêu hao vật tư thực tế tại xưởng production ≤ 0,5 – 1,0%','Thiếu trọng số, chưa chốt mốc 0,5 hay 1,0%'],
+ ['0 sự cố dừng chuyền may/gò hoặc hủy lô hàng do lỗi sai cấu trúc BOM','Chưa có cách đếm và người xác nhận nguyên nhân gốc'],
+ ['Hoàn thành bộ BOM chuẩn trong vòng 24 – 48 giờ sau khi nhận đủ Tech-pack và Bảng màu (Colorway) đã duyệt từ R&D/Buyer','Chưa chốt 24 hay 48 giờ, thực chất là cách đo đúng của chỉ số 3'],
+ ['Tăng hiệu suất sử dụng da/vải/PU thêm X% thông qua việc phối hợp với phòng Rập (Pattern) để xếp sơ đồ rập tối ưu','X chưa xác định, chưa có kỳ gốc để so sánh'],
+ ['Tận dụng được Y% vật tư tồn kho dư thừa từ mùa cũ (dùng cho các chi tiết ẩn, mẫu thử hoặc đàm phán với Buyer để thay thế)','Y chưa xác định, chưa rõ tính theo giá trị hay số lượng'],
+ ['100% các lệnh thay đổi kỹ thuật (ECO) từ Buyer được cập nhật lên hệ thống ERP và thông báo tới Purchasing/Factory trong vòng 12 – 24 giờ','Thiếu trọng số, chưa chốt 12 hay 24 giờ']
+];
+var NOTE_KT=[
+ ['Thời gian xử lí lead-time DEV-COM (Ngày)','Dòng để trống hoàn toàn: chưa có trọng số, hiện tại và mục tiêu'],
+ ['Tối ưu hóa Chi phí — 80','Không rõ 80 là phần trăm hay điểm, trùng chỉ số Cost Saving 20%'],
+ ['Sản phẩm trước khi đưa vào sản xuất hàng loạt có đầy đủ Tech-pack, PFC quy trình cắt may/gò, hướng dẫn kỹ thuật (Technical Guide) và bảng màu chuẩn (Color Swatches) — 100','Chưa có trọng số, trùng chỉ số Bộ tài liệu kỹ thuật 10%']
+];
+var STAFF_BOM=[
+ ['Nguyễn Thị Hồng Loan','Trưởng phòng Định mức'],
+ ['Trần Minh Quân','Nhân viên Định mức'],
+ ['Lê Thị Bích Ngọc','Nhân viên Định mức'],
+ ['Phạm Văn Duy','Nhân viên lập BOM'],
+ ['Võ Thị Kim Anh','Nhân viên lập BOM']
+];
+var STAFF_KT=[
+ ['Đặng Quốc Thắng','Trưởng phòng Kỹ thuật'],
+ ['Hoàng Anh Tuấn','Kỹ sư phát triển mẫu (DEV)'],
+ ['Nguyễn Thị Thu Hà','Kỹ sư thương mại hoá (COM)'],
+ ['Bùi Tấn Phát','Kỹ sư Tooling — Khuôn'],
+ ['Trương Mỹ Linh','Kỹ sư IE — Thời gian chuẩn'],
+ ['Lý Hoàng Nam','Kỹ sư QC kỹ thuật']
+];
+function seedRand(a){return function(){a=(a*1664525+1013904223)%4294967296;return a/4294967296;};}
+function mkOffsets(nS,nK,seed){
+  var r=seedRand(seed),m=[],e,k,sum;
+  for(e=0;e<nS;e++){m.push([]);for(k=0;k<nK;k++)m[e].push((r()-0.5)*13);}
+  for(k=0;k<nK;k++){sum=0;for(e=0;e<nS;e++)sum+=m[e][k];sum/=nS;for(e=0;e<nS;e++)m[e][k]-=sum;}
+  return m;
+}
+var OFF_BOM=mkOffsets(STAFF_BOM.length,6,20260817), OFF_KT=mkOffsets(STAFF_KT.length,6,987654321);
+
+var DEPTS=[
+ {code:'DM',name:'Phòng Định mức — BOM',page:'p2',list:KPI_BOM,off:OFF_BOM,staff:STAFF_BOM,notes:NOTE_BOM,color:'#0065B3'},
+ {code:'KT',name:'Phòng Kỹ thuật — DEV/COM',page:'p3',list:KPI_KT,off:OFF_KT,staff:STAFF_KT,notes:NOTE_KT,color:'#E4622B'}
+];
+
+/* ===== TÍNH TOÁN ===== */
+var st={m:7,mode:'month',dept:'all',emp:{p2:-1,p3:-1}},charts={};
+var GOAL=100, PASS=95, LAST=11;
+
+function valAt(k,i,mode){if(mode==='ytd'){var s=0;for(var j=0;j<=i;j++)s+=k.s[j];return s/(i+1);}return k.s[i];}
+function scoreOf(k,v){var r=(k.dir==='down')?(k.target/v):(v/k.target);return Math.min(r,1.2)*100;}
+function kScore(k,i,mode){return scoreOf(k,valAt(k,i,mode));}
+function cl(v){return Math.max(0,Math.min(120,v));}
+/* điểm của một chỉ số: e<0 là cả phòng, e>=0 là một nhân viên */
+function sc1(list,off,e,x,i,mode){var b=kScore(list[x],i,mode);return e<0?b:cl(b+off[e][x]);}
+function backVal(k,s){return k.dir==='down'?k.target/(s/100):s/100*k.target;}
+function sumW(list){return list.reduce(function(a,k){return a+k.w;},0);}
+function normAt(list,off,e,i,mode){
+  var w=sumW(list),t=0;
+  list.forEach(function(k,x){t+=sc1(list,off,e,x,i,mode)*k.w;});
+  return t/w;
+}
+function deptAt(code,i,mode){var d=DEPTS.filter(function(x){return x.code===code;})[0];return normAt(d.list,d.off,-1,i,mode);}
+function activeDepts(){return st.dept==='all'?DEPTS:DEPTS.filter(function(d){return d.code===st.dept;});}
+function coScoreAt(i,mode,ds){var a=ds||activeDepts(),t=0;a.forEach(function(d){t+=deptAt(d.code,i,mode);});return t/a.length;}
+function rateOf(f,i){return i<1?0:(f(i)-f(0))/i;}
+function needOf(cur,i,goal){var l=LAST-i;return l<=0?0:Math.max((goal===undefined?GOAL:goal)-cur,0)/l;}
+function forecast(cur,rate,i){return cur+rate*(LAST-i);}
+
+function rank(s){if(s>=100)return{t:'Xuất sắc',c:'p-ok'};if(s>=95)return{t:'Đạt',c:'p-ok'};if(s>=85)return{t:'Cần cải thiện',c:'p-wn'};return{t:'Không đạt',c:'p-bd'};}
+function col(s){return s>=95?'#1F8A5B':(s>=85?'#E4622B':'#C93A2E');}
+function n1(v){return (Math.round(v*10)/10).toLocaleString('vi-VN',{minimumFractionDigits:1,maximumFractionDigits:1});}
+function n2(v){return (Math.round(v*100)/100).toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function R1(v){return Math.round(v*10)/10;}
+function R2(v){return Math.round(v*100)/100;}
+function delta(c,p){if(p===null)return '<span class="mut">—</span>';var d=c-p;return '<span class="'+(d>0?'up':(d<0?'dn':'mut'))+'">'+(d>0?'+':'')+n1(d)+'</span>';}
+function mk(id,cfg){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),cfg);}
+
+var GRID={color:'#EFF3F7'},TICK={color:'#69798A',font:{size:10.5,family:'Inter'}};
+var TT={backgroundColor:'#003862',padding:11,titleFont:{size:11.5,family:'Inter'},bodyFont:{size:11.5,family:'Inter'},cornerRadius:6,displayColors:false};
+function baseOpt(o){return Object.assign({responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:TT},
+  scales:{x:{grid:{display:false},ticks:TICK},y:{grid:GRID,ticks:TICK,border:{display:false}}}},o||{});}
+function legendOpt(){return {display:true,position:'bottom',labels:{boxWidth:10,boxHeight:10,font:{size:10.5,family:'Inter'},color:'#69798A',padding:10,usePointStyle:true,pointStyle:'rectRounded'}};}
+function hline(v,c,l){return {id:'h'+v+l,afterDatasetsDraw:function(ch){
+  var y=ch.scales.y;if(!y)return;var py=y.getPixelForValue(v);if(py<ch.chartArea.top||py>ch.chartArea.bottom)return;
+  var x=ch.ctx;x.save();x.setLineDash([5,4]);x.strokeStyle=c;x.lineWidth=1.2;
+  x.beginPath();x.moveTo(ch.chartArea.left,py);x.lineTo(ch.chartArea.right,py);x.stroke();
+  x.setLineDash([]);x.fillStyle=c;x.font='600 10px Inter';x.textAlign='right';x.fillText(l,ch.chartArea.right-2,py-4);x.restore();}};}
+function vline(v,c,l){return {id:'v'+v+l,afterDatasetsDraw:function(ch){
+  var sx=ch.scales.x;if(!sx)return;var px=sx.getPixelForValue(v);if(px<ch.chartArea.left||px>ch.chartArea.right)return;
+  var x=ch.ctx;x.save();x.setLineDash([5,4]);x.strokeStyle=c;x.lineWidth=1.2;
+  x.beginPath();x.moveTo(px,ch.chartArea.top);x.lineTo(px,ch.chartArea.bottom);x.stroke();
+  x.setLineDash([]);x.fillStyle=c;x.font='600 10px Inter';x.textAlign='center';x.fillText(l,px,ch.chartArea.top-4);x.restore();}};}
+
+/* ----- gauge ----- */
+function polar(cx,cy,r,deg){var a=deg*Math.PI/180;return [cx+r*Math.cos(a),cy-r*Math.sin(a)];}
+function arcP(cx,cy,r,a0,a1){var p0=polar(cx,cy,r,a0),p1=polar(cx,cy,r,a1);
+  return 'M'+p0[0].toFixed(2)+' '+p0[1].toFixed(2)+' A'+r+' '+r+' 0 '+(Math.abs(a0-a1)>180?1:0)+' 1 '+p1[0].toFixed(2)+' '+p1[1].toFixed(2);}
+function gauge(val,mn,mx,thr){
+  var cx=112,cy=104,r=68,w=17;
+  val=R1(val);
+  var pct=Math.max(0,Math.min(1,(val-mn)/(mx-mn))),a1=180-180*pct;
+  var c=val>=thr?'#1F8A5B':(val>=thr-8?'#E4622B':'#C93A2E');
+  var t0=polar(cx,cy,r+w/2+2,a1),t1=polar(cx,cy,r-w/2-2,a1);
+  return '<svg viewBox="0 0 224 118" class="gg">'+
+    '<path d="'+arcP(cx,cy,r,180,0)+'" fill="none" stroke="#E7EDF3" stroke-width="'+w+'" stroke-linecap="round"/>'+
+    (pct>0.004?'<path d="'+arcP(cx,cy,r,180,a1)+'" fill="none" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round"/>':'')+
+    '<line x1="'+t0[0].toFixed(2)+'" y1="'+t0[1].toFixed(2)+'" x2="'+t1[0].toFixed(2)+'" y2="'+t1[1].toFixed(2)+'" stroke="#16242F" stroke-width="2.6"/>'+
+    '<text x="'+cx+'" y="'+(cy-4)+'" text-anchor="middle" font-size="30" font-weight="700" fill="#16242F" font-family="Inter">'+n1(val)+'</text>'+
+    '<text x="4" y="'+(cy+14)+'" font-size="11" fill="#69798A" font-family="Inter">'+n1(mn)+'</text>'+
+    '<text x="220" y="'+(cy+14)+'" text-anchor="end" font-size="11" fill="#69798A" font-family="Inter">'+n1(mx)+'</text>'+
+    '</svg>';
+}
+
+/* ----- thác nước ----- */
+function waterfall(id,items,endScore,endLabel){
+  var labels=['Mốc chuẩn 100'],data=[[0,100]],meta=[null],colors=['#003862'],run=100;
+  items.forEach(function(it){
+    labels.push(it.label);var a=run,b=run-it.loss;
+    data.push([Math.min(a,b),Math.max(a,b)]);meta.push(it);
+    colors.push(it.loss>0?'#C93A2E':'#1F8A5B');run=b;
+  });
+  labels.push(endLabel);data.push([0,endScore]);meta.push(null);colors.push(col(endScore));
+  var mn=Math.max(0,Math.floor(Math.min(endScore,run)/5)*5-6);
+  mk(id,{type:'bar',data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderRadius:4,barPercentage:.72}]},
+    options:baseOpt({scales:{x:{grid:{display:false},ticks:Object.assign({},TICK,{maxRotation:0,autoSkip:false})},
+      y:{min:mn,max:104,grid:GRID,ticks:TICK,border:{display:false}}},
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{
+        title:function(c){var m=meta[c[0].dataIndex];return m?m.full:c[0].label;},
+        label:function(c){var m=meta[c.dataIndex];
+          if(!m)return c.dataIndex===0?'Mốc chuẩn: 100 điểm':'Điểm thực tế: '+n1(c.raw[1]);
+          return ['Điểm: '+n1(m.score),'Trọng số: '+m.w+'%','Làm hụt: '+(m.loss>0?'-':'+')+n2(Math.abs(m.loss))+' điểm'];}}})}})});
+}
+
+/* ----- ma trận trọng số × điểm ----- */
+function matrix(id,items,xLabel,avgW){
+  var pts=items.map(function(it){return {x:it.w,y:R1(it.score),r:Math.max(6,Math.min(26,6+Math.abs(it.loss)*3.2)),it:it};});
+  var maxX=Math.max.apply(null,items.map(function(i){return i.w;}));
+  mk(id,{type:'bubble',data:{datasets:[{data:pts,
+    backgroundColor:pts.map(function(p){return p.it.score>=95?'rgba(31,138,91,.55)':(p.it.score>=85?'rgba(228,98,43,.55)':'rgba(201,58,46,.6)');}),
+    borderColor:pts.map(function(p){return col(p.it.score);}),borderWidth:1.5}]},
+    options:baseOpt({layout:{padding:{top:10,right:16}},
+      scales:{x:{min:0,max:maxX+7,title:{display:true,text:xLabel,color:'#69798A',font:{size:10.5,family:'Inter'}},grid:GRID,ticks:Object.assign({},TICK,{callback:function(v){return v+'%';}}),border:{display:false}},
+        y:{min:50,max:114,title:{display:true,text:'Điểm chỉ số',color:'#69798A',font:{size:10.5,family:'Inter'}},grid:GRID,ticks:TICK,border:{display:false}}},
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{
+        title:function(c){return c[0].raw.it.full;},
+        label:function(c){var i=c.raw.it;return ['Trọng số: '+i.w+'%','Điểm: '+n1(i.score),'Làm hụt: '+n2(i.loss)+' điểm'];}}})}}),
+    plugins:[{id:'q'+id,beforeDatasetsDraw:function(c){
+      var x=c.ctx,ax=c.chartArea,py=c.scales.y.getPixelForValue(95),px=c.scales.x.getPixelForValue(avgW);
+      x.save();x.fillStyle='rgba(201,58,46,.05)';x.fillRect(px,py,ax.right-px,ax.bottom-py);
+      x.setLineDash([4,4]);x.strokeStyle='#C7D5DF';x.lineWidth=1;
+      x.beginPath();x.moveTo(ax.left,py);x.lineTo(ax.right,py);x.stroke();
+      x.beginPath();x.moveTo(px,ax.top);x.lineTo(px,ax.bottom);x.stroke();
+      x.setLineDash([]);x.font='600 9.5px Inter';x.fillStyle='#C93A2E';x.textAlign='right';
+      x.fillText('ƯU TIÊN XỬ LÝ',ax.right-6,ax.bottom-6);
+      x.fillStyle='#9AABB8';x.textAlign='left';x.fillText('Ngưỡng đạt 95',ax.left+4,py-5);x.restore();}},
+    {id:'l'+id,afterDatasetsDraw:function(c){
+      var x=c.ctx;x.save();x.font='700 10.5px Inter';x.fillStyle='#16242F';x.textAlign='center';
+      c.getDatasetMeta(0).data.forEach(function(p,i){x.fillText(pts[i].it.id,p.x,p.y-p.options.radius-4);});x.restore();}}]});
+}
+
+/* ----- điểm trung bình theo tháng ----- */
+function monthLine(id,list,off,e,i,mode,staffName){
+  var lb=[],dp=[],em=[];
+  for(var j=0;j<=i;j++){lb.push(MONTHS[j]);dp.push(R1(normAt(list,off,-1,j,mode)));
+    if(e>=0)em.push(R1(normAt(list,off,e,j,mode)));}
+  var ds=[{label:'Điểm trung bình phòng',data:dp,borderColor:e>=0?'#B6C7D4':'#0065B3',borderWidth:e>=0?2:2.6,
+    pointRadius:e>=0?2:3.5,pointBackgroundColor:e>=0?'#B6C7D4':'#0065B3',tension:.32,
+    fill:e>=0?false:true,backgroundColor:'rgba(0,101,179,.10)'}];
+  if(e>=0)ds.push({label:staffName,data:em,borderColor:'#E4622B',borderWidth:2.6,pointRadius:3.5,
+    pointBackgroundColor:'#E4622B',tension:.32,fill:false});
+  var lo=Math.min.apply(null,dp.concat(em)),hi=Math.max.apply(null,dp.concat(em));
+  mk(id,{type:'line',data:{labels:lb,datasets:ds},
+    options:baseOpt({layout:{padding:{top:12}},
+      plugins:{legend:e>=0?legendOpt():{display:false},tooltip:Object.assign({},TT,{callbacks:{
+        label:function(c){return c.dataset.label+': '+n1(c.raw)+' điểm';}}})},
+      scales:{x:{grid:{display:false},ticks:TICK},
+        y:{min:Math.max(0,Math.floor((lo-6)/5)*5),max:Math.min(120,Math.ceil((hi+6)/5)*5),grid:GRID,ticks:TICK,border:{display:false}}}}),
+    plugins:[hline(PASS,'#1F8A5B','Ngưỡng Đạt 95')]});
+  return dp.concat();
+}
+
+/* ----- bảng nhiệt nhân viên ----- */
+function heatC(v){
+  if(v>=100)return['#CFEBDF','#12563A'];
+  if(v>=95) return['#E4F3EB','#1F8A5B'];
+  if(v>=90) return['#FCF0E4','#A2551D'];
+  if(v>=80) return['#FADFCF','#8C3F16'];
+  if(v>=70) return['#F7D5D1','#9E2F26'];
+  return ['#EDB4AD','#701C16'];
+}
+function daysIn(m){return [31,28,31,30,31,30,31,31][m];}
+var WD=['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+/* điểm từng chỉ số theo từng ngày, bình quân tháng đúng bằng điểm tháng của người đó */
+function dailyMatrix(key,list,off,e,i,mode,mi){
+  var n=daysIn(mi),out=[];
+  list.forEach(function(k,x){
+    var base=sc1(list,off,e,x,i,mode),r=seedRand(key+9176*(x+1)),a=[],sm=0,j;
+    for(j=0;j<n;j++){var v=(r()-0.5)*11;a.push(v);sm+=v;}
+    sm/=n;
+    out.push(a.map(function(v){return cl(base+v-sm);}));
+  });
+  return out;
+}
+function dayRows(pid,e,list,off,i,mode,mi){
+  var mx=dailyMatrix(1000003*(pid==='p2'?1:2)+7919*(e+2)+131*(mi+1),list,off,e,i,mode,mi);
+  var n=daysIn(mi),W=sumW(list),out='',d,x;
+  for(d=0;d<n;d++){
+    var cells='',tot=0;
+    for(x=0;x<list.length;x++){
+      var v=mx[x][d],h=heatC(v);tot+=v*list[x].w;
+      cells+='<td class="num hc" style="background:'+h[0]+';color:'+h[1]+'">'+n1(v)+'</td>';
+    }
+    tot/=W;
+    var ht=heatC(tot),rk=rank(tot),wd=WD[new Date(2026,mi,d+1).getDay()];
+    out+='<tr class="dchr dc-'+pid+'-'+e+'"><td class="num">'+(d+1)+'</td>'+
+      '<td><span class="ind"></span>Ngày '+(d<9?'0':'')+(d+1)+'/'+(mi<9?'0':'')+(mi+1)+'/2026</td>'+
+      '<td style="color:var(--gray)">'+wd+'</td>'+cells+
+      '<td class="num hc" style="background:'+ht[0]+';color:'+ht[1]+';font-weight:700">'+n1(tot)+'</td>'+
+      '<td><span class="pill '+rk.c+'">'+rk.t+'</span></td></tr>';
+  }
+  return out;
+}
+function renderHeat(elId,list,staff,off,i,mode,sel,pid){
+  var base=list.map(function(k,x){return sc1(list,off,-1,x,i,mode);}),W=sumW(list);
+  var rows=staff.map(function(p,e){
+    var cells=list.map(function(k,x){return sc1(list,off,e,x,i,mode);});
+    var t=0;list.forEach(function(k,x){t+=cells[x]*k.w;});
+    return {e:e,name:p[0],role:p[1],cells:cells,tot:t/W};
+  }).sort(function(a,b){return b.tot-a.tot;});
+  var th='<tr><th>#</th><th>Nhân viên</th><th>Vị trí</th>'+
+    list.map(function(k){return '<th class="num" title="'+k.name+'">'+k.id+'<div class="thw">'+k.w+'%</div></th>';}).join('')+
+    '<th class="num">Điểm KPI</th><th>Xếp loại</th></tr>';
+  var tb=rows.map(function(r,x){
+    var c=r.cells.map(function(v){var h=heatC(v);return '<td class="num hc" style="background:'+h[0]+';color:'+h[1]+'">'+n1(v)+'</td>';}).join('');
+    var h=heatC(r.tot),rk=rank(r.tot);
+    return '<tr class="clk '+(sel===r.e?'sel':'')+'" onclick="tgDay(\''+pid+'\','+r.e+')"><td class="num"><span class="cr" id="cr-'+pid+'-'+r.e+'">▸</span> '+(x+1)+'</td>'+
+      '<td><b>'+r.name+'</b></td><td style="color:var(--gray)">'+r.role+'</td>'+c+
+      '<td class="num hc" style="background:'+h[0]+';color:'+h[1]+';font-weight:700">'+n1(r.tot)+'</td>'+
+      '<td><span class="pill '+rk.c+'">'+rk.t+'</span></td></tr>'+
+      dayRows(pid,r.e,list,off,i,mode,st.m);
+  }).join('');
+  var avg=rows.reduce(function(a,r){return a+r.tot;},0)/rows.length;
+  var tf='<tr><td colspan="3">Bình quân phòng ('+rows.length+' nhân sự)</td>'+
+    base.map(function(v){return '<td class="num">'+n1(v)+'</td>';}).join('')+
+    '<td class="num">'+n1(avg)+'</td><td></td></tr>';
+  document.getElementById(elId).innerHTML='<table class="heatt"><thead>'+th+'</thead><tbody>'+tb+'</tbody><tfoot>'+tf+'</tfoot></table>'+
+    '<div class="hleg"><span>Thang màu điểm</span>'+
+    [['<70','#EDB4AD'],['70–80','#F7D5D1'],['80–90','#FADFCF'],['90–95','#FCF0E4'],['95–100','#E4F3EB'],['≥100','#CFEBDF']]
+      .map(function(v){return '<em><i style="background:'+v[1]+'"></i>'+v[0]+'</em>';}).join('')+
+    '<b>Di chuột lên mã chỉ số ở dòng tiêu đề để xem tên đầy đủ</b></div>';
+}
+
+function statCard(hl,lb,vl,tone,fts){
+  var c=tone==='red'?' style="color:var(--red)"':(tone==='amber'?' style="color:var(--orange)"':(tone==='green'?' style="color:var(--green)"':''));
+  return '<div class="stat'+(hl?' hl':'')+'"><div class="lb">'+lb+'</div>'+
+    '<div class="bd"><div class="vl"'+c+'>'+vl+'</div></div>'+ftRow(fts)+'</div>';
+}
+function ftRow(fts){
+  if(!fts||!fts.length)return '';
+  return '<div class="ft">'+fts.map(function(f){return '<div><span>'+f[0]+'</span><b>'+f[1]+'</b></div>';}).join('')+'</div>';
+}
+function gaugeCard(lb,val,mn,mx,thr,fts){
+  return '<div class="stat gg-card"><div class="lb">'+lb+'</div>'+
+    '<div class="bd">'+gauge(val,mn,mx,thr)+'</div>'+ftRow(fts)+'</div>';
+}
+
+/* dòng drill-down: dùng đúng 8 cột của bảng cha, chèn thẳng vào cùng bảng */
+function drillRows(dep,i,mode){
+  var list=dep.list,out='';
+  list.forEach(function(k,x){
+    var sc=sc1(list,dep.off,-1,x,i,mode);
+    var pv=i>0?sc1(list,dep.off,-1,x,i-1,mode):null;
+    var rate=rateOf(function(j){return sc1(list,dep.off,-1,x,j,mode);},i);
+    var fc=forecast(sc,rate,i),need=needOf(sc,i),rk=rank(sc);
+    var kl=need<=0?'<span class="pill p-ok">Đã đạt mục tiêu</span>'
+                 :(rate>=need?'<span class="pill p-ok">Dự báo kịp</span>':'<span class="pill p-bd">Không kịp mục tiêu 2026</span>');
+    out+='<tr class="chr ch-'+dep.code+'"><td><span class="ind"></span><b>'+k.id+'</b> — '+k.name+
+      '<div class="sm">'+k.uom+' · mục tiêu '+k.tgtTxt+' · thực tế '+n2(valAt(k,i,mode))+(k.uom==='%'?'%':'')+' · nguồn: '+k.src+'</div></td>'+
+      '<td class="num">'+k.w+'%</td><td class="num"><b style="color:'+col(sc)+'">'+n1(sc)+'</b></td>'+
+      '<td class="num">'+delta(sc,pv)+'</td><td class="num">'+n1(Math.min(fc,120))+'</td>'+
+      '<td class="num">'+(sc<PASS?'1/1':'0/1')+'</td>'+
+      '<td><span class="pill '+rk.c+'">'+rk.t+'</span></td><td>'+kl+'</td></tr>';
+  });
+  dep.notes.forEach(function(nt){
+    out+='<tr class="chr ch-'+dep.code+'"><td><span class="ind"></span><span style="color:#8896A4">'+nt[0]+'</span>'+
+      '<div class="sm" style="color:var(--red)">'+nt[1]+'</div></td>'+
+      '<td class="num mut">—</td><td class="num mut">—</td><td class="num mut">—</td><td class="num mut">—</td><td class="num mut">—</td>'+
+      '<td><span class="pill p-nu">Chưa chấm được</span></td><td style="color:var(--gray)">Cần chốt ĐVT, công thức và trọng số</td></tr>';
+  });
+  return out;
+}
+
+/* ===== TRANG 1 ===== */
+function r1(){
+  var i=st.m,mode=st.mode,ds=activeDepts();
+  var cs=coScoreAt(i,mode,ds),prev=i>0?coScoreAt(i-1,mode,ds):null;
+  var rows=ds.map(function(d){
+    var sc=deptAt(d.code,i,mode);
+    var rate=rateOf(function(j){return deptAt(d.code,j,mode);},i);
+    return {d:d,score:sc,loss:(100-sc)/ds.length,rate:rate,need:needOf(sc,i,PASS),fc:forecast(sc,rate,i),
+            bad:d.list.filter(function(k,x){return sc1(d.list,d.off,-1,x,i,mode)<PASS;}).length};
+  });
+  var byLoss=rows.slice().sort(function(a,b){return b.loss-a.loss;});
+  var totLoss=rows.reduce(function(a,r){return a+Math.max(r.loss,0);},0);
+  var coRate=rateOf(function(j){return coScoreAt(j,mode,ds);},i);
+  var coNeed=needOf(cs,i,PASS), coFc=forecast(cs,coRate,i);
+  var prevFc=i>0?forecast(coScoreAt(i-1,mode,ds),rateOf(function(j){return coScoreAt(j,mode,ds);},i-1),i-1):null;
+
+  var allK=[];ds.forEach(function(d){d.list.forEach(function(k,x){
+    allK.push({d:d,k:k,id:k.id,full:k.id+' — '+k.name,score:sc1(d.list,d.off,-1,x,i,mode)});});});
+  var kBad=allK.filter(function(a){return a.score<PASS;}).length;
+  var nNote=ds.reduce(function(a,d){return a+d.notes.length;},0);
+
+  document.getElementById('p1stats').innerHTML=
+   statCard(true,'Điểm trung bình công ty',n1(cs),'',
+     [['Kỳ trước',prev===null?'—':n1(prev)],['Thay đổi',prev===null?'—':delta(cs,prev)]])+
+   gaugeCard('Run-rate — dự báo điểm T12',Math.min(coFc,100),0,100,PASS,
+     [['Tốc độ / tháng',n2(coRate)],['Kỳ trước',prevFc===null?'—':n1(Math.min(prevFc,100))]])+
+   statCard(false,'Chỉ số dưới ngưỡng Đạt',kBad+'<small>/'+allK.length+'</small>',kBad?'red':'green',
+     rows.map(function(r){return [r.d.code,r.bad+'/'+r.d.list.length];}))+
+   statCard(false,'Hạng mục chưa chấm được',nNote,'amber',
+     ds.map(function(d){return [d.code,d.notes.length];}));
+
+  waterfall('c1a',byLoss.map(function(r){return {label:r.d.code,full:r.d.name,loss:r.loss,score:r.score,w:R1(100/ds.length)};}),cs,'Điểm công ty');
+  document.getElementById('r1a').innerHTML= ds.length<2 ?
+    'Đang lọc riêng <b>'+ds[0].name+'</b> nên điểm công ty chính là điểm phòng này.' :
+    'Công ty hụt <b>'+n2(totLoss)+' điểm</b> so với mốc chuẩn. <b>'+byLoss[0].d.name+'</b> gây ra '+n1(byLoss[0].loss/totLoss*100)+'% phần hụt đó.';
+
+  var lb=[],dt=[];
+  for(var j=0;j<=i;j++){lb.push(MONTHS[j]);dt.push(R1(coScoreAt(j,mode,ds)));}
+  mk('c1c',{type:'line',data:{labels:lb,datasets:[{data:dt,borderColor:'#0065B3',borderWidth:2.6,
+      pointRadius:3.5,pointBackgroundColor:'#0065B3',tension:.32,fill:true,
+      backgroundColor:'rgba(0,101,179,.10)'}]},
+    options:baseOpt({layout:{padding:{top:12}},
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{
+        label:function(c){return 'Điểm trung bình công ty: '+n1(c.raw);}}})},
+      scales:{x:{grid:{display:false},ticks:TICK},y:{min:80,max:102,grid:GRID,ticks:TICK,border:{display:false}}}}),
+    plugins:[hline(PASS,'#1F8A5B','Ngưỡng Đạt 95')]});
+  document.getElementById('r1c').innerHTML='Từ tháng 1 tới nay điểm công ty đi từ <b>'+n1(dt[0])+'</b> lên <b>'+n1(dt[dt.length-1])+'</b>, bình quân '+n2(coRate)+' điểm mỗi tháng. '+
+    (cs>=PASS?'Hiện đã vượt ngưỡng Đạt.':'Còn thiếu '+n1(PASS-cs)+' điểm để chạm ngưỡng Đạt.');
+
+  var sorted=[];
+  ds.forEach(function(d){
+    allK.filter(function(a){return a.d.code===d.code;}).sort(function(a,b){return a.score-b.score;})
+        .forEach(function(a){sorted.push(a);});
+  });
+  var gBreak=[],gName=[];
+  sorted.forEach(function(a,x){if(x===0||a.d.code!==sorted[x-1].d.code){gBreak.push(x);gName.push(a.d);}});
+  mk('c1b',{type:'bar',data:{labels:sorted.map(function(a){return a.id;}),
+    datasets:[{data:sorted.map(function(a){return R1(a.score);}),
+      backgroundColor:sorted.map(function(a){return a.d.color;}),borderRadius:4,barThickness:15}]},
+    options:baseOpt({indexAxis:'y',layout:{padding:{right:30,top:12}},
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{
+        title:function(c){return sorted[c[0].dataIndex].full;},
+        label:function(c){var a=sorted[c.dataIndex];return [a.d.name,'Trọng số trong phòng: '+a.k.w+'%','Điểm: '+n1(a.score)];}}})},
+      scales:{x:{min:50,max:115,grid:GRID,ticks:TICK,border:{display:false}},
+              y:{grid:{display:false},ticks:Object.assign({},TICK,{font:{size:11.5,family:'Inter',weight:'600'}})}}}),
+    plugins:[vline(PASS,'#1F8A5B','Ngưỡng Đạt 95'),
+      {id:'grp1b',beforeDatasetsDraw:function(c){
+        var x=c.ctx,ax=c.chartArea,m=c.getDatasetMeta(0).data;
+        x.save();
+        gBreak.forEach(function(st0,gi){
+          var en=(gi+1<gBreak.length?gBreak[gi+1]:sorted.length)-1;
+          if(!m[st0]||!m[en])return;
+          var y0=m[st0].y-(m.length>1?Math.abs(m[1].y-m[0].y)/2:12), y1=m[en].y+(m.length>1?Math.abs(m[1].y-m[0].y)/2:12);
+          x.fillStyle=gi%2?'rgba(228,98,43,.045)':'rgba(0,101,179,.045)';
+          x.fillRect(ax.left,y0,ax.right-ax.left,y1-y0);
+          if(gi>0){x.strokeStyle='#C7D5DF';x.lineWidth=1;x.beginPath();x.moveTo(ax.left,y0);x.lineTo(ax.right,y0);x.stroke();}
+          x.font='700 9.5px Inter';x.fillStyle=gName[gi].color;x.textAlign='right';
+          x.fillText(gName[gi].name.toUpperCase(),ax.right-6,y0+13);
+        });
+        x.restore();}},
+      {id:'lbl1b',afterDatasetsDraw:function(c){
+        var x=c.ctx;x.save();x.font='600 10.5px Inter';x.fillStyle='#16242F';x.textAlign='left';
+        c.getDatasetMeta(0).data.forEach(function(b,k){x.fillText(n1(sorted[k].score),b.x+7,b.y+4);});x.restore();}}]});
+  var bad3=sorted.slice(0,3).map(function(a){return a.id;}).join(', ');
+  document.getElementById('r1b').innerHTML='Ba chỉ số yếu nhất toàn công ty: <b>'+bad3+'</b>. '+
+    'Màu xanh là Phòng Định mức, màu cam là Phòng Kỹ thuật — '+
+    (ds.length<2?'đang lọc riêng một phòng.':'nhóm dưới ngưỡng đang nghiêng về '+(sorted.slice(0,kBad).filter(function(a){return a.d.code==='KT';}).length>kBad/2?'Phòng Kỹ thuật':'Phòng Định mức')+'.');
+
+  var cmpLbl = i>0 ? (mode==='ytd'?'So luỹ kế đến '+MONTHS[i-1]:'So với '+MONTHS[i-1]) : 'So kỳ trước';
+  document.getElementById('p1th').innerHTML='<th style="width:26%">Phòng ban</th><th class="num">Tổng trọng số gốc</th>'+
+    '<th class="num">Điểm chuẩn hoá</th><th class="num">'+cmpLbl+'</th><th class="num">Dự báo T12</th>'+
+    '<th class="num">Chỉ số dưới ngưỡng</th><th>Xếp loại</th><th>Nhận định</th>';
+
+  var tb='';
+  rows.slice().sort(function(a,b){return b.score-a.score;}).forEach(function(r,ri){
+    var pv=i>0?deptAt(r.d.code,i-1,mode):null,rk=rank(r.score);
+    var kl=r.need<=0?'<span class="pill p-ok">Đã đạt ngưỡng</span>':
+           (r.rate>=r.need?'<span class="pill p-ok">Dự báo kịp</span>':'<span class="pill p-bd">Không kịp ngưỡng 95</span>');
+    tb+='<tr class="clk" onclick="tgDept(\''+r.d.code+'\')"><td><span class="cr" id="cd-'+r.d.code+'">▸</span> <b>'+r.d.name+'</b>'+
+      '<div class="bar"><i style="width:'+Math.min(r.score,100)+'%;background:'+col(r.score)+'"></i></div></td>'+
+      '<td class="num">'+sumW(r.d.list)+'%</td><td class="num"><b style="color:'+col(r.score)+'">'+n1(r.score)+'</b></td>'+
+      '<td class="num">'+delta(r.score,pv)+'</td><td class="num">'+n1(Math.min(r.fc,120))+'</td>'+
+      '<td class="num">'+r.bad+'/'+r.d.list.length+'</td>'+
+      '<td><span class="pill '+rk.c+'">'+rk.t+'</span></td><td>'+kl+'</td></tr>'+
+      drillRows(r.d,i,mode);
+  });
+  document.getElementById('p1tb').innerHTML=tb;
+  document.getElementById('p1tf').innerHTML='<tr><td>Điểm trung bình công ty</td><td class="num"></td><td class="num">'+n1(cs)+'</td>'+
+    '<td class="num"></td><td class="num">'+n1(Math.min(coFc,120))+'</td><td class="num">'+kBad+'/'+allK.length+'</td><td colspan="2"></td></tr>';
+}
+
+/* ===== TRANG PHÒNG BAN ===== */
+function renderDept(dep,pfx,pid){
+  var i=st.m,mode=st.mode,list=dep.list,off=dep.off,e=st.emp[pid],W=sumW(list);
+  var rows=list.map(function(k,x){
+    var s=sc1(list,off,e,x,i,mode);
+    var rate=rateOf(function(j){return sc1(list,off,e,x,j,mode);},i);
+    return {k:k,x:x,id:k.id,full:k.id+' — '+k.name,name:k.name,w:k.w,
+            v:(e<0?valAt(k,i,mode):backVal(k,s)),score:s,loss:(100-s)*k.w/W,
+            rate:rate,need:needOf(s,i),fc:forecast(s,rate,i)};
+  });
+  var norm=normAt(list,off,e,i,mode);
+  var prev=i>0?normAt(list,off,e,i-1,mode):null;
+  var byLoss=rows.slice().sort(function(a,b){return b.loss-a.loss;});
+  var totLoss=rows.reduce(function(a,r){return a+Math.max(r.loss,0);},0);
+  var okN=rows.filter(function(r){return r.score>=PASS;}).length;
+  var okFc=rows.filter(function(r){return r.fc>=GOAL;}).length;
+  var avgW=W/rows.length;
+  var deptNorm=normAt(list,off,-1,i,mode);
+  var who=e<0?'toàn phòng':dep.staff[e][0];
+
+  var low=rows.slice().sort(function(a,b){return a.score-b.score;})[0];
+  var dRate=rateOf(function(j){return normAt(list,off,e,j,mode);},i);
+  var dFc=forecast(norm,dRate,i);
+  var c4 = e<0
+    ? statCard(false,'Dự báo điểm T12',n1(Math.min(dFc,120)),dFc>=PASS?'green':'amber',
+        [['Tốc độ / tháng',n2(dRate)],['Chỉ số dự báo đạt',okFc+'/'+rows.length]])
+    : statCard(false,'Chênh lệch với phòng',(norm>=deptNorm?'+':'')+n1(norm-deptNorm),norm>=deptNorm?'green':'red',
+        [['Cá nhân',n1(norm)],['Bình quân phòng',n1(deptNorm)]]);
+  document.getElementById(pid+'stats').innerHTML=
+   statCard(true,'Điểm KPI '+(e<0?'phòng':'cá nhân'),n1(norm),'',
+     [['Kỳ trước',prev===null?'—':n1(prev)],['Thay đổi',prev===null?'—':delta(norm,prev)]])+
+   statCard(false,'Chỉ số đạt chuẩn',okN+'<small>/'+rows.length+'</small>',okN===rows.length?'green':'',
+     [['Đạt từ 95',okN],['Dưới ngưỡng',rows.length-okN]])+
+   statCard(false,'Chỉ số điểm thấp nhất',n1(low.score),'red',
+     [['Mã chỉ số',low.id],['Trọng số',low.w+'%']])+
+   c4;
+
+  waterfall(pfx+'a',byLoss.map(function(r){return {label:r.id,full:r.full,loss:r.loss,score:r.score,w:r.w};}),norm,e<0?'Điểm phòng':'Điểm cá nhân');
+  document.getElementById('r'+pfx.slice(1)+'a').innerHTML='Hụt <b>'+n2(totLoss)+' điểm</b> so với mốc chuẩn, riêng <b>'+byLoss[0].id+'</b> chiếm <b>'+n1(byLoss[0].loss/totLoss*100)+'%</b>. Nâng riêng chỉ số này lên mức đạt sẽ kéo điểm lên khoảng '+n1(norm+byLoss[0].loss*0.9)+'.';
+
+  matrix(pfx+'b',rows.map(function(r){return {id:r.id,full:r.full,w:r.w,score:r.score,loss:r.loss};}),'Trọng số chỉ số',avgW);
+  var dg=rows.filter(function(r){return r.score<PASS&&r.w>=avgW;});
+  document.getElementById('r'+pfx.slice(1)+'b').innerHTML=dg.length?
+    'Vùng ưu tiên xử lý gồm <b>'+dg.map(function(r){return r.id;}).join(', ')+'</b>: trọng số từ '+n1(avgW)+'% trở lên nhưng điểm dưới 95. Chỉ số trọng số thấp dù điểm rất thấp cũng chỉ ảnh hưởng nhỏ.':
+    'Không chỉ số nào vừa trọng số cao vừa điểm dưới ngưỡng trong kỳ này.';
+
+  var dpline=monthLine(pfx+'d',list,off,e,i,mode,e<0?'':dep.staff[e][0]);
+  var rd=dpline[dpline.length-1]-dpline[0];
+  document.getElementById('r'+pfx.slice(1)+'d').innerHTML='Điểm phòng đi từ <b>'+n1(dpline[0])+'</b> tháng 1 lên <b>'+n1(dpline[dpline.length-1])+'</b> kỳ này, bình quân '+n2(rd/Math.max(i,1))+' điểm mỗi tháng.'+
+    (e<0?'':' Đường cam là '+dep.staff[e][0]+', hiện '+(norm>=deptNorm?'cao hơn':'thấp hơn')+' bình quân phòng '+n1(Math.abs(norm-deptNorm))+' điểm.');
+
+  renderHeat('heat'+pid.slice(1),list,dep.staff,off,i,mode,e,pid);
+}
+function r2(){renderDept(DEPTS[0],'c2','p2');}
+function r3(){renderDept(DEPTS[1],'c3','p3');}
+
+function tgRow(rowId,crId){
+  var r=document.getElementById(rowId),c=document.getElementById(crId);
+  if(!r)return;
+  var open=r.className.indexOf('open')>=0;
+  r.className=open?'drow':'drow open';
+  if(c)c.innerHTML=open?'▸':'▾';
+}
+function tgDept(code){
+  var rs=document.querySelectorAll('.ch-'+code),c=document.getElementById('cd-'+code);
+  if(!rs||!rs.length)return;
+  var open=rs[0].className.indexOf('open')>=0;
+  for(var i=0;i<rs.length;i++)rs[i].className='chr ch-'+code+(open?'':' open');
+  if(c)c.innerHTML=open?'▸':'▾';
+}
+function tgDay(pid,e){
+  var rs=document.querySelectorAll('.dc-'+pid+'-'+e),c=document.getElementById('cr-'+pid+'-'+e);
+  if(!rs||!rs.length)return;
+  var open=rs[0].className.indexOf('open')>=0;
+  for(var i=0;i<rs.length;i++)rs[i].className='dchr dc-'+pid+'-'+e+(open?'':' open');
+  if(c)c.innerHTML=open?'▸':'▾';
+}
+
+/* ===== ĐIỀU HƯỚNG ===== */
+var TITLES={p1:['Tổng quan KPI công ty','Hai phòng có bảng KPI: Định mức (BOM) và Kỹ thuật (DEV/COM)'],
+ p2:['Phòng Định mức — BOM','6 chỉ số, tổng trọng số 100% — theo bảng KPI đã nhận'],
+ p3:['Phòng Kỹ thuật — DEV/COM','6 chỉ số, tổng trọng số 90% — có mục tiêu chi tiết theo quý']};
+function fillEmp(pid){
+  var sel=document.getElementById('fEmp');sel.innerHTML='';
+  var o=document.createElement('option');o.value=-1;o.textContent='Toàn phòng (bình quân)';sel.appendChild(o);
+  if(pid==='p1')return;
+  var dep=pid==='p2'?DEPTS[0]:DEPTS[1];
+  dep.staff.forEach(function(p,x){var t=document.createElement('option');t.value=x;t.textContent=p[0]+' — '+p[1];sel.appendChild(t);});
+  sel.value=st.emp[pid];
+}
+function go(p){
+  document.querySelectorAll('.page').forEach(function(s){s.classList.toggle('show',s.id===p);});
+  document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-p')===p);});
+  document.getElementById('ttl').innerHTML=TITLES[p][0];
+  document.getElementById('fdWrap').style.display=(p==='p1')?'flex':'none';
+  document.getElementById('feWrap').style.display=(p==='p1')?'none':'flex';
+  fillEmp(p);window.scrollTo(0,0);render();
+}
+function render(){
+  var p=document.querySelector('.page.show').id;
+  var extra=(p!=='p1'&&st.emp[p]>=0)?' &nbsp;·&nbsp; Đang xem: '+(p==='p2'?DEPTS[0]:DEPTS[1]).staff[st.emp[p]][0]:'';
+  document.getElementById('sub').innerHTML=TITLES[p][1]+' &nbsp;·&nbsp; Kỳ: '+(st.mode==='ytd'?'Luỹ kế đến ':'')+MONTHS[st.m]+extra;
+  if(p==='p1')r1();else if(p==='p2')r2();else r3();
+}
+(function init(){
+  var sel=document.getElementById('fMonth');
+  MONTHS.forEach(function(m,x){var o=document.createElement('option');o.value=x;o.textContent='Tháng '+m;sel.appendChild(o);});
+  sel.value=st.m;sel.onchange=function(){st.m=+sel.value;render();};
+  document.getElementById('fDept').onchange=function(){st.dept=this.value;render();};
+  document.getElementById('fEmp').onchange=function(){
+    var p=document.querySelector('.page.show').id;
+    if(p!=='p1'){st.emp[p]=+this.value;render();}};
+  document.getElementById('bM').onclick=function(){st.mode='month';this.classList.add('on');document.getElementById('bY').classList.remove('on');render();};
+  document.getElementById('bY').onclick=function(){st.mode='ytd';this.classList.add('on');document.getElementById('bM').classList.remove('on');render();};
+  document.querySelectorAll('nav a').forEach(function(a){a.onclick=function(){go(a.getAttribute('data-p'));};});
+  document.getElementById('fdWrap').style.display='flex';
+  document.getElementById('feWrap').style.display='none';
+  fillEmp('p1');render();
+})();
+</script>
+</body>
+</html>

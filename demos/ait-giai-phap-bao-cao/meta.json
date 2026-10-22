@@ -1,0 +1,23 @@
+{
+  "slug": "ait-giai-phap-bao-cao",
+  "title": "AIT Corp — Sơ đồ giải pháp & bộ báo cáo",
+  "type": "proposal",
+  "industry": "General",
+  "department": "All",
+  "description": "Sơ đồ giải pháp dữ liệu trên Base cho AIT Corp, kèm 4 báo cáo: tổng quan, tài chính, tiến độ, mua sắm.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/AIT/",
+  "source_repo": "https://github.com/tbinh-06/AIT",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "sơ đồ giải pháp",
+    "tài chính",
+    "tiến độ",
+    "mua sắm"
+  ]
+}

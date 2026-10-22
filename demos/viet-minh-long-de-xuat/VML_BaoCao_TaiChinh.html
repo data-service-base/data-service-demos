@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Việt Minh Long — Dashboard Tài chính Công trình</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F0F3F8;
+  --color-background-danger:#FCEAEA;
+  --color-background-warning:#FBF1DD;
+  --color-background-success:#E8F6EE;
+  --color-background-info:#E9F2FC;
+  --color-border-tertiary:#E2E7F0;
+  --color-border-secondary:#CCD5E2;
+  --color-border-info:#A9CBF0;
+  --color-text-primary:#1A2230;
+  --color-text-secondary:#5A6678;
+  --color-text-tertiary:#8A95A8;
+  --color-text-info:#2F6FE0;
+  --color-text-success:#1E9E57;
+  --color-text-danger:#E24B4A;
+  --color-text-warning:#D98200;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--color-border-tertiary);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.brand .nm{font-weight:600;font-size:14px}.brand .sub{font-size:10.5px;color:var(--color-text-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;background:transparent;border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--color-background-secondary)}
+.nav button.on{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.nav button:disabled{color:var(--color-text-tertiary);cursor:default;opacity:.7}
+.nav button:disabled:hover{background:transparent}
+.nav .soon{margin-left:auto;font-size:9.5px;background:var(--color-background-secondary);color:var(--color-text-tertiary);padding:1px 6px;border-radius:6px}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;position:relative}
+.kpi .chg{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;line-height:1.45}
+.kpi .chg.u{color:var(--color-text-success);background:var(--color-background-success)}
+.kpi .chg.d{color:var(--color-text-danger);background:var(--color-background-danger)}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi .big{font-size:23px;font-weight:500;margin:5px 0 9px}
+.kpi .row{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:3px 0}
+.kpi .row .l{color:var(--color-text-secondary)}.kpi .row .v{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.hd{font-size:13px;font-weight:500;margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.up{color:var(--color-text-success)}.dn{color:var(--color-text-danger)}.wn{color:var(--color-text-warning)}.prow{cursor:pointer}
+.bdg{font-size:10.5px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.bM{background:var(--color-background-warning);color:var(--color-text-warning)}.bG{background:var(--color-background-success);color:var(--color-text-success)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.dash{width:16px;height:0;border-top:2px dashed;display:inline-block}
+.tab{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.ptab{font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.ptab.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+table.rk{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11.5px}
+table.rk th{text-align:right;font-weight:500;color:var(--color-text-secondary);padding:6px 7px;font-size:11px;position:sticky;top:0;background:var(--color-background-secondary)}
+table.rk td{padding:9px 7px;border-top:0.5px solid var(--color-border-tertiary);text-align:right;vertical-align:middle}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:500;background:var(--color-background-secondary)}
+table.dvt td,table.dvt th{border-left:0.5px solid var(--color-border-tertiary)}
+table.dvt td:first-child,table.dvt th:first-child{border-left:none}
+table.txl td,table.txl th{text-align:left}
+table.tk th:not(:first-child),table.tk td:not(:first-child){text-align:center}
+.mono{font-variant-numeric:tabular-nums}.s2{font-size:11px;color:var(--color-text-tertiary)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.titlebar .t{font-size:18px;font-weight:600}
+.warn{display:flex;gap:10px;align-items:flex-start;background:var(--color-background-warning);border:0.5px solid #E0AA4E;border-radius:var(--border-radius-lg);padding:12px 15px;margin-bottom:14px;font-size:12.5px;color:#7a5212}
+.warn b{color:#5e3f0c}
+table.hm{width:100%;border-collapse:separate;border-spacing:3px;font-size:10.5px;min-width:840px}
+table.hm.hmfix{table-layout:fixed}
+table.hm.hmfix td,table.hm.hmfix th{overflow:hidden;text-overflow:ellipsis}
+table.hm th{font-weight:500;color:var(--color-text-secondary);font-size:10px;padding:3px;text-align:center}
+table.hm th:first-child,table.hm td:first-child{text-align:left}
+.hcell{border-radius:7px;padding:8px 2px;text-align:center;font-variant-numeric:tabular-nums;font-weight:500;color:var(--color-text-primary)}
+.hcell.over{outline:1.5px solid #E24B4A;outline-offset:-1.5px}
+.dname{padding:6px 8px;font-size:11px;font-weight:500;white-space:nowrap}
+.tbtog{cursor:pointer;color:var(--color-text-info)!important;background:var(--color-background-info);border-radius:6px}
+.ccell{padding:6px 3px;text-align:center;font-variant-numeric:tabular-nums;color:var(--color-text-secondary);font-size:10.5px}
+table.mx{width:100%;border-collapse:collapse;font-size:11.5px;min-width:560px}
+table.mx th{font-weight:500;color:var(--color-text-secondary);font-size:10.5px;padding:7px 8px;text-align:right;white-space:nowrap;background:var(--color-background-secondary);position:sticky;top:0}
+table.mx th:first-child{text-align:left}
+table.mx td{padding:0;border-top:0.5px solid var(--color-border-tertiary);text-align:right}
+table.mx td .c{padding:8px;font-variant-numeric:tabular-nums}
+table.mx td:first-child{text-align:left;font-weight:500;padding:8px;white-space:nowrap}
+table.mx tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:600;background:var(--color-background-secondary)}
+.tg{display:inline-block;font-size:10px;padding:1px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.cpgt{font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.cpgt.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+.sidefilter{margin-top:14px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
+.sftitle{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 11px 9px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:10px;padding:0 11px}
+.fitem{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fdrow{display:flex;gap:6px}.fdrow .fitem{flex:1;min-width:0}
+.flabel{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.fsel,.fdate,.msbtn{font-size:12px;font-family:inherit;width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 9px;color:var(--color-text-primary);cursor:pointer;outline:none}
+.fdate{cursor:text;min-width:0}
+.fdate:disabled{opacity:.45;cursor:not-allowed}
+.ms{position:relative}
+.msbtn{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.msbtn .cv{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msdrop{margin-top:5px;max-height:190px;overflow:auto;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px;display:none}
+.ms.open .msdrop{display:block}
+.msopt{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;font-size:11.5px;cursor:pointer;color:var(--color-text-secondary)}
+.msopt:hover{background:var(--color-background-secondary)}
+.msopt input{accent-color:var(--color-text-info);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.msall{border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:3px;color:var(--color-text-primary);font-weight:500}
+.freset{font-size:11.5px;color:var(--color-text-info);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:5px;padding:4px 0;margin-top:2px}
+.freset:hover{text-decoration:underline}
+
+.pt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.pt-card{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:15px 17px}
+.pt-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.pt-code{font-weight:700;font-size:13px;font-family:ui-monospace,monospace;color:var(--color-text-info)}
+.pt-kh{font-weight:600;font-size:13px}
+.pt-meta{font-size:10.5px;color:var(--color-text-tertiary)}
+.pt-prog{font-size:11px;color:var(--color-text-secondary);margin-bottom:12px}
+.pt-steps{display:flex;flex-direction:column}
+.pt-step{display:flex;align-items:flex-start;gap:10px;position:relative;padding-bottom:13px}
+.pt-step:not(.pt-last)::before{content:'';position:absolute;left:5px;top:13px;bottom:0;width:1.5px;background:var(--color-border-secondary)}
+.pt-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:1px;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--color-border-secondary)}
+.pt-dot.pt-done{background:var(--color-text-success);box-shadow:0 0 0 1.5px var(--color-text-success)}
+.pt-dot.pt-wait{background:var(--color-background-secondary)}
+.pt-body{flex:1}
+.pt-name{font-size:12px;line-height:1.4}
+.pt-val{font-size:12px;font-weight:700;color:var(--color-text-tertiary);white-space:nowrap}
+.pt-val.pt-vdone{color:var(--color-text-success)}
+@media (prefers-color-scheme:dark){.pt-card{background:#1d1f27}}
+
+.cn-wrap{overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:#fff}
+.cn-tbl{width:100%;border-collapse:collapse;font-size:11.5px;min-width:900px}
+.cn-tbl th{background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;padding:8px 9px;text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
+.cn-tbl th.r{text-align:right}.cn-tbl th.c{text-align:center}
+.cn-tbl th.cn-grp{background:var(--color-background-info);color:var(--color-text-info);text-align:center}
+.cn-tbl td{padding:7px 9px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+.cn-tbl td.r{text-align:right;font-variant-numeric:tabular-nums}.cn-tbl td.c{text-align:center}
+.cn-tbl td.b{font-weight:700}
+.cn-ndtt{font-size:10.5px;color:var(--color-text-secondary);line-height:1.45;min-width:240px;white-space:normal}
+.cn-paid{color:var(--color-text-success)}
+.cn-ok{color:var(--color-text-secondary)}
+.cn-warn{color:var(--color-text-warning);font-weight:500}
+.cn-bad{color:var(--color-text-danger);font-weight:600}
+.cn-tbl tr.cn-tot td{background:var(--color-background-secondary);font-weight:700;border-top:1.5px solid var(--color-border-secondary)}
+@media(prefers-color-scheme:dark){.cn-wrap,.cn-tbl{background:#1d1f27}}
+
+.qt-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.qt-card{background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:13px 15px}
+.qt-t{font-size:10.5px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.3px}
+.qt-n{font-size:22px;font-weight:700;margin:5px 0 2px;font-variant-numeric:tabular-nums}
+.qt-s{font-size:10px;color:var(--color-text-tertiary)}
+.qt-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.qt-pill.ok{background:var(--color-background-success);color:var(--color-text-success)}
+.qt-pill.wait{background:var(--color-background-warning);color:var(--color-text-warning)}
+.qt-pill.bad{background:var(--color-background-danger);color:var(--color-text-danger)}
+@media(prefers-color-scheme:dark){.qt-card{background:#1d1f27}}
+
+.nt-mau{font-size:10px;color:var(--color-text-info);font-weight:600}
+.nt-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.nt-pill.ok{background:var(--color-background-success);color:var(--color-text-success)}
+.nt-pill.wait{background:var(--color-background-warning);color:var(--color-text-warning)}
+
+.cn-tbl.freeze1 th.fz, .cn-tbl.freeze1 td.fz{position:sticky;left:0;z-index:3;background:#fff;box-shadow:1px 0 0 var(--color-border-tertiary)}
+.cn-tbl.freeze1 thead th.fz{z-index:4;background:var(--color-background-secondary)}
+.cn-tbl.freeze1 tfoot td.fz{background:var(--color-background-secondary)}
+@media(prefers-color-scheme:dark){.cn-tbl.freeze1 th.fz,.cn-tbl.freeze1 td.fz{background:#1d1f27}}
+
+.cgrp{font-size:14px;font-weight:700;color:var(--color-text-info);margin:22px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--color-border-secondary);display:flex;align-items:center;gap:7px}
+.cgrp:first-of-type{margin-top:6px}
+
+.ntwrap{display:flex;gap:14px;align-items:flex-start}
+@media(max-width:760px){.ntwrap{flex-direction:column}}
+.ntnav-col{flex:0 0 220px;display:flex;flex-direction:column;gap:4px;position:sticky;top:8px}
+@media(max-width:760px){.ntnav-col{flex:auto;width:100%;flex-direction:row;overflow-x:auto;position:static}}
+.ntnav{text-align:left;background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:9px;padding:8px 11px;cursor:pointer;display:flex;flex-direction:column;gap:1px;font-family:inherit;transition:all .12s;white-space:nowrap}
+.ntnav.on{background:var(--color-background-info);border-color:var(--color-text-info)}
+.ntnav-c{font-weight:700;font-size:12px;color:var(--color-text-info)}
+.ntnav-k{font-size:11px}
+.ntnav-m{font-size:9.5px;color:var(--color-text-tertiary)}
+.ntpanel-col{flex:1;min-width:0;background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px 16px}
+@media(prefers-color-scheme:dark){.ntnav,.ntpanel-col{background:#1d1f27}}
+
+.cn-tbl th.gA{background:var(--color-background-info);color:var(--color-text-info)}
+.cn-tbl th.gB{background:var(--color-background-success);color:var(--color-text-success)}
+.cn-tbl th.gC{background:var(--color-background-warning);color:var(--color-text-warning)}
+
+.ntblock{margin-bottom:18px;scroll-margin-top:12px}
+.ntblock:last-child{margin-bottom:0}
+.ntpanel-col{max-height:560px;overflow-y:auto}
+.ntnav{text-decoration:none}
+.ntnav.active{background:var(--color-background-info);border-color:var(--color-text-info)}
+
+.cn-tbl .cxA,.cn-tbl .cxB,.cn-tbl .cxC{display:none}
+.cn-tbl.sA .cxA,.cn-tbl.sB .cxB,.cn-tbl.sC .cxC{display:table-cell}
+.colexp{cursor:pointer;border:none;background:rgba(255,255,255,.35);color:inherit;border-radius:4px;font-size:10px;font-weight:700;padding:0 5px;margin-left:5px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">VML</div><div><div class="nm">Việt Minh Long</div><div class="sub">Báo cáo tài chính</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="overview"><i class="ti ti-layout-dashboard"></i> Tổng quan điều hành</button>
+      <button data-page="revenue"><i class="ti ti-cash"></i> Doanh thu công trình</button>
+      <button data-page="cost"><i class="ti ti-receipt"></i> Chi phí</button>
+      <button data-page="cncf"><i class="ti ti-wallet"></i> Công nợ & dòng tiền</button>
+    </nav>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar"></div>
+    </div>
+  </aside>
+  <main class="main">
+
+  <!-- ===================== TRANG TỔNG QUAN ĐIỀU HÀNH ===================== -->
+  <section class="page" id="page-overview" style="display:block">
+    <div class="titlebar"><div style="display:flex;align-items:center;gap:8px"><span class="t">Tổng quan điều hành</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: tỷ đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 26/05/2026</span></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+      <div class="kpi"><div class="ttl">Doanh thu nghiệm thu</div><div class="big" style="color:var(--color-text-info)">74.8 tỷ</div>
+        <div class="row"><span class="l">So kỳ trước</span><span class="v up">↑ 18%</span></div>
+        <div class="row"><span class="l">Đạt kế hoạch</span><span class="v">82%</span><span class="bdg bM">Theo dõi</span></div></div>
+      <div class="kpi"><div class="ttl">Chi phí</div><div class="big" style="color:var(--color-text-info)">41.3 tỷ</div>
+        <div class="row"><span class="l">So kỳ trước</span><span class="v dn">↑ 12%</span></div>
+        <div class="row"><span class="l">% ngân sách</span><span class="v">92%</span><span class="bdg bG">Tốt</span></div></div>
+      <div class="kpi"><div class="ttl">Lợi nhuận tạm tính</div><div class="big" style="color:var(--color-text-info)">33.5 tỷ</div>
+        <div class="row"><span class="l">So kỳ trước</span><span class="v up">↑ 24%</span></div>
+        <div class="row"><span class="l">Đạt kế hoạch</span><span class="v">88%</span></div>
+        <div class="row"><span class="l">Biên lợi nhuận</span><span class="v">44.8%</span><span class="bdg bG">Tốt</span></div></div>
+      <div class="kpi"><div class="ttl">Dòng tiền thuần</div><div class="big up">+24.2 tỷ</div>
+        <div class="row"><span class="l">Đã thu</span><span class="v">48.5 tỷ</span></div>
+        <div class="row"><span class="l">Đã chi</span><span class="v">24.3 tỷ</span></div></div>
+      <div class="kpi"><div class="ttl">Công nợ còn lại</div><div class="big" style="color:var(--color-text-info)">+18.4 tỷ</div>
+        <div class="row"><span class="l">Phải thu còn</span><span class="v">31.2 tỷ</span></div>
+        <div class="row"><span class="l">Phải trả còn</span><span class="v">12.8 tỷ</span></div></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-alert-triangle"></i> Công trình cần chú ý — theo loại cảnh báo</div>
+        <div style="overflow-x:auto"><table class="rk tk" style="min-width:680px"><thead id="ov_tkh"></thead><tbody id="ov_tkb"></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-chart-bar"></i> Doanh thu nghiệm thu theo tháng <span style="font-size:11px;color:var(--color-text-tertiary);font-weight:400">· di chuột xem công trình</span></span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="ov_c1" data-v="month">Theo tháng</button><button class="tab cum" data-c="ov_c1" data-v="cumu">Lũy kế</button></div></div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Cột: doanh thu NT (theo công trình)</span><span><span class="dash" style="border-color:#5F5E5A"></span>Đường: kế hoạch</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="ov_c1"></canvas></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-gauge"></i> Chi phí vs ngân sách · Biên lợi nhuận theo tháng</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Chi phí</span><span><span class="dot" style="background:#E24B4A"></span>Tháng vượt ngân sách</span><span><span class="dash" style="border-color:#5F5E5A"></span>Ngân sách chi phí</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Biên lợi nhuận %</span></div>
+        <div style="position:relative;width:100%;height:230px"><canvas id="ov_c2"></canvas></div>
+        <div class="s2" style="margin-top:8px">Biên lợi nhuận % = (Doanh thu nghiệm thu − Chi phí) / Doanh thu nghiệm thu trong tháng (trục phải). Số liệu tạm tính, chưa gồm thuế.</div>
+      </div>
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-arrows-up-down"></i> Dòng tiền theo tháng & dự kiến</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="ov_c3" data-v="month">Theo tháng</button><button class="tab cum" data-c="ov_c3" data-v="cumu">Lũy kế</button></div></div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Thu</span><span><span class="dot" style="background:#E24B4A"></span>Chi</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Dòng tiền thuần</span><span style="color:var(--color-text-tertiary)">· T06–T07 = dự kiến (nhạt)</span></div>
+        <div style="position:relative;width:100%;height:230px"><canvas id="ov_c3"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-table"></i> Theo dõi công trình <span class="s2" style="font-weight:400">· 2 cột nhạt = dự kiến 2 tháng tới</span></span>
+        <div style="display:flex;gap:6px"><button class="tab ovtab on" data-t="1">DT · Lợi nhuận · Chi phí</button><button class="tab ovtab" data-t="2">Dòng tiền · Công nợ</button></div></div>
+      <div style="max-height:380px;overflow:auto"><table class="rk dvt" style="min-width:680px"><thead id="ov_th"></thead><tbody id="ov_tb"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRANG DOANH THU ===================== -->
+  <section class="page" id="page-revenue">
+    <div class="titlebar"><div style="display:flex;align-items:center;gap:8px"><span class="t">Doanh thu công trình</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: triệu đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 26/05/2026</span></div>
+    <div id="rv_ct">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="chg u">↑ 18%</div><div class="ttl">Doanh thu nghiệm thu</div><div class="big" style="color:var(--color-text-info)">74.8 tỷ</div>
+          <div class="row"><span class="l">% Nghiệm thu / Hợp đồng</span><span class="v">39%</span></div>
+          <div class="row"><span class="l">% Nghiệm thu / Kế hoạch</span><span class="v">82%</span></div></div>
+        <div class="kpi"><div class="chg u">↑ 7%</div><div class="ttl">Giá trị chờ nghiệm thu</div><div class="big" style="color:var(--color-text-warning)">31.6 tỷ</div>
+          <div class="row"><span class="l">% Nghiệm thu / Hợp đồng</span><span class="v">39%</span></div>
+          <div class="row"><span class="l">% Nghiệm thu / Kế hoạch</span><span class="v">82%</span></div></div>
+        <div class="kpi"><div class="ttl">Kế hoạch</div><div class="big" style="color:var(--color-text-info)">91.2 tỷ</div>
+          <div class="row"><span class="l">KH lũy kế đến T05</span><span class="v">91.2 tỷ</span></div>
+          <div class="row"><span class="l">KH cả năm</span><span class="v">220 tỷ</span></div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-chart-bar"></i> Doanh thu nghiệm thu theo tháng — đóng góp theo công trình</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="rv_c1" data-v="month">Theo tháng</button><button class="tab cum" data-c="rv_c1" data-v="cumu">Lũy kế</button></div></div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Cột: doanh thu NT (theo công trình)</span><span><span class="dash" style="border-color:#5F5E5A"></span>Đường: kế hoạch</span></div>
+        <div style="position:relative;width:100%;height:240px"><canvas id="rv_c1"></canvas></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd"><i class="ti ti-trophy"></i> Đóng góp doanh thu nghiệm thu theo công trình — so với hợp đồng</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Đã nghiệm thu</span><span><span class="dot" style="background:#BBD7F6"></span>Còn lại theo HĐ</span></div>
+        <div style="position:relative;width:100%;height:300px"><canvas id="rv_c2"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-table"></i> Thi công & nghiệm thu theo công trình</span>
+          <div style="display:flex;gap:6px"><button class="tab rvtab on" data-rv="tbl">Bảng chi tiết</button><button class="tab rvtab" data-rv="warn">Cảnh báo nghiệm thu</button></div></div>
+        <div id="rv_vtbl">
+          <div class="s2" style="margin-bottom:8px">Xếp theo độ lệch thi công − nghiệm thu · 2 cột nhạt = dự kiến</div>
+          <div style="max-height:360px;overflow:auto"><table class="rk" style="min-width:680px"><thead><tr><th style="width:20%">Công trình</th><th>Giá trị HĐ</th><th style="width:17%;text-align:left">Thi công</th><th style="width:17%;text-align:left">Nghiệm thu</th><th>Chênh lệch</th><th>Chờ NT</th><th style="text-align:center;width:16%">NT/tháng</th></tr></thead><tbody id="rv_tb"></tbody></table></div>
+        </div>
+        <div id="rv_vwarn" style="display:none">
+          <div class="s2" style="margin-bottom:8px">Độ lệch % tiến độ — công trình thi công vượt xa nghiệm thu cần thúc hồ sơ nghiệm thu</div>
+          <div class="legend"><span><span class="dot" style="background:#85B7EB"></span>Thi công (%)</span><span><span class="dot" style="background:#E24B4A"></span>Nghiệm thu (%) — đỏ khi lệch &gt;20%</span></div>
+          <div style="position:relative;width:100%;height:320px"><canvas id="rv_c3"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CÁC ĐỢT NGHIỆM THU -->
+    <div style="margin-top:20px;border-top:0.5px solid var(--color-border-tertiary);padding-top:18px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:3px">Các đợt nghiệm thu</div>
+      <div class="s2" style="margin-bottom:12px">Doanh thu ghi nhận theo từng đợt nghiệm thu / thanh toán của hợp đồng (theo đúng điều khoản từng mẫu A–E).</div>
+      <div class="ntwrap">
+        <div class="ntnav-col"><a class="ntnav" href="#nt0" data-nt="0"><span class="ntnav-c">108-25</span><span class="ntnav-k">Đạt Gia – Vũng Tàu</span><span class="ntnav-m">Mẫu A · 2/3 đợt</span></a><a class="ntnav" href="#nt1" data-nt="1"><span class="ntnav-c">034-26</span><span class="ntnav-k">Chú Thắng – Tân Bình</span><span class="ntnav-m">Mẫu E · 1/4 đợt</span></a><a class="ntnav" href="#nt2" data-nt="2"><span class="ntnav-c">131-25</span><span class="ntnav-k">Anh Hoàng – Dĩ An</span><span class="ntnav-m">Mẫu D · 2/5 đợt</span></a><a class="ntnav" href="#nt3" data-nt="3"><span class="ntnav-c">018-26</span><span class="ntnav-k">Anh Tùng – Kim Long</span><span class="ntnav-m">Mẫu B · 2/5 đợt</span></a><a class="ntnav" href="#nt4" data-nt="4"><span class="ntnav-c">026-26</span><span class="ntnav-k">Anh Vũ – Nha Trang</span><span class="ntnav-m">Mẫu A · 1/3 đợt</span></a><a class="ntnav" href="#nt5" data-nt="5"><span class="ntnav-c">008-26</span><span class="ntnav-k">Anh Tuấn – Thủ Đức</span><span class="ntnav-m">Mẫu C · 1/3 đợt</span></a><a class="ntnav" href="#nt6" data-nt="6"><span class="ntnav-c">028-26</span><span class="ntnav-k">Cô Dung – Tân Uyên</span><span class="ntnav-m">Mẫu A · 1/3 đợt</span></a><a class="ntnav" href="#nt7" data-nt="7"><span class="ntnav-c">031-26</span><span class="ntnav-k">Chị Phượng – Thảo Điền</span><span class="ntnav-m">Mẫu E · 1/4 đợt</span></a><a class="ntnav" href="#nt8" data-nt="8"><span class="ntnav-c">145-25</span><span class="ntnav-k">Anh Minh – Vạn Phúc</span><span class="ntnav-m">Mẫu D · 4/5 đợt</span></a><a class="ntnav" href="#nt9" data-nt="9"><span class="ntnav-c">146-25</span><span class="ntnav-k">Anh Độ – Quận 7</span><span class="ntnav-m">Mẫu A · 2/3 đợt</span></a></div>
+        <div class="ntpanel-col"><div class="ntblock" id="nt0"><div style="font-weight:600;margin-bottom:8px">108-25 · Đạt Gia – Vũng Tàu <span class="nt-mau">Mẫu A</span> <span class="s2">· đã thu 2/3 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Giao hàng tới chân công trình</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Nghiệm thu sản phẩm</td><td class="c b">20% (đủ 100%)</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt1"><div style="font-weight:600;margin-bottom:8px">034-26 · Chú Thắng – Tân Bình <span class="nt-mau">Mẫu E</span> <span class="s2">· đã thu 1/4 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Đợt 1 · Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Đợt 2 · Giao hàng ra công trình</td><td class="c b">40%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Đợt 3 · Lắp đặt xong (chưa vệ sinh, bắn keo)</td><td class="c b">10%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 4</td><td>Đợt 4 · Nghiệm thu</td><td class="c b">đủ 100%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt2"><div style="font-weight:600;margin-bottom:8px">131-25 · Anh Hoàng – Dĩ An <span class="nt-mau">Mẫu D</span> <span class="s2">· đã thu 2/5 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Đợt 1 · Ký hợp đồng</td><td class="c b">30%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Đợt 2 · Giao khung nhôm tới chân CT, lắp đặt 60%</td><td class="c b">20%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Đợt 3 · Giao kính</td><td class="c b">20%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 4</td><td>Đợt 4 · Lắp đặt xong + bắn keo + vệ sinh + test nước</td><td class="c b">20%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 5</td><td>Đợt 5 · Nghiệm thu</td><td class="c b">10%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt3"><div style="font-weight:600;margin-bottom:8px">018-26 · Anh Tùng – Kim Long <span class="nt-mau">Mẫu B</span> <span class="s2">· đã thu 2/5 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký hợp đồng</td><td class="c b">150 tr</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>10–15 ngày sau ký HĐ</td><td class="c b">120 tr</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Giao khung nhôm</td><td class="c b">30%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 4</td><td>Giao kính</td><td class="c b">90%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 5</td><td>Nghiệm thu sản phẩm</td><td class="c b">đủ 100%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt4"><div style="font-weight:600;margin-bottom:8px">026-26 · Anh Vũ – Nha Trang <span class="nt-mau">Mẫu A</span> <span class="s2">· đã thu 1/3 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Giao hàng tới chân công trình</td><td class="c b">40%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Nghiệm thu sản phẩm</td><td class="c b">20% (đủ 100%)</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt5"><div style="font-weight:600;margin-bottom:8px">008-26 · Anh Tuấn – Thủ Đức <span class="nt-mau">Mẫu C</span> <span class="s2">· đã thu 1/3 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký HĐ (chuẩn bị vật tư)</td><td class="c b">1 tỷ</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Giao hàng tới chân công trình</td><td class="c b">1 tỷ</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Nghiệm thu sản phẩm</td><td class="c b">đủ 100%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt6"><div style="font-weight:600;margin-bottom:8px">028-26 · Cô Dung – Tân Uyên <span class="nt-mau">Mẫu A</span> <span class="s2">· đã thu 1/3 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Giao hàng tới chân công trình</td><td class="c b">40%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Nghiệm thu sản phẩm</td><td class="c b">20% (đủ 100%)</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt7"><div style="font-weight:600;margin-bottom:8px">031-26 · Chị Phượng – Thảo Điền <span class="nt-mau">Mẫu E</span> <span class="s2">· đã thu 1/4 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Đợt 1 · Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Đợt 2 · Giao hàng ra công trình</td><td class="c b">40%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Đợt 3 · Lắp đặt xong (chưa vệ sinh, bắn keo)</td><td class="c b">10%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 4</td><td>Đợt 4 · Nghiệm thu</td><td class="c b">đủ 100%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt8"><div style="font-weight:600;margin-bottom:8px">145-25 · Anh Minh – Vạn Phúc <span class="nt-mau">Mẫu D</span> <span class="s2">· đã thu 4/5 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Đợt 1 · Ký hợp đồng</td><td class="c b">30%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Đợt 2 · Giao khung nhôm tới chân CT, lắp đặt 60%</td><td class="c b">20%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Đợt 3 · Giao kính</td><td class="c b">20%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 4</td><td>Đợt 4 · Lắp đặt xong + bắn keo + vệ sinh + test nước</td><td class="c b">20%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 5</td><td>Đợt 5 · Nghiệm thu</td><td class="c b">10%</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div><div class="ntblock" id="nt9"><div style="font-weight:600;margin-bottom:8px">146-25 · Anh Độ – Quận 7 <span class="nt-mau">Mẫu A</span> <span class="s2">· đã thu 2/3 đợt</span></div><table class="cn-tbl" style="min-width:auto"><thead><tr><th class="c">Đợt</th><th>Nội dung nghiệm thu / thanh toán</th><th class="c">Giá trị</th><th>Trạng thái</th></tr></thead><tbody><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 1</td><td>Ký hợp đồng</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 2</td><td>Giao hàng tới chân công trình</td><td class="c b">40%</td><td><span class="nt-pill ok">Đã nghiệm thu</span></td></tr><tr><td class="c" style="color:var(--color-text-tertiary)">Đợt 3</td><td>Nghiệm thu sản phẩm</td><td class="c b">20% (đủ 100%)</td><td><span class="nt-pill wait">Chờ nghiệm thu</span></td></tr></tbody></table></div></div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD + HỢP ĐỒNG -->
+    <div style="margin-top:20px;border-top:0.5px solid var(--color-border-tertiary);padding-top:18px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:10px">Hợp đồng &amp; hoa hồng NVKD</div>
+      <div class="ov-g2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+        <div class="card-c" style="background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px">
+          <div style="font-size:13px;font-weight:600">Doanh thu theo nguồn data</div>
+          <div class="s2" style="margin-bottom:8px">doanh số thuần theo kênh tiếp cận khách</div>
+          <div style="position:relative;height:230px"><canvas id="rv_src"></canvas></div>
+        </div>
+        <div class="card-c" style="background:#fff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px">
+          <div style="font-size:13px;font-weight:600">Doanh số &amp; doanh số thuần theo tháng</div>
+          <div class="s2" style="margin-bottom:8px">gross (trước CK) vs thuần (sau CK)</div>
+          <div style="position:relative;height:230px"><canvas id="rv_gn"></canvas></div>
+        </div>
+      </div>
+      <div class="s2" style="margin-bottom:10px">Chi tiết giá trị hợp đồng, chiết khấu, VAT, doanh số thuần và hoa hồng kinh doanh từng đơn hàng. Đơn vị: triệu đồng.</div>
+      <div class="cn-wrap"><table class="cn-tbl freeze1" id="hdTable" style="font-size:11px">
+        <thead><tr>
+          <th class="fz">Công trình / NVKD</th>
+          <th class="r cxA gA">Giá trị HĐ (trước CK)</th><th class="r cxA gA">Chiết khấu KH</th><th class="r cxA gA">Thuế VAT</th>
+          <th class="r gA">Tổng GT Hợp Đồng <button class="colexp" data-g="A" title="Mở/ẩn cột chi tiết">▸</button></th>
+          <th class="r cxB gB">GT đơn KD trước CK</th><th class="r cxB gB">Thu hồi CS ưu đãi</th><th class="r cxB gB">HH chênh lệch</th><th class="c cxB gB">Tỉ lệ CK KD</th><th class="r cxB gB">GT HH quy đổi</th>
+          <th class="r gB">TỔNG HOA HỒNG KD <button class="colexp" data-g="B" title="Mở/ẩn cột chi tiết">▸</button></th>
+          <th class="c cxC gC">CK đối tác %</th><th class="r cxC gC">CK đối tác GT</th>
+          <th class="r">Doanh số Thuần <button class="colexp" data-g="C" title="Mở/ẩn cột chi tiết">▸</button></th>
+          <th class="c cxC">HĐ bản chính</th><th class="c cxC">Dự toán HĐ</th>
+          <th class="c">ĐKDS</th>
+        </tr></thead>
+        <tbody><tr><td class="fz"><b>108-25</b> Đạt Gia – Vũng Tàu<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Tuấn Kiệt</span></td><td class="r cxA">935</td><td class="r cxA">28</td><td class="r cxA">73</td><td class="r b">980</td><td class="r cxB">860</td><td class="r cxB">–</td><td class="r cxB">75</td><td class="c cxB">40%</td><td class="r cxB">30</td><td class="r b cn-paid">30</td><td class="c cxC">2%</td><td class="r cxC">19</td><td class="r b">907</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>034-26</b> Chú Thắng – Tân Bình<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Minh Trí</span></td><td class="r cxA">393</td><td class="r cxA">12</td><td class="r cxA">30</td><td class="r b">412</td><td class="r cxB">362</td><td class="r cxB">–</td><td class="r cxB">31</td><td class="c cxB">40%</td><td class="r cxB">13</td><td class="r b cn-paid">13</td><td class="c cxC">0%</td><td class="r cxC">–</td><td class="r b">381</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>131-25</b> Anh Hoàng – Dĩ An<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Thanh Hà</span></td><td class="r cxA">534</td><td class="r cxA">16</td><td class="r cxA">41</td><td class="r b">559</td><td class="r cxB">491</td><td class="r cxB">–</td><td class="r cxB">43</td><td class="c cxB">40%</td><td class="r cxB">17</td><td class="r b cn-paid">17</td><td class="c cxC">2%</td><td class="r cxC">11</td><td class="r b">518</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>018-26</b> Anh Tùng – Kim Long<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Tuấn Kiệt</span></td><td class="r cxA">506</td><td class="r cxA">15</td><td class="r cxA">39</td><td class="r b">530</td><td class="r cxB">466</td><td class="r cxB">–</td><td class="r cxB">40</td><td class="c cxB">40%</td><td class="r cxB">16</td><td class="r b cn-paid">16</td><td class="c cxC">0%</td><td class="r cxC">–</td><td class="r b">491</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-warn">Chưa</td><td class="c cn-warn">Chưa</td></tr><tr><td class="fz"><b>026-26</b> Anh Vũ – Nha Trang<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Minh Trí</span></td><td class="r cxA">434</td><td class="r cxA">13</td><td class="r cxA">34</td><td class="r b">455</td><td class="r cxB">399</td><td class="r cxB">–</td><td class="r cxB">35</td><td class="c cxB">40%</td><td class="r cxB">14</td><td class="r b cn-paid">14</td><td class="c cxC">2%</td><td class="r cxC">9</td><td class="r b">421</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>008-26</b> Anh Tuấn – Thủ Đức<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Thanh Hà</span></td><td class="r cxA">602</td><td class="r cxA">18</td><td class="r cxA">47</td><td class="r b">631</td><td class="r cxB">554</td><td class="r cxB">–</td><td class="r cxB">48</td><td class="c cxB">40%</td><td class="r cxB">19</td><td class="r b cn-paid">19</td><td class="c cxC">2%</td><td class="r cxC">12</td><td class="r b">584</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>028-26</b> Cô Dung – Tân Uyên<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Tuấn Kiệt</span></td><td class="r cxA">329</td><td class="r cxA">16</td><td class="r cxA">25</td><td class="r b">338</td><td class="r cxB">303</td><td class="r cxB">–</td><td class="r cxB">26</td><td class="c cxB">40%</td><td class="r cxB">11</td><td class="r b cn-paid">11</td><td class="c cxC">0%</td><td class="r cxC">–</td><td class="r b">313</td><td class="c cxC cn-warn">Chưa</td><td class="c cxC cn-warn">Chưa</td><td class="c cn-warn">Chưa</td></tr><tr><td class="fz"><b>031-26</b> Chị Phượng – Thảo Điền<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Minh Trí</span></td><td class="r cxA">237</td><td class="r cxA">7</td><td class="r cxA">18</td><td class="r b">248</td><td class="r cxB">218</td><td class="r cxB">–</td><td class="r cxB">19</td><td class="c cxB">40%</td><td class="r cxB">8</td><td class="r b cn-paid">8</td><td class="c cxC">2%</td><td class="r cxC">5</td><td class="r b">230</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>145-25</b> Anh Minh – Vạn Phúc<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Thanh Hà</span></td><td class="r cxA">582</td><td class="r cxA">12</td><td class="r cxA">46</td><td class="r b">616</td><td class="r cxB">535</td><td class="r cxB">–</td><td class="r cxB">47</td><td class="c cxB">40%</td><td class="r cxB">19</td><td class="r b cn-paid">19</td><td class="c cxC">2%</td><td class="r cxC">12</td><td class="r b">570</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr><tr><td class="fz"><b>146-25</b> Anh Độ – Quận 7<br><span style="font-size:10px;color:var(--color-text-info)">NVKD: Tuấn Kiệt</span></td><td class="r cxA">410</td><td class="r cxA">12</td><td class="r cxA">32</td><td class="r b">430</td><td class="r cxB">377</td><td class="r cxB">–</td><td class="r cxB">33</td><td class="c cxB">40%</td><td class="r cxB">13</td><td class="r b cn-paid">13</td><td class="c cxC">2%</td><td class="r cxC">8</td><td class="r b">398</td><td class="c cxC cn-paid">Có</td><td class="c cxC cn-paid">Có</td><td class="c cn-paid">Đạt</td></tr></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ===================== TRANG TỔNG QUAN CHI PHÍ ===================== -->
+  <section class="page" id="page-cost">
+    <div class="titlebar"><div style="display:flex;align-items:center;gap:8px"><span class="t">Chi phí</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: tỷ đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 26/05/2026</span></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px">
+      <div class="kpi"><div class="ttl">Tổng chi phí</div><div class="big" style="color:var(--color-text-info)">3.6 tỷ</div></div>
+      <div class="kpi"><div class="ttl">Chi phí vật tư</div><div class="big">1.95 tỷ</div></div>
+      <div class="kpi"><div class="ttl">% Ngân sách</div><div class="big up">94%</div></div>
+      <div class="kpi"><div class="ttl">Chi phí vượt ngân sách</div><div class="big dn">0.8 tỷ</div></div>
+    </div>
+
+    <div class="cgrp"><i class="ti ti-chart-bar"></i> Tổng quan chi phí</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:18px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-chart-bar"></i> Chi phí theo tháng — theo mảng</span>
+          <div style="display:flex;gap:6px"><button class="tab cum on" data-c="cp_seg" data-v="month">Theo tháng</button><button class="tab cum" data-c="cp_seg" data-v="cumu">Lũy kế</button></div></div>
+        <div class="legend"><span><span class="dot" style="background:#0C447C"></span>Vật tư</span><span><span class="dot" style="background:#2E7CD6"></span>Nhân công SX</span><span><span class="dot" style="background:#5B9BE0"></span>Gia công</span><span><span class="dot" style="background:#8FBEEC"></span>Lắp đặt</span><span><span class="dot" style="background:#BBD7F6"></span>VC & chung</span><span><span class="dash" style="border-color:#5F5E5A"></span>Ngân sách</span></div>
+        <div style="position:relative;width:100%;height:215px"><canvas id="cp_seg"></canvas></div>
+      </div>
+            <div class="card">
+        <div class="hd"><i class="ti ti-gauge"></i> Thực tế vs ngân sách theo mảng</div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Thực tế</span><span><span class="dot" style="background:#E24B4A"></span>Vượt NS</span><span><span class="dot" style="background:#BBD7F6"></span>Ngân sách</span></div>
+        <div style="position:relative;width:100%;height:185px"><canvas id="cp_nsbar"></canvas></div>
+      </div>
+    </div>
+
+    
+
+    <div id="cp_proj" style="display:block">
+      <div class="card">
+          <div class="hd"><i class="ti ti-chart-bar"></i> Cơ cấu chi phí theo công trình</div>
+          <div class="legend" id="cp_cclg"></div>
+          <div style="position:relative;width:100%;height:210px"><canvas id="cp_cc"></canvas></div>
+        </div>
+      <div class="cgrp"><i class="ti ti-building-community"></i> Chi phí theo công trình</div>
+      
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-layout-grid"></i> Phân loại chi phí &amp; dự báo hoàn thành theo công trình <span class="s2" style="font-weight:400">· bấm dòng để mở hạng mục</span></span>
+          <div style="display:flex;gap:6px"><button class="tab cphp on" data-mode="gt">Giá trị</button><button class="tab cphp" data-mode="pct">Tỷ lệ %</button><button class="tab cphp" data-mode="ns">% Ngân sách</button></div></div>
+        <div class="legend" id="cp_hpleg"></div>
+        <div style="overflow-x:auto"><table class="hm"><thead id="cp_hph"></thead><tbody id="cp_hpb"></tbody></table></div>
+        <div class="s2" id="cp_hpnote" style="margin-top:8px"></div>
+      </div>
+
+      <div class="cgrp"><i class="ti ti-package"></i> Phân tích vật tư</div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-table"></i> Cơ cấu vật tư &amp; thiết bị theo loại</span>
+          <div style="display:flex;gap:6px"><button class="tab cpdt on" data-d="month">Theo tháng</button><button class="tab cpdt" data-d="proj">Theo công trình</button></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;align-items:center">
+          <div style="display:flex;gap:6px"><button class="cpgt cpgrp on" data-g="vt">Vật tư / NVL</button></div>
+          <div id="cp_splitWrap" style="display:none;gap:6px"><button class="tab cpst on" data-s="type">Theo loại</button><button class="tab cpst" data-s="rent">Thuê / Khấu hao</button></div>
+        </div>
+        <div style="max-height:420px;overflow:auto"><table class="mx"><thead id="cp_mxh"></thead><tbody id="cp_mxb"></tbody></table></div>
+        <div class="s2" style="margin-top:8px">Ô tô đậm hơn = chi phí lớn hơn. Cột <b>Tổng cộng</b> kèm thanh so sánh giữa các loại.</div>
+      </div>
+
+      <div class="cgrp"><i class="ti ti-truck-delivery"></i> Nhà cung cấp vật tư</div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-building-store"></i> Chi phí theo nhà cung cấp / đơn vị</span>
+          <div style="display:flex;gap:6px"><button class="cpgt cpvg on" data-g="vt">Vật tư / NVL</button></div></div>
+        <div class="legend" id="cp_vlg"></div>
+        <div style="position:relative;width:100%;height:260px"><canvas id="cp_vend"></canvas></div>
+        <div class="s2" style="margin-top:8px">Chi phí mua vật tư / NVL theo nhà cung cấp (nhôm, kính, phụ kiện).</div>
+      </div>
+
+          </div>
+  </section>
+
+  <!-- ===================== TRANG CÔNG NỢ & DÒNG TIỀN ===================== -->
+  <section class="page" id="page-cncf">
+    <div class="titlebar"><div style="display:flex;align-items:center;gap:8px"><span class="t">Công nợ & dòng tiền</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: tỷ đồng</span></div>
+      <span class="frange" style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 26/05/2026</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="ptab cntab on" data-cn="dt"><i class="ti ti-arrows-up-down"></i> Dòng tiền</button>
+      <button class="ptab cntab" data-cn="no"><i class="ti ti-wallet"></i> Công nợ</button><button class="ptab cntab" data-cn="tu"><i class="ti ti-cash-banknote"></i> Tạm ứng &amp; quyết toán</button>
+    </div>
+
+    <!-- TAB DÒNG TIỀN -->
+    <div id="cn_dt">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="ttl">Dòng tiền thuần kỳ này</div><div class="big up">+24.2 tỷ</div>
+          <div class="row"><span class="l">Đã thu</span><span class="v">48.5 tỷ</span></div><div class="row"><span class="l">Đã chi</span><span class="v">24.3 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Số dư tiền cuối kỳ</div><div class="big" style="color:var(--color-text-info)">36.8 tỷ</div>
+          <div class="row"><span class="l">Đầu kỳ</span><span class="v">12.6 tỷ</span></div><div class="row"><span class="l">Thay đổi</span><span class="v up">+24.2 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Dự kiến thu 30 ngày tới</div><div class="big" style="color:var(--color-text-info)">14.5 tỷ</div>
+          <div class="row"><span class="l">Từ nghiệm thu</span><span class="v">11.0 tỷ</span></div><div class="row"><span class="l">Thu nợ</span><span class="v">3.5 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Dự kiến chi 30 ngày tới</div><div class="big" style="color:var(--color-text-info)">12.0 tỷ</div>
+          <div class="row"><span class="l">NCC / vật tư</span><span class="v">8.0 tỷ</span></div><div class="row"><span class="l">Lương & khác</span><span class="v">4.0 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Dòng tiền dự kiến ròng</div><div class="big up">+2.5 tỷ</div>
+          <div class="row"><span class="l">Tháng tới (T06)</span><span class="v"></span></div><div class="row"><span class="l">Số dư dự kiến</span><span class="v">39.3 tỷ</span></div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-arrows-up-down"></i> Thu / chi theo tháng & dự kiến</span>
+          <div style="display:flex;gap:6px"><button class="tab cncf on" data-v="month">Theo tháng</button><button class="tab cncf" data-v="cumu">Lũy kế (số dư)</button></div></div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Thu</span><span><span class="dot" style="background:#E24B4A"></span>Chi</span><span><span class="dot" style="background:#0C447C;height:3px;width:16px"></span>Dòng tiền thuần</span><span style="color:var(--color-text-tertiary)">· T06–T07 = dự kiến (nhạt)</span></div>
+        <div style="position:relative;width:100%;height:240px"><canvas id="cn_cf"></canvas></div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-layout-grid"></i> Dòng tiền theo công trình × tháng <span class="s2" style="font-weight:400">· bấm dòng để mở hạng mục</span></span>
+          <div style="display:flex;gap:6px"><button class="tab cnmd on" data-m="net">Ròng</button><button class="tab cnmd" data-m="thu">Tiền thu</button><button class="tab cnmd" data-m="chi">Tiền chi</button></div></div>
+        <div class="legend" id="cn_hmleg"></div>
+        <div style="overflow-x:auto"><table class="hm hmfix"><thead id="cn_hmh"></thead><tbody id="cn_hmb"></tbody></table></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:14px">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-users"></i> Thu / chi theo đối tượng</span>
+            <div style="display:flex;gap:6px"><button class="tab cnpty on" data-p="thu">Đã thu</button><button class="tab cnpty" data-p="chi">Đã chi</button></div></div>
+          <div class="legend" id="cn_ptylg"></div>
+          <div style="position:relative;width:100%;height:240px"><canvas id="cn_pty"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-calendar-event"></i> Lịch thu / chi dự kiến 30 ngày tới</div>
+          <div style="max-height:260px;overflow:auto"><table class="rk" style="min-width:0"><thead><tr><th style="text-align:left;width:13%">Loại</th><th style="text-align:left">Nội dung</th><th style="text-align:left;width:22%">Đối tượng</th><th style="width:12%">Ngày</th><th>Số tiền</th></tr></thead><tbody id="cn_planb"></tbody></table></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-notebook"></i> Nhật ký thu / chi tiền</span>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="display:flex;gap:6px"><button class="tab cnjr on" data-j="thu">Nhật ký thu</button><button class="tab cnjr" data-j="chi">Nhật ký chi</button></div>
+            <div style="display:flex;gap:6px"><button class="tab cnjf on" data-jf="all">Tất cả</button><button class="tab cnjf" data-jf="CK">Chuyển khoản</button><button class="tab cnjf" data-jf="TM">Tiền mặt</button></div>
+          </div></div>
+        <div id="cn_jrsum" class="s2" style="margin-bottom:8px"></div>
+        <div style="max-height:340px;overflow:auto"><table class="rk" style="min-width:780px"><thead><tr><th style="text-align:left;width:9%">Ngày</th><th style="text-align:left;width:12%">Chứng từ</th><th style="text-align:left">Diễn giải</th><th style="text-align:left;width:18%">Đối tượng</th><th style="text-align:left;width:16%">Công trình</th><th>Số tiền</th><th style="text-align:center;width:8%">Hình thức</th></tr></thead><tbody id="cn_jrb"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- TAB CÔNG NỢ -->
+    <div id="cn_no" style="display:none">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="ttl">Công nợ phải thu</div><div class="big" style="color:var(--color-text-info)">31.2 tỷ</div>
+          <div class="row"><span class="l">Quá hạn (&gt;60 ngày)</span><span class="v dn">8.8 tỷ</span></div><div class="row"><span class="l">Tỉ lệ quá hạn</span><span class="v">28%</span></div></div>
+        <div class="kpi"><div class="ttl">Công nợ phải trả</div><div class="big" style="color:var(--color-text-info)">12.8 tỷ</div>
+          <div class="row"><span class="l">Đến hạn 30 ngày</span><span class="v">9.0 tỷ</span></div><div class="row"><span class="l">Quá hạn</span><span class="v wn">1.4 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Công nợ ròng</div><div class="big up">+18.4 tỷ</div>
+          <div class="row"><span class="l">Phải thu</span><span class="v">31.2 tỷ</span></div><div class="row"><span class="l">Phải trả</span><span class="v">12.8 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Nợ quá hạn phải thu</div><div class="big dn">8.8 tỷ</div>
+          <div class="row"><span class="l">61–90 ngày</span><span class="v">4.0 tỷ</span></div><div class="row"><span class="l">&gt; 90 ngày</span><span class="v dn">4.8 tỷ</span></div></div>
+        <div class="kpi"><div class="ttl">Số ngày thu BQ (DSO)</div><div class="big" style="color:var(--color-text-info)">58 ngày</div>
+          <div class="row"><span class="l">Kỳ trước</span><span class="v">52 ngày</span></div><div class="row"><span class="l">Mục tiêu</span><span class="v">≤ 45 ngày</span><span class="bdg bM">Theo dõi</span></div></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <button class="tab cnag on" data-m="pt">Công nợ phải thu</button>
+        <button class="tab cnag" data-m="ptr">Công nợ phải trả</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:14px">
+        <div class="card">
+          <div class="hd"><i class="ti ti-clock-hour-4"></i> Phân tích tuổi nợ</div>
+          <div class="legend" id="cn_agleg"></div>
+          <div style="position:relative;width:100%;height:230px"><canvas id="cn_agL"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-users"></i> Công nợ theo đối tượng — theo tuổi nợ</div>
+          <div class="s2" style="margin-bottom:8px">Xếp theo dư nợ · phần <span style="color:var(--color-text-danger)">đỏ/cam</span> là nợ quá hạn</div>
+          <div style="position:relative;width:100%;height:250px"><canvas id="cn_agR"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd"><span id="cn_cnhmTitle"><i class="ti ti-layout-grid"></i> Công nợ phải thu theo công trình × tuổi nợ</span> <span class="s2" style="font-weight:400">· bấm dòng để mở hạng mục</span></div>
+        <div class="legend" id="cn_cnhmleg"></div>
+        <div style="overflow-x:auto"><table class="hm"><thead id="cn_cnhmh"></thead><tbody id="cn_cnhmb"></tbody></table></div>
+      </div>
+
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px"><span><i class="ti ti-alert-triangle"></i> Cảnh báo hóa đơn — quá hạn & sắp đến hạn</span>
+          <div style="display:flex;gap:6px"><button class="tab cnfl on" data-f="all">Tất cả</button><button class="tab cnfl" data-f="over">Quá hạn</button><button class="tab cnfl" data-f="soon">Sắp đến hạn</button></div></div>
+        <div style="overflow-x:auto"><table class="rk" style="min-width:1080px"><thead><tr><th style="text-align:left;width:11%">Chứng từ</th><th style="text-align:left">Đối tượng</th><th style="text-align:left">Công trình</th><th style="text-align:center;width:8%">Loại</th><th style="width:10%">Đến hạn</th><th>Số tiền</th><th style="text-align:center;width:13%">Tình trạng</th><th style="text-align:left;width:12%">Phụ trách thu</th><th style="width:10%">Cam kết xử lý</th><th style="text-align:center;width:8%">Đã nhắc</th></tr></thead><tbody id="cn_invb"></tbody></table></div>
+      </div>
+      <!-- TỔNG HỢP CÔNG NỢ PHẢI THU -->
+    <div style="margin-top:20px;border-top:0.5px solid var(--color-border-tertiary);padding-top:18px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:3px">Tổng hợp công nợ phải thu</div>
+      <div class="s2" style="margin-bottom:12px">Phân loại giá trị chưa thu (đang thực hiện · khó đòi · bảo hành) kèm nội dung các đợt thanh toán theo hợp đồng. Đơn vị: triệu đồng.</div>
+      <div class="cn-wrap"><table class="cn-tbl">
+        <thead>
+          <tr><th rowspan="2">Công trình</th><th rowspan="2" class="r">Tổng phải thu</th><th rowspan="2" class="r">Đã thanh toán</th><th rowspan="2" class="r">Tổng chưa thu</th><th colspan="3" class="c cn-grp">Trong đó</th><th rowspan="2">Nội dung thanh toán</th><th rowspan="2" class="c">Hình thức TT</th><th rowspan="2">Tình trạng</th><th rowspan="2" class="r">DK thu trước 10/6</th><th rowspan="2" class="r">Tổng DK thu</th></tr>
+          <tr><th class="r">CN đang thực hiện</th><th class="r">CN khó đòi</th><th class="r">CN bảo hành</th></tr>
+        </thead>
+        <tbody><tr><td><b>108-25</b> Đạt Gia – Vũng Tàu</td><td class="r">980</td><td class="r cn-paid">686</td><td class="r b">294</td><td class="r">294</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">40% ký HĐ · 40% giao tới chân CT · 20% nghiệm thu</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">120</td><td class="r b">294</td></tr><tr><td><b>034-26</b> Chú Thắng – Tân Bình</td><td class="r">412</td><td class="r cn-paid">165</td><td class="r b">247</td><td class="r">–</td><td class="r cn-bad">247</td><td class="r cn-warn">–</td><td class="cn-ndtt">40% ký · 40% giao ra CT · 10% lắp xong · 10% nghiệm thu</td><td class="c">CK</td><td class="cn-bad">Quá hạn — tranh chấp PK</td><td class="r">–</td><td class="r b">–</td></tr><tr><td><b>131-25</b> Anh Hoàng – Dĩ An</td><td class="r">560</td><td class="r cn-paid">392</td><td class="r b">168</td><td class="r">168</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">30% ký · 20% giao khung nhôm + lắp · 20% kính · 20% lắp xong + vệ sinh · 10% NT</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">80</td><td class="r b">168</td></tr><tr><td><b>018-26</b> Anh Tùng – Kim Long</td><td class="r">530</td><td class="r cn-paid">132</td><td class="r b">398</td><td class="r">398</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">150tr ký · 120tr sau 10–15 ngày · 30% giao khung nhôm · 90% giao kính · NT</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">120</td><td class="r b">398</td></tr><tr><td><b>026-26</b> Anh Vũ – Nha Trang</td><td class="r">455</td><td class="r cn-paid">182</td><td class="r b">273</td><td class="r">273</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">40% ký HĐ · 40% giao tới chân CT · 20% nghiệm thu</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">90</td><td class="r b">273</td></tr><tr><td><b>008-26</b> Anh Tuấn – Thủ Đức</td><td class="r">631</td><td class="r cn-paid">300</td><td class="r b">331</td><td class="r">331</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">1 tỷ ký HĐ (chuẩn bị VT) · 1 tỷ giao tới chân CT · NT</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">150</td><td class="r b">331</td></tr><tr><td><b>028-26</b> Cô Dung – Tân Uyên</td><td class="r">345</td><td class="r cn-paid">138</td><td class="r b">207</td><td class="r">207</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">40% ký HĐ · 40% giao tới chân CT · 20% nghiệm thu</td><td class="c">TM</td><td class="cn-ok">Trong hạn</td><td class="r">60</td><td class="r b">207</td></tr><tr><td><b>031-26</b> Chị Phượng – Thảo Điền</td><td class="r">248</td><td class="r cn-paid">99</td><td class="r b">149</td><td class="r">149</td><td class="r cn-bad">–</td><td class="r cn-warn">–</td><td class="cn-ndtt">40% ký · 40% giao ra CT · 10% lắp xong · 10% nghiệm thu</td><td class="c">CK</td><td class="cn-ok">Trong hạn</td><td class="r">50</td><td class="r b">149</td></tr><tr><td><b>145-25</b> Anh Minh – Vạn Phúc</td><td class="r">610</td><td class="r cn-paid">488</td><td class="r b">122</td><td class="r">–</td><td class="r cn-bad">–</td><td class="r cn-warn">122</td><td class="cn-ndtt">30% ký · 20% giao khung nhôm + lắp · 20% kính · 20% lắp xong + vệ sinh · 10% NT</td><td class="c">CK</td><td class="cn-warn">Giữ chờ hết BH</td><td class="r">–</td><td class="r b">122</td></tr><tr><td><b>146-25</b> Anh Độ – Quận 7</td><td class="r">430</td><td class="r cn-paid">344</td><td class="r b">86</td><td class="r">–</td><td class="r cn-bad">–</td><td class="r cn-warn">86</td><td class="cn-ndtt">40% ký HĐ · 40% giao tới chân CT · 20% nghiệm thu</td><td class="c">CK</td><td class="cn-warn">Giữ chờ hết BH</td><td class="r">–</td><td class="r b">86</td></tr></tbody>
+        <tfoot><tr class="cn-tot"><td>TỔNG CỘNG · 10 công trình</td><td class="r">5.201</td><td class="r cn-paid">2.926</td><td class="r">2.275</td><td class="r">1.820</td><td class="r cn-bad">247</td><td class="r cn-warn">208</td><td></td><td></td><td></td><td class="r">670</td><td class="r">2.028</td></tr></tfoot>
+      </table></div>
+    </div>
+      <!-- ĐIỀU KHOẢN THANH TOÁN -->
+    <div style="margin-top:20px;border-top:0.5px solid var(--color-border-tertiary);padding-top:18px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:3px">Điều khoản &amp; tiến độ thanh toán theo hợp đồng</div>
+      <div class="s2" style="margin-bottom:14px">Lịch thu theo từng đợt của mỗi hợp đồng — đợt <span style="color:var(--color-text-success);font-weight:600">đã thu</span> tô xanh, đợt còn lại màu xám. VML áp dụng nhiều mẫu điều khoản tùy quy mô &amp; thỏa thuận với khách.</div>
+      <div class="pt-grid"><div class="pt-card"><div class="pt-head"><div><span class="pt-code">108-25</span> <span class="pt-kh">Đạt Gia – Vũng Tàu</span></div><div class="pt-meta">980 tr · Mẫu A · 3 đợt</div></div><div class="pt-prog">Đã thu 2/3 đợt</div><div class="pt-steps"><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Ký hợp đồng</div></div><div class="pt-val pt-vdone">40%</div></div><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Giao hàng tới chân công trình</div></div><div class="pt-val pt-vdone">40%</div></div><div class="pt-step pt-last"><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Nghiệm thu sản phẩm</div></div><div class="pt-val ">20%</div></div></div></div><div class="pt-card"><div class="pt-head"><div><span class="pt-code">018-26</span> <span class="pt-kh">Anh Tùng – Kim Long</span></div><div class="pt-meta">530 tr · Mẫu B · theo mốc tiền + %</div></div><div class="pt-prog">Đã thu 2/5 đợt</div><div class="pt-steps"><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Ký hợp đồng</div></div><div class="pt-val pt-vdone">150 tr</div></div><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">10–15 ngày sau ký HĐ</div></div><div class="pt-val pt-vdone">120 tr</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Giao khung nhôm</div></div><div class="pt-val ">30%</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Giao kính</div></div><div class="pt-val ">90%</div></div><div class="pt-step pt-last"><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Nghiệm thu sản phẩm</div></div><div class="pt-val ">100%</div></div></div></div><div class="pt-card"><div class="pt-head"><div><span class="pt-code">008-26</span> <span class="pt-kh">Anh Tuấn – Thủ Đức</span></div><div class="pt-meta">631 tr · Mẫu C · công trình lớn</div></div><div class="pt-prog">Đã thu 1/3 đợt</div><div class="pt-steps"><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Ký HĐ (chuẩn bị vật tư)</div></div><div class="pt-val pt-vdone">1 tỷ</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Giao hàng tới chân công trình</div></div><div class="pt-val ">1 tỷ</div></div><div class="pt-step pt-last"><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Nghiệm thu sản phẩm</div></div><div class="pt-val ">Còn lại</div></div></div></div><div class="pt-card"><div class="pt-head"><div><span class="pt-code">131-25</span> <span class="pt-kh">Anh Hoàng – Dĩ An</span></div><div class="pt-meta">560 tr · Mẫu D · 5 đợt chi tiết</div></div><div class="pt-prog">Đã thu 2/5 đợt</div><div class="pt-steps"><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Đợt 1 · Ký hợp đồng</div></div><div class="pt-val pt-vdone">30%</div></div><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Đợt 2 · Giao khung nhôm tới chân CT, lắp đặt</div></div><div class="pt-val pt-vdone">20%</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 3 · Giao kính</div></div><div class="pt-val ">20%</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 4 · Lắp xong + bắn keo + vệ sinh + test nước</div></div><div class="pt-val ">20%</div></div><div class="pt-step pt-last"><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 5 · Nghiệm thu</div></div><div class="pt-val ">10%</div></div></div></div><div class="pt-card"><div class="pt-head"><div><span class="pt-code">034-26</span> <span class="pt-kh">Chú Thắng – Tân Bình</span></div><div class="pt-meta">412 tr · Mẫu E · 4 đợt</div></div><div class="pt-prog">Đã thu 1/4 đợt</div><div class="pt-steps"><div class="pt-step "><span class="pt-dot pt-done"></span><div class="pt-body"><div class="pt-name">Đợt 1 · Ký hợp đồng</div></div><div class="pt-val pt-vdone">40%</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 2 · Giao hàng ra công trình</div></div><div class="pt-val ">40%</div></div><div class="pt-step "><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 3 · Lắp xong (chưa vệ sinh, bắn keo)</div></div><div class="pt-val ">10%</div></div><div class="pt-step pt-last"><span class="pt-dot pt-wait"></span><div class="pt-body"><div class="pt-name">Đợt 4 · Nghiệm thu</div></div><div class="pt-val ">10%</div></div></div></div></div>
+    </div>
+    </div>
+
+    <!-- TAB TẠM ỨNG & QT -->
+    <div id="cn_tu" style="display:none">
+      <!-- TẠM ỨNG & QUYẾT TOÁN -->
+    <div style="">
+      <div style="font-size:15px;font-weight:600;margin-bottom:3px">Thống kê tạm ứng &amp; quyết toán</div>
+      <div class="s2" style="margin-bottom:14px">Theo quy trình ĐNTT · Tạm ứng · Quyết toán trên Base Service. Đơn vị: triệu đồng.</div>
+      <div class="qt-cards"><div class="qt-card"><div class="qt-t">Tạm ứng đang treo</div><div class="qt-n" style="color:var(--color-text-warning)">795 tr</div><div class="qt-s">chưa hoàn ứng / quyết toán</div></div><div class="qt-card"><div class="qt-t">Công trình đã quyết toán</div><div class="qt-n" style="color:var(--color-text-success)">3</div><div class="qt-s">đã nghiệm thu &amp; thanh lý</div></div><div class="qt-card"><div class="qt-t">Chờ quyết toán</div><div class="qt-n">4</div><div class="qt-s">đang thi công / dở dang</div></div><div class="qt-card"><div class="qt-t">Giá trị chờ quyết toán</div><div class="qt-n" style="color:var(--color-text-info)">2.583 tr</div><div class="qt-s">tổng GTHĐ chưa quyết toán</div></div></div>
+      <div style="font-size:12.5px;font-weight:600;margin:18px 0 8px">Khoản tạm ứng</div>
+      <div class="cn-wrap"><table class="cn-tbl"><thead><tr><th>Đối tượng</th><th>Công trình</th><th>Loại tạm ứng</th><th class="r">Số tiền</th><th class="c">Ngày</th><th>Trạng thái</th></tr></thead><tbody><tr><td><b>Nhôm Xingfa QĐ</b></td><td>108-25 Đạt Gia</td><td>NCC vật tư</td><td class="r">240</td><td class="c">02/05</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>Nhôm Maxpro</b></td><td>018-26 Anh Tùng</td><td>NCC vật tư</td><td class="r">185</td><td class="c">19/05</td><td><span class="qt-pill wait">Chưa hoàn ứng</span></td></tr><tr><td><b>Kính Đại Phúc</b></td><td>131-25 Anh Hoàng</td><td>NCC vật tư</td><td class="r">330</td><td class="c">16/05</td><td><span class="qt-pill wait">Chưa hoàn ứng</span></td></tr><tr><td><b>Gia công CNC Tân Phú</b></td><td>028-26 Cô Dung</td><td>Gia công ngoài</td><td class="r">700</td><td class="c">14/05</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>Đội thi công số 3</b></td><td>145-25 Anh Minh</td><td>Đội lắp đặt</td><td class="r">600</td><td class="c">03/05</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>Đội thi công số 1</b></td><td>108-25 Đạt Gia</td><td>Đội lắp đặt</td><td class="r">280</td><td class="c">10/05</td><td><span class="qt-pill wait">Chưa hoàn ứng</span></td></tr></tbody></table></div>
+      <div style="font-size:12.5px;font-weight:600;margin:18px 0 8px">Quyết toán theo công trình</div>
+      <div class="cn-wrap"><table class="cn-tbl"><thead><tr><th>Công trình</th><th class="r">Giá trị HĐ</th><th class="r">Đã quyết toán</th><th class="r">Còn lại</th><th>Trạng thái</th></tr></thead><tbody><tr><td><b>108-25</b> Đạt Gia – Vũng Tàu</td><td class="r">980</td><td class="r cn-paid">–</td><td class="r b">980</td><td><span class="qt-pill wait">Đang thi công</span></td></tr><tr><td><b>034-26</b> Chú Thắng – Tân Bình</td><td class="r">412</td><td class="r cn-paid">–</td><td class="r b">412</td><td><span class="qt-pill bad">Tạm dừng — tranh chấp</span></td></tr><tr><td><b>131-25</b> Anh Hoàng – Dĩ An</td><td class="r">560</td><td class="r cn-paid">–</td><td class="r b">560</td><td><span class="qt-pill wait">Đang thi công</span></td></tr><tr><td><b>145-25</b> Anh Minh – Vạn Phúc</td><td class="r">610</td><td class="r cn-paid">610</td><td class="r b">–</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>146-25</b> Anh Độ – Quận 7</td><td class="r">430</td><td class="r cn-paid">430</td><td class="r b">–</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>024-25</b> Anh Tài – Long An</td><td class="r">280</td><td class="r cn-paid">280</td><td class="r b">–</td><td><span class="qt-pill ok">Đã quyết toán</span></td></tr><tr><td><b>008-26</b> Anh Tuấn – Thủ Đức</td><td class="r">631</td><td class="r cn-paid">–</td><td class="r b">631</td><td><span class="qt-pill wait">Đang thi công</span></td></tr></tbody></table></div>
+    </div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<script>
+/* ============ DÙNG CHUNG ============ */
+const grid='rgba(128,128,128,0.18)',tickc='rgba(128,128,128,0.85)',zero='rgba(128,128,128,0.55)';
+const BL='#2E7CD6',BLL='#85B7EB',RD='#E24B4A',NV='#0C447C',GR='#5F5E5A',FAINT='#BBD7F6';
+const SH=['#0C447C','#185FA5','#2E7CD6','#5B9BE0','#8FBEEC','#BBD7F6'];
+Chart.defaults.font.family="Inter,-apple-system,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color=tickc;
+const ty=v=>(v<0?'-':'')+Math.abs(Math.round(v*10)/10)+' tỷ';
+const R=v=>Math.round(v*10)/10,pc=(a,b)=>Math.round(a/b*100);
+const nf=v=>Math.round(v).toLocaleString('vi-VN');
+/* Toggle Theo tháng / Lũy kế dùng chung */
+const cumu=a=>{let s=0;return a.map(v=>R(s+=v));};
+const _cum={};
+function regCum(id,chart,recolor){_cum[id]={chart,base:chart.data.datasets.map(d=>d.data.slice()),recolor};}
+function setCum(id,v){const e=_cum[id];if(!e)return;e.chart.data.datasets.forEach((d,i)=>{d.data=(v==='cumu')?cumu(e.base[i]):e.base[i].slice();});if(e.recolor)e.recolor(e.chart);e.chart.update();
+  document.querySelectorAll('.cum[data-c="'+id+'"]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));}
+document.addEventListener('click',e=>{const b=e.target.closest?e.target.closest('.cum'):null;if(b)setCum(b.dataset.c,b.dataset.v);});
+
+/* ============ TRANG TỔNG QUAN ============ */
+(function(){
+  const proj=[
+    {n:'Đạt Gia – Vũng Tàu',dt:27.6,dtkh:30,cp:16.4,ns:14.3,tc:55,td:41,cf:11.5,cfm:[2,1.5,3,2.5,2.5,2,1.8],lnm:[1.8,1.5,2.6,2.8,2.5,2.4,2.2],pt:9.5,ptr:4.2},
+    {n:'Chú Thắng – Tân Bình',dt:20.9,dtkh:28,cp:11.2,ns:11.8,tc:68,td:46,cf:0.78,cfm:[1.2,-0.5,0.8,-0.3,-0.4,0.5,0.8],lnm:[1.5,1.2,2.2,2.6,2.2,2,1.9],pt:12.4,ptr:6.1},
+    {n:'Anh Hoàng – Dĩ An',dt:13.7,dtkh:16,cp:5.6,ns:7.8,tc:50,td:43,cf:7.6,cfm:[1.5,1,2,1.5,1.6,1.4,1.5],lnm:[1.4,1,1.9,2,1.8,1.7,1.6],pt:3.5,ptr:1.2},
+    {n:'Anh Tùng – Kim Long',dt:9.1,dtkh:10,cp:6.0,ns:7.0,tc:58,td:50,cf:2.2,cfm:[0.4,0.5,0.4,0.5,0.4,0.4,0.4],lnm:[0.5,0.5,0.7,0.7,0.7,0.6,0.6],pt:2.1,ptr:1.0},
+    {n:'Anh Vũ – Nha Trang',dt:8.8,dtkh:12,cp:5.6,ns:6.4,tc:45,td:31,cf:-2.3,cfm:[-0.5,-0.4,-0.6,-0.4,-0.4,-0.3,-0.2],lnm:[0.5,0.6,0.7,0.7,0.7,0.6,0.6],pt:5.2,ptr:2.0},
+    {n:'Anh Tuấn – Thủ Đức',dt:6.2,dtkh:8,cp:4.1,ns:5.1,tc:55,td:48,cf:1.4,cfm:[0.3,0.2,0.3,0.3,0.3,0.3,0.3],lnm:[0.3,0.4,0.4,0.5,0.5,0.4,0.4],pt:2.0,ptr:0.9},
+    {n:'Cô Dung – Tân Uyên',dt:3.8,dtkh:18.5,cp:2.6,ns:3.3,tc:62,td:20,cf:3.8,cfm:[0.8,0.7,0.8,0.7,0.8,0.7,0.6],lnm:[0.2,0.2,0.3,0.2,0.3,0.2,0.2],pt:0.5,ptr:0.3},
+    {n:'Chị Phượng – Thảo Điền',dt:4.5,dtkh:6,cp:3.8,ns:4.1,tc:46,td:38,cf:-0.9,cfm:[-0.1,-0.2,-0.2,-0.2,-0.2,-0.1,0.1],lnm:[0.2,0.1,0.2,0.1,0.1,0.1,0.1],pt:1.8,ptr:1.0},
+    {n:'Anh Minh – Vạn Phúc',dt:2.4,dtkh:5,cp:2.9,ns:2.4,tc:50,td:18,cf:-1.2,cfm:[-0.2,-0.3,-0.2,-0.3,-0.2,-0.2,-0.1],lnm:[0.1,-0.2,-0.1,-0.2,-0.1,-0.1,-0.1],pt:0.8,ptr:1.5}
+  ];
+  const stk=[
+    {n:'Đạt Gia – Vũng Tàu',c:SH[0],d:[3.2,2.8,5.5,6.8,8.1]},
+    {n:'Chú Thắng – Tân Bình',c:SH[1],d:[2.1,2.5,4.2,5.2,3.9]},
+    {n:'Anh Hoàng – Dĩ An',c:SH[2],d:[2.0,1.8,2.5,2.8,2.6]},
+    {n:'Anh Tùng – Kim Long',c:SH[3],d:[1.5,1.4,1.8,1.5,0.9]},
+    {n:'Anh Vũ – Nha Trang',c:SH[4],d:[1.0,1.2,1.7,1.0,0.0]},
+    {n:'Khác',c:SH[5],d:[1.0,1.0,2.0,1.5,1.3]}
+  ];
+  const cfMax=Math.max(...proj.flatMap(p=>p.cfm.map(Math.abs)));
+  const lnMax=Math.max(...proj.flatMap(p=>p.lnm.map(Math.abs)));
+
+  // Bảng tick cảnh báo
+  const CR={ns:'#E24B4A',nt:'#E67E22',cf:'#EF9F27',lm:'#C77700',loss:'#B3261E'};
+  const mg=p=>(p.dt-p.cp)/p.dt;
+  const wNS=p=>p.cp/p.ns>1,wNT=p=>(p.tc-p.td)>30,wCF=p=>p.cf<-1,wLM=p=>p.dt>=8&&mg(p)<0.37;
+  const wAny=p=>wNS(p)||wNT(p)||wCF(p)||wLM(p),wn=p=>[wNS(p),wNT(p),wCF(p),wLM(p)].filter(Boolean).length;
+  const cell=(on,val,col)=>on?'<span style="display:inline-flex;align-items:center;gap:4px;color:'+col+';font-size:11px;font-weight:500"><i class="ti ti-alert-triangle" style="font-size:13px"></i>'+val+'</span>':'<span style="color:var(--color-text-tertiary)">–</span>';
+  const warned=proj.filter(wAny).sort((a,b)=>wn(b)-wn(a));
+  const thh=(col,t)=>'<th><span style="display:inline-flex;align-items:center;gap:5px;justify-content:center"><span class="dot" style="background:'+col+'"></span>'+t+'</span></th>';
+  document.getElementById('ov_tkh').innerHTML='<tr><th style="width:24%">Công trình</th>'+thh(CR.ns,'Vượt ngân sách')+thh(CR.nt,'Chậm nghiệm thu')+thh(CR.cf,'Âm dòng tiền')+thh(CR.lm,'Biên LN thấp')+'</tr>';
+  document.getElementById('ov_tkb').innerHTML=warned.map(p=>'<tr><td style="font-weight:500">'+p.n+'</td>'
+    +'<td>'+cell(wNS(p),pc(p.cp,p.ns)+'% NS',CR.ns)+'</td>'
+    +'<td>'+cell(wNT(p),'NT '+p.td+'% / TC '+p.tc+'%',CR.nt)+'</td>'
+    +'<td>'+cell(wCF(p),R(p.cf)+' tỷ',CR.cf)+'</td>'
+    +'<td>'+cell(wLM(p),Math.round(mg(p)*100)+'% · DT '+p.dt,CR.lm)+'</td></tr>').join('');
+
+  // Bảng theo dõi công trình (2 tab)
+  const spark=(arr,max)=>'<div style="position:relative;display:inline-flex;gap:4px;align-items:center;padding:0 2px"><div style="position:absolute;left:0;right:0;top:30px;height:1px;background:var(--color-border-secondary)"></div>'
+    +arr.map((v,i)=>{const h=Math.max(Math.round(Math.abs(v)/max*28),2),up=v>=0,d=i>=5;const u=d?BL+'55':BL,dn=d?RD+'55':RD;
+    return '<div title="'+(i<5?'T0'+(i+1):'Dự kiến T0'+(i+1))+': '+(up?'+':'')+R(v)+' tỷ" style="display:flex;flex-direction:column;width:12px;height:60px"><div style="height:30px;display:flex;align-items:flex-end"><div style="width:12px;height:'+(up?h:0)+'px;background:'+u+';border-radius:2px"></div></div><div style="height:30px;display:flex;align-items:flex-start"><div style="width:12px;height:'+(up?0:h)+'px;background:'+dn+';border-radius:2px"></div></div></div>';}).join('')+'</div>';
+  const pline=(lbl,val,col)=>'<div style="display:flex;align-items:center;gap:5px"><span class="s2" style="width:56px;flex-shrink:0;font-size:11px">'+lbl+'</span><div style="flex:1;height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;min-width:26px"><div style="height:100%;width:'+Math.min(val,100)+'%;background:'+col+';border-radius:3px"></div></div><span class="mono" style="font-size:11px;color:'+col+';width:30px;text-align:right">'+val+'%</span></div>';
+  const nameCell=p=>{const ntCol=(p.tc-p.td)>30?RD:BL;return '<td><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;margin-bottom:5px">'+p.n+'</div>'+pline('Thi công',p.tc,BLL)+'<div style="height:4px"></div>'+pline('Nghiệm thu',p.td,ntCol)+'</td>';};
+  let otab=1;
+  function renderOv(){
+    const th=document.getElementById('ov_th'),tb=document.getElementById('ov_tb');
+    const list=[...proj].sort((a,b)=>b.dt-a.dt);
+    const sDT=R(proj.reduce((s,p)=>s+p.dt,0)),sCP=R(proj.reduce((s,p)=>s+p.cp,0)),sLN=R(sDT-sCP),sPT=R(proj.reduce((s,p)=>s+p.pt,0)),sPTr=R(proj.reduce((s,p)=>s+p.ptr,0)),sNet=R(sPT-sPTr);
+    if(otab===1){
+      th.innerHTML='<tr><th style="width:26%">Công trình</th><th style="width:14%">Doanh thu NT</th><th style="width:14%">Chi phí</th><th style="width:14%">Lợi nhuận</th><th style="text-align:center;width:32%">Lợi nhuận / tháng</th></tr>';
+      tb.innerHTML=list.map(p=>{const ln=R(p.dt-p.cp),khc=pc(p.dt,p.dtkh),nsc=pc(p.cp,p.ns),mg=Math.round(ln/p.dt*100);
+        return '<tr>'+nameCell(p)
+          +'<td><div class="mono">'+p.dt+'</div><div class="s2">'+khc+'% KH</div></td>'
+          +'<td><div class="mono" style="color:var(--color-text-secondary)">'+p.cp+'</div><div class="s2" style="color:'+(nsc>100?RD:'var(--color-text-tertiary)')+'">'+nsc+'% NS</div></td>'
+          +'<td><div class="mono" style="color:'+(ln<0?RD:'')+'">'+ln+'</div><div class="s2">biên '+mg+'%</div></td>'
+          +'<td style="text-align:center">'+spark(p.lnm,lnMax)+'<div class="s2 mono" style="margin-top:3px;color:'+(ln<0?RD:BL)+'">Kỳ '+(ln>=0?'+':'')+ln+' tỷ</div></td></tr>';}).join('')+'<tr class="tot"><td>TỔNG CỘNG</td><td class="mono">'+sDT+'</td><td class="mono">'+sCP+'</td><td class="mono" style="color:'+(sLN<0?RD:'')+'">'+sLN+'</td><td></td></tr>';
+    }else{
+      th.innerHTML='<tr><th style="width:26%">Công trình</th><th style="width:14%">Phải thu còn</th><th style="width:14%">Phải trả còn</th><th style="width:14%">Net công nợ</th><th style="text-align:center;width:32%">Dòng tiền / tháng</th></tr>';
+      tb.innerHTML=list.map(p=>{const ncn=R(p.pt-p.ptr);
+        return '<tr>'+nameCell(p)
+          +'<td class="mono">'+p.pt+'</td><td class="mono" style="color:var(--color-text-secondary)">'+p.ptr+'</td>'
+          +'<td class="mono" style="color:'+(ncn<0?RD:'')+'">'+(ncn>=0?'+':'')+ncn+'</td>'
+          +'<td style="text-align:center">'+spark(p.cfm,cfMax)+'<div class="s2 mono" style="margin-top:3px;color:'+(p.cf<0?RD:BL)+'">Thuần '+(p.cf>=0?'+':'')+R(p.cf)+' tỷ</div></td></tr>';}).join('')+'<tr class="tot"><td>TỔNG CỘNG</td><td class="mono">'+sPT+'</td><td class="mono">'+sPTr+'</td><td class="mono" style="color:'+(sNet<0?RD:'')+'">'+(sNet>=0?'+':'')+sNet+'</td><td></td></tr>';
+    }
+    document.querySelectorAll('.ovtab').forEach(b=>b.classList.toggle('on',+b.dataset.t===otab));
+  }
+  document.querySelectorAll('.ovtab').forEach(b=>b.addEventListener('click',function(){otab=+b.dataset.t;renderOv();}));
+  renderOv();
+
+  let charts=[],built=false;
+  window.ovBuild=function(){
+    if(built){charts.forEach(c=>c.resize());return;}
+    let ovc1,ovc3;
+    charts.push(ovc1=new Chart(document.getElementById('ov_c1'),{type:'bar',
+      data:{labels:['T01','T02','T03','T04','T05'],datasets:
+        stk.map(s=>({type:'bar',label:s.n,data:s.d,backgroundColor:s.c,stack:'dt',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)',order:2}))
+        .concat([{type:'line',label:'Kế hoạch',data:[12,12,15,16,18],borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:1}])},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{itemSort:(a,b)=>b.parsed.y-a.parsed.y,callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}}}}}));
+    const cpD=[6,6.8,9.5,10,10.8],nsD=[7,7,9,9.5,9.8];
+    charts.push(new Chart(document.getElementById('ov_c2'),{
+      data:{labels:['T01','T02','T03','T04','T05'],datasets:[
+        {type:'bar',label:'Chi phí',data:cpD,backgroundColor:cpD.map((v,i)=>v>nsD[i]?RD:BL),borderRadius:4,order:3,yAxisID:'y'},
+        {type:'line',label:'Ngân sách CP',data:nsD,borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:2,yAxisID:'y'},
+        {type:'line',label:'Biên lợi nhuận %',data:[44,36,46,47,36],borderColor:NV,backgroundColor:NV,borderWidth:2.5,tension:.35,pointRadius:3,order:1,yAxisID:'y1'}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.dataset.yAxisID==='y1'?c.parsed.y+'%':ty(c.parsed.y))}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y1:{position:'right',min:0,max:60,grid:{display:false},ticks:{callback:v=>v+'%',color:NV}}}}}));
+    const thu=[9.5,6.6,11.1,9.6,11.7,8,10],chi=[-3.2,-4.15,-8.52,-8.15,-6.2,-12,-14],fc=i=>i>=5;
+    const net=thu.map((t,i)=>R(t+chi[i]));
+    charts.push(ovc3=new Chart(document.getElementById('ov_c3'),{
+      data:{labels:['T01','T02','T03','T04','T05','T06*','T07*'],datasets:[
+        {type:'bar',label:'Thu',data:thu,backgroundColor:thu.map((_,i)=>fc(i)?BL+'59':BL),borderRadius:3,order:2},
+        {type:'bar',label:'Chi',data:chi,backgroundColor:chi.map((_,i)=>fc(i)?RD+'59':RD),borderRadius:3,order:2},
+        {type:'line',label:'Thuần',data:net,borderColor:NV,borderWidth:2.5,tension:.3,pointRadius:3,order:1,segment:{borderDash:c=>c.p0DataIndex>=4?[5,4]:undefined}}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:c=>c.tick.value===0?zero:grid,lineWidth:c=>c.tick.value===0?1.5:1}}}}}));
+    regCum('ov_c1',ovc1);regCum('ov_c3',ovc3);
+    built=true;
+  };
+})();
+
+/* ============ TRANG DOANH THU ============ */
+(function(){
+  const stk=[
+    {n:'Đạt Gia – Vũng Tàu',c:SH[0],d:[3.2,2.8,5.5,6.8,8.1]},
+    {n:'Chú Thắng – Tân Bình',c:SH[1],d:[2.1,2.5,4.2,5.2,3.9]},
+    {n:'Anh Hoàng – Dĩ An',c:SH[2],d:[2.0,1.8,2.5,2.8,2.6]},
+    {n:'Anh Tùng – Kim Long',c:SH[3],d:[1.5,1.4,1.8,1.5,0.9]},
+    {n:'Anh Vũ – Nha Trang',c:SH[4],d:[1.0,1.2,1.7,1.0,0.0]},
+    {n:'Khác',c:SH[5],d:[1.0,1.0,2.0,1.5,1.3]}
+  ];
+  const proj=[
+    {n:'Đạt Gia – Vũng Tàu',ghd:52,tc:55,td:41,dt:21.3,cho:7.3,ntm:[3,3.2,4.5,5,5.6,5.2,5.5]},
+    {n:'Chú Thắng – Tân Bình',ghd:35,tc:68,td:46,dt:16.1,cho:7.7,ntm:[2.5,2.8,3.5,3.8,3.5,3.6,3.8]},
+    {n:'Anh Hoàng – Dĩ An',ghd:25,tc:50,td:43,dt:10.6,cho:1.7,ntm:[1.8,1.9,2.2,2.4,2.3,2.3,2.4]},
+    {n:'Anh Tùng – Kim Long',ghd:14,tc:58,td:50,dt:7.0,cho:1.1,ntm:[1.2,1.3,1.5,1.5,1.5,1.5,1.5]},
+    {n:'Anh Vũ – Nha Trang',ghd:22,tc:45,td:31,dt:6.8,cho:3.1,ntm:[1.3,1.2,1.5,1.4,1.4,1.3,1.4]},
+    {n:'Anh Tuấn – Thủ Đức',ghd:10,tc:55,td:48,dt:4.8,cho:0.7,ntm:[0.8,0.9,1,1.1,1,1,1]},
+    {n:'Cô Dung – Tân Uyên',ghd:15,tc:62,td:20,dt:2.9,cho:6.1,ntm:[0.5,0.5,0.6,0.6,0.7,0.7,0.8]},
+    {n:'Chị Phượng – Thảo Điền',ghd:9,tc:46,td:38,dt:3.5,cho:0.7,ntm:[0.6,0.6,0.8,0.7,0.8,0.7,0.7]},
+    {n:'Anh Minh – Vạn Phúc',ghd:10,tc:50,td:18,dt:1.8,cho:3.2,ntm:[0.3,0.3,0.4,0.4,0.4,0.4,0.4]}
+  ];
+  const ntMax=Math.max(...proj.flatMap(p=>p.ntm));
+  const pbar=(val,col)=>'<div style="display:flex;align-items:center;gap:8px"><span class="mono" style="font-size:11px;color:'+col+';width:32px;text-align:left;font-weight:500;flex-shrink:0">'+val+'%</span><div style="flex:1;height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden;min-width:22px"><div style="height:100%;width:'+Math.min(val,100)+'%;background:'+col+';border-radius:4px"></div></div></div>';
+  const sparkP=(arr,mx,col)=>'<div style="display:inline-flex;gap:4px;align-items:flex-end;height:44px;padding:0 2px">'+arr.map((v,i)=>{const h=Math.max(Math.round(v/mx*40),2),d=i>=5;return '<div title="'+(i<5?'T0'+(i+1):'Dự kiến T0'+(i+1))+': '+R(v)+'" style="width:10px;height:'+h+'px;background:'+(d?col+'55':col)+';border-radius:2px"></div>';}).join('')+'</div>';
+  document.getElementById('rv_tb').innerHTML=[...proj].sort((a,b)=>(b.tc-b.td)-(a.tc-a.td)).map(p=>{const lag=p.tc-p.td;
+    return '<tr><td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500">'+p.n+'</td>'
+      +'<td class="mono">'+p.ghd+'</td><td>'+pbar(p.tc,BLL)+'</td><td>'+pbar(p.td,lag>20?RD:BL)+'</td>'
+      +'<td class="mono" style="color:'+(lag>20?RD:'var(--color-text-secondary)')+';font-weight:'+(lag>20?500:400)+'">'+lag+'%</td>'
+      +'<td class="mono" style="color:'+(p.cho>=3?RD:'')+';font-weight:'+(p.cho>=3?500:400)+'">'+p.cho+'</td>'
+      +'<td style="text-align:center">'+sparkP(p.ntm,ntMax,BL)+'</td></tr>';}).join('');
+
+  const rank=[...proj].sort((a,b)=>b.dt-a.dt);
+  let warnChart=null,c1=null,c2=null,ctBuilt=false;
+  function buildCT(){
+    if(ctBuilt){[c1,c2].forEach(c=>c&&c.resize());if(warnChart)warnChart.resize();return;}
+    c1=new Chart(document.getElementById('rv_c1'),{type:'bar',
+      data:{labels:['T01','T02','T03','T04','T05'],datasets:
+        stk.map(s=>({type:'bar',label:s.n,data:s.d,backgroundColor:s.c,stack:'dt',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)',order:2}))
+        .concat([{type:'line',label:'Kế hoạch',data:[12,12,15,16,18],borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:1}])},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{itemSort:(a,b)=>b.parsed.y-a.parsed.y,callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}}}}});
+    c2=new Chart(document.getElementById('rv_c2'),{type:'bar',
+      data:{labels:rank.map(p=>p.n),datasets:[
+        {label:'Đã nghiệm thu',data:rank.map(p=>p.dt),backgroundColor:BL,stack:'h'},
+        {label:'Còn lại theo HĐ',data:rank.map(p=>R(p.ghd-p.dt)),backgroundColor:FAINT,stack:'h'}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.datasetIndex===0?'Đã nghiệm thu: '+ty(c.parsed.x)+' ('+pc(c.parsed.x,rank[c.dataIndex].ghd)+'% HĐ)':'Còn lại theo HĐ: '+ty(c.parsed.x)}}},
+        scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{stacked:true,grid:{display:false}}}}});
+    regCum('rv_c1',c1);
+    ctBuilt=true;
+  }
+  function initWarn(){
+    const w=[...proj].sort((a,b)=>(b.tc-b.td)-(a.tc-a.td));
+    warnChart=new Chart(document.getElementById('rv_c3'),{type:'bar',
+      data:{labels:w.map(p=>p.n),datasets:[
+        {label:'Thi công',data:w.map(p=>p.tc),backgroundColor:BLL,borderRadius:3},
+        {label:'Nghiệm thu',data:w.map(p=>p.td),backgroundColor:w.map(p=>(p.tc-p.td)>20?RD:BL),borderRadius:3}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.x+'%',afterBody:items=>{const i=items[0].dataIndex;return 'Lệch: '+(w[i].tc-w[i].td)+'% · chờ NT '+w[i].cho+' tỷ';}}}},
+        scales:{x:{grid:{color:grid},max:100,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
+  }
+  document.querySelectorAll('.rvtab').forEach(b=>b.addEventListener('click',function(){
+    const v=b.dataset.rv;
+    document.getElementById('rv_vtbl').style.display=v==='tbl'?'':'none';
+    document.getElementById('rv_vwarn').style.display=v==='warn'?'':'none';
+    document.querySelectorAll('.rvtab').forEach(x=>x.classList.toggle('on',x.dataset.rv===v));
+    if(v==='warn'){ if(!warnChart){initWarn();} else {warnChart.resize();} }
+  }));
+
+  // Nhà máy
+  const prod=[
+    {n:'Đá 1×2',c:SH[0],sl:92,slkh:95,slPrev:80,dt:11.7,khh:12,dtPrev:9.9,gia:127,giakh:126,gprev:124,ton:1.8,mg:24,mgp:23,dtm:[2,2.2,2.5,2.6,2.4,2.5,2.6]},
+    {n:'Đá 0×4 (mi)',c:SH[1],sl:60,slkh:58,slPrev:57,dt:6.8,khh:6.5,dtPrev:6.4,gia:113,giakh:116,gprev:115,ton:1.1,mg:20,mgp:21,dtm:[1.2,1.3,1.4,1.5,1.4,1.4,1.5]},
+    {n:'Đá hộc',c:SH[2],sl:50,slkh:52,slPrev:44,dt:4.6,khh:5,dtPrev:3.8,gia:92,giakh:90,gprev:90,ton:0.9,mg:19,mgp:19,dtm:[0.8,0.9,1,1,0.9,0.9,1]},
+    {n:'Đá base',c:SH[3],sl:40,slkh:42,slPrev:38,dt:3.0,khh:3.5,dtPrev:2.7,gia:75,giakh:80,gprev:78,ton:0.6,mg:15,mgp:17,dtm:[0.5,0.6,0.6,0.7,0.6,0.6,0.6]},
+    {n:'Bột đá',c:SH[4],sl:30,slkh:32,slPrev:33,dt:1.8,khh:2,dtPrev:2.1,gia:60,giakh:62,gprev:60,ton:0.6,mg:12,mgp:14,dtm:[0.3,0.3,0.4,0.4,0.4,0.4,0.4]}
+  ];
+  const fmtKH=v=>{const c=v>=100?'var(--color-text-success)':v>=90?'var(--color-text-tertiary)':'var(--color-text-warning)';return '<div class="s2" style="color:'+c+'">'+v+'% KH</div>';};
+  const fmtD=(d,u)=>{const c=d<0?'var(--color-text-danger)':'var(--color-text-success)';return '<div class="s2" style="color:'+c+'">'+(d>=0?'↑':'↓')+Math.abs(d)+u+'</div>';};
+  function renderNM(w){
+    const th=document.getElementById('rv_nmth'),tb=document.getElementById('rv_nmtb');
+    th.innerHTML='<tr><th style="width:22%">Sản phẩm</th><th style="width:15%">Doanh thu</th><th style="width:14%">Sản lượng</th><th style="width:14%">Giá BQ</th><th style="width:13%">Tồn kho</th><th style="width:22%">Biên LN</th></tr>';
+    const rows=[...prod].sort((a,b)=>b.dt-a.dt);
+    tb.innerHTML=rows.map(p=>{const bc=(p.ton/p.dt)>0.3;let cDT,cSL,cGia,cMg;
+      if(w==='gt'){cDT='<td class="mono" style="color:var(--color-text-info)">'+p.dt+'</td>';cSL='<td class="mono">'+p.sl+'</td>';cGia='<td class="mono" style="color:var(--color-text-secondary)">'+p.gia+'</td>';cMg='<td class="mono" style="color:var(--color-text-secondary)">'+p.mg+'%</td>';}
+      else if(w==='kh'){cDT='<td><div class="mono" style="color:var(--color-text-info)">'+p.dt+'</div>'+fmtKH(pc(p.dt,p.khh))+'</td>';cSL='<td><div class="mono">'+p.sl+'</div>'+fmtKH(pc(p.sl,p.slkh))+'</td>';cGia='<td><div class="mono" style="color:var(--color-text-secondary)">'+p.gia+'</div>'+fmtKH(pc(p.gia,p.giakh))+'</td>';cMg='<td class="mono" style="color:var(--color-text-secondary)">'+p.mg+'%</td>';}
+      else{const dD=Math.round((p.dt-p.dtPrev)/p.dtPrev*100),sD=Math.round((p.sl-p.slPrev)/p.slPrev*100),gD=R(p.gia-p.gprev),mD=R(p.mg-p.mgp);cDT='<td><div class="mono" style="color:var(--color-text-info)">'+p.dt+'</div>'+fmtD(dD,'%')+'</td>';cSL='<td><div class="mono">'+p.sl+'</div>'+fmtD(sD,'%')+'</td>';cGia='<td><div class="mono" style="color:var(--color-text-secondary)">'+p.gia+'</div>'+fmtD(gD,'')+'</td>';cMg='<td><div class="mono" style="color:var(--color-text-secondary)">'+p.mg+'%</div>'+fmtD(mD,'')+'</td>';}
+      const cTon='<td class="mono" style="color:'+(bc?RD:'var(--color-text-secondary)')+';font-weight:'+(bc?500:400)+'">'+p.ton+(bc?' ⚠':'')+'</td>';
+      return '<tr><td style="font-weight:500">'+p.n+'</td>'+cDT+cSL+cGia+cTon+cMg+'</tr>';}).join('');
+    const sDT=R(prod.reduce((s,p)=>s+p.dt,0)),sSL=prod.reduce((s,p)=>s+p.sl,0),sTon=R(prod.reduce((s,p)=>s+p.ton,0)),giaT=Math.round(sDT*1000/sSL);
+    const sKd=prod.reduce((s,p)=>s+p.khh,0),sKs=prod.reduce((s,p)=>s+p.slkh,0),giaK=Math.round(sKd*1000/sKs);
+    const sPd=R(prod.reduce((s,p)=>s+p.dtPrev,0)),sPs=prod.reduce((s,p)=>s+p.slPrev,0),giaP=Math.round(sPd*1000/sPs);
+    let tDT,tSL,tGia;
+    if(w==='gt'){tDT='<td class="mono">'+sDT+'</td>';tSL='<td class="mono">'+sSL+'</td>';tGia='<td class="mono">'+giaT+'</td>';}
+    else if(w==='kh'){tDT='<td><div class="mono">'+sDT+'</div>'+fmtKH(pc(sDT,sKd))+'</td>';tSL='<td><div class="mono">'+sSL+'</div>'+fmtKH(pc(sSL,sKs))+'</td>';tGia='<td><div class="mono">'+giaT+'</div>'+fmtKH(pc(giaT,giaK))+'</td>';}
+    else{tDT='<td><div class="mono">'+sDT+'</div>'+fmtD(Math.round((sDT-sPd)/sPd*100),'%')+'</td>';tSL='<td><div class="mono">'+sSL+'</div>'+fmtD(Math.round((sSL-sPs)/sPs*100),'%')+'</td>';tGia='<td><div class="mono">'+giaT+'</div>'+fmtD(giaT-giaP,'')+'</td>';}
+    tb.innerHTML+='<tr class="tot"><td>TỔNG CỘNG</td>'+tDT+tSL+tGia+'<td class="mono">'+sTon+'</td><td class="mono">22%</td></tr>';
+  }
+  
+
+  let nm1,nm2,nm3,curM='dt',nmInit=false;
+  function setNM2(m){curM=m;const isDt=m==='dt';
+    nm2.data.datasets[0].data=prod.map(p=>isDt?p.dt:p.sl);
+    nm2.data.datasets[1].data=prod.map(p=>isDt?p.khh:p.slkh);
+    nm2.options.scales.x.ticks.callback=v=>isDt?v+' tỷ':v;
+    nm2.update();
+    document.querySelectorAll('.rvmtab').forEach(x=>x.classList.toggle('on',x.dataset.m===m));}
+  function buildNM(){
+    document.getElementById('rv_nmlg').innerHTML=prod.map(p=>'<span><span class="dot" style="background:'+p.c+'"></span>'+p.n+'</span>').join('')+'<span><span class="dash" style="border-color:#5F5E5A"></span>Kế hoạch</span>';
+    nm1=new Chart(document.getElementById('rv_nm1'),{type:'bar',
+      data:{labels:['T01','T02','T03','T04','T05'],datasets:
+        prod.map(p=>({type:'bar',label:p.n,data:p.dtm.slice(0,5),backgroundColor:p.c,stack:'s',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)',order:2}))
+        .concat([{type:'line',label:'Kế hoạch',data:[5,5.5,5.5,6,6],borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:1}])},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{itemSort:(a,b)=>b.parsed.y-a.parsed.y,callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}}}}});
+    nm2=new Chart(document.getElementById('rv_nm2'),{type:'bar',
+      data:{labels:prod.map(p=>p.n),datasets:[
+        {label:'Thực tế',data:prod.map(p=>p.dt),backgroundColor:BL,borderRadius:3},
+        {label:'Kế hoạch',data:prod.map(p=>p.khh),backgroundColor:FAINT,borderRadius:3}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const p=prod[c.dataIndex],isDt=curM==='dt',plan=isDt?p.khh:p.slkh,unit=isDt?' tỷ':' ngh.tấn';let s=c.dataset.label+': '+c.parsed.x+unit;if(c.datasetIndex===0)s+=' ('+pc(c.parsed.x,plan)+'% KH)';return s;}}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{grid:{display:false}}}}});
+    const SL=[38,42,47,49,45];
+    nm3=new Chart(document.getElementById('rv_nm3'),{
+      data:{labels:['T01','T02','T03','T04','T05'],datasets:[
+        {type:'bar',label:'Sản lượng',data:SL.slice(),backgroundColor:BL,borderRadius:4,yAxisID:'y',order:2},
+        {type:'line',label:'Giá BQ',data:[124,126,128,130,132],borderColor:NV,backgroundColor:NV,borderWidth:2.5,tension:.35,pointRadius:3,yAxisID:'y1',order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+(c.dataset.yAxisID==='y1'?' k/tấn':' ngh.tấn')}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>v+'k tấn'}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>v+'k',color:NV}}}}});
+    regCum('rv_nm1',nm1);
+    function setNM3(v){nm3.data.datasets[0].data=v==='cumu'?SL.reduce((a,x,i)=>{a.push((i?a[i-1]:0)+x);return a;},[]):SL.slice();nm3.update();document.querySelectorAll('.nm3tog').forEach(b=>b.classList.toggle('on',b.dataset.v===v));}
+    document.querySelectorAll('.nm3tog').forEach(b=>b.addEventListener('click',()=>setNM3(b.dataset.v)));
+    nmInit=true;
+  }
+  document.querySelectorAll('.rvmtab').forEach(b=>b.addEventListener('click',function(){setNM2(b.dataset.m);}));
+  
+
+  window.rvBuild=buildCT;
+})();
+
+/* ============ TRANG TỔNG QUAN CHI PHÍ ============ */
+(function(){
+  const el=id=>document.getElementById(id),q=s=>document.querySelectorAll(s);
+  const blueA=a=>'rgba(46,124,214,'+a.toFixed(2)+')';
+  const TCOL={'Mua':'#2E7CD6','Thuê':'#5B9BE0','Khấu hao':'#0C447C','Thầu phụ':'#185FA5'};
+
+  /* ----- PHẦN A ----- */
+  const seg=[{n:'Vật tư (nhôm/kính/PK)',c:'#0C447C',d:[0.35,0.38,0.42,0.40,0.40],tot:1.95,ns:2.0},
+    {n:'Nhân công SX',c:'#2E7CD6',d:[0.10,0.11,0.12,0.11,0.11],tot:0.55,ns:0.5},
+    {n:'Gia công thuê ngoài',c:'#5B9BE0',d:[0.07,0.08,0.08,0.08,0.07],tot:0.38,ns:0.4},
+    {n:'Thi công lắp đặt',c:'#8FBEEC',d:[0.08,0.08,0.09,0.08,0.09],tot:0.42,ns:0.45},
+    {n:'Vận chuyển & chung',c:'#BBD7F6',d:[0.05,0.06,0.06,0.06,0.07],tot:0.30,ns:0.30}];
+  const nsLine=[0.70,0.72,0.78,0.74,0.75];
+  let segC,dnC,nsC;
+  function buildPartA(){
+    segC=new Chart(el('cp_seg'),{data:{labels:['T01','T02','T03','T04','T05'],datasets:
+      seg.map(s=>({type:'bar',label:s.n,data:s.d.slice(),backgroundColor:s.c,stack:'cp',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)',order:2}))
+      .concat([{type:'line',label:'Ngân sách',data:nsLine.slice(),borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:0,order:1}])},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}}}}});
+    regCum('cp_seg',segC);
+    const segTot=seg.reduce((s,x)=>s+x.tot,0);
+    nsC=new Chart(el('cp_nsbar'),{type:'bar',data:{labels:seg.map(s=>s.n),datasets:[
+      {label:'Thực tế',data:seg.map(s=>s.tot),backgroundColor:seg.map(s=>s.tot>s.ns?RD:BL),borderRadius:3},
+      {label:'Ngân sách',data:seg.map(s=>s.ns),backgroundColor:FAINT,borderRadius:3}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.x)+(c.datasetIndex===0?' ('+pc(seg[c.dataIndex].tot,seg[c.dataIndex].ns)+'% NS)':'')}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{grid:{display:false}}}}});
+  }
+
+  /* ----- TAB VĂN PHÒNG ----- */
+  const dept=[{n:'Phòng Hành chính - Nhân sự',th:480,kh:450},{n:'Phòng Tài chính - Kế toán',th:360,kh:400},{n:'Ban Giám đốc',th:280,kh:320},{n:'Phòng Kế hoạch - Kỹ thuật',th:320,kh:380},{n:'Phòng Vật tư - Thiết bị',th:250,kh:300},{n:'Ban Điều hành Công trường',th:152,kh:250}];
+  const MON8=['T10/25','T11/25','T12/25','T01/26','T02/26','T03/26','T04/26','T05/26'];
+  const oTH=[210,225,215,235,260,235,235,227],oKH=[255,258,260,265,275,262,265,260];
+  const LO=[{n:'Điện/Nước',th:332,kh:296,dy:18},{n:'Xăng xe',th:184,kh:230,dy:-6},{n:'VP phẩm',th:258,kh:225,dy:30},{n:'Thiết bị',th:295,kh:370,dy:12},{n:'Tiếp khách',th:221,kh:188,dy:28},{n:'Công tác',th:258,kh:320,dy:8},{n:'Sửa chữa',th:147,kh:200,dy:-10},{n:'Khác',th:147,kh:271,dy:4}];
+  const grandTH=LO.reduce((s,x)=>s+x.th,0),loR=LO.map(x=>x.th/grandTH);
+  const HV=dept.map(d=>loR.map(r=>R(d.th*r))),maxHV=Math.max(...HV.flat());
+  const overSet=new Set(['0-4','0-0','5-1','1-2','2-3','3-0','4-3']);
+  const oms=oTH.map(v=>v/oTH.reduce((a,b)=>a+b,0));
+  dept.forEach(d=>d.m=oms.map(r=>R(d.th*r)));
+  const monMax=Math.max(...dept.flatMap(d=>d.m));
+  const GROUPS=[{n:'I. Dịch vụ & tiện ích mua ngoài',m:[0,6]},{n:'II. Đồ dùng & thiết bị văn phòng',m:[2,3]},{n:'III. Đi lại & tiếp khách',m:[1,5,4]},{n:'IV. Chi phí khác',m:[7]}];
+  const TX=[
+    {d:'28/03',n:'Hóa đơn điện tháng 3',c:'Chi phí điện',a:68240000,u:'Trần Văn A',s:1},
+    {d:'27/03',n:'Mua văn phòng phẩm & mực in Q1',c:'VP phẩm, mực in',a:12500000,u:'Lê Thị B',s:1},
+    {d:'26/03',n:'Tiếp khách đối tác chiến lược',c:'Chi phí tiếp khách',a:18600000,u:'Phạm Quang C',s:0},
+    {d:'25/03',n:'Nước uống văn phòng tháng 3',c:'Chi phí nước uống',a:3200000,u:'Nguyễn D',s:1},
+    {d:'24/03',n:'Phí Internet tháng 3',c:'ĐT, Fax, Internet',a:8900000,u:'Trần E',s:1},
+    {d:'22/03',n:'Mua màn hình họp 65 inch',c:'Máy móc, thiết bị VP',a:35000000,u:'Lê F',s:0},
+    {d:'20/03',n:'Chi phí đi công tác Đà Nẵng',c:'Chi phí đi công tác',a:22400000,u:'Phạm G',s:1},
+    {d:'18/03',n:'Phí phần mềm quản lý T3',c:'Dịch vụ phần mềm',a:9600000,u:'Nguyễn H',s:1},
+    {d:'16/03',n:'Xăng dầu xe công vụ T3',c:'Chi phí xăng dầu',a:11200000,u:'Trần I',s:1},
+    {d:'12/03',n:'Sửa chữa cải tạo phòng họp P2',c:'Sửa chữa, cải tạo VP',a:28500000,u:'Lê K',s:0}
+  ];
+  const miniBars=arr=>'<div style="display:inline-flex;gap:3px;align-items:flex-end;height:26px">'+arr.map((v,i)=>'<div title="'+MON8[i]+': '+nf(v)+' tr" style="width:8px;height:'+Math.max(Math.round(v/monMax*22),2)+'px;background:'+BL+';border-radius:1px"></div>').join('')+'</div>';
+  let trC,deptC;
+  function renderHeatO(mode){
+    el('cp_hmh').innerHTML='<tr><th style="width:190px;min-width:190px">Phòng ban \\ Loại CP</th>'+LO.map(l=>'<th>'+l.n+'</th>').join('')+'</tr>';
+    el('cp_hmb').innerHTML=dept.map((d,di)=>'<tr><td class="dname">'+d.n+'</td>'+LO.map((l,li)=>{
+      const v=HV[di][li],over=overSet.has(di+'-'+li),limF=over?0.89:1.13,pctHm=Math.round(100/limF);
+      const bg=blueA(0.08+0.5*(v/maxHV)),txt=mode==='val'?nf(v):pctHm+'%';
+      return '<td><div class="hcell'+(over?' over':'')+'" style="background:'+bg+'">'+txt+'</div></td>';}).join('')+'</tr>').join('')+'<tr><td class="dname" style="font-weight:700;background:var(--color-background-secondary)">TỔNG CỘNG</td>'+LO.map(l=>'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'+(mode==='val'?nf(l.th):pc(l.th,l.kh)+'%')+'</div></td>').join('')+'</tr>';
+  }
+  const moExp=new Set();
+  function renderMonO(){let h='';
+    dept.forEach((d,di)=>{const p=pc(d.th,d.kh),open=moExp.has(di);
+      h+='<tr class="morow" data-i="'+di+'" style="cursor:pointer"><td style="font-weight:500"><span style="color:var(--color-text-tertiary);font-size:10px;margin-right:5px">'+(open?'▾':'▸')+'</span>'+d.n+'</td><td><div class="mono" style="color:var(--color-text-info)">'+nf(d.th)+'</div><div class="s2" style="color:'+(p>100?RD:'var(--color-text-tertiary)')+'">'+p+'% NS</div></td><td class="mono" style="color:var(--color-text-secondary)">'+nf(d.kh)+'</td><td style="text-align:center">'+statO(d.th,d.kh)+'</td></tr>';
+      if(open){LO.forEach((l,li)=>{const v=HV[di][li],over=overSet.has(di+'-'+li),pct=over?112:88,ns=R(v/(pct/100));
+        h+='<tr style="background:var(--color-background-secondary)"><td style="padding-left:28px;color:var(--color-text-secondary);font-size:11px">└ '+l.n+'</td><td><div class="mono s2" style="color:var(--color-text-secondary)">'+nf(v)+'</div><div class="s2" style="color:'+(over?RD:'var(--color-text-tertiary)')+'">'+pct+'% NS</div></td><td class="mono s2" style="color:var(--color-text-tertiary)">'+nf(ns)+'</td><td style="text-align:center">'+(over?'<span class="tg" style="background:var(--color-background-danger);color:var(--color-text-danger)">Vượt NS</span>':'<span class="tg" style="background:var(--color-background-success);color:var(--color-text-success)">Đạt NS</span>')+'</td></tr>';});}
+    });
+    el('cp_monb').innerHTML=h;
+    document.querySelectorAll('.morow').forEach(r=>r.addEventListener('click',function(){const i=+r.dataset.i;if(moExp.has(i))moExp.delete(i);else moExp.add(i);renderMonO();}));}
+  function setHMO(m){const isMon=m==='month';el('cp_hmView').style.display=isMon?'none':'';el('cp_monView').style.display=isMon?'':'none';el('cp_hmleg').style.display=isMon?'none':'flex';if(!isMon)renderHeatO(m);q('.cphm').forEach(b=>b.classList.toggle('on',b.dataset.m===m));}
+  const statO=(th,kh)=>th>kh?'<span class="tg" style="background:var(--color-background-danger);color:var(--color-text-danger)">Vượt NS</span>':'<span class="tg" style="background:var(--color-background-success);color:var(--color-text-success)">Đạt NS</span>';
+  const dltO=v=>'<span class="'+(v<0?'up':'dn')+'" style="color:'+(v<0?'var(--color-text-success)':'var(--color-text-danger)')+'">'+(v>=0?'+':'')+nf(v)+'</span>';
+  const sbarO=p=>{const c=p>100?'var(--color-text-danger)':p>=95?'var(--color-text-warning)':'var(--color-text-success)';return '<div style="display:flex;align-items:center;gap:6px;margin-top:4px"><div style="flex:1;height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;max-width:160px"><div style="height:100%;width:'+Math.min(p,100)+'%;background:'+c+';border-radius:3px"></div></div><span class="mono" style="font-size:10.5px;color:'+c+'">'+p+'%</span></div>';};
+  const sExp=new Set();
+  function renderSumO(){let h='',gKH=0,gTH=0,gDY=0;
+    GROUPS.forEach((g,gi)=>{const kh=g.m.reduce((s,i)=>s+LO[i].kh,0),th=g.m.reduce((s,i)=>s+LO[i].th,0),dy=g.m.reduce((s,i)=>s+LO[i].dy,0);
+      gKH+=kh;gTH+=th;gDY+=dy;const p=pc(th,kh),open=sExp.has(gi);
+      h+='<tr class="cpgrprow" data-g="'+gi+'" style="cursor:pointer;background:var(--color-background-secondary)"><td style="font-weight:600"><div style="display:flex;align-items:center;gap:6px"><span style="color:var(--color-text-tertiary);font-size:10px">'+(open?'▾':'▸')+'</span>'+g.n+'</div>'+sbarO(p)+'</td><td class="mono">'+nf(kh)+'</td><td class="mono" style="color:var(--color-text-info)">'+nf(th)+'</td><td>'+dltO(th-kh)+'</td><td>'+dltO(dy)+'</td><td class="mono" style="color:var(--color-text-secondary)">'+nf(R(th*1.05))+'</td><td style="text-align:center">'+statO(th,kh)+'</td></tr>';
+      g.m.forEach(i=>{const l=LO[i];h+='<tr class="cpsub cpg'+gi+'" style="display:'+(open?'':'none')+'"><td style="padding-left:28px;color:var(--color-text-secondary)">'+l.n+'</td><td class="mono">'+nf(l.kh)+'</td><td class="mono">'+nf(l.th)+'</td><td>'+dltO(l.th-l.kh)+'</td><td>'+dltO(l.dy)+'</td><td class="mono" style="color:var(--color-text-tertiary)">'+nf(R(l.th*1.05))+'</td><td style="text-align:center">'+statO(l.th,l.kh)+'</td></tr>';});
+    });
+    h='<tr class="tot"><td>TỔNG CỘNG</td><td class="mono">'+nf(gKH)+'</td><td class="mono" style="color:var(--color-text-info)">'+nf(gTH)+'</td><td>'+(gTH-gKH>=0?'+':'')+nf(gTH-gKH)+'</td><td>+'+nf(gDY)+'</td><td class="mono">'+nf(R(gTH*1.05))+'</td><td style="text-align:center">'+pc(gTH,gKH)+'%</td></tr>'+h;
+    el('cp_sumb').innerHTML=h;
+    q('.cpgrprow').forEach(r=>r.addEventListener('click',function(){const gi=+r.dataset.g;if(sExp.has(gi))sExp.delete(gi);else sExp.add(gi);renderSumO();}));
+  }
+  function renderTxO(){const txTot=TX.reduce((s,x)=>s+x.a,0);
+    el('cp_txb').innerHTML=TX.map(t=>{const tr=t.a/txTot*100;
+      return '<tr><td class="s2">'+t.d+'</td><td style="font-weight:500">'+t.n+'</td><td><span class="tg" style="background:var(--color-background-info);color:var(--color-text-info)">'+t.c+'</span></td><td class="mono">'+nf(t.a)+'</td><td><div style="display:flex;align-items:center;gap:5px"><div style="flex:1;height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;min-width:20px"><div style="height:100%;width:'+Math.min(tr*4,100)+'%;background:'+BL+';border-radius:3px"></div></div><span class="s2 mono">'+tr.toFixed(1)+'%</span></div></td><td style="text-align:left">'+t.u+'</td><td style="text-align:center">'+(t.s?'<span class="tg" style="background:var(--color-background-success);color:var(--color-text-success)">Đã duyệt</span>':'<span class="tg" style="background:var(--color-background-warning);color:var(--color-text-warning)">Chờ duyệt</span>')+'</td></tr>';}).join('');}
+  function buildOffice(){
+    trC=new Chart(el('cp_tr'),{data:{labels:MON8,datasets:[
+      {type:'bar',label:'Thực hiện',data:oTH.slice(),backgroundColor:oTH.map((t,i)=>t>oKH[i]?RD:BL),borderRadius:4,order:2},
+      {type:'line',label:'Ngân sách',data:oKH.slice(),borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:3,pointBackgroundColor:GR,tension:.25,order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' tr'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    regCum('cp_tr',trC,ch=>{const th=ch.data.datasets[0].data,kh=ch.data.datasets[1].data;ch.data.datasets[0].backgroundColor=th.map((t,i)=>t>kh[i]?RD:BL);});
+    deptC=new Chart(el('cp_dept'),{data:{labels:dept.map(d=>d.n),datasets:[
+      {type:'bar',label:'Thực hiện',data:dept.map(d=>d.th),backgroundColor:dept.map(d=>d.th>d.kh?RD:BL),borderRadius:3,order:2},
+      {type:'line',label:'Ngân sách',data:dept.map(d=>d.kh),borderColor:GR,borderWidth:1.5,borderDash:[5,4],pointRadius:3,pointBackgroundColor:GR,tension:.25,order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' tr'+(c.datasetIndex===0?' ('+pc(dept[c.dataIndex].th,dept[c.dataIndex].kh)+'% NS)':'')}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:9.5},maxRotation:40,minRotation:40}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    renderMonO();setHMO('val');renderSumO();renderTxO();
+    q('.cphm').forEach(b=>b.addEventListener('click',()=>setHMO(b.dataset.m)));
+  }
+
+  /* ----- TAB DỰ ÁN ----- */
+  const COMP=['Vật tư / NVL','Nhân công SX','Thi công lắp đặt','Khấu hao máy móc','Gia công thuê ngoài','Chi phí chung'];
+  const R0=[.38,.21,.13,.06,.11,.11];
+  const HMa=[{n:'Sản xuất tại xưởng',f:.45,j:1.05},{n:'Vận chuyển & giao hàng',f:.15,j:.97},{n:'Lắp đặt tại công trình',f:.40,j:1.0}];
+  const HMb=[{n:'Phần ngầm',f:.30,j:1.04},{n:'Phần thân',f:.45,j:.98},{n:'Hoàn thiện & MEP',f:.25,j:1.0}];
+  const pp=[
+    {n:'Đạt Gia – Vũng Tàu',code:'CT-04',cp:11.2,ns:12.0,tc:55,nsUsed:52,r:[.38,.18,.18,.08,.08,.10],hm:HMa},
+    {n:'Chú Thắng – Tân Bình',code:'CT-01',cp:8.4,ns:8.0,tc:68,nsUsed:70,r:[.43,.21,.09,.04,.13,.10],hm:HMa},
+    {n:'Anh Hoàng – Dĩ An',code:'CT-02',cp:5.2,ns:5.6,tc:50,nsUsed:48,r:[.40,.24,.10,.05,.11,.10],hm:HMb},
+    {n:'Anh Tùng – Kim Long',code:'CT-06',cp:4.6,ns:4.8,tc:58,nsUsed:60,r:[.36,.19,.20,.09,.06,.10],hm:HMa},
+    {n:'Anh Vũ – Nha Trang',code:'CT-05',cp:4.1,ns:4.5,tc:45,nsUsed:64,r:[.42,.19,.13,.06,.10,.10],hm:HMa},
+    {n:'Anh Tuấn – Thủ Đức',code:'CT-07',cp:3.4,ns:3.7,tc:55,nsUsed:53,r:[.44,.20,.09,.04,.13,.10],hm:HMa},
+    {n:'Cô Dung – Tân Uyên',code:'CT-03',cp:2.2,ns:2.5,tc:62,nsUsed:49,r:[.38,.21,.08,.04,.19,.10],hm:HMb},
+    {n:'Anh Minh – Vạn Phúc',code:'CT-09',cp:2.2,ns:1.9,tc:18,nsUsed:49,r:[.34,.18,.22,.10,.06,.10],hm:HMa}
+  ];
+  const pval=pp.map(p=>p.r.map(r=>R(p.cp*r)));
+  const pnsv=pp.map(p=>R0.map(b=>R(p.ns*b)));
+  const pcolSum=COMP.map((_,i)=>R(pval.reduce((s,row)=>s+row[i],0)));
+  const pcolNs=COMP.map((_,i)=>R(pnsv.reduce((s,row)=>s+row[i],0)));
+  const ptotCp=R(pp.reduce((s,p)=>s+p.cp,0)),ptotNs=R(pp.reduce((s,p)=>s+p.ns,0)),pmaxVal=Math.max(...pval.flat(),...pval.map(r=>R(r[2]+r[3])));
+  const sumK=(arr,k)=>k.reduce((s,i)=>s+arr[i],0);
+  const monTH=[6.0,6.8,9.5,10.0,9.0],monNS=[7.0,7.5,9.0,9.5,10.0];
+  const pms=monTH.map(v=>v/monTH.reduce((a,b)=>a+b,0));
+  const VT=[{n:'Nhôm thanh',r:.38},{n:'Kính',r:.28},{n:'Phụ kiện & khóa',r:.14},{n:'Roăng & silicone',r:.08},{n:'Vật tư phụ',r:.07},{n:'Vật tư khác',r:.05}];
+  const TB=[{n:'Máy cắt CNC',r:.30},{n:'Máy phay/khoan',r:.20},{n:'Máy ép góc',r:.15},{n:'Xe tải giao hàng',r:.17},{n:'Xe cẩu lắp đặt',r:.10},{n:'Khác',r:.08}];
+  const vtTot=pcolSum[0],thueTot=pcolSum[2],khTot=pcolSum[3],tbTot=R(thueTot+khTot);
+  const VEND={
+    vt:[{n:'Nhôm Xingfa QĐ',v:4.9,t:'Mua'},{n:'Nhôm Maxpro',v:3.6,t:'Mua'},{n:'Kính Đại Phúc',v:3.0,t:'Mua'},{n:'Nhôm Romadio',v:2.6,t:'Mua'},{n:'Phụ kiện Kinlong',v:1.3,t:'Mua'},{n:'Roăng & silicone',v:0.8,t:'Mua'},{n:'NCC khác',v:1.0,t:'Mua'}]
+  };
+  let ptrC,ccC,vendC;
+  // cơ cấu loại — bảng
+  let mxG='vt',mxDim='month',mxS='type';
+  function buildMx(){
+    const isVt=mxG==='vt',isTb=mxG==='tb',isRent=(isTb&&mxS==='rent');
+    let colsLab,colIdx;
+    if(mxDim==='month'){colsLab=['T01','T02','T03','T04','T05'];colIdx=[0,1,2,3,4];}
+    else{const ord=[...pp.keys()].sort((a,b)=>{const gv=o=>isVt?pval[o][0]:(pval[o][2]+pval[o][3]);return gv(b)-gv(a);});colIdx=ord;colsLab=ord.map(o=>pp[o].n);}
+    let items;
+    if(isRent)items=[{n:'Thuê ngoài',f:c=>mxDim==='month'?thueTot*pms[c]:pval[c][2]},{n:'Khấu hao',f:c=>mxDim==='month'?khTot*pms[c]:pval[c][3]}];
+    else items=(isVt?VT:TB).map(it=>({n:it.n,f:c=>{const base=mxDim==='month'?(isVt?vtTot:tbTot)*pms[c]:(isVt?pval[c][0]:(pval[c][2]+pval[c][3]));return base*it.r;}}));
+    const M=items.map(it=>colIdx.map(c=>R(it.f(c)))),rowTot=M.map(r=>R(r.reduce((a,b)=>a+b,0))),colTot=colIdx.map((_,ci)=>R(M.reduce((s,r)=>s+r[ci],0))),grand=R(rowTot.reduce((a,b)=>a+b,0)),maxCell=Math.max(...M.flat()),maxRow=Math.max(...rowTot);
+    el('cp_mxh').innerHTML='<tr><th style="width:18%">Loại</th>'+colsLab.map(l=>'<th>'+l+'</th>').join('')+'<th style="width:18%">Tổng cộng</th></tr>';
+    el('cp_mxb').innerHTML=items.map((it,ri)=>'<tr><td>'+it.n+'</td>'+M[ri].map(v=>'<td><div class="c" style="background:'+(v>0?blueA(0.06+0.45*(v/maxCell)):'transparent')+'">'+(v>0?R(v):'–')+'</div></td>').join('')+'<td><div class="c" style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;max-width:70px"><div style="height:100%;width:'+Math.round(rowTot[ri]/maxRow*100)+'%;background:'+BL+';border-radius:3px"></div></div><span class="mono" style="color:var(--color-text-info);font-weight:500;width:34px">'+rowTot[ri]+'</span></div></td></tr>').join('')+'<tr class="tot"><td>TỔNG CỘNG</td>'+colTot.map(v=>'<td><div class="c">'+R(v)+'</div></td>').join('')+'<td><div class="c mono">'+grand+'</div></td></tr>';
+    el('cp_splitWrap').style.display=isTb?'flex':'none';
+    q('.cpgrp').forEach(b=>b.classList.toggle('on',b.dataset.g===mxG));
+    q('.cpdt').forEach(b=>b.classList.toggle('on',b.dataset.d===mxDim));
+    q('.cpst').forEach(b=>b.classList.toggle('on',b.dataset.s===mxS));
+  }
+  // nhà cung cấp
+  let vgGrp='vt';
+  function buildVend(){
+    const list=[...VEND[vgGrp]].sort((a,b)=>b.v-a.v),tot=list.reduce((s,x)=>s+x.v,0);
+    if(vendC)vendC.destroy();
+    vendC=new Chart(el('cp_vend'),{type:'bar',data:{labels:list.map(x=>x.n),datasets:[{data:list.map(x=>x.v),backgroundColor:list.map(x=>TCOL[x.t]),borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>{const it=list[c.dataIndex];return it.n+': '+R(it.v)+' tỷ ('+pc(it.v,tot)+'%) · '+it.t;}}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{grid:{display:false}}}}});
+    const types=[...new Set(list.map(x=>x.t))];el('cp_vlg').innerHTML=types.map(t=>'<span><span class="dot" style="background:'+TCOL[t]+'"></span>'+t+'</span>').join('');
+    q('.cpvg').forEach(b=>b.classList.toggle('on',b.dataset.g===vgGrp));
+  }
+  // heatmap phân loại
+  const redA=a=>'rgba(226,75,74,'+a.toFixed(2)+')';
+  function cellHP(mode,v,nsval,rowTot){let txt,bg;
+    if(mode==='gt'){txt=R(v);bg=blueA(0.08+0.5*(v/pmaxVal));}
+    else if(mode==='pct'){const p=Math.round(v/rowTot*100);txt=p+'%';bg=blueA(0.08+0.5*Math.min(p/50,1));}
+    else{const p=pc(v,nsval);txt=p+'%';bg=p>100?redA(0.22+0.5*Math.min((p-100)/40,1)):blueA(0.08+0.4*(p/100));}
+    return '<td><div class="hcell" style="background:'+bg+'">'+txt+'</div></td>';}
+  function childCellHP(mode,cv,cns,ctot){let txt,col='var(--color-text-secondary)';
+    if(mode==='gt')txt=R(cv);else if(mode==='pct')txt=Math.round(cv/ctot*100)+'%';else{const p=pc(cv,cns);txt=p+'%';if(p>100)col=RD;}
+    return '<td><div class="ccell" style="color:'+col+'">'+txt+'</div></td>';}
+  const miniHP=(lbl,v,red)=>'<div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span style="font-size:9.5px;color:var(--color-text-tertiary);width:48px;flex-shrink:0">'+lbl+'</span><div style="flex:1;height:4px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;min-width:24px"><div style="height:100%;width:'+Math.min(v,100)+'%;background:'+(red?RD:BL)+';border-radius:3px"></div></div><span style="font-size:9.5px;color:'+(red?RD:'var(--color-text-secondary)')+';width:26px;text-align:right">'+v+'%</span></div>';
+  const hpExp=new Set();let hpMode='gt',tbExp=false;
+  function colDefsHP(){return [{k:[0]},{k:[1]},{k:[2]},{k:[5]}];}
+  function buildHeadHP(){
+    return '<tr><th style="width:22%">Công trình / Hạng mục</th><th>Vật tư / NVL</th><th>Nhân công SX</th><th>Thi công lắp đặt</th><th>Chi phí chung</th><th>TỔNG CỘNG</th><th>Tiến độ</th><th>Dự báo hoàn thành</th><th>So ngân sách</th></tr>';}
+  function renderHP(mode){hpMode=mode;const cd=colDefsHP();el('cp_hph').innerHTML=buildHeadHP();let html='';
+    pp.forEach((p,pi)=>{const open=hpExp.has(pi);
+      const cells=cd.map(c=>cellHP(mode,sumK(pval[pi],c.k),sumK(pnsv[pi],c.k),p.cp)).join('');
+      let last,lastRed=false;if(mode==='gt')last=p.cp;else if(mode==='pct')last='100%';else{last=pc(p.cp,p.ns)+'%';lastRed=p.cp>p.ns;}
+      const burn=p.nsUsed-p.tc>15;const fc=R(p.cp/((p.tc||100)/100)),pvc=Math.round(fc/p.ns*100),ovc=fc>p.ns;
+      html+='<tr class="cphprow" data-pi="'+pi+'" style="cursor:pointer"><td class="dname"><div style="display:flex;align-items:flex-start;gap:6px"><span style="color:var(--color-text-tertiary);margin-top:1px;font-size:10px">'+(open?'▾':'▸')+'</span><div style="flex:1;min-width:0"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.n+' <span class="s2">'+p.code+'</span></div>'+miniHP('Thi công',p.tc,false)+miniHP('Ngân sách',p.nsUsed,burn)+'</div></div></td>'+cells+'<td><div class="hcell" style="font-weight:600;color:'+(lastRed?RD:'var(--color-text-info)')+'">'+last+'</div></td>'+'<td class="ccell">'+p.tc+'%</td><td class="ccell" style="font-weight:600;color:'+(ovc?RD:'var(--color-text-info)')+'">'+fc+'</td><td class="ccell" style="font-weight:500;color:'+(ovc?RD:'var(--color-text-success)')+'">'+pvc+'%</td></tr>';
+      p.hm.forEach(h=>{const ctot=R(p.cp*h.f);const cc=cd.map(c=>childCellHP(mode,sumK(pval[pi],c.k)*h.f,sumK(pnsv[pi],c.k)*h.f*h.j,ctot)).join('');
+        const cl=mode==='gt'?ctot:mode==='pct'?'100%':pc(p.cp*h.f,p.ns*h.f)+'%';
+        html+='<tr class="cphpc" style="display:'+(open?'':'none')+'"><td style="padding:6px 8px 6px 26px;color:var(--color-text-secondary);font-size:11px">└ '+h.n+'</td>'+cc+'<td class="ccell" style="font-weight:500">'+cl+'</td><td colspan="3" class="ccell"></td></tr>';});
+    });
+    const totCells=cd.map(c=>{const cv=R(sumK(pcolSum,c.k)),cn=R(sumK(pcolNs,c.k));let t;if(mode==='gt')t=cv;else if(mode==='pct')t=Math.round(cv/ptotCp*100)+'%';else t=pc(cv,cn)+'%';return '<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'+t+'</div></td>';}).join('');
+    html+='<tr><td class="dname" style="background:var(--color-background-secondary);font-weight:600">TỔNG CỘNG</td>'+totCells+'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600">'+(mode==='gt'?ptotCp:mode==='pct'?'100%':pc(ptotCp,ptotNs)+'%')+'</div></td><td colspan="3" style="background:var(--color-background-secondary)"></td></tr>';
+    el('cp_hpb').innerHTML=html;
+    el('cp_hpnote').innerHTML=(mode==='gt'?'Giá trị chi phí (tỷ đồng) — màu đậm = chi phí lớn.':mode==='pct'?'Tỷ lệ % trong tổng chi phí từng công trình / hạng mục (mỗi hàng = 100%).':'Chi phí thực tế / ngân sách — <span style="color:'+RD+'">đỏ = vượt ngân sách</span>.')+' · Thanh <b>Ngân sách</b> đỏ = tiêu vượt tiến độ.';
+    el('cp_hpleg').innerHTML=(mode==='ns')
+      ?'<span><span class="dot" style="background:'+blueA(0.45)+'"></span>Trong ngân sách (≤100%)</span><span><span class="dot" style="background:#E24B4A"></span>Vượt ngân sách (&gt;100%)</span>'
+      :'<span style="color:var(--color-text-secondary)">Ít</span><span style="width:84px;height:11px;border-radius:3px;background:linear-gradient(90deg,'+blueA(0.12)+','+blueA(0.6)+')"></span><span style="color:var(--color-text-secondary)">Nhiều</span>'+(mode==='pct'?'<span style="color:var(--color-text-tertiary)">· % trong từng công trình</span>':'<span style="color:var(--color-text-tertiary)">· tỷ đồng</span>');
+    q('.cphprow').forEach(r=>r.addEventListener('click',function(){const pi=+r.dataset.pi;if(hpExp.has(pi))hpExp.delete(pi);else hpExp.add(pi);renderHP(hpMode);}));
+    q('.cphp').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode));
+  }
+  const RR=[
+    {n:'Đạt Gia – Vũng Tàu',code:'108-25',chi:22,td:55,ns:42},{n:'Chú Thắng – Tân Bình',code:'034-26',chi:21,td:68,ns:30},
+    {n:'Anh Hoàng – Dĩ An',code:'131-25',chi:10,td:50,ns:22},{n:'Anh Tùng – Kim Long',code:'018-26',chi:9,td:58,ns:16},
+    {n:'Anh Vũ – Nha Trang',code:'026-26',chi:9.5,td:45,ns:18},{n:'Anh Tuấn – Thủ Đức',code:'008-26',chi:7,td:55,ns:13},
+    {n:'Cô Dung – Tân Uyên',code:'028-26',chi:5.5,td:62,ns:9},{n:'Anh Minh – Vạn Phúc',code:'145-25',chi:2.0,td:18,ns:8}
+  ];
+  const RPH=[{n:'Sản xuất tại xưởng',fc:0.40,fn:0.38,pf:1.25},{n:'Vận chuyển & giao hàng',fc:0.38,fn:0.37,pf:1.0},{n:'Lắp đặt tại công trình',fc:0.22,fn:0.25,pf:0.6}];
+  const rbar=td=>'<div style="display:flex;align-items:center;gap:6px"><div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;min-width:30px"><div style="height:100%;width:'+Math.min(td,100)+'%;background:'+BL+';border-radius:3px"></div></div><span class="s2 mono" style="width:32px;text-align:right">'+td+'%</span></div>';
+  const rrExp=new Set();
+  function renderRR(){
+    const rows=RR.map((p,idx)=>{const f=R(p.chi/(p.td/100)),ch=R(f-p.ns),pv=Math.round(f/p.ns*100);return{n:p.n,code:p.code,chi:p.chi,td:p.td,ns:p.ns,f:f,ch:ch,pv:pv,idx:idx};}).sort((a,b)=>b.pv-a.pv);
+    let h='';
+    rows.forEach(p=>{const over=p.f>p.ns,open=rrExp.has(p.idx);
+      h+='<tr class="rrrow" data-i="'+p.idx+'" style="cursor:pointer"><td style="text-align:left;font-weight:500"><span style="color:var(--color-text-tertiary);font-size:10px;margin-right:5px">'+(open?'▾':'▸')+'</span>'+p.n+' <span class="s2">'+p.code+'</span></td>'
+        +'<td class="mono">'+p.chi+'</td><td>'+rbar(p.td)+'</td>'
+        +'<td class="mono" style="font-weight:600;color:'+(over?RD:'var(--color-text-info)')+'">'+p.f+'</td>'
+        +'<td class="mono" style="color:var(--color-text-secondary)">'+p.ns+'</td>'
+        +'<td class="mono" style="font-weight:500;color:'+(p.ch>0?RD:'var(--color-text-success)')+'">'+(p.ch>0?'+':'')+p.ch+' ('+p.pv+'%)</td>'
+        +'<td style="text-align:center">'+(over?'<span class="tg" style="background:var(--color-background-danger);color:var(--color-text-danger)">Dự báo vượt</span>':'<span class="tg" style="background:var(--color-background-success);color:var(--color-text-success)">Trong NS</span>')+'</td></tr>';
+      if(open){RPH.forEach(ph=>{const chiH=R(p.chi*ph.fc),nsH=R(p.ns*ph.fn),tdH=Math.max(5,Math.min(100,Math.round(p.td*ph.pf))),fH=R(chiH/(tdH/100)),chH=R(fH-nsH),ovH=fH>nsH;
+        h+='<tr style="background:var(--color-background-secondary)"><td style="text-align:left;padding-left:28px;color:var(--color-text-secondary);font-size:11px">└ '+ph.n+'</td>'
+          +'<td class="mono s2">'+chiH+'</td><td>'+rbar(tdH)+'</td>'
+          +'<td class="mono s2" style="font-weight:500;color:'+(ovH?RD:'var(--color-text-secondary)')+'">'+fH+'</td>'
+          +'<td class="mono s2" style="color:var(--color-text-tertiary)">'+nsH+'</td>'
+          +'<td class="mono s2" style="color:'+(chH>0?RD:'var(--color-text-success)')+'">'+(chH>0?'+':'')+chH+'</td><td></td></tr>';});}
+    });
+    const sChi=R(RR.reduce((s,p)=>s+p.chi,0)),sF=R(RR.reduce((s,p)=>s+p.chi/(p.td/100),0)),sNS=R(RR.reduce((s,p)=>s+p.ns,0)),sCh=R(sF-sNS),sPv=Math.round(sF/sNS*100);
+    h+='<tr class="tot"><td style="text-align:left">TỔNG CỘNG</td><td class="mono">'+sChi+'</td><td></td><td class="mono" style="color:'+(sF>sNS?RD:'var(--color-text-info)')+'">'+sF+'</td><td class="mono">'+sNS+'</td><td class="mono" style="color:'+(sCh>0?RD:'var(--color-text-success)')+'">'+(sCh>0?'+':'')+sCh+' ('+sPv+'%)</td><td></td></tr>';
+    el('cp_rrb').innerHTML=h;
+    document.querySelectorAll('.rrrow').forEach(r=>r.addEventListener('click',function(){const i=+r.dataset.i;if(rrExp.has(i))rrExp.delete(i);else rrExp.add(i);renderRR();}));
+  }
+  function buildProj(){
+    
+    regCum('cp_ptr',ptrC,ch=>{const th=ch.data.datasets[0].data,kh=ch.data.datasets[1].data;ch.data.datasets[0].backgroundColor=th.map((t,i)=>t>kh[i]?RD:BL);});
+    const GRP5=[{l:'Vật tư / NVL',k:[0]},{l:'Nhân công SX',k:[1]},{l:'Thi công lắp đặt',k:[2]},{l:'Chi phí chung',k:[5]}];
+    const ordc=[...pp.keys()].sort((a,b)=>pp[b].cp-pp[a].cp);
+    el('cp_cclg').innerHTML=GRP5.map((g,i)=>'<span><span class="dot" style="background:'+SH[i]+'"></span>'+g.l+'</span>').join('');
+    ccC=new Chart(el('cp_cc'),{type:'bar',data:{labels:ordc.map(o=>pp[o].n),datasets:GRP5.map((g,i)=>({label:g.l,data:ordc.map(o=>R(sumK(pval[o],g.k))),backgroundColor:SH[i],stack:'s',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)'}))},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.x)+' ('+pc(c.parsed.x,pp[ordc[c.dataIndex]].cp)+'%)'}}},
+        scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{stacked:true,grid:{display:false}}}}});
+    buildMx();buildVend();renderHP('gt');
+    q('.cpgrp').forEach(b=>b.addEventListener('click',()=>{mxG=b.dataset.g;buildMx();}));
+    q('.cpdt').forEach(b=>b.addEventListener('click',()=>{mxDim=b.dataset.d;buildMx();}));
+    q('.cpst').forEach(b=>b.addEventListener('click',()=>{mxS=b.dataset.s;buildMx();}));
+    q('.cpvg').forEach(b=>b.addEventListener('click',()=>{vgGrp=b.dataset.g;buildVend();}));
+    q('.cphp').forEach(b=>b.addEventListener('click',()=>renderHP(b.dataset.mode)));
+  }
+
+  let cpBuilt=false,projBuilt=false;
+  window.cpBuild=function(){
+    if(!cpBuilt){buildPartA();cpBuilt=true;}
+    else{[segC,nsC].forEach(c=>c&&c.resize());}
+    if(!projBuilt){buildProj();projBuilt=true;}else{[ccC,vendC].forEach(c=>c&&c.resize());}
+  };
+  
+})();
+
+/* ============ TRANG CÔNG NỢ & DÒNG TIỀN ============ */
+(function(){
+  const el=id=>document.getElementById(id),q=s=>document.querySelectorAll(s);
+  const posA=a=>'rgba(46,124,214,'+a.toFixed(2)+')',negA=a=>'rgba(226,75,74,'+a.toFixed(2)+')';
+  const MON=['T01','T02','T03','T04','T05','T06*','T07*'];
+
+  /* ---- DÒNG TIỀN ---- */
+  const thu=[9.5,6.6,11.1,9.6,11.7,14.5,12.8],chi=[-2.5,-3.5,-6.5,-6.3,-5.5,-12.0,-11.0];
+  const net=thu.map((t,i)=>R(t+chi[i])),fci=i=>i>=5,OPEN=12.6;
+  let cfMode='month',cfChart;
+  function cfData(){if(cfMode==='month')return{thu,chi,line:net,lbl:'Dòng tiền thuần'};
+    const ct=cumu(thu),cc=cumu(chi),bal=[];net.reduce((a,v,i)=>{const b=R((i?bal[i-1]:OPEN)+v);bal.push(b);return b;},0);
+    return{thu:ct,chi:cc,line:bal,lbl:'Số dư tiền'};}
+  function buildCf(){const d=cfData();if(cfChart)cfChart.destroy();
+    cfChart=new Chart(el('cn_cf'),{data:{labels:MON,datasets:[
+      {type:'bar',label:'Thu',data:d.thu,backgroundColor:d.thu.map((_,i)=>fci(i)?BL+'59':BL),borderRadius:3,order:2},
+      {type:'bar',label:'Chi',data:d.chi,backgroundColor:d.chi.map((_,i)=>fci(i)?RD+'59':RD),borderRadius:3,order:2},
+      {type:'line',label:d.lbl,data:d.line,borderColor:NV,borderWidth:2.5,tension:.3,pointRadius:3,order:1,segment:{borderDash:c=>c.p0DataIndex>=4?[5,4]:undefined}}]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+ty(c.parsed.y)}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:c=>c.tick.value===0?zero:grid,lineWidth:c=>c.tick.value===0?1.5:1},ticks:{callback:v=>v+' tỷ'}}}}});
+    q('.cncf').forEach(b=>b.classList.toggle('on',b.dataset.v===cfMode));}
+
+  const HMa=[{n:'Sản xuất tại xưởng',f:.45},{n:'Vận chuyển & giao hàng',f:.15},{n:'Lắp đặt tại công trình',f:.40}];
+  const HMb=[{n:'Phần ngầm',f:.30},{n:'Phần thân',f:.45},{n:'Hoàn thiện & MEP',f:.25}];
+  const cproj=[
+    {n:'Đạt Gia – Vũng Tàu',code:'CT-04',thu:16,chi:4,hm:HMa},{n:'Chú Thắng – Tân Bình',code:'CT-01',thu:8,chi:5,hm:HMa},
+    {n:'Anh Hoàng – Dĩ An',code:'CT-02',thu:9,chi:3,hm:HMb},{n:'Anh Tùng – Kim Long',code:'CT-06',thu:4,chi:2,hm:HMa},
+    {n:'Anh Vũ – Nha Trang',code:'CT-05',thu:2.5,chi:4.8,hm:HMa},{n:'Anh Tuấn – Thủ Đức',code:'CT-07',thu:2.5,chi:1.3,hm:HMa},
+    {n:'Cô Dung – Tân Uyên',code:'CT-03',thu:5.5,chi:1.5,hm:HMb},{n:'Chị Phượng – Thảo Điền',code:'CT-08',thu:0.5,chi:1,hm:HMa},
+    {n:'Anh Minh – Vạn Phúc',code:'CT-09',thu:0.5,chi:1.7,hm:HMa}
+  ];
+  const msThu=[0.12,0.10,0.16,0.14,0.18,0.15,0.15],msChi=[0.16,0.15,0.16,0.14,0.13,0.13,0.13];
+  let dtMode='net';const dtExp=new Set();
+  function cv(t,c,i){const tv=t*msThu[i],cc=c*msChi[i];return dtMode==='thu'?tv:dtMode==='chi'?cc:tv-cc;}
+  function colorOf(v,mx){if(dtMode==='net'){const a=0.1+0.55*(Math.abs(v)/mx);return v>=0?posA(a):negA(a);}const a=0.08+0.55*(Math.abs(v)/mx);return dtMode==='thu'?posA(a):negA(a);}
+  function fc2(v){return dtMode==='net'?(v>0?'+':'')+R(v):R(v);}
+  function renderDtHM(){let vs=[];cproj.forEach(p=>{for(let i=0;i<7;i++)vs.push(Math.abs(cv(p.thu,p.chi,i)));});const mx=Math.max(...vs,0.1);
+    el('cn_hmh').innerHTML='<tr><th style="width:20%">Công trình / Hạng mục</th>'+MON.map(m=>'<th>'+m+'</th>').join('')+'<th>Tổng</th></tr>';
+    let h='';
+    cproj.forEach((p,pi)=>{const open=dtExp.has(pi);
+      const cells=MON.map((_,i)=>{const v=cv(p.thu,p.chi,i),dark=Math.abs(v)/mx>0.55;return '<td><div class="hcell" style="background:'+colorOf(v,mx)+';color:'+(dark?'#fff':'var(--color-text-primary)')+'">'+fc2(v)+'</div></td>';}).join('');
+      const tot=R(MON.reduce((s,_,i)=>s+cv(p.thu,p.chi,i),0));
+      h+='<tr class="prow" data-pi="'+pi+'"><td class="dname"><span style="color:var(--color-text-tertiary);font-size:10px;margin-right:5px">'+(open?'▾':'▸')+'</span>'+p.n+' <span class="s2">'+p.code+'</span></td>'+cells+'<td><div class="hcell" style="background:var(--color-background-secondary);color:'+(tot<0?RD:'var(--color-text-info)')+';font-weight:600">'+fc2(tot)+'</div></td></tr>';
+      p.hm.forEach(hm=>{const cc=MON.map((_,i)=>{const v=cv(p.thu*hm.f,p.chi*hm.f,i);return '<td><div class="ccell" style="color:'+(dtMode==='net'&&v<0?RD:'var(--color-text-secondary)')+'">'+fc2(v)+'</div></td>';}).join('');
+        const ct=R(MON.reduce((s,_,i)=>s+cv(p.thu*hm.f,p.chi*hm.f,i),0));
+        h+='<tr style="display:'+(open?'':'none')+'"><td style="padding:5px 8px 5px 26px;color:var(--color-text-secondary);font-size:10.5px">└ '+hm.n+'</td>'+cc+'<td class="ccell" style="font-weight:500">'+fc2(ct)+'</td></tr>';});
+    });
+    const tmon=MON.map((_,i)=>R(cproj.reduce((s,p)=>s+cv(p.thu,p.chi,i),0)));const tall=R(tmon.reduce((a,b)=>a+b,0));
+    h+='<tr><td class="dname" style="font-weight:700;background:var(--color-background-secondary)">TỔNG CỘNG</td>'+tmon.map(v=>'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:600;color:'+(v<0?RD:'var(--color-text-primary)')+'">'+fc2(v)+'</div></td>').join('')+'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:700;color:'+(tall<0?RD:'var(--color-text-info)')+'">'+fc2(tall)+'</div></td></tr>';
+    el('cn_hmb').innerHTML=h;
+    el('cn_hmleg').innerHTML=dtMode==='net'?'<span><span class="dot" style="background:#E24B4A"></span>Âm</span><span style="color:var(--color-text-tertiary)">← 0 →</span><span><span class="dot" style="background:#2E7CD6"></span>Dương</span>':dtMode==='thu'?'<span><span class="dot" style="background:#2E7CD6"></span>Tiền thu — đậm hơn = thu nhiều</span>':'<span><span class="dot" style="background:#E24B4A"></span>Tiền chi — đậm hơn = chi nhiều</span>';
+    el('cn_hmb').querySelectorAll('.prow').forEach(r=>r.addEventListener('click',function(){const pi=+r.dataset.pi;if(dtExp.has(pi))dtExp.delete(pi);else dtExp.add(pi);renderDtHM();}));
+    q('.cnmd').forEach(b=>b.classList.toggle('on',b.dataset.m===dtMode));}
+
+  const THU=[{n:'Đạt Gia (Vũng Tàu)',v:12.5},{n:'Chú Thắng (Tân Bình)',v:9.8},{n:'Anh Hoàng (Dĩ An)',v:7.2},{n:'Anh Minh (Vạn Phúc)',v:6.2},{n:'Anh Tùng (Kim Long)',v:5.5},{n:'Anh Vũ (Nha Trang)',v:4.1},{n:'Anh Tuấn (Thủ Đức)',v:3.2}];
+  const CHI=[{n:'Lương & BHXH SX',v:5.5},{n:'Nhôm Xingfa QĐ',v:4.9},{n:'Gia công CNC',v:3.5},{n:'Kính Đại Phúc',v:3.0},{n:'Phụ kiện Kinlong',v:2.4},{n:'Vận chuyển giao hàng',v:2.0},{n:'Chi khác',v:3.0}];
+  let ptyChart,ptyMode='thu';
+  function buildPty(){const isThu=ptyMode==='thu',list=[...(isThu?THU:CHI)].sort((a,b)=>b.v-a.v),col=isThu?BL:RD,tot=list.reduce((s,x)=>s+x.v,0);
+    if(ptyChart)ptyChart.destroy();
+    ptyChart=new Chart(el('cn_pty'),{type:'bar',data:{labels:list.map(x=>x.n),datasets:[{data:list.map(x=>x.v),backgroundColor:col,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(isThu?'Đã thu: ':'Đã chi: ')+ty(c.parsed.x)+' ('+pc(c.parsed.x,tot)+'%)'}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{grid:{display:false}}}}});
+    el('cn_ptylg').innerHTML='<span><span class="dot" style="background:'+col+'"></span>'+(isThu?'Tiền đã thu từ chủ đầu tư / khách hàng':'Tiền đã chi cho NCC / nội bộ')+'</span>';
+    q('.cnpty').forEach(b=>b.classList.toggle('on',b.dataset.p===ptyMode));}
+
+  const PLAN=[{k:1,n:'Nghiệm thu Đạt Gia',o:'Đạt Gia',d:'18/06',a:6.5},{k:0,n:'Lương SX tháng 6',o:'Nội bộ',d:'05/06',a:5.5},{k:0,n:'TT nhôm Xingfa',o:'Xingfa QĐ',d:'15/06',a:3.2},{k:1,n:'Thu nợ Chú Thắng',o:'Chú Thắng',d:'22/06',a:3.8},{k:1,n:'Thu Anh Vũ giao hàng',o:'Anh Vũ',d:'25/06',a:4.2},{k:0,n:'Thuê xe lắp T6',o:'Vận tải',d:'20/06',a:2.4},{k:0,n:'Gia công CNC',o:'Tân Phú',d:'28/06',a:1.4}];
+  function renderPlan(){const sThu=R(PLAN.filter(p=>p.k).reduce((s,p)=>s+p.a,0)),sChi=R(PLAN.filter(p=>!p.k).reduce((s,p)=>s+p.a,0)),sNet=R(sThu-sChi);el('cn_planb').innerHTML=[...PLAN].sort((a,b)=>a.d.localeCompare(b.d)).map(p=>'<tr><td style="text-align:left">'+(p.k?'<span class="tg" style="background:var(--color-background-info);color:var(--color-text-info)">Thu</span>':'<span class="tg" style="background:var(--color-background-danger);color:var(--color-text-danger)">Chi</span>')+'</td><td style="text-align:left;font-weight:500">'+p.n+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+p.o+'</td><td class="s2">'+p.d+'</td><td class="mono" style="color:'+(p.k?'var(--color-text-success)':'var(--color-text-danger)')+';font-weight:500">'+(p.k?'+':'-')+p.a+'</td></tr>').join('')+'<tr class="tot"><td style="text-align:left">Tổng</td><td colspan="2" style="text-align:left" class="s2">Thu +'+sThu+' tỷ · Chi -'+sChi+' tỷ</td><td class="s2" style="text-align:left">Ròng</td><td class="mono" style="color:'+(sNet>=0?'var(--color-text-success)':'var(--color-text-danger)')+'">'+(sNet>=0?'+':'')+sNet+'</td></tr>';}
+
+  const JTHU=[{d:'24/05',ct:'PT-0512',dg:'Thu nghiệm thu & quyết toán đợt 3',o:'Đạt Gia (Vũng Tàu)',p:'Đạt Gia – Vũng Tàu',a:5200,f:'CK'},{d:'22/05',ct:'PT-0511',dg:'Thu đợt 2 khi giao hàng',o:'Anh Minh (Vạn Phúc)',p:'Anh Minh – Vạn Phúc',a:1850,f:'CK'},{d:'20/05',ct:'PT-0510',dg:'Thu hồ sơ nghiệm thu T05',o:'Chú Thắng (Tân Bình)',p:'Chú Thắng – Tân Bình',a:3600,f:'CK'},{d:'18/05',ct:'PT-0509',dg:'Thu tạm ứng đợt 1 (ký HĐ)',o:'Anh Hoàng (Dĩ An)',p:'Anh Hoàng – Dĩ An',a:2400,f:'CK'},{d:'15/05',ct:'PT-0508',dg:'Thu tạm ứng đợt 1 (ký HĐ)',o:'Anh Vũ (Nha Trang)',p:'Anh Vũ – Nha Trang',a:980,f:'TM'},{d:'12/05',ct:'PT-0507',dg:'Thu công nợ kỳ trước',o:'Chị Phượng (Thảo Điền)',p:'Chị Phượng – Thảo Điền',a:1500,f:'CK'},{d:'08/05',ct:'PT-0506',dg:'Thu đợt 2 khi giao hàng',o:'Anh Vũ (Nha Trang)',p:'Anh Vũ – Nha Trang',a:1200,f:'CK'},{d:'05/05',ct:'PT-0505',dg:'Thu tạm ứng đợt 1 (ký HĐ)',o:'Anh Tuấn (Thủ Đức)',p:'Anh Tuấn – Thủ Đức',a:760,f:'TM'}];
+  const JCHI=[{d:'23/05',ct:'PC-0820',dg:'Thanh toán nhôm Xingfa (sau ĐNMH)',o:'Nhôm Xingfa QĐ',p:'Đạt Gia – Vũng Tàu',a:240,f:'CK'},{d:'21/05',ct:'PC-0819',dg:'Chi lương sản xuất tháng 5',o:'Nội bộ — bảng lương',p:'Toàn công ty',a:520,f:'CK'},{d:'19/05',ct:'PC-0818',dg:'Tạm ứng đặt cọc nhôm Maxpro',o:'Nhôm Maxpro',p:'Anh Tùng – Kim Long',a:185,f:'CK'},{d:'16/05',ct:'PC-0817',dg:'Thanh toán kính cường lực',o:'Kính Đại Phúc',p:'Anh Hoàng – Dĩ An',a:1100,f:'CK'},{d:'14/05',ct:'PC-0816',dg:'Thanh toán gia công CNC',o:'Gia công Tân Phú',p:'Cô Dung – Tân Uyên',a:700,f:'CK'},{d:'10/05',ct:'PC-0815',dg:'Chi nhiên liệu xe giao hàng',o:'Cây xăng',p:'Anh Vũ – Nha Trang',a:120,f:'TM'},{d:'07/05',ct:'PC-0814',dg:'Quyết toán phụ kiện Kinlong',o:'Phụ kiện Kinlong',p:'Anh Minh – Vạn Phúc',a:310,f:'TM'},{d:'03/05',ct:'PC-0813',dg:'Tạm ứng đội lắp đặt',o:'Đội thi công số 3',p:'Anh Minh – Vạn Phúc',a:600,f:'TM'}];
+  let jr='thu',jrForm='all';
+  function renderJr(){const isThu=jr==='thu',col=isThu?'var(--color-text-success)':'var(--color-text-danger)';
+    const list=(isThu?JTHU:JCHI).filter(x=>jrForm==='all'||x.f===jrForm),tot=list.reduce((s,x)=>s+x.a,0);
+    const fl=jrForm==='all'?'':' · '+(jrForm==='CK'?'Chuyển khoản':'Tiền mặt');
+    el('cn_jrsum').textContent=(isThu?'Tổng thu kỳ hiển thị: ':'Tổng chi kỳ hiển thị: ')+nf(tot)+' triệu đồng · '+list.length+' chứng từ'+fl;
+    el('cn_jrb').innerHTML=list.map(x=>'<tr><td class="s2" style="text-align:left">'+x.d+'</td><td style="text-align:left;font-weight:500;color:'+col+'">'+x.ct+'</td><td style="text-align:left">'+x.dg+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+x.o+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+x.p+'</td><td class="mono" style="font-weight:500;color:'+col+'">'+(isThu?'+':'-')+nf(x.a)+'</td><td style="text-align:center"><span class="tg" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">'+x.f+'</span></td></tr>').join('')||'<tr><td colspan="7" class="s2" style="text-align:center;padding:16px">Không có chứng từ '+(jrForm==='CK'?'chuyển khoản':'tiền mặt')+'</td></tr>';
+    q('.cnjr').forEach(b=>b.classList.toggle('on',b.dataset.j===jr));q('.cnjf').forEach(b=>b.classList.toggle('on',b.dataset.jf===jrForm));}
+
+  /* ---- CÔNG NỢ ---- */
+  const AG=['#2E7CD6','#EF9F27','#E67E22','#E24B4A'],AGrgb=[[46,124,214],[239,159,39],[230,126,34],[226,75,74]],BK=['0–30 ngày','31–60 ngày','61–90 ngày','> 90 ngày'];
+  const aColor=(c,a)=>'rgba('+AGrgb[c].join(',')+','+a.toFixed(2)+')';
+  const PTo=[{n:'Đạt Gia (Vũng Tàu)',a:[4.5,2.0,1.0,0.5]},{n:'Chú Thắng (Tân Bình)',a:[3.0,1.5,0.8,1.2]},{n:'Anh Hoàng (Dĩ An)',a:[2.5,1.0,0.5,0.3]},{n:'Anh Vũ (Nha Trang)',a:[1.0,0.8,0.7,1.5]},{n:'Anh Tùng (Kim Long)',a:[1.8,0.9,0.4,0.6]},{n:'Anh Tuấn (Thủ Đức)',a:[1.2,0.5,0.3,0.5]},{n:'Anh Tuấn (Thủ Đức)',a:[1.2,0.5,0.3,0.2]}];
+  const PTro=[{n:'Nhôm Xingfa QĐ',a:[2.0,0.5,0.2,0.1]},{n:'Kính Đại Phúc',a:[1.5,0.3,0.1,0.1]},{n:'Gia công CNC Tân Phú',a:[1.0,0.5,0.3,0.2]},{n:'Thuê xe cẩu lắp',a:[1.2,0.4,0.1,0.0]},{n:'Nhôm Romadio',a:[1.3,0.2,0.1,0.0]},{n:'Chi khác',a:[1.2,0.4,0.1,0.1]},{n:'Nhiên liệu',a:[0.8,0.1,0.0,0.0]}];
+  const dproj=[
+    {n:'Đạt Gia – Vũng Tàu',code:'CT-04',pt:[3.0,1.5,0.8,0.5],ptr:[1.5,0.4,0.1,0.1],hm:HMa},{n:'Chú Thắng – Tân Bình',code:'CT-01',pt:[2.0,1.2,0.6,1.0],ptr:[1.2,0.3,0.1,0.0],hm:HMa},
+    {n:'Anh Hoàng – Dĩ An',code:'CT-02',pt:[2.2,0.8,0.4,0.2],ptr:[1.0,0.2,0.1,0.0],hm:HMb},{n:'Anh Tùng – Kim Long',code:'CT-06',pt:[1.5,0.6,0.3,0.2],ptr:[0.8,0.2,0.1,0.0],hm:HMa},
+    {n:'Anh Vũ – Nha Trang',code:'CT-05',pt:[1.0,0.7,0.6,1.5],ptr:[1.0,0.3,0.2,0.2],hm:HMa},{n:'Anh Tuấn – Thủ Đức',code:'CT-07',pt:[1.2,0.4,0.2,0.1],ptr:[0.6,0.1,0.0,0.0],hm:HMa},
+    {n:'Cô Dung – Tân Uyên',code:'CT-03',pt:[1.8,0.7,0.3,0.4],ptr:[1.2,0.3,0.1,0.1],hm:HMb},{n:'Chị Phượng – Thảo Điền',code:'CT-08',pt:[1.5,0.6,0.4,0.6],ptr:[0.9,0.2,0.1,0.1],hm:HMa},
+    {n:'Anh Minh – Vạn Phúc',code:'CT-09',pt:[1.0,0.5,0.4,0.5],ptr:[0.8,0.2,0.1,0.2],hm:HMa}
+  ];
+  let agMode='pt',agL,agR;const cnExp=new Set();
+  function buildCharts(){const list=[...(agMode==='pt'?PTo:PTro)].sort((x,y)=>y.a.reduce((s,v)=>s+v,0)-x.a.reduce((s,v)=>s+v,0));
+    const bucket=[0,1,2,3].map(i=>R(list.reduce((s,o)=>s+o.a[i],0)));
+    if(agL)agL.destroy();
+    agL=new Chart(el('cn_agL'),{type:'bar',data:{labels:BK,datasets:[{data:bucket,backgroundColor:AG,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>R(c.parsed.y)+' tỷ ('+pc(c.parsed.y,bucket.reduce((a,b)=>a+b,0))+'%)'}}},scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>v+' tỷ'}}}}});
+    if(agR)agR.destroy();
+    agR=new Chart(el('cn_agR'),{type:'bar',data:{labels:list.map(o=>o.n),datasets:BK.map((b,i)=>({label:b,data:list.map(o=>o.a[i]),backgroundColor:AG[i],stack:'s',borderWidth:0.5,borderColor:'rgba(255,255,255,0.5)'}))},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+R(c.parsed.x)+' tỷ'}}},scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>v+' tỷ'}},y:{stacked:true,grid:{display:false}}}}});
+    el('cn_agleg').innerHTML=BK.map((b,i)=>'<span><span class="dot" style="background:'+AG[i]+'"></span>'+b+'</span>').join('');}
+  function renderCNHM(){const key=agMode;let mx=0;dproj.forEach(p=>p[key].forEach(v=>{if(v>mx)mx=v;}));mx=mx||0.1;
+    el('cn_cnhmh').innerHTML='<tr><th style="width:24%">Công trình / Hạng mục</th>'+BK.map(b=>'<th>'+b+'</th>').join('')+'<th>Tổng dư nợ</th></tr>';
+    let h='';
+    dproj.forEach((p,pi)=>{const open=cnExp.has(pi),arr=p[key],tot=R(arr.reduce((a,b)=>a+b,0)),od=R(arr[2]+arr[3]);
+      const cells=arr.map((v,ci)=>{const dark=v/mx>0.6;return '<td><div class="hcell" style="background:'+(v>0?aColor(ci,0.12+0.55*(v/mx)):'transparent')+';color:'+(dark?'#fff':'var(--color-text-primary)')+'">'+(v>0?R(v):'–')+'</div></td>';}).join('');
+      h+='<tr class="prow" data-pi="'+pi+'"><td class="dname"><span style="color:var(--color-text-tertiary);font-size:10px;margin-right:5px">'+(open?'▾':'▸')+'</span>'+p.n+' <span class="s2">'+p.code+'</span></td>'+cells+'<td><div class="hcell" style="background:var(--color-background-secondary);color:'+(od>0.5?RD:'var(--color-text-info)')+';font-weight:600">'+tot+'</div></td></tr>';
+      p.hm.forEach(hm=>{const cc=arr.map((v,ci)=>{const cvv=R(v*hm.f);return '<td><div class="ccell" style="color:'+(ci>=2&&cvv>0?RD:'var(--color-text-secondary)')+'">'+(cvv>0?cvv:'–')+'</div></td>';}).join('');
+        const ct=R(arr.reduce((s,v)=>s+v*hm.f,0));
+        h+='<tr style="display:'+(open?'':'none')+'"><td style="padding:5px 8px 5px 26px;color:var(--color-text-secondary);font-size:10.5px">└ '+hm.n+'</td>'+cc+'<td class="ccell" style="font-weight:500">'+ct+'</td></tr>';});
+    });
+    const tbk=[0,1,2,3].map(ci=>R(dproj.reduce((s,p)=>s+p[key][ci],0)));const tall=R(tbk.reduce((a,b)=>a+b,0));
+    h+='<tr><td class="dname" style="font-weight:700;background:var(--color-background-secondary)">TỔNG CỘNG</td>'+tbk.map((v,ci)=>'<td><div class="hcell" style="background:'+(v>0?aColor(ci,0.5):'var(--color-background-secondary)')+';color:#fff;font-weight:600">'+(v>0?R(v):'–')+'</div></td>').join('')+'<td><div class="hcell" style="background:var(--color-background-secondary);font-weight:700;color:var(--color-text-info)">'+tall+'</div></td></tr>';
+    el('cn_cnhmb').innerHTML=h;
+    el('cn_cnhmleg').innerHTML=BK.map((b,i)=>'<span><span class="dot" style="background:'+AG[i]+'"></span>'+b+'</span>').join('')+'<span style="color:var(--color-text-tertiary)">· đậm hơn = dư nợ lớn</span>';
+    el('cn_cnhmTitle').innerHTML='<i class="ti ti-layout-grid"></i> Công nợ '+(agMode==='pt'?'phải thu':'phải trả')+' theo công trình × tuổi nợ';
+    el('cn_cnhmb').querySelectorAll('.prow').forEach(r=>r.addEventListener('click',function(){const pi=+r.dataset.pi;if(cnExp.has(pi))cnExp.delete(pi);else cnExp.add(pi);renderCNHM();}));}
+  function applyAg(){buildCharts();renderCNHM();q('.cnag').forEach(b=>b.classList.toggle('on',b.dataset.m===agMode));}
+
+  const INV=[{c:'HĐ-2025-006',o:'Chú Thắng',p:'034-26 Tân Bình',t:'PT',d:'28/02/2026',a:1.2,q:88,ph:'Nguyễn Thu Hà',ck:'12/06/2026',nh:3},{c:'HĐ-2024-118',o:'Anh Vũ',p:'026-26 Nha Trang',t:'PT',d:'12/03/2026',a:1.5,q:75,ph:'Trần Minh',ck:'08/06/2026',nh:4},{c:'HĐ-2025-031',o:'Chị Phượng',p:'031-26 Thảo Điền',t:'PT',d:'20/04/2026',a:0.6,q:36,ph:'Lê Quân',ck:'20/06/2026',nh:1},{c:'BN-2025-040',o:'Gia công Tân Phú',p:'028-26 Tân Uyên',t:'PTr',d:'08/05/2026',a:0.3,q:18,ph:'P. Tài chính',ck:'10/06/2026',nh:1},{c:'BN-2025-045',o:'Vận tải giao hàng',p:'108-25 Vũng Tàu',t:'PTr',d:'30/05/2026',a:0.4,q:-4,ph:'P. Tài chính',ck:'30/05/2026',nh:0},{c:'HĐ-2025-052',o:'Đạt Gia',p:'108-25 Vũng Tàu',t:'PT',d:'05/06/2026',a:2.5,q:-10,ph:'Nguyễn Thu Hà',ck:'05/06/2026',nh:0},{c:'BN-2025-061',o:'Nhôm Xingfa QĐ',p:'— (mua chung)',t:'PTr',d:'15/06/2026',a:3.2,q:-20,ph:'P. Tài chính',ck:'15/06/2026',nh:0}];
+  let invFilter='all';
+  function stt(qd){if(qd>0)return '<span class="tg" style="background:var(--color-background-danger);color:var(--color-text-danger)">Quá hạn '+qd+'n</span>';if(qd>=-7)return '<span class="tg" style="background:var(--color-background-warning);color:var(--color-text-warning)">Còn '+(-qd)+'n</span>';return '<span class="tg" style="background:var(--color-background-success);color:var(--color-text-success)">Trong hạn</span>';}
+  function renderInv(){const rows=INV.filter(x=>invFilter==='all'?true:invFilter==='over'?x.q>0:x.q<=0).sort((a,b)=>b.q-a.q);
+    el('cn_invb').innerHTML=rows.map(x=>'<tr><td style="text-align:left;font-weight:500">'+x.c+'</td><td style="text-align:left">'+x.o+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+x.p+'</td><td style="text-align:center">'+(x.t==='PT'?'<span class="tg" style="background:var(--color-background-info);color:var(--color-text-info)">Phải thu</span>':'<span class="tg" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Phải trả</span>')+'</td><td class="s2">'+x.d+'</td><td class="mono" style="font-weight:500;color:'+(x.q>0?RD:'var(--color-text-primary)')+'">'+x.a+'</td><td style="text-align:center">'+stt(x.q)+'</td><td style="text-align:left;color:var(--color-text-secondary)">'+x.ph+'</td><td class="s2">'+x.ck+'</td><td style="text-align:center"><span class="mono" style="font-weight:500;color:'+(x.nh>=3?RD:x.nh>0?'var(--color-text-warning)':'var(--color-text-tertiary)')+'">'+x.nh+' lần</span></td></tr>').join('');
+    q('.cnfl').forEach(b=>b.classList.toggle('on',b.dataset.f===invFilter));}
+
+  let dtBuilt=false,noBuilt=false;
+  function buildDT(){
+    buildCf();renderDtHM();buildPty();renderPlan();renderJr();
+    q('.cncf').forEach(b=>b.addEventListener('click',()=>{cfMode=b.dataset.v;buildCf();}));
+    q('.cnmd').forEach(b=>b.addEventListener('click',()=>{dtMode=b.dataset.m;renderDtHM();}));
+    q('.cnpty').forEach(b=>b.addEventListener('click',()=>{ptyMode=b.dataset.p;buildPty();}));
+    q('.cnjr').forEach(b=>b.addEventListener('click',()=>{jr=b.dataset.j;renderJr();}));
+    q('.cnjf').forEach(b=>b.addEventListener('click',()=>{jrForm=b.dataset.jf;renderJr();}));
+  }
+  function buildNO(){
+    applyAg();renderInv();
+    q('.cnag').forEach(b=>b.addEventListener('click',()=>{agMode=b.dataset.m;applyAg();}));
+    q('.cnfl').forEach(b=>b.addEventListener('click',()=>{invFilter=b.dataset.f;renderInv();}));
+  }
+  window.cncfBuild=function(){
+    if(!dtBuilt){buildDT();dtBuilt=true;}else{if(cfChart)cfChart.resize();if(ptyChart)ptyChart.resize();}
+    if(noBuilt){if(agL)agL.resize();if(agR)agR.resize();}
+  };
+  q('.cntab').forEach(b=>b.addEventListener('click',function(){const t=b.dataset.cn;
+    el('cn_dt').style.display=t==='dt'?'':'none';el('cn_no').style.display=t==='no'?'':'none';el('cn_tu').style.display=t==='tu'?'':'none';
+    q('.cntab').forEach(x=>x.classList.toggle('on',x.dataset.cn===t));
+    if(t==='no'){if(!noBuilt){buildNO();noBuilt=true;}else{if(agL)agL.resize();if(agR)agR.resize();}}
+    else{if(cfChart)cfChart.resize();if(ptyChart)ptyChart.resize();}
+  }));
+})();
+
+/* ============ THANH LỌC (Thời gian · Khách hàng · Công trình) ============ */
+(function(){
+  const KH=['Đạt Gia (Vũng Tàu)','Chú Thắng (Tân Bình)','Anh Hoàng (Dĩ An)','Anh Tùng (Kim Long)','Anh Vũ (Nha Trang)','Anh Tuấn (Thủ Đức)','Khách lẻ / dự án nhỏ'];
+  const CT=['Đạt Gia – Vũng Tàu','Chú Thắng – Tân Bình','Anh Hoàng – Dĩ An','Anh Tùng – Kim Long','Anh Vũ – Nha Trang','Anh Tuấn – Thủ Đức','Cô Dung – Tân Uyên','Chị Phượng – Thảo Điền','Anh Minh – Vạn Phúc'];
+  const PERIODS={
+    'Tháng 05/2026':['01/05','31/05/2026','2026-05-01','2026-05-31'],
+    'Quý II/2026':['01/04','30/06/2026','2026-04-01','2026-06-30'],
+    '6 tháng đầu 2026':['01/01','30/06/2026','2026-01-01','2026-06-30'],
+    'Năm 2026':['01/01','31/12/2026','2026-01-01','2026-12-31'],
+    'Lũy kế từ đầu năm':['01/01','26/05/2026','2026-01-01','2026-05-26'],
+    'Tùy chọn…':null
+  };
+  const DEF='Lũy kế từ đầu năm';
+  const fmt=iso=>{const a=iso.split('-');return a[2]+'/'+a[1]+'/'+a[0];};
+  function setRange(txt){document.querySelectorAll('.frange').forEach(e=>e.innerHTML='<i class="ti ti-calendar"></i> '+txt);}
+  function buildMS(opts){
+    const ms=document.createElement('div');ms.className='ms';
+    ms.innerHTML='<button class="msbtn"><span class="cv">Tất cả</span><i class="ti ti-chevron-down" style="font-size:14px;color:var(--color-text-tertiary)"></i></button><div class="msdrop"><label class="msopt msall"><input type="checkbox" class="all" checked> Tất cả</label>'+opts.map((o,i)=>'<label class="msopt"><input type="checkbox" value="'+i+'"> '+o+'</label>').join('')+'</div>';
+    const btn=ms.querySelector('.msbtn'),drop=ms.querySelector('.msdrop'),allCb=ms.querySelector('.all'),cbs=[...ms.querySelectorAll('.msopt:not(.msall) input')],cv=ms.querySelector('.cv');
+    function upd(){const sel=cbs.filter(c=>c.checked);allCb.checked=sel.length===0;cv.textContent=sel.length===0?'Tất cả':sel.length===1?opts[+sel[0].value]:sel.length+' đã chọn';}
+    btn.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('.ms.open').forEach(x=>{if(x!==ms)x.classList.remove('open');});ms.classList.toggle('open');});
+    drop.addEventListener('click',e=>e.stopPropagation());
+    allCb.addEventListener('change',()=>{if(allCb.checked)cbs.forEach(c=>c.checked=false);else allCb.checked=true;upd();});
+    cbs.forEach(c=>c.addEventListener('change',upd));
+    ms._reset=()=>{cbs.forEach(c=>c.checked=false);upd();};
+    return ms;
+  }
+  function mk(cls,html){const d=document.createElement('div');d.className=cls;if(html)d.innerHTML=html;return d;}
+  document.querySelectorAll('.filterbar').forEach(bar=>{
+    const i1=mk('fitem','<span class="flabel">Kỳ báo cáo</span>');
+    const sel=document.createElement('select');sel.className='fsel';
+    Object.keys(PERIODS).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
+    sel.value=DEF;i1.appendChild(sel);
+    const drow=mk('fdrow');
+    const i2=mk('fitem','<span class="flabel">Từ</span>');const d1=document.createElement('input');d1.type='date';d1.className='fdate';d1.value='2026-01-01';d1.disabled=true;i2.appendChild(d1);
+    const i3=mk('fitem','<span class="flabel">Đến</span>');const d2=document.createElement('input');d2.type='date';d2.className='fdate';d2.value='2026-05-26';d2.disabled=true;i3.appendChild(d2);
+    drow.append(i2,i3);
+    const i4=mk('fitem','<span class="flabel">Khách hàng</span>');const msKH=buildMS(KH);i4.appendChild(msKH);
+    const i5=mk('fitem','<span class="flabel">Công trình</span>');const msCT=buildMS(CT);i5.appendChild(msCT);
+    const reset=document.createElement('button');reset.className='freset';reset.innerHTML='<i class="ti ti-refresh" style="font-size:14px"></i> Đặt lại bộ lọc';
+    bar.append(i1,drow,i4,i5,reset);
+    function apply(){const p=PERIODS[sel.value],custom=p===null;d1.disabled=!custom;d2.disabled=!custom;
+      if(!custom){d1.value=p[2];d2.value=p[3];setRange(p[0]+' → '+p[1]);}else setRange(fmt(d1.value)+' → '+fmt(d2.value));}
+    sel.addEventListener('change',apply);
+    d1.addEventListener('change',()=>{if(sel.value==='Tùy chọn…')setRange(fmt(d1.value)+' → '+fmt(d2.value));});
+    d2.addEventListener('change',()=>{if(sel.value==='Tùy chọn…')setRange(fmt(d1.value)+' → '+fmt(d2.value));});
+    reset.addEventListener('click',()=>{sel.value=DEF;apply();msKH._reset();msCT._reset();});
+  });
+  document.addEventListener('click',()=>document.querySelectorAll('.ms.open').forEach(x=>x.classList.remove('open')));
+})();
+
+/* ============ ĐIỀU HƯỚNG ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='overview'&&window.ovBuild)ovBuild();
+  if(id==='revenue'&&window.rvBuild)rvBuild();
+  if(id==='cost'&&window.cpBuild)cpBuild();
+  if(id==='cncf'&&window.cncfBuild)cncfBuild();
+}
+document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+showPage('overview');
+</script>
+<script>
+(function(){
+  if(typeof Chart==='undefined')return;
+  var cs=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v)||'#3a6ba8';};
+  var grid=cs('--color-border-tertiary');
+  var SRC={"labels": ["Giới thiệu", "Facebook Ads", "Website", "Khách cũ", "Zalo"], "vals": [1889, 694, 748, 1061, 421]};
+  var pal=['#0C447C','#2E7CD6','#5B9BE0','#8FBEEC','#BBD7F6'];
+  var e1=document.getElementById('rv_src');
+  if(e1)new Chart(e1,{type:'doughnut',data:{labels:SRC.labels,datasets:[{data:SRC.vals,backgroundColor:pal,borderWidth:1,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'right',labels:{boxWidth:11,font:{size:10}}},
+      tooltip:{callbacks:{label:function(c){var t=SRC.vals.reduce(function(a,b){return a+b;},0);return c.label+': '+c.parsed.toLocaleString('vi-VN')+' tr ('+Math.round(c.parsed/t*100)+'%)';}}}}}}); 
+  var MON=['T01','T02','T03','T04','T05','T06'];
+  var gross=[680,720,810,760,840,1003], net=[660,698,786,737,815,973];
+  var e2=document.getElementById('rv_gn');
+  if(e2)new Chart(e2,{type:'bar',data:{labels:MON,datasets:[
+     {label:'Doanh số (gross)',data:gross,backgroundColor:'#8FBEEC',borderRadius:3},
+     {label:'Doanh số thuần (net)',data:net,backgroundColor:'#0C447C',borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:10}}}},
+      scales:{x:{grid:{display:false}},y:{grid:{color:grid},beginAtZero:true,ticks:{callback:function(v){return v+' tr';}}}}}});
+})();
+</script>
+<script>
+(function(){
+  var navs=document.querySelectorAll('.ntnav');
+  navs.forEach(function(a){a.addEventListener('click',function(e){
+    e.preventDefault();var el=document.getElementById('nt'+a.dataset.nt);
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    navs.forEach(function(x){x.classList.toggle('active',x===a);});
+  });});
+  if(navs[0])navs[0].classList.add('active');
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('.colexp').forEach(function(b){b.addEventListener('click',function(e){
+    e.stopPropagation();
+    var t=document.getElementById('hdTable'),on=t.classList.toggle('s'+b.dataset.g);
+    b.textContent=on?'▾':'▸';
+  });});
+})();
+</script>
+</body>
+</html>

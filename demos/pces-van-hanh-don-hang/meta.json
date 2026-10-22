@@ -1,0 +1,22 @@
+{
+  "slug": "pces-van-hanh-don-hang",
+  "title": "P&C Solutions — Trung tâm vận hành & báo cáo",
+  "type": "proposal",
+  "industry": "General",
+  "department": "Vận hành",
+  "description": "Sơ đồ giải pháp, báo cáo công việc và báo cáo tổng hợp cho vận hành đơn hàng trên Base Service.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/PCES_demo/",
+  "source_repo": "https://github.com/tbinh-06/PCES_demo",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "đơn hàng",
+    "Base Service",
+    "công việc"
+  ]
+}

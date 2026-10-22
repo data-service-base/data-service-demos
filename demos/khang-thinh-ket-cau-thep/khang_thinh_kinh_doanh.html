@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khang Thịnh — Báo cáo Kinh doanh</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#101F3D; --orange:#F0801E; --orange-deep:#D96C0E;
+  --bg-primary:#FFFFFF; --bg-secondary:#F0F3F8;
+  --bg-danger:#FCEAEA; --bg-warning:#FBF1DD; --bg-success:#E8F6EE; --bg-info:#E9F2FC;
+  --border-t:#E2E7F0; --border-s:#CCD5E2; --border-info:#A9CBF0;
+  --tx-primary:#1A2230; --tx-secondary:#5A6678; --tx-tertiary:#8A95A8;
+  --tx-info:#2F6FE0; --tx-success:#1E9E57; --tx-danger:#E24B4A; --tx-warning:#D98200;
+  --tx-orange:#D96C0E;
+  --r-md:8px; --r-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--tx-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:238px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--border-t);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 6px 16px}
+.brand .logo{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#16294D,#F0801E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;letter-spacing:.5px}
+.brand .nm{font-weight:700;font-size:14px;letter-spacing:.3px}
+.brand .sub{font-size:10px;color:var(--tx-tertiary);letter-spacing:.5px}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 11px;border:none;background:transparent;border-radius:var(--r-md);color:var(--tx-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--bg-secondary)}
+.nav button.on{background:var(--bg-warning);color:var(--tx-orange);font-weight:600}
+.backlink{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--tx-tertiary);text-decoration:none;padding:9px 11px;margin-top:8px;border-radius:var(--r-md)}
+.backlink:hover{background:var(--bg-secondary);color:var(--tx-secondary)}
+.sidefilter{margin-top:16px;border-top:0.5px solid var(--border-t);padding-top:14px}
+.sftitle{font-size:10px;font-weight:600;color:var(--tx-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 8px 10px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:11px;padding:0 8px}
+.fitem{display:flex;flex-direction:column;gap:5px;min-width:0}
+.flabel{font-size:10px;font-weight:600;color:var(--tx-tertiary);text-transform:uppercase;letter-spacing:.4px}
+.fsel,.fdate{font-size:12px;font-family:inherit;width:100%;background:var(--bg-secondary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:8px 9px;color:var(--tx-primary);cursor:pointer;outline:none}
+.fsel:focus{border-color:var(--orange)}
+.fdrow{display:flex;gap:6px}.fdrow .fitem{flex:1;min-width:0}
+.freset{font-size:11.5px;color:var(--tx-orange);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;padding:6px 2px;margin-top:2px}
+.freset:hover{text-decoration:underline}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px;flex-wrap:wrap;gap:10px}
+.titlebar .t{font-size:19px;font-weight:700;color:var(--navy)}
+.titlebar .sub{font-size:11px;color:var(--tx-tertiary)}
+.frange{font-size:12px;color:var(--tx-secondary);display:flex;align-items:center;gap:5px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--bg-primary);border:0.5px solid var(--border-t);border-radius:var(--r-lg);padding:14px 15px;position:relative}
+.kpi .chg{position:absolute;top:12px;right:13px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px}
+.kpi .chg.u{color:var(--tx-success);background:var(--bg-success)}
+.kpi .chg.d{color:var(--tx-danger);background:var(--bg-danger)}
+.kpi .ic{width:34px;height:34px;border-radius:9px;background:var(--bg-warning);color:var(--tx-orange);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:9px}
+.kpi .ttl{font-size:10.5px;font-weight:600;color:var(--tx-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi .big{font-size:22px;font-weight:600;margin:5px 0 3px;color:var(--navy)}
+.kpi .big small{font-size:12px;font-weight:400;color:var(--tx-tertiary)}
+.kpi .subtxt{font-size:11px;color:var(--tx-secondary)}
+.card{background:var(--bg-primary);border:0.5px solid var(--border-t);border-radius:var(--r-lg);padding:15px 17px}
+.hd{font-size:13px;font-weight:600;margin:0 0 13px;display:flex;align-items:center;gap:7px;color:var(--navy)}
+.hd i{color:var(--tx-orange);font-size:16px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:14px;margin-bottom:14px}
+.chart-box{position:relative;width:100%;height:250px}
+.chart-box.lg{height:300px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:8px;font-size:11.5px;color:var(--tx-secondary)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.tab{font-size:11.5px;padding:6px 12px;border-radius:var(--r-md);border:0.5px solid var(--border-s);background:transparent;color:var(--tx-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--bg-warning);color:var(--tx-orange);border-color:#E0AA4E}
+.donut-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center}
+.donut-holder{position:relative;flex-shrink:0}
+.donut-holder canvas{position:absolute;top:0;left:0}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.donut-center b{display:block;font-size:15px;font-weight:700;color:var(--navy)}
+.donut-center span{font-size:9.5px;color:var(--tx-tertiary)}
+.legend-list{display:flex;flex-direction:column;gap:9px;min-width:0}
+.legend-list .li{display:flex;align-items:center;gap:8px;font-size:11.5px}
+.legend-list .li .txt{color:var(--tx-secondary)}
+.legend-list .li .num{margin-left:auto;font-weight:600;color:var(--tx-primary);white-space:nowrap;font-variant-numeric:tabular-nums;padding-left:10px}
+.funnel{display:flex;flex-direction:column;gap:11px;padding-top:4px}
+.funnel .stage{display:grid;grid-template-columns:170px 1fr 60px;gap:11px;align-items:center}
+.funnel .lbl{font-size:12px;font-weight:500;color:var(--tx-primary);line-height:1.25}
+.funnel .bar-wrap{background:var(--bg-secondary);border-radius:6px;overflow:hidden;height:32px}
+.funnel .bar{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:11px;color:#fff;font-size:12px;font-weight:600;white-space:nowrap;transition:width .3s}
+.funnel .meta{font-size:11.5px;font-weight:600;color:var(--tx-success);text-align:right}
+table.rk{width:100%;border-collapse:collapse;font-size:11.8px}
+table.rk th{text-align:right;font-weight:600;color:var(--tx-secondary);padding:8px 9px;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;background:var(--bg-secondary);z-index:1}
+table.rk th:first-child{text-align:left}
+table.rk td{padding:9px 9px;border-top:0.5px solid var(--border-t);text-align:right;vertical-align:middle}
+table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--border-s);font-weight:700;background:var(--bg-secondary)}
+.mono{font-variant-numeric:tabular-nums}
+.s2{font-size:11px;color:var(--tx-tertiary)}
+.up{color:var(--tx-success)}.dn{color:var(--tx-danger)}
+.prow{cursor:pointer}
+.prow:hover td{background:#F7F9FC}
+.caret{color:var(--tx-tertiary);font-size:10px;width:11px;display:inline-block}
+.subrow{background:#FAFBFC}
+.subrow td{color:var(--tx-secondary);font-size:11px}
+.pill{font-size:10px;font-weight:600;border-radius:999px;padding:3px 9px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%}
+.pill.ok{background:var(--bg-success);color:var(--tx-success)}.pill.ok::before{background:var(--tx-success)}
+.pill.wait{background:var(--bg-warning);color:var(--tx-warning)}.pill.wait::before{background:var(--tx-warning)}
+.pill.late{background:var(--bg-danger);color:var(--tx-danger)}.pill.late::before{background:var(--tx-danger)}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:var(--r-md);white-space:nowrap;font-weight:500}
+.mbar{height:6px;border-radius:3px;background:var(--bg-secondary);overflow:hidden;margin-top:3px}
+.mbar>div{height:100%;border-radius:3px}
+.blegend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--tx-secondary);margin-bottom:6px}
+.blegend .li{display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand" style="flex-direction:column;align-items:stretch;gap:6px;padding:2px 2px 14px"><img src="khang_thinh_logo.png" alt="Nhà thép Khang Thịnh" style="width:100%;max-width:170px;height:auto;margin:0 auto;display:block"><div class="sub" style="text-align:center;letter-spacing:.5px">BÁO CÁO KINH DOANH</div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="tq"><i class="ti ti-chart-arcs"></i> Tổng quan &amp; Doanh thu</button>
+      <button data-page="kh"><i class="ti ti-users"></i> Phân nhóm &amp; Khách hàng</button>
+    </nav>
+    <a class="backlink" href="index.html"><i class="ti ti-arrow-left"></i> Về trang báo cáo</a>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar">
+        <div class="fitem"><span class="flabel">Khách hàng / Chủ đầu tư</span>
+          <select class="fsel" id="fKH"><option value="all">Tất cả khách hàng</option></select></div>
+        <div class="fitem"><span class="flabel">Loại hợp đồng</span>
+          <select class="fsel" id="fLoai">
+            <option value="all">Tất cả</option>
+            <option value="sxld">SX + Lắp dựng</option>
+            <option value="sx">Chỉ SX (bán tại xưởng)</option>
+            <option value="epc">Trọn gói EPC</option>
+          </select></div>
+        <div class="fdrow">
+          <div class="fitem"><span class="flabel">Từ ngày</span><input type="date" class="fdate" id="fFrom" value="2026-01-01"></div>
+          <div class="fitem"><span class="flabel">Đến ngày</span><input type="date" class="fdate" id="fTo" value="2026-08-31"></div>
+        </div>
+        <button class="freset" id="fReset"><i class="ti ti-rotate-2"></i> Đặt lại bộ lọc</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- TRANG 1: TỔNG QUAN & DOANH THU -->
+    <section class="page" id="page-tq" style="display:block">
+      <div class="titlebar">
+        <div><span class="t">Tổng quan &amp; Doanh thu</span> <span class="sub">· Phễu chuyển đổi · Doanh thu · Sản lượng ký · ĐVT: triệu đồng</span></div>
+        <span class="frange"><i class="ti ti-calendar"></i> 01/01 → 31/08/2026</span>
+      </div>
+      <div class="kpi-grid" id="kdKpi"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="hd"><i class="ti ti-filter"></i> Phễu chuyển đổi: Báo giá → Hợp đồng → Bàn giao</div>
+          <div class="funnel" id="kdFunnel"></div>
+          <div class="s2" style="margin-top:10px">Mỗi tầng đo theo giá trị (triệu đồng), kèm số lượng dự án và % chuyển tiếp giữa các bước.</div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-category"></i> Cơ cấu giá trị hợp đồng theo loại</div>
+          <div class="donut-row" style="flex:1">
+            <div class="donut-holder" style="width:148px;height:148px">
+              <canvas id="kdLoai" style="width:148px!important;height:148px!important"></canvas>
+              <div class="donut-center"><b id="kdLoaiTotal"></b><span>tỷ đồng ký</span></div>
+            </div>
+            <div class="legend-list" id="kdLoaiLeg" style="flex:1;max-width:230px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <span><i class="ti ti-chart-bar"></i> Báo giá vs ký vs kế hoạch theo tháng</span>
+            <div style="display:flex;gap:6px"><button class="tab kd-cum on" data-v="month">Theo tháng</button><button class="tab kd-cum" data-v="cumu">Lũy kế</button></div>
+          </div>
+          <div class="legend">
+            <span><span class="dot" style="background:#16294D"></span>Hợp đồng ký</span>
+            <span><span class="dot" style="background:#F0801E"></span>Giá trị báo giá</span>
+            <span><span class="dot" style="background:#1E9E57;height:3px;width:16px"></span>Kế hoạch ký</span>
+          </div>
+          <div class="chart-box"><canvas id="kdRevMonth"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-weight"></i> Sản lượng thép ký hợp đồng theo tháng <span class="s2" style="font-weight:400">· tấn</span></div>
+          <div class="chart-box"><canvas id="kdTonMonth"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd"><i class="ti ti-table"></i> Chi tiết khách hàng / chủ đầu tư <span class="s2" style="font-weight:400">· bấm vào dòng để xem báo giá &amp; dự án</span></div>
+        <div style="max-height:480px;overflow:auto"><table class="rk" style="min-width:900px"><thead><tr>
+          <th style="width:30px"></th><th>Khách hàng / Chủ đầu tư</th><th>Loại</th>
+          <th>Số báo giá</th><th>Giá trị báo giá</th><th>HĐ đã ký</th><th>Sản lượng (tấn)</th><th>Tỷ lệ chốt</th><th style="width:118px">Trạng thái</th>
+        </tr></thead><tbody id="tqCustBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- TRANG 2: PHÂN NHÓM & KHÁCH HÀNG -->
+    <section class="page" id="page-kh">
+      <div class="titlebar">
+        <div><span class="t">Phân nhóm &amp; Khách hàng</span> <span class="sub">· Bong bóng phân nhóm · Chi tiết khách hàng / chủ đầu tư</span></div>
+        <span class="frange"><i class="ti ti-calendar"></i> 01/01 → 31/08/2026</span>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="hd"><i class="ti ti-chart-dots"></i> Phân nhóm khách hàng: số báo giá × giá trị ký <span class="s2" style="font-weight:400">· cỡ bong bóng = tỷ lệ chốt · tên KH hiện trực tiếp</span></div>
+        <div class="blegend" id="kdBubbleLeg"></div>
+        <div class="chart-box lg"><canvas id="kdBubble"></canvas></div>
+        <div class="s2" style="margin-top:8px">Trục ngang = số báo giá đã gửi (mức độ quan tâm), trục dọc = giá trị hợp đồng đã ký. <b>Trên-phải (Trọng điểm)</b>: quan tâm nhiều + ký lớn → giữ chặt · <b>Trên-trái (Tiềm năng)</b>: ký lớn dù ít báo giá → dễ mở rộng · <b>Dưới-phải (Cần chăm)</b>: báo giá nhiều nhưng ký thấp → thúc chốt · <b>Dưới-trái (Theo dõi)</b>: giao dịch nhỏ.</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <span><i class="ti ti-user-plus"></i> Khách hàng mới theo tháng <span class="s2" style="font-weight:400">· ký hợp đồng lần đầu</span></span>
+            <div style="display:flex;gap:6px"><button class="tab nk-cum on" data-v="month">Theo tháng</button><button class="tab nk-cum" data-v="cumu">Lũy kế</button></div>
+          </div>
+          <div class="legend">
+            <span><span class="dot" style="background:#F0801E"></span>KH mới trong tháng</span>
+            <span><span class="dot" style="background:#16294D;height:3px;width:16px"></span>Tích lũy KH</span>
+          </div>
+          <div class="chart-box"><canvas id="kdNewKH"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-chart-pie-2"></i> Cơ cấu khách hàng theo nhóm <span class="s2" style="font-weight:400">· số lượng KH</span></div>
+          <div class="donut-row" style="flex:1">
+            <div class="donut-holder" style="width:148px;height:148px">
+              <canvas id="kdSeg" style="width:148px!important;height:148px!important"></canvas>
+              <div class="donut-center"><b id="kdSegTotal"></b><span>khách hàng</span></div>
+            </div>
+            <div class="legend-list" id="kdSegLeg" style="flex:1;max-width:220px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span><i class="ti ti-users"></i> Chi tiết khách hàng / chủ đầu tư <span class="s2" style="font-weight:400">· bấm vào dòng để xem các báo giá &amp; dự án</span></span>
+          <div style="display:flex;gap:6px">
+            <button class="tab kd-tab on" data-k="all">Tất cả</button>
+            <button class="tab kd-tab" data-k="trongdiem">Trọng điểm</button>
+            <button class="tab kd-tab" data-k="tiemnang">Tiềm năng</button>
+          </div>
+        </div>
+        <div style="max-height:560px;overflow:auto"><table class="rk" style="min-width:920px"><thead><tr>
+          <th style="width:30px"></th><th>Khách hàng / Chủ đầu tư</th><th>Loại</th>
+          <th>Số báo giá</th><th>Giá trị báo giá</th><th>HĐ đã ký</th><th>Sản lượng (tấn)</th><th>Tỷ lệ chốt</th><th style="width:118px">Trạng thái</th>
+        </tr></thead><tbody id="kdCustBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <div class="s2" style="margin-top:18px;padding-top:12px;border-top:0.5px solid var(--border-t)">
+      Nguồn: CRM &amp; hồ sơ báo giá Khang Thịnh (dữ liệu thật làm khung, một số chỉ tiêu là số minh họa).
+      Kỳ báo cáo YTD 2026. Khang Thịnh — nhà máy sản xuất &amp; thi công lắp dựng kết cấu thép.
+    </div>
+  </main>
+</div>
+
+<script>
+const cNavy="#16294D", cOrange="#F0801E", cBlueL="#4C8FD4", cGreen="#1E9E57", cRed="#E24B4A", cAmber="#F0A020", cGrid="rgba(128,128,128,0.14)";
+const fmt=n=>new Intl.NumberFormat('vi-VN').format(Math.round(n*100)/100);
+const fmt0=n=>new Intl.NumberFormat('vi-VN').format(Math.round(n));
+const el=id=>document.getElementById(id);
+Chart.defaults.font.family="Inter,-apple-system,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color="rgba(90,102,120,0.9)";
+let charts={};
+function upsert(id,cfg){ if(charts[id])charts[id].destroy(); const e=el(id); if(e)charts[id]=new Chart(e,cfg); }
+const caret=()=>'<span class="caret">▸</span>';
+function delta(pct){ const u=pct>=0; return '<div class="chg '+(u?'u':'d')+'">'+(u?'↑':'↓')+' '+Math.abs(pct).toFixed(1)+'%</div>'; }
+function kpiCard(icon,ttl,big,unit,chg,sub){
+  return '<div class="kpi">'+(chg||'')+'<div class="ic"><i class="ti '+icon+'"></i></div>'
+    +'<div class="ttl">'+ttl+'</div><div class="big">'+big+' <small>'+unit+'</small></div>'
+    +(sub?'<div class="subtxt">'+sub+'</div>':'')+'</div>';
+}
+const MONTHS8=['01/26','02/26','03/26','04/26','05/26','06/26','07/26','08/26'];
+
+const FS={kh:'all', loai:'all'};
+const LOAI_META={sxld:{n:'SX + Lắp dựng',c:'#16294D'}, sx:{n:'Chỉ SX (bán xưởng)',c:'#F0801E'}, epc:{n:'Trọn gói EPC',c:'#4C8FD4'}};
+const SEG_META={trongdiem:{n:'Trọng điểm',c:'#0C447C'}, tiemnang:{n:'Tiềm năng',c:'#2E7CD6'}, cancham:{n:'Cần chăm',c:'#F0801E'}, theodoi:{n:'Theo dõi',c:'#8FBEEC'}};
+const CUSTOMERS=[
+  {id:'kh1', ten:'Thai Tuan Group (Nhà máy FX)', loai:'sxld', bg:14, dukien:242000, daky:190133, tan:4806, seg:'trongdiem',
+    quotes:[{id:'BG-26/088',ngay:'25/07/2026',da:'Nhà máy dệt FX - Thái Tuấn',gt:190133,tt2:'ok'},{id:'BG-26/072',ngay:'12/06/2026',da:'Kho phụ trợ FX',gt:38200,tt2:'wait'},{id:'BG-26/060',ngay:'02/06/2026',da:'Nhà bảo vệ + hàng rào',gt:13600,tt2:'ok'}]},
+  {id:'kh2', ten:'BQL Dự án HĐND Tỉnh', loai:'epc', bg:9, dukien:96400, daky:72800, tan:1820, seg:'trongdiem',
+    quotes:[{id:'BG-26/081',ngay:'18/07/2026',da:'Nhà chính HĐND - kết cấu + cọc',gt:72800,tt2:'ok'},{id:'BG-26/065',ngay:'05/06/2026',da:'Hạng mục phụ trợ',gt:23600,tt2:'wait'}]},
+  {id:'kh3', ten:'Cty CP KCN Long Điền', loai:'sxld', bg:12, dukien:64200, daky:48600, tan:1290, seg:'trongdiem',
+    quotes:[{id:'BG-26/079',ngay:'16/07/2026',da:'Nhà xưởng B3 - khung kèo',gt:28400,tt2:'ok'},{id:'BG-26/070',ngay:'10/06/2026',da:'Nhà xưởng B4',gt:20200,tt2:'ok'}]},
+  {id:'kh4', ten:'Tổng thầu Hòa Bình', loai:'sx', bg:8, dukien:52200, daky:36400, tan:920, seg:'tiemnang',
+    quotes:[{id:'BG-26/076',ngay:'14/07/2026',da:'Cấu kiện dầm sàn deck',gt:24600,tt2:'wait'},{id:'BG-26/058',ngay:'01/06/2026',da:'Cột thép H',gt:11800,tt2:'ok'}]},
+  {id:'kh5', ten:'Coteccons - Dự án KCN', loai:'sx', bg:6, dukien:44800, daky:28200, tan:710, seg:'tiemnang',
+    quotes:[{id:'BG-26/074',ngay:'11/07/2026',da:'Kèo thép nhịp lớn',gt:18200,tt2:'ok'},{id:'BG-26/055',ngay:'28/05/2026',da:'Xà gồ + giằng',gt:10000,tt2:'wait'}]},
+  {id:'kh6', ten:'Cty TNHH Cơ khí Việt Nhật', loai:'sxld', bg:15, dukien:31600, daky:21400, seg:'cancham', tan:540,
+    quotes:[{id:'BG-26/069',ngay:'08/07/2026',da:'Sàn thao tác + cầu thang',gt:8400,tt2:'wait'},{id:'BG-26/052',ngay:'22/05/2026',da:'Khung đỡ thiết bị',gt:6200,tt2:'ok'}]},
+  {id:'kh7', ten:'Chủ đầu tư Kho Sao Mai', loai:'sxld', bg:11, dukien:26400, daky:14600, seg:'cancham', tan:390,
+    quotes:[{id:'BG-26/063',ngay:'04/07/2026',da:'Nhà kho khung thép',gt:9200,tt2:'wait'},{id:'BG-26/048',ngay:'18/05/2026',da:'Mái che',gt:5400,tt2:'wait'}]},
+  {id:'kh8', ten:'Cty Delta Steel', loai:'sx', bg:5, dukien:18800, daky:9800, seg:'theodoi', tan:260,
+    quotes:[{id:'BG-26/061',ngay:'02/07/2026',da:'Bản mã + phụ kiện',gt:5800,tt2:'ok'},{id:'BG-26/044',ngay:'14/05/2026',da:'Ke góc thép',gt:4000,tt2:'wait'}]},
+];
+const KD_MONTH={daky:[18400,22600,31200,28400,26800,34200,38600,42200], dukien:[26200,31800,42400,38900,36600,46200,51400,54800]};
+const KD_TON={ton:[520,680,940,860,810,1060,1180,1310]};
+// Kế hoạch HĐ ký theo tháng (target) + KH mới theo tháng
+const KD_PLAN={daky:[20000,24000,30000,30000,30000,32000,36000,40000]};
+const KD_NEWKH={moi:[2,1,2,1,1,2,1,1], luyke:null}; // KH mới ký lần đầu mỗi tháng
+const cumu=arr=>arr.reduce((a,v,i)=>{a.push((a[i-1]||0)+v);return a;},[]);
+
+(function(){ const s=el('fKH'); CUSTOMERS.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.ten;s.appendChild(o);}); })();
+
+let kdFilter='all', kdCum='month', nkCum='month';
+function kdBase(){ return CUSTOMERS.filter(c=>(FS.kh==='all'||c.id===FS.kh)&&(FS.loai==='all'||c.loai===FS.loai)); }
+
+function renderTQ(){
+  const base=kdBase();
+  const soKH=base.length, soBG=base.reduce((a,c)=>a+c.bg,0);
+  const dukien=base.reduce((a,c)=>a+c.dukien,0), daky=base.reduce((a,c)=>a+c.daky,0);
+  const tan=base.reduce((a,c)=>a+c.tan,0), rate=dukien>0?daky/dukien*100:0;
+  const sc=soKH/CUSTOMERS.length;
+  const planTotal=KD_PLAN.daky.reduce((a,b)=>a+b,0)*sc;
+  const datKH=planTotal>0?daky/planTotal*100:0;
+  el('kdKpi').innerHTML=
+    kpiCard('ti-file-invoice','Báo giá đã gửi',fmt0(soBG),'báo giá',delta(12.4),'BQ '+fmt(soKH>0?soBG/soKH:0)+' /KH')
+    +kpiCard('ti-file-dollar','Giá trị báo giá',fmt0(dukien),'tr',delta(11.0),'Tổng pipeline')
+    +kpiCard('ti-signature','Hợp đồng đã ký',fmt0(daky),'tr',delta(9.6),fmt0(tan)+' tấn thép')
+    +kpiCard('ti-target','Đạt kế hoạch',datKH.toFixed(0),'%',null,'KH '+fmt0(planTotal)+' tr · '+(daky>=planTotal?'vượt':'thiếu '+fmt0(planTotal-daky)+' tr'))
+    +kpiCard('ti-percentage','Tỷ lệ chốt',rate.toFixed(1),'%',delta(2.4),'Giá trị ký ÷ báo giá');
+
+  const soHD=base.reduce((a,c)=>a+c.quotes.filter(q=>q.tt2==='ok').length,0);
+  const daduyet=Math.round(dukien*0.86), soBGduyet=Math.round(soBG*0.78);
+  const dagiao=Math.round(daky*0.62), soDaGiao=Math.max(1,Math.round(soHD*0.7));
+  const top=dukien||1;
+  const stages=[
+    {lbl:'Báo giá gửi đi', v:dukien, cnt:soBG+' báo giá', c:'#0C447C'},
+    {lbl:'Vào đàm phán / duyệt', v:daduyet, cnt:soBGduyet+' báo giá', c:'#2E7CD6'},
+    {lbl:'Hợp đồng đã ký', v:daky, cnt:soHD+' hợp đồng', c:'#F0801E'},
+    {lbl:'Đã bàn giao', v:dagiao, cnt:soDaGiao+' dự án', c:'#16294D'},
+  ];
+  el('kdFunnel').innerHTML=stages.map((s,i)=>{
+    const w=Math.max(14,s.v/top*100), conv=i===0?100:(s.v/stages[i-1].v*100);
+    return '<div class="stage"><div class="lbl">'+s.lbl+'<div class="s2" style="margin-top:1px">'+s.cnt+'</div></div>'
+      +'<div class="bar-wrap"><div class="bar" style="width:'+w+'%;background:'+s.c+'">'+fmt0(s.v)+' tr</div></div>'
+      +'<div class="meta">'+(i===0?'—':(conv.toFixed(0)+'%'))+'</div></div>';
+  }).join('');
+
+  const loaiKeys=Object.keys(LOAI_META);
+  const loaiData=loaiKeys.map(k=>({name:LOAI_META[k].n,c:LOAI_META[k].c,v:base.filter(c=>c.loai===k).reduce((a,c)=>a+c.daky,0)}));
+  el('kdLoaiTotal').textContent=fmt(daky/1000);
+  upsert('kdLoai',{type:'doughnut',data:{labels:loaiData.map(d=>d.name),datasets:[{data:loaiData.map(d=>d.v),backgroundColor:loaiData.map(d=>d.c),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+fmt0(c.parsed)+' tr'}}}}});
+  el('kdLoaiLeg').innerHTML=loaiData.map(d=>'<div class="li"><span class="dot" style="background:'+d.c+'"></span><span class="txt">'+d.name+'</span><span class="num">'+fmt0(d.v)+' tr</span></div>').join('');
+
+  const kyD=kdCum==='cumu'?cumu(KD_MONTH.daky.map(v=>v*sc)):KD_MONTH.daky.map(v=>v*sc);
+  const bgD=kdCum==='cumu'?cumu(KD_MONTH.dukien.map(v=>v*sc)):KD_MONTH.dukien.map(v=>v*sc);
+  const planD=kdCum==='cumu'?cumu(KD_PLAN.daky.map(v=>v*sc)):KD_PLAN.daky.map(v=>v*sc);
+  upsert('kdRevMonth',{data:{labels:MONTHS8,datasets:[
+    {type:'bar',label:'HĐ ký',data:kyD,backgroundColor:cNavy,borderRadius:4,order:3},
+    {type:'bar',label:'Báo giá',data:bgD,backgroundColor:cOrange,borderRadius:4,order:3},
+    {type:'line',label:'Kế hoạch ký',data:planD,borderColor:cGreen,backgroundColor:cGreen,borderWidth:2.5,borderDash:[5,4],tension:.25,pointRadius:2,order:1}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt0(c.parsed.y)+' tr'}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt0(v)}},x:{grid:{display:false}}}}});
+  document.querySelectorAll('.kd-cum').forEach(b=>b.classList.toggle('on',b.dataset.v===kdCum));
+  upsert('kdTonMonth',{type:'bar',data:{labels:MONTHS8,datasets:[{label:'Tấn',data:KD_TON.ton.map(v=>v*sc),backgroundColor:cBlueL,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt0(c.parsed.y)+' tấn'}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt0(v)}},x:{grid:{display:false}}}}});
+
+  // Bảng chi tiết KH ở cuối trang tổng quan (toàn bộ base đã lọc)
+  el('tqCustBody').innerHTML=custTableHTML(base,'tq');
+  drill('tqCustBody');
+}
+
+// HTML bảng chi tiết KH dùng chung cho cả 2 trang
+function custTableHTML(list,pfx){
+  return list.map((c,i)=>{
+    const rate2=c.dukien>0?c.daky/c.dukien*100:0;
+    const st=rate2>=75?'ok':rate2>=55?'wait':'late';
+    const stLabel=rate2>=75?'Chốt tốt':rate2>=55?'Đang theo':'Cần chăm';
+    const sumQGt=c.quotes.reduce((a,q)=>a+q.gt,0)||1;
+    const sub=c.quotes.map(q=>{
+      const qs=q.tt2==='ok'?'<span class="pill ok">Đã chốt</span>':'<span class="pill wait">Đang chờ</span>';
+      const qKy=q.tt2==='ok'?q.gt:0;                       // HĐ ký = giá trị nếu đã chốt
+      const qTan=Math.round(c.tan*q.gt/sumQGt);            // sản lượng phân bổ theo giá trị báo giá
+      return '<tr class="subrow" data-key="'+pfx+i+'" style="display:none"><td></td>'
+        +'<td><i class="ti ti-file-invoice" style="font-size:11px;margin-right:5px;color:var(--tx-info)"></i>'+q.id+' · '+q.da+'</td>'
+        +'<td>'+q.ngay+'</td>'
+        +'<td class="mono">1</td>'
+        +'<td class="mono">'+fmt0(q.gt)+'</td>'
+        +'<td class="mono" style="color:var(--tx-info)">'+(qKy>0?fmt0(qKy):'—')+'</td>'
+        +'<td class="mono">'+fmt0(qTan)+'</td>'
+        +'<td>'+qs+'</td><td>—</td></tr>';
+    }).join('');
+    return '<tr class="prow" data-key="'+pfx+i+'"><td>'+caret()+'</td><td>'+c.ten+'</td>'
+      +'<td><span class="tag" style="background:'+LOAI_META[c.loai].c+'22;color:'+LOAI_META[c.loai].c+'">'+LOAI_META[c.loai].n+'</span></td>'
+      +'<td class="mono">'+c.bg+'</td><td class="mono">'+fmt0(c.dukien)+'</td>'
+      +'<td class="mono" style="color:var(--tx-info)">'+fmt0(c.daky)+'</td><td class="mono">'+fmt0(c.tan)+'</td>'
+      +'<td><div class="mono">'+rate2.toFixed(1)+'%</div><div class="mbar"><div style="width:'+Math.min(rate2,100)+'%;background:'+(rate2>=75?cGreen:rate2>=55?cAmber:cRed)+'"></div></div></td>'
+      +'<td><span class="pill '+st+'">'+stLabel+'</span></td></tr>'+sub;
+  }).join('')
+    +'<tr class="tot"><td></td><td colspan="2">TỔNG ('+list.length+' KH)</td>'
+    +'<td class="mono">'+fmt0(list.reduce((a,c)=>a+c.bg,0))+'</td>'
+    +'<td class="mono">'+fmt0(list.reduce((a,c)=>a+c.dukien,0))+'</td>'
+    +'<td class="mono">'+fmt0(list.reduce((a,c)=>a+c.daky,0))+'</td>'
+    +'<td class="mono">'+fmt0(list.reduce((a,c)=>a+c.tan,0))+'</td><td></td><td></td></tr>';
+}
+
+function renderKH(){
+  const base=kdBase();
+  const segKeys=Object.keys(SEG_META);
+  const shortName=n=>n.replace(/^Cty (CP |TNHH )?/,'').replace(/ \(.*\)$/,'').replace(/^Chủ đầu tư /,'').replace(/^Tổng thầu /,'').replace(/^BQL Dự án /,'BQL ').replace(/ - .*$/,'');
+  const bubbleDs=segKeys.map(sk=>({label:SEG_META[sk].n,
+    data:base.filter(c=>c.seg===sk).map(c=>({x:c.bg,y:c.daky,r:Math.max(7,c.daky/c.dukien*26),nm:shortName(c.ten),rate:c.daky/c.dukien*100})),
+    backgroundColor:SEG_META[sk].c+'B0',borderColor:SEG_META[sk].c,borderWidth:1.5}));
+  el('kdBubbleLeg').innerHTML=segKeys.map(sk=>'<div class="li"><span class="dot" style="background:'+SEG_META[sk].c+'"></span>'+SEG_META[sk].n+'</div>').join('');
+  const allBg=base.map(c=>c.bg).slice().sort((a,b)=>a-b), allDaky=base.map(c=>c.daky).slice().sort((a,b)=>a-b);
+  const medX=allBg[Math.floor(allBg.length/2)]||0, medY=allDaky[Math.floor(allDaky.length/2)]||0;
+  const labelPlugin={id:'bubLabels',afterDatasetsDraw(chart){
+    const ctx=chart.ctx;ctx.save();ctx.font='600 10px Inter,sans-serif';ctx.fillStyle='#1A2230';ctx.textAlign='center';ctx.textBaseline='bottom';
+    chart.data.datasets.forEach((ds,di)=>{chart.getDatasetMeta(di).data.forEach((pt,pi)=>{const d=ds.data[pi];if(!d)return;ctx.fillText(d.nm,pt.x,pt.y-pt.options.radius-2);});});
+    ctx.restore();
+  }};
+  const quadPlugin={id:'quad',beforeDraw(chart){
+    const {ctx,chartArea:a,scales}=chart;if(!a)return;
+    const xm=scales.x.getPixelForValue(medX), ym=scales.y.getPixelForValue(medY);
+    ctx.save();ctx.strokeStyle='rgba(120,130,150,0.25)';ctx.setLineDash([4,4]);ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(xm,a.top);ctx.lineTo(xm,a.bottom);ctx.moveTo(a.left,ym);ctx.lineTo(a.right,ym);ctx.stroke();
+    ctx.setLineDash([]);ctx.font='700 10px Inter';ctx.fillStyle='rgba(16,41,77,0.4)';
+    ctx.textAlign='right';ctx.textBaseline='top';ctx.fillText('★ TRỌNG ĐIỂM',a.right-6,a.top+4);
+    ctx.textAlign='left';ctx.fillText('TIỀM NĂNG',a.left+6,a.top+4);
+    ctx.textBaseline='bottom';ctx.fillText('THEO DÕI',a.left+6,a.bottom-4);
+    ctx.textAlign='right';ctx.fillText('CẦN CHĂM',a.right-6,a.bottom-4);
+    ctx.restore();
+  }};
+  upsert('kdBubble',{type:'bubble',data:{datasets:bubbleDs},plugins:[quadPlugin,labelPlugin],
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:14,right:12}},plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>{const d=c.raw;return d.nm+' · '+fmt0(d.y)+' tr · '+d.x+' báo giá · chốt '+d.rate.toFixed(0)+'%';}}}},
+      scales:{x:{grid:{color:cGrid},title:{display:true,text:'Số báo giá đã gửi (mức độ quan tâm) →',font:{size:10.5}},suggestedMax:(Math.max(...base.map(c=>c.bg))||10)+4},
+              y:{grid:{color:cGrid},ticks:{callback:v=>fmt0(v)},title:{display:true,text:'HĐ đã ký (tr đồng) →',font:{size:10.5}},suggestedMax:(Math.max(...base.map(c=>c.daky))||1)*1.15}}}});
+
+  // KH mới theo tháng (scale theo số KH đang lọc)
+  const scK=base.length/CUSTOMERS.length;
+  const moiArr=KD_NEWKH.moi.map(v=>Math.round(v*scK*10)/10);
+  const moiD=nkCum==='cumu'?cumu(moiArr):moiArr;
+  const tichluy=cumu(moiArr);
+  upsert('kdNewKH',{data:{labels:MONTHS8,datasets:[
+    {type:'bar',label:'KH mới',data:moiD,backgroundColor:cOrange,borderRadius:4,order:2,yAxisID:'y'},
+    {type:'line',label:'Tích lũy',data:tichluy,borderColor:cNavy,backgroundColor:cNavy,borderWidth:2.5,tension:.3,pointRadius:2,order:1,yAxisID:'y1'}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+' KH'}}},
+      scales:{y:{grid:{color:cGrid},ticks:{stepSize:1,precision:0}},y1:{position:'right',grid:{display:false},ticks:{stepSize:2,precision:0,color:cNavy}},x:{grid:{display:false}}}}});
+  document.querySelectorAll('.nk-cum').forEach(b=>b.classList.toggle('on',b.dataset.v===nkCum));
+
+  // Cơ cấu KH theo nhóm (số lượng)
+  const segK=Object.keys(SEG_META);
+  const segData=segK.map(sk=>({name:SEG_META[sk].n,c:SEG_META[sk].c,v:base.filter(c=>c.seg===sk).length})).filter(d=>d.v>0);
+  el('kdSegTotal').textContent=base.length;
+  upsert('kdSeg',{type:'doughnut',data:{labels:segData.map(d=>d.name),datasets:[{data:segData.map(d=>d.v),backgroundColor:segData.map(d=>d.c),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' KH'}}}}});
+  el('kdSegLeg').innerHTML=segData.map(d=>'<div class="li"><span class="dot" style="background:'+d.c+'"></span><span class="txt">'+d.name+'</span><span class="num">'+d.v+' KH</span></div>').join('');
+
+  const list=base.filter(c=>kdFilter==='all'||c.seg===kdFilter);
+  el('kdCustBody').innerHTML=custTableHTML(list,'kd');
+  drill('kdCustBody');
+  document.querySelectorAll('.kd-tab').forEach(b=>b.classList.toggle('on',b.dataset.k===kdFilter));
+}
+
+function drill(tbodyId){
+  el(tbodyId).querySelectorAll('.prow').forEach(row=>{
+    row.addEventListener('click',()=>{
+      const key=row.dataset.key, open=!row.classList.contains('open');
+      row.closest('tbody').querySelectorAll('.prow.open').forEach(r=>{
+        if(r!==row){r.classList.remove('open');r.closest('tbody').querySelectorAll('.subrow[data-key="'+r.dataset.key+'"]').forEach(s=>s.style.display='none');}
+      });
+      row.classList.toggle('open',open);
+      row.closest('tbody').querySelectorAll('.subrow[data-key="'+key+'"]').forEach(s=>s.style.display=open?'':'none');
+    });
+  });
+}
+
+let currentPage='tq';
+function showPage(id){
+  currentPage=id;
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  el('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='tq')renderTQ(); if(id==='kh')renderKH();
+}
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function reRender(){ if(currentPage==='tq')renderTQ(); if(currentPage==='kh')renderKH(); }
+el('fKH').addEventListener('change',e=>{FS.kh=e.target.value;reRender();});
+el('fLoai').addEventListener('change',e=>{FS.loai=e.target.value;reRender();});
+el('fReset').addEventListener('click',()=>{FS.kh='all';FS.loai='all';el('fKH').value='all';el('fLoai').value='all';el('fFrom').value='2026-01-01';el('fTo').value='2026-08-31';reRender();});
+document.querySelectorAll('.kd-tab').forEach(b=>b.addEventListener('click',()=>{kdFilter=b.dataset.k;renderKH();}));
+document.querySelectorAll('.kd-cum').forEach(b=>b.addEventListener('click',()=>{kdCum=b.dataset.v;renderTQ();}));
+document.querySelectorAll('.nk-cum').forEach(b=>b.addEventListener('click',()=>{nkCum=b.dataset.v;renderKH();}));
+
+showPage('tq');
+</script>
+</body>
+</html>

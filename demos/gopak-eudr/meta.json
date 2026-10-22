@@ -1,0 +1,22 @@
+{
+  "slug": "gopak-eudr",
+  "title": "Go-Pak — Hồ sơ thẩm định nguồn gốc EUDR",
+  "type": "tool",
+  "industry": "Sản xuất",
+  "department": "Supply Chain",
+  "description": "Hồ sơ thẩm định nguồn gốc EUDR song ngữ Việt – Anh cho sản phẩm giấy.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/GoPak_truyxuatNG/",
+  "source_repo": "https://github.com/tbinh-06/GoPak_truyxuatNG",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "giấy"
+  ]
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khang Thịnh — Hệ thống báo cáo quản trị</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#101F3D; --orange:#F0801E;
+  --tx-primary:#1A2230; --tx-secondary:#5A6678; --tx-tertiary:#8A95A8;
+  --border-t:#E2E7F0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{color:var(--tx-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;
+  background:url('khang_thinh_bg.png') center center / cover no-repeat;
+  background-attachment:fixed}
+body::after{content:'';position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(1100px 600px at 15% 0%, rgba(240,128,30,0.18), transparent 60%),
+    linear-gradient(180deg, rgba(244,246,250,0.90) 0%, rgba(238,242,248,0.94) 100%)}
+.wrap::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(22,41,77,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(22,41,77,0.04) 1px,transparent 1px);
+  background-size:44px 44px;mask-image:linear-gradient(180deg,rgba(0,0,0,0.4),transparent 70%)}
+.wrap{position:relative}
+.groups,.hero{position:relative;z-index:1}
+.topbar{background:#fff;border-bottom:0.5px solid var(--border-t);padding:16px 40px;display:flex;align-items:center;gap:16px}
+.topbar img.blogo{height:60px;width:auto}
+.topbar .sub{font-size:11.5px;color:var(--tx-tertiary);letter-spacing:.4px;font-weight:500}
+.wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 24px}
+.hero{text-align:center;margin-bottom:38px;max-width:640px}
+.hero h1{font-size:34px;font-weight:800;color:var(--navy);letter-spacing:-.4px;margin-bottom:12px}
+.hero p{font-size:14.5px;color:var(--tx-secondary);line-height:1.6}
+.groups{display:flex;flex-direction:column;gap:34px;width:100%;max-width:1080px}
+.group-hd{display:flex;align-items:center;gap:12px;margin-bottom:2px}
+.group-hd .gi{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.group-hd .gt{font-size:15px;font-weight:700;color:var(--navy)}
+.group-hd .gs{font-size:11.5px;color:var(--tx-tertiary)}
+.group-hd .line{flex:1;height:0.5px;background:var(--border-t)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;width:100%}
+.box{background:#fff;border:0.5px solid var(--border-t);border-radius:18px;padding:28px 26px;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;position:relative;overflow:hidden;box-shadow:0 4px 16px rgba(16,31,61,0.05)}
+.box::after{content:'';position:absolute;left:0;top:0;height:4px;width:100%;background:var(--accent)}
+.box:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(16,31,61,0.13);border-color:var(--accent)}
+.box .ic{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px;background:var(--accent-bg);color:var(--accent)}
+.box .title{font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.box .desc{font-size:13px;color:var(--tx-secondary);line-height:1.55;flex:1}
+.box .pages{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.box .chip{font-size:11px;font-weight:500;padding:4px 10px;border-radius:999px;background:#F0F3F8;color:var(--tx-secondary)}
+.box .cta{margin-top:18px;font-size:13px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px}
+.box .cta i{transition:transform .18s ease}
+.box:hover .cta i{transform:translateX(4px)}
+.footer{text-align:center;font-size:11.5px;color:var(--tx-tertiary);padding:22px;border-top:0.5px solid var(--border-t)}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <img class="blogo" src="khang_thinh_logo.png" alt="Nhà thép Khang Thịnh">
+    <div class="sub">HỆ THỐNG BÁO CÁO QUẢN TRỊ · NHÀ MÁY KẾT CẤU THÉP</div>
+  </div>
+
+  <div class="wrap">
+    <div class="groups">
+      <div>
+        <div class="group-hd">
+          <div class="gi" style="background:#E9EDF5;color:#16294D"><i class="ti ti-chart-pie"></i></div>
+          <div><div class="gt">Kinh doanh &amp; Tài chính</div><div class="gs">Doanh thu, khách hàng, dòng tiền và công nợ</div></div>
+          <div class="line"></div>
+        </div>
+        <div class="grid">
+          <a class="box" href="khang_thinh_kinh_doanh.html" style="--accent:#16294D;--accent-bg:#E9EDF5">
+            <div class="ic"><i class="ti ti-briefcase"></i></div>
+            <div class="title">Báo cáo Kinh doanh</div>
+            <div class="desc">Chủ đầu tư, báo giá, hợp đồng ký, phễu chuyển đổi và phân nhóm khách hàng theo giá trị.</div>
+            <div class="pages"><span class="chip">Tổng quan &amp; doanh thu</span><span class="chip">Phân nhóm &amp; khách hàng</span></div>
+            <div class="cta">Mở báo cáo <i class="ti ti-arrow-right"></i></div>
+          </a>
+          <a class="box" href="khang_thinh_dong_tien.html" style="--accent:#1E9E57;--accent-bg:#E8F6EE">
+            <div class="ic"><i class="ti ti-cash"></i></div>
+            <div class="title">Báo cáo Dòng tiền &amp; Công nợ</div>
+            <div class="desc">Dòng tiền thu - chi theo tháng, số dư quỹ, công nợ phải thu (khách hàng) và phải trả (nhà cung cấp) kèm tuổi nợ.</div>
+            <div class="pages"><span class="chip">Dòng tiền</span><span class="chip">Công nợ</span></div>
+            <div class="cta">Mở báo cáo <i class="ti ti-arrow-right"></i></div>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="group-hd">
+          <div class="gi" style="background:#FBF1DD;color:#D96C0E"><i class="ti ti-building-factory-2"></i></div>
+          <div><div class="gt">Vận hành &amp; Sản xuất</div><div class="gs">Đơn hàng, tiến độ gia công và kho vật tư</div></div>
+          <div class="line"></div>
+        </div>
+        <div class="grid">
+          <a class="box" href="khang_thinh_don_hang.html" style="--accent:#F0801E;--accent-bg:#FBF1DD">
+            <div class="ic"><i class="ti ti-building-factory-2"></i></div>
+            <div class="title">Báo cáo Đơn hàng</div>
+            <div class="desc">Sản lượng, giá trị, tiến độ 8 công đoạn sản xuất, giao hàng đúng hẹn và soi chi tiết từng đơn.</div>
+            <div class="pages"><span class="chip">Tổng quan đơn hàng</span><span class="chip">Sản lượng &amp; giá trị</span><span class="chip">Tiến độ chi tiết</span></div>
+            <div class="cta">Mở báo cáo <i class="ti ti-arrow-right"></i></div>
+          </a>
+          <a class="box" href="khang_thinh_kho.html" style="--accent:#2E7CD6;--accent-bg:#E9F2FC">
+            <div class="ic"><i class="ti ti-building-warehouse"></i></div>
+            <div class="title">Báo cáo Kho</div>
+            <div class="desc">Xuất - nhập - tồn NVL (thép hình, thép tấm, bu lông, que hàn, sơn), cảnh báo tồn kho và thẻ kho từng vật tư.</div>
+            <div class="pages"><span class="chip">Tổng quan kho</span><span class="chip">Xuất - nhập kho</span></div>
+            <div class="cta">Mở báo cáo <i class="ti ti-arrow-right"></i></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Công ty TNHH TM - XD Nhà thép Khang Thịnh · Hệ thống báo cáo nội bộ · Kỳ YTD 2026</div>
+</body>
+</html>

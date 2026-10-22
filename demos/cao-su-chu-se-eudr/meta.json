@@ -1,0 +1,22 @@
+{
+  "slug": "cao-su-chu-se-eudr",
+  "title": "Cao su Chư Sê — Quy trình truy xuất EUDR",
+  "type": "proposal",
+  "industry": "Cao su",
+  "department": "Vận hành",
+  "description": "Luồng truy xuất nguồn gốc từ sổ giấy sang Base cho Cao su Chư Sê (Gia Lai).",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/CSGL_EUDR/",
+  "source_repo": "https://github.com/tbinh-06/CSGL_EUDR",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "quy trình"
+  ]
+}

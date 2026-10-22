@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sơ đồ luồng vận hành & dữ liệu — Cụm Thủy điện Nậm Na</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  :root{
+    --navy:#0e2f4f; --blue:#2e7fc4; --teal:#178a8a; --bg:#eef3f8; --card:#fff;
+    --border:#d4dee8; --ink:#1f2d3a; --muted:#5b7286; --active:#2e7fc4;
+    --badge:#e8830c; --neckbg:#fdecea; --digbg:#e6f5f1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5}
+  .head{padding:14px 20px;background:var(--navy);color:#fff}
+  .head h1{margin:0;font-size:17px;font-weight:600}
+  .head p{margin:3px 0 0;font-size:12.5px;color:#a8c6e0}
+
+  .org{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2px solid var(--border);padding:8px 16px 12px;box-shadow:0 4px 10px rgba(14,47,79,.06)}
+  .orgbar{display:flex;align-items:center;justify-content:space-between;padding:2px 0 6px}
+  .orgbar b{font-size:12px;color:var(--navy);font-weight:600}
+  .orgbtn{background:#dbe7f2;color:#2e5f8c;border:1px solid var(--border);border-radius:6px;padding:4px 11px;font-family:inherit;font-size:12px;cursor:pointer;font-weight:500}
+  .orgbtn:hover{background:#cfe0ef}
+  .org.collapsed #orgBody{display:none}
+  .lvl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:4px 0 6px}
+  .row{display:flex;flex-wrap:wrap;gap:6px}
+  .blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+  .block{background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px}
+  .bhdr{font-size:11.5px;font-weight:600;color:#fff;padding:4px 8px;border-radius:5px;margin-bottom:7px}
+  .bhdr.qt{background:#178a8a} .bhdr.kt{background:#2e7fc4} .bhdr.cm{background:#0e2f4f}
+  .bql{background:#123c63;color:#fff;border-radius:7px;padding:6px 10px;text-align:center;margin:8px auto 4px;max-width:340px}
+  .bql b{font-size:12.5px} .bql span{font-size:11px;color:#bcd6ec;display:block}
+  .dept{position:relative;background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 9px;min-width:118px;flex:1;transition:.18s}
+  .org .row .dept{flex:1 1 120px}
+  .dept .n{font-size:12px;font-weight:500;line-height:1.25}
+  .dept .r{font-size:10.5px;color:var(--muted);margin-top:1px;line-height:1.2}
+  .dept.active{background:var(--active);border-color:var(--active)}
+  .dept.active .n{color:#fff} .dept.active .r{color:#d6e8f7}
+  .dept.pulse{box-shadow:0 0 0 3px var(--badge);transform:translateY(-1px)}
+  .badge{position:absolute;top:-8px;left:-8px;background:var(--badge);color:#fff;font-size:11px;font-weight:600;border-radius:11px;min-width:20px;height:20px;padding:0 5px;display:none;align-items:center;justify-content:center;line-height:20px}
+  .dept.active .badge{display:inline-flex}
+
+  .tabs{display:flex;gap:4px;overflow-x:auto;padding:12px 16px 0}
+  .tab{white-space:nowrap;padding:8px 14px;border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;background:#dde8f2;color:#42607c;cursor:pointer;font-size:12.5px;font-weight:500}
+  .tab:hover{background:#e9f1f8}
+  .tab.on{background:#fff;color:var(--navy);font-weight:600;box-shadow:0 -2px 0 var(--blue) inset}
+
+  .panel{background:#fff;margin:0 16px 20px;border:1px solid var(--border);border-radius:0 10px 10px 10px;padding:16px}
+  .ptitle{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ptitle h2{margin:0;font-size:16px;color:var(--navy);font-weight:600}
+  .chip{font-size:11.5px;padding:3px 9px;border-radius:20px;background:var(--digbg);color:#0a5e51;font-weight:500}
+  .psum{color:var(--muted);font-size:13px;margin:6px 0 12px}
+  .play{background:var(--badge);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+  .play:hover{filter:brightness(.95)}
+
+  .modeseg{display:inline-flex;margin:0 0 8px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .mbtn{padding:9px 18px;background:#fff;color:var(--muted);border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600}
+  .mbtn.on{background:var(--blue);color:#fff}
+  .modehint{font-size:11.5px;color:var(--muted);margin:0 0 12px}
+
+  .bigflow{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;flex-wrap:wrap}
+  .bigbox{flex:1 1 180px;min-width:165px;background:#eef4fa;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer;transition:.15s}
+  .bigbox:hover{border-color:var(--blue)}
+  .bigbox.on{background:var(--navy);border-color:var(--navy)}
+  .bigbox.on .bigt{color:#fff} .bigbox.on .bign{color:#bcd6ec}
+  .bigt{font-size:13px;font-weight:600;color:var(--navy);line-height:1.3}
+  .bign{font-size:11px;color:var(--muted);margin-top:4px}
+  .bigdetail-hdr{font-size:12.5px;font-weight:600;color:var(--navy);margin:16px 0 8px;padding-left:2px}
+
+  .timeline{margin-top:2px}
+  .tl{position:relative;padding-left:42px;padding-bottom:14px}
+  .tl:before{content:'';position:absolute;left:14px;top:24px;bottom:-2px;width:2px;background:var(--border)}
+  .tl:last-child:before{display:none}
+  .tl .dot{position:absolute;left:2px;top:2px;width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .cardx{background:#fbfdff;border:1px solid var(--border);border-radius:10px;padding:11px 13px}
+  .deptline{font-size:11px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:.3px}
+  .act{margin:3px 0 0;font-size:13px;font-weight:500}
+  .inpline{margin-top:6px;font-size:12.5px;color:#33536e;background:#eef4fa;border:1px solid #dbe7f2;border-radius:6px;padding:5px 9px}
+  .inpline b{color:#1a3a55}
+  .neckline{margin-top:7px;font-size:12.5px;color:#a32525;background:var(--neckbg);border-radius:6px;padding:5px 9px}
+  .pills{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+  .pill2{font-size:11px;font-weight:600;padding:3px 10px;border-radius:14px}
+  .lockbadge{display:inline-block;font-size:10px;font-weight:600;background:#fbe6c8;color:#9a5a00;border-radius:5px;padding:2px 7px;margin-left:8px}
+  .tl.lock .dot{background:#c08a2e}
+  .tl.lock .cardx{background:#fdfaf3;border-color:#ecd9b3}
+  .lockline{margin-top:7px;font-size:12.5px;color:#8a5300;background:#fbf3e3;border-radius:6px;padding:5px 9px}
+  .extline{margin-top:7px;font-size:12.5px;color:#2c4a66;background:#eef2f7;border:1px dashed #c2cfdd;border-radius:6px;padding:5px 9px}
+  .tl.ext .dot{background:#8aa6bd} .tl.ext .cardx{background:#f6f8fb;border-style:dashed}
+  .cardx.vh{background:#fff}
+  .vh-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .vh-tag{font-size:10.5px;font-weight:600;color:#1a5a99;background:#e7f1fb;border-radius:5px;padding:3px 9px;letter-spacing:.2px}
+  .vh-act{font-size:14px;font-weight:600;color:var(--ink);line-height:1.35;margin:8px 0 10px}
+  .vh-rows{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .vh-row{border-radius:7px;padding:7px 11px;font-size:12.5px;line-height:1.42}
+  .vh-row.full{grid-column:1/-1}
+  .vh-lbl{display:block;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;opacity:.72}
+  .vh-in{background:#f1f6fb;color:#33536e;border-left:3px solid #7aa8d6}
+  .vh-neck{background:#fdf3f2;color:#8f3636;border-left:3px solid #e08a8a}
+  .vh-lock{background:#fbf6ec;color:#85540a;border-left:3px solid #d9a849}
+  .vh-ext{background:#f2f5f8;color:#3c5066;border-left:3px solid #aebccb}
+  @media(max-width:620px){.vh-rows{grid-template-columns:1fr}}
+  .fc{display:flex;flex-direction:column;align-items:center;padding-top:4px}
+  .fc-node{width:100%;max-width:580px;background:#fff;border:1px solid var(--border);border-top:4px solid var(--blue);border-radius:11px;padding:12px 15px}
+  .fc-node.res{border-top-color:#178a8a} .fc-node.mkt{border-top-color:#2e7fc4}
+  .fc-node.ops{border-top-color:#3a6ea5} .fc-node.sup{border-top-color:#178a8a}
+  .fc-node.corp{border-top-color:#0e2f4f}
+  .fc-node.scada{border-top-color:#c08a2e;background:#fdfaf3}
+  .fc-node.ext{border-top-color:#8aa6bd;border-style:dashed;background:#f7f9fb}
+  .fc-actor{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .fc-title{font-size:14px;font-weight:600;margin:3px 0 9px;line-height:1.35;color:var(--ink)}
+  .fc-line{font-size:12.5px;color:#3a4a5a;line-height:1.42;margin-top:5px}
+  .fc-line.out{color:#0a5e51;margin-top:7px}
+  .fc-k{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;opacity:.7;margin-right:6px}
+  .fc-k.blk{display:block;margin:8px 0 5px}
+  .fc-note{margin-top:7px;font-size:12px;border-radius:6px;padding:5px 9px;line-height:1.4}
+  .fc-note.neck{background:#fdf3f2;color:#8f3636} .fc-note.lock{background:#fbf6ec;color:#85540a} .fc-note.ext{background:#eef2f7;color:#3c5066}
+  .fc-arrow{color:#9bb4c8;font-size:20px;line-height:1;padding:7px 0}
+  .appr{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:4px}
+  .appr>*{min-width:0}
+  @media(max-width:720px){.appr{grid-template-columns:1fr}}
+  .appr-card{background:#fff;border:1px solid var(--border);border-top:4px solid var(--blue);border-radius:12px;padding:15px 16px;display:flex;flex-direction:column}
+  .appr-card.soon{border-top-color:#aebccb;background:#fbfcfd}
+  .appr-tag{align-self:flex-start;font-size:10.5px;font-weight:600;color:#5b7286;background:#eef2f5;border-radius:14px;padding:3px 11px}
+  .appr-tag.rec{background:#e7f6ef;color:#0a7d56}
+  .appr-title{font-size:14.5px;font-weight:700;color:var(--navy);margin:9px 0 6px;line-height:1.3}
+  .appr-desc{font-size:12.5px;color:#3a4a5a;line-height:1.45}
+  .appr-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 4px}
+  @media(max-width:480px){.appr-cols{grid-template-columns:1fr}}
+  .appr-h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+  .appr-h.ok{color:#0a7d56} .appr-h.no{color:#9a5a00}
+  .appr-cols ul{margin:0;padding-left:16px} .appr-cols li{font-size:12px;line-height:1.5;color:#3a4a5a;margin-bottom:2px}
+  .appr-btn{margin-top:auto;display:inline-block;text-align:center;text-decoration:none;background:var(--blue);color:#fff;font-size:13px;font-weight:600;border-radius:8px;padding:10px 14px;margin-top:14px}
+  .appr-btn:hover{background:#256aa8}
+  .appr-btn.soon{background:#eef2f5;color:#8a99a3;cursor:default}
+
+  .dnode{margin-top:7px;font-size:12.5px;background:#eef4fa;border:1px solid #dbe7f2;border-radius:6px;padding:6px 9px;color:#33536e}
+  .dnode.out{background:var(--digbg);border-color:#bfe3d8;color:#0a5e51}
+  .dk{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;margin-right:6px;opacity:.85}
+  .dsoft{font-size:11.5px;color:var(--muted);margin-top:8px}
+  .darrow{text-align:center;color:#9bb4c8;font-size:13px;margin:2px 0}
+
+  .seg-group{margin-top:18px}
+  .seghdr{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.3px;padding:8px 11px;border-radius:7px;cursor:pointer;user-select:none;background:#e7f1fb;color:#1a5a99}
+  .chev{transition:transform .15s;font-size:11px}
+  .seg-group.collapsed .seg-body{display:none}
+  .seg-group.collapsed .chev{transform:rotate(-90deg)}
+  .seg-body{margin-top:8px}
+  .tltab-wrap{overflow-x:auto}
+  .tltab{width:100%;border-collapse:collapse;font-size:12.5px}
+  .tltab th{background:#0e2f4f;color:#cfe3f5;text-align:left;padding:7px 10px;border:1px solid #234a6b;font-weight:600;font-size:11.5px}
+  .tltab td{padding:7px 10px;border:1px solid #e2e9f1;vertical-align:top}
+  .tltab .tcol{font-weight:600;color:var(--navy);white-space:nowrap}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;background:#f5f9fd;border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px}
+  .legend .li{font-size:11.5px;display:flex;align-items:center;gap:6px;color:var(--muted)}
+  .dotc{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .t-wework{background:#e7f1fb;color:#1a5a99} .c-wework{background:#2e7fc4}
+  .t-service{background:#ebe9fb;color:#3730a3} .c-service{background:#4338ca}
+  .t-hrm{background:#f4eafe;color:#6b21a8} .c-hrm{background:#9333ea}
+  .t-pipe{background:#fdf0e0;color:#b45f06} .c-pipe{background:#e8830c}
+  .t-bi{background:#e6eef5;color:#0e2f4f} .c-bi{background:#0e2f4f}
+  .t-app{background:#fbe9e3;color:#a83a1c} .c-app{background:#d8542f}
+  .leg{font-size:11.5px;color:var(--muted);padding:8px 16px 0} .leg b{color:var(--ink)}
+  @media(max-width:720px){.blocks{grid-template-columns:1fr}.dept{min-width:0}}
+  /* report grid (báo cáo về công ty mẹ) */
+  .rgcap{font-size:12px;color:var(--muted);margin:2px 0 10px}
+  .rgcap b{color:var(--ink)}
+  .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.rgrid{grid-template-columns:1fr}}
+  .rcard{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff}
+  .rcard .rh{padding:10px 14px;font-weight:700;font-size:13.5px;color:#fff;display:flex;align-items:center;gap:8px}
+  .rcard .rh .rn{background:rgba(255,255,255,.25);border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 auto}
+  .rcard.g-fin .rh{background:#2e7fc4}.rcard.g-ops .rh{background:#178a8a}.rcard.g-hr .rh{background:#0e9f6e}.rcard.g-legal .rh{background:#7c5cbf}
+  .rcard ul{margin:0;padding:10px 16px 12px 30px}
+  .rcard li{margin:5px 0;font-size:12.5px;color:var(--ink)}
+  .rcard .rfoot{padding:0 14px 11px;font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>Sơ đồ luồng vận hành & dữ liệu — Cụm Thủy điện Nậm Na</h1>
+</div>
+
+<div class="org" id="org">
+  <div class="orgbar"><b>Mô hình phòng ban (luồng chạy qua phòng nào)</b>
+    <button class="orgbtn" id="orgToggle">Thu gọn ▾</button></div>
+  <div id="orgBody"></div>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div class="panel" id="panel"></div>
+
+<script>
+const DEPTS = {
+  m_bgd:{n:'Ban Giám đốc / Điều hành', r:'Phê duyệt, chỉ đạo'},
+  m_tckt:{n:'Tài chính – Kế toán', r:'Ngân sách, doanh thu'},
+  m_hcns:{n:'Hành chính – Nhân sự', r:'Nhân sự, đào tạo'},
+  m_khdt:{n:'Kế hoạch – Đầu tư', r:'Kế hoạch, tiến độ'},
+  m_kt:{n:'Kỹ thuật – Giám sát VH', r:'Theo dõi KT, sản lượng'},
+  m_pc:{n:'Pháp chế – Hợp đồng', r:'Hợp đồng, pháp lý'},
+  m_cntt:{n:'CNTT / Dữ liệu', r:'Dashboard, báo cáo'},
+  qt_hcns:{n:'Hành chính – Nhân sự', r:'Ca kíp, chấm công'},
+  qt_tckt:{n:'Tài chính – Kế toán', r:'Chi phí, quyết toán'},
+  qt_khvt:{n:'Kế hoạch – Vật tư / Kho', r:'Mua sắm, tồn kho'},
+  kt_ktat:{n:'Kỹ thuật – An toàn', r:'Quy trình, ATLĐ'},
+  kt_pxvh:{n:'PX Vận hành', r:'Vận hành tổ máy, trực ca'},
+  kt_pxsc:{n:'PX Sửa chữa / Bảo trì', r:'Bảo trì, sửa chữa'},
+  cm_atd:{n:'An toàn đập – Hồ chứa', r:'Quan trắc, điều tiết, xả lũ'},
+  cm_ttd:{n:'Thị trường điện / KH SL', r:'Sản lượng, chào giá, đối soát'},
+  cm_scada:{n:'CNTT / SCADA / DCS', r:'Điều khiển, giám sát'},
+};
+const ORG = {
+  moonlight:['m_bgd','m_tckt','m_hcns','m_khdt','m_kt','m_pc','m_cntt'],
+  blocks:[
+    {title:'Khối Quản trị – Hỗ trợ', cls:'qt', depts:['qt_hcns','qt_tckt','qt_khvt']},
+    {title:'Khối Kỹ thuật – Sản xuất', cls:'kt', depts:['kt_ktat','kt_pxvh','kt_pxsc']},
+    {title:'Khối Chuyên môn đặc thù', cls:'cm', depts:['cm_atd','cm_ttd','cm_scada']},
+  ]
+};
+const TOOLS = {
+  'base-wework':{label:'Base Wework', desc:'Quản lý công việc & dự án', c:'c-wework', t:'t-wework'},
+  'base-service':{label:'Base Service', desc:'Số hóa & tự động hóa quy trình', c:'c-service', t:'t-service'},
+  'base-hrm':{label:'Base HRM', desc:'Ca kíp · chấm công · lương', c:'c-hrm', t:'t-hrm'},
+  'data-pipeline':{label:'Data · Pipeline', desc:'Gom & kết nối dữ liệu (SCADA, đo đếm…)', c:'c-pipe', t:'t-pipe'},
+  'data-bi':{label:'Data · Báo cáo chuyên sâu', desc:'Dashboard / BI', c:'c-bi', t:'t-bi'},
+  'data-appsheet':{label:'Data · AppSheet', desc:'Nhập liệu hiện trường (offline)', c:'c-app', t:'t-app'},
+};
+const BIGLABEL = {truoc:'① Chào giá thị trường điện', scada:'② Chuẩn bị & vận hành tổ máy', sau:'③ Theo dõi & báo cáo'};
+
+const FLOWS = [
+  {id:'f1', name:'1. Vận hành phát điện', summary:'Luồng lớn: chuẩn bị/chào giá → vận hành tổ máy (SCADA) → theo dõi/báo cáo. Bấm khối để xem các bước.', steps:[
+    {seg:'truoc', d:'cm_atd', a:'Xác định nước về + công suất khả dụng tổ máy', inp:'Mực nước hồ; lưu lượng nước về; dự báo thủy văn; tổ máy khả dụng; kế hoạch sửa chữa', neck:'Cập nhật từ nhiều nguồn (Hồ chứa, Kỹ thuật, Vận hành) thủ công', sol:'Gom nước về + tình trạng tổ máy về một nguồn dữ liệu', tools:['data-pipeline']},
+    {seg:'truoc', d:'cm_ttd', a:'Lập kế hoạch phát ngày tới', inp:'Công suất khả dụng; giá thị trường; ràng buộc PPA', neck:'Tính tay trên Excel, file rời', sol:'Công cụ lập kế hoạch phát từ dữ liệu khả dụng + giá', tools:['data-bi','base-wework']},
+    {seg:'truoc', d:'cm_ttd', a:'Lập bản chào giá & nộp lên Cổng TTĐ / MMS', inp:'Kế hoạch phát; công suất khả dụng từng giờ; giá chào', neck:'Lập bản chào tay, nộp thủ công, dễ trễ hạn nộp', sol:'Lập & lưu vết bản chào; nhắc hạn nộp', tools:['base-wework','data-bi']},
+    {seg:'truoc', ext:'NSMO', a:'NSMO xử lý các bản chào, lập lịch huy động', inp:'Bản chào của các nhà máy; nhu cầu phụ tải hệ thống', sol:'Theo dõi trạng thái; nhận kết quả tự động nếu có kết nối', tools:['data-pipeline']},
+    {seg:'truoc', d:'cm_ttd', a:'Nhận lịch huy động / lệnh điều độ', inp:'Lịch huy động ngày D do NSMO/A0 công bố (tổ máy nào chạy, bao nhiêu MW, thời điểm); lệnh điều độ', neck:'Nhận qua cổng/điện thoại, ghi sổ, dễ thất lạc', sol:'Tiếp nhận lịch/lệnh số (người nhận, thời gian, nội dung); kết nối dữ liệu nếu cho phép', tools:['base-service','data-pipeline']},
+    {seg:'scada', d:'kt_pxvh', a:'Giao ca & checklist sẵn sàng (phần con người)', inp:'Tình trạng thiết bị cuối ca trước; sự cố tồn đọng; danh mục kiểm tra an toàn; lịch trực', neck:'Ký sổ giao ca, kiểm tra hiện trường ghi tay', sol:'Sổ giao ca + checklist sẵn sàng điện tử, ký xác nhận tại chỗ', tools:['data-appsheet']},
+    {seg:'scada', d:'kt_ktat', a:'Lập phiếu thao tác / phiếu công tác an toàn', inp:'Nội dung thao tác; sơ đồ một sợi; quy trình an toàn điện; người thực hiện/giám sát', neck:'Phiếu giấy, phê duyệt thủ công', sol:'Phiếu thao tác số + phê duyệt + ký số theo quy trình', tools:['base-service']},
+    {seg:'scada', lock:true, d:'cm_scada', a:'Kiểm tra điều kiện liên động → sẵn sàng khởi động', inp:'Tín hiệu trạng thái thiết bị: sự cố, vị trí MC, phanh, cánh hướng, tốc độ (từ cảm biến/PLC)', sol:'Chỉ ĐỌC trạng thái điều kiện lên lớp phân tích', tools:['data-pipeline']},
+    {seg:'scada', lock:true, d:'cm_scada', a:'Khởi động cơ: mở cánh hướng → tốc độ > 95%', inp:'Lệnh khởi động; tín hiệu tốc độ; độ mở cánh hướng (từ governor)', sol:'Chỉ ĐỌC tốc độ, độ mở cánh hướng', tools:['data-pipeline']},
+    {seg:'scada', lock:true, d:'cm_scada', a:'Mồi từ: đóng MC kích từ → điện áp > 80%', inp:'Lệnh mồi từ; điện áp đầu cực; dòng kích từ', sol:'Chỉ ĐỌC điện áp, trạng thái kích từ', tools:['data-pipeline']},
+    {seg:'scada', lock:true, d:'cm_scada', a:'Hòa đồng bộ: khớp áp/tần số/pha → đóng MC đầu cực', inp:'Điện áp, tần số, góc pha của máy phát và của lưới', sol:'Chỉ ĐỌC sự kiện hòa lưới', tools:['data-pipeline']},
+    {seg:'scada', lock:true, d:'kt_pxvh', a:'Mang tải & điều chỉnh công suất (AGC)', inp:'Lệnh công suất (điều độ/AGC); P, Q, f đo realtime', sol:'Chỉ ĐỌC P, Q, f, nhiệt độ, độ rung… realtime', tools:['data-pipeline']},
+    {seg:'sau', d:'kt_pxvh', a:'Ghi nhật ký vận hành ca', inp:'Sự kiện vận hành từ SCADA (giờ khởi động/dừng, P, alarm) + ghi chú trực ca', neck:'Ghi sổ tay, dễ sót, khó truy vết', sol:'Nhật ký ca điện tử tự kéo sự kiện từ SCADA + ghi chú trực ca', tools:['data-appsheet','data-pipeline']},
+    {seg:'sau', d:'cm_ttd', a:'Tổng hợp sản lượng ca / ngày', inp:'Điện năng từ công tơ đo đếm (chính thức) + P tích lũy từ SCADA (ước lượng)', neck:'Cộng tay cuối ca', sol:'Tự tổng hợp: ước lượng từ SCADA + sản lượng chính thức từ đo đếm', tools:['data-pipeline']},
+    {seg:'sau', d:'m_kt', a:'Phân tích hiệu suất phát điện', inp:'Lịch sử P, lưu lượng nước, số giờ chạy, số lần khởi động (từ historian)', neck:'Hầu như không phân tích lịch sử', sol:'BI từ historian: số giờ chạy, số lần khởi động, suất tiêu hao nước, độ khả dụng', tools:['data-bi']},
+    {seg:'sau', d:'kt_ktat', a:'Ghi nhận cảnh báo/sự cố trong ca → chuyển xử lý', inp:'Alarm/event từ SCADA; mô tả hiện trường của trực ca', neck:'Ghi sổ, xử lý theo kinh nghiệm', sol:'Phiếu sự cố tự sinh, liên kết sang luồng bảo trì/sự cố', tools:['base-service']},
+    {seg:'sau', d:'cm_ttd', a:'Chuyển dữ liệu ca → luồng Sản lượng & Báo cáo (mục 7, 9)', inp:'Nhật ký ca, sản lượng ca, sự cố đã ghi nhận', neck:'Bàn giao thủ công sang khâu sản lượng/báo cáo', sol:'Tự đẩy dữ liệu ca sang luồng Sản lượng–đối soát (7) và Báo cáo hợp nhất (9)', tools:['data-pipeline']},
+  ], approaches:[
+      {ready:true, tag:'Khuyến nghị · bài bản', title:'Phương án 1 — Tự động hóa toàn bộ trên Base Service',
+       desc:'Số hóa toàn bộ luồng thành 1 Service. Mỗi ngày tự tạo ticket cụm + 3 ticket con (NM1/NM2/NM3), chạy qua 9 block, kéo dữ liệu SCADA/đo đếm tự điền.',
+       pros:['Quy trình chuẩn hóa, có phê duyệt & ký số','Truy vết đầy đủ, tự gán người theo ca trực','Tích hợp sang luồng sự cố / bảo trì / báo cáo','Phù hợp triển khai bài bản, nhiều phòng tham gia'],
+       cons:['Cần thời gian cấu hình & đào tạo ban đầu'],
+       link:'base_service_van_hanh_phat_dien.html', linkLabel:'Mở demo Base Service'},
+      {ready:true, tag:'Nhẹ · nhanh triển khai', title:'Phương án 2 — Google Sheet tự tính công suất & chào giá (kéo API)',
+       desc:'Dùng Google Sheet kéo API (mực nước, công suất khả dụng, giá thị trường) để tự tính công suất khả dụng và lập bản chào giá.',
+       pros:['Triển khai nhanh, chi phí thấp, linh hoạt','Tập trung cho khâu tính toán & chào giá','Dễ thử nghiệm trước khi làm bài bản'],
+       cons:['Không có workflow / phê duyệt / ký số / truy vết','Chủ yếu phục vụ phần chào giá, chưa bao trùm cả luồng'],
+       link:'https://docs.google.com/spreadsheets/d/1ZNmhM_9C-BO2Q_9JiU124TeY_4nstSqw/edit?usp=sharing&ouid=112210146740702326217&rtpof=true&sd=true', linkLabel:'Mở demo Google Sheet'},
+  ], timeline:[
+      ['Sáng ngày D-1','Cập nhật nước về, mực nước hồ, tổ máy khả dụng, kế hoạch sửa chữa','Hồ chứa, Kỹ thuật, Vận hành'],
+      ['Trước 11h30 ngày D-1','Gửi bản chào giá cho ngày D','Tổ thị trường điện / Kế hoạch sản lượng'],
+      ['Chiều ngày D-1, trước ~16h','Nhận lịch huy động ngày tới','NSMO/A0 công bố, nhà máy tiếp nhận'],
+      ['Ngày D','Vận hành thực tế theo lịch / lệnh điều độ','Trưởng ca, Phân xưởng Vận hành'],
+      ['Trong ngày D','Có thể nhận lệnh điều độ thời gian thực để tăng/giảm tải, dừng/chạy theo tình hình hệ thống','Điều độ ↔ Nhà máy'],
+      ['Sau vận hành','SCADA / công tơ ghi nhận sản lượng, đối soát, báo cáo','Vận hành, Thị trường điện, Tài chính'],
+  ]},
+  {id:'f2', name:'2. Điều tiết hồ & xả lũ', summary:'Quan trắc thủy văn, điều tiết hồ, phối hợp liên hồ 3 nhà máy (cascade).', steps:[
+    {d:'cm_atd', a:'Quan trắc thủy văn, tính điều tiết theo Quy trình vận hành hồ', inp:'Mực nước hồ; lưu lượng nước về hồ (Q đến); lượng mưa & dự báo mưa; mực nước hạ du; biểu đồ điều phối / QTVH hồ; ràng buộc cấp nước hạ du; lệnh PCTT. Cách tính: cân bằng nước (Q đến − Q phát − Q xả = Δ tích) đối chiếu biểu đồ điều phối', neck:'Dữ liệu rời ở nhiều nơi, tính tay trên Excel', sol:'Nhập quan trắc hiện trường + gom các nguồn về một chỗ để tính điều tiết', tools:['data-appsheet','data-pipeline']},
+    {d:'kt_pxvh', a:'Vận hành tích / xả qua turbine hoặc xả tràn', inp:'Quyết định điều tiết (lưu lượng xả mục tiêu); độ mở cửa van/cánh hướng; mực nước realtime', neck:'Phối hợp thủ công với khâu điều tiết', sol:'Liên kết dữ liệu hồ ↔ vận hành tổ máy', tools:['data-pipeline']},
+    {d:'cm_atd', a:'Phối hợp liên hồ NM1 → NM2 → NM3', inp:'Lịch xả & mực nước NM thượng nguồn; thời gian nước chảy giữa các bậc; mực nước 3 hồ', neck:'Phối hợp qua điện thoại, chưa tối ưu, dễ mất nước', sol:'Mô hình tối ưu cascade dùng mực nước / lịch xả 3 NM', tools:['data-bi','data-pipeline']},
+    {d:'m_kt', a:'Giám sát điều tiết cấp cụm', inp:'Mực nước, lưu lượng, lịch xả của cả 3 NM', neck:'Không có cái nhìn cụm', sol:'Dashboard liên hồ cấp cụm cho Moonlight', tools:['data-bi']},
+  ]},
+  {id:'f3', name:'3. Giám sát thông số & cảnh báo', summary:'SCADA giám sát, trực ca xử lý cảnh báo, kỹ thuật đánh giá định kỳ.', steps:[
+    {d:'cm_scada', a:'SCADA giám sát realtime, sinh cảnh báo', inp:'Tín hiệu cảm biến realtime: nhiệt độ, áp lực, độ rung, U, I, tốc độ (từ RTU/PLC)', neck:'Dữ liệu chỉ ở HMI, historian giới hạn', sol:'Lưu trữ dài hạn + phân tích xu hướng', tools:['data-pipeline']},
+    {d:'kt_pxvh', a:'Trực ca tiếp nhận & xử lý cảnh báo', inp:'Nội dung alarm (điểm, ngưỡng, thời gian); quy trình xử lý', neck:'Ghi sổ tay, khó truy vết', sol:'Nhật ký xử lý điện tử có dấu thời gian', tools:['data-appsheet']},
+    {d:'kt_ktat', a:'Đánh giá thông số kỹ thuật định kỳ', inp:'Chuỗi thông số theo thời gian; ngưỡng định mức; lịch sử để so sánh', neck:'Tổng hợp thông số thủ công', sol:'Báo cáo thông số & xu hướng tự động', tools:['data-bi']},
+  ]},
+  {id:'f4', name:'4. Bảo trì – sửa chữa (O&M)', summary:'Lập phương án, cấp vật tư, sửa chữa, nghiệm thu, quyết toán.', steps:[
+    {d:'kt_ktat', a:'Lập kế hoạch / phương án bảo trì + phiếu công tác', inp:'Lịch bảo trì định kỳ; tình trạng thiết bị (giờ chạy, alarm, nhiệt/rung); lịch huy động tổ máy', neck:'Lịch sửa chữa lệch lịch huy động tổ máy', sol:'Quy trình O&M + phiếu công tác số, gắn với kế hoạch sản lượng', tools:['base-service']},
+    {d:'qt_khvt', a:'Đối soát tồn kho & cấp vật tư', inp:'Danh mục vật tư của phương án (BOM); tồn kho hiện tại; lịch sửa chữa', neck:'Thiếu vật tư, mua khẩn đội giá', sol:'Quy trình cấp/mua vật tư + dashboard BOM, tồn kho "sống", cảnh báo sớm', tools:['base-service','data-bi']},
+    {d:'kt_pxsc', a:'Thực hiện sửa chữa thiết bị', inp:'Phương án kỹ thuật; phiếu công tác; vật tư đã cấp; dữ liệu tình trạng thiết bị', neck:'Chủ yếu "sửa khi hỏng"', sol:'Phiếu sửa chữa theo quy trình + bảo trì dự đoán từ nhiệt/rung SCADA', tools:['base-service','data-pipeline']},
+    {d:'kt_ktat', a:'Nghiệm thu, đảm bảo an toàn, hồ sơ thiết bị', inp:'Tiêu chuẩn nghiệm thu; kết quả đo sau sửa; hồ sơ lý lịch thiết bị', neck:'Hồ sơ bằng giấy', sol:'Quy trình nghiệm thu + hồ sơ thiết bị số (CMMS)', tools:['base-service']},
+    {d:'qt_tckt', a:'Quyết toán chi phí sửa chữa', inp:'Khối lượng thực hiện; chi phí nhân công/vật tư; dự toán', neck:'Chứng từ thủ công', sol:'Quy trình thanh toán/quyết toán số gắn phương án', tools:['base-service']},
+  ], approaches:[
+      {ready:true, tag:'Khuyến nghị · có phê duyệt', title:'Số hóa quy trình trên Base Service',
+       desc:'Mỗi nhu cầu bảo trì/sửa chữa = 1 ticket, chạy qua các block có cổng phê duyệt: tiếp nhận → đánh giá → đối soát vật tư & dự toán → phê duyệt → cấp vật tư → thực hiện → nghiệm thu → quyết toán.',
+       pros:['Cổng phê duyệt theo hạn mức + ký số','Đối soát tồn kho & dự toán trước khi duyệt','Truy vết từ phát hiện đến quyết toán'],
+       cons:['Cần cấu hình quy trình & hạn mức ban đầu'],
+       link:'base_service_bao_tri_sua_chua.html', linkLabel:'Mở demo Base Service (bảo trì – vật tư)'},
+  ]},
+  {id:'f5', name:'5. Xử lý sự cố', summary:'Từ trip/alarm đến xử lý khẩn, phân tích nguyên nhân, khắc phục, báo cáo.', steps:[
+    {d:'cm_scada', a:'SCADA trip / alarm sự cố', inp:'Tín hiệu bảo vệ/trip; các thông số tại thời điểm sự cố', neck:'Sự kiện không lưu để phân tích', sol:'Event log đầy đủ phục vụ phân tích sau', tools:['data-pipeline']},
+    {d:'kt_pxvh', a:'Trực ca xử lý khẩn, báo cáo', inp:'Nội dung sự cố; quy trình xử lý khẩn; sơ đồ một sợi', neck:'Báo cáo sự cố thủ công', sol:'Phiếu sự cố tự sinh theo quy trình', tools:['base-service']},
+    {d:'kt_ktat', a:'Phân tích nguyên nhân gốc (RCA)', inp:'Event log có dấu thời gian; thông số trước/khi sự cố; lịch sử sự cố tương tự', neck:'Theo kinh nghiệm, không có thư viện', sol:'Quy trình RCA + thư viện/thống kê sự cố', tools:['base-service','data-bi']},
+    {d:'kt_pxsc', a:'Khắc phục sự cố', inp:'Kết luận RCA; phương án khắc phục; vật tư', neck:'Sự cố tương tự lặp lại', sol:'Liên kết RCA ↔ kế hoạch bảo trì phòng ngừa', tools:['base-service']},
+    {d:'m_kt', a:'Báo cáo sự cố cấp cụm', inp:'Biên bản sự cố; kết quả RCA đã chuẩn hóa', neck:'Bài học không lan tỏa giữa 3 NM', sol:'Kho RCA chung & dashboard sự cố toàn cụm', tools:['data-bi']},
+  ]},
+  {id:'f6', name:'6. Công ca & Đánh giá hiệu suất', summary:'Phân ca, chấm công, tính lương, gắn năng suất với sản xuất.', steps:[
+    {d:'qt_hcns', a:'Phân ca, chấm công', inp:'Lịch ca/kíp; danh sách nhân sự; thời gian vào/ra ca', neck:'Giấy / Excel, dễ sai sót', sol:'Phân ca & chấm công số (kể cả mobile)', tools:['base-hrm']},
+    {d:'kt_pxvh', a:'Xác nhận ca trực & sự kiện trong ca', inp:'Bảng phân ca; sự kiện vận hành trong ca (từ SCADA)', neck:'Năng suất không gắn sản lượng / số sự cố', sol:'Gắn năng suất ca với dữ liệu vận hành SCADA', tools:['data-bi']},
+    {d:'qt_tckt', a:'Tính lương theo công', inp:'Dữ liệu chấm công; đơn giá/hệ số lương; phụ cấp ca đêm/độc hại', neck:'Tính tay, đối chiếu thủ công', sol:'Lương tự tính từ chấm công số', tools:['base-hrm']},
+    {d:'m_hcns', a:'Tổng hợp nhân sự cấp cụm', inp:'Dữ liệu chấm công / lương / năng suất của 3 NM', neck:'Cộng tay 3 NM', sol:'Dashboard nhân sự / năng suất cụm', tools:['data-bi']},
+  ], approaches:[
+      {ready:true, tag:'Đánh giá hiệu suất (BSC)', title:'Dashboard Đánh giá nhân sự theo BSC',
+       desc:'Đánh giá hiệu suất toàn bộ CBCNV theo 4 khía cạnh BSC (Kết quả · Khách hàng · Quy trình · Học hỏi), drill-down đơn vị → phòng ban → từng người, KPI chi tiết theo ngày (daily) và cảnh báo nhân sự.',
+       pros:['Heatmap đơn vị → phòng ban → nhân sự','KPI chi tiết + logic tính theo ngày','Bản đồ sao, so sánh 3 Nậm Na, cảnh báo nhân sự'],
+       cons:['Cần dữ liệu chấm công / KPI từ Base HRM của từng pháp nhân'],
+       link:'dashboard_danh_gia_nhan_su_moonlight.html', linkLabel:'Mở dashboard Đánh giá hiệu suất'},
+  ]},
+  {id:'f7', name:'7. Báo cáo về công ty mẹ', summary:'Bốn nhóm báo cáo từ các pháp nhân (3 nhà máy Lai Châu + HQ Hà Nội) hợp nhất về công ty mẹ Moonlight — bài toán số 1 của holding: nhiều pháp nhân/địa điểm, gom Excel thủ công, thiếu dashboard real-time.',
+    reportGroups:[
+      {title:'Báo cáo tài chính & sản lượng', cls:'g-fin', d:'m_tckt', items:['Sản lượng điện thực tế / kế hoạch (kWh)','Doanh thu PPA từng nhà máy','BCTC quý/năm → hợp nhất tập đoàn','Chi phí O&M, sửa chữa lớn']},
+      {title:'Báo cáo vận hành & kỹ thuật', cls:'g-ops', d:'m_kt', items:['Hệ số sẵn sàng tổ máy (availability %)','Tình trạng hồ chứa, lưu lượng nước về','Sự cố, thời gian dừng máy (downtime)','Kết quả kiểm định thiết bị định kỳ']},
+      {title:'Báo cáo nhân sự & lao động', cls:'g-hr', d:'m_hcns', items:['Nhân sự 3 nhà máy + HQ Hà Nội','Ca trực 24/7: chấm công, OT, lương','Phụ cấp vùng sâu, BHXH tập đoàn','Biến động nhân sự, đào tạo kỹ thuật']},
+      {title:'Báo cáo pháp lý & tuân thủ', cls:'g-legal', d:'kt_ktat', items:['Báo cáo môi trường Bộ TNMT định kỳ','An toàn đập, hồ chứa (Nghị định 114)','Giấy phép vận hành, kiểm định điện','Báo cáo EVN/NLDC sản lượng điện']},
+    ],
+    steps:[
+    {d:'m_tckt', a:'① Tài chính & sản lượng', inp:'Sản lượng (kWh) KH/TT, doanh thu PPA, chi phí O&M, BCTC từng pháp nhân', neck:'Nhiều đầu mối gom Excel thủ công', sol:'Chuẩn hóa & đẩy tự động về công ty mẹ', tools:['data-pipeline','data-bi']},
+    {d:'m_kt', a:'② Vận hành & kỹ thuật', inp:'Hệ số sẵn sàng, hồ chứa/lưu lượng, sự cố/downtime, kiểm định', neck:'Mỗi nhà máy một định dạng', sol:'KPI kỹ thuật chuẩn hóa toàn cụm', tools:['data-pipeline','data-bi']},
+    {d:'m_hcns', a:'③ Nhân sự & lao động', inp:'Nhân sự 3 NM + HQ; ca 24/7; OT, phụ cấp vùng; BHXH; đào tạo', neck:'Đa pháp nhân/địa điểm; lương OT, hệ số vùng tính tay', sol:'Base HRM đa pháp nhân/địa điểm', tools:['base-hrm']},
+    {d:'kt_ktat', a:'④ Pháp lý & tuân thủ', inp:'Môi trường (Bộ TNMT); an toàn đập (NĐ 114); giấy phép/kiểm định; báo cáo EVN/NLDC', neck:'Theo dõi hạn thủ công, rủi ro quá hạn', sol:'Quy trình tuân thủ có nhắc hạn + lưu hồ sơ tập trung', tools:['base-service']},
+    {d:'m_cntt', a:'Lớp hợp nhất đọc dữ liệu các pháp nhân tự động', inp:'4 nhóm báo cáo (3 NM + HQ, mở rộng SPV ĐMT)', neck:'Gom Excel thủ công, không realtime', sol:'Pipeline hợp nhất tập đoàn, mở rộng được khi thêm SPV', tools:['data-pipeline']},
+    {d:'m_bgd', a:'Ban lãnh đạo holding xem dashboard hợp nhất real-time', inp:'KPI hợp nhất 4 nhóm toàn tập đoàn', neck:'Thiếu dashboard real-time về công ty mẹ', sol:'Dashboard điều hành tập đoàn cho lãnh đạo kiêm nhiệm', tools:['data-bi']},
+  ], approaches:[
+      {ready:true, tag:'Báo cáo hợp nhất', title:'Dashboard Báo cáo về công ty mẹ (4 nhóm)',
+       desc:'Dashboard cấp holding gom đúng 4 nhóm báo cáo: tài chính–sản lượng, vận hành–kỹ thuật, nhân sự–lao động, pháp lý–tuân thủ — một chỗ nhìn ra toàn tập đoàn.',
+       pros:['4 tab đúng 4 nhóm báo cáo','Tô màu theo ngưỡng để tự đánh giá','Theo dõi hạn giấy phép / kiểm định / báo cáo'],
+       cons:['Cần chuẩn hóa & cấp quyền dữ liệu từ các pháp nhân'],
+       link:'dashboard_bao_cao_cong_ty_me_moonlight.html', linkLabel:'Mở dashboard Báo cáo công ty mẹ'},
+      {ready:true, tag:'Chi tiết tài chính – sản lượng', title:'Dashboard Sản lượng – Doanh thu – Năng suất',
+       desc:'Bản đào sâu cho nhóm tài chính & sản lượng: đạt kế hoạch, phân rã nguyên nhân, chi phí, năng suất tới cấp tổ máy.',
+       pros:['Đến cấp tổ máy (8 tổ)','Đối soát PPA đo đếm / SCADA / EVN','Tô màu theo ngưỡng để tự đánh giá'],
+       cons:['Cần kết nối đo đếm + SCADA + Base của từng pháp nhân'],
+       link:'dashboard_muc7_phan_tich_nam_na.html', linkLabel:'Mở dashboard Sản lượng & Năng suất'},
+  ]},
+];
+
+let curFlow = 0, mode = 'vh', curBig = 0;
+const $ = s => document.querySelector(s);
+
+function deptBox(id){ const d=DEPTS[id];
+  return `<div class="dept" id="box-${id}"><span class="badge" id="bdg-${id}"></span><div class="n">${d.n}</div><div class="r">${d.r}</div></div>`; }
+function buildOrg(){
+  let h = `<div class="lvl">① Công ty mẹ (Holding) — CT CP Đầu tư Moonlight · MST 0109865562</div><div class="row">${ORG.moonlight.map(deptBox).join('')}</div>
+    <div class="lvl" style="margin-top:10px">② Cấp vận hành — Cụm Thủy điện Nậm Na</div>
+    <div class="bql"><b>Ban Giám đốc / Ban Quản lý nhà máy</b><span>Điều hành trực tiếp tại nhà máy</span></div><div class="blocks">`;
+  ORG.blocks.forEach(b=>{ h += `<div class="block"><div class="bhdr ${b.cls}">${b.title}</div>${b.depts.map(deptBox).join('')}</div>`; });
+  $('#orgBody').innerHTML = h + `</div>`;
+}
+$('#orgToggle').onclick = ()=>{ const o=$('#org'); o.classList.toggle('collapsed');
+  $('#orgToggle').textContent = o.classList.contains('collapsed') ? 'Mở rộng ▸' : 'Thu gọn ▾'; };
+
+function buildTabs(){
+  $('#tabs').innerHTML = FLOWS.map((f,i)=>`<div class="tab${i===0?' on':''}" data-i="${i}">${f.name}</div>`).join('');
+  $('#tabs').addEventListener('click', e=>{
+    const t=e.target.closest('.tab'); if(!t) return;
+    [...$('#tabs').children].forEach(x=>x.classList.remove('on'));
+    t.classList.add('on'); curFlow=+t.dataset.i; curBig=0; renderPanel();
+  });
+}
+function highlightOrg(f){
+  Object.keys(DEPTS).forEach(id=>{ document.getElementById('box-'+id).classList.remove('active','pulse'); document.getElementById('bdg-'+id).textContent=''; });
+  const order={}; f.steps.forEach((s,i)=>{ if(!s.d) return; (order[s.d]=order[s.d]||[]).push(i+1); });
+  Object.entries(order).forEach(([id,nums])=>{ const b=document.getElementById('box-'+id);
+    if(b){ b.classList.add('active'); document.getElementById('bdg-'+id).textContent=nums.join(','); } });
+}
+function pills(tools){ return `<div class="pills">` + tools.map(k=>{const t=TOOLS[k];return `<span class="pill2 ${t.t}">${t.label}</span>`;}).join('') + `</div>`; }
+function digiLegend(){ return `<div class="legend">` + Object.values(TOOLS).map(t=>`<span class="li"><span class="dotc ${t.c}"></span>${t.label} — ${t.desc}</span>`).join('') + `</div>`; }
+function deptName(s){ return s.ext ? `🌐 ${s.ext} (bên ngoài)` : DEPTS[s.d].n; }
+
+function stepCardVH(s,i){
+  const lb=s.lock?'<span class="lockbadge">SCADA · chỉ đọc</span>':'';
+  const full=(s.lock||s.ext)?' full':'';
+  let rows=`<div class="vh-row vh-in${full}"><span class="vh-lbl">Dữ liệu đầu vào</span>${s.inp||'—'}</div>`;
+  if(s.ext) rows+=`<div class="vh-row vh-ext full"><span class="vh-lbl">🌐 Bên ngoài</span>${s.ext} thực hiện — nhà máy theo dõi / tiếp nhận</div>`;
+  else if(s.lock) rows+=`<div class="vh-row vh-lock full"><span class="vh-lbl">🔒 SCADA · chỉ đọc</span>SCADA tự thực hiện — an toàn, trọng yếu, không can thiệp</div>`;
+  else rows+=`<div class="vh-row vh-neck"><span class="vh-lbl">⏱ Điểm nghẽn / mất thời gian</span>${s.neck}</div>`;
+  return `<div class="tl${s.lock?' lock':''}${s.ext?' ext':''}"><div class="dot">${i+1}</div><div class="cardx vh">
+    <div class="vh-head"><span class="vh-tag">${deptName(s)}</span>${lb}</div>
+    <div class="vh-act">${s.a}</div>
+    <div class="vh-rows">${rows}</div></div></div>`;
+}
+function stepCardDATA(s,i){
+  const lb=s.lock?'<span class="lockbadge">SCADA · chỉ đọc</span>':'';
+  const out=s.lock?`${s.sol} (read-only · KHÔNG điều khiển)`:s.sol;
+  return `<div class="tl${s.lock?' lock':''}${s.ext?' ext':''}"><div class="dot">${i+1}</div><div class="cardx">
+    <div class="deptline">${deptName(s)}${lb}</div><div class="act">${s.a}</div>
+    <div class="dnode"><span class="dk">Dữ liệu vào</span>${s.inp||'—'}</div>
+    <div class="darrow">↓ xử lý trên phần mềm</div>${pills(s.tools)}
+    <div class="darrow">↓</div>
+    <div class="dnode out"><span class="dk">Kết quả / đầu ra</span>${out}</div></div></div>`;
+}
+function stepCard(s,i){ return mode==='vh'?stepCardVH(s,i):stepCardDATA(s,i); }
+
+function nodeColor(s){
+  if(s.ext) return 'ext';
+  if(s.lock) return 'scada';
+  const d=s.d||'';
+  if(d==='cm_atd') return 'res';
+  if(d==='cm_ttd') return 'mkt';
+  if(d.startsWith('kt_')) return 'ops';
+  if(d.startsWith('qt_')) return 'sup';
+  if(d.startsWith('m_')) return 'corp';
+  return 'mkt';
+}
+function fcNode(s){
+  const col=nodeColor(s);
+  const head=`<div class="fc-actor">${deptName(s)}</div><div class="fc-title">${s.a}</div>`;
+  let body;
+  if(mode==='vh'){
+    const note = s.ext ? `<div class="fc-note ext">🌐 Bên ngoài — ${s.ext} thực hiện; nhà máy theo dõi / tiếp nhận</div>`
+               : s.lock ? `<div class="fc-note lock">🔒 SCADA tự thực hiện — an toàn, trọng yếu, không can thiệp</div>`
+               : `<div class="fc-note neck">⏱ Nghẽn: ${s.neck}</div>`;
+    body=`<div class="fc-line"><span class="fc-k">Đầu vào</span>${s.inp||'—'}</div>${note}`;
+  } else {
+    const out = s.lock ? `${s.sol} (chỉ đọc · KHÔNG điều khiển)` : s.sol;
+    body=`<div class="fc-line"><span class="fc-k">Dữ liệu vào</span>${s.inp||'—'}</div>`
+       + `<div class="fc-k blk">Phần mềm xử lý</div>${pills(s.tools)}`
+       + `<div class="fc-line out"><span class="fc-k">Kết quả ra</span>${out}</div>`;
+  }
+  return `<div class="fc-node ${col}">${head}<div class="fc-body">${body}</div></div>`;
+}
+function flowChart(steps){
+  return `<div class="fc">` + steps.map((s,k)=>(k>0?`<div class="fc-arrow">↓</div>`:'')+fcNode(s)).join('') + `</div>`;
+}
+
+function bigFlows(f){
+  if(!f.steps.some(s=>s.seg)) return null;
+  const groups=[]; let cur=null;
+  f.steps.forEach((s,i)=>{ if(!cur||cur.seg!==s.seg){cur={seg:s.seg,label:BIGLABEL[s.seg],items:[]};groups.push(cur);} cur.items.push({s,i}); });
+  return groups;
+}
+function selectBig(i){ curBig=i; renderPanel(); }
+function reportGrid(f){
+  const cards = f.reportGroups.map((g,i)=>`
+    <div class="rcard ${g.cls}">
+      <div class="rh"><span class="rn">${i+1}</span>${g.title}</div>
+      <ul>${g.items.map(it=>`<li>${it}</li>`).join('')}</ul>
+    </div>`).join('');
+  return `<div class="rgcap">3 nhà máy Lai Châu + Văn phòng Hà Nội → hợp nhất về <b>Công ty mẹ Moonlight</b></div><div class="rgrid">${cards}</div>`;
+}
+function approachesView(f){
+  return `<div class="appr">` + f.approaches.map(a=>`
+    <div class="appr-card${a.ready?'':' soon'}">
+      <div class="appr-tag${a.ready?' rec':''}">${a.tag}</div>
+      <div class="appr-title">${a.title}</div>
+      <div class="appr-desc">${a.desc}</div>
+      <div class="appr-cols">
+        <div><div class="appr-h ok">Ưu điểm</div><ul>${a.pros.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+        <div><div class="appr-h no">Lưu ý</div><ul>${a.cons.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+      </div>
+      ${a.ready
+        ? `<a class="appr-btn" href="${a.link}" target="_blank" rel="noopener">${a.linkLabel} →</a>`
+        : `<span class="appr-btn soon">⏳ ${a.linkLabel}</span>`}
+    </div>`).join('') + `</div>`;
+}
+function scheduleTable(rows){
+  return `<div class="seg-group"><div class="seghdr" onclick="this.parentNode.classList.toggle('collapsed')"><span class="chev">▾</span>🗓 Lịch vận hành theo thời điểm (D-1 / ngày D)</div>
+    <div class="seg-body"><div class="tltab-wrap"><table class="tltab"><thead><tr><th>Thời điểm</th><th>Việc làm</th><th>Ai làm</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td class="tcol">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')+`</tbody></table></div></div></div>`;
+}
+function renderPanel(){
+  const f=FLOWS[curFlow]; highlightOrg(f);
+  const implMode = (mode==='data');
+  const useApproaches = implMode && f.approaches;
+  let body='', sched='', legend='', hint='';
+  if(useApproaches){
+    body = approachesView(f);
+    hint = f.approaches.length>1
+      ? `${f.approaches.length} phương án triển khai cho luồng này — chọn theo mức độ bài bản và nguồn lực.`
+      : 'Phương án triển khai cho luồng này.';
+  } else if(!implMode && f.reportGroups){
+    body = reportGrid(f);
+    hint = 'Bốn nhóm báo cáo từ các pháp nhân gửi về công ty mẹ — bấm "Phương án triển khai" để xem dashboard.';
+  } else {
+    const big=bigFlows(f);
+    if(big){
+      if(curBig>=big.length) curBig=0;
+      body += `<div class="bigflow">` + big.map((g,gi)=>
+        `<div class="bigbox${gi===curBig?' on':''}" onclick="selectBig(${gi})"><div class="bigt">${g.label}</div><div class="bign">${g.items.length} bước · bấm xem</div></div>`).join('') + `</div>`;
+      const g=big[curBig];
+      body += `<div class="bigdetail-hdr">${g.label}</div>` + flowChart(g.items.map(it=>it.s));
+      if(f.timeline && g.seg==='truoc') sched = scheduleTable(f.timeline);
+    } else {
+      body += flowChart(f.steps);
+    }
+    legend = implMode ? digiLegend() : '';
+    hint = implMode
+      ? 'Mỗi bước: dữ liệu đầu vào → phần mềm xử lý (Base / Data Service) → kết quả ra. Lõi SCADA chỉ ĐỌC.'
+      : 'Quy trình thực tế: ai làm gì, cần dữ liệu đầu vào nào, đang nghẽn ở đâu.';
+  }
+  $('#panel').innerHTML = `
+    <div class="ptitle"><h2>${f.name}</h2>
+      <span class="chip">${f.reportGroups ? f.reportGroups.length+' nhóm báo cáo' : f.steps.length+' bước'}</span>
+      <button class="play" id="playBtn">▶ Chạy luồng qua phòng ban</button></div>
+    <div class="psum">${f.summary}</div>
+    <div class="modeseg">
+      <button class="mbtn${mode==='vh'?' on':''}" data-m="vh">⚙ Luồng vận hành</button>
+      <button class="mbtn${mode==='data'?' on':''}" data-m="data">🛠 Phương án triển khai</button>
+    </div>
+    ${legend}${body}${sched}`;
+  $('.modeseg').addEventListener('click', e=>{ const b=e.target.closest('.mbtn'); if(!b)return; mode=b.dataset.m; renderPanel(); });
+  $('#playBtn').onclick = ()=>playFlow(f);
+}
+let playing=false;
+async function playFlow(f){
+  if(playing) return; playing=true;
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  for(const s of f.steps){ if(!s.d) continue; const b=document.getElementById('box-'+s.d);
+    b.classList.add('pulse'); b.scrollIntoView({block:'nearest',behavior:'smooth'}); await sleep(700); b.classList.remove('pulse'); await sleep(110); }
+  playing=false;
+}
+buildOrg(); buildTabs(); renderPanel();
+</script>
+</body>
+</html>

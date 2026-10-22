@@ -1,0 +1,22 @@
+{
+  "slug": "sapoche-kho",
+  "title": "Sapoche — Báo cáo kho",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "Supply Chain",
+  "description": "Nhập xuất tồn và số phiếu theo loại hoạt động, bản dựng trước cho Power BI.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Sapoche_BC-Kho/",
+  "source_repo": "https://github.com/tbinh-06/Sapoche_BC-Kho",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "tồn kho",
+    "nhập xuất",
+    "Power BI"
+  ]
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo Sản lượng & Năng suất — Cụm Thủy điện Nậm Na</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  :root{--navy:#0e2f4f;--blue:#2e7fc4;--teal:#178a8a;--bg:#eef3f8;--card:#fff;--line:#d9e2ec;--ink:#1f2d3a;--muted:#5b7286;--green:#0e9f6e;--red:#c0392b;--amber:#c08a2e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5}
+  .head{background:var(--navy);color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px}
+  .head h1{margin:0;font-size:18px;font-weight:700}
+  .head p{margin:4px 0 0;font-size:12.5px;color:#a8c6e0}
+  .period{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:7px 13px;font-size:12.5px}
+  .period b{font-size:14px}
+  .wrap{max-width:980px;margin:0 auto;padding:18px 16px 40px}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px;border-top:3px solid var(--teal)}
+  .kpi .lab{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .kpi .val{font-size:23px;font-weight:700;margin-top:5px;line-height:1.1}
+  .kpi .val small{font-size:13px;font-weight:600;color:var(--muted)}
+  .kpi .delta{font-size:12px;font-weight:600;margin-top:4px}
+  .down{color:var(--red)} .up{color:var(--green)} .neu{color:var(--muted)}
+  .kpi.k2{border-top-color:var(--blue)} .kpi.k3{border-top-color:var(--green)} .kpi.k4{border-top-color:var(--amber)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+  .card h2{margin:0 0 2px;font-size:15px;color:var(--navy)}
+  .card .sub{color:var(--muted);font-size:12.5px;margin-bottom:10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid2>*{min-width:0}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .chartlegend{display:flex;gap:16px;font-size:11.5px;color:var(--muted);margin-bottom:6px}
+  .chartlegend span{display:flex;align-items:center;gap:6px}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  svg{width:100%;height:auto;display:block}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{background:#f3f7fb;color:var(--navy);text-align:right;padding:8px 10px;border-bottom:2px solid var(--line);font-weight:600;font-size:11.5px;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:8px 10px;border-bottom:1px solid #eef2f6;text-align:right;white-space:nowrap}
+  tr.total td{font-weight:700;background:#f7fafc;border-top:2px solid var(--line)}
+  .tag{display:inline-block;font-size:10.5px;font-weight:600;border-radius:5px;padding:2px 7px}
+  .t-ok{background:#e7f6ef;color:#0a7d56} .t-warn{background:#fbf3e3;color:#9a5a00}
+  .neg{color:var(--red);font-weight:600} .pos{color:var(--green);font-weight:600}
+  .foot{font-size:11.5px;color:var(--muted);margin-top:6px}
+  .src{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .srcchip{font-size:11px;background:#eef4fa;color:#33536e;border:1px solid #dbe7f2;border-radius:14px;padding:3px 10px}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div><h1>Báo cáo Sản lượng & Năng suất</h1><p>Cụm Thủy điện Nậm Na · 180 MW · NM1 + NM2 + NM3 · Mục 7 — Sản lượng – doanh thu – đối soát</p></div>
+  <div class="period">Kỳ báo cáo<br><b>Ngày 16/06/2026</b></div>
+</div>
+
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi"><div class="lab">Sản lượng ngày</div><div class="val">3.524 <small>MWh</small></div><div class="delta down">▼ 2,1% so kế hoạch (3.600)</div></div>
+    <div class="kpi k2"><div class="lab">Doanh thu ước tính</div><div class="val">3,88 <small>tỷ đ</small></div><div class="delta neu">Giá PPA b/q 1.100 đ/kWh</div></div>
+    <div class="kpi k3"><div class="lab">Độ khả dụng b/q</div><div class="val">98,6 <small>%</small></div><div class="delta up">▲ NM2 có 1 tổ bảo trì</div></div>
+    <div class="kpi k4"><div class="lab">Hệ số công suất (CF)</div><div class="val">81,6 <small>%</small></div><div class="delta neu">Cả cụm 180 MW</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Sản lượng theo nhà máy</h2>
+      <div class="sub">Kế hoạch so thực tế (MWh) — ngày 16/06</div>
+      <div class="chartlegend"><span><span class="sw" style="background:#c3d2dd"></span>Kế hoạch</span><span><span class="sw" style="background:#178a8a"></span>Thực tế</span></div>
+      <div id="barchart"></div>
+    </div>
+    <div class="card">
+      <h2>Xu hướng sản lượng cụm — 7 ngày</h2>
+      <div class="sub">Tổng sản lượng cả cụm (MWh)</div>
+      <div id="linechart"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Sản lượng & doanh thu</h2>
+    <div class="sub">Kế hoạch, thực tế, sai lệch và doanh thu theo nhà máy</div>
+    <table>
+      <thead><tr><th>Nhà máy</th><th>Công suất</th><th>KH (MWh)</th><th>Thực tế (MWh)</th><th>Sai lệch</th><th>Doanh thu (triệu đ)</th></tr></thead>
+      <tbody>
+        <tr><td>Nậm Na 1</td><td>30 MW</td><td>600</td><td>588</td><td class="neg">−2,0%</td><td>646,8</td></tr>
+        <tr><td>Nậm Na 2</td><td>66 MW</td><td>1.300</td><td>1.272</td><td class="neg">−2,2%</td><td>1.399,2</td></tr>
+        <tr><td>Nậm Na 3</td><td>84 MW</td><td>1.700</td><td>1.664</td><td class="neg">−2,1%</td><td>1.830,4</td></tr>
+        <tr class="total"><td>Cụm Nậm Na</td><td>180 MW</td><td>3.600</td><td>3.524</td><td class="neg">−2,1%</td><td>3.876,4</td></tr>
+      </tbody>
+    </table>
+    <div class="foot">Sai lệch chủ yếu do điều độ giảm tải khung 14h–15h theo lệnh hệ thống.</div>
+  </div>
+
+  <div class="card">
+    <h2>Năng suất – hiệu suất vận hành</h2>
+    <div class="sub">Giờ chạy, độ khả dụng, hệ số công suất, suất tiêu hao nước, số lần khởi động</div>
+    <table>
+      <thead><tr><th>Nhà máy</th><th>Giờ chạy</th><th>Độ khả dụng</th><th>CF</th><th>Suất hao nước (m³/kWh)</th><th>Số lần KĐ/dừng</th></tr></thead>
+      <tbody>
+        <tr><td>Nậm Na 1</td><td>22,0 h</td><td>100%</td><td>81,7%</td><td>4,2</td><td>1</td></tr>
+        <tr><td>Nậm Na 2</td><td>23,0 h</td><td>95,8%</td><td>80,3%</td><td>3,8</td><td>2</td></tr>
+        <tr><td>Nậm Na 3</td><td>23,0 h</td><td>100%</td><td>82,5%</td><td>3,5</td><td>1</td></tr>
+        <tr class="total"><td>Cụm Nậm Na</td><td>—</td><td>98,6%</td><td>81,6%</td><td>3,7</td><td>4</td></tr>
+      </tbody>
+    </table>
+    <div class="foot">CF = sản lượng thực tế / (công suất × 24h). Suất hao nước phản ánh hiệu quả dùng nước; theo dõi để tối ưu điều tiết.</div>
+  </div>
+
+  <div class="card">
+    <h2>Đối soát PPA</h2>
+    <div class="sub">Sản lượng đo đếm (chính thức) ↔ ước lượng SCADA ↔ EVN xác nhận</div>
+    <table>
+      <thead><tr><th>Nhà máy</th><th>Đo đếm (MWh)</th><th>SCADA (MWh)</th><th>Chênh đo đếm / SCADA</th><th>EVN xác nhận</th><th>Trạng thái</th></tr></thead>
+      <tbody>
+        <tr><td>Nậm Na 1</td><td>588,0</td><td>586,2</td><td class="pos">+0,3%</td><td>588,0</td><td><span class="tag t-ok">Khớp</span></td></tr>
+        <tr><td>Nậm Na 2</td><td>1.272,0</td><td>1.269,5</td><td class="pos">+0,2%</td><td>1.272,0</td><td><span class="tag t-ok">Khớp</span></td></tr>
+        <tr><td>Nậm Na 3</td><td>1.664,0</td><td>1.661,0</td><td class="pos">+0,2%</td><td>1.664,0</td><td><span class="tag t-ok">Khớp</span></td></tr>
+        <tr class="total"><td>Cụm Nậm Na</td><td>3.524,0</td><td>3.516,7</td><td class="pos">+0,2%</td><td>3.524,0</td><td><span class="tag t-ok">Khớp</span></td></tr>
+      </tbody>
+    </table>
+    <div class="foot">Sản lượng chính thức để thanh toán PPA lấy từ <b>hệ đo đếm</b> (công tơ cấp chính xác cao); SCADA chỉ dùng đối chiếu, chênh lệch trong ngưỡng cho phép.</div>
+    <div class="src">
+      <span class="srcchip">Nguồn: Hệ đo đếm (công tơ)</span>
+      <span class="srcchip">SCADA / Data Pipeline</span>
+      <span class="srcchip">Hợp đồng PPA / EVN</span>
+      <span class="srcchip">Tự sinh từ luồng 7 → đẩy luồng 9 (báo cáo hợp nhất)</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PLANTS=[
+  {id:'NM1',cap:30,kh:600,tt:588},
+  {id:'NM2',cap:66,kh:1300,tt:1272},
+  {id:'NM3',cap:84,kh:1700,tt:1664},
+];
+function barChart(){
+  const W=540,H=250,pad={l:42,r:12,t:14,b:42},max=1800;
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b, gw=pw/PLANTS.length, bw=gw*0.26;
+  let g='',b='',lb='';
+  [0,600,1200,1800].forEach(v=>{const y=pad.t+ph-(v/max)*ph;
+    g+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="#e3e9ee"/><text x="${pad.l-6}" y="${y+3.5}" text-anchor="end" font-size="10" fill="#8a99a3">${v}</text>`;});
+  PLANTS.forEach((p,i)=>{
+    const cx=pad.l+gw*i+gw/2, khH=(p.kh/max)*ph, ttH=(p.tt/max)*ph;
+    b+=`<rect x="${cx-bw-3}" y="${pad.t+ph-khH}" width="${bw}" height="${khH}" fill="#c3d2dd" rx="3"/>`;
+    b+=`<rect x="${cx+3}" y="${pad.t+ph-ttH}" width="${bw}" height="${ttH}" fill="#178a8a" rx="3"/>`;
+    b+=`<text x="${cx+3+bw/2}" y="${pad.t+ph-ttH-5}" text-anchor="middle" font-size="10" font-weight="600" fill="#0e5e5e">${p.tt}</text>`;
+    lb+=`<text x="${cx}" y="${H-22}" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f2d3a">${p.id}</text>`;
+    lb+=`<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="9.5" fill="#8a99a3">${p.cap} MW</text>`;
+  });
+  document.getElementById('barchart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}${b}${lb}</svg>`;
+}
+function lineChart(){
+  const W=540,H=230,pad={l:46,r:14,t:14,b:34};
+  const data=[3480,3520,3610,3550,3490,3600,3524];
+  const labs=['10/06','11/06','12/06','13/06','14/06','15/06','16/06'];
+  const min=3400,max=3700, pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const X=i=>pad.l+(pw/(data.length-1))*i, Y=v=>pad.t+ph-((v-min)/(max-min))*ph;
+  let g='';[3400,3500,3600,3700].forEach(v=>{const y=Y(v);
+    g+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="#e3e9ee"/><text x="${pad.l-6}" y="${y+3.5}" text-anchor="end" font-size="10" fill="#8a99a3">${v}</text>`;});
+  const pts=data.map((v,i)=>`${X(i)},${Y(v)}`).join(' ');
+  const area=`${pad.l},${pad.t+ph} ${pts} ${X(data.length-1)},${pad.t+ph}`;
+  let dots='',xl='';
+  data.forEach((v,i)=>{ dots+=`<circle cx="${X(i)}" cy="${Y(v)}" r="3.4" fill="#fff" stroke="#2e7fc4" stroke-width="2"/>`;
+    xl+=`<text x="${X(i)}" y="${H-12}" text-anchor="middle" font-size="9.5" fill="#8a99a3">${labs[i]}</text>`;});
+  dots+=`<text x="${X(6)}" y="${Y(3524)-9}" text-anchor="middle" font-size="10" font-weight="600" fill="#2e7fc4">3.524</text>`;
+  document.getElementById('linechart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}<polygon points="${area}" fill="#2e7fc4" opacity="0.10"/><polyline points="${pts}" fill="none" stroke="#2e7fc4" stroke-width="2.5"/>${dots}${xl}</svg>`;
+}
+barChart(); lineChart();
+</script>
+</body>
+</html>

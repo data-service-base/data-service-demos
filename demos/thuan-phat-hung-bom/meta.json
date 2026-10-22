@@ -1,0 +1,22 @@
+{
+  "slug": "thuan-phat-hung-bom",
+  "title": "Thuận Phát Hưng — Quy trình tính giá BOM & duyệt dự toán",
+  "type": "proposal",
+  "industry": "Sản xuất",
+  "department": "Tài chính",
+  "description": "Quy trình tính giá theo BOM và duyệt dự toán trên Base.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Thuan_Phat_Hung_QTBOM/",
+  "source_repo": "https://github.com/tbinh-06/Thuan_Phat_Hung_QTBOM",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "BOM",
+    "dự toán",
+    "quy trình"
+  ]
+}

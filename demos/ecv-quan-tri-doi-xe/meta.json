@@ -1,0 +1,21 @@
+{
+  "slug": "ecv-quan-tri-doi-xe",
+  "title": "ECV — Quản trị đội xe",
+  "type": "dashboard",
+  "industry": "Xây dựng",
+  "department": "Vận hành",
+  "description": "Vận hành và bảo dưỡng đội xe văn phòng, xe dự án theo công trình.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Quan-Ly-Xe---ECV/",
+  "source_repo": "https://github.com/tbinh-06/Quan-Ly-Xe---ECV",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "đội xe",
+    "bảo dưỡng"
+  ]
+}

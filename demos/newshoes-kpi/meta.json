@@ -1,0 +1,21 @@
+{
+  "slug": "newshoes-kpi",
+  "title": "New Shoes Bình Phú — Báo cáo KPI",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "HR",
+  "description": "Điểm KPI công ty, phòng ban hụt chỉ tiêu và chi tiết theo nhân sự.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/KPI_NewShoes/",
+  "source_repo": "https://github.com/tbinh-06/KPI_NewShoes",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "KPI",
+    "giày da"
+  ]
+}

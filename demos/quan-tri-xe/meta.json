@@ -1,0 +1,22 @@
+{
+  "slug": "quan-tri-xe",
+  "title": "Báo cáo quản trị xe",
+  "type": "dashboard",
+  "industry": "Vận tải",
+  "department": "Vận hành",
+  "description": "Lịch điều xe, chi phí, doanh thu và hiệu quả từng xe theo tháng.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/BaoCaoXe/",
+  "source_repo": "https://github.com/tbinh-06/BaoCaoXe",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "đội xe",
+    "điều xe",
+    "chi phí xe"
+  ]
+}

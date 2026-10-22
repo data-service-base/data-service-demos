@@ -1,0 +1,21 @@
+{
+  "slug": "agentic-ai-openclaw",
+  "title": "Agentic AI System — OpenClaw",
+  "type": "deck",
+  "industry": "General",
+  "department": "All",
+  "description": "Giới thiệu Agentic AI: định nghĩa kỹ thuật, nguyên lý vận hành và cấu trúc 3 tầng.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/demo-AI/",
+  "source_repo": "https://github.com/tbinh-06/demo-AI",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "AI",
+    "agent"
+  ]
+}

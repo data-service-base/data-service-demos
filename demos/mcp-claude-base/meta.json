@@ -1,0 +1,22 @@
+{
+  "slug": "mcp-claude-base",
+  "title": "Cách vận hành MCP — Claude dựng hệ thống trên Base",
+  "type": "deck",
+  "industry": "General",
+  "department": "All",
+  "description": "Hướng dẫn dùng MCP để Claude dựng quy trình trên Base, ví dụ ngành cao su.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/MCP_Caosu/",
+  "source_repo": "https://github.com/tbinh-06/MCP_Caosu",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "MCP",
+    "Claude",
+    "AI"
+  ]
+}

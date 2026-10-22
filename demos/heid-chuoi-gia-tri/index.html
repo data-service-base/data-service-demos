@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Value chain – chuỗi giá trị HEID</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Literata:opsz,wght@7..72,500;7..72,600&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#EEF1F5; --surface:#FFFFFF; --ink:#16203A; --muted:#566074; --line:#D7DDE6; --soft:#F3F5F8;
+  --board:#FAFBFD; --dot:#DCE1E9;
+  --ctnd:#1E6B57; --mkt:#A35A0E; --kd:#1F4F9E; --kt:#6A3C83;
+  --io:#3E6A8A; --mar:#B4235A; --ext:#6B7385; --warn:#B42318; --ok:#1E6B57;
+  --serif:"Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --sans:"Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0B0F16; --surface:#151B26; --ink:#E4E8EF; --muted:#9AA4B5; --line:#2A3343; --soft:#1B2230;
+    --board:#10151F; --dot:#222B3A;
+    --ctnd:#5FC2A2; --mkt:#E6A458; --kd:#86AAF0; --kt:#C59EE3;
+    --io:#8DB4D3; --mar:#F27BAA; --ext:#9AA4B5; --warn:#F97066; --ok:#5FC2A2;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B0F16; --surface:#151B26; --ink:#E4E8EF; --muted:#9AA4B5; --line:#2A3343; --soft:#1B2230;
+  --board:#10151F; --dot:#222B3A;
+  --ctnd:#5FC2A2; --mkt:#E6A458; --kd:#86AAF0; --kt:#C59EE3;
+  --io:#8DB4D3; --mar:#F27BAA; --ext:#9AA4B5; --warn:#F97066; --ok:#5FC2A2;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--kd);outline-offset:2px;border-radius:6px}
+h1,h2,h3{margin:0;font-weight:600}
+h1,h2{font-family:var(--serif);letter-spacing:-.015em}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px}
+.wide{padding:0 24px}
+
+/* đầu trang + tab */
+.top{padding:28px 0 0}
+.brandrow{display:flex;align-items:center;gap:16px}
+.logo{flex:none;width:64px;height:64px;border-radius:10px;background:#fff;padding:4px}
+.top h1{font-size:clamp(1.6rem,2.6vw,2.2rem);line-height:1.15}
+.top p{margin:6px 0 0;color:var(--muted);font-size:.95rem}
+.tabs{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-top:16px;padding-top:env(safe-area-inset-top,0px)}
+.tabs .in{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding:0 24px}
+.tab{appearance:none;border:0;background:none;padding:14px 16px 12px;border-bottom:3px solid transparent;white-space:nowrap;color:var(--muted);font-weight:500;font-size:.95rem;display:inline-flex;align-items:center;gap:8px}
+.tab i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--c,var(--ink))}
+
+/* tab 1: luồng bàn giao */
+.vc{display:flex;overflow-x:auto;padding:18px 0 2px;scrollbar-width:none}
+.vcs{flex:1 0 190px;background:var(--ink);color:var(--surface);padding:14px 30px 14px 34px;margin-left:-10px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%,18px 50%)}
+.vcs:first-child{margin-left:0;padding-left:20px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%)}
+.vcs{appearance:none;border:0;text-align:left;cursor:pointer;font:inherit;transition:opacity .15s}
+.vcs.first{margin-left:0;padding-left:20px;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%)}
+.vcs.off{opacity:.4}
+.vcs.on{box-shadow:inset 0 -4px 0 #7FD1C9}
+.vcd{display:flex!important;flex-wrap:wrap;gap:4px;margin-top:8px!important;opacity:1!important}
+.vcd em{font-style:normal;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--dc) 35%,transparent);color:var(--surface);border:1px solid color-mix(in srgb,var(--dc) 70%,var(--surface))}
+.vchint{font-size:.84rem;color:var(--muted);margin:8px 0 0}
+.board.stagef .zone:not(.sin){opacity:.35}
+.board.stagef .qts li:not(.hit){opacity:.35}
+.qts li.hit{box-shadow:0 0 0 2px var(--zc);background:color-mix(in srgb,var(--zc) 22%,var(--surface))}
+.vcs b{display:block;font-family:var(--serif);font-weight:600;font-size:1rem;line-height:1.25}
+.vcs span{display:block;font-size:.8rem;opacity:.8;margin-top:4px}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:16px 0 4px}
+.ctrl .cl{font-size:.85rem;color:var(--muted);margin-right:2px}
+.flt{appearance:none;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px 6px 10px;font-size:.88rem}
+.flt svg{width:34px;height:10px;overflow:visible}
+.flt[aria-pressed="false"]{opacity:.4;text-decoration:line-through}
+.hint{font-size:.88rem;color:var(--muted);margin-left:auto}
+.cap{min-height:44px;display:flex;align-items:center;gap:12px;padding:6px 0;font-size:.95rem}
+.cap b{font-weight:600}
+.cap .clr{appearance:none;margin-left:auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:.82rem;color:var(--muted)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:6px 0 36px}
+.board{position:relative;display:grid;
+  grid-template-columns:minmax(230px,260px) repeat(3,minmax(300px,1fr)) minmax(240px,270px);
+  grid-template-areas:"ext ctnd mkt kd mar" "ext ctnd io kd mar" "ext kt kt kt mar";
+  column-gap:100px;row-gap:72px;padding:74px 30px 30px;min-width:1780px;
+  border:1px solid var(--line);border-radius:26px;background-color:var(--board);
+  background-image:radial-gradient(var(--dot) 1.1px,transparent 1.4px);background-size:24px 24px}
+.wires{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.wires.under{z-index:0}
+.wires.over{z-index:4}
+.w{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.under .w{opacity:.5}
+.w.k-sp{stroke-width:3.6}
+.w.k-tt{stroke-width:2}
+.w.k-tc{stroke-width:2;stroke-dasharray:6 5}
+.over .w{opacity:1;stroke-dasharray:12 7;animation:flow .9s linear infinite}
+.over .w.k-sp{stroke-width:5}
+.over .w.k-tt,.over .w.k-tc{stroke-width:3.2}
+.over .w.k-tc{stroke-dasharray:4 6}
+.board.act .under{opacity:.22}
+@keyframes flow{to{stroke-dashoffset:-38}}
+
+.zone{position:relative;z-index:1;display:flex;flex-direction:column;border-radius:22px;
+  background:color-mix(in srgb,var(--zc) 7%,var(--surface));
+  border:1.5px solid color-mix(in srgb,var(--zc) 55%,transparent);
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 10px 26px -14px color-mix(in srgb,var(--zc) 40%,transparent);transition:opacity .2s,box-shadow .2s}
+.zone.ghost{border-style:dashed}
+.z-ext{align-self:start}
+.zone.zf{box-shadow:0 0 0 3px color-mix(in srgb,var(--zc) 45%,transparent)}
+.board.zfocus .zone:not(.zin){opacity:.4}
+.zh{appearance:none;display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:none;padding:16px 18px 10px}
+.badge{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:var(--zc);color:var(--surface);font-weight:700;font-size:.9rem}
+.zh b{display:block;font-family:var(--serif);font-weight:600;font-size:1.12rem;line-height:1.25}
+.zh small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.zb{padding:2px 16px 16px;display:flex;flex-direction:column;gap:14px}
+.sec h4{margin:0 0 7px;font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.plist{display:flex;flex-direction:column;gap:7px}
+.pill{appearance:none;display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;font-size:.9rem;line-height:1.3;
+  transition:opacity .15s,box-shadow .15s}
+.pill.in{border-left:5px solid var(--pc)}
+.pill.out{border-right:5px solid var(--pc);flex-direction:column;align-items:flex-start;gap:2px}
+.pill .pl{font-weight:500}
+.pill .who{flex:none;font-size:.72rem;font-weight:600;color:var(--tc);white-space:nowrap}
+.pill.in .who{order:-1;min-width:0}
+.pill:hover{box-shadow:0 2px 10px -2px color-mix(in srgb,var(--pc) 45%,transparent)}
+.pill.hl{box-shadow:0 0 0 2px var(--pc),0 6px 16px -6px var(--pc)}
+.board.act .pill:not(.hl){opacity:.32}
+.pill.off{opacity:.28}
+.pill.pinned{background:color-mix(in srgb,var(--pc) 10%,var(--surface))}
+.z-kt .zb{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:20px}
+.qts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.qts li{display:flex;align-items:center;gap:7px;background:color-mix(in srgb,var(--zc) 11%,var(--surface));border-radius:8px;padding:5px 8px;font-size:.8rem;line-height:1.25;min-width:0}
+.qts li i{flex:none;display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--zc);color:var(--surface);font-style:normal;font-size:.68rem;font-weight:700}
+.qts li span{min-width:0}
+.qts li code{display:block;font-family:var(--sans);font-size:.68rem;color:var(--muted)}
+.z-io .qts{grid-template-columns:1fr}
+.segs{display:flex;flex-wrap:wrap;gap:6px}
+.segs span{font-size:.8rem;border:1px solid color-mix(in srgb,var(--zc) 45%,transparent);border-radius:999px;padding:3px 10px;background:var(--surface)}
+
+/* tab phòng */
+.dhead{display:flex;align-items:flex-start;gap:16px;padding:26px 0 6px}
+.dhead .badge{width:54px;height:54px;border-radius:16px;font-size:1rem;background:var(--c);color:var(--surface)}
+.dhead h2{font-size:clamp(1.5rem,2.4vw,2rem);line-height:1.2}
+.dhead p{margin:6px 0 0;color:var(--muted);max-width:76ch}
+.sh{font-family:var(--serif);font-size:1.25rem;margin:30px 0 4px}
+.shl{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.chain{display:flex;gap:0;overflow-x:auto;padding:4px 0 8px}
+.chev{flex:1 0 150px;min-width:150px;background:var(--c);color:var(--surface);padding:14px 26px 14px 30px;margin-left:-10px;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%,16px 50%)}
+.chev:first-child{margin-left:0;padding-left:18px;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,0 100%)}
+.chev:nth-child(even){background:color-mix(in srgb,var(--c) 82%,#000)}
+.chev b{display:block;font-size:.95rem;line-height:1.25}
+.chev span{display:block;font-size:.78rem;opacity:.85;margin-top:3px}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.iobox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.iobox h3{font-size:1rem;margin-bottom:10px}
+.grp{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px;padding:10px 0;border-top:1px solid var(--soft)}
+.grp:first-of-type{border-top:0;padding-top:0}
+.grp .from{display:flex;align-items:flex-start;gap:8px;font-weight:600;font-size:.9rem;color:var(--gc)}
+.grp .from::before{content:"";flex:none;width:12px;height:12px;border-radius:3px;background:var(--gc);margin-top:5px}
+.grp ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.grp li{font-size:.88rem;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--soft)}
+.grp li.k-tc{border-style:dashed}
+.grp li.k-sp{border-width:2px;border-color:var(--gc)}
+
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:12px;align-items:start}
+.have{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px}
+.hv{background:color-mix(in srgb,var(--ok) 8%,var(--surface));border:1.5px solid color-mix(in srgb,var(--ok) 50%,transparent);border-radius:16px;padding:16px 18px}
+.hv .tag{display:inline-block;font-size:.74rem;font-weight:700;color:var(--ok);border:1px solid currentColor;border-radius:999px;padding:1px 9px;margin-bottom:6px}
+.hv b{display:block;font-size:1.05rem}
+.hv p{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
+.note{margin:12px 0 0;padding:10px 14px;border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 7%,var(--surface));border-radius:0 10px 10px 0;font-size:.9rem}
+.rp{border:1px solid var(--line);border-left:5px solid var(--c);background:var(--surface);border-radius:12px}
+.rp>summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px}
+.rp>summary::-webkit-details-marker{display:none}
+.rp .rid{font-size:.76rem;font-weight:700;color:var(--c)}
+.rp .rn{display:block;font-weight:600;font-size:1rem;margin-top:1px}
+.rp .rq{grid-column:1;color:var(--muted);font-size:.9rem;font-family:var(--serif);font-style:italic}
+.rp .rm{grid-column:2;grid-row:1 / span 2;display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.rp .more{font-size:.8rem;color:var(--c);font-weight:500}
+.rp[open] .more{display:none}
+.rp[open]>summary{border-bottom:1px solid var(--line)}
+.rp .bd{padding:6px 16px 14px}
+.st{display:inline-flex;align-items:center;gap:.4em;font-weight:500}
+.st::before{content:"";width:.7em;height:.7em;border-radius:50%;border:1.5px solid currentColor}
+.st.ready{color:var(--ok)} .st.ready::before{background:currentColor}
+.st.partial{color:var(--mkt)} .st.partial::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.st.collect{color:var(--warn)}
+.ov{font-size:.74rem;font-weight:600;color:var(--mkt)}
+.kt{width:100%;border-collapse:collapse;font-size:.86rem}
+.kt th{text-align:left;font-weight:600;font-size:.76rem;color:var(--muted);padding:8px 10px 6px 0;border-bottom:1px solid var(--line)}
+.kt td{padding:7px 10px 7px 0;border-bottom:1px solid var(--soft);vertical-align:top}
+.kt td:first-child{font-weight:500;width:32%}
+.rs{font-size:.84rem;color:var(--muted);margin:10px 0 0}
+.rs b{color:var(--ink);font-weight:500}
+
+/* timeline */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.kpi small{display:block;font-size:.8rem;color:var(--muted)}
+.kpi b{display:block;font-family:var(--serif);font-size:1.45rem;line-height:1.2;margin-top:2px}
+.kpi span{font-size:.84rem;color:var(--muted)}
+.gantt{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px 0 14px;margin-top:18px;overflow-x:auto}
+.gt{display:grid;grid-template-columns:minmax(260px,1.4fr) repeat(4,minmax(170px,1fr));min-width:960px;position:relative}
+.mlist li{grid-template-columns:96px 1fr}
+.gt .hd.sub.pick{color:var(--brandtx);font-weight:700}
+.gt .hd.sub{font-size:.7rem;font-weight:500;padding:4px 2px}
+.gt .cell:not(.wk){border-left-style:dotted;border-left-color:color-mix(in srgb,var(--line) 60%,transparent)}
+.gt .cell.wk{border-left:1px solid var(--line)}
+.gt .hd{font-size:.78rem;font-weight:600;color:var(--muted);padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+.gt .hd b{display:block;color:var(--ink);font-size:.86rem}
+.gt .hd.now{color:var(--warn)}
+.gt .lab{padding:10px 16px;border-bottom:1px solid var(--soft);font-size:.9rem;font-weight:500;display:flex;flex-direction:column;justify-content:center}
+.gt .lab small{font-weight:400;color:var(--muted);font-size:.78rem}
+.gt .cell{border-bottom:1px solid var(--soft);border-left:1px dashed var(--line);position:relative}
+.bar{position:relative;z-index:1;margin:8px 4px;border-radius:9px;padding:6px 10px;font-size:.78rem;font-weight:600;color:#fff;align-self:center;line-height:1.25}
+.bar.base{background:var(--kd)} .bar.heid{background:var(--mkt)} .bar.both{background:var(--ok)}
+.ms{align-self:center;justify-self:center;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;font-weight:700;color:var(--warn);text-align:center;line-height:1.2}
+.ms::before{content:"";width:14px;height:14px;background:var(--warn);transform:rotate(45deg);border-radius:2px}
+.glegend{display:flex;flex-wrap:wrap;gap:16px;padding:12px 16px 0;font-size:.84rem;color:var(--muted)}
+.glegend span{display:inline-flex;align-items:center;gap:7px}
+.glegend i{width:22px;height:10px;border-radius:4px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 20px}
+.box h3{font-size:1.02rem;margin-bottom:8px}
+.box ol,.box ul{margin:0;padding-left:1.2em;font-size:.92rem}
+.box li{margin:6px 0}
+.mlist{list-style:none;padding:0!important}
+.mlist li{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:8px 0;border-top:1px solid var(--soft);margin:0!important}
+.mlist li:first-child{border-top:0}
+.mlist b{color:var(--warn)}
+footer{padding:26px 24px 48px;color:var(--muted);font-size:.82rem}
+@media (max-width:900px){
+  .io,.cols2{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grp{grid-template-columns:1fr}
+  .hint{margin-left:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media print{.tabs,.ctrl{display:none}.scroll{overflow:visible}body{background:#fff}}
+
+/* ===== Giao diện theo màu thương hiệu HEID (xanh đậm, xanh trời của logo) ===== */
+:root{--brand:#13438A;--brand2:#0A8ED0;--brandtx:#13438A;--paper:#F3F6FB;--edge:#DFE6F0;--lift:0 1px 2px rgba(15,37,71,.06),0 14px 30px -20px rgba(15,37,71,.35)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--brand:#0F2F63;--brand2:#0B6A9E;--brandtx:#8DB6F2;--paper:#0B0F16;--edge:#2A3343;--lift:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--brand:#0F2F63;--brand2:#0B6A9E;--brandtx:#8DB6F2;--paper:#0B0F16;--edge:#2A3343;--lift:0 1px 2px rgba(0,0,0,.4)}
+body{background:var(--paper)}
+.top{background:var(--brand);color:#fff;padding:24px 0 18px}
+.top .wrap{max-width:1880px}
+.top h1{color:#fff;font-size:clamp(1.7rem,2.8vw,2.35rem);letter-spacing:-.02em}
+.top p{color:#C7DAF3;font-size:.95rem;max-width:80ch}
+.brandrow{gap:22px;justify-content:center}
+.top h1{font-weight:700;letter-spacing:-.025em}
+h1,h2,h3,.vcs b,.zh b{font-weight:700}
+.logo{width:104px;height:104px;border-radius:18px;padding:7px;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+.tabs{background:var(--brand);border-bottom:0;margin-top:0;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+.tabs .in{max-width:1880px;margin:0 auto;gap:4px;padding:0 24px;justify-content:safe center}
+.tab{color:#C7DAF3;border-bottom:0;border-radius:12px 12px 0 0;padding:12px 18px 13px;font-size:.94rem}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--brandtx);font-weight:600}
+.tab i{box-shadow:0 0 0 1.5px rgba(255,255,255,.7)}
+
+/* chuỗi giai đoạn: xen kẽ hai màu xanh của logo */
+.vc{padding:22px 0 4px}
+.vcs{background:var(--brand);color:#fff;padding:16px 30px 16px 36px}
+.vcs:nth-child(even){background:var(--brand2)}
+.vcs b{font-size:1.02rem}
+.vcs span{color:rgba(255,255,255,.82)}
+.vcs.on{box-shadow:inset 0 -4px 0 #FFD166}
+.vcs.off{opacity:.45}
+.vcd em{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.vcd em::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--dc);box-shadow:0 0 0 1.5px #fff}
+.vchint{margin:10px 0 0}
+
+/* thanh điều khiển và chú thích */
+.ctrl{background:var(--surface);border:1px solid var(--edge);border-radius:14px;padding:10px 14px;margin-top:14px;box-shadow:var(--lift)}
+.flt{border-color:var(--edge)}
+.cap{padding:10px 2px 4px;color:var(--ink)}
+
+/* bảng sơ đồ và các khối phòng */
+.board{background-color:var(--surface);border-color:var(--edge);border-radius:20px;box-shadow:var(--lift);background-image:radial-gradient(color-mix(in srgb,var(--edge) 80%,transparent) 1px,transparent 1.3px)}
+.under .w{opacity:.4}
+.zone{background:var(--surface);border:1px solid var(--edge);border-top:4px solid var(--zc);border-radius:16px;box-shadow:var(--lift)}
+.zone.ghost{border-style:dashed;border-top-style:dashed;background:color-mix(in srgb,var(--zc) 4%,var(--surface))}
+.zh{padding:14px 16px 8px}
+.badge{width:40px;height:40px;border-radius:11px;font-size:.85rem}
+.zh b{font-size:1.08rem}
+.sec h4{color:var(--brandtx);font-size:.76rem;letter-spacing:.01em}
+.pill{border-color:var(--edge);border-radius:8px;padding:7px 11px}
+.qts li{background:color-mix(in srgb,var(--zc) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--zc) 16%,transparent)}
+
+/* tab phòng ban và timeline */
+.dhead{padding-top:30px}
+.dhead .badge{width:52px;height:52px;border-radius:14px}
+.sh{color:var(--brandtx)}
+.iobox,.box,.kpi,.gantt{border-color:var(--edge);border-radius:16px;box-shadow:var(--lift)}
+.hv{border-radius:16px}
+.rp{border-color:var(--edge);border-radius:12px;box-shadow:var(--lift)}
+.kpi b{color:var(--brandtx)}
+.gt .hd b{color:var(--brandtx)}
+.bar{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.74rem;padding:6px 8px}
+
+/* ===== Làm đẹp lần 2: thanh giai đoạn nhẹ, thanh công cụ gọn, sơ đồ thoáng ===== */
+:root{--st1:#E7EFFA;--st2:#D8E6F7;--sttx:#13438A;--stsub:#4A5F80;--chipbg:#FFFFFF;--chipbd:#C8D7EC;--chiptx:#23365A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--st1:#16233A;--st2:#1B2C48;--sttx:#CFE0F7;--stsub:#93A9C8;--chipbg:#0F1828;--chipbd:#2B3D5C;--chiptx:#CFE0F7}}
+:root[data-theme="dark"]{--st1:#16233A;--st2:#1B2C48;--sttx:#CFE0F7;--stsub:#93A9C8;--chipbg:#0F1828;--chipbd:#2B3D5C;--chiptx:#CFE0F7}
+.vc{padding:26px 0 4px}
+.vcs{background:var(--st1);color:var(--sttx);padding:18px 30px 18px 38px;transition:background .15s,color .15s}
+.vcs:nth-child(even){background:var(--st2)}
+.vcs b{font-size:1rem;letter-spacing:-.01em}
+.vcs span{color:var(--stsub)}
+.vcs:hover{filter:brightness(.97)}
+.vcd{gap:5px!important;margin-top:10px!important}
+.vcd em{background:var(--chipbg);border:1px solid var(--chipbd);color:var(--chiptx);font-size:.72rem;padding:2px 9px}
+.vcd em::before{box-shadow:none}
+.vcs.on{background:var(--brand);color:#fff;box-shadow:none}
+.vcs.on span{color:rgba(255,255,255,.85)}
+.vcs.on .vcd em{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);color:#fff}
+.vcs.off{opacity:.55}
+
+.ctrl{justify-content:space-between;gap:10px 18px;margin-top:18px;padding:10px 16px}
+.cgroup{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.legend2{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.84rem;color:var(--muted)}
+.legend2 span{display:inline-flex;align-items:center;gap:7px}
+.lg{display:inline-block;width:24px;height:15px;border-radius:5px;border:2px solid var(--brandtx);background:var(--surface)}
+.lg.dash{border-style:dashed;border-color:var(--muted)}
+.lg.wire{border:0;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--ctnd) 0 33%,var(--mkt) 33% 66%,var(--kd) 66%)}
+.cap{background:color-mix(in srgb,var(--brand2) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--brand2) 28%,transparent);border-radius:12px;padding:10px 14px;margin:12px 0 16px;min-height:0;font-size:.92rem}
+.cap .ci{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--brand2);color:#fff;font-weight:700;font-size:.78rem;font-style:normal}
+
+.board{background-image:none;background-color:color-mix(in srgb,var(--paper) 60%,var(--surface))}
+.under .w{opacity:.3}
+.w.k-tt,.w.k-tc{stroke-width:1.6}
+.zone{border-top-width:3px}
+.zh{background:color-mix(in srgb,var(--zc) 8%,var(--surface));border-radius:13px 13px 0 0;border-bottom:1px solid color-mix(in srgb,var(--zc) 16%,transparent);padding:14px 16px;margin-bottom:10px}
+.zone.ghost .zh{background:transparent}
+.zh b{font-size:1.04rem;letter-spacing:-.01em}
+.sec h4{font-size:.74rem;margin-bottom:8px}
+.pill{font-size:.86rem;padding:7px 10px;box-shadow:0 1px 0 rgba(15,37,71,.04)}
+.pill.in{border-left-width:3px}
+.pill.out{border-right-width:3px}
+.pill .who{font-size:.7rem}
+.qts li{font-size:.78rem;padding:5px 8px}
+.bar.one{overflow:visible;min-height:22px;margin:8px 6px}
+.bar.one::after{content:attr(data-l);position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);color:var(--ink);font-weight:700;white-space:nowrap}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brandrow"><img class="logo" alt="Logo HEID" width="64" height="64" src="data:image/png;base64,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"><div>
+  <h1>Value chain – chuỗi giá trị HEID</h1></div></div>
+</div></header>
+<nav class="tabs" aria-label="Các tab"><div class="in" id="tabs" role="tablist"></div></nav>
+
+<!-- Tab 1 -->
+<section class="panel" id="p-all" role="tabpanel" aria-labelledby="t-all"><div class="wide">
+  <div class="vc" id="vc" aria-label="Chuỗi giá trị tổng quan"></div>
+    <div class="ctrl" id="ctrl"><div class="cgroup">
+    <span class="cl">Loại luồng</span>
+    <button class="flt" type="button" data-k="sp" aria-pressed="true"><svg viewBox="0 0 34 10"><line x1="1" y1="5" x2="33" y2="5" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/></svg>Sản phẩm</button>
+    <button class="flt" type="button" data-k="tt" aria-pressed="true"><svg viewBox="0 0 34 10"><line x1="1" y1="5" x2="33" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Thông tin, yêu cầu</button>
+    <button class="flt" type="button" data-k="tc" aria-pressed="true"><svg viewBox="0 0 34 10"><line x1="1" y1="5" x2="33" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="6 5"/></svg>Tài chính, chứng từ</button>
+    </div>
+    <div class="legend2"><span><i class="lg"></i>Phòng ban HEID</span><span><i class="lg dash"></i>Bên ngoài, phòng phối hợp</span><span><i class="lg wire"></i>Dây mang màu bên giao</span></div>
+  </div>
+  <div class="cap"><span class="ci" aria-hidden="true">i</span><span id="cap"></span><button class="clr" type="button" id="clr" hidden>Bỏ chọn</button></div>
+  <div class="scroll"><div class="board" id="board">
+    <svg class="wires under" id="wu" aria-hidden="true"></svg>
+    <svg class="wires over" id="wo" aria-hidden="true"></svg>
+  </div></div>
+</div></section>
+
+<div id="dpanels"></div>
+
+<!-- Tab timeline -->
+<section class="panel" id="p-tl" role="tabpanel" aria-labelledby="t-tl" hidden><div class="wrap">
+  <div class="dhead"><div><h2>Lịch khảo sát nhu cầu báo cáo các phòng</h2></div></div>
+  <div class="gantt"><div class="gt" id="gantt"></div>
+  </div>
+  <div class="cols2">
+    <div class="box"><h3>Các mốc chính</h3><ul class="mlist" id="mlist"></ul></div>
+    <div class="box"><h3>Mỗi phòng cần chuẩn bị</h3><ol>
+      <li>Cử một đầu mối trả lời khảo sát và một người nắm dữ liệu.</li>
+      <li>Điền form khảo sát (khoảng 20–30 phút), ưu tiên dán link các file báo cáo đang dùng.</li>
+      <li>Dành thời gian cho buổi khảo sát với Base theo lịch của phòng.</li>
+      <li>Xem và góp ý demo báo cáo của phòng trong tuần 2–6/11.</li>
+    </ol>
+    <h3 style="margin-top:16px">Cần HEID chốt trong tuần này</h3><ol>
+      <li>Người đầu mối của 4 phòng.</li>
+      <li>Xác nhận lịch khảo sát đề xuất: Thứ Ba và Thứ Năm của tuần 1 và tuần 2 (20, 22, 27, 29/10).</li>
+      <li>Thứ tự 4 phòng (đề xuất: Ban PT CT&amp;ND, P. KD, P. MKT-TT, P. KT-TV).</li>
+    </ol></div>
+  </div>
+</div></section>
+
+
+
+<script>
+const RPT = {
+ctnd:[
+{id:"CTND-R1",n:"Tiến độ sản xuất nội dung theo đầu sách",q:"Bao nhiêu đầu sách đang ở bước nào, cuốn nào đang trễ và trễ ở khâu nào?",aud:"Trưởng ban, PTGĐ phụ trách nội dung",fr:"Tuần",st:"partial",src:"Base Service (A1-06/07/08), Excel KH SXND",k:[["Số đầu sách theo bước hiện tại","Đếm đầu sách theo bước đang xử lý trên Service","Bộ sách, môn, lớp, loại SP"],["Tỷ lệ đúng tiến độ","Mốc hoàn thành đúng hạn / tổng mốc đến hạn","Bước, BTV phụ trách, tháng"],["Số ngày trễ bình quân","Ngày hoàn thành thực tế − ngày kế hoạch, chỉ tính mốc trễ","Bước, đầu sách"],["Thời gian chu kỳ theo bước","Thời gian trung bình từ nhận việc đến hoàn thành mỗi bước","Bước, loại SP"],["Số vòng biên tập, đọc duyệt","Số lần phiếu bị trả lại hoặc lặp vòng trên một chương","Đầu sách, tác giả"]]},
+{id:"CTND-R2",n:"Sản lượng nội dung số",q:"Kho học liệu số đang có bao nhiêu, kỳ này làm thêm được bao nhiêu so với kế hoạch?",aud:"Trưởng ban, P. CN&GP",fr:"Tháng",st:"partial",src:"Hoclieu.vn, GlobalSpeak, Base",k:[["Tổng nội dung trên hệ thống","Đếm câu hỏi, bài học, học liệu đang xuất bản","Môn, lớp, mức độ khó, sản phẩm"],["Sản lượng mới so với kế hoạch","Nội dung số hóa trong kỳ / kế hoạch kỳ","Tháng, nhóm sản xuất"],["Tỷ lệ lỗi nội dung số","Phản hồi lỗi nội dung / 1.000 nội dung","Sản phẩm, môn"]]},
+{id:"CTND-R3",n:"Danh mục đề tài, hợp đồng và bản quyền",q:"Đề tài nào đã duyệt nhưng chưa triển khai; hợp đồng, bản quyền nào sắp hết hạn?",aud:"Trưởng ban, bộ phận pháp lý xuất bản",fr:"Tháng",st:"partial",src:"Base (A1-03, A1-04), Excel",k:[["Đề tài đăng ký, được duyệt, đã xuất bản","Đếm theo trạng thái trong năm","Năm, bộ sách, loại SP"],["Tỷ lệ đề tài ra sách","Đề tài đã xuất bản / đề tài được duyệt","Năm, môn"],["HĐ tác giả, CTV sắp hết hạn","Số HĐ hết hạn trong 90 ngày tới","Loại HĐ, đầu sách"],["Tài nguyên bản quyền sắp hết hạn","Hình ảnh, ngữ liệu có thời hạn khai thác dưới 90 ngày","Đơn vị cấp quyền"]]},
+{id:"CTND-R4",n:"Đội ngũ tác giả và cộng tác viên",q:"Mạng lưới cộng tác có đủ năng lực không, ai làm đúng hạn, chi phí cộng tác mỗi đầu sách là bao nhiêu?",aud:"Trưởng ban",fr:"Quý",st:"partial",src:"Base (A1-03), P. KT-TV (nhuận bút)",k:[["Tác giả, CTV, chuyên gia đang hoạt động","Có ít nhất 1 HĐ hiệu lực trong kỳ","Vai trò, môn"],["Tỷ lệ nghiệm thu đúng hạn","HĐ nghiệm thu đúng hạn / HĐ đến hạn","Cộng tác viên, đầu sách"],["Chi phí nhuận bút, thù lao / đầu sách","Tổng nhuận bút và thù lao phân bổ theo đầu sách","Loại SP, bộ sách"]]},
+{id:"CTND-R5",n:"Chất lượng học thuật và thẩm định",q:"Sản phẩm có đạt chất lượng ngay từ lần đầu không?",aud:"Trưởng ban, TGĐ",fr:"Theo đợt",st:"partial",src:"Base (A1-10, A1-11), sổ đọc đính chính của QL In",k:[["Tỷ lệ thông qua thẩm định lần 1","SGK được duyệt không phải sửa lớn / SGK nộp thẩm định","Đợt thẩm định, môn"],["Tỷ lệ tiếp thu góp ý","Ý kiến đã tiếp thu / tổng ý kiến HĐTĐ và địa phương","Đầu sách, nguồn góp ý"],["Lỗi đính chính sau in","Số lỗi trong sổ đọc đính chính / 100 trang","Đầu sách, BTV"]]},
+{id:"CTND-R6",n:"Hành vi và phản hồi người dùng học liệu số",q:"Học liệu số có được dùng thật không; nội dung nào được dùng nhiều, phần nào bị bỏ qua?",aud:"Trưởng ban, nhóm sản phẩm số",fr:"Tuần",st:"ready",src:"Hoclieu.vn (Sao Khuê), GlobalSpeak (Bee), kênh CSKH",k:[["DAU, WAU, MAU","Tài khoản có ít nhất 1 phiên trong 1, 7, 30 ngày","Sản phẩm, tỉnh, vai trò HS, GV, PH"],["Thời lượng dùng trung bình mỗi phiên","Tổng thời lượng / số phiên","Sản phẩm, nền tảng web, app"],["Tỷ lệ giữ chân, rời bỏ","Người dùng quay lại sau N ngày / người dùng mới cùng kỳ","Tháng tham gia, sản phẩm"],["Tỷ lệ tự học so với học do giao bài","Phiên tự học / tổng phiên của học sinh","Tỉnh, trường, lớp"],["Tỷ lệ chọn phương án nhiễu","Lượt chọn sai / lượt trả lời mỗi câu hỏi","Câu hỏi, kỹ năng, Test Bank, OLTM, GlobalSpeak"],["Phản hồi theo nhóm vấn đề","Đếm phản hồi: hướng dẫn, nội dung, kỹ thuật","Tuần, sản phẩm"]]},
+{id:"CTND-R7",n:"Tập huấn và đào tạo sử dụng sản phẩm",q:"Tập huấn có tới đúng người và tạo ra việc dùng sản phẩm không?",aud:"Trưởng ban, P. KD",fr:"Theo đợt",st:"partial",src:"Base (A1-09), phiếu khảo sát, Hoclieu.vn",k:[["Số buổi, số GV được tập huấn","Đếm theo đợt","Tỉnh, bộ sách"],["Điểm hài lòng sau tập huấn","Điểm trung bình phiếu khảo sát, thang 5","Chuyên gia, đợt"],["Tỷ lệ kích hoạt sau tập huấn","GV kích hoạt tài khoản trong 30 ngày sau buổi / GV tham dự","Tỉnh, sản phẩm"]]}
+],
+mkt:[
+{id:"MKT-R1",n:"Hiệu quả truyền thông số đa kênh",q:"Kênh nào, nội dung nào đang thu hút được sự chú ý với chi phí hợp lý?",aud:"Trưởng phòng MKT",fr:"Tuần",st:"collect",src:"Meta Business Suite, TikTok Analytics, YouTube Studio, Zalo OA, GA4",k:[["Lượt tiếp cận và hiển thị","Theo định nghĩa của từng nền tảng","Kênh, SP, loại nội dung, chiến dịch, tháng"],["Tỷ lệ tương tác","Tương tác / Reach (hoặc / lượt xem)","Kênh, loại nội dung"],["Lượt click về website, landing page","Link clicks","Kênh, chiến dịch"],["Tăng trưởng người theo dõi ròng","Theo dõi mới − hủy theo dõi","Kênh, tháng"],["Nội dung hiệu quả nhất","Xếp hạng theo tương tác / reach, lượt xem","Kênh, SP"]]},
+{id:"MKT-R2",n:"Phễu lead và đóng góp cho kinh doanh",q:"Marketing tạo ra bao nhiêu cơ hội bán hàng thật, lead đang kẹt ở đâu?",aud:"Trưởng phòng MKT, Trưởng phòng KD",fr:"Tuần",st:"collect",src:"Form, Lead Ads, landing page; trạng thái lead từ P. KD",k:[["Số đăng ký, lead theo nguồn","Đếm theo nguồn: quảng cáo, organic, sự kiện, website","Nguồn, SP, chiến dịch"],["Tỷ lệ lead hợp lệ","Lead hợp lệ chuyển KD / tổng lead","Nguồn, chiến dịch"],["Tỷ lệ chuyển đổi theo giai đoạn","Đăng ký → Lead → Khách hàng","Nguồn, SP, tháng"],["Lead tồn đọng","Lead chưa xử lý quá N ngày","Trạng thái, NV KD"],["Doanh thu từ lead Marketing","Doanh thu của KH có nguồn là lead MKT","Kênh, SP"]]},
+{id:"MKT-R3",n:"Ngân sách và hiệu quả chi phí",q:"Mỗi đồng chi cho marketing mang về bao nhiêu?",aud:"Trưởng phòng MKT, BLĐ, P. KT-TV",fr:"Tháng",st:"collect",src:"Nền tảng quảng cáo, Base (đề nghị thanh toán), P. KT-TV",k:[["Thực chi so với ngân sách","Thực chi / ngân sách","Kênh, chiến dịch, tháng"],["Chi phí trên mỗi lead (CPL)","Chi phí quảng cáo / số lead","Nguồn, chiến dịch"],["Chi phí trên mỗi tài khoản trả phí","Chi phí phễu digital / tài khoản mua gói qua phễu","Sản phẩm, kênh in-app, web"],["ROAS","Doanh thu bán lẻ online quy cho quảng cáo / chi phí quảng cáo","Chiến dịch"]]},
+{id:"MKT-R4",n:"Hiệu quả sự kiện",q:"Sự kiện nào đáng tổ chức tiếp?",aud:"Trưởng phòng MKT, P. KD",fr:"Theo sự kiện",st:"partial",src:"Base (C4-03), phiếu đăng ký",k:[["Người tham dự so với mục tiêu","Tham dự thực tế / đăng ký / mục tiêu","Sự kiện, tỉnh"],["Chi phí trên mỗi người tham dự","Tổng chi phí sự kiện / số người tham dự","Loại sự kiện"],["Lead và đơn hàng sau sự kiện","Lead, đơn hàng phát sinh trong 60 ngày từ người tham dự","Sự kiện"]]},
+{id:"MKT-R5",n:"Năng suất sản xuất nội dung truyền thông",q:"Đội MKT đáp ứng yêu cầu của các phòng nhanh tới đâu?",aud:"Trưởng phòng MKT",fr:"Tháng",st:"ready",src:"Base Service (C4-02)",k:[["Yêu cầu nhận, hoàn thành","Đếm phiếu theo trạng thái","Phòng yêu cầu, loại sản phẩm TT"],["Thời gian xử lý trung bình","Ngày hoàn thành − ngày tiếp nhận","Loại SP, người thực hiện"],["Tỷ lệ đúng hạn","Phiếu hoàn thành đúng hạn / phiếu đến hạn","Tháng"],["Số vòng chỉnh sửa","Số lần phiếu bị trả lại","Phòng yêu cầu"]]}
+],
+kd:[
+{id:"KD-R1",n:"Doanh thu và sản lượng sách giấy so với kế hoạch",q:"Đang bán được bao nhiêu, ở đâu, so với kế hoạch thế nào?",aud:"Trưởng phòng KD, PTGĐ, TGĐ",fr:"Tuần",st:"ready",src:"ERP (VsERP), chỉ tiêu kế hoạch của P. KD",k:[["Sản lượng bán","Số bản xuất bán − trả lại","Khu vực, tỉnh, kênh, đại lý, nhóm sách, đầu sách"],["Doanh số theo giá bìa","Σ số lượng × giá bìa","Như trên"],["Doanh thu thuần","Doanh số giá bìa − chiết khấu − giảm trừ","Kênh, đại lý"],["% hoàn thành kế hoạch","Thực hiện lũy kế / kế hoạch năm hoặc niên học","Khu vực, tỉnh, nhóm sách"],["Tăng trưởng cùng kỳ","(Kỳ này − cùng kỳ năm trước) / cùng kỳ","Tỉnh, nhóm sách"]]},
+{id:"KD-R2",n:"Kinh doanh sản phẩm số",q:"Bán được bao nhiêu tài khoản, qua kênh nào; kích hoạt rồi có mua tiếp không?",aud:"Trưởng phòng KD, nhóm sản phẩm số",fr:"Tuần",st:"partial",src:"Hoclieu.vn (Sao Khuê), GlobalSpeak (Bee), chỉ tiêu kế hoạch",k:[["Tài khoản kích hoạt, đã bán, tặng – khuyến mại","Đếm theo hình thức sở hữu gói","Gói, tỉnh, đại lý (QIG, VTS, VNPT), trường"],["Doanh thu sản phẩm số","Σ giá trị đơn hàng hoàn thành","Kênh in-app, web, B2B; gói"],["Tỷ lệ chuyển đổi kích hoạt → mua gói","Tài khoản mua gói / tài khoản đã kích hoạt","Sản phẩm, tháng"],["Tỷ trọng bán lẻ, bán buôn","Tài khoản bán lẻ so với B2B","Sản phẩm, tỉnh"],["Tỷ lệ gia hạn","Gói gia hạn / gói hết hạn trong kỳ","Gói"]]},
+{id:"KD-R3",n:"Độ phủ thị trường và hiệu quả đại lý",q:"Đang có mặt ở đâu, đại lý nào làm tốt, tỉnh nào còn dư địa?",aud:"Trưởng phòng KD, PTGĐ",fr:"Tháng",st:"partial",src:"ERP, số liệu học sinh, hợp đồng đại lý",k:[["Độ phủ (thị phần ước tính)","Số bản bán / số học sinh của khối lớp trên địa bàn","Tỉnh, môn, lớp"],["Doanh số và tăng trưởng theo đại lý","Doanh thu thuần của đại lý, so cùng kỳ","Đại lý, khu vực"],["Tỷ lệ thực hiện cam kết HĐ","Sản lượng thực tế / sản lượng cam kết","Đại lý"],["Đại lý mới, ngừng hợp tác","Đếm theo kỳ","Khu vực"]]},
+{id:"KD-R4",n:"Đơn hàng, cung ứng và đổi trả",q:"Đơn có được giao đủ, đúng hạn không; hàng trả về bao nhiêu và vì sao?",aud:"Trưởng phòng KD, P. QL In – KV",fr:"Tuần",st:"ready",src:"ERP, Base (B1-08, B1-09)",k:[["Số đơn, giá trị đơn","Đếm và Σ theo trạng thái","Kênh, đại lý, tuần"],["Tỷ lệ giao đủ, đúng hạn (OTIF)","Đơn giao đủ số lượng và đúng hẹn / tổng đơn","Kho, khu vực"],["Thời gian xử lý đơn","Ngày xuất kho − ngày nhận đơn","Kênh"],["Tỷ lệ đổi trả","Giá trị đổi và trả / doanh số","Đầu sách, đại lý, lý do"]]},
+{id:"KD-R5",n:"Dự báo, đặt in và tồn kho",q:"Lần in vừa rồi có sát nhu cầu không, tồn kho nào cần xả?",aud:"Trưởng phòng KD, P. QL In – KV, P. KT-TV",fr:"Theo đợt in",st:"partial",src:"ERP (kho), Base (B1-05, B1-10)",k:[["Độ chính xác dự báo","1 − |bán thực tế − dự báo| / dự báo","Đầu sách, niên học"],["Tồn kho theo tuổi tồn","Số lượng, giá trị tồn theo 0–6, 6–12, trên 12 tháng","Kho, nhóm sách"],["Vòng quay tồn kho","Giá vốn hàng bán / tồn kho bình quân","Nhóm sách"],["Tỷ lệ xả hàng, khuyến mãi","Giá trị bán khuyến mãi, xả / doanh số","Đầu sách"]]},
+{id:"KD-R6",n:"Hoạt động tiếp cận và tập huấn",q:"Thời gian của đội sale đang đổ vào đâu và có ra đơn không?",aud:"Trưởng phòng KD",fr:"Tháng",st:"partial",src:"Base (B1-04), ERP",k:[["Buổi giới thiệu, tập huấn theo tầng","Đếm theo Sở, Phòng, trường","Tỉnh, NV KD, bộ sách"],["Số GV, trường được tiếp cận","Đếm không trùng","Tỉnh"],["Tỷ lệ chuyển đổi tập huấn → đơn hàng","Trường có đơn trong niên học / trường đã tập huấn","Tỉnh, NV KD"],["Chi phí tiếp cận trên mỗi đơn","Chi phí tập huấn, hội nghị / số đơn phát sinh","Khu vực"]]},
+{id:"KD-R7",n:"Chăm sóc khách hàng và khiếu nại",q:"Khách đang phàn nàn điều gì và được xử lý nhanh tới đâu?",aud:"Trưởng phòng KD, Ban PT CT&ND",fr:"Tháng",st:"partial",src:"Base (B1-11), kênh CSKH",k:[["Phản hồi, khiếu nại theo nhóm vấn đề","Đếm theo phân loại","Sản phẩm, tỉnh, kênh"],["Thời gian xử lý trung bình","Ngày đóng − ngày tiếp nhận","Nhóm vấn đề"],["Tỷ lệ phản hồi chuyển cải tiến SP","Phản hồi chuyển Ban PT CT&ND / phản hồi về nội dung","Đầu sách"]]}
+],
+kt:[
+{id:"KT-R1",n:"Kết quả kinh doanh quản trị theo mảng",q:"Mảng nào đang thực sự sinh lời?",aud:"TGĐ, Kế toán trưởng",fr:"Tháng",st:"partial",src:"ERP (kế toán), doanh thu sản phẩm số",k:[["Doanh thu, giá vốn, lãi gộp","Theo sổ kế toán quản trị","Mảng giấy, số, lai; kênh; tháng"],["Biên lợi nhuận gộp","Lãi gộp / doanh thu thuần","Mảng, bộ sách"],["Chi phí bán hàng, quản lý trên doanh thu","Tỷ trọng chi phí / doanh thu","Phòng ban, khoản mục"],["Lợi nhuận trước thuế so với kế hoạch","Thực hiện / kế hoạch","Tháng, quý"]]},
+{id:"KT-R2",n:"Lợi nhuận theo đầu sách",q:"Đầu sách nào lời, đầu nào lỗ; cần bán bao nhiêu bản để hòa vốn?",aud:"TGĐ, P. KD, Ban PT CT&ND",fr:"Niên học",st:"collect",src:"ERP, quyết toán in, chi phí nhuận bút (Base, kế toán)",k:[["Giá vốn đơn vị","(In + vật tư + nhuận bút, biên tập, thiết kế phân bổ) / số bản","Đầu sách, lần in"],["Biên lợi nhuận theo đầu sách","(Doanh thu thuần − giá vốn − chi phí bán hàng trực tiếp) / doanh thu thuần","Đầu sách, bộ sách"],["Sản lượng hòa vốn","Chi phí cố định của đầu sách / lãi gộp đơn vị","Đầu sách mới"],["Chi phí phát triển nội dung / đầu sách","Tổng chi phí SXND phân bổ","Loại SP"]]},
+{id:"KT-R3",n:"Công nợ phải thu",q:"Tiền đang nằm ở đâu và ai đang trả chậm?",aud:"Kế toán trưởng, P. KD",fr:"Tuần",st:"ready",src:"ERP, Base (C3-01)",k:[["Dư nợ phải thu","Σ công nợ còn lại","Đại lý, khu vực, NV KD"],["Tuổi nợ","Dư nợ chia 0–30, 31–60, 61–90, trên 90 ngày","Đại lý"],["Số ngày thu tiền bình quân (DSO)","Phải thu bình quân / doanh thu × số ngày","Kênh"],["Tỷ lệ nợ quá hạn","Dư nợ quá hạn / tổng dư nợ","Khu vực"],["Thu hồi so với kế hoạch","Tiền thu / kế hoạch thu","Tháng"]]},
+{id:"KT-R4",n:"Dòng tiền và công nợ phải trả",q:"Có đủ tiền trả nhà in và tác giả vào mùa in không?",aud:"Kế toán trưởng, TGĐ",fr:"Tuần",st:"partial",src:"ERP, Base (C3-02, C3-03)",k:[["Dòng tiền vào, ra, thuần","Theo sổ quỹ, ngân hàng","Tuần, tháng, hoạt động"],["Dự báo dòng tiền","Thu dự kiến (nợ đến hạn) − chi dự kiến (phải trả đến hạn)","13 tuần tới"],["Dư nợ phải trả, DPO","Phải trả bình quân / giá vốn × số ngày","Nhà in, NCC, tác giả"]]},
+{id:"KT-R5",n:"Ngân sách và kiểm soát chi phí",q:"Phòng nào đang chi vượt, khoản tạm ứng nào chưa hoàn?",aud:"Kế toán trưởng, trưởng các phòng",fr:"Tháng",st:"partial",src:"Base (C3-03), ERP",k:[["Thực chi so với ngân sách","Thực chi / ngân sách","Phòng ban, khoản mục, dự án"],["Tạm ứng chưa hoàn, tuổi tạm ứng","Σ tạm ứng mở, chia theo số ngày","Người tạm ứng, phòng"],["Thời gian xử lý đề nghị thanh toán","Ngày chi − ngày đề nghị","Phòng đề nghị, loại chi"]]},
+{id:"KT-R6",n:"Tồn kho dưới góc độ tài chính",q:"Bao nhiêu tiền đang nằm trong kho và rủi ro mất giá ra sao?",aud:"Kế toán trưởng, P. KD",fr:"Tháng",st:"ready",src:"ERP (kho, kế toán)",k:[["Giá trị tồn kho","Σ số lượng × giá vốn","Kho, nhóm sách, tuổi tồn"],["Vòng quay hàng tồn kho","Giá vốn / tồn kho bình quân","Nhóm sách"],["Dự phòng giảm giá hàng tồn","Theo chính sách trích lập","Đầu sách chậm luân chuyển"]]}
+]};
+
+const C = {ext:'--ext', ctnd:'--ctnd', mkt:'--mkt', kd:'--kd', kt:'--kt', io:'--io', mar:'--mar'};
+const ORDER = ['ext','ctnd','mkt','kd','io','kt','mar'];
+const MAIN = ['ctnd','mkt','kd','kt'];
+const Z = {
+  ext:{area:'ext', badge:'ĐH', name:'Định hướng đầu vào', short:'Định hướng', sub:'Ban lãnh đạo HEID, Bộ GD, NXB', ghost:true},
+  ctnd:{area:'ctnd', badge:'A1', name:'Ban PT Chương trình & Nội dung', short:'Ban PT CT&ND', sub:'13 quy trình',
+    role:'Đầu nguồn của chuỗi: biến chủ trương và chương trình giáo dục thành danh mục sản phẩm, bản thảo tinh và học liệu số sẵn sàng phát hành.',
+    steps:[['Định hướng CT&SP','A1-01'],['Thiết kế CT&SP','A1-02'],['Đề tài, bản quyền','A1-04'],['Kế hoạch SXND','A1-05'],['Đội ngũ cộng tác','A1-03'],['Sản xuất nội dung','A1-06/07/08'],['Thực nghiệm, thẩm định','A1-10/11'],['Tập huấn, cải tiến','A1-09']]},
+  mkt:{area:'mkt', badge:'C4', name:'Phòng Marketing – Truyền thông', short:'P. MKT-TT', sub:'5 quy trình',
+    role:'Tạo nhu cầu và cơ hội bán hàng: tài liệu bán hàng, truyền thông đa kênh, sự kiện. Năng lực marketing còn mờ nhạt, chủ yếu phục vụ trực tiếp đội kinh doanh.',
+    steps:[['Kế hoạch Marketing','C4-01'],['SX nội dung truyền thông','C4-02'],['Truyền thông, thu lead','C4-01'],['Sự kiện bên ngoài','C4-03'],['Đo lường, báo cáo','C4-01']]},
+  kd:{area:'kd', badge:'B1', name:'Phòng Kinh doanh', short:'P. KD', sub:'12 quy trình',
+    role:'Biến sản phẩm thành doanh thu: kế hoạch và chính sách bán, tập huấn theo tầng (Sở, Phòng, trường, GV), hợp đồng đại lý, đặt in, đơn hàng và sau bán.',
+    steps:[['Kế hoạch KD','B1-01'],['Chính sách KD','B1-02'],['Tiếp cận, tập huấn','B1-04'],['Ký HĐ đại lý','B1-03'],['Đặt in, mua','B1-05'],['Xử lý đơn hàng','B1-06'],['Sau bán hàng','B1-07 → 10'],['CSKH, xã hội','B1-11/12']]},
+  io:{area:'io', badge:'IN', name:'P. TKMT và P. QL In – Kho vận', short:'In – Kho vận', sub:'Phòng phối hợp', ghost:true,
+    steps:[['Thiết kế mỹ thuật, chế bản','P. TKMT'],['Triển khai in, kiểm soát chất lượng','P. QL In-KV'],['Nhập kho, xuất kho','P. QL In-KV']]},
+  kt:{area:'kt', badge:'C3', name:'Phòng Kế toán – Tài vụ', short:'P. KT-TV', sub:'4 quy trình',
+    role:'Giữ sổ cái của chuỗi: kế hoạch tài chính, tính giá bán, kiểm soát chi, ghi nhận doanh thu và giá vốn, thu hồi công nợ.',
+    steps:[['KH tài chính',''],['Tính giá bán','C3-04'],['Thanh toán, tạm ứng','C3-03'],['Giá thành, giá vốn',''],['Ghi nhận doanh thu',''],['Công nợ phải thu','C3-01'],['Công nợ phải trả','C3-02'],['BCTC, quản trị','']]},
+  mar:{area:'mar', badge:'KH', icon:'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.6c2.6.2 4.4 2 4.9 4.9"/></svg>', name:'Khách hàng', short:'Khách hàng', sub:'', ghost:true, segs:['Sở, Phòng GD','Trường, giáo viên','Đại lý, điểm bán','HS, PH dùng học liệu số']}
+};
+// t: nhãn ngắn trên sơ đồ, full: diễn giải đầy đủ khi rê chuột
+const I = [
+  {id:'i1', t:'Chủ trương chiến lược SP', full:'Chủ trương chiến lược sản phẩm của công ty', f:['ext'], to:['ctnd'], k:'tt'},
+  {id:'i2', t:'Chương trình GDPT, chính sách GD', full:'Chương trình GDPT, chuẩn đầu ra, chính sách giáo dục mới', f:['ext'], to:['ctnd'], k:'tt'},
+  {id:'i3', t:'Chính sách vĩ mô, chỉ tiêu năm', full:'Chính sách vĩ mô (Bộ, NXB, công ty), chỉ tiêu kế hoạch năm mới', f:['ext'], to:['kd'], k:'tt'},
+  {id:'i4', t:'Danh mục đặt hàng, góp ý SP', full:'Danh mục đặt hàng, góp ý sản phẩm', f:['kd'], to:['ctnd'], k:'tt'},
+  {id:'i5', t:'Hồ sơ SP, tài liệu giới thiệu', full:'Hồ sơ sản phẩm, tài liệu giới thiệu', f:['ctnd'], to:['mkt','kd'], k:'tt'},
+  {id:'i6', t:'Yêu cầu SX nội dung truyền thông', full:'Nhu cầu sản xuất nội dung truyền thông', f:['ctnd','kd'], to:['mkt'], k:'tt'},
+  {id:'i7', t:'Mục tiêu kinh doanh', full:'Mục tiêu kinh doanh (KHKD)', f:['kd'], to:['mkt'], k:'tt'},
+  {id:'i8', t:'Tài liệu bán hàng', full:'Bộ tài liệu bán hàng', f:['mkt'], to:['kd'], k:'tt'},
+  {id:'i9', t:'Lead hợp lệ', full:'Lead hợp lệ chuyển kinh doanh', f:['mkt'], to:['kd'], k:'tt'},
+  {id:'i10', t:'Trạng thái lead', full:'Trạng thái xử lý lead', f:['kd'], to:['mkt'], k:'tt'},
+  {id:'i11', t:'Phiếu đưa vào sản xuất', full:'Phiếu đưa vào sản xuất (thiết kế, giao in)', f:['ctnd'], to:['io'], k:'sp'},
+  {id:'i12', t:'Quyết định in, lệnh xuất kho', full:'Quyết định in, lệnh xuất kho', f:['kd'], to:['io'], k:'tt'},
+  {id:'i13', t:'Sách in theo đơn', full:'Sách in giao theo đơn hàng', f:['io'], to:['mar'], k:'sp'},
+  {id:'i14', t:'Học liệu số', full:'Nội dung số trên Hoclieu.vn, GlobalSpeak', f:['ctnd'], to:['mar'], k:'sp'},
+  {id:'i15', t:'Truyền thông, sự kiện', full:'Truyền thông đa kênh, sự kiện', f:['mkt'], to:['mar'], k:'tt'},
+  {id:'i16', t:'Tập huấn, HĐ đại lý', full:'Giới thiệu, tập huấn sản phẩm, hợp đồng đại lý', f:['kd'], to:['mar'], k:'tt'},
+  {id:'i17', t:'Đơn hàng, phản hồi', full:'Đơn đặt hàng, phản hồi, khiếu nại', f:['mar'], to:['kd'], k:'tt'},
+  {id:'i18', t:'Đăng ký tư vấn, dùng thử', full:'Đăng ký tư vấn, dùng thử', f:['mar'], to:['mkt'], k:'tt'},
+  {id:'i19', t:'Đề nghị TT nhuận bút', full:'Đề nghị thanh toán nhuận bút, thù lao CTV', f:['ctnd'], to:['kt'], k:'tc'},
+  {id:'i20', t:'Đề nghị TT chi phí MKT', full:'Đề nghị thanh toán chi phí marketing, sự kiện', f:['mkt'], to:['kt'], k:'tc'},
+  {id:'i21', t:'Đổi trả hàng', full:'Đổi hàng, trả hàng (bù trừ công nợ)', f:['kd'], to:['kt'], k:'tc'},
+  {id:'i22', t:'HĐ in, quyết toán, nhập kho', full:'Hợp đồng in, quyết toán vật tư, phiếu nhập kho', f:['io'], to:['kt'], k:'tc'},
+  {id:'i23', t:'Thông báo giá SP', full:'Thông báo giá sản phẩm', f:['kt'], to:['kd'], k:'tc'},
+  {id:'i24', t:'Báo cáo nhập – xuất – tồn', full:'Báo cáo nhập – xuất – tồn kho', f:['kt'], to:['kd'], k:'tt'},
+  {id:'i25', t:'Thông báo công nợ', full:'Thông báo công nợ, công văn đòi nợ', f:['kt'], to:['mar'], k:'tc'}
+];
+const LINKS = [];
+I.forEach(x => x.f.forEach(s => x.to.forEach(t => LINKS.push({x, s, t}))));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const oi = z => ORDER.indexOf(z);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const board = $('#board'), wu = $('#wu'), wo = $('#wo'), cap = $('#cap'), clr = $('#clr');
+
+// ================= TAB 1: SƠ ĐỒ =================
+function pill(x, side, z){
+  if (side === 'out') return `<button class="pill out" type="button" data-i="${x.id}" data-side="out" data-z="${z}" data-k="${x.k}" style="--pc:var(${C[z]})" title="${esc(x.full)}">
+    <span class="pl">${esc(x.t)}</span><span class="who" style="--tc:var(${C[x.to[0]]})">→ ${esc(x.to.map(t => Z[t].short).join(', '))}</span></button>`;
+  return `<button class="pill in" type="button" data-i="${x.id}" data-side="in" data-z="${z}" data-k="${x.k}" style="--pc:var(${C[x.f[0]]})" title="${esc(x.full)}">
+    <span class="pl">${esc(x.t)}</span></button>`;
+}
+function zoneHtml(z){
+  const d = Z[z];
+  const ins = I.filter(x => x.to.includes(z)).sort((a, b) => oi(a.f[0]) - oi(b.f[0]));
+  const outs = I.filter(x => x.f.includes(z)).sort((a, b) => oi(a.to[0]) - oi(b.to[0]));
+  const sec = (h, list, side) => list.length ? `<div class="sec"><h4>${h}</h4><div class="plist">${list.map(x => pill(x, side, z)).join('')}</div></div>` : '';
+  const steps = d.steps ? `<div class="sec"><h4>Quy trình</h4><ol class="qts">${d.steps.map((x, i) => `<li data-z="${z}" data-n="${i + 1}"><i>${i + 1}</i><span>${esc(x[0])}${x[1] ? `<code>${esc(x[1])}</code>` : ''}</span></li>`).join('')}</ol></div>` : '';
+  const segs = d.segs ? `<div class="segs">${d.segs.map(s => `<span>${esc(s)}</span>`).join('')}</div>` : '';
+  return `<section class="zone z-${z}${d.ghost ? ' ghost' : ''}" data-zone="${z}" style="grid-area:${d.area};--zc:var(${C[z]})">
+    <button class="zh" type="button" data-zone="${z}"><span class="badge" aria-label="${esc(d.name)}">${d.icon || esc(d.badge)}</span><span><b>${esc(d.name)}</b>${d.sub ? `<small>${esc(d.sub)}</small>` : ''}</span></button>
+    <div class="zb">${segs}${sec('Nhận vào', ins, 'in')}${steps}${sec(z === 'mar' ? 'Gửi lại' : 'Giao ra', outs, 'out')}</div></section>`;
+}
+board.insertAdjacentHTML('beforeend', ORDER.map(zoneHtml).join(''));
+const zoneEl = Object.fromEntries(ORDER.map(z => [z, board.querySelector(`.zone[data-zone="${z}"]`)]));
+// ----- Chuỗi giá trị tổng quan: giai đoạn -> quy trình của từng phòng (số thứ tự quy trình trong khối) -----
+const STG = [
+  {id:'g1', t:'GĐ1. Định hướng chiến lược', s:'Chiến lược SP và chiến lược KD', m:{ext:[], ctnd:[1,2], mkt:[1], kd:[1,2], kt:[1]}},
+  {id:'g2', t:'GĐ2. Sản xuất nội dung', s:'Chủ yếu dòng SP mới', m:{ctnd:[3,4,5,6,7], io:[1], kt:[2,3]}},
+  {id:'g31', t:'GĐ3.1. Phát triển thị trường, bán hàng', s:'MKT và KD', m:{ctnd:[8], mkt:[2,3,4], kd:[3,4,5], kt:[5], mar:[]}},
+  {id:'g32', t:'GĐ3.2. In, kho vận, cung ứng', s:'QL In – KV và KD', m:{ctnd:[6], io:[2,3], kd:[6], kt:[4], mar:[]}},
+  {id:'g4', t:'Sau bán hàng', s:'Thu tiền, phản hồi, cải tiến', m:{ctnd:[8], mkt:[5], kd:[7,8], kt:[6,7,8], mar:[]}}
+];
+let fstage = null;
+$('#vc').innerHTML = STG.map((g, i) => `<button type="button" class="vcs${i ? '' : ' first'}" data-stage="${g.id}" aria-pressed="false"><b>${esc(g.t)}</b><span>${esc(g.s)}</span>
+  <span class="vcd">${Object.keys(g.m).filter(z => g.m[z].length).map(z => `<em style="--dc:var(${C[z]})">${esc(Z[z].short)} ${g.m[z].join(', ')}</em>`).join('')}</span></button>`).join('');
+function applyStage(){
+  const g = STG.find(x => x.id === fstage);
+  $$('.vcs').forEach(b => { const on = b.dataset.stage === fstage; b.classList.toggle('on', on); b.classList.toggle('off', !!fstage && !on); b.setAttribute('aria-pressed', String(on)); });
+  board.classList.toggle('stagef', !!g);
+  $$('.qts li', board).forEach(li => li.classList.toggle('hit', !!g && (g.m[li.dataset.z] || []).includes(+li.dataset.n)));
+  ORDER.forEach(z => zoneEl[z].classList.toggle('sin', !!g && z in g.m));
+  if (g) cap.innerHTML = `<b>${esc(g.t)}</b>: ${Object.keys(g.m).map(z => g.m[z].length ? `${esc(Z[z].short)} (quy trình ${g.m[z].join(', ')})` : esc(Z[z].short)).join('; ')}.`;
+  else render();
+}
+$('#vc').addEventListener('click', e => { const b = e.target.closest('[data-stage]'); if (!b) return; fstage = fstage === b.dataset.stage ? null : b.dataset.stage; applyStage(); });
+const pillEl = (id, side, z) => board.querySelector(`.pill[data-i="${id}"][data-side="${side}"][data-z="${z}"]`);
+const markers = pre => `<defs>${Object.entries(C).map(([z, v]) => `<marker id="${pre}-${z}" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(${v})"/></marker>`).join('')}</defs>`;
+const cl = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+let GEO = [];
+function orth(pts, r = 14){
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 1; i < pts.length - 1; i++){
+    const [px, py] = pts[i-1], [x, y] = pts[i], [nx, ny] = pts[i+1];
+    const l1 = Math.hypot(x-px, y-py), l2 = Math.hypot(nx-x, ny-y);
+    if (!l1 || !l2) continue;
+    const rr = Math.min(r, l1/2, l2/2);
+    d += ` L${x-(x-px)/l1*rr},${y-(y-py)/l1*rr} Q${x},${y} ${x+(nx-x)/l2*rr},${y+(ny-y)/l2*rr}`;
+  }
+  const e = pts[pts.length-1];
+  return d + ` L${e[0]},${e[1]}`;
+}
+function layout(){
+  const B = board.getBoundingClientRect();
+  if (!B.width) return false;
+  const R = el => { const r = el.getBoundingClientRect();
+    return {l:r.left-B.left, t:r.top-B.top, r:r.right-B.left, b:r.bottom-B.top, cx:(r.left+r.right)/2-B.left, cy:(r.top+r.bottom)/2-B.top}; };
+  const zr = Object.fromEntries(ORDER.map(z => [z, R(zoneEl[z])]));
+  const lanes = {top: Math.min(...ORDER.map(z => zr[z].t)) - 38, bot: (zr.io.b + zr.kt.t) / 2};
+  const ovY = (a, b) => a.t < b.b && b.t < a.b, ovX = (a, b) => a.l < b.r && b.l < a.r;
+  const blockedH = (s, t, y1, y2, x1, x2) => ORDER.some(k => { const z = zr[k]; if (z === s || z === t) return false;
+    return z.l >= Math.min(x1, x2) - 2 && z.r <= Math.max(x1, x2) + 2 && z.t < Math.max(y1, y2) + 6 && z.b > Math.min(y1, y2) - 6; });
+  const L = LINKS.map(lk => {
+    const a = R(pillEl(lk.x.id, 'out', lk.s)), b = R(pillEl(lk.x.id, 'in', lk.t));
+    const s = zr[lk.s], t = zr[lk.t], m = 18;
+    const y1 = cl(a.cy, s.t+m, s.b-m), y2 = cl(b.cy, t.t+m, t.b-m);
+    if (t.l >= s.r - 2 && ovY(s, t) && !blockedH(s, t, y1, y2, s.r, t.l)) return {lk, type:'h', x1:s.r, y1, x2:t.l, y2};
+    if (t.r <= s.l + 2 && ovY(s, t) && !blockedH(s, t, y1, y2, s.l, t.r)) return {lk, type:'h', x1:s.l, y1, x2:t.r, y2};
+    if (t.t >= s.b - 2 && ovX(s, t)) return {lk, type:'v', y1:s.b, y2:t.t, s, t, ks:`${lk.s}:b`, kt:`${lk.t}:t`};
+    if (t.b <= s.t + 2 && ovX(s, t)) return {lk, type:'v', y1:s.t, y2:t.b, s, t, ks:`${lk.s}:t`, kt:`${lk.t}:b`};
+    return {lk, type:'c', lane:(lk.s === 'io' || lk.t === 'io') ? 'bot' : 'top', s, t};
+  });
+  const groups = {};
+  const add = (key, item, pref) => (groups[key] = groups[key] || []).push({item, pref});
+  L.forEach(g => {
+    if (g.type === 'v') { add(g.ks, {g, end:'s'}, cl(g.t.cx, g.s.l+26, g.s.r-26)); add(g.kt, {g, end:'t'}, cl(g.s.cx, g.t.l+26, g.t.r-26)); }
+    if (g.type === 'c') {
+      const ly = lanes[g.lane], right = g.t.cx > g.s.cx; g.ly0 = ly;
+      if (!(g.s.t < ly && ly < g.s.b)) { const side = ly < g.s.t ? 't' : 'b'; add(`${g.lk.s}:${side}`, {g, end:'s'}, right ? g.s.r - 36 : g.s.l + 36); g.sEdge = side; }
+      if (!(g.t.t < ly && ly < g.t.b)) { const side = ly < g.t.t ? 't' : 'b'; add(`${g.lk.t}:${side}`, {g, end:'t'}, right ? g.t.l + 36 : g.t.r - 36); g.tEdge = side; }
+    }
+  });
+  Object.values(groups).forEach(list => {
+    list.sort((a, b) => a.pref - b.pref);
+    const bk = {};
+    list.forEach(e => { const k = Math.round(e.pref / 44); (bk[k] = bk[k] || []).push(e); });
+    Object.values(bk).forEach(arr => arr.forEach((e, i) => { e.item.g[e.item.end === 's' ? 'px1' : 'px2'] = e.pref + (i - (arr.length-1)/2) * 16; }));
+  });
+  const laneN = {top:0, bot:0}, laneC = {top:0, bot:0};
+  L.forEach(g => { if (g.type === 'c') laneN[g.lane]++; });
+  let hi = 0;
+  GEO = L.map(g => {
+    let d, p0;
+    if (g.type === 'h') { const mx = (g.x1 + g.x2)/2 + ((hi++ % 5) - 2) * 11; d = `M${g.x1},${g.y1} C${mx},${g.y1} ${mx},${g.y2} ${g.x2},${g.y2}`; p0 = [g.x1, g.y1]; }
+    else if (g.type === 'v') { const my = (g.y1 + g.y2)/2; d = `M${g.px1},${g.y1} C${g.px1},${my} ${g.px2},${my} ${g.px2},${g.y2}`; p0 = [g.px1, g.y1]; }
+    else {
+      const n = laneN[g.lane], i = laneC[g.lane]++, ly = g.ly0 + (i - (n-1)/2) * 9, right = g.t.cx > g.s.cx, pts = [];
+      if (g.sEdge) { const y = g.sEdge === 't' ? g.s.t : g.s.b; pts.push([g.px1, y], [g.px1, ly]); } else pts.push([right ? g.s.r : g.s.l, ly]);
+      if (g.tEdge) { const y = g.tEdge === 't' ? g.t.t : g.t.b; pts.push([g.px2, ly], [g.px2, y]); } else pts.push([right ? g.t.l : g.t.r, ly]);
+      d = orth(pts); p0 = pts[0];
+    }
+    return {lk: g.lk, d, p0};
+  });
+  return true;
+}
+const filters = new Set(['sp', 'tt', 'tc']);
+const pathHtml = (g, pre) => `<path class="w k-${g.lk.x.k}" d="${g.d}" stroke="var(${C[g.lk.s]})" marker-end="url(#${pre}-${g.lk.s})"/><circle cx="${g.p0[0]}" cy="${g.p0[1]}" r="${pre === 'mo' ? 5 : 3.5}" fill="var(${C[g.lk.s]})"/>`;
+const drawUnder = () => { wu.innerHTML = markers('mu') + GEO.filter(g => filters.has(g.lk.x.k)).map(g => pathHtml(g, 'mu')).join(''); };
+let hover = null, pin = null, fz = null;
+const names = arr => arr.map(z => Z[z].short).join(', ');
+function render(){
+  const it = hover || pin;
+  let act = it ? GEO.filter(g => g.lk.x.id === it) : fz ? GEO.filter(g => g.lk.s === fz || g.lk.t === fz) : [];
+  wo.innerHTML = markers('mo') + act.map(g => pathHtml(g, 'mo')).join('');
+  $$('.pill', board).forEach(p => {
+    const on = it ? p.dataset.i === it : fz ? act.some(g => g.lk.x.id === p.dataset.i && (g.lk.s === p.dataset.z || g.lk.t === p.dataset.z)) : false;
+    p.classList.toggle('hl', on); p.classList.toggle('pinned', !!pin && p.dataset.i === pin); p.classList.toggle('off', !filters.has(p.dataset.k));
+  });
+  board.classList.toggle('act', act.length > 0);
+  board.classList.toggle('zfocus', !!fz && !it);
+  const inv = new Set(fz ? [fz, ...act.flatMap(g => [g.lk.s, g.lk.t])] : []);
+  ORDER.forEach(z => { zoneEl[z].classList.toggle('zin', inv.has(z)); zoneEl[z].classList.toggle('zf', z === fz); });
+  if (it) { const x = I.find(v => v.id === it); cap.innerHTML = `<b>${esc(names(x.f))}</b>&nbsp;giao “${esc(x.full)}” cho&nbsp;<b>${esc(names(x.to))}</b>.`; }
+  else if (fz) {
+    const ins = I.filter(x => x.to.includes(fz)), outs = I.filter(x => x.f.includes(fz));
+    const src = [...new Set(ins.flatMap(x => x.f))], dst = [...new Set(outs.flatMap(x => x.to))];
+    cap.innerHTML = `<b>${esc(Z[fz].short)}</b>&nbsp;nhận ${ins.length} đầu vào${src.length ? ' từ ' + esc(names(src)) : ''}, giao ${outs.length} đầu ra${dst.length ? ' cho ' + esc(names(dst)) : ''}.`;
+  } else cap.textContent = `${I.length} điểm bàn giao giữa các khối. Bấm một giai đoạn hoặc tên phòng để lọc, rê chuột vào một ô để xem nó đi đâu.`;
+  clr.hidden = !(pin || fz);
+}
+board.addEventListener('pointerover', e => { const p = e.target.closest('.pill'); if (p && e.pointerType === 'mouse') { hover = p.dataset.i; render(); } });
+board.addEventListener('pointerout', e => { const p = e.target.closest('.pill'); if (p && e.pointerType === 'mouse' && !p.contains(e.relatedTarget)) { hover = null; render(); } });
+board.addEventListener('focusin', e => { const p = e.target.closest('.pill'); if (p) { hover = p.dataset.i; render(); } });
+board.addEventListener('focusout', e => { if (e.target.closest('.pill')) { hover = null; render(); } });
+board.addEventListener('click', e => {
+  const p = e.target.closest('.pill'), h = e.target.closest('.zh');
+  if (p) { pin = pin === p.dataset.i ? null : p.dataset.i; if (pin) fz = null; render(); return; }
+  if (h) { fz = fz === h.dataset.zone ? null : h.dataset.zone; pin = null; render(); }
+});
+$('#ctrl').addEventListener('click', e => {
+  const b = e.target.closest('.flt'); if (!b) return;
+  const k = b.dataset.k, on = !filters.has(k);
+  on ? filters.add(k) : filters.delete(k);
+  b.setAttribute('aria-pressed', String(on)); drawUnder(); render();
+});
+clr.addEventListener('click', () => { pin = fz = hover = null; render(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { pin = fz = hover = null; render(); } });
+function redraw(){ if (layout()) { drawUnder(); render(); } }
+
+// ================= TAB PHÒNG =================
+const STT = {ready:'Sẵn nguồn', partial:'Một phần', collect:'Cần thu thập'};
+const HAVE = {
+  ctnd: [
+    {n:'BC triển khai sản phẩm số', p:'Dữ liệu từ Hoclieu.vn (Sao Khuê) và GlobalSpeak (Bee).', covers:['CTND-R6']},
+    {n:'BC hoạt động sản xuất nội dung giấy và nội dung số', p:'Theo dõi sản xuất nội dung sách giấy và học liệu số.', covers:['CTND-R1', 'CTND-R2']}
+  ]
+};
+const NOTE = {
+  ctnd: 'Phiếu yêu cầu dashboard 06/2026 của Ban còn có số liệu kinh doanh sách giấy. Phần này dùng chung báo cáo KD-R1 của P. Kinh doanh, không làm riêng.',
+  kd: 'KD-R2 (kinh doanh sản phẩm số) cần đối chiếu với BC triển khai sản phẩm số của Ban PT CT&ND đã có, để chỉ làm phần còn thiếu.'
+};
+const OVERLAP = {'KD-R2': 'Đối chiếu với BC triển khai SP số'};
+function chain(d){ return `<div class="chain">${Z[d].steps.map(s => `<div class="chev"><b>${esc(s[0])}</b><span>${esc(s[1] || 'Nghiệp vụ')}</span></div>`).join('')}</div>`; }
+function ioGroups(list, side){
+  const by = {};
+  list.forEach(x => (side === 'in' ? x.f : x.to).forEach(z => (by[z] = by[z] || []).push(x)));
+  return Object.keys(by).sort((a, b) => oi(a) - oi(b)).map(z => `<div class="grp" style="--gc:var(${C[z]})"><div class="from">${esc(Z[z].short)}</div><ul>${by[z].map(x => `<li class="k-${x.k}" title="${esc(x.full)}">${esc(x.t)}</li>`).join('')}</ul></div>`).join('');
+}
+function repCard(r){
+  return `<details class="rp"><summary><div><span class="rid">${esc(r.id)}</span><span class="rn">${esc(r.n)}</span></div>
+    <span class="rq">${esc(r.q)}</span>
+    <span class="rm"><span class="st ${r.st}">${STT[r.st]}</span><span>${esc(r.fr)}</span>${OVERLAP[r.id] ? `<span class="ov">${esc(OVERLAP[r.id])}</span>` : ''}<span class="more">Xem chỉ số</span></span></summary>
+    <div class="bd"><table class="kt"><thead><tr><th>Chỉ số</th><th>Cách tính</th><th>Xem theo</th></tr></thead><tbody>${r.k.map(k => `<tr><td>${esc(k[0])}</td><td>${esc(k[1])}</td><td>${esc(k[2])}</td></tr>`).join('')}</tbody></table>
+    <p class="rs"><b>Nguồn:</b> ${esc(r.src)}<br><b>Người dùng chính:</b> ${esc(r.aud)}</p></div></details>`;
+}
+function deptPanel(d){
+  const z = Z[d], have = HAVE[d] || [];
+  const covered = new Set(have.flatMap(h => h.covers));
+  const reps = RPT[d].filter(r => !covered.has(r.id));
+  const ins = I.filter(x => x.to.includes(d)), outs = I.filter(x => x.f.includes(d));
+  return `<div class="wrap">
+    <div class="dhead"><span class="badge">${esc(z.badge)}</span><div><h2>${esc(z.name)}</h2><p>${esc(z.role)}</p></div></div>
+    <h3 class="sh">Chuỗi hoạt động</h3>${chain(d)}
+    <h3 class="sh">Nhận gì, giao gì</h3>
+    <div class="io"><div class="iobox"><h3>Nhận vào (${ins.length})</h3>${ioGroups(ins, 'in')}</div><div class="iobox"><h3>Giao ra (${outs.length})</h3>${ioGroups(outs, 'out')}</div></div>
+    ${have.length ? `<h3 class="sh">Báo cáo đã có</h3><div class="have">${have.map(h => `<div class="hv"><span class="tag">Đã triển khai</span><b>${esc(h.n)}</b><p>${esc(h.p)} Đã gồm: ${esc(h.covers.map(id => (RPT[d].find(r => r.id === id) || {n:id}).n.toLowerCase()).join('; '))}.</p></div>`).join('')}</div>` : ''}
+    <h3 class="sh">Gợi ý báo cáo${have.length ? ' bổ sung' : ''}</h3>
+    <p class="shl">${reps.length} báo cáo, mỗi báo cáo trả lời một câu hỏi quản trị. Bấm để xem chỉ số. Trạng thái nguồn là đánh giá sơ bộ từ tài liệu, chưa kiểm tra trực tiếp ERP và Base.</p>
+    <div class="rgrid">${reps.map(repCard).join('')}</div>
+    ${NOTE[d] ? `<p class="note">${esc(NOTE[d])}</p>` : ''}
+  </div>`;
+}
+$('#dpanels').innerHTML = MAIN.map(d => `<section class="panel" id="p-${d}" role="tabpanel" aria-labelledby="t-${d}" style="--c:var(${C[d]})" hidden>${deptPanel(d)}</section>`).join('');
+
+// ================= TAB TIMELINE =================
+// Mỗi cột là một tuần. Ngày Thứ Ba, Thứ Năm trong từng dòng chỉ là lịch đề xuất.
+const WEEKS = [['12–16/10', 'Tuần này', true], ['19–23/10', 'Tuần 1', false], ['26–30/10', 'Tuần 2', false], ['2–6/11', 'Tuần 3', false]];
+const TASKS = [
+  {t:'Chuẩn bị, gửi form, các phòng điền form', s:'Chốt đầu mối và lịch khảo sát 4 phòng', w:0, o:'both'},
+  {t:'Khảo sát Ban PT CT&ND', s:'Lịch đề xuất: Thứ Ba 20/10', w:1, o:'both'},
+  {t:'Khảo sát P. Kinh doanh', s:'Lịch đề xuất: Thứ Năm 22/10', w:1, o:'both'},
+  {t:'Khảo sát P. Marketing – Truyền thông', s:'Lịch đề xuất: Thứ Ba 27/10', w:2, o:'both'},
+  {t:'Khảo sát P. Kế toán – Tài vụ', s:'Lịch đề xuất: Thứ Năm 29/10', w:2, o:'both'},
+  {t:'Final giải pháp, demo báo cáo', s:'Theo nhu cầu đã khảo sát của 4 phòng', w:3, o:'both'}
+];
+const MS = [['Tuần này', 'Chuẩn bị, gửi form khảo sát, các phòng điền form (12–16/10).'], ['Tuần 1', 'Khảo sát Ban PT CT&ND và P. Kinh doanh (19–23/10). Lịch đề xuất: Thứ Ba 20/10, Thứ Năm 22/10.'], ['Tuần 2', 'Khảo sát P. Marketing – Truyền thông và P. Kế toán – Tài vụ (26–30/10). Lịch đề xuất: Thứ Ba 27/10, Thứ Năm 29/10.'], ['Tuần 3', 'Final giải pháp, demo báo cáo (2–6/11).']];
+(function(){
+  let h = `<div class="hd" style="text-align:left;padding-left:16px">Hạng mục</div>` + WEEKS.map((w, i) => `<div class="hd${w[2] ? ' now' : ''}" style="grid-row:1;grid-column:${i + 2}"><b>${w[0]}</b>${w[1]}</div>`).join('');
+  TASKS.forEach((t, r) => {
+    const row = r + 2;
+    h += `<div class="lab" style="grid-row:${row};grid-column:1">${esc(t.t)}<small>${esc(t.s)}</small></div>`;
+    for (let c = 0; c < WEEKS.length; c++) h += `<div class="cell wk" style="grid-row:${row};grid-column:${c + 2}"></div>`;
+    h += `<div class="bar ${t.o}" style="grid-row:${row};grid-column:${t.w + 2}">${esc(WEEKS[t.w][0])}</div>`;
+  });
+  $('#gantt').innerHTML = h;
+  $('#mlist').innerHTML = MS.map(m => `<li><b>${m[0]}</b><span>${esc(m[1])}</span></li>`).join('');
+})();
+
+// ================= TAB =================
+const TABS = [['all', 'Value chain', '--ink'], ...MAIN.map(d => [d, Z[d].short, C[d]]), ['tl', 'Timeline khảo sát', '--warn']];
+const tabs = $('#tabs');
+tabs.innerHTML = TABS.map(([id, t, c], i) => `<button class="tab" type="button" role="tab" id="t-${id}" aria-controls="p-${id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-t="${id}" style="--c:var(${c})">${id !== 'all' && id !== 'tl' ? '<i></i>' : ''}${esc(t)}</button>`).join('');
+const btns = $$('.tab', tabs);
+function select(id, focus){
+  btns.forEach(b => { const on = b.dataset.t === id; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; $('#p-' + b.dataset.t).hidden = !on; if (on && focus) b.focus(); });
+  try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  if (id === 'all') requestAnimationFrame(redraw);
+}
+btns.forEach((b, i) => {
+  b.addEventListener('click', () => select(b.dataset.t));
+  b.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); select(btns[(i + (e.key === 'ArrowRight' ? 1 : btns.length - 1)) % btns.length].dataset.t, true); } });
+});
+const h0 = (location.hash || '').replace('#', '');
+select(TABS.some(t => t[0] === h0) ? h0 : 'all');
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+let raf = 0;
+new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(redraw); }).observe(board);
+</script>
+</body>
+</html>

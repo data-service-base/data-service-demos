@@ -1,0 +1,21 @@
+{
+  "slug": "ecoteck-thay-doi-bao-cao",
+  "title": "ECO TECK — Tổng hợp thay đổi báo cáo",
+  "type": "deck",
+  "industry": "Xây dựng",
+  "department": "Tài chính",
+  "description": "Giải thích thay đổi báo cáo: ba lớp giá trị, bốn con số so sánh, cách tính chi phí dự kiến hoàn thành.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Ecoteck-UpdateBC/",
+  "source_repo": "https://github.com/tbinh-06/Ecoteck-UpdateBC",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "chi phí dự kiến",
+    "ngân sách"
+  ]
+}

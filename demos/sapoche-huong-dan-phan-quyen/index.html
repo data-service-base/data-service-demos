@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn sử dụng Trung tâm báo cáo Sapoche</title>
+<style>
+  :root{
+    --navy:#16233C; --navy-2:#24375A; --amber:#F0A020; --amber-soft:#FFF3DC;
+    --ink:#1C2330; --muted:#5F6876; --line:#DDE2EA; --paper:#F4F6F9; --white:#fff;
+    --ok:#2FA36B; --ok-soft:#E3F4EC; --warn:#E5533C; --warn-soft:#FBE8E4;
+    --font:"Segoe UI", "Helvetica Neue", Roboto, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{font-family:var(--font);background:var(--paper);color:var(--ink);line-height:1.6;font-size:16px}
+  a{color:var(--navy-2)}
+  :focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+
+  /* ===== Đầu trang ===== */
+  .masthead{background:var(--navy);color:#fff;padding:44px 24px 36px}
+  .masthead .in{max-width:1080px;margin:0 auto}
+  .brand{font-weight:800;font-size:14px;letter-spacing:.2px;color:var(--amber);margin-bottom:14px}
+  .masthead h1{font-size:clamp(28px,4.2vw,40px);line-height:1.15;font-weight:800;max-width:20ch}
+  .masthead p{color:#C9D2E0;margin-top:12px;max-width:62ch}
+  .linkbox{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .linkbox .lbl{font-size:14px;color:#C9D2E0}
+  .linkbox a{background:var(--amber);color:var(--navy);font-weight:700;text-decoration:none;padding:10px 16px;border-radius:10px;word-break:break-all}
+  .linkbox a.empty{background:transparent;color:#fff;border:1px dashed rgba(255,255,255,.5);font-weight:600}
+
+  /* ===== Bố cục ===== */
+  .layout{max-width:1080px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:220px 1fr;gap:48px}
+  nav.toc{position:sticky;top:24px;align-self:start;font-size:14px}
+  nav.toc p{font-weight:700;color:var(--muted);margin-bottom:8px}
+  nav.toc a{display:block;text-decoration:none;color:var(--ink);padding:6px 10px;border-left:3px solid var(--line)}
+  nav.toc a:hover{border-left-color:var(--amber);background:#fff}
+  nav.toc .who{font-size:12px;color:var(--muted);display:block}
+  main{min-width:0;max-width:720px}
+  section{margin-bottom:64px;scroll-margin-top:20px}
+  section > h2{font-size:26px;line-height:1.25;margin-bottom:6px}
+  .for{display:inline-block;font-size:13px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:12px}
+  .for.all{background:var(--amber-soft);color:#8A5A00}
+  .for.admin{background:var(--navy);color:#fff}
+  .lead{color:var(--muted);margin-bottom:24px}
+  h3{font-size:18px;margin:28px 0 10px}
+  p + p{margin-top:10px}
+  ul.plain{padding-left:20px}
+  ul.plain li{margin:6px 0}
+  .kbd{display:inline-block;font-weight:700;font-size:14px;padding:1px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;white-space:nowrap}
+
+  /* ===== Các bước (có thứ tự thật) ===== */
+  ol.steps{list-style:none;counter-reset:s;position:relative}
+  ol.steps > li{counter-increment:s;position:relative;padding-left:56px;padding-bottom:36px}
+  ol.steps > li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;
+    background:var(--navy);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:16px}
+  ol.steps > li::after{content:"";position:absolute;left:17px;top:40px;bottom:4px;width:2px;background:var(--line)}
+  ol.steps > li:last-child::after{display:none}
+  ol.steps > li > h4{font-size:17px;margin-bottom:6px;padding-top:5px}
+
+  /* ===== Mô phỏng màn hình ===== */
+  .screen{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:520px}
+  .screen .bar{background:#EEF1F5;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  .screen .url{background:#fff;border:1px solid var(--line);border-radius:20px;padding:2px 10px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .screen .body{padding:20px 22px}
+  .screen .t{font-size:18px;font-weight:600;margin-bottom:6px}
+  .screen .t .red{color:#C5221F}
+  .screen .s{font-size:13px;color:var(--muted)}
+  .screen .acts{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;align-items:center;flex-wrap:wrap}
+  .screen .acts.left{justify-content:flex-start}
+  .gbtn{font-size:13px;font-weight:600;padding:8px 14px;border-radius:6px;color:#1A73E8}
+  .gbtn.fill{background:#1A73E8;color:#fff}
+  .glink{font-size:13px;color:#1A73E8;text-decoration:underline}
+  .acc{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:8px;margin-top:8px;font-size:14px}
+  .acc .av{width:28px;height:28px;border-radius:50%;background:var(--navy-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .perm{font-size:13px;padding:8px 0;border-top:1px solid #EEF1F5;display:flex;gap:8px;align-items:flex-start}
+  .perm .box{width:16px;height:16px;border:2px solid #1A73E8;border-radius:3px;flex-shrink:0;margin-top:2px;background:#1A73E8;position:relative}
+  .perm .box::after{content:"";position:absolute;left:3px;top:0;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  /* phần cần bấm */
+  .hit{position:relative;outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+  .hit-note{display:inline-block;margin-left:8px;background:var(--amber);color:var(--navy);font-size:12px;font-weight:800;padding:2px 8px;border-radius:12px;white-space:nowrap}
+
+  /* ===== Hộp ghi chú ===== */
+  .note{border-left:4px solid var(--amber);background:#fff;padding:14px 16px;border-radius:0 10px 10px 0;margin:18px 0;font-size:15px}
+  .note.safe{border-left-color:var(--ok);background:var(--ok-soft)}
+  .note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .note b:first-child{display:block;margin-bottom:4px}
+
+  /* ===== Bảng ===== */
+  .tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:15px;margin-top:10px}
+  .tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid #EEF1F5;vertical-align:top}
+  .tbl th{background:#F7F9FB;font-size:14px;color:var(--muted)}
+  .tbl tr:last-child td{border-bottom:none}
+
+  /* ===== Mô phỏng trang quản trị ===== */
+  .admin-mock{background:#EEF1F5;border-radius:12px;padding:14px;margin-top:12px;max-width:560px}
+  .admin-mock .blk{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}
+  .admin-mock .h{font-weight:700;font-size:14px;color:var(--navy);margin-bottom:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:#EEF1F5;border-radius:20px;padding:3px 10px;font-size:12px;margin:0 4px 6px 0}
+  .chip.root{background:var(--navy);color:#fff}
+  .chip .tag{font-size:10px;background:var(--amber);color:var(--navy);border-radius:10px;padding:0 6px;font-weight:700}
+  .chip .x{color:var(--warn);font-weight:800}
+  .mrow{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  .minput{flex:1;min-width:160px;border:1px solid #D4DAE3;border-radius:8px;padding:7px 10px;font-size:13px;color:#9AA4B2;background:#fff}
+  .mbtn{background:var(--amber);color:var(--navy);font-weight:700;font-size:13px;padding:7px 12px;border-radius:8px}
+  .mbtn.navy{background:var(--navy);color:#fff}
+
+  /* ===== Hỏi đáp ===== */
+  details{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+  details summary{cursor:pointer;padding:14px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";font-weight:800;color:var(--amber);font-size:20px;line-height:1}
+  details[open] summary::after{content:"–"}
+  details .ans{padding:0 16px 16px;color:var(--ink)}
+
+  footer{max-width:1080px;margin:0 auto;padding:0 24px 40px;color:var(--muted);font-size:13px}
+
+  @media (max-width:860px){
+    .layout{grid-template-columns:1fr;gap:20px}
+    nav.toc{position:static;display:flex;flex-wrap:wrap;gap:6px}
+    nav.toc p{width:100%}
+    nav.toc a{border-left:none;border:1px solid var(--line);border-radius:20px;background:#fff;padding:5px 12px}
+    nav.toc .who{display:none}
+  }
+  @media print{
+    .masthead{background:#fff;color:var(--ink)} .masthead p{color:var(--muted)}
+    nav.toc{display:none} .layout{display:block} details{break-inside:avoid} details .ans{display:block}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="in">
+    <div class="brand">SAPOCHE · Trung tâm báo cáo</div>
+    <h1>Hướng dẫn vào xem báo cáo và cấp quyền</h1>
+    <p>Lần đầu mở, Google sẽ hỏi bạn cấp quyền cho ứng dụng. Làm theo đúng các bước dưới đây một lần, những lần sau vào thẳng báo cáo.</p>
+    <div class="linkbox">
+      <span class="lbl">Link trung tâm báo cáo:</span>
+      <a id="linkBaoCao" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Mục lục">
+    <p>Nội dung</p>
+    <a href="#lan-dau">Lần đầu vào<span class="who">Mọi người</span></a>
+    <a href="#hang-ngay">Xem báo cáo hằng ngày<span class="who">Mọi người</span></a>
+    <a href="#admin">Phân quyền<span class="who">Quản trị viên</span></a>
+    <a href="#su-co">Gặp lỗi thì làm gì</a>
+  </nav>
+
+  <main>
+
+    <!-- ============ LẦN ĐẦU VÀO ============ -->
+    <section id="lan-dau">
+      <span class="for all">Dành cho mọi người</span>
+      <h2>Lần đầu vào: cấp quyền cho ứng dụng</h2>
+      <p class="lead">Chỉ làm một lần trên mỗi tài khoản Google. Giao diện Google có thể hiện tiếng Anh hoặc tiếng Việt, tên nút ghi cả hai.</p>
+
+      <div class="note">
+        <b>Trước khi bắt đầu</b>
+        Bạn cần được quản trị viên cấp quyền theo đúng email Google của mình. Nếu chưa được cấp, vẫn làm được các bước dưới nhưng cuối cùng sẽ thấy màn "chưa được cấp quyền".
+      </div>
+
+      <ol class="steps">
+        <li>
+          <h4>Mở link và đăng nhập Google</h4>
+          <p>Mở link trung tâm báo cáo bằng Chrome. Nếu chưa đăng nhập, Google yêu cầu đăng nhập: dùng <b>đúng email đã được cấp quyền</b>.</p>
+        </li>
+
+        <li>
+          <h4>Bấm Xem xét quyền</h4>
+          <p>Google báo ứng dụng cần quyền truy cập. Bấm nút xanh bên phải.</p>
+          <div class="screen" aria-label="Minh hoạ màn hình xin quyền">
+            <div class="bar"><span class="url">script.google.com</span></div>
+            <div class="body">
+              <div class="t">SAPOCHE · Trung tâm báo cáo <span class="red">(Unverified)</span></div>
+              <div class="s">SAPOCHE · Trung tâm báo cáo needs your permission to access your data on Google.</div>
+              <div class="acts">
+                <span class="gbtn">CANCEL</span>
+                <span class="gbtn fill hit">REVIEW PERMISSIONS</span><span class="hit-note">Bấm</span>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <h4>Chọn tài khoản</h4>
+          <p>Chọn đúng email đã được cấp quyền. Nếu chọn nhầm, phải làm lại từ đầu bằng email đúng.</p>
+          <div class="screen" aria-label="Minh hoạ màn hình chọn tài khoản">
+            <div class="bar"><span class="url">accounts.google.com</span></div>
+            <div class="body">
+              <div class="t">Chọn tài khoản</div>
+              <div class="acc hit"><span class="av">B</span>ten.ban@congty.com</div>
+              <div class="acc"><span class="av">C</span>email.khac@gmail.com</div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <h4>Màn cảnh báo "chưa xác minh": bấm Nâng cao</h4>
+          <p>Google hiện cảnh báo ứng dụng chưa được xác minh. <b>Đừng bấm "Quay lại an toàn".</b> Bấm dòng chữ nhỏ <span class="kbd">Advanced</span> / <span class="kbd">Nâng cao</span> ở góc dưới bên trái.</p>
+          <div class="screen" aria-label="Minh hoạ màn hình cảnh báo">
+            <div class="bar"><span class="url">accounts.google.com</span></div>
+            <div class="body">
+              <div class="t">Google hasn't verified this app</div>
+              <div class="s">The app is requesting access to sensitive info in your Google Account…</div>
+              <div class="acts" style="justify-content:space-between">
+                <span><span class="glink hit">Advanced</span><span class="hit-note">Bấm</span></span>
+                <span class="gbtn fill">BACK TO SAFETY</span>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <h4>Bấm "Chuyển tới … (không an toàn)"</h4>
+          <p>Bên dưới hiện thêm một đường link. Bấm <span class="kbd">Go to SAPOCHE · Trung tâm báo cáo (unsafe)</span> / <span class="kbd">Chuyển tới … (không an toàn)</span>.</p>
+          <div class="screen" aria-label="Minh hoạ link chuyển tiếp">
+            <div class="bar"><span class="url">accounts.google.com</span></div>
+            <div class="body">
+              <div class="s">Continue only if you understand the risks and trust the developer.</div>
+              <div class="acts left"><span class="glink hit">Go to SAPOCHE · Trung tâm báo cáo (unsafe)</span><span class="hit-note">Bấm</span></div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <h4>Cho phép</h4>
+          <p>Google liệt kê các quyền ứng dụng cần. Nếu có ô tích, chọn <b>Select all / Chọn tất cả</b>. Kéo xuống cuối, bấm <span class="kbd">Allow</span> / <span class="kbd">Cho phép</span>.</p>
+          <div class="screen" aria-label="Minh hoạ màn hình cho phép">
+            <div class="bar"><span class="url">accounts.google.com</span></div>
+            <div class="body">
+              <div class="t" style="font-size:16px">SAPOCHE · Trung tâm báo cáo wants access to your Google Account</div>
+              <div class="perm"><span class="box"></span>See your primary Google Account email address</div>
+              <div class="perm"><span class="box"></span>Send email as you</div>
+              <div class="acts"><span class="gbtn">Cancel</span><span class="gbtn fill hit">Allow</span><span class="hit-note">Bấm</span></div>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <h4>Xong: báo cáo hiện ra</h4>
+          <p>Bạn thấy thanh tab báo cáo ở trên cùng. Lần sau mở link là vào thẳng, không phải cấp quyền lại.</p>
+        </li>
+      </ol>
+
+      <div class="note safe">
+        <b>Vì sao Google cảnh báo "không an toàn"?</b>
+        Đây là ứng dụng nội bộ do công ty tự làm trên Google Apps Script, chưa nộp hồ sơ để Google kiểm duyệt nên Google luôn hiện cảnh báo này. Ứng dụng xin 2 quyền:
+        <ul class="plain">
+          <li><b>Xem địa chỉ email</b>: để biết bạn là ai và hiện đúng báo cáo bạn được xem.</li>
+          <li><b>Gửi email</b>: chỉ dùng khi quản trị viên bấm chia sẻ hoặc cấp quyền cho người khác. Người chỉ xem báo cáo không dùng tới.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ HẰNG NGÀY ============ -->
+    <section id="hang-ngay">
+      <span class="for all">Dành cho mọi người</span>
+      <h2>Xem báo cáo hằng ngày</h2>
+      <p class="lead">Mở link, đăng nhập đúng email là vào. Bạn chỉ thấy những báo cáo được cấp.</p>
+
+      <table class="tbl">
+        <thead><tr><th style="width:34%">Trên thanh trên cùng</th><th>Dùng để</th></tr></thead>
+        <tbody>
+          <tr><td><b>Các tab báo cáo</b></td><td>Bấm tab để chuyển báo cáo. Ví dụ: Kho, Đơn hàng, TP - BTP, KPI Nhân sự.</td></tr>
+          <tr><td><b>Đổi tài khoản</b></td><td>Đăng xuất Google rồi quay lại trang này để đăng nhập email khác. Lưu ý: trình duyệt sẽ đăng xuất cả Gmail, Drive.</td></tr>
+          <tr><td><b>Quản trị</b></td><td>Chỉ hiện với quản trị viên. Mở trang phân quyền ở tab mới.</td></tr>
+          <tr><td>Email ở góc phải</td><td>Tài khoản đang dùng. Kiểm tra chỗ này khi không thấy báo cáo mình cần.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ ADMIN ============ -->
+    <section id="admin">
+      <span class="for admin">Dành cho quản trị viên</span>
+      <h2>Phân quyền cho người khác</h2>
+      <p class="lead">Bấm nút <span class="kbd">Quản trị</span> trên thanh trên cùng, hoặc mở link trung tâm báo cáo thêm <span class="kbd">?page=admin</span> ở cuối. Trang quản trị có 3 phần.</p>
+
+      <div class="note">
+        <b>Email phải khớp chính xác</b>
+        Nhập đúng email người đó dùng để đăng nhập Google, kể cả dấu chấm. Ví dụ <b>binh.do01@base.vn</b> và <b>binhdo.01@base.vn</b> là hai tài khoản khác nhau. Người được cấp cần tải lại trang (F5) để thấy quyền mới.
+      </div>
+
+      <h3>Cấp quyền xem một báo cáo</h3>
+      <p>Phần <b>Phân quyền xem báo cáo</b> liệt kê từng báo cáo và những email đang được xem.</p>
+      <ul class="plain">
+        <li>Nhập email vào ô dưới báo cáo đó, bấm <span class="kbd">Thêm</span>.</li>
+        <li>Muốn cho một người xem nhiều báo cáo: thêm email đó vào từng báo cáo.</li>
+        <li>Nhập dấu <span class="kbd">*</span> thay cho email nếu muốn mọi người đã đăng nhập Google đều xem được báo cáo đó.</li>
+        <li>Thu quyền: bấm dấu <span class="kbd" style="color:var(--warn)">×</span> cạnh email.</li>
+      </ul>
+      <div class="admin-mock" aria-label="Minh hoạ phần phân quyền xem">
+        <div class="blk">
+          <div class="h">Báo cáo Kho</div>
+          <span class="chip">thukho@congty.com <span class="x">×</span></span>
+          <span class="chip">sep@gmail.com <span class="x">×</span></span>
+          <div class="mrow"><span class="minput">email cần thêm (hoặc *)</span><span class="mbtn">Thêm</span></div>
+        </div>
+      </div>
+
+      <h3>Cấp quyền và báo luôn cho người đó qua email</h3>
+      <p>Phần <b>Chia sẻ qua email</b>: nhập email, chọn báo cáo, bấm <span class="kbd">Gửi &amp; cấp quyền</span>. Người đó được cấp quyền xem và nhận email có link trung tâm báo cáo. Email được gửi từ tài khoản của quản trị viên đang bấm.</p>
+
+      <h3>Cấp quyền quản trị</h3>
+      <p>Phần <b>Quản trị viên</b> ở đầu trang. Quản trị viên xem được tất cả báo cáo và dùng được trang này, kể cả cấp hoặc thu quyền quản trị của người khác.</p>
+      <ul class="plain">
+        <li>Nhập email, giữ ô <b>Gửi mail</b> nếu muốn báo cho người đó, bấm <span class="kbd">Cấp quyền admin</span>.</li>
+        <li>Thu quyền: bấm <span class="kbd" style="color:var(--warn)">×</span> cạnh email trong nhóm <b>Admin cấp thêm</b>.</li>
+        <li>Nhóm <b>Admin gốc</b> (nhãn "gốc") không thu quyền được trên trang này, để tránh xoá nhầm hết quản trị viên. Muốn đổi nhóm này cần người phụ trách kỹ thuật sửa trong mã ứng dụng.</li>
+      </ul>
+      <div class="admin-mock" aria-label="Minh hoạ phần quản trị viên">
+        <div class="blk">
+          <div class="h">Quản trị viên</div>
+          <span class="chip root">binh.do01@base.vn <span class="tag">gốc</span></span>
+          <span class="chip root">nhanvien.kho@gmail.com <span class="tag">gốc</span></span>
+          <span class="chip">truongphong@congty.com <span class="x">×</span></span>
+          <div class="mrow"><span class="minput">email cần cấp quyền admin</span><span style="font-size:12px">☑ Gửi mail</span><span class="mbtn navy">Cấp quyền admin</span></div>
+        </div>
+      </div>
+
+      <div class="note warn">
+        <b>Lần đầu bấm gửi mail</b>
+        Lần đầu quản trị viên bấm <b>Gửi &amp; cấp quyền</b> hoặc <b>Cấp quyền admin</b> có gửi mail, Google có thể hỏi cấp quyền gửi email. Làm giống các bước ở phần <a href="#lan-dau">Lần đầu vào</a>.
+      </div>
+    </section>
+
+    <!-- ============ SỰ CỐ ============ -->
+    <section id="su-co">
+      <h2>Gặp lỗi thì làm gì</h2>
+      <p class="lead">Bấm vào từng tình huống để xem cách xử lý.</p>
+
+      <details>
+        <summary>Màn hình báo "Bạn chưa được cấp quyền xem báo cáo"</summary>
+        <div class="ans">
+          <p>Xem email hiện trên màn hình. Nếu không phải email được cấp quyền, bấm <b>Đổi tài khoản</b> và đăng nhập đúng email.</p>
+          <p>Nếu đúng email mà vẫn báo, gửi email đó cho quản trị viên để kiểm tra lại (thường do gõ thiếu hoặc thừa dấu chấm). Sau khi được cấp, tải lại trang.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Cứ mở lại là Google hỏi cấp quyền</summary>
+        <div class="ans">
+          <p>Lần trước chưa bấm hết tới nút <b>Allow / Cho phép</b>. Làm lại đủ các bước 2 đến 6 ở phần <a href="#lan-dau">Lần đầu vào</a>, không bấm Cancel hay quay lại giữa chừng.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Tab báo cáo trắng, hoặc hiện trang "Get stuff done with Google Drive"</summary>
+        <div class="ans">
+          <p>Thường gặp ở tab KPI Nhân sự. Thử lần lượt:</p>
+          <ul class="plain">
+            <li>Mở bằng Chrome, tắt các tiện ích chặn quảng cáo.</li>
+            <li>Mở link trong cửa sổ ẩn danh (<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">N</span>), đăng nhập đúng email.</li>
+            <li>Vẫn trắng thì báo quản trị viên, ghi rõ tab nào bị trắng.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Bấm "Đổi tài khoản" bị lỗi hoặc không đổi được</summary>
+        <div class="ans">
+          <p>Mở link trung tâm báo cáo trong cửa sổ ẩn danh (<span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">N</span>) rồi đăng nhập email cần dùng. Cửa sổ ẩn danh không bị ảnh hưởng bởi các tài khoản đang đăng nhập sẵn.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Máy đăng nhập nhiều tài khoản Google, vào nhầm tài khoản</summary>
+        <div class="ans">
+          <p>Ứng dụng thường lấy tài khoản Google đăng nhập đầu tiên trên trình duyệt. Cách chắc chắn: dùng cửa sổ ẩn danh, hoặc một hồ sơ Chrome riêng chỉ đăng nhập email công việc.</p>
+        </div>
+      </details>
+    </section>
+
+  </main>
+</div>
+
+<footer>Trung tâm báo cáo Sapoche. Liên hệ quản trị viên khi cần cấp hoặc thu quyền.</footer>
+
+<script>
+  /* ====== DÁN LINK TRUNG TÂM BÁO CÁO (URL /exec) VÀO ĐÂY ====== */
+  var LINK_BAO_CAO = '';
+
+  var a = document.getElementById('linkBaoCao');
+  if (LINK_BAO_CAO) {
+    a.href = LINK_BAO_CAO;
+    a.textContent = 'Mở trung tâm báo cáo';
+  } else {
+    a.removeAttribute('href');
+    a.className = 'empty';
+    a.textContent = 'https://script.google.com/a/macros/base.vn/s/AKfycbzlMxmKn9_6lV74e02H9-UHjPGisMs7skQSIkOihySECb1tHtGUd6M4W0ZMRHkEVm0r/exec';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASEL · Hệ thống báo cáo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg:       #F4F6FA;
+  --bg2:      #FFFFFF;
+  --bg3:      #F0F3F8;
+  --bg4:      #E7EDF5;
+  --border:   #E2E7F0;
+  --border2:  #CCD5E2;
+  --text:     #1A2230;
+  --text2:    #5A6678;
+  --text3:    #8A95A8;
+  --blue:     #2F6FE0;
+  --blue-dim: #E9F2FC;
+  --navy:     #0C447C;
+  --green:    #1E9E57;
+  --green-dim:#E8F6EE;
+  --amber:    #D98200;
+  --amber-dim:#FBF1DD;
+  --coral:    #E24B4A;
+  --coral-dim:#FCEAEA;
+  --purple:   #5B57C7;
+  --purple-dim:#EBEAF8;
+  --r:        8px;
+  --r-lg:     12px;
+  --shadow:   none;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+body {
+  font-family: 'Inter', 'Be Vietnam Pro', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01', 'cv01';
+  letter-spacing: -0.005em;
+}
+
+/* ── LAYOUT ── */
+.shell { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 60px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0; z-index: 20;
+}
+.logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px; font-weight: 800; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-mark {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: linear-gradient(135deg, #2f6fed, #1b4fc2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -0.02em;
+}
+.logo-sub { color: var(--text3); font-weight: 400; font-size: 12.5px; margin-left: 4px; }
+
+/* ── DEPT TABS (top-level) ── */
+.topnav { display: flex; align-items: center; gap: 10px; }
+.topsub { display: flex; align-items: center; gap: 6px; margin-right: 6px; }
+.topsub:not(.active) .sub-btn { background: transparent !important; color: var(--text3) !important; border-color: transparent !important; font-weight: 500 !important; }
+.topsub:not(.active) .sub-btn:hover { color: var(--text2) !important; }
+.dept-tabs { display: flex; gap: 0; }
+.dept-btn {
+  padding: 0 22px; height: 60px; font-size: 13px; font-weight: 600;
+  background: none; border: none; cursor: pointer;
+  color: var(--text3); border-bottom: 2px solid transparent;
+  transition: all .2s; font-family: inherit;
+  display: flex; align-items: center; gap: 7px;
+}
+.dept-btn .pill {
+  font-size: 10px; padding: 1px 7px; border-radius: 20px;
+  background: var(--bg3); color: var(--text3); font-weight: 600;
+}
+.dept-btn.on { color: var(--blue); border-bottom-color: var(--blue); }
+.dept-btn.on .pill { background: var(--blue-dim); color: var(--blue); }
+
+.meta { font-size: 12px; color: var(--text3); }
+
+/* ── DEPT PANEL ── */
+.dept-panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.dept-panel.on { display: flex; }
+
+/* ── SUB TABS ── */
+.sub-tabs-bar {
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 32px; height: 46px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sub-btn {
+  padding: 5px 14px; font-size: 12px; font-weight: 500;
+  background: none; border: 1px solid transparent; cursor: pointer;
+  color: var(--text2); border-radius: 20px;
+  transition: all .18s; font-family: inherit;
+}
+.sub-btn.on { background: var(--blue-dim); color: var(--blue); border-color: rgba(37,99,235,.2); font-weight: 600; }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 12px 32px 40px; }
+.sub-page { display: none; }
+.sub-page.on { display: block; animation: fadeIn .22s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+/* ── FILTER BAR ── */
+.fbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; overflow-x: auto;
+  padding: 10px 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  position: sticky; top: 0; z-index: 15;
+}
+.fbar > * { flex-shrink: 0; }
+/* nắp che khoảng padding phía trên để nội dung không lộ khi cuộn */
+.fbar::before {
+  content: ''; position: absolute; left: -32px; right: -32px; top: -26px; height: 26px;
+  background: var(--bg); z-index: -1;
+}
+.fbar-label { font-size: 10.5px; color: var(--text3); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.fbar select, .fbar input[type=date] {
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--text); font-size: 12px; padding: 5px 10px;
+  border-radius: 6px; font-family: inherit; cursor: pointer;
+  transition: border-color .15s; outline: none;
+}
+.fbar select:focus, .fbar input[type=date]:focus { border-color: var(--blue); }
+.fbar-sep { width: 1px; height: 18px; background: var(--border); }
+.rate-box {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--text2);
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 3px 8px;
+}
+.rate-box input {
+  width: 74px; background: none; border: none; outline: none;
+  color: var(--text); font-size: 12px; font-weight: 600; font-family: inherit;
+  text-align: right; -moz-appearance: textfield;
+}
+.rate-box input::-webkit-outer-spin-button,
+.rate-box input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+/* dual currency in tables */
+.money .m-vnd { display: block; font-weight: 600; }
+.money .m-usd { display: block; font-size: 10px; color: var(--text3); font-weight: 500; margin-top: 1px; }
+.funnel-val.money, .funnel-fc.money { line-height: 1.25; }
+/* dual currency in KPI cards */
+/* dual currency in KPI cards: VNĐ trái · $ phải */
+/* dual currency in KPI cards: USD lớn (chính) · VNĐ nhỏ (phụ, phải) */
+.kf-usd { display: inline-block; font-variant-numeric: tabular-nums; }
+.kf-vnd { display: inline-block; float: right; font-size: 13px; color: var(--text3); font-weight: 600; margin-top: 4px; font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; }
+
+/* ── PIPELINE cells ── */
+.row-sub { font-size: 10px; color: var(--text3); font-weight: 400; margin-top: 2px; }
+.tvtk, .ah-item { display: flex; flex-direction: column; line-height: 1.35; }
+.ah-item { padding: 3px 0; border-bottom: 1px dashed var(--border); }
+.ah-item:last-child { border: none; }
+.ah-name { font-size: 11.5px; color: var(--text); font-weight: 600; }
+.ah-sdt  { font-size: 10.5px; color: var(--text2); }
+.ah-role { font-size: 10px; color: var(--text3); }
+.ah-stance { font-size: 10px; font-weight: 700; }
+.nt-item { display: flex; align-items: center; gap: 6px; padding: 3px 0; border-bottom: 1px dashed var(--border); }
+.nt-item:last-child { border: none; }
+.nt-name { font-size: 11px; color: var(--text); flex: 1; }
+.nt-gt   { font-size: 11px; color: var(--text2); font-weight: 600; font-variant-numeric: tabular-nums; }
+tr.fc-row { cursor: pointer; }
+tr.fc-row:hover td { background: var(--purple-dim); }
+tr.fc-row.active td { background: var(--purple-dim); box-shadow: inset 3px 0 0 var(--purple); }
+tr.fc-row.active td.bold { color: var(--purple); }
+tr.fc-total td { background: var(--bg3); font-weight: 700; border-bottom: 2px solid var(--border2); position: sticky; top: 0; z-index: 3; }
+/* Freeze STT + Tên dự án khi cuộn ngang */
+.fc-table td.c1, .fc-table th.c1 { position: sticky; left: 0;    z-index: 3; }
+.fc-table td.c2, .fc-table th.c2 { position: sticky; left: 44px; z-index: 3; box-shadow: 1px 0 0 var(--border); }
+.fc-table tbody td.c1, .fc-table tbody td.c2 { background: var(--bg2); }
+.fc-table thead th.c1, .fc-table thead th.c2 { z-index: 6; background: var(--bg3); }
+.fc-table tr.fc-total td.c1, .fc-table tr.fc-total td.c2 { z-index: 5; background: var(--bg3); }
+.fc-table tr.fc-row:hover td.c1, .fc-table tr.fc-row:hover td.c2 { background: var(--purple-dim); }
+.fc-table tr.fc-row.active td.c1, .fc-table tr.fc-row.active td.c2 { background: var(--purple-dim); }
+.cur-btn {
+  font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+  background: var(--blue-dim); color: var(--blue); border: 1px solid var(--color-border-info, #A9CBF0);
+  padding: 6px 12px; border-radius: var(--r); transition: all .15s;
+}
+.cur-btn:hover { background: #dcebfb; }
+.fbar-date-range { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+.chip-live {
+  margin-left: auto; font-size: 11px; font-weight: 600; padding: 4px 10px;
+  border-radius: 20px; background: var(--green-dim); color: var(--green);
+  border: 1px solid rgba(13,158,110,.2);
+}
+
+/* ── KPI CARDS ── */
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 26px; }
+.kpi-row-6 { grid-template-columns: repeat(6, 1fr); }
+.kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1100px){ .kpi-row-6 { grid-template-columns: repeat(3, 1fr); } }
+.kpi-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 14px 16px;
+  box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+}
+.kpi-card::after { content: none; }
+.kpi-lbl { font-size: 10.5px; color: var(--text3); margin-bottom: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.kpi-val { font-family: 'Inter', sans-serif; font-size: 23px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; color: var(--text); }
+.kpi-card.blue  .kpi-val { color: var(--blue); }
+.kpi-card.green .kpi-val { color: var(--green); }
+.kpi-card.coral .kpi-val { color: var(--coral); }
+.kpi-trend { font-size: 11px; margin-top: 8px; font-weight: 500; }
+.t-up   { color: var(--green); }
+.t-dn   { color: var(--coral); }
+.t-neu  { color: var(--text3); }
+
+/* ── SECTION HEADER ── */
+.sec-hd { display: flex; align-items: center; gap: 8px; margin: 26px 0 14px; }
+.sec-line { display: none; }
+.sec-title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0; display: flex; align-items: center; gap: 7px; }
+.sec-title i { font-size: 18px; color: var(--blue); }
+.sec-sub { font-size: 11.5px; color: var(--text3); }
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.card-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; color: var(--text); letter-spacing: 0; display: flex; align-items: center; gap: 6px; }
+.card-title i { font-size: 16px; color: var(--text2); }
+.card-sub { font-size: 11px; color: var(--text3); margin-bottom: 14px; }
+
+/* ── GRID LAYOUTS ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-tl { grid-template-columns: 1fr 0.82fr; align-items: stretch; }
+.grid-tl .tl-wrap table { width: 100% !important; min-width: 0 !important; }
+.tl-cell { display: flex; align-items: center; gap: 10px; }
+.tl-track { flex: 1; height: 6px; background: var(--bg4); border-radius: 4px; overflow: hidden; min-width: 40px; }
+.tl-fill { height: 100%; border-radius: 4px; }
+.tl-h { width: 42px; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+@media (max-width: 900px){ .grid-tl { grid-template-columns: 1fr; } }
+tr.tl-row { cursor: pointer; transition: background .12s; }
+tr.tl-row:hover td { background: var(--blue-dim); }
+tr.tl-row.active td { background: var(--blue-dim); box-shadow: inset 3px 0 0 var(--blue); }
+tr.tl-row.active td.bold { color: var(--blue); }
+.grid-af { display: grid; grid-template-columns: 1fr 1.5fr; gap: 16px; }
+.grid-cv { display: grid; grid-template-columns: 1fr 1.9fr; gap: 16px; }
+.grid-detail { display: grid; grid-template-columns: 300px 1fr; }
+.cv-tree tr.cv-main { cursor: pointer; }
+.cv-tree { table-layout: fixed; }
+.cv-tree td, .cv-tree th { padding: 5px 7px; font-size: 11.5px; border-left: 1px solid var(--border); overflow: hidden; }
+.cv-tree td:first-child, .cv-tree th:first-child { border-left: none; }
+.cv-tree tr.cv-child > td { font-size: 11px; padding: 4px 7px; }
+.cv-tree tr.cv-main > td { border-top: 1.5px solid var(--border2); }
+/* wrap text columns so fixed widths hold */
+.cv-tree td.dt-wrap, .cv-tree td.bold { white-space: normal; word-break: break-word; }
+/* ── FREEZE 4 cột đầu (đến Tên phiếu) ── */
+.cv-tree th:nth-child(-n+4), .cv-tree td:nth-child(-n+4) { position: sticky; z-index: 2; background: var(--bg2); }
+.cv-tree th:nth-child(1), .cv-tree td:nth-child(1) { left: 0; }
+.cv-tree th:nth-child(2), .cv-tree td:nth-child(2) { left: 40px; }
+.cv-tree th:nth-child(3), .cv-tree td:nth-child(3) { left: 215px; }
+.cv-tree th:nth-child(4), .cv-tree td:nth-child(4) { left: 287px; box-shadow: inset -1px 0 0 var(--border2), 6px 0 8px -6px rgba(16,24,40,.12); }
+.cv-tree thead th:nth-child(-n+4) { z-index: 4; }
+/* nền cột đông theo từng loại hàng */
+.cv-tree tr.cv-total td:nth-child(-n+4) { background: var(--bg3); }
+.cv-tree tr.cv-main  td:nth-child(-n+4) { background: var(--bg2); }
+.cv-tree tr.cv-main:hover td:nth-child(-n+4),
+.cv-tree tr.cv-main.active td:nth-child(-n+4) { background: var(--blue-dim); }
+.cv-tree tr.cv-child td:nth-child(-n+4) { background: var(--bg2); }
+.cv-tree th:nth-child(-n+4) { background: var(--bg3); }
+.cv-tree tr.cv-main:hover td { background: var(--blue-dim); }
+.cv-tree tr.cv-main.open td { background: var(--blue-dim); font-weight: 700; }
+.cv-caret { display: inline-block; width: 11px; font-size: 9px; color: var(--text3); transition: transform .15s; transform: rotate(0deg); }
+.cv-tree tr.cv-main.open .cv-caret { transform: rotate(90deg); color: var(--blue); }
+.cv-tree tr.cv-child > td { background: var(--bg3); font-size: 12px; border-bottom: 1px solid var(--border); }
+.cv-tree tr.cv-child:hover > td { background: var(--bg4); }
+.cv-tree tr.cv-main.open + tr.cv-child > td { border-top: 1px solid var(--border2); }
+.grid-detail .detail-left { border-right: 1px solid var(--border); }
+@media (max-width: 900px){ .grid-detail { grid-template-columns: 1fr; } .grid-detail .detail-left { border-right: none; border-bottom: 1px solid var(--border); } }
+
+/* ── TABLE MAIN (công việc) ── */
+.tbl-wrap { overflow-x: auto; }
+.cv-wrap { max-height: 560px; overflow: auto; }
+.tl-wrap { border: 1px solid var(--border); border-radius: var(--r); margin: 0 20px 20px; overflow: hidden; }
+.stage-wrap { border: 1px solid var(--border); border-radius: var(--r); margin: 0 16px 16px; overflow: hidden; }
+.stage-tbl tr.stage-row { cursor: pointer; }
+.stage-tbl tr.stage-row:hover td { background: var(--blue-dim); }
+.stage-tbl tr.stage-row.active td { background: var(--blue-dim); }
+.stage-tbl tr.stage-row.active td:first-child { box-shadow: inset 3px 0 0 var(--blue); }
+.tl-wrap table.t th { border-top: none; }
+table.t { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 900px; }
+table.t.tw-auto { width: auto; min-width: 0; }
+table.t th {
+  padding: 7px 12px; text-align: left;
+  background: var(--bg3); color: var(--text2);
+  font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap; position: sticky; top: 0; z-index: 2;
+}
+table.t td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: middle; font-size: 11.5px; }
+table.t tr:last-child td { border: none; }
+table.t tr:hover td { background: var(--bg3); }
+table.t td.bold { color: var(--text); font-weight: 500; }
+table.t td.num  { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; color: var(--text); }
+table.t td.ctr  { text-align: center; }
+
+/* ── EXPANDABLE ROWS ── */
+tr.cv-main { cursor: pointer; }
+tr.cv-main:hover td { background: var(--blue-dim); }
+tr.cv-main.active td { background: var(--blue-dim); box-shadow: inset 3px 0 0 var(--blue); }
+tr.cv-main.active td.bold { color: var(--blue); }
+tr.cv-total td { background: var(--bg3); font-weight: 600; border-top: 1.5px solid var(--border2); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 3; }
+tr.cv-total td.bold { color: var(--text); letter-spacing: 0; }
+.detail-wrap { padding: 4px 8px 10px; overflow: auto; max-height: 440px; }
+.detail-wrap table.dt thead th { position: sticky; top: 0; z-index: 2; }
+table.dt { width: 100%; border-collapse: collapse; font-size: 11.5px; background: var(--bg2); border-radius: var(--r); overflow: hidden; box-shadow: inset 0 0 0 1px var(--border); }
+table.dt th {
+  padding: 7px 10px; text-align: left;
+  background: var(--bg4); color: var(--text2);
+  font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  white-space: nowrap; border-bottom: 1px solid var(--border);
+}
+table.dt td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text2); white-space: nowrap; }
+table.dt td.dt-wrap { white-space: normal; min-width: 200px; max-width: 300px; line-height: 1.4; }
+table.dt tr:last-child td { border: none; }
+table.dt td.bold { color: var(--text); font-weight: 600; }
+table.dt td.ctr { text-align: center; }
+.wlink { color: var(--blue); text-decoration: none; font-weight: 600; font-size: 11px; }
+.wlink:hover { text-decoration: underline; }
+.empty { color: var(--text3); opacity: .5; }
+
+/* ── BADGE ── */
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 5px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+.b-green  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(13,158,110,.2); }
+.b-blue   { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(37,99,235,.2); }
+.b-amber  { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(217,119,6,.2); }
+.b-coral  { background: var(--coral-dim); color: var(--coral); border: 1px solid rgba(224,68,43,.2); }
+.b-purple { background: var(--purple-dim);color: var(--purple);border: 1px solid rgba(124,58,237,.2); }
+.b-gray   { background: var(--bg3);       color: var(--text3); border: 1px solid var(--border); }
+
+/* ── COMPACT COUNT + STACKED BAR ── */
+.pct-sub { display: block; font-size: 10px; color: var(--text3); font-weight: 500; margin-top: 1px; }
+.stack-track {
+  display: flex; height: 8px; width: 100%;
+  background: var(--bg4); border-radius: 5px; overflow: hidden;
+}
+.seg { height: 100%; transition: width .4s; }
+.seg:first-child { border-radius: 5px 0 0 5px; }
+.seg:last-child  { border-radius: 0 5px 5px 0; }
+.tbl-legend {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 9px 14px; background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+
+/* ── TIME BARS ── */
+.tc-block { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.tc-block:last-child { border: none; }
+.tc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.tc-name { font-size: 11.5px; color: var(--text2); font-weight: 500; }
+.tc-tag  { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+.tc-tag.b-green { background: var(--green-dim); color: var(--green); }
+.tc-tag.b-coral { background: var(--coral-dim); color: var(--coral); }
+.tc-tag.b-amber { background: var(--amber-dim); color: var(--amber); }
+.tc-bars { display: flex; flex-direction: column; gap: 4px; }
+.tc-bar-row { display: flex; align-items: center; gap: 7px; }
+.tc-lbl { font-size: 10px; color: var(--text3); width: 16px; }
+.tc-track { flex: 1; height: 6px; background: var(--bg4); border-radius: 4px; overflow: hidden; position: relative; }
+.tc-bar   { height: 100%; border-radius: 4px; }
+.tc-mark  { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--coral); opacity: .8; }
+.tc-num   { font-size: 10.5px; font-weight: 700; width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── PB LIST ── */
+.pb-row { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid var(--border); border-radius: 5px; }
+.pb-row:last-child { border-bottom: 1px solid var(--border); }
+.pb-row.clk { cursor: pointer; }
+.pb-row.clk:hover { background: var(--bg3); }
+.pb-row.active { background: var(--blue-dim); }
+.pb-cnt { width: 52px; text-align: center; font-size: 11px; font-weight: 600; color: var(--text2); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pb-head { display: flex; align-items: center; gap: 8px; padding: 0 4px 7px; margin-bottom: 4px; border-bottom: 1.5px solid var(--border2); }
+.pb-head span { font-size: 10px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; color: var(--text3) !important; }
+.pb-head .pb-track { background: transparent; height: auto; }
+.pb-head .pb-hrs, .pb-head .pb-pct { text-align: right; }
+.pb-name { width: 150px; font-size: 11.5px; color: var(--text2); flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pb-hrs  { width: 34px; text-align: right; font-size: 11px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.pb-track { flex: 1; height: 5px; background: var(--bg4); border-radius: 4px; overflow: hidden; }
+.pb-fill  { height: 100%; border-radius: 4px; }
+.pb-pct   { width: 34px; text-align: right; font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.pb-delta { width: 84px; text-align: center; font-size: 10px; font-weight: 700; padding: 2px 0; border-radius: 5px; flex-shrink: 0; }
+.pb-delta.b-green { background: var(--green-dim); color: var(--green); }
+.pb-delta.b-coral { background: var(--coral-dim); color: var(--coral); }
+.pb-delta.b-amber { background: var(--amber-dim); color: var(--amber); }
+.pb-foot { display: flex; align-items: center; gap: 8px; padding: 9px 0 2px; margin-top: 4px; border-top: 2px solid var(--border2); }
+
+/* ── FUNNEL ── */
+.funnel-hd  { display: grid; grid-template-columns: 110px 1fr 76px 84px; gap: 8px; padding: 5px 0; }
+.funnel-row { display: grid; grid-template-columns: 110px 1fr 76px 84px; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.funnel-total { border-bottom: 2px solid var(--border2); font-weight: 700; margin-bottom: 2px; }
+.funnel-row:last-child { border: none; }
+.funnel-track { height: 22px; background: var(--bg4); border-radius: 6px; overflow: hidden; }
+.funnel-fill  { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; font-size: 10.5px; font-weight: 700; color: #fff; }
+.funnel-val   { text-align: right; font-size: 12px; font-weight: 700; color: var(--text); }
+.funnel-fc    { text-align: right; font-size: 12px; font-weight: 700; color: var(--green); }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: var(--blue-dim); border: 1px solid rgba(37,99,235,.15);
+  border-radius: var(--r); padding: 14px 16px; margin-top: 16px;
+}
+.info-box-title { font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+.info-box-body  { font-size: 11.5px; color: var(--text2); line-height: 1.75; }
+.info-box-body strong { color: var(--text); }
+
+/* ── SUM ROW ── */
+.sum-row {
+  display: flex; justify-content: flex-end; gap: 24px;
+  padding: 10px 14px; background: var(--bg3);
+  border-top: 1px solid var(--border);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  font-size: 12px; color: var(--text2);
+}
+.sum-row strong { color: var(--text); }
+
+/* ── LEG ── */
+.leg { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+.leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+.leg-sq   { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ══════ TOPBAR ══════ -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark">A</div>
+      ASEL <span class="logo-sub">· Hệ thống báo cáo</span>
+    </div>
+
+    <div class="topnav">
+      <button class="dept-btn on" onclick="switchDept('kd',this)">
+        Phòng Kinh doanh
+      </button>
+      <div class="topsub active" id="topsub-kd">
+        <button class="sub-btn on" data-sub="cv" onclick="switchSub('kd','cv',this)">Công việc &amp; Thời lượng</button>
+        <button class="sub-btn" data-sub="fc" onclick="switchSub('kd','fc',this)">Forecast Doanh thu</button>
+      </div>
+      <button class="dept-btn" onclick="switchDept('kt',this)">
+        Phòng Kỹ thuật
+      </button>
+      <div class="topsub" id="topsub-kt">
+        <button class="sub-btn on" data-sub="cv" onclick="switchSub('kt','cv',this)">Công việc &amp; Thời lượng</button>
+      </div>
+    </div>
+
+    <div class="meta">Tháng 5 · 2026</div>
+  </div>
+
+  <!-- ══════ PHÒNG KINH DOANH ══════ -->
+  <div class="dept-panel on" id="dept-kd">
+    <div class="content">
+
+      <!-- SUB: CV KD -->
+      <div class="sub-page on" id="kd-cv">
+
+        <!-- FILTER BAR -->
+        <div class="fbar" id="fbar-kd">
+          <span class="fbar-label">Lọc</span>
+          <select id="f-kd-nv" onchange="renderKDcv()">
+            <option value="all">Tất cả NV</option>
+            <option value="nv1">NVKD 1 · Minh</option>
+            <option value="nv2">NVKD 2 · Linh</option>
+            <option value="nv3">NVKD 3 · Nam</option>
+            <option value="nv4">NVKD 4 · Hà</option>
+            <option value="nv5">NVKD 5 · Sơn</option>
+            <option value="nv6">NVKD 6 · Quân</option>
+            <option value="nv7">NVKD 7 · Trang</option>
+            <option value="nv8">NVKD 8 · Dũng</option>
+            <option value="nv9">NVKD 9 · Vy</option>
+            <option value="nv10">NVKD 10 · Phúc</option>
+          </select>
+          <select id="f-kd-type" onchange="renderKDcv()">
+            <option value="all">Tất cả loại CV</option>
+          </select>
+          <div class="fbar-sep"></div>
+          <span class="fbar-label">Thời gian</span>
+          <div class="fbar-date-range">
+            <input type="date" id="f-date-from" value="2026-05-01" onchange="renderKDcv()">
+            <span>→</span>
+            <input type="date" id="f-date-to" value="2026-05-31" onchange="renderKDcv()">
+          </div>
+          <span class="chip-live">● Live</span>
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-row kpi-row-4">
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng công việc</div>
+            <div class="kpi-val" id="k-plan">—</div>
+            <div class="kpi-trend t-neu">bản ghi thực tế</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng giờ làm</div>
+            <div class="kpi-val" id="k-hours">—</div>
+            <div class="kpi-trend t-neu">giờ trong kỳ lọc</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng dự án</div>
+            <div class="kpi-val" id="k-proj">—</div>
+            <div class="kpi-trend t-neu">đối tượng / dự án</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-lbl">TB giờ làm / ngày / NV</div>
+            <div class="kpi-val" id="k-avg">—</div>
+            <div class="kpi-trend t-neu">giờ · ngày · mỗi nhân viên</div>
+          </div>
+        </div>
+
+        <!-- Section A: Thời lượng công việc -->
+        <div class="sec-hd">
+          <div class="sec-line" style="background:var(--purple)"></div>
+          <span class="sec-title"><i class="ti ti-clock-hour-4"></i>A. Thời lượng công việc</span>
+          <span class="sec-sub">Thời gian thực tế</span>
+        </div>
+
+        <div class="grid2 grid-tl">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:20px 20px 12px">
+              <div class="card-title"><i class="ti ti-clock"></i>Giờ làm theo nhân viên</div>
+              <div class="card-sub">Thời gian thực tế · mốc chuẩn <span id="tgt-bars-kd">44h</span> · tăng ca / thiếu giờ</div>
+            </div>
+            <div class="tbl-wrap tl-wrap">
+              <table class="t tw-auto">
+                <thead><tr>
+                  <th style="width:8%;text-align:center">STT</th>
+                  <th style="width:27%">Tên nhân viên</th>
+                  <th style="width:43%">Tổng thời gian</th>
+                  <th style="width:22%;text-align:center">Tăng ca / Thiếu</th>
+                </tr></thead>
+                <tbody id="tc-list-kd"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="ti ti-chart-donut"></i>Tỷ lệ thời gian thực hiện / <span id="tgt-share-kd">44h</span></div>
+            <div class="card-sub">Chọn nhân viên để xem % thời lượng từng loại việc trong kỳ lọc</div>
+            <div id="pb-list-kd"></div>
+          </div>
+        </div>
+
+        <!-- Section B: Bảng chi tiết công việc (drill-down) -->
+        <div class="sec-hd" style="margin-top:22px">
+          <div class="sec-line" style="background:var(--blue)"></div>
+          <span class="sec-title"><i class="ti ti-table"></i>B. Bảng chi tiết công việc</span>
+          <span class="sec-sub">Nhấp một loại công việc để mở rộng danh sách bản ghi ngay bên dưới</span>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap cv-wrap">
+            <table class="t cv-tree">
+              <thead><tr>
+                <th style="width:40px;text-align:center">STT</th>
+                <th style="width:175px">Loại công việc</th>
+                <th style="width:72px">Người TH</th>
+                <th style="width:150px">Tên phiếu</th>
+                <th style="width:160px">Đối tượng / Dự án</th>
+                <th style="width:130px">Người liên hệ</th>
+                <th style="width:115px">SĐT</th>
+                <th style="width:78px;text-align:center">Giai đoạn</th>
+                <th style="width:260px">Nội dung / Wework</th>
+                <th style="width:95px;text-align:center">Ngày</th>
+                <th style="width:120px;text-align:center">Thời gian</th>
+                <th style="width:72px;text-align:center">Wework</th>
+              </tr></thead>
+              <tbody id="tbody-kd-cv"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /kd-cv -->
+
+      <!-- SUB: FORECAST KD -->
+      <div class="sub-page" id="kd-fc">
+
+        <div class="fbar">
+          <span class="fbar-label">Lọc</span>
+          <select id="f-fc-nv" onchange="renderForecast()">
+            <option value="all">Tất cả NVKD</option>
+            <option value="nv1">NVKD 1 · Minh</option>
+            <option value="nv2">NVKD 2 · Linh</option>
+            <option value="nv3">NVKD 3 · Nam</option>
+            <option value="nv4">NVKD 4 · Hà</option>
+            <option value="nv5">NVKD 5 · Sơn</option>
+          </select>
+          <select id="f-fc-stage" onchange="renderForecast()">
+            <option value="all">Tất cả stage</option>
+            <option value="5">Thô · 5%</option>
+            <option value="10">10%</option>
+            <option value="30">30%</option>
+            <option value="50">50%</option>
+            <option value="70">70%</option>
+            <option value="90">90%</option>
+            <option value="win">Win · đã ký</option>
+          </select>
+          <select id="f-fc-status" onchange="renderForecast()">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="new">Dự án mới (hôm nay)</option>
+            <option value="active">Đang theo dõi</option>
+            <option value="won">Đã ký</option>
+            <option value="lost">Thất bại</option>
+          </select>
+          <div class="fbar-sep"></div>
+          <span class="fbar-label">Thời gian</span>
+          <div class="fbar-date-range">
+            <input type="date" id="f-fc-from" value="2026-05-01" onchange="renderForecast()">
+            <span>→</span>
+            <input type="date" id="f-fc-to" value="2026-05-31" onchange="renderForecast()">
+          </div>
+          <span class="fbar-label" style="margin-left:auto">Tỉ giá</span>
+          <div class="rate-box">
+            $1 =
+            <input type="number" id="f-rate" value="25400" step="100" min="1" onchange="renderForecast()">
+            đ
+          </div>
+        </div>
+
+        <!-- KPI Forecast -->
+        <div class="kpi-row kpi-row-6">
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng giá trị pipeline</div>
+            <div class="kpi-val" id="kf-hddk" style="font-size:20px">—</div>
+            <div class="kpi-trend t-neu">&nbsp;</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-lbl">Giá trị HĐ đã ký</div>
+            <div class="kpi-val" id="kf-total" style="font-size:20px">—</div>
+            <div class="kpi-trend t-neu">&nbsp;</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-lbl">Dự án mới (hôm nay)</div>
+            <div class="kpi-val" id="kf-new">—</div>
+            <div class="kpi-trend t-up" id="kf-newsub">phiếu service mới</div>
+          </div>
+          <div class="kpi-card purple">
+            <div class="kpi-lbl">Tổng dự án</div>
+            <div class="kpi-val" id="kf-count">—</div>
+            <div class="kpi-trend t-neu">trong bộ lọc</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-lbl">Số Win</div>
+            <div class="kpi-val" id="kf-win">—</div>
+            <div class="kpi-trend t-up" id="kf-winrate">—</div>
+          </div>
+          <div class="kpi-card coral">
+            <div class="kpi-lbl">Số Fail</div>
+            <div class="kpi-val" id="kf-fail">—</div>
+            <div class="kpi-trend t-dn" id="kf-failrate">—</div>
+          </div>
+        </div>
+
+        <div class="sec-hd">
+          <div class="sec-line" style="background:var(--green)"></div>
+          <span class="sec-title"><i class="ti ti-filter"></i>A. Funnel pipeline</span>
+          <button id="fc-cur-btn-a" onclick="toggleFcCur()" class="cur-btn" style="margin-left:auto">Xem: VNĐ</button>
+        </div>
+
+        <div style="margin-bottom:16px">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:16px 16px 10px">
+              <div class="card-title"><i class="ti ti-filter"></i>Pipeline theo stage</div>
+              <div class="card-sub">Số dự án &amp; giá trị theo từng stage · nhấp một stage để lọc danh sách bên dưới</div>
+            </div>
+            <div class="tbl-wrap stage-wrap">
+              <table class="t stage-tbl" style="min-width:0">
+                <thead><tr>
+                  <th style="width:26%">Stage</th>
+                  <th style="text-align:center">Số dự án</th>
+                  <th style="text-align:center">% SL</th>
+                  <th style="text-align:right">Tổng giá trị HĐ</th>
+                  <th style="text-align:center">% HĐ</th>
+                  <th style="text-align:right">Forecast</th>
+                  <th style="text-align:center">% FC</th>
+                </tr></thead>
+                <tbody id="funnel-list"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-hd">
+          <div class="sec-line" style="background:var(--amber)"></div>
+          <span class="sec-title"><i class="ti ti-list-details"></i>B. Danh sách dự án Pipeline</span>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:8px">
+            <button id="fc-cur-btn" onclick="toggleFcCur()" class="cur-btn">Xem: VNĐ</button>
+          </span>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap">
+            <table class="t fc-table">
+              <thead>
+                <tr>
+                  <th class="c1" style="width:44px;min-width:44px;text-align:center">STT</th>
+                  <th class="c2" style="min-width:170px">Tên dự án</th>
+                  <th style="text-align:center;min-width:100px">Stage</th>
+                  <th style="text-align:center;min-width:110px">Trạng thái</th>
+                  <th style="text-align:center;min-width:130px">Hiện trạng</th>
+                  <th style="min-width:130px">TVTK · Tên</th>
+                  <th style="min-width:110px">TVTK · SĐT</th>
+                  <th style="text-align:right;min-width:110px">Giá trị chào</th>
+                  <th style="text-align:right;min-width:110px">Giá trị ký (HĐ)</th>
+                  <th style="text-align:right;min-width:110px" title="Giá trị tính hoa hồng = giá trị ký − ~20% (chiết khấu KH, thuế)">Giá trị quy đổi</th>
+                  <th style="text-align:center;min-width:90px">Ngày tiếp cận</th>
+                  <th style="text-align:center;min-width:110px" id="fc-date-col">Ngày chốt</th>
+                  <th style="text-align:center;min-width:90px">Phiếu service</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-fc-total"></tbody>
+              <tbody id="tbody-fc"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Người ảnh hưởng + Nhà thầu (click dự án ở trên để lọc) -->
+        <div class="sec-hd">
+          <div class="sec-line" style="background:var(--purple)"></div>
+          <span class="sec-title"><i class="ti ti-users-group"></i>C. Người ảnh hưởng &amp; Nhà thầu</span>
+          <span class="sec-sub" id="fc-sub-hint">Nhấp một dự án ở bảng trên để lọc · đang xem tất cả</span>
+        </div>
+
+        <div class="grid2">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:14px 16px 10px">
+              <div class="card-title"><i class="ti ti-user-star"></i>Người ảnh hưởng</div>
+            </div>
+            <div class="tbl-wrap" style="max-height:360px;overflow:auto">
+              <table class="t" style="min-width:0">
+                <thead><tr>
+                  <th style="width:42px;text-align:center">STT</th><th>Dự án</th><th>Tên</th><th>SĐT</th><th>Vai trò</th><th style="text-align:center">Thái độ</th>
+                </tr></thead>
+                <tbody id="tbody-ah"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:14px 16px 10px">
+              <div class="card-title"><i class="ti ti-building-store"></i>Nhà thầu <span style="font-weight:400;color:var(--text3);font-size:11px">(ASEL lắp đặt điện + các đơn vị thi công khác)</span></div>
+            </div>
+            <div class="tbl-wrap" style="max-height:360px;overflow:auto">
+              <table class="t" style="min-width:0">
+                <thead><tr>
+                  <th style="width:42px;text-align:center">STT</th><th>Dự án</th><th>Hạng mục</th><th>Nhà thầu</th><th style="text-align:right">Giá trị HĐ</th><th style="text-align:center">Trạng thái</th>
+                </tr></thead>
+                <tbody id="tbody-nt"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /kd-fc -->
+    </div><!-- /content kd -->
+  </div><!-- /dept-kd -->
+
+  <!-- ══════ PHÒNG KỸ THUẬT ══════ -->
+  <div class="dept-panel" id="dept-kt">
+    <div class="content">
+
+      <div class="sub-page on" id="kt-cv">
+
+        <div class="fbar">
+          <span class="fbar-label">Lọc</span>
+          <select id="f-kt-nv" onchange="renderKTcv()">
+            <option value="all">Tất cả NV kỹ thuật</option>
+            <option value="kt1">NVKT 1 · Hùng</option>
+            <option value="kt2">NVKT 2 · Lan</option>
+            <option value="kt3">NVKT 3 · Đạt</option>
+            <option value="kt4">NVKT 4 · Yến</option>
+          </select>
+          <select id="f-kt-type" onchange="renderKTcv()">
+            <option value="all">Tất cả loại CV</option>
+          </select>
+          <div class="fbar-sep"></div>
+          <span class="fbar-label">Thời gian</span>
+          <div class="fbar-date-range">
+            <input type="date" id="f-kt-from" value="2026-05-01" onchange="renderKTcv()">
+            <span>→</span>
+            <input type="date" id="f-kt-to" value="2026-05-31" onchange="renderKTcv()">
+          </div>
+          <span class="chip-live">● Live</span>
+        </div>
+
+        <!-- KPI KT -->
+        <div class="kpi-row kpi-row-4">
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng công việc</div>
+            <div class="kpi-val" id="kt-plan">—</div>
+            <div class="kpi-trend t-neu">bản ghi thực tế</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng giờ làm</div>
+            <div class="kpi-val" id="kt-hours">—</div>
+            <div class="kpi-trend t-neu">giờ trong kỳ lọc</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-lbl">Tổng dự án</div>
+            <div class="kpi-val" id="kt-proj">—</div>
+            <div class="kpi-trend t-neu">đối tượng / dự án</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-lbl">TB giờ làm / ngày / NV</div>
+            <div class="kpi-val" id="kt-avg">—</div>
+            <div class="kpi-trend t-neu">giờ · ngày · mỗi nhân viên</div>
+          </div>
+        </div>
+
+        <!-- Section A KT: Thời lượng -->
+        <div class="sec-hd">
+          <div class="sec-line" style="background:var(--purple)"></div>
+          <span class="sec-title"><i class="ti ti-clock-hour-4"></i>A. Thời lượng công việc</span>
+          <span class="sec-sub">Thời gian thực tế</span>
+        </div>
+
+        <div class="grid2 grid-tl">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div style="padding:20px 20px 12px">
+              <div class="card-title"><i class="ti ti-clock"></i>Giờ làm theo nhân viên</div>
+              <div class="card-sub">Thời gian thực tế · mốc chuẩn <span id="tgt-bars-kt">44h</span> · tăng ca / thiếu giờ</div>
+            </div>
+            <div class="tbl-wrap tl-wrap">
+              <table class="t tw-auto">
+                <thead><tr>
+                  <th style="width:8%;text-align:center">STT</th>
+                  <th style="width:27%">Tên nhân viên</th>
+                  <th style="width:43%">Tổng thời gian</th>
+                  <th style="width:22%;text-align:center">Tăng ca / Thiếu</th>
+                </tr></thead>
+                <tbody id="tc-list-kt"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="ti ti-chart-donut"></i>Tỷ lệ thời gian thực hiện / <span id="tgt-share-kt">44h</span></div>
+            <div class="card-sub">Chọn nhân viên để xem % thời lượng từng loại việc trong kỳ lọc</div>
+            <div id="pb-list-kt"></div>
+          </div>
+        </div>
+
+        <!-- Section B KT: Bảng chi tiết công việc (drill-down) -->
+        <div class="sec-hd" style="margin-top:22px">
+          <div class="sec-line" style="background:var(--purple)"></div>
+          <span class="sec-title"><i class="ti ti-table"></i>B. Bảng chi tiết công việc</span>
+          <span class="sec-sub">Nhấp một loại công việc để mở rộng danh sách bản ghi ngay bên dưới</span>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <div class="tbl-wrap cv-wrap">
+            <table class="t cv-tree">
+              <thead><tr>
+                <th style="width:40px;text-align:center">STT</th>
+                <th style="width:175px">Loại công việc</th>
+                <th style="width:72px">Người TH</th>
+                <th style="width:150px">Tên phiếu</th>
+                <th style="width:160px">Đối tượng / Dự án</th>
+                <th style="width:130px">Người liên hệ</th>
+                <th style="width:115px">SĐT</th>
+                <th style="width:78px;text-align:center">Giai đoạn</th>
+                <th style="width:260px">Nội dung / Wework</th>
+                <th style="width:95px;text-align:center">Ngày</th>
+                <th style="width:120px;text-align:center">Thời gian</th>
+                <th style="width:72px;text-align:center">Wework</th>
+              </tr></thead>
+              <tbody id="tbody-kt-cv"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /kt-cv -->
+    </div>
+  </div><!-- /dept-kt -->
+
+</div><!-- /shell -->
+
+<script>
+var charts = {};
+
+// ── DATA: CV KINH DOANH ──
+// group: 'field' = đi thị trường/nhậu/event | 'hoso' = xử lý hồ sơ | 'std' = còn lại
+var cvKD = [
+  {id:'k01', group:'std',   name:'Tiếp KTS mới tại showroom',   kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k02', group:'std',   name:'Tiếp KTS cũ tại showroom',    kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k03', group:'std',   name:'Làm việc tại VP KTS mới',     kh:1,  done:1, inprog:0, soon:0, late:0},
+  {id:'k04', group:'std',   name:'Làm việc tại VP KTS cũ',      kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k05', group:'std',   name:'Tiếp CĐT tại showroom',       kh:2,  done:1, inprog:1, soon:0, late:0},
+  {id:'k06', group:'std',   name:'Làm việc với CĐT tại công trình', kh:2, done:1, inprog:1, soon:0, late:0},
+  {id:'k07', group:'std',   name:'Gặp đối tác cũ',             kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k08', group:'std',   name:'Gặp đối tác mới',            kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k09', group:'hoso',  name:'Xử lý hồ sơ',               kh:6,  done:4, inprog:1, soon:1, late:0},
+  {id:'k10', group:'field', name:'Đi thị trường',              kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k11', group:'field', name:'Đi nhậu',                   kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k12', group:'field', name:'Đi event',                  kh:2,  done:2, inprog:0, soon:0, late:0},
+  {id:'k13', group:'std',   name:'Telesale',                  kh:2,  done:2, inprog:0, soon:0, late:0},
+];
+
+// ── DETAIL RECORDS: sinh tự động cho đủ số lượng = tổng KH mỗi loại ──
+var cvDetails = {};
+
+// pool mẫu (số minh họa)
+var poolKTS = [
+  {donvi:'CTY TK An Phú',        nguoi:'KTS Trần Vũ',   sdt:'0901 234 567'},
+  {donvi:'Studio Nội thất Zen',  nguoi:'KTS Lê Hoa',    sdt:'0912 888 111'},
+  {donvi:'ARC Design',           nguoi:'KTS Phạm Long', sdt:'0938 555 222'},
+  {donvi:'CTY TK Hải Đăng',      nguoi:'KTS Nguyễn An', sdt:'0977 121 212'},
+  {donvi:'Home Concept',         nguoi:'KTS Đỗ My',     sdt:'0909 343 434'},
+  {donvi:'Studio Kiến Tạo',      nguoi:'KTS Vũ Nam',    sdt:'0905 678 234'},
+  {donvi:'CTY TK Bình Minh',     nguoi:'KTS Lý Hà',     sdt:'0918 445 667'},
+];
+var poolCDT = [
+  {donvi:'CĐT Vinhomes',   nguoi:'A. Tuấn',  sdt:'0966 777 888'},
+  {donvi:'CĐT Masterise',  nguoi:'C. Hằng',  sdt:'0933 222 111'},
+  {donvi:'CĐT Sun Group',  nguoi:'A. Dũng',  sdt:'0944 556 778'},
+  {donvi:'CĐT Novaland',   nguoi:'A. Khoa',  sdt:'0922 113 445'},
+  {donvi:'CĐT Phú Mỹ Hưng',nguoi:'C. Thảo',  sdt:'0955 889 001'},
+];
+var poolDT = [
+  {donvi:'NPP Điện Quang',  nguoi:'A. Hòa',  sdt:'0988 224 668'},
+  {donvi:'NPP Rạng Đông',   nguoi:'C. Yến',  sdt:'0911 778 990'},
+  {donvi:'CTY Schneider VN',nguoi:'A. Bảo',  sdt:'0977 665 443'},
+  {donvi:'CTY Panasonic VN',nguoi:'C. Trâm', sdt:'0966 001 223'},
+];
+var timePairs = [['08:30','10:00'],['09:00','11:30'],['13:30','15:00'],['14:00','17:00'],['10:00','12:00'],['15:30','17:30']];
+var fieldAreas = ['khu vực Q2','khu Thủ Đức','khu Q7','khu Q9','trung tâm Q1','khu Bình Thạnh'];
+// giai đoạn dự án cho hồ sơ Xử lý hồ sơ
+var stagesHoso = ['Khảo sát','Thiết kế','Duyệt dự toán','Thi công','Nghiệm thu','Bàn giao'];
+var stageBadgeMap = {'Khảo sát':'b-gray','Thiết kế':'b-blue','Duyệt dự toán':'b-amber','Thi công':'b-purple','Nghiệm thu':'b-green','Bàn giao':'b-green'};
+// giai đoạn (%) + hiện trạng công trình cho CĐT / hồ sơ
+var stagesPct = ['5%','10%','30%','50%','70%','90%'];
+var hienTrangList = ['Đã phá dỡ','Đào hầm','Đổ móng','Cất nóc','Xây tường ngăn','Hoàn thiện thô'];
+
+function poolFor(name) {
+  if (name.indexOf('KTS') !== -1) return poolKTS;
+  if (name.indexOf('CĐT') !== -1 || name.indexOf('công trình') !== -1) return poolCDT;
+  if (name.indexOf('đối tác') !== -1) return poolDT;
+  return poolKTS;
+}
+function pickBuoi(id, seq) {
+  // chỉ đi nhậu (k11) & đi event (k12) mới có Tối
+  if ((id === 'k11' || id === 'k12') && seq % 3 === 2) return 'Tối';
+  return (seq % 2 === 0) ? 'Sáng' : 'Chiều';
+}
+function makeRecord(d, thName, seq) {
+  var day = (seq % 27) + 1;
+  var ngay = (day < 10 ? '0' + day : day) + '/05/2026';
+  var rec = { th: thName, ngay: ngay, link: '#' };
+  if (d.group === 'field') {
+    if (d.id === 'k11' || d.id === 'k12') {   // đi nhậu / đi event: có đơn vị + người
+      var fp = poolDT[seq % poolDT.length];
+      rec.donvi = fp.donvi; rec.nguoi = fp.nguoi; rec.sdt = fp.sdt;
+      rec.nd = d.name + ' · ' + fp.donvi;
+    } else {
+      rec.nd = d.name + ' — ' + fieldAreas[seq % fieldAreas.length];
+    }
+    rec.buoi = pickBuoi(d.id, seq);
+  } else if (d.group === 'hoso') {
+    var ph = poolKTS[seq % poolKTS.length];
+    rec.donvi = ph.donvi; rec.nguoi = ph.nguoi; rec.sdt = ph.sdt;
+    rec.nd = 'Xử lý hồ sơ · ' + ph.donvi;
+    var t = timePairs[seq % timePairs.length];
+    rec.start = t[0]; rec.end = t[1];
+  } else if (d.id === 'k13') {
+    // telesale: không dùng tên phiếu / đơn vị / người liên hệ / SĐT
+    rec.donvi = ''; rec.nguoi = ''; rec.sdt = '';
+    rec.nd = 'Gọi telesale batch #' + (seq + 1);
+    rec.buoi = (seq % 2 === 0) ? 'Sáng' : 'Chiều';
+  } else {
+    var p = poolFor(d.name); var pp = p[seq % p.length];
+    rec.donvi = pp.donvi; rec.nguoi = pp.nguoi; rec.sdt = pp.sdt;
+    rec.nd = d.name + ' · ' + pp.donvi;
+    rec.buoi = (seq % 2 === 0) ? 'Sáng' : 'Chiều';
+  }
+  // ── các trường bổ sung theo cấu trúc v2 ──
+  // Sáng/Chiều
+  if (rec.buoi)        rec.sc = rec.buoi;
+  else if (rec.start)  rec.sc = (parseInt(rec.start, 10) < 12) ? 'Sáng' : 'Chiều';
+  else                 rec.sc = (seq % 2 === 0) ? 'Sáng' : 'Chiều';
+  // Giai đoạn + Hiện trạng: chỉ CĐT (k05,k06) và Xử lý hồ sơ (k09)
+  if (d.id === 'k05' || d.id === 'k06') {
+    rec.giai = stagesPct[seq % stagesPct.length];
+    rec.hientrang = hienTrangList[seq % hienTrangList.length];
+  } else if (d.id === 'k09') {
+    rec.giai = stagesPct[seq % stagesPct.length];
+    rec.hientrang = '';
+  } else {
+    rec.giai = ''; rec.hientrang = '';
+  }
+  // Tên phiếu (Service): người liên hệ - đơn vị
+  if (rec.nguoi && rec.donvi && rec.donvi !== '—') rec.tenPhieu = rec.nguoi + ' - ' + rec.donvi;
+  else if (rec.donvi && rec.donvi !== '—')          rec.tenPhieu = rec.donvi;
+  else                                              rec.tenPhieu = d.name;
+  if (d.id === 'k13') rec.tenPhieu = '';   // telesale không có tên phiếu
+  return rec;
+}
+function buildDeptDetails(list, dept) {
+  var emps = deptEmps[dept];
+  list.forEach(function(d, i) {
+    var w = weightsFor(emps.length, i);
+    var khParts = partition(d.kh, w);   // số bản ghi mỗi nhân viên = KH slice → khớp filter
+    var recs = [];
+    emps.forEach(function(e, ei) {
+      for (var k = 0; k < khParts[ei]; k++) {
+        recs.push(makeRecord(d, empName[e], recs.length));
+      }
+    });
+    // gán trạng thái: giữ tỉ lệ, mỗi trạng thái >0 có ≥1 bản ghi, tổng đúng = kh
+    var wts = [d.done, d.inprog, d.soon, d.late];
+    var labs = ['done','inprog','soon','late'];
+    var order = [0,1,2,3].sort(function(a,b){ return wts[b]-wts[a]; });
+    var nz = [0,1,2,3].filter(function(i){ return wts[i] > 0; });
+    var cnts = [0,0,0,0];
+    if (d.kh <= nz.length) {
+      for (var q=0;q<d.kh;q++) cnts[order[q]]++;
+    } else {
+      nz.forEach(function(i){ cnts[i] = 1; });
+      var rem = d.kh - nz.length;
+      var swz = nz.reduce(function(a,i){ return a+wts[i]; },0);
+      nz.forEach(function(i){ cnts[i] += Math.floor(rem * wts[i] / swz); });
+      var rem2 = d.kh - cnts.reduce(function(a,b){return a+b;},0);
+      var oi = 0;
+      while (rem2 > 0) { var idx = order[oi % 4]; if (wts[idx] > 0) { cnts[idx]++; rem2--; } oi++; }
+    }
+    // đồng bộ số liệu bảng tổng = số bản ghi thực tế từng trạng thái
+    d.done = cnts[0]; d.inprog = cnts[1]; d.soon = cnts[2]; d.late = cnts[3];
+    var statusList = [];
+    for (var j=0;j<4;j++) for (var m=0;m<cnts[j];m++) statusList.push(labs[j]);
+    recs.forEach(function(r, ri){ r.tt = statusList[ri] || 'done'; });
+    cvDetails[d.id] = recs;   // tổng bản ghi = d.kh
+  });
+}
+// ── DETAIL RECORDS KD: dữ liệu thật từ Excel ASEL_demo_bang_chi_tiet_KD_v2 ──
+var cvDetailsKD = {
+  k01: [
+    {th:"Trang", tenPhieu:"Anh Đức - Tayone", donvi:"Tayone", nguoi:"Anh Đức", sdt:"0903118759", giai:"", hientrang:"", nd:"Trao đổi nhu cầu cải tạo nhà phố và demo giải pháp chiếu sáng", ngay:"02/05/2026", sc:"Sáng", link:"#", tt:"done"},
+    {th:"Phúc", tenPhieu:"Chị Thu - Ray", donvi:"Ray Architecture", nguoi:"Chị Thu", sdt:"0941992377", giai:"", hientrang:"", nd:"Giới thiệu showroom, thống nhất gửi profile năng lực ASEL", ngay:"03/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k02: [
+    {th:"Minh", tenPhieu:"Anh Quân - Cover Archi", donvi:"Cover Archi", nguoi:"Anh Quân", sdt:"0932101100", giai:"", hientrang:"", nd:"Cập nhật dự án đang quan tâm và lịch khách ghé showroom", ngay:"04/05/2026", sc:"Sáng", link:"#", tt:"inprog"},
+    {th:"Phúc", tenPhieu:"Anh Khánh - Amorcons", donvi:"Amorcons", nguoi:"Anh Khánh", sdt:"0960549732", giai:"", hientrang:"", nd:"Trao đổi lại báo giá mẫu thiết bị cho biệt thự Long Biên", ngay:"05/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k03: [
+    {th:"Dũng", tenPhieu:"Anh Tuấn Anh - Klea", donvi:"Klea Studio", nguoi:"Anh Tuấn Anh", sdt:"0972058174", giai:"", hientrang:"", nd:"Gặp tại văn phòng để giới thiệu chính sách hợp tác KTS mới", ngay:"06/05/2026", sc:"Sáng", link:"#", tt:"done"}
+  ],
+  k04: [
+    {th:"Linh", tenPhieu:"A Quân - TONY Group", donvi:"TONY Group", nguoi:"Anh Quân", sdt:"0975885764", giai:"", hientrang:"", nd:"Cập nhật danh sách khách hàng đang thiết kế và kế hoạch gửi hồ sơ", ngay:"06/05/2026", sc:"Chiều", link:"#", tt:"soon"},
+    {th:"Phúc", tenPhieu:"Anh Hậu - Đồng Gia", donvi:"Đồng Gia", nguoi:"Anh Hậu", sdt:"0925428355", giai:"", hientrang:"", nd:"Làm việc về đề xuất giải pháp cho villa Quảng Ninh", ngay:"07/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k05: [
+    {th:"Minh", tenPhieu:"Chị Duyên - Time City - Thiên Khôi CDC", donvi:"Time City - Thiên Khôi CDC", nguoi:"Chị Duyên", sdt:"0939571578", giai:"5%", hientrang:"Đã phá", nd:"Tiếp CĐT tại showroom, ghi nhận nhu cầu chiếu sáng/rèm/âm thanh", ngay:"08/05/2026", sc:"Sáng", link:"#", tt:"done"},
+    {th:"Trang", tenPhieu:"Anh Vinh - Hải Phòng", donvi:"Nhà phố Hải Phòng", nguoi:"Anh Vinh", sdt:"0968247234", giai:"30%", hientrang:"Đào hầm", nd:"Demo hệ thống điều khiển trung tâm và xác nhận ngân sách sơ bộ", ngay:"09/05/2026", sc:"Chiều", link:"#", tt:"inprog"}
+  ],
+  k06: [
+    {th:"Nam", tenPhieu:"Anh Hoan - Nhà phố Hạ Long", donvi:"Nhà phố Hạ Long", nguoi:"Anh Hoan", sdt:"0981054033", giai:"10%", hientrang:"Cất nóc", nd:"Khảo sát hiện trạng công trình, thống nhất phạm vi phòng khách và phòng ngủ", ngay:"10/05/2026", sc:"Sáng", link:"#", tt:"late"},
+    {th:"Dũng", tenPhieu:"Chị Tám số 6 ngõ 8 Từ Hoa", donvi:"Từ Hoa Tây Hồ", nguoi:"Chị Tám", sdt:"0941853098", giai:"50%", hientrang:"Xây tường ngăn", nd:"Làm việc tại công trình về vị trí tủ điện và kịch bản chiếu sáng", ngay:"10/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k07: [
+    {th:"Minh", tenPhieu:"Anh Quang - Kyodotech", donvi:"Kyodotech", nguoi:"Anh Quang", sdt:"0966183195", giai:"", hientrang:"", nd:"Cập nhật dự án đối tác đang giới thiệu và thống nhất follow trong tuần", ngay:"13/05/2026", sc:"Sáng", link:"#", tt:"soon"},
+    {th:"Phúc", tenPhieu:"Gặp đối tác Lâm D&A", donvi:"D&A", nguoi:"Anh Lâm", sdt:"0950092944", giai:"", hientrang:"", nd:"Trao đổi lại hồ sơ dự án cũ và kế hoạch gặp chủ nhà", ngay:"13/05/2026", sc:"Chiều", link:"#", tt:"inprog"}
+  ],
+  k08: [
+    {th:"Dũng", tenPhieu:"A Thành - NYC", donvi:"NYC Design", nguoi:"Anh Thành", sdt:"0960709101", giai:"", hientrang:"", nd:"Gặp đối tác mới, trao đổi cơ chế giới thiệu khách và báo giá mẫu", ngay:"11/05/2026", sc:"Sáng", link:"#", tt:"done"},
+    {th:"Phúc", tenPhieu:"Chị Ánh - Vietceramic", donvi:"Vietceramic", nguoi:"Chị Ánh", sdt:"0932042043", giai:"", hientrang:"", nd:"Làm việc về khả năng phối hợp khách hàng phân khúc cao cấp", ngay:"12/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k09: [
+    {th:"Minh", tenPhieu:"Chị Duyên - Time City - Thiên Khôi CDC", donvi:"CDC Design", nguoi:"Chị Duyên", sdt:"0939571578", giai:"5%", hientrang:"Đã phá", nd:"Cập nhật thông tin thô, bổ sung mô tả chân dung dự án", ngay:"14/05/2026", sc:"09:00 - 10:00", link:"#", tt:"done"},
+    {th:"Linh", tenPhieu:"Anh A - Tân Bình", donvi:"Tân Bình Design", nguoi:"Anh A", sdt:"", giai:"10%", hientrang:"Chưa xác định", nd:"Bổ sung số liệu diện tích và danh sách hạng mục điều khiển", ngay:"14/05/2026", sc:"10:30 - 11:30", link:"#", tt:"done"},
+    {th:"Phúc", tenPhieu:"C Huyền - Nguyệt Quế 2.62", donvi:"ARC Design", nguoi:"Chị Huyền", sdt:"0977060192", giai:"30%", hientrang:"Làm móng", nd:"Rà soát hồ sơ thiết kế và cập nhật TVTK/người ảnh hưởng", ngay:"15/05/2026", sc:"14:00 - 15:30", link:"#", tt:"done"},
+    {th:"Phúc", tenPhieu:"Anh Hoàng - Ninh Bình", donvi:"Hadocharm Design", nguoi:"Anh Hoàng", sdt:"0913405079", giai:"50%", hientrang:"Đổ mái tầng 1", nd:"Cập nhật giá trị chào và nội dung trao đổi với nhà thầu", ngay:"16/05/2026", sc:"09:00 - 11:00", link:"#", tt:"done"},
+    {th:"Linh", tenPhieu:"Hoa Sữa 11.42 - Chú Sáng", donvi:"Home Concept", nguoi:"Chú Sáng", sdt:"0980947736", giai:"70%", hientrang:"Hoàn thiện nội thất", nd:"Cập nhật lịch dự kiến ký HĐ và các lưu ý khi làm việc trong dự án", ngay:"17/05/2026", sc:"15:00 - 16:30", link:"#", tt:"done"},
+    {th:"Trang", tenPhieu:"NOBEL CRYSTAL - SENDESIGN", donvi:"Sendesign", nguoi:"Anh Hải", sdt:"0954611878", giai:"90%", hientrang:"Hoàn thiện nội thất", nd:"Hoàn thiện hồ sơ chào giá, kiểm tra giá trị quy đổi trước VAT", ngay:"18/05/2026", sc:"08:30 - 10:30", link:"#", tt:"inprog"}
+  ],
+  k10: [
+    {th:"Dũng", tenPhieu:"", donvi:"", nguoi:"", sdt:"", giai:"", hientrang:"", nd:"Khảo sát các công trình đang thi công quanh khu vực Hồ Tây", ngay:"18/05/2026", sc:"Chiều", link:"#", tt:"soon"},
+    {th:"Nam", tenPhieu:"", donvi:"", nguoi:"", sdt:"", giai:"", hientrang:"", nd:"Đi thị trường, ghi nhận các công trình mới và biển nhà thầu", ngay:"19/05/2026", sc:"Sáng", link:"#", tt:"done"}
+  ],
+  k11: [
+    {th:"Minh", tenPhieu:"Anh Quang - Kyodotech", donvi:"Kyodotech", nguoi:"Anh Quang", sdt:"0966183195", giai:"", hientrang:"", nd:"Gặp đối tác ngoài giờ, trao đổi cơ hội dự án villa Cầu Giấy", ngay:"19/05/2026", sc:"Tối", link:"#", tt:"done"},
+    {th:"Phúc", tenPhieu:"Anh Lâm - D&A", donvi:"D&A", nguoi:"Anh Lâm", sdt:"0950092944", giai:"", hientrang:"", nd:"Tiếp khách/đối tác, duy trì quan hệ và cập nhật cơ hội hợp tác", ngay:"20/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+  k12: [
+    {th:"Dũng", tenPhieu:"Sự kiện Vietbuild 2026", donvi:"Vietbuild", nguoi:"Anh Minh", sdt:"0988004982", giai:"", hientrang:"", nd:"Tham dự event, gặp nhóm nhà thầu và thu thập danh thiếp đối tác", ngay:"21/05/2026", sc:"Tối", link:"#", tt:"done"},
+    {th:"Trang", tenPhieu:"Workshop Nội thất cao cấp", donvi:"Luxury Interior Hub", nguoi:"Chị Linh", sdt:"0955571869", giai:"", hientrang:"", nd:"Gặp đối tác thiết kế tại workshop, giới thiệu giải pháp smarthome", ngay:"21/05/2026", sc:"Chiều", link:"#", tt:"inprog"}
+  ],
+  k13: [
+    {th:"Phúc", tenPhieu:"", donvi:"", nguoi:"", sdt:"", giai:"", hientrang:"", nd:"Gọi data khách hàng mới, lọc nhu cầu smarthome và đặt lịch tư vấn", ngay:"22/05/2026", sc:"Sáng", link:"#", tt:"done"},
+    {th:"Minh", tenPhieu:"", donvi:"", nguoi:"", sdt:"", giai:"", hientrang:"", nd:"Telesale nhóm KTS chưa có dự án, xác nhận thông tin văn phòng", ngay:"22/05/2026", sc:"Chiều", link:"#", tt:"done"}
+  ],
+};
+
+function buildAllDetails() {
+  cvDetails = {};
+  // KD: dùng dữ liệu thật từ Excel (bản sao để không đụng bản gốc)
+  for (var id in cvDetailsKD) {
+    cvDetails[id] = cvDetailsKD[id].map(function(r){ var o={}; for(var k in r)o[k]=r[k]; return o; });
+  }
+  // KT: sinh tự động như cũ
+  buildDeptDetails(cvKT, 'kt');
+}
+
+var cvKT = [
+  {id:'t01', group:'std', name:'Giám sát tiến độ',  kh:16, done:14, inprog:1, soon:2, late:1},
+  {id:'t02', group:'std', name:'Nghiệm thu dây',    kh:12, done:9,  inprog:2, soon:3, late:2},
+  {id:'t03', group:'std', name:'Bàn giao thiết bị', kh:8,  done:8,  inprog:0, soon:1, late:0},
+  {id:'t04', group:'std', name:'Họp CĐT / KTS',    kh:10, done:7,  inprog:2, soon:3, late:0},
+  {id:'t05', group:'std', name:'Test chương trình', kh:9,  done:8,  inprog:1, soon:2, late:0},
+  {id:'t06', group:'std', name:'Hỗ trợ lắp đặt',   kh:7,  done:6,  inprog:1, soon:1, late:0},
+  {id:'t07', group:'std', name:'Cập nhật bản vẽ',  kh:6,  done:5,  inprog:1, soon:1, late:0},
+];
+
+var timeDataKD = [
+  {name:'NVKD 1 · Minh',  color:'var(--blue)', dk:68, tt:62},
+  {name:'NVKD 2 · Linh',  color:'var(--blue)', dk:48, tt:41},
+  {name:'NVKD 3 · Nam',   color:'var(--blue)', dk:44, tt:38},
+  {name:'NVKD 4 · Hà',    color:'var(--blue)', dk:52, tt:47},
+  {name:'NVKD 5 · Sơn',   color:'var(--blue)', dk:44, tt:44},
+  {name:'NVKD 6 · Quân',  color:'var(--blue)', dk:50, tt:55},
+  {name:'NVKD 7 · Trang', color:'var(--blue)', dk:46, tt:40},
+  {name:'NVKD 8 · Dũng',  color:'var(--blue)', dk:48, tt:49},
+  {name:'NVKD 9 · Vy',    color:'var(--blue)', dk:44, tt:36},
+  {name:'NVKD 10 · Phúc', color:'var(--blue)', dk:52, tt:51},
+];
+var timeDataKT = [
+  {name:'NVKT 1 · Hùng', color:'var(--purple)', dk:88, tt:80},
+  {name:'NVKT 2 · Lan',  color:'var(--purple)', dk:46, tt:42},
+  {name:'NVKT 3 · Đạt',  color:'var(--purple)', dk:48, tt:47},
+  {name:'NVKT 4 · Yến',  color:'var(--purple)', dk:44, tt:40},
+];
+
+// tt = thời gian thực hiện (giờ) · mốc chuẩn hoàn thành = 44h
+var pbDataKD = [
+  {name:'Telesale',            tt:42},
+  {name:'Tiếp KTS showroom',   tt:44},
+  {name:'Tiếp CĐT showroom',   tt:46},
+  {name:'Đi thị trường',       tt:38},
+  {name:'Xử lý hồ sơ',        tt:50},
+  {name:'Gặp đối tác mới',     tt:35},
+  {name:'Làm việc tại VP KTS', tt:48},
+];
+var pbDataKT = [
+  {name:'Bàn giao thiết bị',  tt:44},
+  {name:'Giám sát tiến độ',   tt:41},
+  {name:'Test chương trình',  tt:45},
+  {name:'Nghiệm thu dây',     tt:52},
+  {name:'Họp CĐT / KTS',     tt:36},
+];
+var TARGET_H = 44;
+
+// ── PHÂN RÃ THEO NHÂN VIÊN ──
+var empName  = { nv1:'Minh', nv2:'Linh', nv3:'Nam', nv4:'Hà', nv5:'Sơn', nv6:'Quân', nv7:'Trang', nv8:'Dũng', nv9:'Vy', nv10:'Phúc', kt1:'Hùng', kt2:'Lan', kt3:'Đạt', kt4:'Yến' };
+var deptEmps = { kd:['nv1','nv2','nv3','nv4','nv5','nv6','nv7','nv8','nv9','nv10'], kt:['kt1','kt2','kt3','kt4'] };
+
+// tỉ trọng phân bổ theo loại việc cho N nhân viên (ổn định theo index)
+function weightsFor(nEmp, idx) {
+  var w = [];
+  for (var e = 0; e < nEmp; e++) w.push(((idx * 3 + e * 2) % 5) + 2);  // 2..6
+  return w;
+}
+
+// chia số nguyên total theo tỉ trọng weights, đảm bảo tổng == total
+function partition(total, weights) {
+  var sum = weights.reduce(function(a,b){return a+b;},0);
+  var parts = weights.map(function(w){ return Math.floor(total * w / sum); });
+  var rem = total - parts.reduce(function(a,b){return a+b;},0);
+  for (var i = 0; rem > 0; i++, rem--) parts[i % parts.length]++;
+  return parts;
+}
+
+// ── LỌC THEO NGÀY ──
+function dateBounds(dept) {
+  var f = document.getElementById(dept === 'kd' ? 'f-date-from' : 'f-kt-from');
+  var t = document.getElementById(dept === 'kd' ? 'f-date-to'   : 'f-kt-to');
+  return {
+    from: (f && f.value) ? new Date(f.value) : null,
+    to:   (t && t.value) ? new Date(t.value) : null
+  };
+}
+function recDate(ngay) {           // 'DD/MM/YYYY' → Date
+  var p = String(ngay).split('/');
+  if (p.length !== 3) return null;
+  return new Date(+p[2], +p[1] - 1, +p[0]);
+}
+function inBounds(r, b) {
+  if (!b || (!b.from && !b.to)) return true;
+  var rd = recDate(r.ngay);
+  if (!rd) return true;
+  if (b.from && rd < b.from) return false;
+  if (b.to   && rd > b.to)   return false;
+  return true;
+}
+
+// số liệu 1 loại việc: lọc theo nhân viên + khoảng ngày (KHÔNG lọc theo trạng thái)
+// đếm trực tiếp từ bản ghi ⇒ KH = hoàn thành + đang làm + sắp tới + quá hạn
+function sliceDept(data, dept, empId) {
+  var name = (empId === 'all') ? null : empName[empId];
+  var b = dateBounds(dept);
+  return data.map(function(item){
+    var recs = (typeof cvDetails !== 'undefined' && cvDetails[item.id]) ? cvDetails[item.id] : [];
+    var c = {done:0, inprog:0, soon:0, late:0}, n = 0;
+    recs.forEach(function(r){
+      if (name && r.th !== name) return;
+      if (!inBounds(r, b)) return;
+      n++; if (c[r.tt] !== undefined) c[r.tt]++;
+    });
+    return { id:item.id, group:item.group, name:item.name,
+      kh:n, done:c.done, inprog:c.inprog, soon:c.soon, late:c.late };
+  });
+}
+
+// Forecast data · st = trạng thái dự án: active | won | lost
+// tvtk = tư vấn thiết kế {ten,sdt} · ah = người ảnh hưởng [{ten,sdt,vai,ung}] (ung: true=ủng hộ)
+// chao = giá trị chào · ky = giá trị ký HĐ · qd = giá trị quy đổi (doanh số) · null nếu chưa có
+// tiepCan/dukienky/ngayky/ngayfail = mốc ngày · nhaThau = [{ten,gt,ky}]
+var fcData = [
+  {name:'Villa Thảo Điền A', nv:'nv1', nvName:'Minh', hddk:2400, stage:90, st:'active', date:'2026-05-03', service:'#',
+   tvtk:{ten:'KTS Trần Vũ',  sdt:'0901 234 567'},
+   ah:[{ten:'A. Tuấn (CĐT)', sdt:'0966 777 888', vai:'Chủ đầu tư', ung:true},
+       {ten:'C. Hằng',        sdt:'0933 222 111', vai:'Kế toán trưởng', ung:false}],
+   chao:2400, ky:null, qd:null, tiepCan:'03/05/2026', dukienky:'12/06/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:2400, ky:false},
+     {hm:'Xây dựng', ten:'XD An Phát', gt:5200, ky:true},
+     {hm:'Cơ điện HVAC', ten:'Cơ điện Sao Việt', gt:1800, ky:true},
+     {hm:'Cấp thoát nước', ten:'Nước Minh Long', gt:600, ky:false},
+     {hm:'PCCC', ten:'PCCC Bảo An', gt:750, ky:false},
+     {hm:'Nội thất', ten:'Nội thất Kim Long', gt:1400, ky:true},
+     {hm:'Nhôm kính', ten:'Nhôm kính Đông Á', gt:900, ky:false}]},
+
+  {name:'Penthouse SKY Tower', nv:'nv1', nvName:'Minh', hddk:3200, stage:50, st:'active', date:'2026-05-06', service:'#',
+   tvtk:{ten:'KTS Lê Hoa', sdt:'0912 888 111'},
+   ah:[{ten:'A. Sơn', sdt:'0977 010 020', vai:'Giám đốc dự án', ung:true}],
+   chao:3200, ky:null, qd:null, tiepCan:'06/05/2026', dukienky:'20/06/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:3200, ky:false},
+     {hm:'Xây dựng', ten:'Xây dựng Hòa Bình', gt:8000, ky:true},
+     {hm:'HVAC', ten:'Cơ điện REE', gt:2600, ky:false},
+     {hm:'Thang máy', ten:'Thang máy Mitsubishi', gt:1900, ky:true},
+     {hm:'Nội thất', ten:'Nội thất AA', gt:2200, ky:false}]},
+
+  {name:'Căn hộ Vinhomes Q9', nv:'nv2', nvName:'Linh', hddk:1800, stage:70, st:'active', moi:true, date:'2026-05-09', service:'#',
+   tvtk:{ten:'KTS Phạm Long', sdt:'0938 555 222'},
+   ah:[{ten:'C. Mai', sdt:'0909 121 212', vai:'Chủ nhà', ung:true},
+       {ten:'A. Khoa', sdt:'0922 113 445', vai:'Người thân', ung:false}],
+   chao:1800, ky:null, qd:null, tiepCan:'09/05/2026', dukienky:'05/06/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:1800, ky:false},
+     {hm:'Nội thất', ten:'Nội thất Kim Long', gt:1200, ky:true},
+     {hm:'Nhôm kính', ten:'Nhôm kính Đông Á', gt:500, ky:true}]},
+
+  {name:'Office Landmark 81', nv:'nv1', nvName:'Minh', hddk:5000, stage:5, st:'active', date:'2026-05-11', service:'#',
+   tvtk:{ten:'KTS Nguyễn An', sdt:'0977 121 212'},
+   ah:[{ten:'A. Bình (BQL)', sdt:'0944 556 778', vai:'Ban quản lý', ung:false}],
+   chao:5000, ky:null, qd:null, tiepCan:'11/05/2026', dukienky:'15/07/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:5000, ky:false},
+     {hm:'Xây dựng', ten:'Coteccons', gt:15000, ky:false},
+     {hm:'HVAC', ten:'Cơ điện REE', gt:6000, ky:false}]},
+
+  {name:'Biệt thự Hội An', nv:'nv5', nvName:'Sơn', hddk:1500, stage:30, st:'active', date:'2026-05-13', service:'#',
+   tvtk:{ten:'KTS Đỗ My', sdt:'0909 343 434'},
+   ah:[{ten:'A. Hùng', sdt:'0988 224 668', vai:'Chủ đầu tư', ung:true}],
+   chao:1500, ky:null, qd:null, tiepCan:'13/05/2026', dukienky:'28/06/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:1500, ky:false},
+     {hm:'Xây dựng', ten:'Xây dựng Miền Trung', gt:4000, ky:false},
+     {hm:'Cấp thoát nước', ten:'Nước Minh Long', gt:450, ky:false}]},
+
+  {name:'Townhouse Q7', nv:'nv2', nvName:'Linh', hddk:900, stage:30, st:'lost', date:'2026-05-15', service:'#',
+   tvtk:{ten:'KTS Lý Hà', sdt:'0918 445 667'},
+   ah:[{ten:'C. Yến', sdt:'0911 778 990', vai:'Chủ nhà', ung:false}],
+   chao:900, ky:null, qd:null, tiepCan:'15/05/2026', dukienky:null, ngayky:null, ngayfail:'22/05/2026',
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:900, ky:false}]},
+
+  {name:'Nhà phố Thủ Đức', nv:'nv4', nvName:'Hà', hddk:1100, stage:50, st:'active', moi:true, date:'2026-05-18', service:'#',
+   tvtk:{ten:'KTS Vũ Nam', sdt:'0905 678 234'},
+   ah:[{ten:'A. Dũng', sdt:'0944 556 778', vai:'Chủ nhà', ung:true},
+       {ten:'C. Lan', sdt:'0933 010 101', vai:'Vợ', ung:true}],
+   chao:1100, ky:null, qd:null, tiepCan:'18/05/2026', dukienky:'10/06/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:1100, ky:false},
+     {hm:'Cơ điện HVAC', ten:'Cơ điện Sao Việt', gt:500, ky:false},
+     {hm:'Nội thất', ten:'Nội thất Kim Long', gt:800, ky:true}]},
+
+  {name:'Resort Phú Quốc', nv:'nv1', nvName:'Minh', hddk:8500, stage:10, st:'active', date:'2026-05-20', service:'#',
+   tvtk:{ten:'KTS Trần Vũ', sdt:'0901 234 567'},
+   ah:[{ten:'A. Phong (CĐT)', sdt:'0966 001 223', vai:'Chủ đầu tư', ung:true},
+       {ten:'A. Khoa (Tài chính)', sdt:'0922 113 445', vai:'GĐ Tài chính', ung:false}],
+   chao:8500, ky:null, qd:null, tiepCan:'20/05/2026', dukienky:'30/08/2026', ngayky:null, ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:8500, ky:false},
+     {hm:'Xây dựng', ten:'Coteccons', gt:40000, ky:false},
+     {hm:'HVAC', ten:'Cơ điện REE', gt:12000, ky:false},
+     {hm:'PCCC', ten:'PCCC Bảo An', gt:3500, ky:false},
+     {hm:'Cảnh quan', ten:'Cảnh quan Xanh', gt:5000, ky:false},
+     {hm:'Nội thất', ten:'Nội thất AA', gt:9000, ky:false}]},
+
+  {name:'Chung cư Bình Dương', nv:'nv2', nvName:'Linh', hddk:700, stage:70, st:'won', date:'2026-05-24', service:'#',
+   tvtk:{ten:'KTS Nguyễn An', sdt:'0977 121 212'},
+   ah:[{ten:'A. Thành', sdt:'0955 889 001', vai:'Chủ đầu tư', ung:true}],
+   chao:700, ky:680, qd:680, tiepCan:'24/05/2026', dukienky:null, ngayky:'02/06/2026', ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:680, ky:true},
+     {hm:'Xây dựng', ten:'XD An Phát', gt:3000, ky:true},
+     {hm:'Nội thất', ten:'Nội thất Kim Long', gt:1100, ky:true}]},
+
+  {name:'Studio Landmark', nv:'nv3', nvName:'Nam', hddk:600, stage:90, st:'won', date:'2026-05-28', service:'#',
+   tvtk:{ten:'KTS Đỗ My', sdt:'0909 343 434'},
+   ah:[{ten:'C. Trâm', sdt:'0966 001 223', vai:'Chủ nhà', ung:true}],
+   chao:600, ky:560, qd:560, tiepCan:'28/05/2026', dukienky:null, ngayky:'05/06/2026', ngayfail:null,
+   nhaThau:[
+     {hm:'Điện & ĐK (ASEL)', ten:'ASEL', gt:560, ky:true},
+     {hm:'Nội thất', ten:'Nội thất Kim Long', gt:400, ky:true}]},
+];
+
+// Hiện trạng công trình theo stage/tình trạng dự án (Chưa xác định = đỏ, còn lại = xanh)
+(function(){
+  var phases = ['Đã phá dỡ','Đào hầm','Đổ móng','Cất nóc','Xây tường ngăn','Hoàn thiện thô','Bàn giao'];
+  fcData.forEach(function(d){
+    if (d.st === 'lost' || d.stage <= 10) {
+      d.hientrang = 'Chưa xác định';
+    } else if (d.st === 'won') {
+      d.hientrang = 'Hoàn thiện thô';
+    } else {
+      var idx = Math.min(phases.length - 2, Math.round(d.stage / 100 * (phases.length - 1)));
+      d.hientrang = phases[Math.max(1, idx)];
+    }
+  });
+})();
+
+var stageColors = {5:'#e0442b',10:'#d97706',30:'#d97706',50:'#2563eb',70:'#7c3aed',90:'#0d9e6e'};
+var stageBadge  = {5:'b-coral',10:'b-amber',30:'b-amber',50:'b-blue',70:'b-purple',90:'b-green'};
+var stageLabel  = {5:'Thô · 5%',10:'10%',30:'30%',50:'50%',70:'70%',90:'≥ 90%'};
+
+var stLabel = {active:'Đang theo dõi', won:'Đã ký', lost:'Thất bại'};
+var stBadge = {active:'b-blue', won:'b-green', lost:'b-coral'};
+
+// ── HELPERS ──
+function fmtM(n) {
+  if (n >= 1000) return (n/1000).toFixed(n%1000===0?0:2).replace(/\.?0+$/,'') + ' tỷ';
+  return n + 'M';
+}
+function pctColor(p) {
+  return p >= 100 ? 'var(--green)' : p >= 85 ? 'var(--blue)' : p >= 65 ? 'var(--amber)' : 'var(--coral)';
+}
+
+// ── CURRENCY ── (hddk tính theo triệu VNĐ; tỉ giá do người dùng nhập)
+function getRate() {
+  var el = document.getElementById('f-rate');
+  var v = el ? parseFloat(el.value) : 25400;
+  return (isNaN(v) || v <= 0) ? 25400 : v;
+}
+// n = số triệu VNĐ → chuỗi USD
+function fmtUSD(n) {
+  var usd = (n * 1e6) / getRate();
+  if (usd >= 1e6) return '$' + (usd/1e6).toFixed(2).replace(/\.?0+$/,'') + 'M';
+  if (usd >= 1e3) return '$' + (usd/1e3).toFixed(1).replace(/\.?0+$/,'') + 'K';
+  return '$' + Math.round(usd);
+}
+// VNĐ + USD trên 2 dòng
+function fmtMoney(n) {
+  return '<span class="m-vnd">' + fmtM(n) + '</span><span class="m-usd">' + fmtUSD(n) + '</span>';
+}
+
+// ── COMPACT COUNT CELL (chỉ con số) ──
+function countCell(val, kh, color) {
+  return '<td class="ctr">'
+    + '<span style="color:' + color + ';font-weight:700;font-size:13px">' + val + '</span>'
+    + '</td>';
+}
+
+// ── STACKED PROGRESS BAR (1 thanh gộp 4 trạng thái) ──
+function stackBar(d) {
+  var total = Math.max(d.kh, d.done + d.inprog + d.soon + d.late);
+  function seg(v, c, lbl) {
+    if (v <= 0) return '';
+    var w = (v / total * 100).toFixed(1);
+    return '<div class="seg" style="width:' + w + '%;background:' + c + '" title="' + lbl + ': ' + v + '"></div>';
+  }
+  return '<td>'
+    + '<div class="stack-track">'
+    + seg(d.done,   'var(--green)', 'Hoàn thành')
+    + seg(d.inprog, 'var(--amber)', 'Đang làm')
+    + seg(d.soon,   'var(--blue)',  'Sắp tới')
+    + seg(d.late,   'var(--coral)', 'Quá hạn')
+    + '</div>'
+    + '</td>';
+}
+
+// ── STATUS BADGE from done/kh ──
+function statusBadge(done, kh) {
+  var pct = kh > 0 ? Math.round(done/kh*100) : 0;
+  if (pct >= 100) return '<span class="badge b-green">Vượt KH</span>';
+  if (pct >= 85)  return '<span class="badge b-green">Tốt</span>';
+  if (pct >= 65)  return '<span class="badge b-blue">Bình thường</span>';
+  return '<span class="badge b-amber">Cần cải thiện</span>';
+}
+
+// ── UNIFIED DETAIL TABLE (cột chung, ô không có để trống) ──
+// Mỗi bản ghi được gắn _loai (tên loại CV) khi gom.
+function buildUnifiedTable(recs) {
+  if (!recs || !recs.length) {
+    return '<div style="padding:16px;color:var(--text3);font-size:11.5px">Chưa có bản ghi · số minh họa</div>';
+  }
+  var head = ['STT','Loại công việc','Tên đơn vị','Tên người','SĐT','Nội dung','Ngày','Thời gian','Người TH','Wework'];
+  var body = recs.map(function(r,i){
+    var timeCell;
+    if (r.start && r.end) {
+      timeCell = '<span class="badge b-blue">' + r.start + ' → ' + r.end + '</span>';
+    } else if (r.buoi) {
+      timeCell = '<span class="badge ' + buoiBadge(r.buoi) + '">' + buoiFull(r.buoi) + '</span>';
+    } else {
+      timeCell = '<span class="empty">—</span>';
+    }
+    function cell(v){ return v ? v : '<span class="empty">—</span>'; }
+    return '<tr>'
+      +'<td class="ctr">'+(i+1)+'</td>'
+      +'<td class="bold">'+cell(r._loai)+'</td>'
+      +'<td>'+cell(r.donvi)+'</td>'
+      +'<td>'+cell(r.nguoi)+'</td>'
+      +'<td>'+cell(r.sdt)+'</td>'
+      +'<td class="dt-wrap">'+cell(r.nd)+'</td>'
+      +'<td>'+cell(r.ngay)+'</td>'
+      +'<td class="ctr">'+timeCell+'</td>'
+      +'<td>'+cell(r.th)+'</td>'
+      +'<td class="ctr">'+(r.link?'<a href="'+r.link+'" class="wlink">Mở ↗</a>':'<span class="empty">—</span>')+'</td>'
+      +'</tr>';
+  }).join('');
+  return '<div class="detail-wrap"><table class="dt">'
+    + '<thead><tr>' + head.map(function(h){return '<th>'+h+'</th>';}).join('') + '</tr></thead>'
+    + '<tbody>' + body + '</tbody></table></div>';
+}
+function buoiFull(b){
+  if(b==='Sáng') return 'Sáng · 8–12h';
+  if(b==='Chiều') return 'Chiều · 12–18h';
+  if(b==='Tối') return 'Tối · sau 18h';
+  return b;
+}
+function buoiBadge(b){
+  if(b==='Sáng') return 'b-amber';
+  if(b==='Chiều') return 'b-blue';
+  if(b==='Tối') return 'b-purple';
+  return 'b-gray';
+}
+
+// gom bản ghi của 1 dept (kèm _loai), lọc theo id · nhân viên · ngày · (tuỳ chọn) trạng thái
+function collectRecs(dept, filterId, useStatus) {
+  var data = (dept === 'kd') ? cvKD : cvKT;
+  var nvSel = document.getElementById(dept === 'kd' ? 'f-kd-nv' : 'f-kt-nv').value;
+  var name  = empName[nvSel];   // undefined khi 'all'
+  var stEl  = document.getElementById('f-kd-status');
+  var stSel = (useStatus && dept === 'kd' && stEl) ? stEl.value : 'all';
+  var b = dateBounds(dept);
+  var out = [];
+  data.forEach(function(d){
+    if (filterId && d.id !== filterId) return;
+    var recs = (typeof cvDetails !== 'undefined' && cvDetails[d.id]) ? cvDetails[d.id] : [];
+    recs.forEach(function(r){
+      if (name && r.th !== name) return;              // lọc theo nhân viên
+      if (!inBounds(r, b)) return;                    // lọc theo khoảng ngày
+      if (stSel !== 'all' && r.tt !== stSel) return;  // lọc theo trạng thái (chỉ bảng cuối)
+      var copy = {};
+      for (var k in r) copy[k] = r[k];
+      copy._loai = d.name;
+      out.push(copy);
+    });
+  });
+  return out;
+}
+var ttLabel = {done:'Hoàn thành', inprog:'Đang làm', soon:'Sắp tới', late:'Quá hạn'};
+var ttBadge = {done:'b-green', inprog:'b-amber', soon:'b-blue', late:'b-coral'};
+
+// ── DRILL-DOWN (matrix Power BI): loại = group header, bản ghi = dòng con cùng cột ──
+var cvOpen = { kd: {}, kt: {} };
+
+function toggleCv(dept, id) {
+  cvOpen[dept][id] = !cvOpen[dept][id];
+  var open = cvOpen[dept][id];
+  var kids = document.querySelectorAll('#tbody-' + dept + '-cv tr.cv-child[data-parent="' + id + '"]');
+  kids.forEach(function(tr){ tr.style.display = open ? '' : 'none'; });
+  var main = document.querySelector('#tbody-' + dept + '-cv tr.cv-main[data-id="' + id + '"]');
+  if (main) main.classList.toggle('open', open);
+}
+
+// dựng lại bảng drill-down (khi đổi bộ lọc trạng thái) — giữ trạng thái mở
+function typeFilteredRows(dept, all) {
+  var el = document.getElementById(dept === 'kd' ? 'f-kd-type' : 'f-kt-type');
+  var t = el ? el.value : 'all';
+  return (t === 'all') ? all : all.filter(function(d){ return d.id === t; });
+}
+// click vào 1 loại ở card Tỷ lệ thời gian → set bộ lọc loại (bấm lại để bỏ)
+function filterByType(dept, id) {
+  var el = document.getElementById(dept === 'kd' ? 'f-kd-type' : 'f-kt-type');
+  if (!el) return;
+  el.value = (el.value === id) ? 'all' : id;
+  if (dept === 'kd') renderKDcv(); else renderKTcv();
+}
+function refreshCvTable(dept) {
+  var nv = document.getElementById(dept === 'kd' ? 'f-kd-nv' : 'f-kt-nv').value;
+  var data = typeFilteredRows(dept, sliceDept(dept === 'kd' ? cvKD : cvKT, dept, nv));
+  renderCvTable('tbody-' + dept + '-cv', data);
+}
+
+var EMPTY11 = '<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
+
+function cvChildRow(pid, r, idx, open) {
+  function cell(v){ return v ? v : '<span class="empty">—</span>'; }
+  var giaiCell = r.giai ? '<span class="badge b-purple">' + r.giai + '</span>' : '<span class="empty">—</span>';
+  var scCell   = r.sc ? '<span class="badge ' + buoiBadge(r.sc) + '">' + r.sc + '</span>' : '<span class="empty">—</span>';
+  return '<tr class="cv-child" data-parent="' + pid + '"' + (open ? '' : ' style="display:none"') + '>'
+    + '<td class="ctr" style="color:var(--text3);font-size:11px">' + idx + '</td>'
+    + '<td style="padding-left:12px;color:var(--text3)">' + cell(r._loai) + '</td>'
+    + '<td>' + cell(r.th) + '</td>'
+    + '<td class="bold">' + cell(r.tenPhieu) + '</td>'
+    + '<td>' + cell(r.donvi) + '</td>'
+    + '<td>' + cell(r.nguoi) + '</td>'
+    + '<td>' + cell(r.sdt) + '</td>'
+    + '<td class="ctr">' + giaiCell + '</td>'
+    + '<td class="dt-wrap">' + cell(r.nd) + '</td>'
+    + '<td>' + cell(r.ngay) + '</td>'
+    + '<td class="ctr">' + scCell + '</td>'
+    + '<td class="ctr">' + (r.link ? '<a href="' + r.link + '" class="wlink">Mở ↗</a>' : '<span class="empty">—</span>') + '</td>'
+    + '</tr>';
+}
+
+// ── CV TABLE (matrix drill-down): cùng bộ cột cho dòng loại và dòng bản ghi ──
+function renderCvTable(tbodyId, data) {
+  var dept = (tbodyId.indexOf('kd') !== -1) ? 'kd' : 'kt';
+  var el = document.getElementById(tbodyId);
+  var html = '';
+  data.forEach(function(d, i) {
+    var open = !!cvOpen[dept][d.id];
+    var recs = collectRecs(dept, d.id, true);   // bản ghi (áp bộ lọc trạng thái)
+    html += '<tr class="cv-main' + (open ? ' open' : '') + '" data-id="' + d.id + '" onclick="toggleCv(\'' + dept + '\',\'' + d.id + '\')">'
+      + '<td class="ctr">' + (i+1) + '</td>'
+      + '<td class="bold"><span class="cv-caret">▸</span>' + d.name + '</td>'
+      + EMPTY11 + '</tr>';
+    recs.forEach(function(r, ri){ html += cvChildRow(d.id, r, ri+1, open); });
+  });
+  el.innerHTML = html;
+}
+
+// cập nhật nhãn mốc chuẩn theo số tuần trong kỳ lọc
+function setTargetLabels(dept, wk) {
+  var target = TARGET_H * wk;
+  var suffix = target + 'h' + (wk > 1 ? ' (' + wk + ' tuần × 44h)' : '');
+  var b = document.getElementById('tgt-bars-' + dept);
+  var s = document.getElementById('tgt-share-' + dept);
+  if (b) b.textContent = suffix;
+  if (s) s.textContent = target + 'h';
+}
+
+// số tuần trong khoảng lọc (44h/tuần là chuẩn) — min 1 tuần
+function periodWeeks(fromId, toId) {
+  var f = document.getElementById(fromId), t = document.getElementById(toId);
+  if (!f || !t || !f.value || !t.value) return 1;
+  var d1 = new Date(f.value), d2 = new Date(t.value);
+  var days = Math.round((d2 - d1) / 86400000) + 1;
+  return Math.max(1, Math.round(days / 7));
+}
+
+// ── TIME BARS: DK vs TT + tăng ca / thiếu so với mốc chuẩn kỳ ──
+// ── TIME TABLE: giờ làm thực tế theo nhân viên (STT · tên · tổng · mốc · tăng ca/thiếu) ──
+function empIdByName(dept, nm) {
+  var emps = deptEmps[dept];
+  for (var i = 0; i < emps.length; i++) {
+    if (nm.indexOf(empName[emps[i]]) !== -1) return emps[i];
+  }
+  return null;
+}
+function selectTimeEmp(dept, eid) {
+  var sel = document.getElementById(dept === 'kd' ? 'f-kd-nv' : 'f-kt-nv');
+  if (!sel) return;
+  sel.value = (sel.value === eid) ? 'all' : eid;   // click lại để bỏ lọc
+  if (dept === 'kd') renderKDcv(); else renderKTcv();
+}
+function renderTimeTable(elId, data, wk) {
+  wk = wk || 1;
+  var dept = (elId.indexOf('kd') !== -1) ? 'kd' : 'kt';
+  var curNv = document.getElementById(dept === 'kd' ? 'f-kd-nv' : 'f-kt-nv');
+  var cur = curNv ? curNv.value : 'all';
+  var target = TARGET_H * wk;
+  var maxTt = Math.max.apply(null, data.map(function(d){return d.tt;}).concat([1])) * wk;
+  document.getElementById(elId).innerHTML = data.map(function(d, i) {
+    var tt = Math.round(d.tt * wk);   // tổng thời gian thực tế theo kỳ
+    var delta = tt - target;          // + = tăng ca, − = thiếu
+    var barCol = delta > 0 ? 'var(--coral)' : delta < 0 ? 'var(--amber)' : 'var(--green)';
+    var barW = Math.min(100, Math.round(tt / maxTt * 100));
+    var badge = delta === 0
+      ? '<span class="badge b-green">Đủ giờ</span>'
+      : delta > 0
+        ? '<span class="badge b-coral">Tăng ca ' + delta + 'h</span>'
+        : '<span class="badge b-amber">Thiếu ' + Math.abs(delta) + 'h</span>';
+    var eid = empIdByName(dept, d.name);
+    var active = (eid && eid === cur) ? ' active' : '';
+    var click = eid ? ' onclick="selectTimeEmp(\'' + dept + '\',\'' + eid + '\')"' : '';
+    return '<tr class="tl-row' + active + '"' + click + '>'
+      + '<td class="ctr">' + (i+1) + '</td>'
+      + '<td class="bold">' + d.name + '</td>'
+      + '<td><div class="tl-cell"><div class="tl-track"><div class="tl-fill" style="width:' + barW + '%;background:' + barCol + '"></div></div><span class="tl-h" style="color:' + barCol + '">' + tt + 'h</span></div></td>'
+      + '<td class="ctr">' + badge + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+// phân bổ giờ thực tế của (một hoặc tất cả) nhân viên ra từng loại việc
+function typeHoursFor(dept, empId, wk) {
+  wk = wk || 1;
+  var types = (dept === 'kd') ? cvKD : cvKT;
+  var tData = (dept === 'kd') ? timeDataKD : timeDataKT;
+  var totalH;
+  if (empId === 'all') {
+    totalH = tData.reduce(function(a,t){return a+t.tt;},0);
+  } else {
+    var row = tData.filter(function(t){return t.name.indexOf(empName[empId])!==-1;})[0];
+    totalH = row ? row.tt : 0;
+  }
+  totalH = Math.round(totalH * wk);   // theo kỳ lọc
+  // số lượng công việc thực tế mỗi loại (theo NV + ngày đang lọc)
+  var slices = sliceDept(types, dept, empId);
+  var cntById = {};
+  slices.forEach(function(s){ cntById[s.id] = s.kh; });
+  var weights = types.map(function(d){ return Math.max(1, cntById[d.id] || 0); });
+  var parts = partition(totalH, weights);
+  return types.map(function(d,i){ return {id:d.id, name:d.name, hrs:parts[i], count:cntById[d.id]||0}; })
+              .filter(function(x){ return x.count > 0; })
+              .sort(function(a,b){ return b.hrs - a.hrs; });
+}
+
+// ── TIME SHARE: % thời lượng từng loại việc theo mốc chuẩn kỳ ──
+function renderTimeShare(elId, dept, empId, wk) {
+  wk = wk || 1;
+  var list = typeHoursFor(dept, empId, wk);
+  var nEmp = deptEmps[dept].length;
+  var baseline = (empId === 'all') ? TARGET_H * nEmp * wk : TARGET_H * wk;
+  var totalH = list.reduce(function(a,d){return a+d.hrs;},0);
+  var totalCnt = list.reduce(function(a,d){return a+d.count;},0);
+  var typeEl = document.getElementById(dept === 'kd' ? 'f-kd-type' : 'f-kt-type');
+  var typeSel = typeEl ? typeEl.value : 'all';
+  var rows = list.map(function(d) {
+    var pct  = Math.round(d.hrs / baseline * 100);
+    var barW = Math.min(100, pct);
+    var color = pct >= 25 ? 'var(--blue)' : pct >= 10 ? 'var(--green)' : 'var(--text3)';
+    var active = (typeSel === d.id) ? ' active' : '';
+    return '<div class="pb-row clk' + active + '" onclick="filterByType(\'' + dept + '\',\'' + d.id + '\')">'
+      + '<span class="pb-name">' + d.name + '</span>'
+      + '<span class="pb-cnt">' + d.count + ' việc</span>'
+      + '<span class="pb-hrs">' + d.hrs + 'h</span>'
+      + '<div class="pb-track"><div class="pb-fill" style="width:' + barW + '%;background:' + color + '"></div></div>'
+      + '<span class="pb-pct" style="color:' + color + '">' + pct + '%</span>'
+      + '</div>';
+  }).join('');
+  // footer tổng vs baseline
+  var delta = totalH - baseline;
+  var fBadge = delta === 0
+    ? '<span class="pb-delta b-green">Đủ ' + baseline + 'h</span>'
+    : delta > 0
+      ? '<span class="pb-delta b-coral">Tăng ca ' + delta + 'h</span>'
+      : '<span class="pb-delta b-amber">Thiếu ' + Math.abs(delta) + 'h</span>';
+  var totPct = Math.round(totalH / baseline * 100);
+  var foot = '<div class="pb-foot"><span class="pb-name" style="font-weight:700;color:var(--text)">Tổng</span>'
+    + '<span class="pb-cnt" style="color:var(--text)">' + totalCnt + ' việc</span>'
+    + '<span class="pb-hrs">' + totalH + 'h</span>'
+    + '<div class="pb-track"><div class="pb-fill" style="width:' + Math.min(100,totPct) + '%;background:var(--text2)"></div></div>'
+    + '<span class="pb-pct" style="color:var(--text)">' + totPct + '%</span>'
+    + fBadge + '</div>';
+  var head = '<div class="pb-head">'
+    + '<span class="pb-name">Loại công việc</span>'
+    + '<span class="pb-cnt">Số việc</span>'
+    + '<span class="pb-hrs">Giờ</span>'
+    + '<div class="pb-track"></div>'
+    + '<span class="pb-pct">Tỷ lệ</span>'
+    + '</div>';
+  document.getElementById(elId).innerHTML = head + rows + foot;
+}
+
+// ── RENDER KD CV ──
+// ── LINE: tổng công việc theo tuần (dùng weekOf từ phần forecast) ──
+function renderCvWeek(dept, canvasId) {
+  var recs = collectRecs(dept, null, false);   // biểu đồ tuần: KHÔNG lọc theo trạng thái
+  var tot = {}, done = {}, lab = {};
+  recs.forEach(function(r){
+    if (!r.ngay) return;
+    var w;
+    try { w = weekOf(r.ngay); } catch(e){ return; }
+    tot[w.key]  = (tot[w.key] || 0) + 1;
+    if (r.tt === 'done') done[w.key] = (done[w.key] || 0) + 1;
+    lab[w.key]  = w.label;
+  });
+  var keys = Object.keys(tot).sort();
+  var labels = keys.map(function(k){ return 'T. ' + lab[k]; });
+  var dTot = keys.map(function(k){ return tot[k]; });
+  var dDone = keys.map(function(k){ return done[k] || 0; });
+
+  var key = 'week_' + dept;
+  if (charts[key]) charts[key].destroy();
+  charts[key] = new Chart(document.getElementById(canvasId), {
+    type:'line',
+    data:{
+      labels: labels.length ? labels : ['—'],
+      datasets:[
+        {label:'Tổng CV', data:dTot, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,.12)',
+         fill:true, tension:.35, pointRadius:3, pointBackgroundColor:'#2563eb', borderWidth:2},
+        {label:'Hoàn thành', data:dDone, borderColor:'#0d9e6e', backgroundColor:'transparent',
+         fill:false, tension:.35, pointRadius:3, pointBackgroundColor:'#0d9e6e', borderWidth:2}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+c.parsed.y+' CV';}}}},
+      scales:{
+        x:{ticks:{color:'#9aa0bc',font:{size:10}},grid:{display:false}},
+        y:{ticks:{color:'#9aa0bc',font:{size:10},precision:0},grid:{color:'rgba(0,0,0,.05)'},beginAtZero:true}
+      }
+    }
+  });
+}
+
+function renderKDcv() {
+  var nv = document.getElementById('f-kd-nv').value;
+  var rows = typeFilteredRows('kd', sliceDept(cvKD, 'kd', nv));
+  var total_kh = rows.reduce(function(a,d){return a+d.kh;},0);
+  var wkKD = periodWeeks('f-date-from', 'f-date-to');
+
+  // giờ làm: toàn phòng hoặc chỉ NV đang chọn · × số tuần trong kỳ
+  var hrs, nEmp;
+  if (nv === 'all') {
+    hrs = timeDataKD.reduce(function(a,t){return a+t.tt;},0) * wkKD;
+    nEmp = deptEmps.kd.length;
+  } else {
+    var one = timeDataKD.filter(function(t){ return t.name.indexOf(empName[nv]) !== -1; })[0];
+    hrs = one ? one.tt * wkKD : 0;
+    nEmp = 1;
+  }
+  var workDays = Math.max(1, wkKD * 5);        // 5 ngày làm việc / tuần
+  var avg = hrs / nEmp / workDays;
+
+  // tổng dự án: đối tượng/dự án khác nhau trong các bản ghi (theo bộ lọc NV + loại + ngày)
+  var typeSel = document.getElementById('f-kd-type');
+  typeSel = typeSel ? typeSel.value : 'all';
+  var recs = collectRecs('kd', typeSel === 'all' ? null : typeSel, false);
+  var projSet = {};
+  recs.forEach(function(r){ if (r.donvi && r.donvi !== '—') projSet[r.donvi] = 1; });
+
+  document.getElementById('k-plan').textContent  = total_kh;
+  document.getElementById('k-hours').textContent = Math.round(hrs) + 'h';
+  document.getElementById('k-proj').textContent  = Object.keys(projSet).length;
+  document.getElementById('k-avg').textContent   = avg.toFixed(1) + 'h';
+
+  renderCvTable('tbody-kd-cv', rows);
+  renderTimeTable('tc-list-kd', timeDataKD, wkKD);
+  renderTimeShare('pb-list-kd', 'kd', nv, wkKD);
+  setTargetLabels('kd', wkKD);
+}
+
+// ── RENDER KT CV ──
+function renderKTcv() {
+  var nv = document.getElementById('f-kt-nv').value;
+  var rows = typeFilteredRows('kt', sliceDept(cvKT, 'kt', nv));
+  var t_kh = rows.reduce(function(a,d){return a+d.kh;},0);
+  var wkKT = periodWeeks('f-kt-from', 'f-kt-to');
+
+  var hrs, nEmp;
+  if (nv === 'all') {
+    hrs = timeDataKT.reduce(function(a,t){return a+t.tt;},0) * wkKT;
+    nEmp = deptEmps.kt.length;
+  } else {
+    var one = timeDataKT.filter(function(t){ return t.name.indexOf(empName[nv]) !== -1; })[0];
+    hrs = one ? one.tt * wkKT : 0;
+    nEmp = 1;
+  }
+  var workDays = Math.max(1, wkKT * 5);
+  var avg = hrs / nEmp / workDays;
+
+  var typeSel = document.getElementById('f-kt-type');
+  typeSel = typeSel ? typeSel.value : 'all';
+  var recs = collectRecs('kt', typeSel === 'all' ? null : typeSel, false);
+  var projSet = {};
+  recs.forEach(function(r){ if (r.donvi && r.donvi !== '—') projSet[r.donvi] = 1; });
+
+  if (document.getElementById('kt-plan'))  document.getElementById('kt-plan').textContent  = t_kh;
+  if (document.getElementById('kt-hours')) document.getElementById('kt-hours').textContent = Math.round(hrs) + 'h';
+  if (document.getElementById('kt-proj'))  document.getElementById('kt-proj').textContent  = Object.keys(projSet).length;
+  if (document.getElementById('kt-avg'))   document.getElementById('kt-avg').textContent   = avg.toFixed(1) + 'h';
+
+  renderCvTable('tbody-kt-cv', rows);
+  renderTimeTable('tc-list-kt', timeDataKT, wkKT);
+  renderTimeShare('pb-list-kt', 'kt', nv, wkKT);
+  setTargetLabels('kt', wkKT);
+}
+
+// ── RENDER FORECAST ──
+var fcSel = null;   // tên dự án đang chọn (null = tất cả)
+var fcStageSel = null;  // stage bucket đang chọn (null = tất cả)
+var fcRows = [];    // dòng pipeline sau lọc
+var fcCur = 'vnd';  // đơn vị tiền hiển thị ở bảng B: 'vnd' | 'usd'
+
+// các nhóm stage của funnel (dùng chung: render funnel + lọc bảng khi click)
+var FUNNEL_BUCKETS = [
+  {key:'s510', label:'Thô · 5–10%', badge:'b-coral',  match:function(d){return d.st==='active' && (d.stage===5||d.stage===10);}},
+  {key:'s30',  label:'30%',          badge:'b-amber',  match:function(d){return d.st==='active' && d.stage===30;}},
+  {key:'s50',  label:'50%',          badge:'b-blue',   match:function(d){return d.st==='active' && d.stage===50;}},
+  {key:'s70',  label:'70%',          badge:'b-purple', match:function(d){return d.st==='active' && d.stage===70;}},
+  {key:'s90',  label:'≥ 90%',        badge:'b-green',  match:function(d){return d.st==='active' && d.stage===90;}},
+  {key:'win',  label:'Win · đã ký',  badge:'b-green',  match:function(d){return d.st==='won';}},
+  {key:'fail', label:'Fail',         badge:'b-coral',  match:function(d){return d.st==='lost';}},
+];
+function stageMatch(key){ var b=FUNNEL_BUCKETS.filter(function(x){return x.key===key;})[0]; return b?b.match:function(){return true;}; }
+function selectStage(key){ fcStageSel = (fcStageSel===key)?null:key; renderForecast(); }
+
+function moneyCur(n) { return (fcCur === 'usd') ? fmtUSD(n) : fmtM(n); }
+function toggleFcCur() {
+  fcCur = (fcCur === 'vnd') ? 'usd' : 'vnd';
+  var lbl = 'Xem: ' + (fcCur === 'usd' ? 'USD' : 'VNĐ');
+  ['fc-cur-btn','fc-cur-btn-a'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.textContent = lbl;
+  });
+  renderForecast();
+}
+
+function selectProject(name) {
+  fcSel = (fcSel === name) ? null : name;
+  renderForecast();
+}
+
+function renderSubTables() {
+  var src = fcSel ? fcRows.filter(function(d){ return d.name === fcSel; }) : fcRows;
+  // hint
+  document.getElementById('fc-sub-hint').textContent = fcSel
+    ? ('Đang lọc theo dự án: ' + fcSel + ' · nhấp lại để xem tất cả')
+    : 'Nhấp một dự án ở bảng trên để lọc · đang xem tất cả';
+
+  // người ảnh hưởng
+  var ahRows = [];
+  src.forEach(function(d){
+    (d.ah || []).forEach(function(a){
+      var col = a.ung ? 'var(--green)' : 'var(--coral)';
+      var tag = a.ung ? '● Ủng hộ' : '● Phản đối';
+      ahRows.push('<tr>'
+        +'<td class="ctr">'+(ahRows.length+1)+'</td>'
+        +'<td class="bold">'+d.name+'</td>'
+        +'<td>'+a.ten+'</td>'
+        +'<td>'+a.sdt+'</td>'
+        +'<td style="color:var(--text3)">'+a.vai+'</td>'
+        +'<td class="ctr" style="color:'+col+';font-weight:700">'+tag+'</td>'
+        +'</tr>');
+    });
+  });
+  document.getElementById('tbody-ah').innerHTML = ahRows.length ? ahRows.join('')
+    : '<tr><td colspan="6" style="padding:16px;color:var(--text3)">Không có dữ liệu</td></tr>';
+
+  // nhà thầu
+  var ntRows = [];
+  src.forEach(function(d){
+    (d.nhaThau || []).forEach(function(n){
+      var b = n.ky ? '<span class="badge b-green">Đã ký</span>' : '<span class="badge b-coral">Chưa ký</span>';
+      var isAsel = (n.ten === 'ASEL');
+      ntRows.push('<tr'+(isAsel?' style="background:var(--blue-dim)"':'')+'>'
+        +'<td class="ctr">'+(ntRows.length+1)+'</td>'
+        +'<td class="bold">'+d.name+'</td>'
+        +'<td>'+(n.hm||'—')+'</td>'
+        +'<td'+(isAsel?' style="color:var(--blue);font-weight:700"':'')+'>'+n.ten+'</td>'
+        +'<td class="num">'+moneyCur(n.gt)+'</td>'
+        +'<td class="ctr">'+b+'</td>'
+        +'</tr>');
+    });
+  });
+  document.getElementById('tbody-nt').innerHTML = ntRows.length ? ntRows.join('')
+    : '<tr><td colspan="6" style="padding:16px;color:var(--text3)">Không có dữ liệu</td></tr>';
+}
+
+// ── LINE CHART: Forecast doanh thu theo tuần ──
+function fcKeyDate(d) {
+  var s = (d.st === 'won') ? d.ngayky : (d.st === 'lost') ? d.ngayfail : d.dukienky;
+  return s || null;  // 'DD/MM/YYYY'
+}
+function parseVN(ddmmyyyy) {
+  var p = ddmmyyyy.split('/');
+  return new Date(+p[2], +p[1]-1, +p[0]);
+}
+function two(n){ return n<10?'0'+n:''+n; }
+// khoá tuần = ngày thứ Hai đầu tuần (YYYY-MM-DD) · nhãn = dd/mm
+function weekOf(ddmmyyyy) {
+  var dt = parseVN(ddmmyyyy);
+  var dow = (dt.getDay() + 6) % 7;      // 0 = thứ Hai
+  dt.setDate(dt.getDate() - dow);
+  return {
+    key: dt.getFullYear() + '-' + two(dt.getMonth()+1) + '-' + two(dt.getDate()),
+    label: two(dt.getDate()) + '/' + two(dt.getMonth()+1)
+  };
+}
+// Forecast doanh thu 1 dự án: đã ký → giá ký thực; fail → 0; đang theo dõi → HĐ DK × %stage
+function forecastOf(d) {
+  if (d.st === 'won')  return d.ky || 0;
+  if (d.st === 'lost') return 0;
+  return Math.round(d.hddk * d.stage / 100);
+}
+function renderFcLine(rows) {
+  var buckets = {}, labelMap = {};
+  rows.forEach(function(d){
+    if (d.st === 'lost') return;   // deal fail không tính doanh thu
+    var kd = fcKeyDate(d);
+    if (!kd) return;
+    var w = weekOf(kd);
+    var fc = forecastOf(d);
+    buckets[w.key] = (buckets[w.key] || 0) + fc;
+    labelMap[w.key] = w.label;
+  });
+  var keys = Object.keys(buckets).sort();
+  var labels = keys.map(function(k){ return 'Tuần ' + labelMap[k]; });
+  // đơn vị theo nút Xem: tỷ VNĐ hoặc K$ (nghìn USD)
+  var isUsd = (fcCur === 'usd');
+  var unit  = isUsd ? 'K$' : 'tỷ';
+  var conv  = isUsd
+    ? function(m){ return +(m * 1000 / getRate()).toFixed(1); }   // triệu VNĐ → K$
+    : function(m){ return +(m / 1000).toFixed(2); };              // triệu VNĐ → tỷ
+  var data = keys.map(function(k){ return conv(buckets[k]); });
+  // luỹ kế
+  var cum = []; var run = 0;
+  keys.forEach(function(k){ run += buckets[k]; cum.push(conv(run)); });
+
+  if (charts.fcLine) charts.fcLine.destroy();
+  charts.fcLine = new Chart(document.getElementById('cFcLine'), {
+    type:'line',
+    data:{
+      labels: labels.length ? labels : ['—'],
+      datasets:[
+        {label:'Forecast/tuần', data:data, borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,.12)',
+         fill:true, tension:.35, pointRadius:4, pointBackgroundColor:'#2563eb', borderWidth:2},
+        {label:'Luỹ kế', data:cum, borderColor:'#0d9e6e', backgroundColor:'transparent',
+         fill:false, tension:.35, pointRadius:3, pointBackgroundColor:'#0d9e6e', borderWidth:2, borderDash:[5,4]}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:true, labels:{color:'#5a6080', font:{size:11}, boxWidth:14}},
+        tooltip:{callbacks:{label:function(c){return ' '+c.dataset.label+': '+c.parsed.y+' '+unit;}}}
+      },
+      scales:{
+        x:{ticks:{color:'#9aa0bc',font:{size:11}},grid:{display:false}},
+        y:{ticks:{color:'#9aa0bc',font:{size:10},callback:function(v){return v+unit;}},grid:{color:'rgba(0,0,0,.05)'}}
+      }
+    }
+  });
+}
+
+function renderForecast() {
+  var nv     = document.getElementById('f-fc-nv').value;
+  var stage  = document.getElementById('f-fc-stage').value;
+  var status = document.getElementById('f-fc-status').value;
+  var dFrom  = document.getElementById('f-fc-from').value || null;
+  var dTo    = document.getElementById('f-fc-to').value   || null;
+  var rows  = fcData.filter(function(d){
+    var okDate = true;
+    if (dFrom) okDate = okDate && d.date >= dFrom;
+    if (dTo)   okDate = okDate && d.date <= dTo;
+    var okStage = (stage==='all') || (stage==='win' ? d.st==='won' : d.stage===parseInt(stage));
+    return (nv==='all'||d.nv===nv)
+        && okStage
+        && (status==='all' || (status==='new' ? d.moi===true : d.st===status))
+        && okDate;
+  });
+
+  // cột ngày: tên hợp lý theo bộ lọc (khi không lọc → gộp chung)
+  var dateCol = document.getElementById('fc-date-col');
+  if (dateCol) {
+    dateCol.textContent = (status === 'won' || stage === 'win') ? 'Ngày ký'
+                        : (status === 'lost') ? 'Ngày fail'
+                        : (status === 'active') ? 'Ngày dự kiến ký'
+                        : 'Ngày chốt';
+  }
+
+  fcRows = rows;   // dùng cho KPI/funnel (giữ toàn bộ theo bộ lọc dropdown)
+
+  // click stage ở bảng funnel → lọc danh sách dự án + section C
+  var tblRows = fcStageSel ? rows.filter(stageMatch(fcStageSel)) : rows;
+
+  function dateFor(d) {
+    if (d.st === 'won')  return d.ngayky   || '—';
+    if (d.st === 'lost') return d.ngayfail || '—';
+    return d.dukienky || '—';
+  }
+  function svcCell(d) {
+    return d.service ? '<a href="'+d.service+'" class="wlink">Phiếu ↗</a>' : '<span class="empty">—</span>';
+  }
+  // giá trị quy đổi (tính hoa hồng) = giá trị ký − 20% (chiết khấu KH, thuế...)
+  var QD_RATE = 0.8;
+  function qdOf(d) { return d.ky ? Math.round(d.ky * QD_RATE) : null; }
+
+  // hàng tổng trên cùng của bảng
+  var tChao = tblRows.reduce(function(a,d){return a+d.chao;},0);
+  var tKy   = tblRows.reduce(function(a,d){return a+(d.ky||0);},0);
+  var tQd   = tblRows.reduce(function(a,d){return a+(qdOf(d)||0);},0);
+  document.getElementById('tbody-fc-total').innerHTML =
+    '<tr class="fc-total">'
+    +'<td class="ctr c1">Σ</td>'
+    +'<td class="bold c2">TỔNG CỘNG</td>'
+    +'<td class="ctr empty">—</td>'
+    +'<td class="ctr empty">'+tblRows.length+' DA</td>'
+    +'<td class="ctr empty">—</td>'
+    +'<td class="empty">—</td>'
+    +'<td class="empty">—</td>'
+    +'<td class="num">'+moneyCur(tChao)+'</td>'
+    +'<td class="num">'+(tKy?moneyCur(tKy):'<span class="empty">—</span>')+'</td>'
+    +'<td class="num" style="color:var(--green)">'+(tQd?moneyCur(tQd):'<span class="empty">—</span>')+'</td>'
+    +'<td class="empty ctr">—</td><td class="empty ctr">—</td><td class="empty ctr">—</td>'
+    +'</tr>';
+
+  var sumHd=0, sumFc=0;
+  document.getElementById('tbody-fc').innerHTML = tblRows.map(function(d, i){
+    var fc = forecastOf(d);
+    sumHd += d.chao; sumFc += fc;
+    var dateColor = d.st==='won' ? 'var(--green)' : d.st==='lost' ? 'var(--coral)' : 'var(--blue)';
+    var active = (fcSel === d.name) ? ' active' : '';
+    return '<tr class="fc-row'+active+'" onclick="selectProject(\''+d.name.replace(/'/g,"\\'")+'\')">'
+      +'<td class="ctr c1">'+(i+1)+'</td>'
+      +'<td class="bold c2">'+d.name+'</td>'
+      +'<td class="ctr"><span class="badge '+stageBadge[d.stage]+'">'+stageLabel[d.stage]+'</span></td>'
+      +'<td class="ctr"><span class="badge '+stBadge[d.st]+'">'+stLabel[d.st]+'</span></td>'
+      +'<td class="ctr"><span class="badge '+(d.hientrang==='Chưa xác định'?'b-coral':'b-green')+'">'+d.hientrang+'</span></td>'
+      +'<td>'+d.tvtk.ten+'</td>'
+      +'<td style="font-size:11px;color:var(--text2)">'+d.tvtk.sdt+'</td>'
+      +'<td class="num">'+moneyCur(d.chao)+'</td>'
+      +'<td class="num">'+(d.ky?moneyCur(d.ky):'<span class="empty">—</span>')+'</td>'
+      +'<td class="num" style="color:var(--green)">'+(qdOf(d)?moneyCur(qdOf(d)):'<span class="empty">—</span>')+'</td>'
+      +'<td class="ctr" style="font-size:11px">'+d.tiepCan+'</td>'
+      +'<td class="ctr" style="font-size:11px;font-weight:600;color:'+dateColor+'">'+dateFor(d)+'</td>'
+      +'<td class="ctr">'+svcCell(d)+'</td>'
+      +'</tr>';
+  }).join('');
+
+  // sub-tables theo tblRows
+  fcRows = tblRows;
+
+  renderSubTables();
+
+
+  // KPI (theo bộ lọc chung, không phụ thuộc stage bảng)
+  var gHd = rows.reduce(function(a,d){return a+d.chao;},0);
+  var gKy = rows.reduce(function(a,d){return a+(d.st==='won'?(d.ky||0):0);},0);  // giá trị HĐ đã ký
+  document.getElementById('kf-total').innerHTML = '<span class="kf-usd">'+fmtUSD(gKy)+'</span><span class="kf-vnd">'+fmtM(gKy)+'</span>';
+  document.getElementById('kf-hddk').innerHTML  = '<span class="kf-usd">'+fmtUSD(gHd)+'</span><span class="kf-vnd">'+fmtM(gHd)+'</span>';
+  document.getElementById('kf-count').textContent = rows.length;
+  document.getElementById('kf-new').textContent = rows.filter(function(d){return d.moi===true;}).length;
+  // Win / Fail (tỉ lệ tính trên số deal đã đóng = win + fail)
+  var nWin  = rows.filter(function(d){return d.st==='won';}).length;
+  var nFail = rows.filter(function(d){return d.st==='lost';}).length;
+  var closed = nWin + nFail;
+  var winRate  = closed ? Math.round(nWin  / closed * 100) : 0;
+  var failRate = closed ? Math.round(nFail / closed * 100) : 0;
+  document.getElementById('kf-win').textContent      = nWin;
+  document.getElementById('kf-fail').textContent     = nFail;
+  document.getElementById('kf-winrate').textContent  = 'Tỉ lệ win ' + winRate + '%';
+  document.getElementById('kf-failrate').textContent = 'Tỉ lệ fail ' + failRate + '%';
+
+  // funnel: các stage đang mở (đang theo dõi) + Win + Fail
+  function fcVal(d){ return forecastOf(d); }
+  var funnelCalc = FUNNEL_BUCKETS.map(function(f){
+    var bucket=rows.filter(f.match);
+    var hd=bucket.reduce(function(a,d){return a+d.hddk;},0);
+    var fc=bucket.reduce(function(a,d){return a+fcVal(d);},0);
+    return {key:f.key,label:f.label,badge:f.badge,count:bucket.length,hd:hd,fc:fc};
+  });
+  var totC = funnelCalc.reduce(function(a,f){return a+f.count;},0);
+  var totHd= funnelCalc.reduce(function(a,f){return a+f.hd;},0);
+  var totFc= funnelCalc.reduce(function(a,f){return a+f.fc;},0);
+  function pctOf(v,t){ return t ? Math.round(v/t*100)+'%' : '—'; }
+  var maxC  = Math.max.apply(null, funnelCalc.map(function(f){return f.count;}).concat([1]));
+  var maxHd = Math.max.apply(null, funnelCalc.map(function(f){return f.hd;}).concat([1]));
+  var maxFc = Math.max.apply(null, funnelCalc.map(function(f){return f.fc;}).concat([1]));
+  function shade(v,mx){ return (v>0 && mx>0) ? 'background:rgba(37,99,235,'+(0.10+0.55*(v/mx)).toFixed(2)+');color:'+((v/mx)>0.55?'#0c2f66':'inherit') : ''; }
+  var totalRow = '<tr class="cv-total">'
+    +'<td class="bold">TỔNG</td>'
+    +'<td class="ctr">'+totC+'</td>'
+    +'<td class="ctr">100%</td>'
+    +'<td class="num">'+(totHd?moneyCur(totHd):'—')+'</td>'
+    +'<td class="ctr">100%</td>'
+    +'<td class="num">'+(totFc?moneyCur(totFc):'—')+'</td>'
+    +'<td class="ctr">100%</td>'
+    +'</tr>';
+  document.getElementById('funnel-list').innerHTML = totalRow + funnelCalc.map(function(f){
+    var active = (fcStageSel === f.key) ? ' active' : '';
+    return '<tr class="stage-row'+active+'" onclick="selectStage(\''+f.key+'\')">'
+      +'<td><span class="badge '+f.badge+'">'+f.label+'</span></td>'
+      +'<td class="ctr" style="'+shade(f.count,maxC)+'">'+f.count+'</td>'
+      +'<td class="ctr" style="color:var(--text3)">'+pctOf(f.count,totC)+'</td>'
+      +'<td class="num" style="'+shade(f.hd,maxHd)+'">'+(f.hd?moneyCur(f.hd):'<span class="empty">—</span>')+'</td>'
+      +'<td class="ctr" style="color:var(--text3)">'+pctOf(f.hd,totHd)+'</td>'
+      +'<td class="num" style="'+shade(f.fc,maxFc)+'">'+(f.fc?moneyCur(f.fc):'<span class="empty">—</span>')+'</td>'
+      +'<td class="ctr" style="color:var(--text3)">'+pctOf(f.fc,totFc)+'</td>'
+      +'</tr>';
+  }).join('');
+}
+
+// ── NAV ──
+function switchDept(dept, btn) {
+  ['kd','kt'].forEach(function(d){
+    document.getElementById('dept-'+d).classList.toggle('on', d===dept);
+    var ts = document.getElementById('topsub-'+d);
+    if (ts) ts.classList.toggle('active', d===dept);
+  });
+  document.querySelectorAll('.dept-btn').forEach(function(b,i){
+    b.classList.toggle('on', ['kd','kt'][i]===dept);
+  });
+  if(dept==='kt') renderKTcv();
+}
+
+function switchSub(dept, sub, btn) {
+  // bấm tab của phòng nào thì kích hoạt luôn phòng đó
+  ['kd','kt'].forEach(function(d){
+    document.getElementById('dept-'+d).classList.toggle('on', d===dept);
+    var ts = document.getElementById('topsub-'+d);
+    if (ts) ts.classList.toggle('active', d===dept);
+  });
+  document.querySelectorAll('.dept-btn').forEach(function(b,i){
+    b.classList.toggle('on', ['kd','kt'][i]===dept);
+  });
+  var panel = document.getElementById('dept-'+dept);
+  panel.querySelectorAll('.sub-page').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById(dept+'-'+sub).classList.add('on');
+  var ts2 = document.getElementById('topsub-'+dept);
+  if (ts2) ts2.querySelectorAll('.sub-btn').forEach(function(b){ b.classList.toggle('on', b.dataset.sub===sub); });
+  if(dept==='kt') renderKTcv();
+  if(dept==='kd' && sub==='fc') renderForecast();
+}
+
+// ── INIT ──
+buildAllDetails();
+// bảng chi tiết mặc định mở tất cả nhóm loại công việc
+cvKD.forEach(function(d){ cvOpen.kd[d.id] = true; });
+cvKT.forEach(function(d){ cvOpen.kt[d.id] = true; });
+(function fillTypeFilters(){
+  function fill(id, list){
+    var el = document.getElementById(id); if (!el) return;
+    list.forEach(function(d){ var o = document.createElement('option'); o.value = d.id; o.textContent = d.name; el.appendChild(o); });
+  }
+  fill('f-kd-type', cvKD);
+  fill('f-kt-type', cvKT);
+})();
+renderKDcv();
+</script>
+</body>
+</html>

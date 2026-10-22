@@ -1,0 +1,22 @@
+{
+  "slug": "thuy-dien-nam-na",
+  "title": "Thủy điện Nậm Na — Sơ đồ luồng vận hành & dữ liệu",
+  "type": "proposal",
+  "industry": "Năng lượng",
+  "department": "All",
+  "description": "Sơ đồ luồng vận hành và dữ liệu cho cụm thủy điện Nậm Na, kèm các báo cáo về công ty mẹ.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/thuydien_namno/",
+  "source_repo": "https://github.com/tbinh-06/thuydien_namno",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "thủy điện",
+    "vận hành",
+    "công ty mẹ"
+  ]
+}

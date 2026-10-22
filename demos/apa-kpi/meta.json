@@ -1,0 +1,22 @@
+{
+  "slug": "apa-kpi",
+  "title": "APA — Báo cáo KPI & hướng dẫn đọc",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "HR",
+  "description": "Báo cáo KPI 4 trang theo 3 mức quyền xem, kèm hướng dẫn điểm KPI tính thế nào và chỗ dễ đọc nhầm.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/APA_BC-KPI/",
+  "source_repo": "https://github.com/tbinh-06/APA_BC-KPI",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "KPI",
+    "thuốc thú y",
+    "phân quyền"
+  ]
+}

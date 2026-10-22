@@ -1,0 +1,22 @@
+{
+  "slug": "saigon-indochina-chuyen-doi-so",
+  "title": "Saigon Indochina — Tài liệu dự án chuyển đổi số",
+  "type": "proposal",
+  "industry": "Bán lẻ",
+  "department": "All",
+  "description": "Bản đồ số hóa chuỗi giá trị và kế hoạch chuyển đổi số cùng Base 2026.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/DongDuongSaiGon/",
+  "source_repo": "https://github.com/tbinh-06/DongDuongSaiGon",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "chuỗi giá trị",
+    "chuyển đổi số",
+    "phân phối"
+  ]
+}

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khang Thịnh — Báo cáo Kho vật tư</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#16294D; --orange:#F0801E; --orange-deep:#D96C0E;
+  --bg-primary:#FFFFFF; --bg-secondary:#F0F3F8;
+  --bg-danger:#FCEAEA; --bg-warning:#FBF1DD; --bg-success:#E8F6EE; --bg-info:#E9F2FC;
+  --border-t:#E2E7F0; --border-s:#CCD5E2;
+  --tx-primary:#1A2230; --tx-secondary:#5A6678; --tx-tertiary:#8A95A8;
+  --tx-info:#2F6FE0; --tx-success:#1E9E57; --tx-danger:#E24B4A; --tx-warning:#D98200; --tx-orange:#D96C0E;
+  --r-md:8px; --r-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--tx-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:238px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--border-t);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:2px 2px 14px}
+.brand img{width:100%;max-width:170px;height:auto;margin:0 auto;display:block}
+.brand .sub{text-align:center;letter-spacing:.5px;font-size:10.5px;color:var(--tx-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 11px;border:none;background:transparent;border-radius:var(--r-md);color:var(--tx-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--bg-secondary)}
+.nav button.on{background:var(--bg-warning);color:var(--tx-orange);font-weight:600}
+.backlink{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--tx-tertiary);text-decoration:none;padding:9px 11px;margin-top:8px;border-radius:var(--r-md)}
+.backlink:hover{background:var(--bg-secondary);color:var(--tx-secondary)}
+.sidefilter{margin-top:16px;border-top:0.5px solid var(--border-t);padding-top:14px}
+.sftitle{font-size:10px;font-weight:600;color:var(--tx-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 8px 10px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:11px;padding:0 8px}
+.fitem{display:flex;flex-direction:column;gap:5px;min-width:0}
+.flabel{font-size:10px;font-weight:600;color:var(--tx-tertiary);text-transform:uppercase;letter-spacing:.4px}
+.fsel,.fdate{font-size:12px;font-family:inherit;width:100%;background:var(--bg-secondary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:8px 9px;color:var(--tx-primary);cursor:pointer;outline:none}
+.fsel:focus,.fdate:focus{border-color:var(--orange)}
+.fdrow{display:flex;gap:6px}.fdrow .fitem{flex:1;min-width:0}
+.freset{font-size:11.5px;color:var(--tx-orange);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:6px;padding:6px 2px;margin-top:2px}
+.freset:hover{text-decoration:underline}
+.main{flex:1;padding:22px 26px;max-width:1560px;min-width:0}
+.page{display:none}
+.page.on{display:block}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px;flex-wrap:wrap;gap:10px}
+.titlebar .t{font-size:19px;font-weight:700;color:var(--navy)}
+.titlebar .sub{font-size:11px;color:var(--tx-tertiary)}
+.frange{font-size:12px;color:var(--tx-secondary);display:flex;align-items:center;gap:5px}
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.kpi{background:var(--bg-primary);border:0.5px solid var(--border-t);border-radius:var(--r-lg);padding:15px 16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--kc,var(--orange))}
+.kpi .lb{font-size:10.5px;font-weight:600;color:var(--tx-secondary);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:8px}
+.kpi .val{font-size:26px;font-weight:700;line-height:1;color:var(--navy);display:block;margin-bottom:7px}
+.kpi .tr{font-size:11px;font-weight:600;display:flex;align-items:center;gap:4px}
+/* grid 12 col */
+.chart-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+.col-3{grid-column:span 3}.col-4{grid-column:span 4}.col-5{grid-column:span 5}.col-6{grid-column:span 6}.col-7{grid-column:span 7}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+.card{background:var(--bg-primary);border:0.5px solid var(--border-t);border-radius:var(--r-lg);padding:15px 17px}
+.chart-card{display:flex;flex-direction:column}
+.chart-card.sm{min-height:290px}.chart-card.md{min-height:350px}.chart-card.lg{min-height:410px}
+.chart-header{margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chart-title{font-size:13px;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:7px}
+.chart-title i{color:var(--tx-orange);font-size:16px}
+.chart-box{flex:1;position:relative;width:100%;min-height:210px}
+/* table */
+.rk{width:100%;border-collapse:collapse;font-size:12px}
+.rk th{text-align:left;font-weight:600;color:var(--tx-secondary);padding:9px 12px;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+.rk td{padding:11px 12px;background:var(--bg-secondary);font-size:12.5px;vertical-align:middle}
+.rk tbody tr td:first-child{border-radius:8px 0 0 8px}
+.rk tbody tr td:last-child{border-radius:0 8px 8px 0}
+.rk tbody tr{margin-bottom:6px}
+.mono{font-variant-numeric:tabular-nums}
+.badge{font-size:10.5px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.b-ok{background:var(--bg-success);color:var(--tx-success)}
+.b-warn{background:var(--bg-warning);color:var(--tx-warning)}
+.b-danger{background:var(--bg-danger);color:var(--tx-danger)}
+.b-info{background:var(--bg-info);color:var(--tx-info)}
+.up{color:var(--tx-success)}.dn{color:var(--tx-danger)}.mut{color:var(--tx-tertiary)}
+@media(max-width:1100px){.kpi-row{grid-template-columns:repeat(2,1fr)}.col-3,.col-4,.col-5,.col-6,.col-7,.col-8{grid-column:span 12}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><img src="khang_thinh_logo.png" alt="Nhà thép Khang Thịnh"><div class="sub">BÁO CÁO KHO</div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="p1"><i class="ti ti-layout-dashboard"></i> Tổng quan XNT</button>
+      <button data-page="p2"><i class="ti ti-building-factory-2"></i> Xuất vật tư - Đơn hàng</button>
+      <button data-page="p3"><i class="ti ti-hourglass"></i> Tồn kho - Tuổi tồn</button>
+      <button data-page="p4"><i class="ti ti-clipboard-check"></i> Khả năng đáp ứng</button>
+      <button data-page="p5"><i class="ti ti-package-import"></i> Báo cáo nhập kho</button>
+    </nav>
+    <a class="backlink" href="index.html"><i class="ti ti-arrow-left"></i> Về trang báo cáo</a>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar">
+        <div class="fitem"><span class="flabel">Kho</span>
+          <select class="fsel" id="fKho">
+            <option value="all">Tất cả kho</option>
+            <option value="hcm">Kho HCM</option>
+            <option value="vt">Kho Vũng Tàu</option>
+          </select></div>
+        <div class="fitem"><span class="flabel">Kỳ báo cáo</span>
+          <select class="fsel" id="fPeriod">
+            <option value="ytd">Lũy kế từ đầu năm</option><option value="q2">Quý II/2026</option><option value="m7">Tháng 07/2026</option><option value="y26">Năm 2026</option>
+          </select></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="titlebar">
+      <div><span class="t" id="pageTitle">Tổng quan Xuất - Nhập - Tồn</span> <span class="sub">· ĐVT: triệu đồng · tấn</span></div>
+      <span class="frange"><i class="ti ti-calendar"></i> 01/01 → 05/08/2026</span>
+    </div>
+
+    <!-- ============ TRANG 1: TỔNG QUAN XNT ============ -->
+    <section class="page on" id="p1">
+      <div class="kpi-row">
+        <div class="kpi" style="--kc:#1E9E57"><span class="lb">Tổng nhập (kỳ)</span><span class="val">42.800</span><div class="tr up">▲ 12,5% vs kỳ trước</div></div>
+        <div class="kpi" style="--kc:#2E7CD6"><span class="lb">Tổng xuất (kỳ)</span><span class="val">38.200</span><div class="tr up">▲ 8,1% vs kỳ trước</div></div>
+        <div class="kpi" style="--kc:#F0801E"><span class="lb">Tồn kho hiện tại</span><span class="val">28.400</span><div class="tr dn">▼ 2,4% vs đầu kỳ</div></div>
+        <div class="kpi" style="--kc:#16294D"><span class="lb">Vòng quay kho</span><span class="val">3,2x</span><div class="tr mut">Mục tiêu: 4,0x</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card md col-8"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-bar"></i> Xu hướng nhập - xuất - tồn theo tháng</span></div><div class="chart-box"><canvas id="c11"></canvas></div></div>
+        <div class="card chart-card md col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-donut"></i> Cơ cấu giá trị theo nhóm vật tư</span></div><div class="chart-box"><canvas id="c12"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-building-warehouse"></i> Phân bổ tồn kho theo kho</span></div><div class="chart-box"><canvas id="c13"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-pie"></i> Số mã vật tư theo trạng thái</span></div><div class="chart-box"><canvas id="c14"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-gauge"></i> Tỷ lệ lấp đầy kho trung bình</span></div><div class="chart-box"><canvas id="c15"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-arrow-down-left"></i> Top 5 nhóm vật tư nhập nhiều nhất</span></div><div class="chart-box"><canvas id="c16"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-arrow-up-right"></i> Top 5 nhóm vật tư xuất nhiều nhất</span></div><div class="chart-box"><canvas id="c17"></canvas></div></div>
+      </div>
+    </section>
+
+    <!-- ============ TRANG 2: XUẤT VẬT TƯ - ĐƠN HÀNG ============ -->
+    <section class="page" id="p2">
+      <div class="kpi-row">
+        <div class="kpi" style="--kc:#16294D"><span class="lb">Đơn hàng đang SX</span><span class="val">8</span><div class="tr mut">3 đơn trọng điểm</div></div>
+        <div class="kpi" style="--kc:#1E9E57"><span class="lb">Tổng giá trị xuất</span><span class="val">38.200</span><div class="tr up">▲ 5,2%</div></div>
+        <div class="kpi" style="--kc:#E24B4A"><span class="lb">Đơn vượt định mức (&gt;110%)</span><span class="val">2</span><div class="tr dn">Cần kiểm soát</div></div>
+        <div class="kpi" style="--kc:#1E9E57"><span class="lb">Cấp phát đúng hạn</span><span class="val">94,2%</span><div class="tr mut">Mục tiêu: 95%</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card md col-7"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-bar"></i> So sánh định mức vs thực xuất theo đơn</span></div><div class="chart-box"><canvas id="c21"></canvas></div></div>
+        <div class="card chart-card md col-5"><div class="chart-header"><span class="chart-title"><i class="ti ti-percentage"></i> Tỷ lệ sử dụng định mức theo đơn</span></div><div class="chart-box"><canvas id="c22"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-donut"></i> Cơ cấu xuất theo nhóm vật tư</span></div><div class="chart-box"><canvas id="c23"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-line"></i> Xu hướng xuất theo tuần</span></div><div class="chart-box"><canvas id="c24"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-alert-triangle"></i> Vật tư vượt định mức</span></div><div class="chart-box"><canvas id="c25"></canvas></div></div>
+        <div class="card col-12"><div class="chart-header"><span class="chart-title"><i class="ti ti-alert-triangle" style="color:var(--tx-warning)"></i> Danh sách đơn hàng cần kiểm soát vật tư</span></div>
+          <table class="rk"><thead><tr><th>Mã đơn</th><th>Dự án</th><th>Định mức NVL</th><th>Thực xuất</th><th>% SD</th><th>VT vượt chính</th><th>Trạng thái</th></tr></thead><tbody id="tb2"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRANG 3: TỒN KHO - TUỔI TỒN ============ -->
+    <section class="page" id="p3">
+      <div class="kpi-row">
+        <div class="kpi" style="--kc:#E24B4A"><span class="lb">Tồn lâu ngày (&gt;90 ngày)</span><span class="val">7.680</span><div class="tr mut">27% tổng giá trị kho</div></div>
+        <div class="kpi" style="--kc:#F0801E"><span class="lb">Tuổi tồn trung bình</span><span class="val">78 <small style="font-size:13px;font-weight:400;color:var(--tx-tertiary)">ngày</small></span><div class="tr dn">▲ 5 ngày vs tháng trước</div></div>
+        <div class="kpi" style="--kc:#D98200"><span class="lb">Giá trị rủi ro (gỉ/lỗi)</span><span class="val">1.560</span><div class="tr mut">Cần thanh lý/xử lý</div></div>
+        <div class="kpi" style="--kc:#16294D"><span class="lb">Số mã VT cần thanh lý</span><span class="val">12</span><div class="tr mut">Đang xử lý: 4 mã</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-pie"></i> Phân lớp tồn kho theo tuổi</span></div><div class="chart-box"><canvas id="c31"></canvas></div></div>
+        <div class="card chart-card sm col-8"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-bar"></i> Giá trị tồn theo nhóm vật tư &amp; tuổi tồn</span></div><div class="chart-box"><canvas id="c32"></canvas></div></div>
+        <div class="card chart-card md col-5"><div class="chart-header"><span class="chart-title"><i class="ti ti-clock-exclamation"></i> Top mã vật tư tồn lâu nhất (&gt;180 ngày)</span></div><div class="chart-box"><canvas id="c33"></canvas></div></div>
+        <div class="card chart-card md col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-alert-octagon"></i> Phân bổ rủi ro tồn kho</span></div><div class="chart-box"><canvas id="c34"></canvas></div></div>
+        <div class="card chart-card md col-3"><div class="chart-header"><span class="chart-title"><i class="ti ti-building-warehouse"></i> Tuổi tồn TB theo kho</span></div><div class="chart-box"><canvas id="c35"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-line"></i> Xu hướng tuổi tồn (6 tháng)</span></div><div class="chart-box"><canvas id="c36"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-ban"></i> Top 5 VT không có giao dịch</span></div><div class="chart-box"><canvas id="c37"></canvas></div></div>
+      </div>
+    </section>
+
+    <!-- ============ TRANG 4: KHẢ NĂNG ĐÁP ỨNG ============ -->
+    <section class="page" id="p4">
+      <div class="kpi-row">
+        <div class="kpi" style="--kc:#1E9E57"><span class="lb">Tỷ lệ đáp ứng nhu cầu</span><span class="val">88,5%</span><div class="tr dn">▼ 11,5% thiếu hụt</div></div>
+        <div class="kpi" style="--kc:#E24B4A"><span class="lb">Số mã dưới định mức an toàn</span><span class="val">9</span><div class="tr mut">Cần nhập gấp trong tuần</div></div>
+        <div class="kpi" style="--kc:#2E7CD6"><span class="lb">Giá trị cần nhập (tháng tới)</span><span class="val">12.500</span><div class="tr mut">Theo đơn đã ký</div></div>
+        <div class="kpi" style="--kc:#16294D"><span class="lb">Lead-time nhập TB</span><span class="val">12 <small style="font-size:13px;font-weight:400;color:var(--tx-tertiary)">ngày</small></span><div class="tr mut">Tiêu chuẩn: 10 ngày</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card md col-8"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-area"></i> Dự báo cung - cầu 30 ngày tới</span></div><div class="chart-box"><canvas id="c41"></canvas></div></div>
+        <div class="card chart-card md col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-pie"></i> Tình trạng sẵn sàng của kho</span></div><div class="chart-box"><canvas id="c42"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-trending-down"></i> Top 5 vật tư thiếu hụt nhiều nhất</span></div><div class="chart-box"><canvas id="c43"></canvas></div></div>
+        <div class="card chart-card sm col-6"><div class="chart-header"><span class="chart-title"><i class="ti ti-scale"></i> Tồn hiện tại vs nhu cầu 30 ngày</span></div><div class="chart-box"><canvas id="c44"></canvas></div></div>
+        <div class="card col-12"><div class="chart-header"><span class="chart-title"><i class="ti ti-urgent" style="color:var(--tx-danger)"></i> Danh sách vật tư cần nhập khẩn cấp</span></div>
+          <table class="rk"><thead><tr><th>Mã VT</th><th>Tên vật tư</th><th>Tồn hiện tại</th><th>Nhu cầu 30 ngày</th><th>Thiếu hụt</th><th>Ưu tiên</th></tr></thead><tbody id="tb4"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRANG 5: BÁO CÁO NHẬP KHO ============ -->
+    <section class="page" id="p5">
+      <div class="kpi-row">
+        <div class="kpi" style="--kc:#2E7CD6"><span class="lb">Tổng GT nhập (tháng)</span><span class="val">16.800</span><div class="tr up">▲ 8,2% vs tháng trước</div></div>
+        <div class="kpi" style="--kc:#16294D"><span class="lb">Số đơn hàng nhập</span><span class="val">42</span><div class="tr mut">Hoàn tất: 38 đơn</div></div>
+        <div class="kpi" style="--kc:#E24B4A"><span class="lb">Đơn hàng quá hạn</span><span class="val">3</span><div class="tr dn">Cần theo dõi NCC</div></div>
+        <div class="kpi" style="--kc:#1E9E57"><span class="lb">Tỷ lệ nhập đúng hạn</span><span class="val">91,2%</span><div class="tr mut">Mục tiêu: 95%</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="card chart-card md col-8"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-line"></i> Giá trị nhập theo tháng</span></div><div class="chart-box"><canvas id="c51"></canvas></div></div>
+        <div class="card chart-card md col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-donut"></i> Cơ cấu nhập theo nhóm VT</span></div><div class="chart-box"><canvas id="c52"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-pie"></i> Trạng thái đơn hàng nhập</span></div><div class="chart-box"><canvas id="c53"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-building-store"></i> Top 5 NCC theo GT nhập</span></div><div class="chart-box"><canvas id="c54"></canvas></div></div>
+        <div class="card chart-card sm col-4"><div class="chart-header"><span class="chart-title"><i class="ti ti-chart-bar"></i> Số lượng đơn theo tuần</span></div><div class="chart-box"><canvas id="c55"></canvas></div></div>
+        <div class="card col-12"><div class="chart-header"><span class="chart-title"><i class="ti ti-package-import"></i> Chi tiết đơn hàng nhập gần đây</span></div>
+          <table class="rk"><thead><tr><th>Mã PN</th><th>Vật tư</th><th>NCC</th><th>Số lượng</th><th>Giá trị</th><th>Ngày nhập</th><th>Trạng thái</th></tr></thead><tbody id="tb5"></tbody></table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const cNavy="#16294D", cOrange="#F0801E", cBlue="#2E7CD6", cBlueL="#5B9BE0", cGreen="#1E9E57", cRed="#E24B4A", cAmber="#F0A020", cGrid="rgba(128,128,128,0.14)";
+const PAL=[cOrange,cNavy,cBlue,cGreen,cAmber,cRed,cBlueL,'#8FBEEC','#B98AE0','#34C38F'];
+const fmt=n=>new Intl.NumberFormat('vi-VN').format(Math.round(n));
+Chart.defaults.font.family="Inter,-apple-system,sans-serif";Chart.defaults.font.size=11;Chart.defaults.color="rgba(90,102,120,0.9)";
+const inst={};
+function mk(id,cfg){ const e=document.getElementById(id); if(!e)return; if(inst[id])inst[id].destroy(); inst[id]=new Chart(e,cfg); }
+
+/* helper builders */
+function comboXNT(id,x,nhap,xuat,ton){
+  mk(id,{data:{labels:x,datasets:[
+    {type:'bar',label:'Tồn',data:ton,backgroundColor:cOrange+'cc',borderRadius:4,order:3,yAxisID:'y1'},
+    {type:'line',label:'Nhập',data:nhap,borderColor:cGreen,backgroundColor:cGreen,borderWidth:2.5,tension:.35,pointRadius:2,order:1,yAxisID:'y'},
+    {type:'line',label:'Xuất',data:xuat,borderColor:cBlue,backgroundColor:cBlue,borderWidth:2.5,tension:.35,pointRadius:2,order:2,yAxisID:'y'}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+' tr'}}},
+      scales:{y:{position:'left',grid:{color:cGrid},ticks:{callback:v=>fmt(v)},title:{display:true,text:'Nhập/Xuất',font:{size:9.5}}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>fmt(v)},title:{display:true,text:'Tồn',font:{size:9.5}}},x:{grid:{display:false}}}}});
+}
+function donut(id,labels,data,cols){
+  mk(id,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:cols||PAL,borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,font:{size:10.5},padding:8}},tooltip:{callbacks:{label:c=>c.label+': '+fmt(c.parsed)+(c.dataset._unit||'')}}}}});
+}
+function barH(id,labels,data,col,unit){
+  mk(id,{type:'bar',data:{labels,datasets:[{data,backgroundColor:col||cOrange,borderRadius:[0,5,5,0]}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmt(c.parsed.x)+(unit||'')}}},
+      scales:{x:{grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+}
+function barV(id,labels,series,unit){
+  mk(id,{type:'bar',data:{labels,datasets:series.map((s,i)=>({label:s.n,data:s.d,backgroundColor:s.c||PAL[i],borderRadius:[4,4,0,0]}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:series.length>1,position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+(unit||'')}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},x:{grid:{display:false}}}}});
+}
+function lineC(id,x,series,unit){
+  mk(id,{type:'line',data:{labels:x,datasets:series.map((s,i)=>({label:s.n,data:s.d,borderColor:s.c||PAL[i],backgroundColor:(s.c||PAL[i])+'22',borderWidth:2.5,tension:.35,pointRadius:2,fill:s.fill!==false}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:series.length>1,position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+(unit||'')}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},x:{grid:{display:false}}}}});
+}
+function stacked(id,labels,series){
+  mk(id,{type:'bar',data:{labels,datasets:series.map((s,i)=>({label:s.n,data:s.d,backgroundColor:[cGreen,cAmber,cRed][i]||PAL[i],borderRadius:i===series.length-1?[4,4,0,0]:0,stack:'s'}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+' tr'}}},
+      scales:{y:{stacked:true,grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},x:{stacked:true,grid:{display:false}}}}});
+}
+function gauge(id,val){
+  mk(id,{type:'doughnut',data:{datasets:[{data:[val,100-val],backgroundColor:[cOrange,'#EEF1F6'],borderWidth:0,circumference:360,cutout:'75%'}]},
+    options:{responsive:true,maintainAspectRatio:false,rotation:-90,plugins:{legend:{display:false},tooltip:{enabled:false}}},
+    plugins:[{id:'ctr'+id,afterDraw(ch){const{ctx,width,height}=ch;ctx.save();ctx.font='700 26px Inter';ctx.fillStyle=cNavy;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(val+'%',width/2,height/2-2);ctx.font='400 10px Inter';ctx.fillStyle='#8A95A8';ctx.fillText('lấp đầy',width/2,height/2+16);ctx.restore();}}]});
+}
+// bar so sánh: tồn vs nhu cầu, cột thứ 2 đỏ nếu thiếu
+function barDemand(id,labels,ton,cau){
+  mk(id,{type:'bar',data:{labels,datasets:[
+    {label:'Tồn hiện tại',data:ton,backgroundColor:ton.map((v,i)=>v<cau[i]?cRed:cGreen),borderRadius:[4,4,0,0]},
+    {label:'Nhu cầu 30 ngày',data:cau,backgroundColor:'rgba(22,41,77,0.18)',borderRadius:[4,4,0,0]}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+' tấn'}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},x:{grid:{display:false}}}}});
+}
+// bar so sánh định mức vs thực (cột thực đỏ nếu vượt)
+function barCompare(id,labels,plan,act){
+  mk(id,{type:'bar',data:{labels,datasets:[
+    {label:'Định mức',data:plan,backgroundColor:'rgba(22,41,77,0.18)',borderRadius:[4,4,0,0]},
+    {label:'Thực xuất',data:act,backgroundColor:act.map((v,i)=>v>plan[i]?cRed:cGreen),borderRadius:[4,4,0,0]}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)+' tr'}}},
+      scales:{y:{grid:{color:cGrid},ticks:{callback:v=>fmt(v)}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+}
+
+const MON=['T1','T2','T3','T4','T5','T6','T7','T8'];
+const NHOM=['Thép hình','Thép tấm','Thép hộp','Bu lông','Que hàn','Sơn','Tôn'];
+
+/* ============ BỘ LỌC (Kho + Kỳ) ============ */
+const FILTER={kho:'all', period:'ytd'};
+// Tỷ trọng theo kho: HCM ~62%, Vũng Tàu ~38%
+function khoW(){ return FILTER.kho==='hcm'?0.62 : FILTER.kho==='vt'?0.38 : 1; }
+// Số tháng hiển thị theo kỳ (mảng index tháng 0..7 = T1..T8)
+function perMonths(){
+  switch(FILTER.period){
+    case 'q2': return [3,4,5];        // T4-T6
+    case 'm7': return [6];            // T7
+    case 'y26': return [0,1,2,3,4,5,6,7];
+    default: return [0,1,2,3,4,5,6,7]; // ytd
+  }
+}
+// scale 1 giá trị theo kho
+const s1=v=>Math.round(v*khoW());
+// scale 1 mảng theo kho
+const sA=a=>a.map(s1);
+// mảng tháng: chỉ giữ tháng trong kỳ (các tháng ngoài kỳ = null để chart bỏ qua), + scale kho
+function sMon(a){ const keep=new Set(perMonths()); return a.map((v,i)=>keep.has(i)?s1(v):null); }
+// labels tháng theo kỳ
+function monLabels(){ const keep=perMonths(); return keep.map(i=>MON[i]); }
+// lấy phần con của mảng tháng theo kỳ + scale
+function subMon(a){ return perMonths().map(i=>s1(a[i])); }
+// nhãn kho cho tiêu đề
+function khoLabel(){ return FILTER.kho==='hcm'?' · Kho HCM':FILTER.kho==='vt'?' · Kho Vũng Tàu':''; }
+
+/* ============ TRANG 1 ============ */
+function buildP1(){
+  comboXNT('c11',monLabels(),
+    subMon([3800,4200,5100,4600,5300,6100,6800,6900]),
+    subMon([3400,3800,4600,4200,4900,5600,6200,5500]),
+    subMon([22000,23400,24900,25300,25700,26200,26800,28400]));
+  donut('c12',['Thép hình','Thép tấm','Thép hộp','Bu lông','Sơn','Khác'],sA([11400,7800,4200,2100,1600,1300]),[cNavy,cBlue,cBlueL,cAmber,cOrange,'#8FBEEC']);
+  // Phân bổ theo kho: nếu lọc 1 kho thì chỉ hiện kho đó
+  const khoNames=FILTER.kho==='hcm'?['Kho HCM']:FILTER.kho==='vt'?['Kho Vũng Tàu']:['Kho HCM','Kho Vũng Tàu'];
+  const khoVals=FILTER.kho==='hcm'?[18400]:FILTER.kho==='vt'?[10000]:[18400,10000];
+  barH('c13',khoNames,khoVals,cOrange,' tr');
+  // Số mã VT theo trạng thái — scale số lượng theo kho
+  donut('c14',['Đang hoạt động','Tồn lâu ngày','Cần thanh lý'],sA([86,18,12]),[cGreen,cAmber,cRed]);
+  // Tỷ lệ lấp đầy: HCM cao hơn (82%), Vũng Tàu (71%), tất cả (78%)
+  gauge('c15',FILTER.kho==='hcm'?82:FILTER.kho==='vt'?71:78);
+  barH('c16',['Thép hình','Thép tấm','Thép hộp','Bu lông','Sơn'],sA([18500,8200,6100,2200,1800]),cGreen,' tr');
+  barH('c17',['Thép hình','Thép tấm','Thép hộp','Que hàn','Sơn'],sA([15200,7800,5500,2100,1600]),cBlue,' tr');
+}
+
+/* ============ TRANG 2 ============ */
+const ORD=['DH-088','DH-081','DH-079','DH-076','DH-074','DH-069','DH-063','DH-061'];
+function buildP2(){
+  barCompare('c21',ORD,sA([9000,5600,3800,2400,4200,1300,1500,600]),sA([9200,5600,3900,2300,4800,1350,1600,580]));
+  barH('c22',['DH-074: 114%','DH-088: 102%','DH-079: 103%','DH-069: 104%','DH-063: 107%'],[114,102,103,104,107],cOrange,'%');
+  donut('c23',['Thép hình','Thép tấm','Thép hộp','Phụ kiện'],
+    FILTER.kho==='hcm'?[56,24,12,8]:FILTER.kho==='vt'?[44,34,14,8]:[52,28,12,8]);
+  lineC('c24',['W1','W2','W3','W4','W5','W6','W7','W8'],[{n:'Xuất',d:sA([820,910,750,1020,880,950,1120,980]),c:cBlue}],' tr');
+  barH('c25',['Thép hình','Bu lông','Que hàn','Sơn','Thép hộp'],sA([35,28,18,12,8]),cRed,' tr');
+  const rows2=[
+    ['DH-26/074','Kèo thép Coteccons','4.200','4.800','114,3%','Thép hình H350, Bu lông','<span class="badge b-danger">Vượt mức</span>'],
+    ['DH-26/063','Nhà kho Sao Mai','1.500','1.600','106,7%','Tôn, Que hàn','<span class="badge b-warn">Cảnh báo</span>'],
+    ['DH-26/069','Sàn thao tác Việt Nhật','1.300','1.350','103,8%','Thép hộp','<span class="badge b-warn">Cảnh báo</span>'],
+    ['DH-26/088','Nhà máy dệt FX Thái Tuấn','9.000','9.200','102,2%','Thép hình H400','<span class="badge b-ok">An toàn</span>']
+  ];
+  document.getElementById('tb2').innerHTML=rows2.map(r=>'<tr><td class="mono">'+r[0]+'</td><td>'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="mono">'+r[3]+'</td><td class="mono">'+r[4]+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>').join('');
+}
+
+/* ============ TRANG 3 ============ */
+function buildP3(){
+  donut('c31',['<30 ngày','30-90 ngày','>90 ngày'],[45,28,27],[cGreen,cAmber,cRed]);
+  stacked('c32',NHOM,[
+    {n:'<30 ngày',d:sA([4000,2000,1500,600,400,700,900])},
+    {n:'30-90 ngày',d:sA([1500,800,700,300,200,300,500])},
+    {n:'>90 ngày',d:sA([1000,500,600,400,300,200,400])}]);
+  barH('c33',['THH-350-A','THT-12-B','THO-100-C','BLG-M24-D','THH-400-E','TON-05-F','QH-32-G','SON-JT-H','THT-16-I','BLG-M20-J'],[245,220,198,185,172,165,158,150,142,138],cRed,' ngày');
+  donut('c34',['Gỉ sét','Lỗi thời/dư','Chậm luân chuyển'],[15,35,50],[cRed,cAmber,cBlue]);
+  const k35n=FILTER.kho==='hcm'?['Kho HCM']:FILTER.kho==='vt'?['Kho Vũng Tàu']:['Kho HCM','Kho Vũng Tàu'];
+  const k35v=FILTER.kho==='hcm'?[82]:FILTER.kho==='vt'?[71]:[82,71];
+  barH('c35',k35n,k35v,cNavy,' ngày');
+  lineC('c36',['T3','T4','T5','T6','T7','T8'],[{n:'Tuổi TB',d:[72,73,75,76,77,78],c:cAmber}],' ngày');
+  barH('c37',['Bu lông M16 cũ','Sơn lót hết hạn','Que hàn ẩm','Van khóa','Đầu nối tôn'],[180,165,150,142,135],cAmber,' ngày');
+}
+
+/* ============ TRANG 4 ============ */
+function buildP4(){
+  lineC('c41',['Tuần 1','Tuần 2','Tuần 3','Tuần 4','D.kiến'],[
+    {n:'Khả năng đáp ứng',d:sA([15600,14500,13200,12000,9500]),c:cGreen},
+    {n:'Nhu cầu xuất',d:sA([10000,12000,13500,14000,15000]),c:cRed}],' tr');
+  donut('c42',['Đầy đủ','Cảnh báo','Thiếu hụt'],[70,20,10],[cGreen,cAmber,cRed]);
+  barH('c43',['Thép hình H350','Bu lông M24','Thép tấm 12mm','Que hàn','Sơn epoxy'],sA([3300,2500,1800,1200,800]),cRed,' kg');
+  barDemand('c44',['Thép hình','Thép tấm','Thép hộp','Bu lông','Sơn'],sA([450,250,180,120,80]),sA([650,350,220,150,100]));
+  const rows4=[
+    ['THH-350','Thép hình H350×175','1.200 kg','4.500 kg','-3.300 kg','<span class="badge b-danger">Khẩn cấp</span>'],
+    ['BLG-M24','Bu lông cường độ cao M24','800 bộ','3.300 bộ','-2.500 bộ','<span class="badge b-danger">Khẩn cấp</span>'],
+    ['THT-12','Thép tấm dày 12mm','2.000 kg','3.800 kg','-1.800 kg','<span class="badge b-warn">Cao</span>'],
+    ['SON-EP','Sơn epoxy công nghiệp','100 thùng','120 thùng','-20 thùng','<span class="badge b-ok">Thấp</span>']
+  ];
+  document.getElementById('tb4').innerHTML=rows4.map(r=>'<tr><td class="mono">'+r[0]+'</td><td>'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="mono">'+r[3]+'</td><td class="mono dn">'+r[4]+'</td><td>'+r[5]+'</td></tr>').join('');
+}
+
+/* ============ TRANG 5 ============ */
+function buildP5(){
+  lineC('c51',monLabels(),[{n:'Giá trị nhập',d:subMon([3800,4200,5100,4600,5300,6100,6800,6900]),c:cOrange}],' tr');
+  donut('c52',['Thép hình','Thép tấm','Thép hộp','Khác'],
+    FILTER.kho==='hcm'?[50,25,15,10]:FILTER.kho==='vt'?[38,34,16,12]:[45,28,15,12],[cNavy,cBlue,cBlueL,cAmber]);
+  donut('c53',['Đã nhập','Đang xử lý','Quá hạn'],[38,4,3],[cGreen,cAmber,cRed]);
+  barH('c54',['Hòa Phát','Formosa','Posco','Hoa Sen','Jotun'],sA([5200,3800,2500,1800,1200]),cNavy,' tr');
+  barV('c55',['W1','W2','W3','W4'],[{n:'Số đơn',d:sA([12,14,10,11]),c:cOrange}],' đơn');
+  const rows5=[
+    ['PN-210','Thép hình H400','Hòa Phát','120 tấn','4.200','20/07/2026','<span class="badge b-ok">Đã nhập</span>'],
+    ['PN-208','Thép tấm 12mm','Formosa Hà Tĩnh','80 tấn','1.800','21/07/2026','<span class="badge b-ok">Đã nhập</span>'],
+    ['PN-205','Thép hộp 100×100','Posco SS-Vina','50 tấn','980','22/07/2026','<span class="badge b-warn">Chờ nhập</span>'],
+    ['PN-202','Tôn mạ kẽm','Hoa Sen','2.000 m²','850','23/07/2026','<span class="badge b-ok">Đã nhập</span>'],
+    ['PN-199','Bu lông M24','LG Fastener','1.500 bộ','620','24/07/2026','<span class="badge b-danger">Quá hạn</span>']
+  ];
+  document.getElementById('tb5').innerHTML=rows5.map(r=>'<tr><td class="mono">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td class="mono">'+r[3]+'</td><td class="mono">'+r[4]+'</td><td class="mono">'+r[5]+'</td><td>'+r[6]+'</td></tr>').join('');
+}
+
+const BUILDERS={p1:buildP1,p2:buildP2,p3:buildP3,p4:buildP4,p5:buildP5};
+const TITLES={p1:'Tổng quan Xuất - Nhập - Tồn',p2:'Xuất vật tư theo đơn hàng',p3:'Tồn kho & tuổi tồn',p4:'Khả năng đáp ứng nhu cầu',p5:'Báo cáo nhập kho'};
+const PERLABEL={ytd:'01/01 → 05/08/2026',q2:'01/04 → 30/06/2026',m7:'01/07 → 31/07/2026',y26:'01/01 → 31/12/2026'};
+let curPage='p1';
+function updateBanner(){
+  document.getElementById('pageTitle').textContent=TITLES[curPage]+khoLabel();
+  const fr=document.querySelector('.frange'); if(fr)fr.innerHTML='<i class="ti ti-calendar"></i> '+(PERLABEL[FILTER.period]||PERLABEL.ytd);
+}
+function showPage(id){
+  curPage=id;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  updateBanner();
+  setTimeout(()=>{ BUILDERS[id](); },30);
+}
+document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.getElementById('fKho').addEventListener('change',e=>{FILTER.kho=e.target.value;updateBanner();BUILDERS[curPage]();});
+document.getElementById('fPeriod').addEventListener('change',e=>{FILTER.period=e.target.value;updateBanner();BUILDERS[curPage]();});
+window.addEventListener('resize',()=>{Object.values(inst).forEach(c=>{try{c.resize();}catch(e){}});});
+updateBanner();buildP1();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "slug": "ecv-tai-chinh-cong-trinh",
+  "title": "ECV Corp — Dashboard tài chính công trình",
+  "type": "dashboard",
+  "industry": "Xây dựng",
+  "department": "Tài chính",
+  "description": "Doanh thu nghiệm thu, chi phí, lợi nhuận, công nợ và dòng tiền theo công trình.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/ecv-dashboard-v2/",
+  "source_repo": "https://github.com/tbinh-06/ecv-dashboard-v2",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "công trình",
+    "công nợ",
+    "dòng tiền"
+  ]
+}

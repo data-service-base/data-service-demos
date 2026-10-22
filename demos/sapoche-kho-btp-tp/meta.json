@@ -1,0 +1,22 @@
+{
+  "slug": "sapoche-kho-btp-tp",
+  "title": "Sapoche — Báo cáo kho BTP & TP",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "Supply Chain",
+  "description": "Kho bán thành phẩm và thành phẩm: nhập xuất tồn, số phiếu theo loại hoạt động.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Sapoche_TP-BTP/",
+  "source_repo": "https://github.com/tbinh-06/Sapoche_TP-BTP",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "tồn kho",
+    "bán thành phẩm",
+    "thành phẩm"
+  ]
+}

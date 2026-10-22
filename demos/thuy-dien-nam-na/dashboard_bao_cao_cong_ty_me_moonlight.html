@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo về công ty mẹ — Moonlight Holding</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root{--brand:#0d2a45;--accent:#15a07a;--accent-l:#e4f5ee;--amber:#cf922a;--amber-l:#fbf2dd;--red:#c0392b;--red-l:#fbe7e4;
+    --bg:#f3f6f9;--card:#fff;--line:#e4eaf0;--ink:#14222f;--muted:#647689;--nm1:#2e7fc4;--nm2:#1b9aa0;--nm3:#7c5cbf;--hq:#cf922a;--grey:#cdd8e2}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}
+  .top{background:var(--card);border-bottom:1px solid var(--line);padding:11px 22px;display:flex;align-items:center;gap:14px}
+  .brandmark{display:flex;align-items:center;gap:9px}.brandmark .dot{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#16486f,#15a07a)}
+  .brandmark b{font-size:15px}.brandmark span{font-size:11.5px;color:var(--muted)}
+  .top .right{margin-left:auto;font-size:12px;color:var(--muted);text-align:right}.top .right b{color:var(--ink)}
+  .tabs{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--line);padding:0 14px}
+  .tab{white-space:nowrap;padding:13px 15px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent}
+  .tab.on{color:var(--brand);border-bottom-color:var(--accent)}
+  .wrap{max-width:1040px;margin:0 auto;padding:18px 16px 40px}
+  section{display:none}section.on{display:block}
+  .subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+  .subtab{padding:7px 13px;border-radius:8px;background:#fff;border:1px solid var(--line);cursor:pointer;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .subtab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .sub{display:none}.sub.on{display:block}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--line);border-left:4px solid #b9c6d3;border-radius:12px;padding:12px 14px}
+  .kpi.ok{border-left-color:var(--accent)}.kpi.am{border-left-color:var(--amber)}.kpi.bad{border-left-color:var(--red)}
+  .kpi .lab{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;line-height:1.25}
+  .kpi .val{font-size:21px;font-weight:700;margin-top:5px;line-height:1.05}
+  .kpi .val small{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .kpi .d{font-size:11px;font-weight:600;margin-top:4px;color:var(--muted)}
+  .kpi.ok .d{color:#0a6b4f}.kpi.am .d{color:#9a6a12}.kpi.bad .d{color:#a3281c}
+  .thresh{font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;margin-bottom:16px}
+  .thresh b{color:var(--ink)}.dotc{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 3px 0 8px;vertical-align:middle}
+  .c-ok{background:var(--accent)}.c-am{background:var(--amber)}.c-bad{background:var(--red)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 2px rgba(13,42,69,.04)}
+  .card h2{margin:0 0 2px;font-size:14.5px;color:var(--brand);font-weight:700}.card .sub2{color:var(--muted);font-size:12px;margin-bottom:10px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.row2>*{min-width:0}
+  @media(max-width:820px){.row2{grid-template-columns:1fr}}
+  .clegend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--muted);margin-bottom:8px}
+  .clegend span{display:flex;align-items:center;gap:6px}.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  svg{width:100%;height:auto;display:block}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{background:#f3f7fb;color:var(--brand);text-align:right;padding:8px 9px;border-bottom:2px solid var(--line);font-weight:600;font-size:11px;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:8px 9px;border-bottom:1px solid #eef2f6;text-align:right;white-space:nowrap}
+  td.l,th.l{text-align:left;white-space:normal}
+  tr.total td{font-weight:700;background:#f7fafc;border-top:2px solid var(--line)}
+  td.c-bad{background:var(--red-l);color:#a3281c;font-weight:700}td.c-am{background:var(--amber-l);color:#9a6a12;font-weight:600}td.c-ok{background:var(--accent-l);color:#0a6b4f;font-weight:600}
+  .tag{display:inline-block;font-size:10.5px;font-weight:600;border-radius:5px;padding:2px 8px}
+  .t-ok{background:var(--accent-l);color:#0a6b4f}.t-am{background:var(--amber-l);color:#9a6a12}.t-bad{background:var(--red-l);color:#a3281c}
+  .src{font-size:11px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brandmark"><span class="dot"></span><div><b>Moonlight Holding</b> <span>· Báo cáo hợp nhất về công ty mẹ</span></div></div>
+  <div class="right">Kỳ: <b>Tháng 6/2026</b><br>Phạm vi: 3 nhà máy + HQ · <i>số minh họa</i></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab on" data-t="tc">① Tài chính & sản lượng</div>
+  <div class="tab" data-t="vh">② Vận hành & kỹ thuật</div>
+  <div class="tab" data-t="ns">③ Nhân sự & lao động</div>
+  <div class="tab" data-t="pl">④ Pháp lý & tuân thủ</div>
+</div>
+
+<div class="wrap">
+
+  <!-- ① TÀI CHÍNH & SẢN LƯỢNG -->
+  <section class="on" id="tc">
+    <div class="subtabs">
+      <div class="subtab on" data-m="tc" data-s="ov">Tổng quan</div>
+      <div class="subtab" data-m="tc" data-s="sl">Sản lượng & đối soát</div>
+      <div class="subtab" data-m="tc" data-s="fin">Tài chính & chi phí</div>
+    </div>
+
+    <div class="sub on" id="tc-ov">
+      <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div><h2 style="margin:0">Báo cáo tài chính chi tiết — cụm thủy điện</h2><div class="sub2" style="margin:2px 0 0">Doanh thu PPA · chi phí (khấu hao / lãi vay / O&amp;M) · công nợ EVN · dòng tiền · 5 trang, lọc theo nhà máy &amp; so kế hoạch</div></div>
+        <a href="bao_cao_tai_chinh_thuy_dien_moonlight.html" target="_blank" rel="noopener" style="background:#0d2a45;color:#fff;text-decoration:none;font-weight:600;font-size:12.5px;border-radius:9px;padding:9px 16px;white-space:nowrap">Mở báo cáo tài chính →</a>
+      </div>
+      <div class="kpis">
+        <div class="kpi am"><div class="lab">Đạt KH sản lượng</div><div class="val">97,2 <small>%</small></div><div class="d">70.000 / 72.000 MWh</div></div>
+        <div class="kpi am"><div class="lab">Doanh thu PPA</div><div class="val">77,0 <small>tỷ</small></div><div class="d">−2,2 tỷ so KH</div></div>
+        <div class="kpi"><div class="lab">Chi phí O&M + sửa chữa</div><div class="val">6,8 <small>tỷ</small></div><div class="d">O&M 4,3 · sửa chữa 2,5</div></div>
+        <div class="kpi ok"><div class="lab">Biên LN gộp b/q</div><div class="val">90,5 <small>%</small></div><div class="d">trước khấu hao & lãi vay</div></div>
+      </div>
+      <div class="thresh">Ngưỡng — <b>Đạt KH</b>:<span class="dotc c-ok"></span>≥98% <span class="dotc c-am"></span>95–98% <span class="dotc c-bad"></span>&lt;95%.</div>
+      <div class="row2">
+        <div class="card"><h2>Sản lượng KH vs thực tế</h2><div class="sub2">MWh · theo pháp nhân</div>
+          <div class="clegend"><span><span class="sw" style="background:#cdd8e2"></span>KH</span><span><span class="sw" style="background:#2e7fc4"></span>Thực tế</span></div><div id="tc_ov_sl"></div></div>
+        <div class="card"><h2>Doanh thu KH vs thực tế</h2><div class="sub2">Tỷ đồng · theo pháp nhân</div>
+          <div class="clegend"><span><span class="sw" style="background:#cdd8e2"></span>KH</span><span><span class="sw" style="background:#15a07a"></span>Thực tế</span></div><div id="tc_ov_dt"></div></div>
+      </div>
+      <div class="card"><h2>BCTC hợp nhất (minh họa)</h2><div class="sub2">Theo pháp nhân · tháng 6/2026</div>
+        <table><thead><tr><th class="l">Pháp nhân</th><th>Sản lượng (MWh)</th><th>Đạt KH</th><th>Doanh thu (tỷ)</th><th>O&M (tỷ)</th><th>Sửa chữa (tỷ)</th><th>Biên LN gộp</th></tr></thead><tbody>
+          <tr><td class="l">CT Điện lực Tây Bắc (NM1)</td><td>11.800</td><td class="c-am">96,7%</td><td>12,98</td><td>0,8</td><td>0,4</td><td>90,8%</td></tr>
+          <tr><td class="l">CT Năng lượng Nậm Na 2</td><td>26.000</td><td class="c-am">97,0%</td><td>28,60</td><td>1,6</td><td>1,2</td><td>90,2%</td></tr>
+          <tr><td class="l">CT Năng lượng Nậm Na 3</td><td>32.200</td><td class="c-am">97,6%</td><td>35,42</td><td>1,9</td><td>0,9</td><td>92,1%</td></tr>
+          <tr class="total"><td class="l">Hợp nhất</td><td>70.000</td><td class="c-am">97,2%</td><td>77,00</td><td>4,3</td><td>2,5</td><td>90,5%</td></tr>
+        </tbody></table>
+        <div class="src">Biên LN gộp = (doanh thu − O&M − sửa chữa)/doanh thu, trước khấu hao & lãi vay. Nguồn: đo đếm · PPA · kế toán. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="tc-sl">
+      <div class="kpis">
+        <div class="kpi am"><div class="lab">Sản lượng tháng</div><div class="val">70.000 <small>MWh</small></div><div class="d">97,2% KH</div></div>
+        <div class="kpi ok"><div class="lab">Lũy kế năm</div><div class="val">99,7 <small>% KH</small></div><div class="d">366/367 nghìn MWh</div></div>
+        <div class="kpi ok"><div class="lab">Đối soát PPA</div><div class="val">100 <small>% khớp</small></div><div class="d">3/3 nhà máy</div></div>
+        <div class="kpi am"><div class="lab">Sai lệch KH tháng</div><div class="val">−2,8 <small>%</small></div><div class="d">điều độ giảm tải</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Sản lượng cụm theo tháng</h2><div class="sub2">MWh · KH vs thực tế</div>
+          <div class="clegend"><span><span class="sw" style="background:#cdd8e2"></span>KH</span><span><span class="sw" style="background:#2e7fc4"></span>Thực tế</span></div><div id="tc_sl_line"></div></div>
+        <div class="card"><h2>Mức đạt kế hoạch theo nhà máy</h2><div class="sub2">%</div><div id="tc_sl_at"></div></div>
+      </div>
+      <div class="card"><h2>Đối soát PPA</h2><div class="sub2">Đo đếm (chính thức) ↔ SCADA ↔ EVN · ngưỡng khớp ≤0,5%</div>
+        <table><thead><tr><th class="l">Nhà máy</th><th>Đo đếm (MWh)</th><th>SCADA</th><th>Chênh</th><th>EVN</th><th>Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Nậm Na 1</td><td>11.800</td><td>11.765</td><td>+0,3%</td><td>11.800</td><td><span class="tag t-ok">Khớp</span></td></tr>
+          <tr><td class="l">Nậm Na 2</td><td>26.000</td><td>25.920</td><td>+0,3%</td><td>26.000</td><td><span class="tag t-ok">Khớp</span></td></tr>
+          <tr><td class="l">Nậm Na 3</td><td>32.200</td><td>32.100</td><td>+0,3%</td><td>32.200</td><td><span class="tag t-ok">Khớp</span></td></tr>
+          <tr class="total"><td class="l">Cụm</td><td>70.000</td><td>69.785</td><td>+0,3%</td><td>70.000</td><td><span class="tag t-ok">Khớp</span></td></tr>
+        </tbody></table>
+        <div class="src">Sản lượng thanh toán PPA lấy từ hệ đo đếm; SCADA để đối chiếu. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="tc-fin">
+      <div class="kpis">
+        <div class="kpi am"><div class="lab">Doanh thu tháng</div><div class="val">77,0 <small>tỷ</small></div><div class="d">−2,2 tỷ so KH</div></div>
+        <div class="kpi"><div class="lab">Chi phí O&M</div><div class="val">4,3 <small>tỷ</small></div><div class="d">theo 5 hạng mục</div></div>
+        <div class="kpi"><div class="lab">Sửa chữa lớn</div><div class="val">2,5 <small>tỷ</small></div><div class="d">tập trung NM2</div></div>
+        <div class="kpi ok"><div class="lab">Dòng tiền ròng</div><div class="val">+59,2 <small>tỷ</small></div><div class="d">Thu 77,0 − chi 17,8</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Doanh thu cụm theo tháng</h2><div class="sub2">Tỷ đồng</div><div id="tc_fin_rev"></div></div>
+        <div class="card"><h2>Chi phí O&M theo hạng mục</h2><div class="sub2">Tỷ đồng · tháng 6</div><div id="tc_fin_cost"></div></div>
+      </div>
+      <div class="card"><h2>Chi phí & hiệu quả theo nhà máy</h2>
+        <table><thead><tr><th class="l">Nhà máy</th><th>Doanh thu (tỷ)</th><th>O&M (tỷ)</th><th>Sửa chữa (tỷ)</th><th>Tổng chi (tỷ)</th><th>Biên LN gộp</th></tr></thead><tbody>
+          <tr><td class="l">Nậm Na 1</td><td>12,98</td><td>0,8</td><td>0,4</td><td>1,2</td><td>90,8%</td></tr>
+          <tr><td class="l">Nậm Na 2</td><td>28,60</td><td>1,6</td><td>1,2</td><td class="c-am">2,8</td><td>90,2%</td></tr>
+          <tr><td class="l">Nậm Na 3</td><td>35,42</td><td>1,9</td><td>0,9</td><td>2,8</td><td>92,1%</td></tr>
+          <tr class="total"><td class="l">Hợp nhất</td><td>77,00</td><td>4,3</td><td>2,5</td><td>6,8</td><td>90,5%</td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: kế toán các pháp nhân. Số minh họa.</div></div>
+    </div>
+  </section>
+
+  <!-- ② VẬN HÀNH & KỸ THUẬT -->
+  <section id="vh">
+    <div class="subtabs">
+      <div class="subtab on" data-m="vh" data-s="ov">Tổng quan</div>
+      <div class="subtab" data-m="vh" data-s="inc">Sự cố & độ tin cậy</div>
+      <div class="subtab" data-m="vh" data-s="res">Hồ chứa & thủy văn</div>
+    </div>
+
+    <div class="sub on" id="vh-ov">
+      <div class="kpis">
+        <div class="kpi ok"><div class="lab">Hệ số sẵn sàng b/q</div><div class="val">98,4 <small>%</small></div><div class="d">≥ ngưỡng 98%</div></div>
+        <div class="kpi"><div class="lab">Số sự cố</div><div class="val">6</div><div class="d">NM1:1 · NM2:3 · NM3:2</div></div>
+        <div class="kpi am"><div class="lab">Thời gian dừng máy</div><div class="val">50 <small>giờ</small></div><div class="d">phần lớn ở NM2</div></div>
+        <div class="kpi bad"><div class="lab">Kiểm định quá hạn</div><div class="val">1</div><div class="d">cần xử lý</div></div>
+      </div>
+      <div class="thresh">Ngưỡng — <b>Hệ số sẵn sàng</b>:<span class="dotc c-ok"></span>≥98% <span class="dotc c-am"></span>95–98% <span class="dotc c-bad"></span>&lt;95%.</div>
+      <div class="row2">
+        <div class="card"><h2>Hệ số sẵn sàng (availability)</h2><div class="sub2">% · theo nhà máy</div><div id="vh_ov_av"></div></div>
+        <div class="card"><h2>Thời gian dừng máy</h2><div class="sub2">Giờ · theo nhà máy</div><div id="vh_ov_dt"></div></div>
+      </div>
+      <div class="card"><h2>Kiểm định thiết bị định kỳ</h2><div class="sub2">Còn hạn / sắp tới (≤90 ngày) / quá hạn</div>
+        <table><thead><tr><th class="l">Hạng mục</th><th class="l">Nhà máy</th><th>Hạn kiểm định</th><th class="l">Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Hệ thống bảo vệ rơ-le</td><td class="l">NM1</td><td>12/2026</td><td class="l"><span class="tag t-ok">Còn hạn</span></td></tr>
+          <tr><td class="l">Van an toàn turbine</td><td class="l">NM3</td><td>09/2026</td><td class="l"><span class="tag t-ok">Còn hạn</span></td></tr>
+          <tr><td class="l">Thiết bị nâng hạ (cẩu trục)</td><td class="l">NM2</td><td>08/2026</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Hệ thống PCCC</td><td class="l">NM2</td><td>05/2026</td><td class="l"><span class="tag t-bad">Quá hạn</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: SCADA · nhật ký kỹ thuật · hồ sơ kiểm định. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="vh-inc">
+      <div class="kpis">
+        <div class="kpi"><div class="lab">Số sự cố tháng</div><div class="val">6</div><div class="d">6 tháng: 21 vụ</div></div>
+        <div class="kpi am"><div class="lab">Downtime tháng</div><div class="val">50 <small>giờ</small></div><div class="d">≈ 0,4% thời gian</div></div>
+        <div class="kpi ok"><div class="lab">Hệ số sẵn sàng</div><div class="val">98,4 <small>%</small></div><div class="d">≥ ngưỡng 98%</div></div>
+        <div class="kpi"><div class="lab">Dừng khẩn (trip)</div><div class="val">2</div><div class="d">NM2 · ổ hướng H2</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Sự cố theo nhà máy — 6 tháng</h2><div class="sub2">Số vụ/tháng</div>
+          <div class="clegend"><span><span class="sw" style="background:#2e7fc4"></span>NM1</span><span><span class="sw" style="background:#1b9aa0"></span>NM2</span><span><span class="sw" style="background:#7c5cbf"></span>NM3</span></div><div id="vh_inc_st"></div></div>
+        <div class="card"><h2>Downtime theo nguyên nhân</h2><div class="sub2">Giờ · tháng 6</div><div id="vh_inc_cause"></div></div>
+      </div>
+      <div class="card"><h2>Sự cố nổi bật trong kỳ</h2>
+        <table><thead><tr><th class="l">Nhà máy</th><th class="l">Hạng mục</th><th>Downtime (giờ)</th><th class="l">Tình trạng</th></tr></thead><tbody>
+          <tr><td class="l">NM2 · tổ H2</td><td class="l">Sự cố ổ hướng</td><td class="c-bad">18</td><td class="l"><span class="tag t-ok">Đã khắc phục</span></td></tr>
+          <tr><td class="l">NM2</td><td class="l">Bơm làm mát</td><td>6</td><td class="l"><span class="tag t-ok">Đã khắc phục</span></td></tr>
+          <tr><td class="l">NM3</td><td class="l">Rơ-le bảo vệ tác động</td><td>8</td><td class="l"><span class="tag t-ok">Đã khắc phục</span></td></tr>
+          <tr><td class="l">NM1</td><td class="l">Cảm biến nhiệt</td><td>4</td><td class="l"><span class="tag t-ok">Đã khắc phục</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: nhật ký sự cố · SCADA. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="vh-res">
+      <div class="kpis">
+        <div class="kpi ok"><div class="lab">Dung tích hữu ích b/q</div><div class="val">77 <small>%</small></div><div class="d">3 hồ</div></div>
+        <div class="kpi"><div class="lab">Lưu lượng về b/q</div><div class="val">144 <small>m³/s</small></div><div class="d">tăng theo mùa</div></div>
+        <div class="kpi ok"><div class="lab">Trong giới hạn vận hành</div><div class="val">3/3</div><div class="d">hồ</div></div>
+        <div class="kpi"><div class="lab">Xả theo QTVH</div><div class="val">Đúng</div><div class="d">cấp nước hạ du đảm bảo</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Dung tích hữu ích theo tháng</h2><div class="sub2">% · 3 hồ</div>
+          <div class="clegend"><span><span class="sw" style="background:#2e7fc4"></span>NM1</span><span><span class="sw" style="background:#1b9aa0"></span>NM2</span><span><span class="sw" style="background:#7c5cbf"></span>NM3</span></div><div id="vh_res_line"></div></div>
+        <div class="card"><h2>Lưu lượng nước về theo tháng</h2><div class="sub2">m³/s · cụm</div><div id="vh_res_q"></div></div>
+      </div>
+      <div class="card"><h2>Tình trạng hồ chứa</h2>
+        <table><thead><tr><th class="l">Hồ</th><th>Mực nước (m)</th><th>% dung tích</th><th>Q về (m³/s)</th><th>Q xả (m³/s)</th><th>Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Hồ NM1</td><td>215,4</td><td>78%</td><td>96</td><td>90</td><td><span class="tag t-ok">Bình thường</span></td></tr>
+          <tr><td class="l">Hồ NM2</td><td>168,2</td><td>72%</td><td>132</td><td>128</td><td><span class="tag t-ok">Bình thường</span></td></tr>
+          <tr><td class="l">Hồ NM3</td><td>132,7</td><td>81%</td><td>205</td><td>198</td><td><span class="tag t-ok">Bình thường</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: quan trắc thủy văn · QTVH hồ chứa. Số minh họa.</div></div>
+    </div>
+  </section>
+
+  <!-- ③ NHÂN SỰ & LAO ĐỘNG -->
+  <section id="ns">
+    <div class="subtabs">
+      <div class="subtab on" data-m="ns" data-s="ov">Tổng quan</div>
+      <div class="subtab" data-m="ns" data-s="ot">Ca trực & OT</div>
+      <div class="subtab" data-m="ns" data-s="cost">Chi phí lao động</div>
+    </div>
+
+    <div class="sub on" id="ns-ov">
+      <div class="kpis">
+        <div class="kpi"><div class="lab">Tổng nhân sự</div><div class="val">122</div><div class="d">3 NM + HQ Hà Nội</div></div>
+        <div class="kpi am"><div class="lab">Đủ định biên ca trực</div><div class="val">98 <small>%</small></div><div class="d">NM2 thiếu 1</div></div>
+        <div class="kpi"><div class="lab">Giờ OT trong tháng</div><div class="val">1.260 <small>giờ</small></div><div class="d">phụ cấp vùng kèm</div></div>
+        <div class="kpi ok"><div class="lab">Tỷ lệ nghỉ việc</div><div class="val">0,8 <small>%</small></div><div class="d">vào 2 · ra 1</div></div>
+      </div>
+      <div class="thresh">Ngưỡng — <b>Đủ định biên ca trực</b>:<span class="dotc c-ok"></span>100% <span class="dotc c-am"></span>95–99% <span class="dotc c-bad"></span>&lt;95%.</div>
+      <div class="row2">
+        <div class="card"><h2>Nhân sự theo đơn vị</h2><div class="sub2">Người</div><div id="ns_ov_hr"></div></div>
+        <div class="card"><h2>Giờ OT theo đơn vị</h2><div class="sub2">Giờ · tháng 6</div><div id="ns_ov_ot"></div></div>
+      </div>
+      <div class="card"><h2>Lao động & quỹ lương</h2>
+        <table><thead><tr><th class="l">Đơn vị</th><th>Nhân sự</th><th>Đủ định biên ca</th><th>Giờ OT</th><th>Phụ cấp vùng</th><th>Quỹ lương (tỷ)</th></tr></thead><tbody>
+          <tr><td class="l">Nhà máy 1 (Lai Châu)</td><td>28</td><td class="c-ok">100%</td><td>320</td><td>Có</td><td>0,9</td></tr>
+          <tr><td class="l">Nhà máy 2 (Lai Châu)</td><td>34</td><td class="c-am">96%</td><td>410</td><td>Có</td><td>1,1</td></tr>
+          <tr><td class="l">Nhà máy 3 (Lai Châu)</td><td>38</td><td class="c-ok">100%</td><td>450</td><td>Có</td><td>1,2</td></tr>
+          <tr><td class="l">HQ Hà Nội</td><td>22</td><td class="c-ok">—</td><td>80</td><td>Không</td><td>0,8</td></tr>
+          <tr class="total"><td class="l">Toàn tập đoàn</td><td>122</td><td class="c-am">98%</td><td>1.260</td><td>—</td><td>4,0</td></tr>
+        </tbody></table>
+        <div class="src">Ca trực 24/7 yêu cầu 4 kíp/nhà máy. Đào tạo: 3 khóa / 24 lượt. Nguồn: chấm công · HRM · BHXH. Số minh họa.</div></div>
+      <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div><h2 style="margin:0">Đánh giá hiệu suất nhân sự toàn công ty</h2><div class="sub2" style="margin:2px 0 0">122 CBCNV · 8 phòng ban · heatmap theo phòng/người + xu hướng thời gian</div></div>
+        <a href="dashboard_danh_gia_nhan_su_moonlight.html" target="_blank" rel="noopener" style="background:#0d2a45;color:#fff;text-decoration:none;font-weight:600;font-size:12.5px;border-radius:9px;padding:9px 16px;white-space:nowrap">Mở báo cáo đánh giá →</a>
+      </div>
+    </div>
+
+    <div class="sub" id="ns-ot">
+      <div class="kpis">
+        <div class="kpi"><div class="lab">Số kíp trực</div><div class="val">12</div><div class="d">4 kíp × 3 nhà máy</div></div>
+        <div class="kpi am"><div class="lab">Đủ định biên</div><div class="val">98 <small>%</small></div><div class="d">thiếu 1 ở NM2</div></div>
+        <div class="kpi"><div class="lab">Giờ OT tháng</div><div class="val">1.260 <small>giờ</small></div><div class="d">3 NM + HQ</div></div>
+        <div class="kpi"><div class="lab">OT b/q / người (NM)</div><div class="val">11,8 <small>giờ</small></div><div class="d">khối nhà máy</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Giờ OT toàn cụm theo tháng</h2><div class="sub2">Giờ</div><div id="ns_ot_line"></div></div>
+        <div class="card"><h2>Giờ OT theo đơn vị</h2><div class="sub2">Giờ · tháng 6</div><div id="ns_ot_unit"></div></div>
+      </div>
+      <div class="card"><h2>Ca trực theo nhà máy</h2><div class="sub2">Định biên 24/7 = 4 kíp</div>
+        <table><thead><tr><th class="l">Nhà máy</th><th>Số kíp</th><th>Định biên/kíp</th><th>Cần</th><th>Hiện có</th><th>Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Nậm Na 1</td><td>4</td><td>7</td><td>28</td><td>28</td><td><span class="tag t-ok">Đủ</span></td></tr>
+          <tr><td class="l">Nậm Na 2</td><td>4</td><td>9</td><td>35</td><td class="c-am">34</td><td><span class="tag t-am">Thiếu 1</span></td></tr>
+          <tr><td class="l">Nậm Na 3</td><td>4</td><td>9</td><td>38</td><td>38</td><td><span class="tag t-ok">Đủ</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: lịch ca trực · chấm công. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="ns-cost">
+      <div class="kpis">
+        <div class="kpi"><div class="lab">Quỹ lương tháng</div><div class="val">4,0 <small>tỷ</small></div><div class="d">toàn tập đoàn</div></div>
+        <div class="kpi"><div class="lab">Phụ cấp vùng sâu</div><div class="val">0,6 <small>tỷ</small></div><div class="d">khối 3 nhà máy</div></div>
+        <div class="kpi"><div class="lab">BHXH tập đoàn</div><div class="val">0,3 <small>tỷ</small></div><div class="d">trích nộp</div></div>
+        <div class="kpi"><div class="lab">Tỷ trọng OT</div><div class="val">12,5 <small>%</small></div><div class="d">0,5 / 4,0 tỷ</div></div>
+      </div>
+      <div class="row2">
+        <div class="card"><h2>Cấu phần quỹ lương</h2><div class="sub2">Tỷ đồng · toàn tập đoàn</div><div id="ns_cost_comp"></div></div>
+        <div class="card"><h2>Quỹ lương theo đơn vị</h2><div class="sub2">Tỷ đồng</div><div id="ns_cost_unit"></div></div>
+      </div>
+      <div class="card"><h2>Cấu phần chi phí lao động theo đơn vị</h2>
+        <table><thead><tr><th class="l">Đơn vị</th><th>Lương cứng</th><th>OT</th><th>Phụ cấp vùng</th><th>BHXH</th><th>Tổng (tỷ)</th></tr></thead><tbody>
+          <tr><td class="l">Nhà máy 1</td><td>0,58</td><td>0,12</td><td>0,14</td><td>0,06</td><td>0,90</td></tr>
+          <tr><td class="l">Nhà máy 2</td><td>0,70</td><td>0,16</td><td>0,16</td><td>0,08</td><td>1,10</td></tr>
+          <tr><td class="l">Nhà máy 3</td><td>0,78</td><td>0,17</td><td>0,17</td><td>0,08</td><td>1,20</td></tr>
+          <tr><td class="l">HQ Hà Nội</td><td>0,69</td><td>0,03</td><td>0,00</td><td>0,08</td><td>0,80</td></tr>
+          <tr class="total"><td class="l">Tổng</td><td>2,75</td><td>0,48</td><td>0,47</td><td>0,30</td><td>4,00</td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: bảng lương · HRM · BHXH. Số minh họa.</div></div>
+    </div>
+  </section>
+
+  <!-- ④ PHÁP LÝ & TUÂN THỦ -->
+  <section id="pl">
+    <div class="subtabs">
+      <div class="subtab on" data-m="pl" data-s="ov">Tổng quan</div>
+      <div class="subtab" data-m="pl" data-s="due">Lịch hạn sắp tới</div>
+      <div class="subtab" data-m="pl" data-s="env">An toàn đập & môi trường</div>
+    </div>
+
+    <div class="sub on" id="pl-ov">
+      <div class="kpis">
+        <div class="kpi ok"><div class="lab">Giấy phép còn hiệu lực</div><div class="val">92 <small>%</small></div><div class="d">11/12 hạng mục</div></div>
+        <div class="kpi am"><div class="lab">Sắp hết hạn (≤90 ngày)</div><div class="val">3</div><div class="d">cần gia hạn</div></div>
+        <div class="kpi bad"><div class="lab">Quá hạn</div><div class="val">1</div><div class="d">kiểm định điện NM2</div></div>
+        <div class="kpi ok"><div class="lab">An toàn đập (NĐ 114)</div><div class="val">3/3</div><div class="d">trong giới hạn</div></div>
+      </div>
+      <div class="thresh">Trạng thái theo hạn:<span class="dotc c-ok"></span>còn hiệu lực <span class="dotc c-am"></span>sắp tới (≤90 ngày) <span class="dotc c-bad"></span>quá hạn.</div>
+      <div class="card"><h2>Danh mục tuân thủ & hạn báo cáo</h2><div class="sub2">Giấy phép · báo cáo định kỳ · kiểm định</div>
+        <table><thead><tr><th class="l">Hạng mục</th><th class="l">Cơ quan</th><th class="l">Nhà máy</th><th>Hết hạn / kỳ</th><th class="l">Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Giấy phép hoạt động điện lực</td><td class="l">Bộ Công Thương</td><td class="l">NM1</td><td>03/2028</td><td class="l"><span class="tag t-ok">Còn hiệu lực</span></td></tr>
+          <tr><td class="l">Kiểm định an toàn đập (NĐ 114)</td><td class="l">Sở NN&PTNT</td><td class="l">NM3</td><td>09/2026</td><td class="l"><span class="tag t-ok">Còn hiệu lực</span></td></tr>
+          <tr><td class="l">Giấy phép khai thác nước mặt</td><td class="l">Bộ TN&MT</td><td class="l">NM2</td><td>11/2026</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Báo cáo quan trắc môi trường Q2</td><td class="l">Bộ TN&MT</td><td class="l">Cụm</td><td>15/07/2026</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Báo cáo sản lượng điện tháng 6</td><td class="l">EVN / NLDC</td><td class="l">Cụm</td><td>05/07/2026</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Kiểm định hệ thống điện</td><td class="l">Đơn vị kiểm định</td><td class="l">NM2</td><td>04/2026</td><td class="l"><span class="tag t-bad">Quá hạn</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: hồ sơ pháp lý · lịch báo cáo. Số minh họa. "Sắp tới" = còn ≤90 ngày.</div></div>
+    </div>
+
+    <div class="sub" id="pl-due">
+      <div class="kpis">
+        <div class="kpi bad"><div class="lab">Quá hạn</div><div class="val">1</div><div class="d">−60 ngày</div></div>
+        <div class="kpi bad"><div class="lab">Còn ≤30 ngày</div><div class="val">2</div><div class="d">EVN · môi trường</div></div>
+        <div class="kpi am"><div class="lab">Còn 31–90 ngày</div><div class="val">1</div><div class="d">nâng hạ NM2</div></div>
+        <div class="kpi ok"><div class="lab">Đã nộp kỳ này</div><div class="val">4</div><div class="d">đúng hạn</div></div>
+      </div>
+      <div class="thresh">Số ngày còn lại tới hạn:<span class="dotc c-bad"></span>quá hạn / ≤30 <span class="dotc c-am"></span>31–90 <span class="dotc c-ok"></span>&gt;90.</div>
+      <div class="card"><h2>Hạng mục theo mức độ khẩn (gần hạn → xa hạn)</h2>
+        <table><thead><tr><th class="l">Hạng mục</th><th class="l">Cơ quan</th><th>Hạn</th><th>Còn lại</th><th class="l">Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Kiểm định hệ thống điện NM2</td><td class="l">Đơn vị kiểm định</td><td>04/2026</td><td class="c-bad">Quá 60 ngày</td><td class="l"><span class="tag t-bad">Quá hạn</span></td></tr>
+          <tr><td class="l">Báo cáo sản lượng EVN/NLDC T6</td><td class="l">EVN/NLDC</td><td>05/07/2026</td><td class="c-bad">20 ngày</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Báo cáo quan trắc môi trường Q2</td><td class="l">Bộ TN&MT</td><td>15/07/2026</td><td class="c-bad">30 ngày</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">Kiểm định thiết bị nâng hạ NM2</td><td class="l">Đơn vị kiểm định</td><td>08/2026</td><td class="c-am">60 ngày</td><td class="l"><span class="tag t-am">Sắp tới</span></td></tr>
+          <tr><td class="l">GP khai thác nước mặt NM2</td><td class="l">Bộ TN&MT</td><td>11/2026</td><td>150 ngày</td><td class="l"><span class="tag t-ok">Còn hạn</span></td></tr>
+        </tbody></table>
+        <div class="src">Mốc tính: 15/06/2026. Nguồn: lịch tuân thủ. Số minh họa.</div></div>
+    </div>
+
+    <div class="sub" id="pl-env">
+      <div class="kpis">
+        <div class="kpi ok"><div class="lab">An toàn đập</div><div class="val">3/3</div><div class="d">trong giới hạn</div></div>
+        <div class="kpi ok"><div class="lab">Quan trắc môi trường</div><div class="val">Đạt</div><div class="d">các chỉ tiêu</div></div>
+        <div class="kpi ok"><div class="lab">Dòng chảy tối thiểu</div><div class="val">Đảm bảo</div><div class="d">cấp nước hạ du</div></div>
+        <div class="kpi ok"><div class="lab">Sự cố môi trường</div><div class="val">0</div><div class="d">trong kỳ</div></div>
+      </div>
+      <div class="card"><h2>An toàn đập (Nghị định 114)</h2>
+        <table><thead><tr><th class="l">Đập</th><th>Mực nước (m)</th><th>Mực nước max cho phép</th><th>Thấm (l/s)</th><th>Quan trắc chuyển vị</th><th>Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Đập NM1</td><td>215,4</td><td>220,0</td><td>1,2</td><td>Trong ngưỡng</td><td><span class="tag t-ok">An toàn</span></td></tr>
+          <tr><td class="l">Đập NM2</td><td>168,2</td><td>172,0</td><td>2,0</td><td>Trong ngưỡng</td><td><span class="tag t-ok">An toàn</span></td></tr>
+          <tr><td class="l">Đập NM3</td><td>132,7</td><td>136,0</td><td>1,6</td><td>Trong ngưỡng</td><td><span class="tag t-ok">An toàn</span></td></tr>
+        </tbody></table></div>
+      <div class="card"><h2>Quan trắc môi trường (Bộ TN&MT)</h2>
+        <table><thead><tr><th class="l">Chỉ tiêu</th><th>Kết quả</th><th>Ngưỡng cho phép</th><th class="l">Trạng thái</th></tr></thead><tbody>
+          <tr><td class="l">Lưu lượng dòng chảy tối thiểu hạ du</td><td>14,2 m³/s</td><td>≥ 12,0 m³/s</td><td class="l"><span class="tag t-ok">Đạt</span></td></tr>
+          <tr><td class="l">Độ đục nước thải</td><td>28 NTU</td><td>≤ 50 NTU</td><td class="l"><span class="tag t-ok">Đạt</span></td></tr>
+          <tr><td class="l">Tiếng ồn khu vực vận hành</td><td>62 dBA</td><td>≤ 70 dBA</td><td class="l"><span class="tag t-ok">Đạt</span></td></tr>
+        </tbody></table>
+        <div class="src">Nguồn: quan trắc định kỳ · báo cáo môi trường. Số minh họa.</div></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function fmtN(v){return (''+Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function chartGrouped(id,labels,series,max,dec){const W=540,H=240,p={l:42,r:12,t:16,b:40},pw=W-p.l-p.r,ph=H-p.t-p.b,n=labels.length,gw=pw/n,m=series.length,bw=Math.min(34,gw*0.58/m);let g='',b='',l='';for(let k=0;k<=4;k++){const v=max*k/4,y=p.t+ph-(v/max)*ph;g+=`<line x1="${p.l}" y1="${y}" x2="${W-p.r}" y2="${y}" stroke="#eef2f6"/><text x="${p.l-5}" y="${y+3}" text-anchor="end" font-size="9.5" fill="#8a99a3">${dec?v.toFixed(0):fmtN(v)}</text>`;}labels.forEach((L,i)=>{const x0=p.l+gw*i+gw/2-(m*bw+(m-1)*4)/2;series.forEach((s,j)=>{const h=(s.data[i]/max)*ph,x=x0+j*(bw+4);b+=`<rect x="${x}" y="${p.t+ph-h}" width="${bw}" height="${h}" fill="${s.color}" rx="3"/><text x="${x+bw/2}" y="${p.t+ph-h-5}" text-anchor="middle" font-size="9" font-weight="600" fill="#3a4a5a">${dec?s.data[i].toFixed(dec):fmtN(s.data[i])}</text>`;});l+=`<text x="${p.l+gw*i+gw/2}" y="${H-20}" text-anchor="middle" font-size="11" font-weight="600" fill="#14222f">${L}</text>`;});document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}${b}${l}</svg>`;}
+function chartHBar(id,items,max,unit,dec){const W=520,rowH=34,p={l:120,r:58,t:6},H=p.t+items.length*rowH+6,pw=W-p.l-p.r;let s='';items.forEach((it,i)=>{const y=p.t+i*rowH+7,w=Math.max(3,(it.value/max)*pw);s+=`<text x="${p.l-8}" y="${y+14}" text-anchor="end" font-size="11" font-weight="600" fill="#14222f">${it.label}</text><rect x="${p.l}" y="${y}" width="${pw}" height="20" rx="5" fill="#eef2f5"/><rect x="${p.l}" y="${y}" width="${w}" height="20" rx="5" fill="${it.color}"/><text x="${p.l+w+6}" y="${y+14}" font-size="11" font-weight="600" fill="#3a4a5a">${dec?it.value.toFixed(dec):it.value}${unit||''}</text>`;});document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}">${s}</svg>`;}
+function chartLine(id,labels,lines,min,max,fmt){const W=540,H=230,p={l:50,r:14,t:14,b:34},pw=W-p.l-p.r,ph=H-p.t-p.b,n=labels.length;const X=i=>p.l+(pw/(n-1))*i,Y=v=>p.t+ph-((v-min)/(max-min))*ph;let g='';for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=Y(v);g+=`<line x1="${p.l}" y1="${y}" x2="${W-p.r}" y2="${y}" stroke="#eef2f6"/><text x="${p.l-5}" y="${y+3}" text-anchor="end" font-size="9" fill="#8a99a3">${fmt?fmt(v):fmtN(v)}</text>`;}let pa='';lines.forEach(ln=>{const pts=ln.data.map((v,i)=>`${X(i)},${Y(v)}`).join(' ');if(ln.area)pa+=`<polygon points="${p.l},${p.t+ph} ${pts} ${X(n-1)},${p.t+ph}" fill="${ln.color}" opacity="0.10"/>`;pa+=`<polyline points="${pts}" fill="none" stroke="${ln.color}" stroke-width="2.5" ${ln.dash?'stroke-dasharray="5 4"':''}/>`;pa+=ln.data.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="3" fill="#fff" stroke="${ln.color}" stroke-width="2"/>`).join('');});let xl=labels.map((L,i)=>`<text x="${X(i)}" y="${H-12}" text-anchor="middle" font-size="9.5" fill="#8a99a3">${L}</text>`).join('');document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}${pa}${xl}</svg>`;}
+function chartStacked(id,labels,series,max){const W=540,H=240,p={l:42,r:12,t:14,b:40},pw=W-p.l-p.r,ph=H-p.t-p.b,n=labels.length,gw=pw/n,bw=Math.min(34,gw*0.5);let g='',b='',l='';for(let k=0;k<=4;k++){const v=max*k/4,y=p.t+ph-(v/max)*ph;g+=`<line x1="${p.l}" y1="${y}" x2="${W-p.r}" y2="${y}" stroke="#eef2f6"/><text x="${p.l-5}" y="${y+3}" text-anchor="end" font-size="9.5" fill="#8a99a3">${v.toFixed(0)}</text>`;}labels.forEach((L,i)=>{const x=p.l+gw*i+gw/2-bw/2;let acc=0;series.forEach(s=>{const h=(s.data[i]/max)*ph;acc+=h;b+=`<rect x="${x}" y="${p.t+ph-acc}" width="${bw}" height="${h}" fill="${s.color}"/>`;});l+=`<text x="${p.l+gw*i+gw/2}" y="${H-20}" text-anchor="middle" font-size="11" font-weight="600" fill="#14222f">${L}</text>`;});document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}${b}${l}</svg>`;}
+const C1='#2e7fc4',C2='#1b9aa0',C3='#7c5cbf',CH='#cf922a',M6=['T1','T2','T3','T4','T5','T6'];
+const R={
+  tc_ov(){chartGrouped('tc_ov_sl',['NM1','NM2','NM3'],[{color:'#cdd8e2',data:[12200,26800,33000]},{color:C1,data:[11800,26000,32200]}],36000);chartGrouped('tc_ov_dt',['NM1','NM2','NM3'],[{color:'#cdd8e2',data:[13.42,29.48,36.30]},{color:'#15a07a',data:[12.98,28.60,35.42]}],40,1);},
+  tc_sl(){chartLine('tc_sl_line',M6,[{color:'#cdd8e2',data:[54000,50000,57000,64000,70000,72000]},{color:C1,area:true,data:[52000,48000,58000,66000,72000,70000]}],40000,76000,v=>fmtN(v/1000)+'k');chartHBar('tc_sl_at',[{label:'NM1',value:96.7,color:C1},{label:'NM2',value:97.0,color:C2},{label:'NM3',value:97.6,color:C3}],100,'%',1);},
+  tc_fin(){chartLine('tc_fin_rev',M6,[{color:'#15a07a',area:true,data:[57.2,52.8,63.8,72.6,79.2,77.0]}],40,85,v=>v.toFixed(0));chartHBar('tc_fin_cost',[{label:'Sửa chữa sự cố',value:1.2,color:'#c0392b'},{label:'Vật tư/phụ tùng',value:1.0,color:'#cf922a'},{label:'Bảo trì định kỳ',value:0.9,color:C1},{label:'Nhân công',value:0.8,color:C2},{label:'Khác',value:0.4,color:C3}],1.4,' tỷ',1);},
+  vh_ov(){chartHBar('vh_ov_av',[{label:'NM1',value:99.0,color:C1},{label:'NM2',value:97.5,color:C2},{label:'NM3',value:98.8,color:C3}],100,'%',1);chartHBar('vh_ov_dt',[{label:'NM1',value:8,color:C1},{label:'NM2',value:28,color:C2},{label:'NM3',value:14,color:C3}],32,' giờ');},
+  vh_inc(){chartStacked('vh_inc_st',M6,[{color:C1,data:[1,0,1,0,1,1]},{color:C2,data:[2,1,1,2,1,3]},{color:C3,data:[0,1,1,1,2,2]}],8);chartHBar('vh_inc_cause',[{label:'Sự cố thiết bị',value:28,color:'#c0392b'},{label:'Bảo trì',value:14,color:C1},{label:'Điều độ',value:6,color:C2},{label:'Khác',value:2,color:C3}],32,' giờ');},
+  vh_res(){chartLine('vh_res_line',M6,[{color:C1,data:[60,64,68,72,76,78]},{color:C2,data:[58,60,63,67,70,72]},{color:C3,data:[66,70,73,77,80,81]}],50,90,v=>v.toFixed(0)+'%');chartLine('vh_res_q',M6,[{color:'#2e7fc4',area:true,data:[95,80,115,150,178,205]}],0,240,v=>v.toFixed(0));},
+  ns_ov(){chartHBar('ns_ov_hr',[{label:'NM1',value:28,color:C1},{label:'NM2',value:34,color:C2},{label:'NM3',value:38,color:C3},{label:'HQ Hà Nội',value:22,color:CH}],40,' người');chartHBar('ns_ov_ot',[{label:'NM1',value:320,color:C1},{label:'NM2',value:410,color:C2},{label:'NM3',value:450,color:C3},{label:'HQ Hà Nội',value:80,color:CH}],500,'h');},
+  ns_ot(){chartLine('ns_ot_line',M6,[{color:'#cf922a',area:true,data:[1100,1050,1180,1220,1300,1260]}],900,1400,v=>fmtN(v));chartHBar('ns_ot_unit',[{label:'NM1',value:320,color:C1},{label:'NM2',value:410,color:C2},{label:'NM3',value:450,color:C3},{label:'HQ Hà Nội',value:80,color:CH}],500,'h');},
+  ns_cost(){chartHBar('ns_cost_comp',[{label:'Lương cứng',value:2.75,color:C1},{label:'OT',value:0.48,color:'#cf922a'},{label:'Phụ cấp vùng',value:0.47,color:C2},{label:'BHXH',value:0.30,color:C3}],3,' tỷ',2);chartHBar('ns_cost_unit',[{label:'NM1',value:0.9,color:C1},{label:'NM2',value:1.1,color:C2},{label:'NM3',value:1.2,color:C3},{label:'HQ Hà Nội',value:0.8,color:CH}],1.4,' tỷ',1);},
+  pl_ov(){},pl_due(){},pl_env(){},
+};
+const subActive={tc:'ov',vh:'ov',ns:'ov',pl:'ov'};
+function showSub(main,sub){
+  subActive[main]=sub;
+  const sec=document.getElementById(main);
+  sec.querySelectorAll('.subtab').forEach(x=>x.classList.toggle('on',x.dataset.s===sub));
+  sec.querySelectorAll('.sub').forEach(x=>x.classList.toggle('on',x.id===main+'-'+sub));
+  const fn=R[main+'_'+sub]; if(fn) fn();
+}
+function showMain(t){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));
+  showSub(t, subActive[t]);
+}
+document.getElementById('tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)showMain(t.dataset.t);});
+document.querySelectorAll('.subtabs').forEach(bar=>bar.addEventListener('click',e=>{const b=e.target.closest('.subtab');if(b)showSub(b.dataset.m,b.dataset.s);}));
+showMain('tc');
+</script>
+</body>
+</html>

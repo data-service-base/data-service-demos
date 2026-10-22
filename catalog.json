@@ -7,6 +7,53 @@
  },
  "items": [
   {
+   "slug": "viet-minh-long-de-xuat",
+   "title": "Việt Minh Long — Đề xuất số hóa thi công & sản xuất",
+   "type": "proposal",
+   "industry": "Xây dựng",
+   "department": "All",
+   "description": "Phân tích doanh nghiệp, sơ đồ quy trình phòng ban trên Base Service và đối chiếu dữ liệu Excel hiện tại.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Viet-Minh-Long/",
+   "source_repo": "https://github.com/tbinh-06/Viet-Minh-Long",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "đề xuất",
+    "quy trình",
+    "Base Service"
+   ],
+   "path": "demos/viet-minh-long-de-xuat/",
+   "thumb": ""
+  },
+  {
+   "slug": "uppingham-ngan-sach",
+   "title": "Uppingham Edu Vietnam — Báo cáo ngân sách",
+   "type": "dashboard",
+   "industry": "Giáo dục",
+   "department": "Tài chính",
+   "description": "Ngân sách và chi phí theo phòng ban, mã chi phí và phiếu đề xuất.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Uppingham_Demo/",
+   "source_repo": "https://github.com/tbinh-06/Uppingham_Demo",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "ngân sách",
+    "chi phí"
+   ],
+   "path": "demos/uppingham-ngan-sach/",
+   "thumb": ""
+  },
+  {
    "slug": "ahs-quy-luong",
    "title": "Tổng quan quỹ lương & phiếu lương",
    "type": "dashboard",
@@ -32,6 +79,291 @@
    "thumb": "demos/ahs-quy-luong/thumb.jpg"
   },
   {
+   "slug": "thuy-dien-nam-na",
+   "title": "Thủy điện Nậm Na — Sơ đồ luồng vận hành & dữ liệu",
+   "type": "proposal",
+   "industry": "Năng lượng",
+   "department": "All",
+   "description": "Sơ đồ luồng vận hành và dữ liệu cho cụm thủy điện Nậm Na, kèm các báo cáo về công ty mẹ.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/thuydien_namno/",
+   "source_repo": "https://github.com/tbinh-06/thuydien_namno",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "thủy điện",
+    "vận hành",
+    "công ty mẹ"
+   ],
+   "path": "demos/thuy-dien-nam-na/",
+   "thumb": ""
+  },
+  {
+   "slug": "thuan-phat-hung-sales",
+   "title": "Thuận Phát Hưng — Sales Expansion",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "Kinh doanh",
+   "description": "Doanh thu so kế hoạch, báo giá & chốt đơn, mua lại & giữ chân khách, cross-sell và chiến dịch.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Thuan_Phat_Hung/",
+   "source_repo": "https://github.com/tbinh-06/Thuan_Phat_Hung",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "doanh thu",
+    "báo giá",
+    "cross-sell"
+   ],
+   "path": "demos/thuan-phat-hung-sales/",
+   "thumb": ""
+  },
+  {
+   "slug": "thuan-phat-hung-bom",
+   "title": "Thuận Phát Hưng — Quy trình tính giá BOM & duyệt dự toán",
+   "type": "proposal",
+   "industry": "Sản xuất",
+   "department": "Tài chính",
+   "description": "Quy trình tính giá theo BOM và duyệt dự toán trên Base.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Thuan_Phat_Hung_QTBOM/",
+   "source_repo": "https://github.com/tbinh-06/Thuan_Phat_Hung_QTBOM",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "BOM",
+    "dự toán",
+    "quy trình"
+   ],
+   "path": "demos/thuan-phat-hung-bom/",
+   "thumb": ""
+  },
+  {
+   "slug": "sapoche-huong-dan-phan-quyen",
+   "title": "Sapoche — Hướng dẫn xem báo cáo & cấp quyền",
+   "type": "tool",
+   "industry": "Sản xuất",
+   "department": "All",
+   "description": "Hướng dẫn người dùng vào trung tâm báo cáo, cấp quyền lần đầu và xem báo cáo hằng ngày.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Sapoche_HuongdanPhanquyen/",
+   "source_repo": "https://github.com/tbinh-06/Sapoche_HuongdanPhanquyen",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "hướng dẫn",
+    "phân quyền"
+   ],
+   "path": "demos/sapoche-huong-dan-phan-quyen/",
+   "thumb": ""
+  },
+  {
+   "slug": "sapoche-san-luong",
+   "title": "Sapoche — Báo cáo sản lượng",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "Vận hành",
+   "description": "Sản lượng sản xuất theo thời gian, công đoạn và sản phẩm.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Sapoche_SanLuong/",
+   "source_repo": "https://github.com/tbinh-06/Sapoche_SanLuong",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "sản lượng"
+   ],
+   "path": "demos/sapoche-san-luong/",
+   "thumb": ""
+  },
+  {
+   "slug": "sapoche-kho-btp-tp",
+   "title": "Sapoche — Báo cáo kho BTP & TP",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "Supply Chain",
+   "description": "Kho bán thành phẩm và thành phẩm: nhập xuất tồn, số phiếu theo loại hoạt động.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Sapoche_TP-BTP/",
+   "source_repo": "https://github.com/tbinh-06/Sapoche_TP-BTP",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "tồn kho",
+    "bán thành phẩm",
+    "thành phẩm"
+   ],
+   "path": "demos/sapoche-kho-btp-tp/",
+   "thumb": ""
+  },
+  {
+   "slug": "sapoche-kho",
+   "title": "Sapoche — Báo cáo kho",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "Supply Chain",
+   "description": "Nhập xuất tồn và số phiếu theo loại hoạt động, bản dựng trước cho Power BI.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Sapoche_BC-Kho/",
+   "source_repo": "https://github.com/tbinh-06/Sapoche_BC-Kho",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "tồn kho",
+    "nhập xuất",
+    "Power BI"
+   ],
+   "path": "demos/sapoche-kho/",
+   "thumb": ""
+  },
+  {
+   "slug": "sao-mai-san-xuat",
+   "title": "Sao Mai — Hệ thống báo cáo sản xuất",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "Vận hành",
+   "description": "Sản lượng và phế theo công đoạn, ca, ngày, tổng hợp từ 32 sổ nguồn.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/SaoMai/",
+   "source_repo": "https://github.com/tbinh-06/SaoMai",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "sản lượng",
+    "phế phẩm",
+    "công đoạn"
+   ],
+   "path": "demos/sao-mai-san-xuat/",
+   "thumb": ""
+  },
+  {
+   "slug": "saigon-indochina-chuyen-doi-so",
+   "title": "Saigon Indochina — Tài liệu dự án chuyển đổi số",
+   "type": "proposal",
+   "industry": "Bán lẻ",
+   "department": "All",
+   "description": "Bản đồ số hóa chuỗi giá trị và kế hoạch chuyển đổi số cùng Base 2026.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/DongDuongSaiGon/",
+   "source_repo": "https://github.com/tbinh-06/DongDuongSaiGon",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "chuỗi giá trị",
+    "chuyển đổi số",
+    "phân phối"
+   ],
+   "path": "demos/saigon-indochina-chuyen-doi-so/",
+   "thumb": ""
+  },
+  {
+   "slug": "saigon-indochina-data-center",
+   "title": "Saigon Indochina — Sơ đồ Data Center",
+   "type": "proposal",
+   "industry": "Bán lẻ",
+   "department": "All",
+   "description": "Data Center gom dữ liệu bán hàng nhiều kênh về một nền tảng, data mart và báo cáo.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/DongDuongSG_Sodogp/",
+   "source_repo": "https://github.com/tbinh-06/DongDuongSG_Sodogp",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "data center",
+    "sơ đồ giải pháp",
+    "đơn hàng"
+   ],
+   "path": "demos/saigon-indochina-data-center/",
+   "thumb": ""
+  },
+  {
+   "slug": "sthome-thi-dua-kinh-doanh",
+   "title": "ST Home — Trung tâm điều hành thi đua kinh doanh",
+   "type": "dashboard",
+   "industry": "BĐS - CĐT - Nhà thầu",
+   "department": "Kinh doanh",
+   "description": "Vinh danh, xếp hạng cá nhân, tiến độ liên hệ, chuyển đổi và chất lượng cuộc gọi trong chương trình thi đua.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/STHome/",
+   "source_repo": "https://github.com/tbinh-06/STHome",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "thi đua",
+    "sales",
+    "cuộc gọi"
+   ],
+   "path": "demos/sthome-thi-dua-kinh-doanh/",
+   "thumb": ""
+  },
+  {
+   "slug": "quan-nho-nhan-su-doanh-thu",
+   "title": "Quán Nhỏ — Báo cáo nhân sự & doanh thu",
+   "type": "dashboard",
+   "industry": "FnB",
+   "department": "HR",
+   "description": "Cơ cấu nhân sự, tuyển mới, nghỉ việc, quỹ lương và doanh thu theo ca, theo cơ sở.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Quan-Nho/",
+   "source_repo": "https://github.com/tbinh-06/Quan-Nho",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "nhân sự",
+    "quỹ lương",
+    "doanh thu"
+   ],
+   "path": "demos/quan-nho-nhan-su-doanh-thu/",
+   "thumb": ""
+  },
+  {
    "slug": "proposal-data-service",
    "title": "Proposal Base Data Service (18 slide)",
    "type": "proposal",
@@ -54,6 +386,506 @@
    ],
    "path": "demos/proposal-data-service/",
    "thumb": "demos/proposal-data-service/thumb.jpg"
+  },
+  {
+   "slug": "pces-van-hanh-don-hang",
+   "title": "P&C Solutions — Trung tâm vận hành & báo cáo",
+   "type": "proposal",
+   "industry": "General",
+   "department": "Vận hành",
+   "description": "Sơ đồ giải pháp, báo cáo công việc và báo cáo tổng hợp cho vận hành đơn hàng trên Base Service.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/PCES_demo/",
+   "source_repo": "https://github.com/tbinh-06/PCES_demo",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "đơn hàng",
+    "Base Service",
+    "công việc"
+   ],
+   "path": "demos/pces-van-hanh-don-hang/",
+   "thumb": ""
+  },
+  {
+   "slug": "nhau-tu-do-ca-bep",
+   "title": "Nhậu Tự Do — Báo cáo ca bếp",
+   "type": "dashboard",
+   "industry": "FnB",
+   "department": "Vận hành",
+   "description": "Tổng quan, xu hướng, cảnh báo và phân tích lỗi theo ca bếp.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Nhau-Tu-Do/",
+   "source_repo": "https://github.com/tbinh-06/Nhau-Tu-Do",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "bếp",
+    "ca làm",
+    "QAQC"
+   ],
+   "path": "demos/nhau-tu-do-ca-bep/",
+   "thumb": ""
+  },
+  {
+   "slug": "newshoes-kpi",
+   "title": "New Shoes Bình Phú — Báo cáo KPI",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "HR",
+   "description": "Điểm KPI công ty, phòng ban hụt chỉ tiêu và chi tiết theo nhân sự.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/KPI_NewShoes/",
+   "source_repo": "https://github.com/tbinh-06/KPI_NewShoes",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "KPI",
+    "giày da"
+   ],
+   "path": "demos/newshoes-kpi/",
+   "thumb": ""
+  },
+  {
+   "slug": "komex-van-hanh",
+   "title": "Komex — Bảng điều hành vận hành & sau bán hàng",
+   "type": "dashboard",
+   "industry": "Bán lẻ",
+   "department": "Chăm sóc khách hàng",
+   "description": "Hoàn trả, bảo hành, khiếu nại và đánh giá khách hàng theo gian hàng.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Komex/",
+   "source_repo": "https://github.com/tbinh-06/Komex",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "hoàn trả",
+    "bảo hành",
+    "khiếu nại",
+    "TMĐT"
+   ],
+   "path": "demos/komex-van-hanh/",
+   "thumb": ""
+  },
+  {
+   "slug": "khang-thinh-ket-cau-thep",
+   "title": "Khang Thịnh — Báo cáo quản trị nhà máy kết cấu thép",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "All",
+   "description": "Kinh doanh, đơn hàng, dòng tiền và kho cho nhà máy kết cấu thép.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/KhangThinh/",
+   "source_repo": "https://github.com/tbinh-06/KhangThinh",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "kết cấu thép",
+    "đơn hàng",
+    "dòng tiền",
+    "tồn kho"
+   ],
+   "path": "demos/khang-thinh-ket-cau-thep/",
+   "thumb": ""
+  },
+  {
+   "slug": "hung-hau-kpi",
+   "title": "Hùng Hậu Holdings — Dashboard KPI khối HHC",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "HR",
+   "description": "Đăng ký, cập nhật và đánh giá KPI theo nhóm mục tiêu, pháp nhân; cảnh báo điểm nóng.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/KPI_LucGiac/",
+   "source_repo": "https://github.com/tbinh-06/KPI_LucGiac",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "KPI",
+    "holding",
+    "pháp nhân"
+   ],
+   "path": "demos/hung-hau-kpi/",
+   "thumb": ""
+  },
+  {
+   "slug": "heid-san-pham-so",
+   "title": "HEID — Hoạt động triển khai sản phẩm số",
+   "type": "dashboard",
+   "industry": "Giáo dục",
+   "department": "Kinh doanh",
+   "description": "Triển khai sản phẩm số theo sản phẩm, gói, tỉnh thành và nhóm khách B2B / B2C.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/HEID_BC_SPso/",
+   "source_repo": "https://github.com/tbinh-06/HEID_BC_SPso",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "sản phẩm số",
+    "B2B",
+    "B2C"
+   ],
+   "path": "demos/heid-san-pham-so/",
+   "thumb": ""
+  },
+  {
+   "slug": "heid-phong-kinh-doanh",
+   "title": "HEID — Giải pháp báo cáo phòng Kinh doanh",
+   "type": "proposal",
+   "industry": "Giáo dục",
+   "department": "Kinh doanh",
+   "description": "Chuỗi giá trị phòng Kinh doanh và giải pháp thay báo cáo tuần đang làm thủ công.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/HEID_PhongKinhdoanh/",
+   "source_repo": "https://github.com/tbinh-06/HEID_PhongKinhdoanh",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "báo cáo tuần",
+    "chuỗi giá trị"
+   ],
+   "path": "demos/heid-phong-kinh-doanh/",
+   "thumb": ""
+  },
+  {
+   "slug": "heid-chuoi-gia-tri",
+   "title": "HEID — Chuỗi giá trị & lịch khảo sát",
+   "type": "proposal",
+   "industry": "Giáo dục",
+   "department": "All",
+   "description": "Chuỗi giá trị HEID, lịch khảo sát nhu cầu báo cáo các phòng và các mốc triển khai.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/HEID_Phase3/",
+   "source_repo": "https://github.com/tbinh-06/HEID_Phase3",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "chuỗi giá trị",
+    "khảo sát"
+   ],
+   "path": "demos/heid-chuoi-gia-tri/",
+   "thumb": ""
+  },
+  {
+   "slug": "heid-bo-bao-cao",
+   "title": "HEID — Bộ 4 báo cáo quản trị",
+   "type": "dashboard",
+   "industry": "Giáo dục",
+   "department": "All",
+   "description": "Tài chính & hiệu quả kinh doanh, tiến độ đơn hàng, sản lượng vận hành, hành chính nhân sự.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/HEID_Baocao/",
+   "source_repo": "https://github.com/tbinh-06/HEID_Baocao",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "tài chính",
+    "đơn hàng",
+    "nhân sự"
+   ],
+   "path": "demos/heid-bo-bao-cao/",
+   "thumb": ""
+  },
+  {
+   "slug": "gopak-eudr",
+   "title": "Go-Pak — Hồ sơ thẩm định nguồn gốc EUDR",
+   "type": "tool",
+   "industry": "Sản xuất",
+   "department": "Supply Chain",
+   "description": "Hồ sơ thẩm định nguồn gốc EUDR song ngữ Việt – Anh cho sản phẩm giấy.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/GoPak_truyxuatNG/",
+   "source_repo": "https://github.com/tbinh-06/GoPak_truyxuatNG",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "giấy"
+   ],
+   "path": "demos/gopak-eudr/",
+   "thumb": ""
+  },
+  {
+   "slug": "ecv-quan-tri-doi-xe",
+   "title": "ECV — Quản trị đội xe",
+   "type": "dashboard",
+   "industry": "Xây dựng",
+   "department": "Vận hành",
+   "description": "Vận hành và bảo dưỡng đội xe văn phòng, xe dự án theo công trình.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Quan-Ly-Xe---ECV/",
+   "source_repo": "https://github.com/tbinh-06/Quan-Ly-Xe---ECV",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "đội xe",
+    "bảo dưỡng"
+   ],
+   "path": "demos/ecv-quan-tri-doi-xe/",
+   "thumb": ""
+  },
+  {
+   "slug": "ecv-tai-chinh-cong-trinh",
+   "title": "ECV Corp — Dashboard tài chính công trình",
+   "type": "dashboard",
+   "industry": "Xây dựng",
+   "department": "Tài chính",
+   "description": "Doanh thu nghiệm thu, chi phí, lợi nhuận, công nợ và dòng tiền theo công trình.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/ecv-dashboard-v2/",
+   "source_repo": "https://github.com/tbinh-06/ecv-dashboard-v2",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "công trình",
+    "công nợ",
+    "dòng tiền"
+   ],
+   "path": "demos/ecv-tai-chinh-cong-trinh/",
+   "thumb": ""
+  },
+  {
+   "slug": "ecoteck-thay-doi-bao-cao",
+   "title": "ECO TECK — Tổng hợp thay đổi báo cáo",
+   "type": "deck",
+   "industry": "Xây dựng",
+   "department": "Tài chính",
+   "description": "Giải thích thay đổi báo cáo: ba lớp giá trị, bốn con số so sánh, cách tính chi phí dự kiến hoàn thành.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Ecoteck-UpdateBC/",
+   "source_repo": "https://github.com/tbinh-06/Ecoteck-UpdateBC",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "chi phí dự kiến",
+    "ngân sách"
+   ],
+   "path": "demos/ecoteck-thay-doi-bao-cao/",
+   "thumb": ""
+  },
+  {
+   "slug": "ecoteck-giai-phap",
+   "title": "ECO TECK — Sơ đồ giải pháp số hoá & báo cáo",
+   "type": "proposal",
+   "industry": "Xây dựng",
+   "department": "All",
+   "description": "Từ dữ liệu phân mảnh về một nền tảng, kèm báo cáo ngân sách và sản lượng, vật tư thiết bị.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Ecoteck/",
+   "source_repo": "https://github.com/tbinh-06/Ecoteck",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "ngân sách",
+    "vật tư",
+    "thiết bị"
+   ],
+   "path": "demos/ecoteck-giai-phap/",
+   "thumb": ""
+  },
+  {
+   "slug": "data-center-bravo",
+   "title": "Data Center — Sơ đồ giải pháp cho Bravo",
+   "type": "proposal",
+   "industry": "General",
+   "department": "All",
+   "description": "Sơ đồ Data Center cho doanh nghiệp dùng ERP Bravo: nguồn, xử lý, data mart, báo cáo, cảnh báo và AI agent.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/SDGP_Bravo/",
+   "source_repo": "https://github.com/tbinh-06/SDGP_Bravo",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "data center",
+    "Bravo",
+    "ERP"
+   ],
+   "path": "demos/data-center-bravo/",
+   "thumb": ""
+  },
+  {
+   "slug": "data-center-dung-chung",
+   "title": "Data Center — Sơ đồ giải pháp bản dùng chung",
+   "type": "proposal",
+   "industry": "General",
+   "department": "All",
+   "description": "Sơ đồ Data Center dùng chung: nhiều nguồn, xử lý chuẩn hoá, nền tảng trung tâm, data mart, báo cáo và AI agent.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/SDGP_VIPPRO/",
+   "source_repo": "https://github.com/tbinh-06/SDGP_VIPPRO",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "data center",
+    "sơ đồ giải pháp"
+   ],
+   "path": "demos/data-center-dung-chung/",
+   "thumb": ""
+  },
+  {
+   "slug": "cong-phan-tich-thuc-don",
+   "title": "Cộng — Phân tích thực đơn",
+   "type": "dashboard",
+   "industry": "FnB",
+   "department": "Kinh doanh",
+   "description": "Cấu trúc menu, sản lượng và biên lợi nhuận gộp theo nhóm sản phẩm.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Cong_Demo/",
+   "source_repo": "https://github.com/tbinh-06/Cong_Demo",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "menu",
+    "biên lợi nhuận",
+    "đồ uống"
+   ],
+   "path": "demos/cong-phan-tich-thuc-don/",
+   "thumb": ""
+  },
+  {
+   "slug": "mcp-claude-base",
+   "title": "Cách vận hành MCP — Claude dựng hệ thống trên Base",
+   "type": "deck",
+   "industry": "General",
+   "department": "All",
+   "description": "Hướng dẫn dùng MCP để Claude dựng quy trình trên Base, ví dụ ngành cao su.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/MCP_Caosu/",
+   "source_repo": "https://github.com/tbinh-06/MCP_Caosu",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "MCP",
+    "Claude",
+    "AI"
+   ],
+   "path": "demos/mcp-claude-base/",
+   "thumb": ""
+  },
+  {
+   "slug": "cao-su-siem-riep-eudr",
+   "title": "Cao su Tây Ninh Siêm Riệp — Quy trình truy xuất EUDR",
+   "type": "proposal",
+   "industry": "Cao su",
+   "department": "Vận hành",
+   "description": "Luồng truy xuất nguồn gốc EUDR cho Tây Ninh Siêm Riệp PTCS.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/Siem_Riep_TruyxuatEUDR/",
+   "source_repo": "https://github.com/tbinh-06/Siem_Riep_TruyxuatEUDR",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "quy trình"
+   ],
+   "path": "demos/cao-su-siem-riep-eudr/",
+   "thumb": ""
+  },
+  {
+   "slug": "cao-su-chu-se-eudr",
+   "title": "Cao su Chư Sê — Quy trình truy xuất EUDR",
+   "type": "proposal",
+   "industry": "Cao su",
+   "department": "Vận hành",
+   "description": "Luồng truy xuất nguồn gốc từ sổ giấy sang Base cho Cao su Chư Sê (Gia Lai).",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/CSGL_EUDR/",
+   "source_repo": "https://github.com/tbinh-06/CSGL_EUDR",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "EUDR",
+    "truy xuất nguồn gốc",
+    "quy trình"
+   ],
+   "path": "demos/cao-su-chu-se-eudr/",
+   "thumb": ""
   },
   {
    "slug": "jsc-inventory",
@@ -117,6 +949,30 @@
    "tags": [],
    "path": "demos/cao-su-siem-riep/",
    "thumb": "demos/cao-su-siem-riep/thumb.jpg"
+  },
+  {
+   "slug": "quan-tri-xe",
+   "title": "Báo cáo quản trị xe",
+   "type": "dashboard",
+   "industry": "Vận tải",
+   "department": "Vận hành",
+   "description": "Lịch điều xe, chi phí, doanh thu và hiệu quả từng xe theo tháng.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/BaoCaoXe/",
+   "source_repo": "https://github.com/tbinh-06/BaoCaoXe",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "đội xe",
+    "điều xe",
+    "chi phí xe"
+   ],
+   "path": "demos/quan-tri-xe/",
+   "thumb": ""
   },
   {
    "slug": "inventory-construction",
@@ -309,6 +1165,102 @@
    "tags": [],
    "path": "demos/dashboard-finance/",
    "thumb": "demos/dashboard-finance/thumb.jpg"
+  },
+  {
+   "slug": "agentic-ai-openclaw",
+   "title": "Agentic AI System — OpenClaw",
+   "type": "deck",
+   "industry": "General",
+   "department": "All",
+   "description": "Giới thiệu Agentic AI: định nghĩa kỹ thuật, nguyên lý vận hành và cấu trúc 3 tầng.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/demo-AI/",
+   "source_repo": "https://github.com/tbinh-06/demo-AI",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "AI",
+    "agent"
+   ],
+   "path": "demos/agentic-ai-openclaw/",
+   "thumb": ""
+  },
+  {
+   "slug": "asel-kinh-doanh-ky-thuat",
+   "title": "ASEL — Báo cáo kinh doanh & kỹ thuật",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "Kinh doanh",
+   "description": "Công việc, thời lượng và forecast doanh thu phòng Kinh doanh; công việc phòng Kỹ thuật theo nhân viên.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/ASEL/",
+   "source_repo": "https://github.com/tbinh-06/ASEL",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "forecast",
+    "công việc",
+    "thời lượng"
+   ],
+   "path": "demos/asel-kinh-doanh-ky-thuat/",
+   "thumb": ""
+  },
+  {
+   "slug": "apa-kpi",
+   "title": "APA — Báo cáo KPI & hướng dẫn đọc",
+   "type": "dashboard",
+   "industry": "Sản xuất",
+   "department": "HR",
+   "description": "Báo cáo KPI 4 trang theo 3 mức quyền xem, kèm hướng dẫn điểm KPI tính thế nào và chỗ dễ đọc nhầm.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/APA_BC-KPI/",
+   "source_repo": "https://github.com/tbinh-06/APA_BC-KPI",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "KPI",
+    "thuốc thú y",
+    "phân quyền"
+   ],
+   "path": "demos/apa-kpi/",
+   "thumb": ""
+  },
+  {
+   "slug": "ait-giai-phap-bao-cao",
+   "title": "AIT Corp — Sơ đồ giải pháp & bộ báo cáo",
+   "type": "proposal",
+   "industry": "General",
+   "department": "All",
+   "description": "Sơ đồ giải pháp dữ liệu trên Base cho AIT Corp, kèm 4 báo cáo: tổng quan, tài chính, tiến độ, mua sắm.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "https://tbinh-06.github.io/AIT/",
+   "source_repo": "https://github.com/tbinh-06/AIT",
+   "author": "Thanh Bình",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "sơ đồ giải pháp",
+    "tài chính",
+    "tiến độ",
+    "mua sắm"
+   ],
+   "path": "demos/ait-giai-phap-bao-cao/",
+   "thumb": ""
   }
  ]
 }

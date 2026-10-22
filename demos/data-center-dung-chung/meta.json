@@ -1,0 +1,21 @@
+{
+  "slug": "data-center-dung-chung",
+  "title": "Data Center — Sơ đồ giải pháp bản dùng chung",
+  "type": "proposal",
+  "industry": "General",
+  "department": "All",
+  "description": "Sơ đồ Data Center dùng chung: nhiều nguồn, xử lý chuẩn hoá, nền tảng trung tâm, data mart, báo cáo và AI agent.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/SDGP_VIPPRO/",
+  "source_repo": "https://github.com/tbinh-06/SDGP_VIPPRO",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "data center",
+    "sơ đồ giải pháp"
+  ]
+}

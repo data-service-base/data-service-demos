@@ -1,0 +1,22 @@
+{
+  "slug": "heid-san-pham-so",
+  "title": "HEID — Hoạt động triển khai sản phẩm số",
+  "type": "dashboard",
+  "industry": "Giáo dục",
+  "department": "Kinh doanh",
+  "description": "Triển khai sản phẩm số theo sản phẩm, gói, tỉnh thành và nhóm khách B2B / B2C.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/HEID_BC_SPso/",
+  "source_repo": "https://github.com/tbinh-06/HEID_BC_SPso",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "sản phẩm số",
+    "B2B",
+    "B2C"
+  ]
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đánh giá nhân sự BSC — Moonlight Holding</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root{
+    --brand:#16365c;--brand2:#1d4877;--accent:#2f7ed8;--accent-l:#e8f1fb;
+    --ok:#1f8f6a;--ok-l:#e3f4ee;--am:#c98a1e;--am-l:#fbf1da;--bad:#c0392b;--bad-l:#fbe7e4;
+    --bg:#eef3f8;--card:#fff;--line:#dbe4ee;--ink:#13243a;--muted:#5f7488;
+    --u1:#2f7ed8;--u2:#5aa7e6;--u3:#16406b;--uhq:#9cc2e6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:13px;line-height:1.5;font-variant-numeric:tabular-nums}
+  .top{background:var(--card);border-bottom:1px solid var(--line);padding:11px 22px;display:flex;align-items:center;gap:14px}
+  .brandmark{display:flex;align-items:center;gap:9px}.brandmark .dot{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#16365c,#2f7ed8)}
+  .brandmark b{font-size:14px}.brandmark span{font-size:11px;color:var(--muted)}
+  .top .right{margin-left:auto;font-size:11.5px;color:var(--muted);text-align:right}.top .right b{color:var(--ink)}
+  .tabs{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--line);padding:0 14px}
+  .tab{white-space:nowrap;padding:12px 14px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent}
+  .tab.on{color:var(--brand);border-bottom-color:var(--accent)}
+  .wrap{max-width:1060px;margin:0 auto;padding:16px 16px 40px}
+  section{display:none}section.on{display:block}
+  .hero{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:14px}
+  .hero .num{font-size:38px;font-weight:800;line-height:1;letter-spacing:-1px;color:#bfe0ff}
+  .hero .num small{font-size:14px;font-weight:600;color:#a9c8e6}
+  .hero .meta{font-size:11.5px;color:#bcd6ee}.hero .meta b{color:#fff}
+  .hero .tag{display:inline-block;font-size:11.5px;font-weight:700;background:rgba(191,224,255,.18);color:#bfe0ff;border-radius:20px;padding:3px 12px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:11px;padding:11px 13px}
+  .kpi.ok{border-left-color:var(--ok)}.kpi.am{border-left-color:var(--am)}.kpi.bad{border-left-color:var(--bad)}
+  .kpi .lab{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;line-height:1.25}
+  .kpi .val{font-size:18px;font-weight:700;margin-top:4px;line-height:1.05}.kpi .val small{font-size:11px;font-weight:600;color:var(--muted)}
+  .kpi .d{font-size:10.5px;font-weight:600;margin-top:3px;color:var(--muted)}
+  .kpi.ok .d{color:#0a6b4f}.kpi.am .d{color:#8a5e12}.kpi.bad .d{color:#a3281c}
+  .thresh{font-size:10.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;margin-bottom:14px}
+  .thresh b{color:var(--ink)}
+  .scale{display:inline-flex;gap:0;margin:0 4px;vertical-align:middle}.scale i{width:18px;height:10px;display:inline-block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(22,54,92,.05)}
+  .card h2{margin:0 0 2px;font-size:13.5px;color:var(--brand);font-weight:700}.card .sub2{color:var(--muted);font-size:11px;margin-bottom:9px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.row2>*{min-width:0}
+  @media(max-width:820px){.row2{grid-template-columns:1fr}}
+  .clegend{display:flex;flex-wrap:wrap;gap:12px;font-size:10.5px;color:var(--muted);margin-bottom:6px}
+  .clegend span{display:flex;align-items:center;gap:5px}.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  svg{width:100%;height:auto;display:block}
+  .tblwrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{background:#f1f6fb;color:var(--brand);text-align:center;padding:7px 8px;border-bottom:2px solid var(--line);font-weight:600;font-size:10.5px;white-space:nowrap}
+  th.l,td.l{text-align:left}
+  td{padding:6px 8px;border-bottom:1px solid #eef3f8;text-align:center;white-space:nowrap}
+  tr.total td{font-weight:700;background:#f6f9fc;border-top:2px solid var(--line)}
+  td.hm{font-weight:700}
+  .h5{background:#1f8f6a;color:#fff}.h4{background:#a3d6c2}.h3{background:#f4e2a6}.h2{background:#f0bf9c}.h1{background:#dd8473;color:#fff}
+  td.c-ok{background:var(--ok-l);color:#0a6b4f;font-weight:700}td.c-am{background:var(--am-l);color:#8a5e12;font-weight:600}td.c-bad{background:var(--bad-l);color:#a3281c;font-weight:700}
+  .lbA{background:var(--ok-l);color:#0a6b4f}.lbB{background:#e8f4ee;color:#15805d}.lbC{background:var(--am-l);color:#8a5e12}.lbD{background:var(--bad-l);color:#a3281c}
+  .badge{display:inline-block;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+  .src{font-size:10.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:9px;margin-top:8px}
+  .trow.tog{cursor:pointer}.trow.tog:hover td{background:#f5f9fd}
+  .caret{display:inline-block;width:14px;color:var(--accent);font-size:10px}
+  select{font-family:inherit;font-size:12px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:#fff}
+  .formula{background:#f1f6fb;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--ink);margin:8px 0 10px}
+  .formula b{color:var(--brand)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brandmark"><span class="dot"></span><div><b>Moonlight Holding</b> <span>· Đánh giá nhân sự theo BSC (Thẻ điểm cân bằng)</span></div></div>
+  <div class="right">Kỳ: <b>Quý II/2026</b><br>122 CBCNV · 4 đơn vị · <i>số minh họa</i></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab on" data-t="ov">Tổng hợp</div>
+  <div class="tab" data-t="kq">1 · Kết quả công việc</div>
+  <div class="tab" data-t="kh">2 · Khách hàng / nội bộ</div>
+  <div class="tab" data-t="qt">3 · Quy trình nội bộ</div>
+  <div class="tab" data-t="pt">4 · Học hỏi & phát triển</div>
+</div>
+
+<div class="wrap">
+  <section class="on" id="ov">
+    <div class="hero">
+      <div><div class="num" id="ov_num">–<small>/100</small></div></div>
+      <div>
+        <div class="tag" id="ov_tag">–</div>
+        <div class="meta" style="margin-top:7px">Điểm BSC trung bình toàn công ty · 4 khía cạnh<br>Trọng số: Kết quả 40% · Quy trình 25% · Khách hàng 20% · Học hỏi 15%</div>
+      </div>
+    </div>
+    <div class="kpis" id="ov_kpi"></div>
+    <div class="row2">
+      <div class="card"><h2>Bản đồ sao 4 khía cạnh BSC</h2><div class="sub2">Điểm trung bình toàn công ty theo từng khía cạnh</div><div id="ov_radar"></div></div>
+      <div class="card"><h2>So sánh đơn vị theo 4 khía cạnh</h2><div class="sub2">So sánh Nậm Na 1 / 2 / 3 — mạnh/yếu ở khía cạnh nào</div>
+        <div class="clegend"><span><span class="sw" style="background:#2f7ed8"></span>NM1</span><span><span class="sw" style="background:#5aa7e6"></span>NM2</span><span><span class="sw" style="background:#16406b"></span>NM3</span></div>
+        <div id="ov_cmp"></div></div>
+    </div>
+    <div class="card"><h2>Heatmap chi tiết — bấm để mở rộng</h2><div class="sub2">Bấm <b>đơn vị</b> → mở <b>phòng ban</b>; bấm phòng ban → mở <b>từng nhân sự</b></div>
+      <div class="thresh" style="margin-bottom:9px">Thang màu:<span class="scale"><i class="h1"></i><i class="h2"></i><i class="h3"></i><i class="h4"></i><i class="h5"></i></span> &lt;75 · 75–79 · 80–84 · 85–89 · ≥90</div>
+      <div class="tblwrap"><table id="tree"></table></div>
+      <div class="src">Điểm cấp trên = trung bình cấp dưới. Số minh họa.</div></div>
+    <div class="card"><h2>Xu hướng điểm theo thời gian</h2><div class="sub2">Điểm BSC theo tháng · so sánh đơn vị</div>
+      <div class="clegend"><span><span class="sw" style="background:#2f7ed8"></span>NM1</span><span><span class="sw" style="background:#5aa7e6"></span>NM2</span><span><span class="sw" style="background:#16406b"></span>NM3</span><span><span class="sw" style="background:#16365c"></span>TB công ty</span></div>
+      <div id="ov_trend"></div></div>
+    <div class="card"><h2>⚠ Cảnh báo nhân sự</h2><div class="sub2">Tự động liệt kê CBCNV điểm tổng &lt;82 (loại C/D) hoặc có khía cạnh &lt;80 — sắp theo điểm tăng dần</div>
+      <div class="tblwrap"><table id="ov_alert"></table></div>
+      <div class="src">Mức: <b>Cao</b> = điểm tổng &lt;82 · <b>Trung bình</b> = đạt loại B nhưng có khía cạnh dưới ngưỡng. Số minh họa.</div></div>
+  </section>
+
+  <section id="kq"></section>
+  <section id="kh"></section>
+  <section id="qt"></section>
+  <section id="pt"></section>
+</div>
+
+<script>
+const CR=[['kq','Kết quả công việc','Kết quả'],['kh','Khách hàng / nội bộ','Khách hàng'],['qt','Quy trình nội bộ','Quy trình'],['pt','Học hỏi & phát triển','Học hỏi']];
+const W={kq:.40,kh:.20,qt:.25,pt:.15};
+function comp(s){return CR.reduce((a,[k])=>a+s[k]*W[k],0);}
+function hm(v){return v>=90?'h5':v>=85?'h4':v>=80?'h3':v>=75?'h2':'h1';}
+function loai(c){return c>=90?['A','lbA']:c>=82?['B','lbB']:c>=75?['C','lbC']:['D','lbD'];}
+function fmt1(v){return v.toFixed(1).replace('.',',');}
+const UNITS=['Nậm Na 1','Nậm Na 2','Nậm Na 3','HQ Hà Nội'];
+const EMP=[
+  {dvi:'Nậm Na 1',phong:'PX Vận hành',n:'Nguyễn V. An',r:'Trưởng ca',s:{kq:93,kh:91,qt:95,pt:90}},
+  {dvi:'Nậm Na 1',phong:'PX Vận hành',n:'Vũ T. Lan',r:'Vận hành viên',s:{kq:90,kh:89,qt:93,pt:87}},
+  {dvi:'Nậm Na 1',phong:'PX Vận hành',n:'Lê V. Cường',r:'Vận hành viên',s:{kq:89,kh:88,qt:92,pt:86}},
+  {dvi:'Nậm Na 1',phong:'Tổ Sửa chữa',n:'Ngô V. Khoa',r:'Tổ trưởng',s:{kq:89,kh:86,qt:85,pt:91}},
+  {dvi:'Nậm Na 1',phong:'Tổ Sửa chữa',n:'Trần V. Dũng',r:'Thợ sửa chữa',s:{kq:87,kh:84,qt:83,pt:88}},
+  {dvi:'Nậm Na 1',phong:'Kỹ thuật – An toàn',n:'Lý T. Thu',r:'KS kỹ thuật',s:{kq:91,kh:90,qt:94,pt:92}},
+  {dvi:'Nậm Na 2',phong:'PX Vận hành',n:'Trần V. Hùng',r:'Trưởng ca',s:{kq:80,kh:82,qt:76,pt:84}},
+  {dvi:'Nậm Na 2',phong:'PX Vận hành',n:'Lê T. Mai',r:'Vận hành viên',s:{kq:85,kh:87,qt:82,pt:86}},
+  {dvi:'Nậm Na 2',phong:'PX Vận hành',n:'Phạm V. Sơn',r:'Vận hành viên',s:{kq:87,kh:88,qt:84,pt:85}},
+  {dvi:'Nậm Na 2',phong:'Tổ Sửa chữa',n:'Hoàng V. Long',r:'Tổ trưởng',s:{kq:88,kh:85,qt:79,pt:90}},
+  {dvi:'Nậm Na 2',phong:'Tổ Sửa chữa',n:'Đặng V. Tú',r:'Thợ sửa chữa',s:{kq:85,kh:83,qt:77,pt:88}},
+  {dvi:'Nậm Na 2',phong:'Kỹ thuật – An toàn',n:'Đỗ V. Hải',r:'KS an toàn',s:{kq:88,kh:89,qt:88,pt:90}},
+  {dvi:'Nậm Na 3',phong:'PX Vận hành',n:'Đỗ V. Nam',r:'Trưởng ca',s:{kq:91,kh:90,qt:93,pt:88}},
+  {dvi:'Nậm Na 3',phong:'PX Vận hành',n:'Bùi T. Hoa',r:'Vận hành viên',s:{kq:89,kh:88,qt:92,pt:86}},
+  {dvi:'Nậm Na 3',phong:'PX Vận hành',n:'Phan V. Tài',r:'Vận hành viên',s:{kq:88,kh:87,qt:91,pt:85}},
+  {dvi:'Nậm Na 3',phong:'Tổ Sửa chữa',n:'Tạ V. Minh',r:'Tổ trưởng',s:{kq:89,kh:86,qt:84,pt:91}},
+  {dvi:'Nậm Na 3',phong:'Kỹ thuật – An toàn',n:'Trịnh V. Đức',r:'KS an toàn',s:{kq:92,kh:91,qt:95,pt:93}},
+  {dvi:'HQ Hà Nội',phong:'Tài chính – Kế toán',n:'Phan T. Nga',r:'Kế toán trưởng',s:{kq:93,kh:93,qt:96,pt:86}},
+  {dvi:'HQ Hà Nội',phong:'Tài chính – Kế toán',n:'Cao V. Bình',r:'Kế toán viên',s:{kq:90,kh:91,qt:94,pt:82}},
+  {dvi:'HQ Hà Nội',phong:'Hành chính – Nhân sự',n:'Dương T. Hà',r:'Trưởng phòng',s:{kq:88,kh:92,qt:93,pt:84}},
+  {dvi:'HQ Hà Nội',phong:'Hành chính – Nhân sự',n:'Tô V. Kiên',r:'Chuyên viên',s:{kq:84,kh:86,qt:88,pt:76}},
+  {dvi:'HQ Hà Nội',phong:'Kế hoạch – Đầu tư',n:'Hồ T. Linh',r:'Trưởng phòng',s:{kq:90,kh:91,qt:92,pt:89}},
+  {dvi:'HQ Hà Nội',phong:'Kế hoạch – Đầu tư',n:'Mai V. Phong',r:'Chuyên viên',s:{kq:87,kh:89,qt:90,pt:87}},
+  {dvi:'HQ Hà Nội',phong:'Ban Kỹ thuật',n:'Vương V. Sĩ',r:'Trưởng ban KT',s:{kq:90,kh:90,qt:93,pt:90}},
+];
+EMP.forEach(e=>e.c=comp(e.s));
+function unitPersp(u,k){const es=EMP.filter(e=>e.dvi===u);return es.reduce((a,e)=>a+e.s[k],0)/es.length;}
+function critAvg(k){return EMP.reduce((a,e)=>a+e.s[k],0)/EMP.length;}
+const KPIDATA={
+  kq:[
+    {n:'Đạt KPI cá nhân',u:'%',t:90,dir:'up',v:[91,86,90,89],f:'<b>Điểm ngày</b> = (Số đầu việc hoàn thành đúng hạn trong ngày ÷ Số đầu việc được giao) × 100. <b>Điểm đơn vị</b> = TB điểm ngày của nhân sự. Điểm kỳ = TB các ngày.'},
+    {n:'Hoàn thành khối lượng giao',u:'%',t:95,dir:'up',v:[96,90,95,94],f:'<b>Điểm ngày</b> = (Khối lượng thực hiện ÷ Khối lượng kế hoạch trong ngày) × 100 (trần 100).'},
+    {n:'Tối ưu chi phí so định mức',u:'%',t:100,dir:'up',v:[98,95,97,96],f:'<b>Điểm ngày</b> = (Định mức chi phí ÷ Chi phí thực tế trong ngày) × 100 (trần 100).'},
+    {n:'Tiến độ so kế hoạch',u:'%',t:95,dir:'up',v:[95,88,94,93],f:'<b>Điểm ngày</b> = (Tiến độ thực tế lũy kế ÷ Tiến độ kế hoạch đến ngày) × 100.'},
+  ],
+  kh:[
+    {n:'Hài lòng cấp trên / phòng ban',u:'/100',t:90,dir:'up',v:[90,86,89,91],f:'<b>Điểm ngày</b> = TB đánh giá hài lòng (thang 100) ghi nhận trong ngày từ cấp trên / phòng ban phối hợp.'},
+    {n:'Phản hồi / xử lý đúng hạn',u:'%',t:95,dir:'up',v:[95,90,94,96],f:'<b>Điểm ngày</b> = (Số yêu cầu xử lý đúng hạn ÷ Tổng yêu cầu nhận trong ngày) × 100.'},
+    {n:'Số lỗi bị phàn nàn',u:'vụ',t:2,dir:'down',v:[1,3,2,1],f:'<b>Điểm ngày</b> = 100 − (Số lỗi / phàn nàn trong ngày × hệ số trừ). Càng ít lỗi điểm càng cao.'},
+    {n:'Phối hợp liên phòng',u:'/100',t:88,dir:'up',v:[88,85,88,90],f:'<b>Điểm ngày</b> = mức phối hợp (thang 100) do phòng ban liên quan chấm trong ngày.'},
+  ],
+  qt:[
+    {n:'Hoàn thành đúng deadline',u:'%',t:95,dir:'up',v:[93,84,92,94],f:'<b>Điểm ngày</b> = (Số việc xong đúng / trước hạn ÷ Số việc đến hạn trong ngày) × 100.'},
+    {n:'Tuân thủ quy trình / SOP',u:'%',t:98,dir:'up',v:[96,88,95,96],f:'<b>Điểm ngày</b> = (Số thao tác đúng SOP ÷ Tổng thao tác được kiểm tra) × 100.'},
+    {n:'Số lỗi phát sinh',u:'lỗi',t:3,dir:'down',v:[2,6,3,2],f:'<b>Điểm ngày</b> = 100 − (Số lỗi phát sinh trong ngày × hệ số trừ). Càng ít lỗi điểm càng cao.'},
+    {n:'Báo cáo / cập nhật đúng hạn',u:'%',t:95,dir:'up',v:[94,85,93,95],f:'<b>Điểm ngày</b> = (Số báo cáo / cập nhật đúng hạn ÷ Số yêu cầu báo cáo trong ngày) × 100.'},
+  ],
+  pt:[
+    {n:'Giờ đào tạo hoàn thành',u:'% KH',t:90,dir:'up',v:[92,88,90,86],f:'<b>Điểm</b> = (Giờ đào tạo tích lũy ÷ Giờ đào tạo kế hoạch đến ngày) × 100, cập nhật theo ngày.'},
+    {n:'Kỹ năng / chứng chỉ mới',u:'số',t:2,dir:'up',v:[2,2,2,1],f:'<b>Điểm</b> = (Số kỹ năng / chứng chỉ đạt ÷ Mục tiêu kỳ) × 100, tăng khi có chứng nhận mới.'},
+    {n:'Sáng kiến / đề xuất cải tiến',u:'số',t:1,dir:'up',v:[2,1,2,1],f:'<b>Điểm</b> = (Số sáng kiến được ghi nhận ÷ Mục tiêu) × 100, cộng dồn theo ngày.'},
+    {n:'Điểm năng lực chuyên môn',u:'/100',t:85,dir:'up',v:[89,87,89,84],f:'<b>Điểm</b> = kết quả đánh giá / kiểm tra năng lực gần nhất (thang 100), giữ đến kỳ đánh giá kế tiếp.'},
+  ],
+};
+function pctOf(k,val){return k.dir==='down'?(val===0?120:k.t/val*100):val/k.t*100;}
+function cellCls(p){return p>=98?'c-ok':p>=92?'c-am':'c-bad';}
+const TREND={labels:['T1','T2','T3','T4','T5','T6'],series:[
+  {color:'#2f7ed8',data:[91,91,92,92,92,92]},{color:'#5aa7e6',data:[88,87,86,82,84,85]},
+  {color:'#16406b',data:[90,90,90,90,90,90]},{color:'#16365c',data:[90,90,89,88,89,89]},
+]};
+const DAYS=14, DAYLABELS=Array.from({length:DAYS},(_,i)=>(10+i)+'/6');
+function dailyScore(k,uIdx,d){const base=Math.min(100,pctOf(k,k.v[uIdx]));const noise=3.5*Math.sin(d*0.8+uIdx*2)+1.5*Math.cos(d*0.5+uIdx);return Math.max(50,Math.min(100,Math.round(base+noise)));}
+
+/* charts — fixed font sizes; pass display-matched viewBox width Wd for uniform apparent text */
+function chartGrouped(id,labels,series,min,max,Wd){const H=210,p={l:30,r:10,t:14,b:34},pw=Wd-p.l-p.r,ph=H-p.t-p.b,n=labels.length,gw=pw/n,m=series.length,bw=Math.min(26,gw*0.62/m);let g='',b='',l='';for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=p.t+ph-((v-min)/(max-min))*ph;g+=`<line x1="${p.l}" y1="${y}" x2="${Wd-p.r}" y2="${y}" stroke="#eef3f8"/><text x="${p.l-4}" y="${y+3}" text-anchor="end" font-size="9" fill="#8aa0b4">${v.toFixed(0)}</text>`;}labels.forEach((L,i)=>{const x0=p.l+gw*i+gw/2-(m*bw+(m-1)*3)/2;series.forEach((s,j)=>{const hh=((s.data[i]-min)/(max-min))*ph,x=x0+j*(bw+3);b+=`<rect x="${x}" y="${p.t+ph-hh}" width="${bw}" height="${Math.max(1,hh)}" fill="${s.color}" rx="2.5"/><text x="${x+bw/2}" y="${p.t+ph-hh-3}" text-anchor="middle" font-size="9" font-weight="600" fill="#3a4a5a">${s.data[i].toFixed(0)}</text>`;});l+=`<text x="${p.l+gw*i+gw/2}" y="${H-18}" text-anchor="middle" font-size="11" font-weight="600" fill="#13243a">${L}</text>`;});document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${Wd} ${H}">${g}${b}${l}</svg>`;}
+function chartBars(id,items,min,max,Wd){const H=200,p={l:30,r:10,t:14,b:40},pw=Wd-p.l-p.r,ph=H-p.t-p.b,n=items.length,gw=pw/n,bw=Math.min(64,gw*0.5);let g='',b='';for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=p.t+ph-((v-min)/(max-min))*ph;g+=`<line x1="${p.l}" y1="${y}" x2="${Wd-p.r}" y2="${y}" stroke="#eef3f8"/><text x="${p.l-4}" y="${y+3}" text-anchor="end" font-size="9" fill="#8aa0b4">${v.toFixed(0)}</text>`;}items.forEach((it,i)=>{const hh=((it.value-min)/(max-min))*ph,x=p.l+gw*i+gw/2-bw/2;b+=`<rect x="${x}" y="${p.t+ph-hh}" width="${bw}" height="${Math.max(1,hh)}" fill="${it.color}" rx="3"/><text x="${x+bw/2}" y="${p.t+ph-hh-4}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#13243a">${fmt1(it.value)}</text><text x="${x+bw/2}" y="${H-20}" text-anchor="middle" font-size="11" font-weight="600" fill="#13243a">${it.label}</text>`;});document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${Wd} ${H}">${g}${b}</svg>`;}
+function chartLine(id,labels,lines,min,max,Wd){const H=230,p={l:30,r:12,t:12,b:28},pw=Wd-p.l-p.r,ph=H-p.t-p.b,n=labels.length;const X=i=>p.l+(pw/(n-1))*i,Y=v=>p.t+ph-((v-min)/(max-min))*ph;let g='';for(let k=0;k<=4;k++){const v=min+(max-min)*k/4,y=Y(v);g+=`<line x1="${p.l}" y1="${y}" x2="${Wd-p.r}" y2="${y}" stroke="#eef3f8"/><text x="${p.l-4}" y="${y+3}" text-anchor="end" font-size="9" fill="#8aa0b4">${v.toFixed(0)}</text>`;}let pa='';lines.forEach(ln=>{const pts=ln.data.map((v,i)=>`${X(i)},${Y(v)}`).join(' ');pa+=`<polyline points="${pts}" fill="none" stroke="${ln.color}" stroke-width="2.2"/>`;pa+=ln.data.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="2.4" fill="#fff" stroke="${ln.color}" stroke-width="1.8"/>`).join('');});let xl=labels.map((L,i)=>`<text x="${X(i)}" y="${H-9}" text-anchor="middle" font-size="9" fill="#8aa0b4">${L}</text>`).join('');document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${Wd} ${H}">${g}${pa}${xl}</svg>`;}
+function chartRadar(id,axes,min,max){const Wd=480,H=290,cx=240,cy=145,Rr=92,n=axes.length;const ang=i=>(-Math.PI/2)+(i*2*Math.PI/n),pt=(i,rr)=>[cx+rr*Math.cos(ang(i)),cy+rr*Math.sin(ang(i))];let g='';for(let gr=1;gr<=4;gr++){const rr=Rr*gr/4,pts=axes.map((a,i)=>pt(i,rr).join(',')).join(' ');g+=`<polygon points="${pts}" fill="none" stroke="#e3eaf2"/>`;}let ax='';axes.forEach((a,i)=>{const[x,y]=pt(i,Rr);ax+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#e3eaf2"/>`;const[lx,ly]=pt(i,Rr+22);ax+=`<text x="${lx}" y="${ly}" text-anchor="middle" font-size="11" font-weight="700" fill="#16365c">${a.label}</text><text x="${lx}" y="${ly+13}" text-anchor="middle" font-size="11" font-weight="700" fill="#2f7ed8">${a.value.toFixed(0)}</text>`;});const sc=v=>Rr*Math.max(0,Math.min(1,(v-min)/(max-min)));const dpts=axes.map((a,i)=>pt(i,sc(a.value)).join(',')).join(' ');let dots=axes.map((a,i)=>{const[x,y]=pt(i,sc(a.value));return `<circle cx="${x}" cy="${y}" r="3" fill="#2f7ed8"/>`;}).join('');document.getElementById(id).innerHTML=`<svg viewBox="0 0 ${Wd} ${H}">${g}${ax}<polygon points="${dpts}" fill="#2f7ed8" fill-opacity="0.16" stroke="#2f7ed8" stroke-width="2"/>${dots}<text x="${cx}" y="${cy+3}" text-anchor="middle" font-size="8.5" fill="#9fb2c4">thang 70–100</text></svg>`;}
+
+let expU=new Set(),expP=new Set();
+function aggScores(es){const s={};CR.forEach(([k])=>s[k]=Math.round(es.reduce((a,e)=>a+e.s[k],0)/es.length));return {s,c:es.reduce((a,e)=>a+e.c,0)/es.length};}
+function treeRow(o){const pad=8+o.level*22;const caret=o.toggle?`<span class="caret">${o.open?'▾':'▸'}</span>`:`<span class="caret" style="visibility:hidden">▸</span>`;const cells=CR.map(c=>`<td class="hm ${hm(o.s[c[0]])}">${o.s[c[0]]}</td>`).join('');const[lb,cls]=loai(o.c);const attr=o.toggle?` class="trow tog" data-k="${o.key}"`:` class="trow"`;return `<tr${attr}><td class="l" style="padding-left:${pad}px;font-weight:${o.level<2?700:500}">${caret}${o.label}</td><td class="l" style="color:#5f7488">${o.sub}</td>${cells}<td class="hm ${hm(o.c)}">${fmt1(o.c)}</td><td><span class="badge ${cls}">${lb}</span></td></tr>`;}
+function buildTree(){const head=`<thead><tr><th class="l">Đơn vị / phòng ban / nhân sự</th><th class="l">Quân số / chức danh</th>${CR.map(c=>`<th>${c[2]}</th>`).join('')}<th>Điểm</th><th>Loại</th></tr></thead>`;let rows='';UNITS.forEach(u=>{const es=EMP.filter(e=>e.dvi===u),ag=aggScores(es),openU=expU.has(u);rows+=treeRow({key:'u:'+u,level:0,toggle:true,open:openU,label:u,sub:es.length+' người',s:ag.s,c:ag.c});if(openU){[...new Set(es.map(e=>e.phong))].forEach(p=>{const pes=es.filter(e=>e.phong===p),pag=aggScores(pes),pk='p:'+u+'|'+p,openP=expP.has(pk);rows+=treeRow({key:pk,level:1,toggle:true,open:openP,label:p,sub:pes.length+' người',s:pag.s,c:pag.c});if(openP){pes.slice().sort((a,b)=>a.c-b.c).forEach(e=>{rows+=treeRow({level:2,toggle:false,label:e.n,sub:e.r,s:e.s,c:e.c});});}});}});document.getElementById('tree').innerHTML=head+`<tbody>${rows}</tbody>`;}
+
+function mean(a){return a.reduce((x,y)=>x+y,0)/a.length;}
+function perspOf(ch,key){return mean(ch.emps.map(e=>e.s[key]));}
+function entityBase(key,kpiSel,ch){
+  if(kpiSel==='all')return perspOf(ch,key);
+  const k=KPIDATA[key][+kpiSel],ui=UNITS.indexOf(ch.unit);
+  const ub=Math.min(100,pctOf(k,k.v[ui])),ua=unitPersp(ch.unit,key),ea=perspOf(ch,key);
+  return Math.max(40,Math.min(100,Math.round(ub*ea/ua)));
+}
+function scopeChildren(sv){
+  if(sv==='company')return UNITS.map(u=>({label:u.replace('Nậm Na','NM').replace('HQ Hà Nội','HQ'),unit:u,emps:EMP.filter(e=>e.dvi===u)}));
+  if(sv.slice(0,2)==='u:'){const u=sv.slice(2);return [...new Set(EMP.filter(e=>e.dvi===u).map(e=>e.phong))].map(p=>({label:p,unit:u,emps:EMP.filter(e=>e.dvi===u&&e.phong===p)}));}
+  const parts=sv.slice(2).split('|'),u=parts[0],p=parts[1];return EMP.filter(e=>e.dvi===u&&e.phong===p).map(e=>({label:e.n,unit:u,emps:[e]}));
+}
+function dnoise(seed,d){return 3.5*Math.sin(d*0.8+seed*2)+1.5*Math.cos(d*0.5+seed);}
+const DPAL=['#2f7ed8','#5aa7e6','#16406b','#9cc2e6','#1f8f6a','#c98a1e','#7c5cbf','#d9743a'];
+function renderDaily(key){
+  const kpiSel=document.getElementById(key+'_dsel').value;
+  const sv=document.getElementById(key+'_dscope').value;
+  document.getElementById(key+'_df').innerHTML=(kpiSel==='all')?'<b>Điểm khía cạnh (ngày)</b> = trung bình điểm ngày của các KPI trong khía cạnh. Điểm phòng/người = TB điểm thành viên.':KPIDATA[key][+kpiSel].f;
+  const ch=scopeChildren(sv);
+  const bases=ch.map(c=>entityBase(key,kpiSel,c));
+  const lines=ch.map((c,i)=>({color:DPAL[i%DPAL.length],data:DAYLABELS.map((_,d)=>Math.max(45,Math.min(100,Math.round(bases[i]+dnoise(i,d)))))}));
+  chartLine(key+'_dchart',DAYLABELS,lines,50,100,980);
+  document.getElementById(key+'_dleg').innerHTML=ch.map((c,i)=>`<span><span class="sw" style="background:${DPAL[i%DPAL.length]}"></span>${c.label}</span>`).join('');
+  const lvl=(sv==='company')?'Đơn vị':(sv.slice(0,2)==='u:'?'Phòng ban':'Nhân sự');
+  document.getElementById(key+'_dttl').textContent='Điểm KPI '+(kpiSel==='all'?'(điểm khía cạnh)':'\u201c'+KPIDATA[key][+kpiSel].n+'\u201d')+' theo '+lvl.toLowerCase();
+  const order=ch.map((c,i)=>i).sort((a,b)=>bases[a]-bases[b]);
+  let head=`<thead><tr><th class="l">${lvl}</th><th>Điểm KPI (kỳ)</th><th>Điểm hôm nay</th><th>Loại</th></tr></thead>`;
+  let body=order.map(i=>{const base=bases[i],today=lines[i].data[lines[i].data.length-1];return `<tr><td class="l">${ch[i].label}</td><td class="hm ${hm(base)}">${Math.round(base)}</td><td class="hm ${hm(today)}">${today}</td><td><span class="badge ${loai(base)[1]}">${loai(base)[0]}</span></td></tr>`;}).join('');
+  document.getElementById(key+'_dtbl').innerHTML=head+`<tbody>${body}</tbody>`;
+}
+function renderPersp(key){
+  const meta=CR.find(c=>c[0]===key);
+  const compAvg=critAvg(key);
+  const units=UNITS.map(u=>({u,v:unitPersp(u,key)}));
+  const best=units.slice().sort((a,b)=>b.v-a.v)[0],worst=units.slice().sort((a,b)=>a.v-b.v)[0];
+  let lowK=null,lowP=999;KPIDATA[key].forEach(k=>{const p=k.v.reduce((a,_,i)=>a+pctOf(k,k.v[i]),0)/k.v.length;if(p<lowP){lowP=p;lowK=k;}});
+  const aCls=v=>v>=82?'ok':v>=75?'am':'bad';
+  let kpiTable=`<thead><tr><th class="l">KPI</th><th>ĐVT</th><th>Mục tiêu</th>${UNITS.map(u=>`<th>${u.replace('Nậm Na','NM').replace('HQ Hà Nội','HQ')}</th>`).join('')}</tr></thead><tbody>`;
+  KPIDATA[key].forEach(k=>{const cells=k.v.map(val=>{const p=pctOf(k,val);return `<td class="${cellCls(p)}">${val}</td>`;}).join('');kpiTable+=`<tr><td class="l">${k.n}</td><td>${k.u}</td><td>${k.dir==='down'?'≤':'≥'}${k.t}</td>${cells}</tr>`;});
+  kpiTable+=`<tr class="total"><td class="l">Điểm khía cạnh (TB)</td><td></td><td></td>${units.map(x=>`<td class="hm ${hm(x.v)}">${x.v.toFixed(1)}</td>`).join('')}</tr></tbody>`;
+  const optsKPI='<option value="all">Tất cả KPI (điểm khía cạnh)</option>'+KPIDATA[key].map((k,i)=>`<option value="${i}">${k.n}</option>`).join('');
+  const optsScope='<option value="company">Toàn công ty — so sánh đơn vị</option>'+'<optgroup label="So sánh phòng ban trong đơn vị">'+UNITS.map(u=>`<option value="u:${u}">${u}</option>`).join('')+'</optgroup>'+'<optgroup label="So sánh nhân sự trong phòng">'+UNITS.map(u=>[...new Set(EMP.filter(e=>e.dvi===u).map(e=>e.phong))].map(p=>`<option value="p:${u}|${p}">${u.replace('Nậm Na','NM')} › ${p}</option>`).join('')).join('')+'</optgroup>';
+  document.getElementById(key).innerHTML=`
+    <div class="kpis">
+      <div class="kpi ${aCls(compAvg)}"><div class="lab">Điểm khía cạnh TB</div><div class="val">${fmt1(compAvg)}</div><div class="d">trọng số ${W[key]*100}% trong BSC</div></div>
+      <div class="kpi ok"><div class="lab">Đơn vị tốt nhất</div><div class="val" style="font-size:14px">${best.u}</div><div class="d">${fmt1(best.v)} điểm</div></div>
+      <div class="kpi bad"><div class="lab">Đơn vị cần chú ý</div><div class="val" style="font-size:14px">${worst.u}</div><div class="d">${fmt1(worst.v)} điểm</div></div>
+      <div class="kpi am"><div class="lab">KPI yếu nhất</div><div class="val" style="font-size:12.5px">${lowK.n}</div><div class="d">đạt TB ${lowP.toFixed(0)}%</div></div>
+    </div>
+    <div class="thresh"><b>Khía cạnh: ${meta[1]}</b> — ô KPI tô theo % đạt mục tiêu: <span style="color:#1f8f6a">■</span> ≥98% <span style="color:#c98a1e">■</span> 92–98% <span style="color:#c0392b">■</span> &lt;92%.</div>
+    <div class="row2">
+      <div class="card"><h2>Điểm khía cạnh theo đơn vị</h2><div class="sub2">0–100 · so sánh các đơn vị</div><div id="${key}_bar"></div></div>
+      <div class="card"><h2>KPI chi tiết theo đơn vị</h2><div class="tblwrap"><table>${kpiTable}</table></div>
+        <div class="src">% đạt = giá trị/mục tiêu (chỉ tiêu "càng thấp càng tốt" tính ngược). Số minh họa.</div></div>
+    </div>
+    <div class="card"><h2>KPI theo ngày — logic tính (daily) & drill-down</h2><div class="sub2">Chọn KPI + phạm vi (đơn vị → phòng ban → nhân sự) để xem điểm theo ngày</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px"><select id="${key}_dsel">${optsKPI}</select><select id="${key}_dscope">${optsScope}</select></div>
+      <div class="formula" id="${key}_df"></div>
+      <div class="clegend" id="${key}_dleg"></div>
+      <div id="${key}_dchart"></div>
+      <h2 style="margin-top:14px" id="${key}_dttl"></h2>
+      <div class="tblwrap"><table id="${key}_dtbl"></table></div>
+      <div class="src">Điểm ngày thang 50–100. Điểm phòng/người suy ra từ điểm khía cạnh tương ứng (tỷ lệ với đơn vị). Số minh họa.</div></div>`;
+  chartBars(key+'_bar',units.map(x=>({label:x.u.replace('Nậm Na','NM').replace('HQ Hà Nội','HQ'),value:x.v,color:x.v>=90?'#1f8f6a':x.v>=82?'#5aa7e6':x.v>=75?'#c98a1e':'#c0392b'})),70,100,480);
+  const dsel=document.getElementById(key+'_dsel'),dsc=document.getElementById(key+'_dscope');
+  dsel.addEventListener('change',()=>renderDaily(key));
+  dsc.addEventListener('change',()=>renderDaily(key));
+  renderDaily(key);
+}
+
+const R={
+  ov(){
+    const avg=EMP.reduce((a,e)=>a+e.c,0)/EMP.length;
+    document.getElementById('ov_num').innerHTML=`${fmt1(avg)}<small>/100</small>`;
+    document.getElementById('ov_tag').textContent='● Loại '+loai(avg)[0];
+    chartRadar('ov_radar',CR.map(c=>({label:c[2],value:critAvg(c[0])})),70,100);
+    chartGrouped('ov_cmp',CR.map(c=>c[2]),[
+      {color:'#2f7ed8',data:CR.map(c=>unitPersp('Nậm Na 1',c[0]))},
+      {color:'#5aa7e6',data:CR.map(c=>unitPersp('Nậm Na 2',c[0]))},
+      {color:'#16406b',data:CR.map(c=>unitPersp('Nậm Na 3',c[0]))},
+    ],70,100,480);
+    const uc=UNITS.map(u=>({u,c:aggScores(EMP.filter(e=>e.dvi===u)).c}));
+    const best=uc.slice().sort((a,b)=>b.c-a.c)[0],worst=uc.slice().sort((a,b)=>a.c-b.c)[0];
+    let lowK=CR[0],lowV=999;CR.forEach(c=>{const v=critAvg(c[0]);if(v<lowV){lowV=v;lowK=c;}});
+    document.getElementById('ov_kpi').innerHTML=
+      `<div class="kpi ok"><div class="lab">Điểm BSC TB · loại</div><div class="val">${fmt1(avg)} · ${loai(avg)[0]}</div><div class="d">122 CBCNV</div></div>`+
+      `<div class="kpi ok"><div class="lab">Đơn vị tốt nhất</div><div class="val" style="font-size:14px">${best.u}</div><div class="d">${fmt1(best.c)} điểm</div></div>`+
+      `<div class="kpi bad"><div class="lab">Đơn vị cần chú ý</div><div class="val" style="font-size:14px">${worst.u}</div><div class="d">${fmt1(worst.c)} điểm</div></div>`+
+      `<div class="kpi am"><div class="lab">Khía cạnh yếu nhất</div><div class="val" style="font-size:14px">${lowK[2]}</div><div class="d">TB ${lowV.toFixed(0)} điểm</div></div>`;
+    buildTree();
+    chartLine('ov_trend',TREND.labels,TREND.series,80,95,980);
+    // cảnh báo nhân sự
+    const al=[];
+    EMP.forEach(e=>{const iss=[];CR.forEach(c=>{if(e.s[c[0]]<80)iss.push(c[2]+' '+e.s[c[0]]);});if(e.c<82||iss.length){const sev=e.c<82?['Cao','lbD']:['Trung bình','lbC'];al.push({e,iss,sev});}});
+    al.sort((a,b)=>a.e.c-b.e.c);
+    let ah=`<thead><tr><th class="l">Nhân viên</th><th class="l">Đơn vị</th><th class="l">Phòng ban</th><th>Điểm</th><th>Loại</th><th class="l">Khía cạnh dưới ngưỡng</th><th>Mức</th></tr></thead>`;
+    let ab=al.map(a=>`<tr><td class="l">${a.e.n}</td><td class="l">${a.e.dvi}</td><td class="l">${a.e.phong}</td><td class="hm ${hm(a.e.c)}">${fmt1(a.e.c)}</td><td><span class="badge ${loai(a.e.c)[1]}">${loai(a.e.c)[0]}</span></td><td class="l">${a.iss.length?a.iss.join(', '):'—'}</td><td><span class="badge ${a.sev[1]}">${a.sev[0]}</span></td></tr>`).join('');
+    document.getElementById('ov_alert').innerHTML=ah+`<tbody>${ab}</tbody>`;
+  },
+  kq(){renderPersp('kq');},kh(){renderPersp('kh');},qt(){renderPersp('qt');},pt(){renderPersp('pt');},
+};
+document.getElementById('tree').addEventListener('click',e=>{const tr=e.target.closest('tr.tog');if(!tr)return;const k=tr.dataset.k;if(k.slice(0,2)==='u:'){const u=k.slice(2);expU.has(u)?expU.delete(u):expU.add(u);}else{expP.has(k)?expP.delete(k):expP.add(k);}buildTree();});
+function show(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));R[t]();}
+document.getElementById('tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)show(t.dataset.t);});
+show('ov');
+</script>
+</body>
+</html>

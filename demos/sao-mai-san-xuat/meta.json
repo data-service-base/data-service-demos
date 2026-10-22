@@ -1,0 +1,22 @@
+{
+  "slug": "sao-mai-san-xuat",
+  "title": "Sao Mai — Hệ thống báo cáo sản xuất",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "Vận hành",
+  "description": "Sản lượng và phế theo công đoạn, ca, ngày, tổng hợp từ 32 sổ nguồn.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/SaoMai/",
+  "source_repo": "https://github.com/tbinh-06/SaoMai",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "sản lượng",
+    "phế phẩm",
+    "công đoạn"
+  ]
+}

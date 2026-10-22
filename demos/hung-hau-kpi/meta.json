@@ -1,0 +1,22 @@
+{
+  "slug": "hung-hau-kpi",
+  "title": "Hùng Hậu Holdings — Dashboard KPI khối HHC",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "HR",
+  "description": "Đăng ký, cập nhật và đánh giá KPI theo nhóm mục tiêu, pháp nhân; cảnh báo điểm nóng.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/KPI_LucGiac/",
+  "source_repo": "https://github.com/tbinh-06/KPI_LucGiac",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "KPI",
+    "holding",
+    "pháp nhân"
+  ]
+}

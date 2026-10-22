@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEID — Báo cáo 03: Sản lượng & Vận hành</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F0F3F8;
+  --color-background-danger:#FCEAEA;
+  --color-background-warning:#FBF1DD;
+  --color-background-success:#E8F6EE;
+  --color-background-info:#E9F2FC;
+  --color-border-tertiary:#E2E7F0;
+  --color-border-secondary:#CCD5E2;
+  --color-border-info:#A9CBF0;
+  --color-text-primary:#1A2230;
+  --color-text-secondary:#5A6678;
+  --color-text-tertiary:#8A95A8;
+  --color-text-info:#2F6FE0;
+  --color-text-success:#1E9E57;
+  --color-text-danger:#E24B4A;
+  --color-text-warning:#D98200;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F4F6FA;color:var(--color-text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px}
+::-webkit-scrollbar{width:7px;height:7px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,0.04)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.18);border-radius:4px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:230px;flex-shrink:0;background:#fff;border-right:0.5px solid var(--color-border-tertiary);padding:18px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:6px 8px 16px}
+.brand .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#0C447C,#2E7CD6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.brand .nm{font-weight:600;font-size:14px}.brand .sub{font-size:10.5px;color:var(--color-text-tertiary)}
+.nav{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;background:transparent;border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:12.5px;cursor:pointer;font-family:inherit}
+.nav button i{font-size:17px}
+.nav button:hover{background:var(--color-background-secondary)}
+.nav button.on{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.main{flex:1;padding:22px 26px;max-width:1500px;min-width:0}
+.page{display:none}
+.kpi{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;position:relative}
+.kpi .chg{position:absolute;top:11px;right:12px;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-flex;align-items:center;gap:3px;line-height:1.45}
+.kpi .chg.u{color:var(--color-text-success);background:var(--color-background-success)}
+.kpi .chg.d{color:var(--color-text-danger);background:var(--color-background-danger)}
+.kpi .ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px}
+.kpi .big{font-size:23px;font-weight:500;margin:5px 0 9px}
+.kpi .row{display:flex;align-items:center;gap:8px;font-size:11.5px;padding:3px 0}
+.kpi .row .l{color:var(--color-text-secondary)}.kpi .row .v{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.hd{font-size:13px;font-weight:500;margin:0 0 12px;display:flex;align-items:center;gap:6px}
+.up{color:var(--color-text-success)}.dn{color:var(--color-text-danger)}.wn{color:var(--color-text-warning)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--color-text-secondary)}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+.tab{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.tab.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.ptab{font-size:13px;font-weight:500;padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;font-family:inherit}
+.ptab.on{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+table.rk{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11.5px}
+table.rk th{text-align:right;font-weight:500;color:var(--color-text-secondary);padding:6px 7px;font-size:11px;position:sticky;top:0;background:var(--color-background-secondary)}
+table.rk td{padding:9px 7px;border-top:0.5px solid var(--color-border-tertiary);text-align:right;vertical-align:middle}
+table.rk th:first-child,table.rk td:first-child{text-align:left}
+table.rk tr.tot td{border-top:1.5px solid var(--color-border-secondary);font-weight:500;background:var(--color-background-secondary)}
+table.dvt td,table.dvt th{border-left:0.5px solid var(--color-border-tertiary)}
+table.dvt td:first-child,table.dvt th:first-child{border-left:none}
+.mono{font-variant-numeric:tabular-nums}.s2{font-size:11px;color:var(--color-text-tertiary)}
+.titlebar{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.titlebar .t{font-size:18px;font-weight:600}
+.pgbar{height:8px;background:var(--color-background-secondary);border-radius:999px;overflow:hidden;margin:4px 0}
+.pgbar .fill{height:100%;border-radius:999px;transition:width .4s}
+.fbox{display:flex;align-items:center;gap:8px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px 16px;flex-wrap:wrap}
+.fbox .fitem{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:90px}
+.fbox .fitem .flabel{font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.fbox .fitem .fval{font-size:20px;font-weight:600;color:var(--color-text-info);font-variant-numeric:tabular-nums}
+.fbox .fitem .fsub{font-size:10.5px;color:var(--color-text-secondary)}
+.fbox .fop{font-size:22px;color:var(--color-border-secondary);font-weight:300;flex-shrink:0}
+.fbox .feq{font-size:20px;color:var(--color-text-info);font-weight:600;flex-shrink:0}
+.bdg{font-size:10.5px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.bG{background:var(--color-background-success);color:var(--color-text-success)}
+.bM{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bD{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bB{background:var(--color-background-info);color:var(--color-text-info)}
+.sidefilter{margin-top:14px;border-top:0.5px solid var(--color-border-tertiary);padding-top:12px}
+.sftitle{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.6px;padding:0 11px 9px;display:flex;align-items:center;gap:6px}
+.filterbar{display:flex;flex-direction:column;gap:10px;padding:0 11px}
+.fitem-f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.flabel-f{font-size:10px;font-weight:600;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.fsel{font-size:12px;font-family:inherit;width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:7px 9px;color:var(--color-text-primary);cursor:pointer;outline:none}
+.freset{font-size:11.5px;color:var(--color-text-info);cursor:pointer;background:none;border:none;font-family:inherit;display:flex;align-items:center;gap:5px;padding:4px 0;margin-top:2px}
+.freset:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">HEID</div><div><div class="nm">HEID</div><div class="sub">Sản lượng &amp; Vận hành</div></div></div>
+    <nav class="nav" id="nav">
+      <button class="on" data-page="supply"><i class="ti ti-printer"></i> Số lượng in &amp; đặt mua</button>
+      <button data-page="inventory"><i class="ti ti-building-warehouse"></i> Tồn kho</button>
+      <button data-page="transfer"><i class="ti ti-arrow-autofit-both"></i> Nhập - Xuất kho</button>
+      <button data-page="content"><i class="ti ti-file-text"></i> Phát triển nội dung</button>
+    </nav>
+    <div class="sidefilter">
+      <div class="sftitle"><i class="ti ti-filter" style="font-size:14px"></i> Bộ lọc</div>
+      <div class="filterbar">
+        <div class="fitem-f"><span class="flabel-f">Kỳ báo cáo</span>
+          <select class="fsel"><option>YTD 2026</option><option>Quý II/2026</option><option>Tháng 07/2026</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Nhóm sản phẩm</span>
+          <select class="fsel"><option>Tất cả</option><option>Sách HEID in</option><option>Sách HEID nhập mua</option></select></div>
+        <div class="fitem-f"><span class="flabel-f">Mảng sản phẩm</span>
+          <select class="fsel"><option>Tất cả</option><option>STA</option><option>GDQPAN</option><option>SBT OLTM</option><option>STK</option><option>SGK</option><option>SBT NXB</option></select></div>
+        <button class="freset"><i class="ti ti-rotate-2"></i> Đặt lại bộ lọc</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+  <!-- ===== SỐ LƯỢNG IN & ĐẶT MUA ===== -->
+  <section class="page" id="page-supply" style="display:block">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Số lượng in &amp; đặt mua</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: nghìn bản</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px" id="sp_kpi"></div>
+
+    <!-- Card duy nhất với tab In / Đặt mua -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span id="sp_card_title"><i class="ti ti-printer"></i> SÁCH HEID IN — Tổ chức in</span>
+        <div style="display:flex;gap:6px">
+          <button class="ptab sptab on" data-v="in">Sách HEID in</button>
+          <button class="ptab sptab" data-v="mua">Sách nhập mua</button>
+        </div>
+      </div>
+      <div class="fbox" id="sp_flow" style="margin-bottom:14px"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:14px">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Chi tiết theo mảng sản phẩm</div>
+          <table class="rk dvt" style="min-width:360px"><thead id="sp_tb_head"></thead><tbody id="sp_tb"></tbody></table>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Tiến độ nhập theo mảng</div>
+          <div style="position:relative;width:100%;height:220px"><canvas id="sp_chart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng chi tiết các lần in / đặt mua -->
+    <div class="card">
+      <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span id="sp_log_title"><i class="ti ti-clipboard-list"></i> Chi tiết các lần in</span>
+        <span class="s2" style="font-weight:400;align-self:center">· bấm tiêu đề cột để sắp xếp</span>
+      </div>
+      <div style="max-height:380px;overflow:auto">
+        <table class="rk dvt" id="sp_log_table" style="min-width:700px">
+          <thead id="sp_log_head"></thead>
+          <tbody id="sp_log_tb"></tbody>
+        </table>
+      </div>
+      <div class="s2" style="margin-top:8px" id="sp_log_note"></div>
+    </div>
+  </section>
+
+  <!-- ===== TỒN KHO ===== -->
+  <section class="page" id="page-inventory">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Tồn kho</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: nghìn bản</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> Tính đến 31/07/2026</span>
+    </div>
+    <div class="fbox" id="inv_flow" style="margin-bottom:14px"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px" id="inv_kpi"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-donut"></i> Cơ cấu tồn kho theo nhóm sản phẩm</div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="inv_c1"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Tồn kho theo mảng sản phẩm</div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="inv_c2"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hd"><i class="ti ti-list-details"></i> Chi tiết tồn kho theo nhóm &amp; mảng sản phẩm</div>
+      <div style="max-height:360px;overflow:auto">
+        <table class="rk dvt" style="min-width:620px"><thead><tr><th>Nhóm / Mảng sản phẩm</th><th>Tồn kho đầu kỳ</th><th>Nhập trong kỳ</th><th>Xuất trong kỳ</th><th>Tồn kho cuối kỳ</th><th>Đáp ứng (tháng)</th></tr></thead><tbody id="inv_tb"></tbody></table>
+      </div>
+      <div class="s2" style="margin-top:8px">Đáp ứng = Tồn kho cuối kỳ ÷ Sản lượng xuất bình quân/tháng. <b>Ngưỡng:</b> Tốt = ≥ 2 tháng · Theo dõi = 1–2 tháng · Thiếu hàng = &lt; 1 tháng.</div>
+    </div>
+  </section>
+
+  <!-- ===== NHẬP - XUẤT KHO ===== -->
+  <section class="page" id="page-transfer">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Nhập - Xuất kho</span><span style="font-size:11px;color:var(--color-text-tertiary)">· ĐVT: nghìn bản</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar"></i> 01/01 → 31/07/2026</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:14px" id="tr_kpi"></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <span><i class="ti ti-chart-bar"></i> Nhập - Xuất kho theo tháng</span>
+          <div style="display:flex;gap:6px"><button class="tab trview on" data-v="month">Theo tháng</button><button class="tab trview" data-v="cumu">Lũy kế</button></div>
+        </div>
+        <div class="legend"><span><span class="dot" style="background:#2E7CD6"></span>Nhập kho</span><span><span class="dot" style="background:#1E9E57"></span>Xuất kho</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="tr_c1"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar-off"></i> Sản lượng nhập - xuất kho theo tuần <span class="s2" style="font-weight:400">· T01–T07/2026</span></div>
+        <div class="legend"><span><span class="dot" style="background:#8FBEEC"></span>Nhập kho</span><span><span class="dot" style="background:#EF9F27"></span>Xuất kho</span></div>
+        <div style="position:relative;width:100%;height:250px"><canvas id="tr_c2"></canvas></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:14px">
+      <div class="card">
+        <div class="hd"><i class="ti ti-trending-up"></i> Nhập kho trung bình theo ngày <span class="s2" style="font-weight:400">· theo tháng</span></div>
+        <div style="position:relative;width:100%;height:220px"><canvas id="tr_c3"></canvas></div>
+        <div class="s2" style="margin-top:6px">BQ ngày = Tổng SL nhập kho tháng ÷ Số ngày làm việc thực tế trong tháng.</div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-trending-down"></i> Xuất kho trung bình theo ngày <span class="s2" style="font-weight:400">· theo tháng</span></div>
+        <div style="position:relative;width:100%;height:220px"><canvas id="tr_c4"></canvas></div>
+        <div class="s2" style="margin-top:6px">BQ ngày = Tổng SL xuất kho tháng ÷ Số ngày làm việc thực tế trong tháng.</div>
+      </div>
+    </div>
+    <!-- Bảng chi tiết nhập xuất -->
+    <div class="card">
+      <div class="hd"><i class="ti ti-list-details"></i> Chi tiết nhập - xuất kho theo tháng &amp; nhóm sản phẩm</div>
+      <div style="overflow-x:auto">
+        <table class="rk dvt" style="min-width:780px">
+          <thead>
+            <tr>
+              <th>Tháng</th>
+              <th>Nhập — HEID In</th><th>Nhập — Nhập mua</th><th>Tổng nhập</th>
+              <th>Xuất — HEID In</th><th>Xuất — Nhập mua</th><th>Tổng xuất</th>
+              <th>Chênh lệch</th>
+            </tr>
+          </thead>
+          <tbody id="tr_detail_tb"></tbody>
+        </table>
+      </div>
+      <div class="s2" style="margin-top:8px">Chênh lệch = Tổng nhập − Tổng xuất trong tháng. Dương (+) = tích lũy tồn kho · Âm (−) = giải phóng tồn kho.</div>
+    </div>
+  </section>
+
+  <!-- ===== PHÁT TRIỂN NỘI DUNG ===== -->
+  <section class="page" id="page-content">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:8px"><span class="t">Phát triển nội dung</span><span style="font-size:11px;color:var(--color-text-tertiary)">· Sản phẩm giấy &amp; Sản phẩm số</span></div>
+      <span style="font-size:12px;color:var(--color-text-secondary)"><i class="ti ti-calendar-check"></i> Cập nhật đến 31/07/2026</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="ptab ctab on" data-p="paper">Sản phẩm giấy</button>
+      <button class="ptab ctab" data-p="digital">Sản phẩm số</button>
+    </div>
+
+    <!-- Sản phẩm giấy -->
+    <div id="ct_paper">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px" id="ct_paper_kpi"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:14px">
+        <div class="card">
+          <div class="hd"><i class="ti ti-file-description"></i> Trạng thái thực hiện bản thảo <span class="s2" style="font-weight:400">· theo kế hoạch năm 2026</span></div>
+          <div style="position:relative;width:100%;height:260px"><canvas id="ct_c1"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-check-circle"></i> Tỷ lệ hoàn thành bản thảo &amp; ra QĐ in</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px" id="ct_pgbars"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="hd"><i class="ti ti-list-check"></i> Chi tiết bản thảo theo mảng sản phẩm</div>
+        <div style="overflow-x:auto"><table class="rk dvt" style="min-width:680px"><thead><tr><th>Mảng sản phẩm</th><th>KH bản thảo</th><th>Đang triển khai</th><th>Đã hoàn thành BT</th><th>Đã QĐ in</th><th>Đã giao in</th><th>Tỷ lệ HT</th></tr></thead><tbody id="ct_bt_tb"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- Sản phẩm số -->
+    <div id="ct_digital" style="display:none">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px" id="ct_dg_kpi"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:14px;margin-bottom:14px">
+        <div class="card">
+          <div class="hd"><i class="ti ti-chart-bar"></i> Câu hỏi đã có &amp; dự kiến bổ sung theo môn học</div>
+          <div style="position:relative;width:100%;height:270px"><canvas id="ct_c2"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="hd"><i class="ti ti-chart-bar-off"></i> Câu hỏi đã có &amp; dự kiến theo lớp</div>
+          <div style="position:relative;width:100%;height:270px"><canvas id="ct_c3"></canvas></div>
+        </div>
+      </div>
+      <!-- Thay donut mức độ nhận thức bằng horizontal bar tỷ lệ hoàn thành theo môn -->
+      <div class="card">
+        <div class="hd"><i class="ti ti-chart-bar"></i> Tỷ lệ hoàn thành theo môn học <span class="s2" style="font-weight:400">· % câu hỏi đã có / tổng dự kiến</span></div>
+        <div style="position:relative;width:100%;height:280px"><canvas id="ct_c4"></canvas></div>
+        <div class="s2" style="margin-top:6px">Tỷ lệ hoàn thành = Câu hỏi đã có ÷ (Đã có + Dự kiến bổ sung) × 100%. <b>Ngưỡng:</b> Tốt = ≥ 80% · Theo dõi = 60–80% · Cần bổ sung = &lt; 60%.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="s2" style="margin-top:18px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)">
+    Ghi chú: toàn bộ số liệu là <b>số minh họa</b> phục vụ thiết kế giao diện.
+    Nguồn: ERP (in, đặt mua, kho) · Base + Excel (bản thảo, phát triển nội dung) · Phần mềm sản phẩm (câu hỏi số).
+    Kỳ YTD 2026 (01/01–31/07/2026), số tạm tính chưa chốt sổ.
+    Phân quyền: BOD + khối vận hành — xem toàn bộ, không áp RLS.
+  </div>
+  </main>
+</div>
+
+<script>
+/* ============ UTILS ============ */
+const grid='rgba(128,128,128,0.18)', tickc='rgba(128,128,128,0.85)';
+const BL='#2E7CD6', BLL='#8FBEEC', NV='#0C447C', GN='#1E9E57', OR='#EF9F27', RD='#E24B4A', GY='#CCD5E2';
+const SH=['#0C447C','#185FA5','#2E7CD6','#5B9BE0','#8FBEEC','#BBD7F6'];
+Chart.defaults.font.family="Inter,-apple-system,sans-serif"; Chart.defaults.font.size=11; Chart.defaults.color=tickc;
+const nf=v=>Math.round(v).toLocaleString('vi-VN');
+const pp=v=>v.toFixed(1).replace('.',',');
+const el=id=>document.getElementById(id);
+const MON=['T01','T02','T03','T04','T05','T06','T07'];
+const cumu=a=>{let s=0;return a.map(v=>+(s+=v).toFixed(1));};
+const pct=(a,b)=>Math.round(a/b*100);
+const statusBdg=r=>r>=90?'<span class="bdg bG">Đúng tiến độ</span>':r>=75?'<span class="bdg bM">Theo dõi</span>':'<span class="bdg bD">Chậm tiến độ</span>';
+
+/* ============ DATA ============ */
+const IN_MANG=[
+  {n:'STA',     qd:55000, nhap:50000},
+  {n:'GDQPAN',  qd:35000, nhap:28000},
+  {n:'SBT mới', qd:40000, nhap:35000},
+  {n:'STK',     qd:15000, nhap:12000},
+];
+const IN_TOTAL={qd:145000, nhap:117000};
+
+const MUA_MANG=[
+  {n:'SGK',     dm:45000, nhap:40000},
+  {n:'SBT NXB', dm:25000, nhap:15000},
+  {n:'SBT PN',  dm:12000, nhap:8000},
+  {n:'STK mua', dm:8000,  nhap:5000},
+];
+const MUA_TOTAL={dm:110000, nhap:83000};
+
+// Chi tiết các lần in (mock)
+const IN_LOG=[
+  {ma:'QD-IN-001', mang:'STA',     so:'45/QĐ-HEID',  ngay:'05/01/2026', nxb:'NXB ĐH Quốc gia',  sl_qd:20000, sl_nhap:20000, tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-002', mang:'GDQPAN',  so:'46/QĐ-HEID',  ngay:'10/01/2026', nxb:'NXB Giáo dục VN',  sl_qd:15000, sl_nhap:15000, tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-003', mang:'SBT mới', so:'47/QĐ-HEID',  ngay:'15/01/2026', nxb:'NXB ĐH Sư phạm',   sl_qd:18000, sl_nhap:18000, tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-004', mang:'STA',     so:'82/QĐ-HEID',  ngay:'12/02/2026', nxb:'NXB ĐH Quốc gia',  sl_qd:20000, sl_nhap:20000, tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-005', mang:'SBT mới', so:'83/QĐ-HEID',  ngay:'18/02/2026', nxb:'NXB ĐH Sư phạm',   sl_qd:12000, sl_nhap:12000, tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-006', mang:'GDQPAN',  so:'84/QĐ-HEID',  ngay:'20/02/2026', nxb:'NXB Giáo dục VN',  sl_qd:10000, sl_nhap:8000,  tinh_trang:'Đang in'},
+  {ma:'QD-IN-007', mang:'STK',     so:'118/QĐ-HEID', ngay:'05/03/2026', nxb:'NXB Giáo dục VN',  sl_qd:8000,  sl_nhap:8000,  tinh_trang:'Hoàn thành'},
+  {ma:'QD-IN-008', mang:'STA',     so:'119/QĐ-HEID', ngay:'10/03/2026', nxb:'NXB ĐH Quốc gia',  sl_qd:15000, sl_nhap:10000, tinh_trang:'Đang in'},
+  {ma:'QD-IN-009', mang:'SBT mới', so:'156/QĐ-HEID', ngay:'08/04/2026', nxb:'NXB ĐH Sư phạm',   sl_qd:10000, sl_nhap:5000,  tinh_trang:'Đang in'},
+  {ma:'QD-IN-010', mang:'STK',     so:'157/QĐ-HEID', ngay:'15/04/2026', nxb:'NXB Giáo dục VN',  sl_qd:7000,  sl_nhap:4000,  tinh_trang:'Đang in'},
+];
+
+// Chi tiết các lần đặt mua (mock)
+const MUA_LOG=[
+  {ma:'DM-001', mang:'SGK',     ncc:'NXB Giáo dục VN',    ngay:'08/01/2026', sl_dm:18000, sl_nhap:18000, tinh_trang:'Hoàn thành', han:'15/02/2026'},
+  {ma:'DM-002', mang:'SBT NXB', ncc:'NXB ĐH Sư phạm',    ngay:'10/01/2026', sl_dm:10000, sl_nhap:10000, tinh_trang:'Hoàn thành', han:'20/02/2026'},
+  {ma:'DM-003', mang:'SGK',     ncc:'NXB Giáo dục VN',    ngay:'12/02/2026', sl_dm:15000, sl_nhap:14000, tinh_trang:'Hoàn thành', han:'15/03/2026'},
+  {ma:'DM-004', mang:'SBT PN',  ncc:'NXB Phương Nam',     ngay:'18/02/2026', sl_dm:8000,  sl_nhap:5000,  tinh_trang:'Đang giao',  han:'30/03/2026'},
+  {ma:'DM-005', mang:'SGK',     ncc:'NXB Giáo dục VN',    ngay:'10/03/2026', sl_dm:12000, sl_nhap:8000,  tinh_trang:'Đang giao',  han:'20/04/2026'},
+  {ma:'DM-006', mang:'STK mua', ncc:'NXB Kim Đồng',       ngay:'15/03/2026', sl_dm:5000,  sl_nhap:4000,  tinh_trang:'Hoàn thành', han:'15/04/2026'},
+  {ma:'DM-007', mang:'SBT NXB', ncc:'NXB ĐH Sư phạm',    ngay:'05/04/2026', sl_dm:8000,  sl_nhap:5000,  tinh_trang:'Đang giao',  han:'30/05/2026'},
+  {ma:'DM-008', mang:'STK mua', ncc:'NXB Kim Đồng',       ngay:'20/04/2026', sl_dm:3000,  sl_nhap:1000,  tinh_trang:'Chờ hàng',   han:'30/06/2026'},
+  {ma:'DM-009', mang:'SBT PN',  ncc:'NXB Phương Nam',     ngay:'10/05/2026', sl_dm:4000,  sl_nhap:3000,  tinh_trang:'Hoàn thành', han:'30/06/2026'},
+  {ma:'DM-010', mang:'SGK',     ncc:'NXB Giáo dục VN',    ngay:'15/06/2026', sl_dm:10000, sl_nhap:0,     tinh_trang:'Chờ hàng',   han:'31/08/2026'},
+];
+
+const TON_GRP=[
+  {n:'Sách HEID in',c:SH[0],tk_dau:12000,nhap:117000,xuat:80500,m:[
+    {n:'STA',tk_dau:5000,nhap:50000,xuat:35000},{n:'GDQPAN',tk_dau:2500,nhap:28000,xuat:20000},
+    {n:'SBT mới',tk_dau:3000,nhap:35000,xuat:22000},{n:'STK',tk_dau:1500,nhap:12000,xuat:8000}]},
+  {n:'Sách HEID nhập mua',c:SH[2],tk_dau:8000,nhap:83000,xuat:55000,m:[
+    {n:'SGK',tk_dau:4000,nhap:40000,xuat:28000},{n:'SBT NXB',tk_dau:2000,nhap:15000,xuat:12000},
+    {n:'SBT PN',tk_dau:1200,nhap:8000,xuat:7500},{n:'STK mua',tk_dau:800,nhap:5000,xuat:3500}]},
+  {n:'Kho khác',c:'#8FBEEC',tk_dau:1200,nhap:800,xuat:500,m:[]},
+];
+const xuat_bq_thang={in:80500/7,mua:55000/7};
+
+// Nhập xuất tháng — phân tách theo nhóm
+const NK_IN=[22000,11000,18000,8000,16000,14000,7000];
+const NK_MUA=[18000,9000,17000,7000,12000,11000,5000];
+const XK_IN=[8000,15000,7000,14000,11000,13000,7500];
+const XK_MUA=[7000,12000,5000,12000,8000,10000,5500];
+const NK_M=NK_IN.map((v,i)=>v+NK_MUA[i]);
+const XK_M=XK_IN.map((v,i)=>v+XK_MUA[i]);
+
+const TUAN_LABELS=['T1(01/01)','T2(08/01)','T3(15/01)','T4(22/01)','T1(05/02)','T2(12/02)','T3(19/02)',
+  'T1(05/03)','T2(12/03)','T3(19/03)','T4(26/03)','T1(02/04)','T2(09/04)','T3(16/04)',
+  'T4(23/04)','T1(07/05)','T2(14/05)','T3(21/05)','T4(28/05)','T1(04/06)','T2(11/06)',
+  'T3(18/06)','T4(25/06)','T1(02/07)','T2(09/07)','T3(16/07)','T4(23/07)'];
+const NK_W=[10500,9200,8800,11500,4500,4200,4800,8200,8500,9800,8500,3800,3600,3900,
+  3700,6500,6200,7100,8200,5900,6100,6500,6500,2800,2900,3100,3200];
+const XK_W=[3600,3800,3500,4100,6500,6800,6700,2900,3100,3200,2800,6200,6500,7100,
+  5200,4800,5100,5400,5700,5500,5800,6200,5500,2900,3100,3500,3500];
+const NLVT=[22,20,22,22,21,21,23];
+const NK_BQ=NK_M.map((v,i)=>Math.round(v/NLVT[i]));
+const XK_BQ=XK_M.map((v,i)=>Math.round(v/NLVT[i]));
+
+const MANG_BT=[
+  {n:'STA',     kh:568,dktk:132,htbt:389,qdIn:312,gIn:256},
+  {n:'GDQPAN',  kh:280,dktk:42, htbt:195,qdIn:180,gIn:156},
+  {n:'SBT mới', kh:320,dktk:68, htbt:175,qdIn:142,gIn:108},
+  {n:'STK',     kh:120,dktk:18, htbt:72, qdIn:60, gIn:52},
+  {n:'SGK',     kh:210,dktk:34, htbt:138,qdIn:120,gIn:98},
+  {n:'SBT NXB', kh:180,dktk:28, htbt:95, qdIn:78, gIn:62},
+];
+const KH_BT_TOTAL=MANG_BT.reduce((a,x)=>a+x.kh,0);
+const HTBT_TOTAL=MANG_BT.reduce((a,x)=>a+x.htbt,0);
+const QDIn_TOTAL=MANG_BT.reduce((a,x)=>a+x.qdIn,0);
+
+const MON_HOC=['Toán','Tiếng Anh','Ngữ Văn','Tiếng Việt','Khoa học','Lịch sử','Sinh học','Vật lý','Hóa học','Khoa học tự nhiên','Tự nhiên xã hội'];
+const SO_DAHCO=[26420,27319,20050,29050,16480,14520,12450,11750,6450,6940,10250];
+const SO_DUKIEN=[8190,4300,5500,6000,3100,2500,3000,2800,2100,1900,2500];
+const LOP_LABELS=['Lớp 1','Lớp 2','Lớp 3','Lớp 4','Lớp 5','Lớp 6','Lớp 7','Lớp 8','Lớp 9','Lớp 10','Lớp 11','Lớp 12'];
+const SO_LOP_DAHCO=[9259,9448,10274,11546,12760,17820,11546,12600,17720,22516,21390,27188];
+const SO_LOP_DUKIEN=[3250,3400,2800,4150,5128,6380,3128,5409,5528,8280,8568,9629];
+const SO_DAHCO_TOTAL=SO_DAHCO.reduce((a,b)=>a+b,0);
+
+/* ============ TRANG SỐ LƯỢNG IN & ĐẶT MUA ============ */
+(function(){
+  let spMode='in', spChart=null, built=false;
+
+  function renderMode(){
+    const isIn=spMode==='in';
+    const data=isIn?IN_MANG:MUA_MANG;
+    const total=isIn?IN_TOTAL:MUA_TOTAL;
+    const colKH=isIn?'QĐ in':'Đặt mua';
+    const colNH=isIn?'Nhập in':'Nhập mua';
+    const iconCls=isIn?'ti-printer':'ti-shopping-bag';
+
+    el('sp_card_title').innerHTML='<i class="ti '+iconCls+'"></i> '+(isIn?'SÁCH HEID IN — Tổ chức in':'SÁCH HEID NHẬP MUA — Tổ chức đặt mua');
+    el('sp_flow').innerHTML=
+      '<div class="fitem"><div class="flabel">'+(isIn?'Tổng QĐ in':'Tổng đặt mua')+'</div><div class="fval">'+nf(isIn?total.qd:total.dm)+'</div><div class="fsub">nghìn bản</div></div>'
+      +'<span class="fop">→</span>'
+      +'<div class="fitem"><div class="flabel">'+(isIn?'Nhập in thực tế':'Nhập mua thực tế')+'</div><div class="fval">'+nf(total.nhap)+'</div><div class="fsub">nghìn bản</div></div>'
+      +'<span class="fop">→</span>'
+      +'<div class="fitem"><div class="flabel">Tỷ lệ Nhập/'+(isIn?'QĐ':'ĐM')+'</div><div class="fval">'+pp((isIn?total.nhap/total.qd:total.nhap/total.dm)*100)+'%</div><div class="fsub">Mục tiêu ≥85%</div></div>';
+
+    el('sp_tb_head').innerHTML='<tr><th>Mảng sản phẩm</th><th>'+colKH+'</th><th>'+colNH+'</th><th>Tỷ lệ</th><th>Trạng thái</th></tr>';
+    const kh_key=isIn?'qd':'dm';
+    el('sp_tb').innerHTML=data.map(x=>{
+      const r=pct(x.nhap,x[kh_key]);
+      return '<tr><td>'+x.n+'</td><td class="mono">'+nf(x[kh_key])+'</td><td class="mono">'+nf(x.nhap)+'</td>'
+        +'<td><div>'+pp(r)+'%</div><div class="pgbar"><div class="fill" style="width:'+r+'%;background:'+(r>=85?GN:r>=70?OR:RD)+'"></div></div></td>'
+        +'<td>'+statusBdg(r)+'</td></tr>';}).join('')
+      +'<tr class="tot"><td>TỔNG</td><td class="mono">'+nf(data.reduce((a,x)=>a+x[kh_key],0))+'</td><td class="mono">'+nf(total.nhap)+'</td>'
+      +'<td class="mono">'+pp((isIn?total.nhap/total.qd:total.nhap/total.dm)*100)+'%</td><td></td></tr>';
+
+    if(spChart)spChart.destroy();
+    spChart=new Chart(el('sp_chart'),{type:'bar',data:{labels:data.map(x=>x.n),datasets:[
+        {label:colKH,data:data.map(x=>x[kh_key]),backgroundColor:GY,borderRadius:4},
+        {label:colNH,data:data.map(x=>x.nhap),backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,boxHeight:8,font:{size:10}}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.x)+' bản'}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>nf(v)}},y:{grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}}}});
+
+    // Bảng chi tiết log
+    const logs=isIn?IN_LOG:MUA_LOG;
+    el('sp_log_title').innerHTML='<i class="ti ti-clipboard-list"></i> Chi tiết các lần '+(isIn?'in':'đặt mua');
+    if(isIn){
+      el('sp_log_head').innerHTML='<tr><th>Mã QĐ</th><th>Số QĐ</th><th>Mảng SP</th><th>Ngày QĐ</th><th>Nhà in / NXB</th><th>SL QĐ in</th><th>SL đã nhập</th><th>Còn lại</th><th>Trạng thái</th></tr>';
+      el('sp_log_tb').innerHTML=logs.map(x=>{
+        const con=x.sl_qd-x.sl_nhap;
+        const stCls=x.tinh_trang==='Hoàn thành'?'bG':x.tinh_trang==='Đang in'?'bM':'bB';
+        return '<tr><td>'+x.ma+'</td><td>'+x.so+'</td><td>'+x.mang+'</td><td>'+x.ngay+'</td><td>'+x.nxb+'</td>'
+          +'<td class="mono">'+nf(x.sl_qd)+'</td><td class="mono">'+nf(x.sl_nhap)+'</td>'
+          +'<td class="mono'+(con>0?' wn':'')+'">'+nf(con)+'</td>'
+          +'<td><span class="bdg '+stCls+'">'+x.tinh_trang+'</span></td></tr>';}).join('')
+        +'<tr class="tot"><td colspan="5">TỔNG</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_qd,0))+'</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_nhap,0))+'</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_qd-x.sl_nhap,0))+'</td><td></td></tr>';
+      el('sp_log_note').innerHTML='SL QĐ in = tổng số lượng được duyệt in theo từng quyết định. SL đã nhập = số lượng thực tế đã nhập kho từ nhà in. Còn lại = SL QĐ − SL đã nhập.';
+    } else {
+      el('sp_log_head').innerHTML='<tr><th>Mã ĐM</th><th>Mảng SP</th><th>Nhà cung cấp</th><th>Ngày đặt</th><th>Hạn giao</th><th>SL đặt</th><th>SL đã nhập</th><th>Còn lại</th><th>Trạng thái</th></tr>';
+      el('sp_log_tb').innerHTML=logs.map(x=>{
+        const con=x.sl_dm-x.sl_nhap;
+        const stCls=x.tinh_trang==='Hoàn thành'?'bG':x.tinh_trang==='Đang giao'?'bM':'bB';
+        return '<tr><td>'+x.ma+'</td><td>'+x.mang+'</td><td>'+x.ncc+'</td><td>'+x.ngay+'</td><td>'+x.han+'</td>'
+          +'<td class="mono">'+nf(x.sl_dm)+'</td><td class="mono">'+nf(x.sl_nhap)+'</td>'
+          +'<td class="mono'+(con>0?' wn':'')+'">'+nf(con)+'</td>'
+          +'<td><span class="bdg '+stCls+'">'+x.tinh_trang+'</span></td></tr>';}).join('')
+        +'<tr class="tot"><td colspan="5">TỔNG</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_dm,0))+'</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_nhap,0))+'</td>'
+        +'<td class="mono">'+nf(logs.reduce((a,x)=>a+x.sl_dm-x.sl_nhap,0))+'</td><td></td></tr>';
+      el('sp_log_note').innerHTML='SL đặt = số lượng đã ký hợp đồng/đặt cọc với nhà cung cấp. SL đã nhập = số lượng thực tế nhận được và nhập kho. Còn lại = SL đặt − SL đã nhập.';
+    }
+  }
+
+  window.spBuild=function(){
+    el('sp_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng SL nhập kho</div><div class="big" style="color:var(--color-text-info)">'+nf(IN_TOTAL.nhap+MUA_TOTAL.nhap)+'</div>'
+      +'<div class="row"><span class="l">HEID In</span><span class="v">'+nf(IN_TOTAL.nhap)+'</span></div>'
+      +'<div class="row"><span class="l">HEID Nhập mua</span><span class="v">'+nf(MUA_TOTAL.nhap)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng QĐ in</div><div class="big" style="color:var(--color-text-info)">'+nf(IN_TOTAL.qd)+'</div>'
+      +'<div class="row"><span class="l">Tỷ lệ Nhập/QĐ</span><span class="v">'+pp(IN_TOTAL.nhap/IN_TOTAL.qd*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng đặt mua</div><div class="big" style="color:var(--color-text-info)">'+nf(MUA_TOTAL.dm)+'</div>'
+      +'<div class="row"><span class="l">Tỷ lệ Nhập/ĐM</span><span class="v">'+pp(MUA_TOTAL.nhap/MUA_TOTAL.dm*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Số lần in trong kỳ</div><div class="big" style="color:var(--color-text-info)">'+IN_LOG.length+'</div>'
+      +'<div class="row"><span class="l">Đang in</span><span class="v">'+IN_LOG.filter(x=>x.tinh_trang==='Đang in').length+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Số lần đặt mua</div><div class="big" style="color:var(--color-text-info)">'+MUA_LOG.length+'</div>'
+      +'<div class="row"><span class="l">Đang giao / Chờ</span><span class="v">'+MUA_LOG.filter(x=>x.tinh_trang!=='Hoàn thành').length+'</span></div></div>';
+
+    renderMode();
+    if(built)return;
+    document.querySelectorAll('.sptab').forEach(b=>b.addEventListener('click',()=>{
+      spMode=b.dataset.v;
+      document.querySelectorAll('.sptab').forEach(x=>x.classList.toggle('on',x===b));
+      renderMode();
+    }));
+    built=true;
+  };
+})();
+
+/* ============ TRANG TỒN KHO ============ */
+(function(){
+  let built=false;
+  window.invBuild=function(){
+    const tkIn=TON_GRP[0].tk_dau+TON_GRP[0].nhap-TON_GRP[0].xuat;
+    const tkMua=TON_GRP[1].tk_dau+TON_GRP[1].nhap-TON_GRP[1].xuat;
+    const tkKhac=TON_GRP[2].tk_dau+TON_GRP[2].nhap-TON_GRP[2].xuat;
+    const tkTong=tkIn+tkMua+tkKhac;
+    el('inv_flow').innerHTML=
+      '<div class="fitem"><div class="flabel">Tồn kho sách in</div><div class="fval">'+nf(tkIn)+'</div><div class="fsub">nghìn bản</div></div>'
+      +'<span class="fop">+</span>'
+      +'<div class="fitem"><div class="flabel">Tồn kho nhập mua</div><div class="fval">'+nf(tkMua)+'</div><div class="fsub">nghìn bản</div></div>'
+      +'<span class="fop">+</span>'
+      +'<div class="fitem"><div class="flabel">Kho khác</div><div class="fval">'+nf(tkKhac)+'</div><div class="fsub">nghìn bản</div></div>'
+      +'<span class="feq">=</span>'
+      +'<div class="fitem"><div class="flabel">Tổng tồn kho</div><div class="fval" style="font-size:26px">'+nf(tkTong)+'</div><div class="fsub">nghìn bản</div></div>';
+
+    el('inv_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tồn kho cuối kỳ</div><div class="big" style="color:var(--color-text-info)">'+nf(tkTong)+'</div><div class="row"><span class="l">Sách In / Nhập mua</span><span class="v">'+nf(tkIn)+' / '+nf(tkMua)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tồn kho HEID In</div><div class="big up">'+nf(tkIn)+'</div><div class="row"><span class="l">Đáp ứng BQ</span><span class="v">'+pp(tkIn/xuat_bq_thang.in)+' tháng</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tồn kho nhập mua</div><div class="big wn">'+nf(tkMua)+'</div><div class="row"><span class="l">Đáp ứng BQ</span><span class="v">'+pp(tkMua/xuat_bq_thang.mua)+' tháng</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng nhập trong kỳ</div><div class="big" style="color:var(--color-text-info)">'+nf(TON_GRP.reduce((a,g)=>a+g.nhap,0))+'</div><div class="row"><span class="l">Tổng xuất</span><span class="v">'+nf(TON_GRP.reduce((a,g)=>a+g.xuat,0))+'</span></div></div>';
+
+    function renderTb(){
+      let h='';
+      TON_GRP.forEach((g,gi)=>{
+        const ck=g.tk_dau+g.nhap-g.xuat;
+        const da=pp(ck/(g.xuat/7));
+        const daBdg=parseFloat(da)>=2?'bG':parseFloat(da)>=1?'bM':'bD';
+        h+='<tr style="background:var(--color-background-secondary);cursor:pointer" onclick="(function(gi){document.querySelectorAll(\'.inv_sub_\'+gi).forEach(function(x){x.style.display=x.style.display===\'none\'?\'table-row\':\'none\'});})('+gi+')">'
+          +'<td style="font-weight:600">'+g.n+'</td>'
+          +'<td class="mono" style="font-weight:600">'+nf(g.tk_dau)+'</td>'
+          +'<td class="mono" style="font-weight:600">'+nf(g.nhap)+'</td>'
+          +'<td class="mono" style="font-weight:600">'+nf(g.xuat)+'</td>'
+          +'<td class="mono" style="font-weight:600;color:var(--color-text-info)">'+nf(ck)+'</td>'
+          +'<td><span class="bdg '+daBdg+'">'+da+' th</span></td></tr>';
+        g.m.forEach(x=>{
+          const tk=x.tk_dau+x.nhap-x.xuat;
+          const da2=pp(tk/(x.xuat/7));
+          h+='<tr class="inv_sub_'+gi+'" style="display:none"><td style="padding-left:28px;color:var(--color-text-secondary)">'+x.n+'</td>'
+            +'<td class="mono">'+nf(x.tk_dau)+'</td><td class="mono">'+nf(x.nhap)+'</td><td class="mono">'+nf(x.xuat)+'</td>'
+            +'<td class="mono" style="color:var(--color-text-info)">'+nf(tk)+'</td>'
+            +'<td><span class="bdg '+(parseFloat(da2)>=2?'bG':parseFloat(da2)>=1?'bM':'bD')+'">'+da2+' th</span></td></tr>';
+        });
+      });
+      const tkT=TON_GRP.reduce((a,g)=>a+(g.tk_dau+g.nhap-g.xuat),0);
+      h+='<tr class="tot"><td>TỔNG CỘNG</td>'
+        +'<td class="mono">'+nf(TON_GRP.reduce((a,g)=>a+g.tk_dau,0))+'</td>'
+        +'<td class="mono">'+nf(TON_GRP.reduce((a,g)=>a+g.nhap,0))+'</td>'
+        +'<td class="mono">'+nf(TON_GRP.reduce((a,g)=>a+g.xuat,0))+'</td>'
+        +'<td class="mono" style="color:var(--color-text-info)">'+nf(tkT)+'</td><td></td></tr>';
+      el('inv_tb').innerHTML=h;
+    }
+    renderTb();
+
+    if(built)return;
+    const grpTk=TON_GRP.map(g=>g.tk_dau+g.nhap-g.xuat);
+    new Chart(el('inv_c1'),{type:'doughnut',data:{labels:TON_GRP.map(g=>g.n),datasets:[{data:grpTk,backgroundColor:TON_GRP.map(g=>g.c),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:14,font:{size:11}}},
+          tooltip:{callbacks:{label:c=>c.label+': '+nf(c.parsed)+' ngh bản ('+pp(c.parsed/grpTk.reduce((a,b)=>a+b,0)*100)+'%)'}}}}});
+    const bangMang=TON_GRP.slice(0,2).flatMap(g=>g.m).map(x=>({n:x.n,v:x.tk_dau+x.nhap-x.xuat}));
+    new Chart(el('inv_c2'),{type:'bar',data:{labels:bangMang.map(x=>x.n),datasets:[{data:bangMang.map(x=>x.v),backgroundColor:BL,borderRadius:4}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>nf(c.parsed.x)+' ngh bản'}}},
+        scales:{x:{grid:{color:grid},ticks:{callback:v=>nf(v)}},y:{grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}}}});
+    built=true;
+  };
+})();
+
+/* ============ TRANG NHẬP - XUẤT KHO ============ */
+(function(){
+  let built=false, c1, c1mode='month';
+  window.trBuild=function(){
+    el('tr_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng SL nhập kho</div><div class="big" style="color:var(--color-text-info)">'+nf(NK_M.reduce((a,b)=>a+b,0))+'</div>'
+      +'<div class="row"><span class="l">BQ / tháng</span><span class="v">'+nf(Math.round(NK_M.reduce((a,b)=>a+b,0)/7))+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tổng SL xuất kho</div><div class="big" style="color:var(--color-text-info)">'+nf(XK_M.reduce((a,b)=>a+b,0))+'</div>'
+      +'<div class="row"><span class="l">BQ / tháng</span><span class="v">'+nf(Math.round(XK_M.reduce((a,b)=>a+b,0)/7))+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Nhập BQ / ngày</div><div class="big" style="color:var(--color-text-info)">'+nf(Math.round(NK_M.reduce((a,b)=>a+b,0)/NLVT.reduce((a,b)=>a+b,0)))+'</div>'
+      +'<div class="row"><span class="l">Tháng cao nhất (T01)</span><span class="v">'+nf(NK_BQ[0])+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Xuất BQ / ngày</div><div class="big" style="color:var(--color-text-info)">'+nf(Math.round(XK_M.reduce((a,b)=>a+b,0)/NLVT.reduce((a,b)=>a+b,0)))+'</div>'
+      +'<div class="row"><span class="l">Tháng cao nhất (T02)</span><span class="v">'+nf(XK_BQ[1])+'</span></div></div>';
+
+    // Bảng chi tiết nhập xuất
+    el('tr_detail_tb').innerHTML=MON.map((m,i)=>{
+      const tnk=NK_IN[i]+NK_MUA[i], txk=XK_IN[i]+XK_MUA[i], cl=tnk-txk;
+      return '<tr><td style="font-weight:500">'+m+' / 2026</td>'
+        +'<td class="mono">'+nf(NK_IN[i])+'</td><td class="mono">'+nf(NK_MUA[i])+'</td>'
+        +'<td class="mono" style="font-weight:600;color:var(--color-text-info)">'+nf(tnk)+'</td>'
+        +'<td class="mono">'+nf(XK_IN[i])+'</td><td class="mono">'+nf(XK_MUA[i])+'</td>'
+        +'<td class="mono" style="font-weight:600;color:var(--color-text-info)">'+nf(txk)+'</td>'
+        +'<td class="mono '+(cl>=0?'up':'dn')+'" style="font-weight:600">'+(cl>=0?'+':'')+nf(cl)+'</td></tr>';}).join('')
+      +'<tr class="tot"><td>TỔNG</td>'
+      +'<td class="mono">'+nf(NK_IN.reduce((a,b)=>a+b,0))+'</td><td class="mono">'+nf(NK_MUA.reduce((a,b)=>a+b,0))+'</td>'
+      +'<td class="mono">'+nf(NK_M.reduce((a,b)=>a+b,0))+'</td>'
+      +'<td class="mono">'+nf(XK_IN.reduce((a,b)=>a+b,0))+'</td><td class="mono">'+nf(XK_MUA.reduce((a,b)=>a+b,0))+'</td>'
+      +'<td class="mono">'+nf(XK_M.reduce((a,b)=>a+b,0))+'</td>'
+      +'<td class="mono '+(NK_M.reduce((a,b)=>a+b,0)-XK_M.reduce((a,b)=>a+b,0)>=0?'up':'dn')+'" style="font-weight:600">'+nf(NK_M.reduce((a,b)=>a+b,0)-XK_M.reduce((a,b)=>a+b,0))+'</td></tr>';
+
+    if(built)return;
+    c1=new Chart(el('tr_c1'),{type:'bar',data:{labels:MON,datasets:[
+        {label:'Nhập kho',data:NK_M.slice(),backgroundColor:BL,borderRadius:4},
+        {label:'Xuất kho',data:XK_M.slice(),backgroundColor:GN,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' ngh bản'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},grace:'12%',ticks:{callback:v=>nf(v)}}}}});
+    document.querySelectorAll('.trview').forEach(b=>b.addEventListener('click',()=>{
+      c1mode=b.dataset.v;
+      c1.data.datasets[0].data=c1mode==='cumu'?cumu(NK_M.slice()):NK_M.slice();
+      c1.data.datasets[1].data=c1mode==='cumu'?cumu(XK_M.slice()):XK_M.slice();
+      c1.update();
+      document.querySelectorAll('.trview').forEach(x=>x.classList.toggle('on',x===b));
+    }));
+    new Chart(el('tr_c2'),{type:'bar',data:{labels:TUAN_LABELS,datasets:[
+        {label:'Nhập kho',data:NK_W,backgroundColor:BLL,borderRadius:2},
+        {label:'Xuất kho',data:XK_W,backgroundColor:OR,borderRadius:2}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' bản'}}},
+        scales:{x:{grid:{display:false},ticks:{maxTicksLimit:7,font:{size:8.5}}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    new Chart(el('tr_c3'),{type:'bar',data:{labels:MON,datasets:[{data:NK_BQ,backgroundColor:BL,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>nf(c.parsed.y)+' bản / ngày'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    new Chart(el('tr_c4'),{type:'bar',data:{labels:MON,datasets:[{data:XK_BQ,backgroundColor:GN,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>nf(c.parsed.y)+' bản / ngày'}}},
+        scales:{x:{grid:{display:false}},y:{grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+    built=true;
+  };
+})();
+
+/* ============ TRANG PHÁT TRIỂN NỘI DUNG ============ */
+(function(){
+  let scope='paper', built={paper:false,digital:false};
+
+  function paperBuild(){
+    const bt_st=[
+      {n:'Đang triển khai',v:MANG_BT.reduce((a,x)=>a+x.dktk,0),c:BLL},
+      {n:'Đã hoàn thành BT',v:MANG_BT.reduce((a,x)=>a+x.htbt,0)-MANG_BT.reduce((a,x)=>a+x.qdIn,0),c:OR},
+      {n:'Đã ra QĐ in',v:QDIn_TOTAL-MANG_BT.reduce((a,x)=>a+x.gIn,0),c:NV},
+      {n:'Đã giao in',v:MANG_BT.reduce((a,x)=>a+x.gIn,0),c:GN},
+      {n:'Chưa triển khai',v:KH_BT_TOTAL-MANG_BT.reduce((a,x)=>a+x.dktk+x.htbt,0),c:GY},
+    ];
+    el('ct_paper_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">KH bản thảo</div><div class="big" style="color:var(--color-text-info)">'+nf(KH_BT_TOTAL)+'</div><div class="row"><span class="l">Đơn vị</span><span class="v">bản thảo</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đã hoàn thành BT</div><div class="big up">'+nf(HTBT_TOTAL)+'</div><div class="row"><span class="l">Tỷ lệ</span><span class="v">'+pp(HTBT_TOTAL/KH_BT_TOTAL*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Đã ra QĐ in</div><div class="big" style="color:var(--color-text-info)">'+nf(QDIn_TOTAL)+'</div><div class="row"><span class="l">/ Tổng HT</span><span class="v">'+pp(QDIn_TOTAL/HTBT_TOTAL*100)+'%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tỷ lệ BT / KH</div><div class="big up">'+pp(HTBT_TOTAL/KH_BT_TOTAL*100)+'%</div><div class="row"><span class="l">Mục tiêu cuối năm</span><span class="v">100%</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tỷ lệ QĐ in / HT BT</div><div class="big up">'+pp(QDIn_TOTAL/HTBT_TOTAL*100)+'%</div><div class="row"><span class="l">Mục tiêu</span><span class="v">≥ 80%</span></div></div>';
+    el('ct_pgbars').innerHTML=
+      '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--color-text-secondary)">Tỷ lệ bản thảo hoàn thành</span><b>'+pp(HTBT_TOTAL/KH_BT_TOTAL*100)+'%</b></div><div class="pgbar" style="height:12px"><div class="fill" style="width:'+pp(HTBT_TOTAL/KH_BT_TOTAL*100)+'%;background:'+GN+'"></div></div><div class="s2" style="margin-top:3px">= Bản thảo hoàn thành ÷ Kế hoạch bản thảo</div></div>'
+      +'<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--color-text-secondary)">Tỷ lệ đã ra QĐ in</span><b>'+pp(QDIn_TOTAL/HTBT_TOTAL*100)+'%</b></div><div class="pgbar" style="height:12px"><div class="fill" style="width:'+pp(QDIn_TOTAL/HTBT_TOTAL*100)+'%;background:'+BL+'"></div></div><div class="s2" style="margin-top:3px">= Bản thảo đã ra QĐ in ÷ Bản thảo đã hoàn thành</div></div>';
+    if(!built.paper){
+      new Chart(el('ct_c1'),{type:'doughnut',data:{labels:bt_st.map(x=>x.n),datasets:[{data:bt_st.map(x=>x.v),backgroundColor:bt_st.map(x=>x.c),borderWidth:0}]},
+        options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+          plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:12,font:{size:10.5}}},
+          tooltip:{callbacks:{label:c=>c.label+': '+nf(c.parsed)+' bản thảo ('+pp(c.parsed/KH_BT_TOTAL*100)+'%)'}}}}});
+      built.paper=true;
+    }
+    el('ct_bt_tb').innerHTML=MANG_BT.map(x=>{
+      const r=pct(x.htbt,x.kh);
+      return '<tr><td>'+x.n+'</td><td class="mono">'+nf(x.kh)+'</td><td class="mono">'+nf(x.dktk)+'</td>'
+        +'<td class="mono">'+nf(x.htbt)+'</td><td class="mono">'+nf(x.qdIn)+'</td><td class="mono">'+nf(x.gIn)+'</td>'
+        +'<td><span class="bdg '+(r>=80?'bG':r>=60?'bM':'bD')+'">'+pp(r)+'%</span></td></tr>';}).join('')
+      +'<tr class="tot"><td>TỔNG</td>'
+      +'<td class="mono">'+nf(KH_BT_TOTAL)+'</td>'
+      +'<td class="mono">'+nf(MANG_BT.reduce((a,x)=>a+x.dktk,0))+'</td>'
+      +'<td class="mono">'+nf(HTBT_TOTAL)+'</td>'
+      +'<td class="mono">'+nf(QDIn_TOTAL)+'</td>'
+      +'<td class="mono">'+nf(MANG_BT.reduce((a,x)=>a+x.gIn,0))+'</td>'
+      +'<td><span class="bdg bG">'+pp(HTBT_TOTAL/KH_BT_TOTAL*100)+'%</span></td></tr>';
+  }
+
+  function digitalBuild(){
+    const dg_du=SO_DUKIEN.reduce((a,b)=>a+b,0);
+    el('ct_dg_kpi').innerHTML=
+      '<div class="kpi"><div class="ttl">Tổng câu hỏi đã có</div><div class="big" style="color:var(--color-text-info)">'+nf(SO_DAHCO_TOTAL)+'</div><div class="row"><span class="l">Đơn vị</span><span class="v">câu hỏi</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Dự kiến bổ sung</div><div class="big" style="color:var(--color-text-info)">'+nf(dg_du)+'</div><div class="row"><span class="l">Tổng dự kiến</span><span class="v">'+nf(SO_DAHCO_TOTAL+dg_du)+'</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Số môn học</div><div class="big" style="color:var(--color-text-info)">'+MON_HOC.length+'</div><div class="row"><span class="l">Môn có nhiều nhất</span><span class="v">Toán</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Số lớp</div><div class="big" style="color:var(--color-text-info)">12</div><div class="row"><span class="l">Lớp có nhiều nhất</span><span class="v">Lớp 12</span></div></div>'
+      +'<div class="kpi"><div class="ttl">Tỷ lệ hoàn thành</div><div class="big up">'+pp(SO_DAHCO_TOTAL/(SO_DAHCO_TOTAL+dg_du)*100)+'%</div><div class="row"><span class="l">trên tổng dự kiến</span><span class="v"></span></div></div>';
+
+    if(!built.digital){
+      new Chart(el('ct_c2'),{type:'bar',data:{labels:MON_HOC,datasets:[
+          {label:'Đã có',data:SO_DAHCO,backgroundColor:BL,borderRadius:3,stack:'s'},
+          {label:'Dự kiến bổ sung',data:SO_DUKIEN,backgroundColor:BLL,borderRadius:3,stack:'s'}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,boxHeight:8,font:{size:10}}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.x)+' câu hỏi'}}},
+          scales:{x:{stacked:true,grid:{color:grid},ticks:{callback:v=>nf(v)}},
+                  y:{stacked:true,grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}}}});
+      new Chart(el('ct_c3'),{type:'bar',data:{labels:LOP_LABELS,datasets:[
+          {label:'Đã có',data:SO_LOP_DAHCO,backgroundColor:NV,borderRadius:3,stack:'s'},
+          {label:'Dự kiến',data:SO_LOP_DUKIEN,backgroundColor:BLL,borderRadius:3,stack:'s'}]},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,boxHeight:8,font:{size:10}}},
+          tooltip:{callbacks:{label:c=>c.dataset.label+': '+nf(c.parsed.y)+' câu hỏi'}}},
+          scales:{x:{grid:{display:false}},y:{stacked:true,grid:{color:grid},ticks:{callback:v=>nf(v)}}}}});
+
+      // Chart tỷ lệ hoàn thành theo môn (thay donut mức độ nhận thức)
+      const pctHT=MON_HOC.map((m,i)=>Math.round(SO_DAHCO[i]/(SO_DAHCO[i]+SO_DUKIEN[i])*100));
+      const barColors=pctHT.map(v=>v>=80?GN:v>=60?OR:RD);
+      new Chart(el('ct_c4'),{type:'bar',data:{labels:MON_HOC,datasets:[
+          {label:'Tỷ lệ hoàn thành (%)',data:pctHT,backgroundColor:barColors,borderRadius:4},
+          {label:'Còn lại (%)',data:pctHT.map(v=>100-v),backgroundColor:GY,borderRadius:4,stack:'s'}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},
+          tooltip:{callbacks:{
+            label:c=>c.datasetIndex===0?('Đã có: '+c.parsed.x+'%'):('Còn thiếu: '+c.parsed.x+'%'),
+            afterBody:(items)=>{const i=items[0].dataIndex;return ['Đã có: '+nf(SO_DAHCO[i])+' câu','Dự kiến: '+nf(SO_DUKIEN[i])+' câu'];},
+          }}},
+          scales:{
+            x:{stacked:true,max:100,grid:{color:grid},ticks:{callback:v=>v+'%'}},
+            y:{stacked:true,grid:{display:false},ticks:{crossAlign:'far',font:{size:10}}}
+          }}});
+      built.digital=true;
+    }
+  }
+
+  window.ctBuild=function(){
+    if(scope==='paper')paperBuild(); else digitalBuild();
+    document.querySelectorAll('.ctab').forEach(b=>b.addEventListener('click',()=>{
+      scope=b.dataset.p;
+      document.querySelectorAll('.ctab').forEach(x=>x.classList.toggle('on',x===b));
+      el('ct_paper').style.display=scope==='paper'?'':'none';
+      el('ct_digital').style.display=scope==='digital'?'':'none';
+      if(scope==='paper')paperBuild(); else digitalBuild();
+    }));
+  };
+})();
+
+/* ============ ĐIỀU HƯỚNG ============ */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('page-'+id).style.display='block';
+  document.querySelectorAll('#nav button[data-page]').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+  if(id==='supply'&&window.spBuild)spBuild();
+  if(id==='inventory'&&window.invBuild)invBuild();
+  if(id==='transfer'&&window.trBuild)trBuild();
+  if(id==='content'&&window.ctBuild)ctBuild();
+}
+document.querySelectorAll('#nav button[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+showPage('supply');
+</script>
+</body>
+</html>

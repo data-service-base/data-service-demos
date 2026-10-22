@@ -1,0 +1,22 @@
+{
+  "slug": "sthome-thi-dua-kinh-doanh",
+  "title": "ST Home — Trung tâm điều hành thi đua kinh doanh",
+  "type": "dashboard",
+  "industry": "BĐS - CĐT - Nhà thầu",
+  "department": "Kinh doanh",
+  "description": "Vinh danh, xếp hạng cá nhân, tiến độ liên hệ, chuyển đổi và chất lượng cuộc gọi trong chương trình thi đua.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/STHome/",
+  "source_repo": "https://github.com/tbinh-06/STHome",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "thi đua",
+    "sales",
+    "cuộc gọi"
+  ]
+}

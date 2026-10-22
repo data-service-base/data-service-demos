@@ -1,0 +1,1086 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AIT CORP · Báo cáo tài chính</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+ --bg:#eef2f7;--pan:#fff;--pan2:#f7f9fc;
+ --head:#152238;--head2:#1e3050;
+ --bd:#e3e9f1;--bd2:#d7dee8;
+ --tx:#1b2431;--mut:#7c899b;--fnt:#95a2b3;
+ --bl:#2E6FB0;--bl2:#5b93cf;--bl3:#a8c8e6;
+ --og:#e8a33d;--gr:#3FA875;--rd:#D2564A;--pu:#8b6fb0;
+ --gr-s:#e7f4ee;--rd-s:#fbecec;--og-s:#fdf4dc;--bl-s:#e9f1f9;
+ --sw:236px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 14px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+
+.side{position:fixed;left:0;top:0;bottom:0;width:var(--sw);background:var(--head);color:#fff;display:flex;flex-direction:column;z-index:40;overflow-y:auto}
+.brand{padding:16px 16px 14px;border-bottom:1px solid #2a3d63;display:flex;gap:11px;align-items:center;flex-wrap:wrap}
+.blogo{background:#fff;border-radius:5px;padding:7px 9px;width:104px;height:auto;display:block;flex:none}
+.bnm{font-weight:700;font-size:13.5px;line-height:1.25;font-family:'Archivo'}
+.bsb{font-size:10px;color:#8fa3c4;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.nav{padding:12px 10px;flex:1}
+.nvl{font-size:9.5px;font-weight:700;letter-spacing:1px;color:#7389af;text-transform:uppercase;padding:10px 10px 7px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:6px;color:#c6d3e6;font:600 13px Inter,sans-serif;padding:10px 12px;cursor:pointer;margin-bottom:2px}
+.nv:hover{background:#1e3050;color:#fff}
+.nv.on{background:var(--bl);color:#fff}
+.nv i{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.55;flex:none}
+.nv.on i{opacity:1}
+.sfoot{padding:14px 18px;border-top:1px solid #2a3d63;font-size:11px;color:#8fa3c4}
+
+.main{margin-left:var(--sw)}
+.top{background:#fff;border-bottom:1px solid var(--bd);padding:0 26px;position:sticky;top:0;z-index:31}
+.topin{display:flex;align-items:center;gap:14px;min-height:58px;flex-wrap:wrap}
+.ptit{font-size:17px;font-weight:700;font-family:'Archivo'}
+.psub{font-size:11.5px;color:var(--fnt);margin-top:1px}
+.sp{flex:1}
+.hb{background:var(--pan2);border:1px solid var(--bd);border-radius:20px;padding:6px 13px;font-size:11.5px;color:var(--mut);display:inline-flex;align-items:center;gap:7px}
+.hb i{width:7px;height:7px;border-radius:50%;background:var(--gr);display:block}
+
+/* ---------- FILTER BAR ---------- */
+.fbar{background:#fff;border-bottom:1px solid var(--bd);padding:11px 26px;position:sticky;top:58px;z-index:30;
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.fg{display:flex;align-items:center;gap:6px}
+.fg label{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
+.fbar select{background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;padding:6px 10px;font:500 12.5px Inter,sans-serif;color:var(--tx);cursor:pointer;max-width:290px}
+.fbar select:focus{outline:2px solid var(--bl);outline-offset:-1px}
+.fbtn{background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;padding:6px 13px;font:600 12.5px Inter,sans-serif;color:var(--mut);cursor:pointer}
+.fbtn:hover{border-color:var(--bl);color:var(--bl)}
+.fst{font-size:11.5px;color:var(--fnt);margin-left:auto}
+.fst b{color:var(--bl);font-weight:700}
+
+.wrap{padding:20px 26px 60px}
+.page{display:none}.page.on{display:block}
+.cgrp{display:flex;align-items:center;gap:12px;margin:26px 0 14px;font-size:12px;font-weight:700;font-family:'Archivo';letter-spacing:1.1px;text-transform:uppercase;color:var(--head2)}
+.cgrp:first-of-type{margin-top:4px}
+.cgrp::after{content:"";flex:1;height:1px;background:var(--bd2)}
+.cgrp b{background:var(--head);color:#fff;width:21px;height:21px;border-radius:4px;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.note{background:var(--bl-s);border-left:3px solid var(--bl);padding:10px 14px;border-radius:0 6px 6px 0;font-size:12.5px;color:#3b4a63;margin-bottom:16px}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--pan);border:1px solid var(--bd);border-left:3.5px solid var(--bl);border-radius:7px;padding:15px 17px}
+.kpi.g{border-left-color:var(--gr)}.kpi.o{border-left-color:var(--og)}.kpi.r{border-left-color:var(--rd)}
+.kl{font-size:10.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.kv{font-size:29px;font-weight:800;font-family:'Archivo';letter-spacing:-.6px;margin:7px 0 4px;line-height:1.1}
+.kv u{font-size:13px;font-weight:600;color:var(--mut);text-decoration:none;margin-left:4px}
+.kd{font-size:11.5px;color:var(--mut)}
+.up{color:var(--gr);font-weight:600}.dn{color:var(--rd);font-weight:600}
+.row{display:grid;gap:16px;margin-bottom:16px}
+.c2{grid-template-columns:1fr 1fr}.c21{grid-template-columns:1.65fr 1fr}.c12{grid-template-columns:1fr 1.65fr}
+.card{background:var(--pan);border:1px solid var(--bd);border-radius:7px;padding:15px 17px 17px}
+.ct{font-size:14px;font-weight:700;font-family:'Archivo';display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ct::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--bl);flex:none}
+.cs{font-size:11.5px;color:var(--fnt);margin:4px 0 13px;padding-left:15px}
+.cv{position:relative;height:275px}.cv.lg{height:335px}
+.seg{display:inline-flex;background:var(--pan2);border:1px solid var(--bd2);border-radius:6px;overflow:hidden;margin-left:auto}
+.seg button{background:none;border:0;padding:5px 12px;font:600 11.5px Inter,sans-serif;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--bl);color:#fff}
+.stabs{display:flex;gap:3px;border-bottom:1px solid var(--bd);margin-bottom:16px;overflow-x:auto}
+.stab{background:none;border:0;border-bottom:2.5px solid transparent;padding:11px 17px;font:600 13.5px Inter,sans-serif;color:var(--mut);cursor:pointer;white-space:nowrap}
+.stab:hover{color:var(--tx)}.stab.on{color:var(--bl);border-bottom-color:var(--bl)}
+.spane{display:none}.spane.on{display:block}
+table{width:100%;border-collapse:collapse;font-size:12.6px}
+th{background:var(--pan2);font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--mut);text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd2);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--bd)}
+tbody tr:hover{background:var(--pan2)}
+.n{text-align:right;font-variant-numeric:tabular-nums;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.8px}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:var(--head2);font-weight:600;white-space:nowrap}
+tr.tot td{background:#eef3f9;font-weight:700;border-top:1.5px solid var(--bd2)}
+.frz th:first-child,.frz td:first-child{position:sticky;left:0;background:#fff;z-index:2;box-shadow:1px 0 0 var(--bd)}
+.frz th:first-child{background:var(--pan2);z-index:3}
+.frz tbody tr:hover td:first-child{background:var(--pan2)}
+.frz tr.tot td:first-child{background:#eef3f9}
+.scr{overflow-x:auto}
+.empty{padding:26px;text-align:center;color:var(--fnt);font-size:12.5px}
+.pill{display:inline-block;font-size:10.3px;font-weight:700;padding:3px 9px;border-radius:12px;white-space:nowrap}
+.p-g{background:var(--gr-s);color:#2b7351}.p-o{background:var(--og-s);color:#8a6420}
+.p-r{background:var(--rd-s);color:#a83c37}.p-b{background:var(--bl-s);color:#245c8f}
+.p-n{background:#eef2f7;color:#7c899b}
+.bar{height:7px;background:#e7ecf3;border-radius:4px;overflow:hidden;min-width:58px}
+.bar i{display:block;height:100%;border-radius:4px}
+.tl{display:flex;gap:2px;margin-top:5px}
+.tl span{flex:1;height:18px;border-radius:2px;background:#e7ecf3;position:relative}
+.tl span.dn2{background:var(--bl)}.tl span.ac{background:var(--og)}
+.tl span:hover::after{content:attr(data-s);position:absolute;bottom:23px;left:50%;transform:translateX(-50%);background:var(--head);color:#fff;font-size:10.5px;padding:4px 8px;border-radius:4px;white-space:nowrap;z-index:5}
+.tlk{display:flex;gap:16px;font-size:11.5px;color:var(--mut);margin-top:12px;flex-wrap:wrap}
+.tlk b{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.ntw{display:grid;grid-template-columns:250px 1fr;gap:18px}
+.ntnav{border-right:1px solid var(--bd);padding-right:14px;max-height:430px;overflow-y:auto}
+.ntb{display:block;width:100%;text-align:left;background:none;border:0;border-left:2.5px solid transparent;padding:9px 11px;cursor:pointer;border-radius:0 5px 5px 0;margin-bottom:2px}
+.ntb:hover{background:var(--pan2)}
+.ntb.on{background:var(--bl-s);border-left-color:var(--bl)}
+.ntb u{display:block;font-family:ui-monospace,Menlo,monospace;font-size:10.7px;color:var(--head2);font-weight:600;text-decoration:none}
+.ntb span{display:block;font-size:11.8px;color:var(--mut);margin-top:2px}
+.ntp{max-height:430px;overflow-y:auto}
+.stp{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--bd)}
+.stp b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none;background:#e7ecf3;color:var(--mut)}
+.stp.ok b{background:var(--gr);color:#fff}.stp.nt b{background:var(--bl);color:#fff}.stp.dg b{background:var(--og);color:#fff}
+.stp em{font-style:normal;flex:1;font-size:13px;font-weight:600}
+.stp .pc{font-size:11.5px;color:var(--mut);min-width:38px;text-align:right}
+.stp .vl{font-weight:700;min-width:78px;text-align:right;font-variant-numeric:tabular-nums}
+.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.mk{background:var(--pan2);border:1px solid var(--bd);border-radius:6px;padding:11px 13px}
+.mk u{display:block;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);text-decoration:none}
+.mk b{display:block;font-size:20px;font-weight:800;margin-top:4px;letter-spacing:-.4px}
+.mk b small{font-size:11px;font-weight:600;color:var(--mut)}
+
+.k5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.k5c{background:var(--pan);border:1px solid var(--bd);border-radius:7px;padding:13px 15px}
+.k5c .ttl{font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mut)}
+.k5c .big{font-size:24px;font-weight:800;letter-spacing:-.5px;margin:6px 0 8px;line-height:1.1}
+.k5c .big small{font-size:12px;font-weight:600;color:var(--mut)}
+.k5c .rw{display:flex;justify-content:space-between;font-size:11.5px;padding:2px 0;gap:8px}
+.k5c .rw .l{color:var(--fnt)}
+.k5c .rw .v{font-weight:600;font-variant-numeric:tabular-nums}
+.lgd{display:flex;gap:15px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin:2px 0 12px;padding-left:15px}
+.lgd i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.s2{font-size:11.5px;font-weight:400;color:var(--fnt)}
+.hm td .hc{border-radius:3px;padding:5px 7px;text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+.hm tr.pr{cursor:pointer}
+.hm tr.pr:hover td:first-child{color:var(--bl)}
+.hm tr.ch td{background:var(--pan2);font-size:12px}
+.hm tr.ch td:first-child{padding-left:26px;color:var(--mut);font-weight:400;font-family:Inter,sans-serif;font-size:12px}
+.cr{display:inline-block;width:13px;color:var(--fnt);font-size:10px;transition:transform .15s}
+.lk{color:var(--bl);font-weight:600;text-decoration:none;font-family:ui-monospace,Menlo,monospace;font-size:11.3px;white-space:nowrap}
+.lk:hover{text-decoration:underline}
+.lk::after{content:"↗";margin-left:3px;font-size:10px;font-family:Inter,sans-serif}
+tr.pr{cursor:pointer}
+tr.pr:hover td:first-child{color:var(--bl)}
+tr.ch td{background:var(--pan2);font-size:12px}
+tr.ch td:first-child{padding-left:28px;color:var(--tx)}
+.cr.op{transform:rotate(90deg)}
+@media(max-width:1250px){.k5{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:820px){.k5{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.k5{grid-template-columns:1fr}}
+@media(max-width:1250px){.c2,.c21,.c12{grid-template-columns:1fr}.kgrid,.mini{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:980px){:root{--sw:0px}.side{transform:translateX(-100%)}.main{margin-left:0}.ntw{grid-template-columns:1fr}.ntnav{border-right:0;border-bottom:1px solid var(--bd);padding-right:0;padding-bottom:10px;max-height:180px}.fbar{top:0;position:relative}}
+@media(max-width:620px){.kgrid,.mini{grid-template-columns:1fr}}
+</style>
+
+<div class="side">
+  <div class="brand">
+    <img class="blogo" src="data:image/png;base64,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" alt="AIT">
+    <div><div class="bnm">AIT CORP</div><div class="bsb">Báo cáo tài chính</div></div>
+  </div>
+  <div class="nav">
+    <div class="nvl">Báo cáo</div>
+    <button class="nv on" data-p="dt"><i></i>Doanh thu công trình</button>
+    <button class="nv" data-p="cp"><i></i>Chi phí &amp; ngân sách</button>
+    <button class="nv" data-p="cn"><i></i>Công nợ &amp; dòng tiền</button>
+    <div class="nvl" style="margin-top:8px">Báo cáo khác</div>
+    <a class="nv" href="AIT_BaoCao_TongQuan.html" style="text-decoration:none"><i></i>Tổng quan điều hành</a>
+    <a class="nv" href="AIT_BaoCao_TienDo.html" style="text-decoration:none"><i></i>Tiến độ dự án</a>
+    <a class="nv" href="AIT_BaoCao_MuaSam.html" style="text-decoration:none"><i></i>Mua sắm vật tư</a>
+  </div>
+  <div class="sfoot">Nguồn: Base.vn WeWork + WorkFlow<br>Cập nhật 06/08/2026</div>
+</div>
+
+<div class="main">
+<div class="top"><div class="topin">
+  <div><div class="ptit" id="ptit">Doanh thu công trình</div><div class="psub" id="psub">Doanh thu · lợi nhuận gộp · nghiệm thu · điều khoản thanh toán</div></div>
+  <div class="sp"></div>
+  <span class="hb"><i></i>Dữ liệu minh họa</span>
+</div></div>
+
+<div class="fbar">
+  <div class="fg"><label>Dự án</label><select id="f_pj"></select></div>
+  <div class="fg"><label>Từ</label><select id="f_a"></select></div>
+  <div class="fg"><label>Đến</label><select id="f_b"></select></div>
+  <div class="fg" id="fg_fl" style="display:none"><label>Giao dịch</label>
+    <select id="f_fl"><option value="all">Thu và chi</option><option value="Thu">Chỉ thu</option><option value="Chi">Chỉ chi</option></select></div>
+  <button class="fbtn" id="f_rs">Đặt lại</button>
+  <div class="fst" id="f_st"></div>
+</div>
+
+<div class="wrap">
+
+<!-- ══════ DOANH THU ══════ -->
+<div class="page on" id="p-dt">
+  <div class="note">Số liệu minh họa dựng theo luồng quy trình dự án AIT trên Base (WeWork DAWW + WorkFlow AIT-QT-XX). Bộ lọc phía trên áp dụng cho toàn bộ số liệu của trang.</div>
+  <div class="cgrp"><b>1</b>Tổng quan doanh thu</div>
+  <div class="kgrid" style="margin-bottom:16px">
+    <div class="kpi"><div class="kl">Doanh thu</div><div class="kv" id="d1">–<u>tỷ đ</u></div><div class="kd" id="d1d">–</div></div>
+    <div class="kpi g"><div class="kl">Đạt kế hoạch</div><div class="kv" id="d2">–<u>%</u></div><div class="kd" id="d2d">–</div></div>
+    <div class="kpi o"><div class="kl">Lợi nhuận gộp</div><div class="kv" id="d3">–<u>tỷ đ</u></div><div class="kd">Doanh thu trừ chi phí</div></div>
+    <div class="kpi"><div class="kl">Biên lợi nhuận gộp</div><div class="kv" id="d4">–<u>%</u></div><div class="kd">Mục tiêu ngành EPC 15–18%</div></div>
+  </div>
+  <div class="row c2">
+    <div class="card"><div class="ct">Doanh thu thực tế vs kế hoạch<span class="seg" id="sg_dt"><button class="on" data-m="th">Thực tế</button><button data-m="lk">Lũy kế</button></span></div>
+      <div class="cs">Theo tháng — tỷ đồng</div>
+      <div class="cv"><canvas id="ch_dt1"></canvas></div></div>
+    <div class="card"><div class="ct">Doanh thu theo loại công trình</div>
+      <div class="cs">Giá trị hợp đồng vs doanh thu đã ghi nhận — tỷ đồng</div>
+      <div class="cv"><canvas id="ch_dt2"></canvas></div></div>
+  </div>
+  <div class="cgrp"><b>2</b>Doanh thu theo công trình</div>
+  <div class="row c12">
+    <div class="card"><div class="ct">Biên lợi nhuận gộp</div>
+      <div class="cs">Xanh ≥18% · cam 14–18% · đỏ &lt;14%</div>
+      <div class="cv lg"><canvas id="ch_dt3"></canvas></div></div>
+    <div class="card"><div class="ct">Chi tiết doanh thu &amp; lợi nhuận</div>
+      <div class="cs">Doanh thu ghi nhận · chi phí · lợi nhuận gộp · doanh thu còn lại chưa ghi nhận</div>
+      <div class="scr"><table class="frz" id="tb_dt"><thead><tr>
+        <th>Mã dự án</th><th>Loại</th><th class="n">Giá trị HĐ</th><th class="n">Doanh thu</th>
+        <th class="n">Chi phí</th><th class="n">LN gộp</th><th class="n">Biên LN</th><th class="n">DT còn lại</th>
+      </tr></thead><tbody></tbody></table></div></div>
+  </div>
+  <div class="cgrp"><b>3</b>Nghiệm thu &amp; ghi nhận doanh thu</div>
+  <div class="card" style="margin-bottom:16px"><div class="ct">Các đợt nghiệm thu theo hợp đồng</div>
+    <div class="cs">Chọn dự án ở danh sách bên trái để xem các đợt nghiệm thu và tỷ lệ thanh toán tương ứng</div>
+    <div class="ntw"><div class="ntnav" id="ntnav"></div><div class="ntp" id="ntp"></div></div>
+  </div>
+  <div class="card"><div class="ct">Điều khoản thanh toán theo mẫu hợp đồng</div>
+    <div class="cs">4 mẫu áp dụng cho các loại công trình khác nhau · tỷ lệ phần trăm trên giá trị hợp đồng</div>
+    <div class="scr"><table id="tb_tm"><thead><tr>
+      <th>Mẫu</th><th>Loại hợp đồng</th><th>Các mốc thanh toán</th><th class="n">Số dự án</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════ CHI PHÍ ══════ -->
+<div class="page" id="p-cp">
+  <div class="cgrp"><b>1</b>Tổng quan chi phí</div>
+  <div class="kgrid" style="margin-bottom:16px">
+    <div class="kpi"><div class="kl">Chi phí thực tế</div><div class="kv" id="c1">–<u>tỷ đ</u></div><div class="kd" id="c1d">–</div></div>
+    <div class="kpi"><div class="kl">Kế hoạch tương ứng</div><div class="kv" id="c2">–<u>tỷ đ</u></div><div class="kd">Theo dự toán đã duyệt</div></div>
+    <div class="kpi r"><div class="kl">Chênh lệch</div><div class="kv" id="c3">–<u>tỷ đ</u></div><div class="kd" id="c3d">–</div></div>
+    <div class="kpi o"><div class="kl">Dự án vượt kế hoạch</div><div class="kv" id="c4">–</div><div class="kd" id="c4d">–</div></div>
+  </div>
+  <div class="row c2">
+    <div class="card"><div class="ct">Chi phí theo hạng mục — thực tế vs kế hoạch</div>
+      <div class="cs">Đơn vị tỷ đồng · cột đỏ = vượt kế hoạch</div>
+      <div class="cv"><canvas id="ch_cp1"></canvas></div></div>
+    <div class="card"><div class="ct">Chi phí theo tháng</div>
+      <div class="cs">Cột: chi phí ghi nhận · Đường: tỷ lệ chi phí trên doanh thu cùng kỳ</div>
+      <div class="cv"><canvas id="ch_cp2"></canvas></div></div>
+  </div>
+  <div class="cgrp"><b>2</b>Chi phí theo công trình</div>
+  <div class="card"><div class="ct">Phân loại chi phí &amp; dự báo hoàn thành
+      <span class="seg" id="sg_cp"><button class="on" data-m="v">Giá trị</button><button data-m="p">Tỷ trọng</button></span></div>
+    <div class="cs">Ô đậm hơn = chi phí lớn hơn · các cột bên phải so sánh thực tế với ngân sách và dự báo run-rate theo tiến độ hiện tại</div>
+    <div class="scr"><table class="frz" id="tb_hcp"><thead></thead><tbody></tbody></table></div>
+  </div>
+  <div class="cgrp"><b>3</b>Chi tiết khoản chi</div>
+  <div class="card"><div class="ct">Các khoản chi theo hạng mục dự án
+      <span class="seg" id="sg_ct"></span></div>
+    <div class="cs" id="cs_ct">Từng khoản chi gắn với dự án và hạng mục · sắp xếp theo số tiền giảm dần</div>
+    <div class="scr" style="max-height:520px;overflow-y:auto"><table class="frz" id="tb_ct"><thead><tr>
+      <th style="min-width:230px">Dự án / Khoản chi</th><th>Hạng mục</th><th>Chứng từ</th><th>Ngày</th>
+      <th>Đối tượng</th><th class="n">Số tiền</th><th class="n">Tỷ trọng</th><th>Trạng thái</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+</div>
+
+<!-- ══════ CÔNG NỢ ══════ -->
+<div class="page" id="p-cn">
+  <div class="stabs">
+    <button class="stab on" data-s="cn2">Dòng tiền</button>
+    <button class="stab" data-s="cn1">Công nợ</button>
+    <button class="stab" data-s="cn3">Tạm ứng &amp; quyết toán</button>
+  </div>
+
+  <!-- ─────── TAB DÒNG TIỀN ─────── -->
+  <div class="spane on" id="s-cn2">
+    <div class="k5" id="k5_cf"></div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="ct">Thu / chi theo tháng &amp; dự kiến
+        <span class="seg" id="sg_cf1"><button class="on" data-m="month">Theo tháng</button><button data-m="cumu">Lũy kế (số dư)</button></span></div>
+      <div class="lgd"><span><i style="background:var(--gr)"></i>Thu</span><span><i style="background:var(--rd)"></i>Chi</span>
+        <span><i style="background:var(--head2);height:3px;width:16px;border-radius:2px"></i>Dòng tiền thuần</span>
+        <span style="color:var(--fnt)">· cột nhạt = dự kiến</span></div>
+      <div class="cv"><canvas id="cn_cf"></canvas></div>
+    </div>
+    <div class="row c2">
+      <div class="card"><div class="ct">Thu / chi theo đối tượng
+          <span class="seg" id="sg_pty"><button class="on" data-m="thu">Đã thu</button><button data-m="chi">Đã chi</button></span></div>
+        <div class="cs" id="cs_pty">Tiền đã thu từ chủ đầu tư</div>
+        <div class="cv"><canvas id="cn_pty"></canvas></div></div>
+      <div class="card"><div class="ct">Lịch thu / chi dự kiến 30 ngày tới</div>
+        <div class="cs">Các khoản dự kiến phát sinh theo tiến độ nghiệm thu và hạn thanh toán nhà cung cấp</div>
+        <div class="scr" style="max-height:280px;overflow-y:auto"><table id="tb_plan"><thead><tr>
+          <th>Loại</th><th>Nội dung</th><th>Đối tượng</th><th>Ngày</th><th class="n">Số tiền</th>
+        </tr></thead><tbody></tbody></table></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="ct">Dòng tiền theo công trình × tháng <span class="s2">· bấm dòng để mở hạng mục</span>
+        <span class="seg" id="sg_cfm"><button class="on" data-m="net">Ròng</button><button data-m="thu">Tiền thu</button><button data-m="chi">Tiền chi</button></span></div>
+      <div class="lgd" id="cf_hmleg"></div>
+      <div class="scr"><table class="hm frz" id="tb_cfhm"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card"><div class="ct">Nhật ký thu / chi tiền
+        <span class="seg" id="sg_jr"><button class="on" data-m="thu">Nhật ký thu</button><button data-m="chi">Nhật ký chi</button></span>
+        <span class="seg" id="sg_jf" style="margin-left:8px"><button class="on" data-m="all">Tất cả</button><button data-m="CK">Chuyển khoản</button><button data-m="TM">Tiền mặt</button></span></div>
+      <div class="cs" id="jr_sum">–</div>
+      <div class="scr" style="max-height:360px;overflow-y:auto"><table id="tb_jn"><thead><tr>
+        <th>Ngày</th><th>Chứng từ</th><th>Diễn giải</th><th>Đối tượng</th><th>Công trình</th><th class="n">Số tiền</th><th>Hình thức</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ─────── TAB CÔNG NỢ ─────── -->
+  <div class="spane" id="s-cn1">
+    <div class="k5" id="k5_no"></div>
+    <div class="seg" id="sg_ag" style="margin:0 0 16px"><button class="on" data-m="pt">Công nợ phải thu</button><button data-m="ptr">Công nợ phải trả</button></div>
+    <div class="row c2">
+      <div class="card"><div class="ct">Phân tích tuổi nợ</div>
+        <div class="lgd" id="ag_leg"></div>
+        <div class="cv"><canvas id="cn_agL"></canvas></div></div>
+      <div class="card"><div class="ct">Công nợ theo đối tượng — theo tuổi nợ</div>
+        <div class="cs">Xếp theo dư nợ · phần <span style="color:var(--rd);font-weight:600">cam và đỏ</span> là nợ quá hạn trên 60 ngày</div>
+        <div class="cv"><canvas id="cn_agR"></canvas></div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="ct" id="cnhm_t">Công nợ phải thu theo công trình × tuổi nợ <span class="s2">· bấm dòng để mở hạng mục</span></div>
+      <div class="lgd" id="cnhm_leg"></div>
+      <div class="scr"><table class="hm frz" id="tb_cnhm"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card"><div class="ct">Cảnh báo hóa đơn — quá hạn &amp; sắp đến hạn
+        <span class="seg" id="sg_inv"><button class="on" data-m="all">Tất cả</button><button data-m="over">Quá hạn</button><button data-m="soon">Sắp đến hạn</button></span></div>
+      <div class="cs">Gộp cả phải thu và phải trả · sắp xếp theo mức độ quá hạn giảm dần</div>
+      <div class="scr"><table class="frz" id="tb_inv"><thead><tr>
+        <th>Chứng từ</th><th>Đối tượng</th><th>Công trình</th><th>Loại</th><th>Đến hạn</th>
+        <th class="n">Số tiền</th><th>Tình trạng</th><th>Phụ trách</th><th>Cam kết xử lý</th><th class="n">Đã nhắc</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:16px"><div class="ct">Tiến độ thanh toán hợp đồng</div>
+      <div class="cs">So sánh tỷ lệ thu tiền với tiến độ thi công · chênh lệch trên 20 điểm phần trăm là cảnh báo dòng tiền</div>
+      <div class="scr"><table class="frz" id="tb_tt"><thead><tr>
+        <th>Mã dự án</th><th class="n">Giá trị HĐ</th><th class="n">Tạm ứng</th><th class="n">Đã thu</th>
+        <th class="n">Còn phải thu</th><th style="min-width:165px">Tỷ lệ thu tiền</th><th class="n">Tiến độ</th><th class="n">Chênh</th><th>Cảnh báo</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ─────── TAB TẠM ỨNG ─────── -->
+  <div class="spane" id="s-cn3">
+    <div class="cgrp"><b>1</b>Đề xuất tạm ứng</div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="ct">Các khoản đề xuất tạm ứng
+        <span class="seg" id="sg_dx"><button class="on" data-m="all">Tất cả</button><button data-m="need">Cần duyệt</button><button data-m="ing">Đang duyệt</button><button data-m="done">Đã xử lý</button></span></div>
+      <div class="cs">Đề xuất chờ phê duyệt trước khi giải ngân tạm ứng · số ngày chờ trên 14 ngày là cảnh báo tồn đọng</div>
+      <div class="mini" id="mn_dx"></div>
+      <div class="scr"><table class="frz" id="tb_dx"><thead><tr>
+        <th>Mã đề xuất</th><th>Mã dự án</th><th>Người đề xuất</th><th>Nội dung</th>
+        <th class="n">Số tiền</th><th>Ngày đề xuất</th><th class="n">Ngày chờ</th><th>Cấp duyệt</th><th>Trạng thái</th><th>Phiếu Service</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="cgrp"><b>2</b>Tạm ứng &amp; thu hồi</div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="mini" id="mn_tu"></div>
+      <div class="scr"><table class="frz" id="tb_tu"><thead><tr>
+        <th>Mã dự án</th><th class="n">Giá trị HĐ</th><th class="n">Tạm ứng</th><th class="n">% HĐ</th>
+        <th class="n">Đã thu hồi</th><th class="n">Số dư</th><th style="min-width:150px">Tiến độ thu hồi</th>
+        <th class="n">Tiến độ TC</th><th>Đánh giá</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="cgrp"><b>3</b>Quyết toán hợp đồng</div>
+    <div class="card" style="margin-bottom:16px"><div class="ct">Trạng thái quyết toán theo dự án</div>
+      <div class="cs">Giá trị quyết toán so giá trị hợp đồng · chênh lệch phát sinh tăng giảm sau nghiệm thu khối lượng</div>
+      <div class="scr"><table class="frz" id="tb_qt"><thead><tr>
+        <th>Mã dự án</th><th>Tên công trình</th><th class="n">Giá trị HĐ</th><th class="n">Giá trị quyết toán</th>
+        <th class="n">Chênh lệch</th><th>Trạng thái</th><th>Ngày trình</th><th>Ngày duyệt</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="cgrp"><b>4</b>Bảo lãnh ngân hàng</div>
+    <div class="card"><div class="ct">Các bảo lãnh còn hiệu lực</div>
+      <div class="cs">Bảo lãnh tạm ứng · thực hiện hợp đồng · bảo hành — theo dõi hạn hiệu lực để gia hạn hoặc giải phóng kịp thời</div>
+      <div class="scr"><table class="frz" id="tb_bl"><thead><tr>
+        <th>Mã dự án</th><th>Loại bảo lãnh</th><th>Ngân hàng</th><th class="n">Giá trị</th>
+        <th>Ngày phát hành</th><th>Hết hiệu lực</th><th>Trạng thái</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+</div></div>
+
+<script>
+const D={"projects": [["24127-1-TRLI-P-BA3", "TBA 110kV Trảng Lĩnh", "Trạm biến áp", "P.DALĐ", 5, 45.2, 62, 28.0, 23.1, 22.4, 6.8, 22.5, "A", "Công ty Điện lực Bắc Giang"], ["24038-2-PhBi2-P2T-BA3", "ĐZ 220kV Phú Bình 2", "Đường dây", "P.DALĐ", 6, 78.5, 88, 69.1, 57.4, 55.2, 11.8, 58.6, "B", "Tổng công ty Truyền tải điện Quốc gia"], ["24035-1-G5MV-P-SPC", "Mua sắm VTTB G5 Miền Nam", "Mua sắm VTTB", "P.DACĐ", 4, 32.1, 45, 14.4, 12.2, 9.6, 4.8, 11.8, "C", "Tổng công ty Điện lực Miền Nam"], ["24074-1-NASA2-PC-HDPC", "ĐZ 110kV Nam Sách 2", "Đường dây", "P.DALĐ", 5, 56.8, 58, 32.9, 28.6, 24.1, 8.5, 26.9, "B", "Công ty Điện lực Hải Dương"], ["24041-2-GILO-P-NPMB", "TBA 220kV Gia Lộc", "Trạm biến áp", "P.DALĐ", 2, 89.3, 18, 16.1, 13.4, 13.4, 13.4, 13.9, "A", "Ban QLDA công trình điện Miền Bắc"], ["24019-2-TĐHB-PCable-EVNPSC", "Cáp ngầm Thủy điện Hòa Bình", "Cáp ngầm", "P.DACĐ", 6, 41.7, 95, 39.6, 32.1, 30.2, 6.3, 31.5, "D", "EVN Power Service Corp"], ["24059-1-LOBI-P-BA1", "TBA 110kV Lộc Bình", "Trạm biến áp", "P.DAĐCN", 7, 28.4, 100, 28.4, 23.5, 25.6, 4.3, 24.2, "A", "Công ty Điện lực Lạng Sơn"], ["23079-HH3-BG-VISC", "ĐZ 110kV Hải Hà 3", "Đường dây", "P.DAĐCN", 7, 19.6, 100, 19.6, 16.0, 18.6, 2.9, 15.9, "B", "Công ty CP Đầu tư VISC"]], "keys": ["ma", "ten", "loai", "phong", "gd", "hd", "td", "dt", "cp", "thu", "tu", "ns", "mau", "cdt"], "stages": ["Đấu thầu", "Ký hợp đồng", "Thiết kế", "Mua sắm VTTB", "Sản xuất", "Thi công", "Nghiệm thu", "Quyết toán"], "months": ["T1/26", "T2/26", "T3/26", "T4/26", "T5/26", "T6/26", "T7/26"], "dtTh": [24.5, 28.2, 35.6, 41.2, 38.4, 42.1, 38.1], "dtKh": [26.0, 30.0, 34.0, 38.0, 40.0, 40.0, 42.0], "cpTh": [20.8, 23.6, 29.5, 34.1, 31.9, 35.0, 31.4], "cfThu": [22.4, 26.1, 30.5, 28.8, 31.2, 29.4, 30.7], "cfChi": [19.8, 22.4, 28.9, 33.5, 30.1, 34.2, 29.8], "cats": ["Vật tư thiết bị", "Nhân công & thi công", "Sản xuất tủ điện", "Thầu phụ & thuê ngoài", "Chi phí chung"], "heatCP": [[12.0, 3.7, 4.16, 2.08, 1.16], [31.57, 14.92, 1.15, 6.89, 2.87], [10.73, 0.37, 0.24, 0.37, 0.49], [15.73, 7.44, 0.57, 3.43, 1.43], [6.97, 2.14, 2.41, 1.21, 0.67], [19.58, 7.06, 0.32, 3.53, 1.61], [12.22, 3.76, 4.23, 2.11, 1.18], [8.8, 4.16, 0.32, 1.92, 0.8]], "nsCatR": [0.968, 0.953, 1.022, 0.92, 1.052], "heatCF": [[0.92, 1.42, 2.38, 3.12, 4.34, 4.81, 5.41], [5.06, 7.02, 9.3, 9.23, 9.62, 8.03, 6.94], [0.28, 0.4, 0.73, 1.09, 1.77, 2.3, 3.03], [0.93, 1.43, 2.43, 3.26, 4.65, 5.3, 6.1], [0.33, 0.42, 0.76, 1.24, 2.27, 3.36, 5.02], [4.18, 5.13, 5.85, 4.96, 4.43, 3.19, 2.46], [6.19, 5.96, 5.24, 3.42, 2.38, 1.4, 1.01], [4.5, 4.33, 3.81, 2.48, 1.73, 1.02, 0.73]], "heatDT": [[1.08, 1.66, 2.88, 4.42, 5.13, 6.51, 6.32], [5.91, 7.84, 10.86, 12.93, 11.54, 11.32, 8.7], [0.38, 0.58, 1.1, 1.91, 2.55, 3.73, 4.15], [1.19, 1.83, 3.23, 5.07, 6.01, 7.81, 7.76], [0.33, 0.47, 0.93, 1.79, 2.67, 4.39, 5.52], [5.05, 5.93, 7.16, 7.38, 5.73, 4.93, 3.42], [6.24, 5.86, 5.58, 4.55, 2.82, 2.03, 1.32], [4.31, 4.04, 3.85, 3.14, 1.95, 1.4, 0.91]], "heatCPM": [[0.91, 1.4, 2.41, 3.68, 4.25, 5.35, 5.1], [5.1, 6.65, 9.07, 10.7, 9.52, 9.29, 7.07], [0.31, 0.49, 0.94, 1.64, 2.18, 3.16, 3.48], [1.04, 1.62, 2.85, 4.45, 5.26, 6.77, 6.61], [0.26, 0.39, 0.79, 1.51, 2.25, 3.68, 4.52], [4.24, 4.88, 5.79, 5.92, 4.59, 3.94, 2.74], [5.31, 4.86, 4.55, 3.69, 2.29, 1.67, 1.13], [3.62, 3.31, 3.1, 2.51, 1.56, 1.13, 0.77]], "heatCHI": [[0.96, 1.42, 2.43, 3.61, 3.94, 5.11, 4.78], [4.96, 6.31, 8.76, 10.31, 8.89, 9.15, 6.9], [0.35, 0.52, 0.98, 1.65, 2.04, 3.01, 3.2], [1.11, 1.65, 2.88, 4.38, 4.88, 6.47, 6.18], [0.29, 0.43, 0.85, 1.55, 2.13, 3.51, 4.15], [3.99, 4.54, 5.56, 5.76, 4.36, 3.98, 2.73], [4.85, 4.48, 4.43, 3.7, 2.29, 1.76, 1.12], [3.31, 3.05, 3.01, 2.52, 1.56, 1.2, 0.76]], "heatKH": [[1.15, 1.76, 2.75, 4.07, 5.34, 6.18, 6.96], [6.3, 8.37, 10.42, 11.98, 12.08, 10.82, 9.66], [0.4, 0.61, 1.04, 1.75, 2.64, 3.52, 4.55], [1.26, 1.94, 3.08, 4.66, 6.25, 7.41, 8.55], [0.35, 0.5, 0.88, 1.63, 2.74, 4.12, 6.0], [5.37, 6.33, 6.86, 6.84, 5.99, 4.71, 3.8], [6.62, 6.21, 5.31, 4.18, 2.93, 1.92, 1.45], [4.55, 4.29, 3.67, 2.89, 2.02, 1.33, 1.0]], "terms": [["A", "Trạm biến áp trọn gói", [["Tạm ứng hợp đồng", 15], ["Giao vật tư thiết bị", 50], ["Nghiệm thu giai đoạn", 25], ["Quyết toán hợp đồng", 8], ["Bảo hành", 2]]], ["B", "Đường dây tải điện", [["Tạm ứng hợp đồng", 15], ["Nghiệm thu móng cột", 25], ["Nghiệm thu dựng cột", 30], ["Nghiệm thu kéo dây", 22], ["Bảo hành", 8]]], ["C", "Mua sắm vật tư thiết bị", [["Tạm ứng hợp đồng", 15], ["Giao hàng tại kho", 70], ["Nghiệm thu bàn giao", 12], ["Bảo hành", 3]]], ["D", "Cáp ngầm trung — cao thế", [["Tạm ứng hợp đồng", 15], ["Giao cáp & phụ kiện", 45], ["Nghiệm thu lắp đặt", 30], ["Thủ tục đóng điện", 7], ["Bảo hành", 3]]]], "batch": {"24127-1-TRLI-P-BA3": [["Tạm ứng hợp đồng", 15, 6.78, "Đã thu"], ["Giao vật tư thiết bị", 50, 22.6, "Đã nghiệm thu"], ["Nghiệm thu giai đoạn", 25, 11.3, "Chưa tới"], ["Quyết toán hợp đồng", 8, 3.62, "Chưa tới"], ["Bảo hành", 2, 0.9, "Chưa tới"]], "24038-2-PhBi2-P2T-BA3": [["Tạm ứng hợp đồng", 15, 11.78, "Đã thu"], ["Nghiệm thu móng cột", 25, 19.62, "Đã thu"], ["Nghiệm thu dựng cột", 30, 23.55, "Đã thu"], ["Nghiệm thu kéo dây", 22, 17.27, "Đã nghiệm thu"], ["Bảo hành", 8, 6.28, "Đang thực hiện"]], "24035-1-G5MV-P-SPC": [["Tạm ứng hợp đồng", 15, 4.82, "Đã thu"], ["Giao hàng tại kho", 70, 22.47, "Chưa tới"], ["Nghiệm thu bàn giao", 12, 3.85, "Chưa tới"], ["Bảo hành", 3, 0.96, "Chưa tới"]], "24074-1-NASA2-PC-HDPC": [["Tạm ứng hợp đồng", 15, 8.52, "Đã thu"], ["Nghiệm thu móng cột", 25, 14.2, "Đã thu"], ["Nghiệm thu dựng cột", 30, 17.04, "Đang thực hiện"], ["Nghiệm thu kéo dây", 22, 12.5, "Chưa tới"], ["Bảo hành", 8, 4.54, "Chưa tới"]], "24041-2-GILO-P-NPMB": [["Tạm ứng hợp đồng", 15, 13.39, "Đã thu"], ["Giao vật tư thiết bị", 50, 44.65, "Chưa tới"], ["Nghiệm thu giai đoạn", 25, 22.32, "Chưa tới"], ["Quyết toán hợp đồng", 8, 7.14, "Chưa tới"], ["Bảo hành", 2, 1.79, "Chưa tới"]], "24019-2-TĐHB-PCable-EVNPSC": [["Tạm ứng hợp đồng", 15, 6.25, "Đã thu"], ["Giao cáp & phụ kiện", 45, 18.77, "Đã thu"], ["Nghiệm thu lắp đặt", 30, 12.51, "Đã nghiệm thu"], ["Thủ tục đóng điện", 7, 2.92, "Đã nghiệm thu"], ["Bảo hành", 3, 1.25, "Đã nghiệm thu"]], "24059-1-LOBI-P-BA1": [["Tạm ứng hợp đồng", 15, 4.26, "Đã thu"], ["Giao vật tư thiết bị", 50, 14.2, "Đã thu"], ["Nghiệm thu giai đoạn", 25, 7.1, "Đã thu"], ["Quyết toán hợp đồng", 8, 2.27, "Đã nghiệm thu"], ["Bảo hành", 2, 0.57, "Đã nghiệm thu"]], "23079-HH3-BG-VISC": [["Tạm ứng hợp đồng", 15, 2.94, "Đã thu"], ["Nghiệm thu móng cột", 25, 4.9, "Đã thu"], ["Nghiệm thu dựng cột", 30, 5.88, "Đã thu"], ["Nghiệm thu kéo dây", 22, 4.31, "Đã thu"], ["Bảo hành", 8, 1.57, "Đã nghiệm thu"]]}, "quyettoan": [["24059-1-LOBI-P-BA1", 28.4, 28.65, "Đã phê duyệt", "15/06/2026", "08/07/2026"], ["23079-HH3-BG-VISC", 19.6, 19.45, "Đã phê duyệt", "22/04/2026", "19/05/2026"], ["24019-2-TĐHB-PCable-EVNPSC", 41.7, 42.3, "Đang lập hồ sơ", "—", "—"], ["24038-2-PhBi2-P2T-BA3", 78.5, null, "Chưa lập", "—", "—"], ["24127-1-TRLI-P-BA3", 45.2, null, "Chưa đến giai đoạn", "—", "—"], ["24074-1-NASA2-PC-HDPC", 56.8, null, "Chưa đến giai đoạn", "—", "—"], ["24035-1-G5MV-P-SPC", 32.1, null, "Chưa đến giai đoạn", "—", "—"], ["24041-2-GILO-P-NPMB", 89.3, null, "Chưa đến giai đoạn", "—", "—"]], "guarantees": [["24041-2-GILO-P-NPMB", "Bảo lãnh tạm ứng", "Vietcombank", 13.4, "20/03/2026", "31/12/2026", "Còn hiệu lực"], ["24041-2-GILO-P-NPMB", "Bảo lãnh thực hiện HĐ", "Vietcombank", 8.93, "20/03/2026", "30/06/2027", "Còn hiệu lực"], ["24038-2-PhBi2-P2T-BA3", "Bảo lãnh tạm ứng", "BIDV", 11.8, "15/01/2026", "30/09/2026", "Còn hiệu lực"], ["24038-2-PhBi2-P2T-BA3", "Bảo lãnh thực hiện HĐ", "BIDV", 7.85, "15/01/2026", "31/03/2027", "Còn hiệu lực"], ["24074-1-NASA2-PC-HDPC", "Bảo lãnh tạm ứng", "VietinBank", 8.5, "08/02/2026", "31/10/2026", "Còn hiệu lực"], ["24074-1-NASA2-PC-HDPC", "Bảo lãnh thực hiện HĐ", "VietinBank", 5.68, "08/02/2026", "30/04/2027", "Còn hiệu lực"], ["24127-1-TRLI-P-BA3", "Bảo lãnh tạm ứng", "MB Bank", 6.8, "22/01/2026", "30/11/2026", "Còn hiệu lực"], ["24127-1-TRLI-P-BA3", "Bảo lãnh thực hiện HĐ", "MB Bank", 4.52, "22/01/2026", "31/05/2027", "Còn hiệu lực"], ["24019-2-TĐHB-PCable-EVNPSC", "Bảo lãnh thực hiện HĐ", "Techcombank", 4.17, "10/12/2025", "30/09/2026", "Sắp hết hạn"], ["24035-1-G5MV-P-SPC", "Bảo lãnh tạm ứng", "Techcombank", 4.8, "05/03/2026", "31/12/2026", "Còn hiệu lực"], ["24059-1-LOBI-P-BA1", "Bảo lãnh bảo hành", "MB Bank", 1.42, "08/07/2026", "08/07/2027", "Còn hiệu lực"], ["23079-HH3-BG-VISC", "Bảo lãnh bảo hành", "BIDV", 0.98, "19/05/2026", "19/05/2027", "Còn hiệu lực"]], "hm": {"Trạm biến áp": [["Thiết kế & mua sắm VTTB", 0.4], ["Sản xuất tủ điện", 0.25], ["Thi công lắp đặt", 0.25], ["Nghiệm thu & đóng điện", 0.1]], "Đường dây": [["Móng & dựng cột", 0.35], ["Kéo dây & phụ kiện", 0.3], ["Vật tư thiết bị", 0.25], ["Nghiệm thu giai đoạn", 0.1]], "Mua sắm VTTB": [["Đặt hàng & sản xuất", 0.5], ["Giao nhận tại kho", 0.35], ["Nghiệm thu bàn giao", 0.15]], "Cáp ngầm": [["Cáp & phụ kiện", 0.45], ["Thi công tuyến ngầm", 0.35], ["Đấu nối & thí nghiệm", 0.2]]}, "bands": ["0–30 ngày", "31–60 ngày", "61–90 ngày", "Trên 90 ngày"], "fcMonths": ["T8/26*", "T9/26*"], "fcThu": [33.5, 29.8], "fcChi": [31.2, 30.5], "tienDauKy": 18.5, "invoices": [["HĐ-2026/0714", 6, "24127-1-TRLI-P-BA3", "Công ty Điện lực Bắc Giang", "16/07/2026", "15/08/2026", 3.4, 21, "Nguyễn Thu Hà", "20/08/2026", 1], ["HĐ-2026/0602", 5, "24127-1-TRLI-P-BA3", "Công ty Điện lực Bắc Giang", "18/06/2026", "18/07/2026", 2.2, 48, "Nguyễn Thu Hà", "15/08/2026", 2], ["HĐ-2026/0603", 5, "24038-2-PhBi2-P2T-BA3", "Tổng công ty Truyền tải điện Quốc gia", "18/06/2026", "18/07/2026", 8.6, 42, "Phạm Duy Tùng", "18/08/2026", 2], ["HĐ-2026/0719", 6, "24038-2-PhBi2-P2T-BA3", "Tổng công ty Truyền tải điện Quốc gia", "19/07/2026", "18/08/2026", 3.5, 18, "Phạm Duy Tùng", "25/08/2026", 0], ["HĐ-2026/0508", 4, "24038-2-PhBi2-P2T-BA3", "Tổng công ty Truyền tải điện Quốc gia", "08/05/2026", "07/06/2026", 1.8, 75, "Phạm Duy Tùng", "12/08/2026", 3], ["HĐ-2026/0621", 5, "24035-1-G5MV-P-SPC", "Tổng công ty Điện lực Miền Nam", "25/06/2026", "25/07/2026", 3.0, 35, "Lê Thanh Sơn", "22/08/2026", 1], ["HĐ-2026/0526", 4, "24035-1-G5MV-P-SPC", "Tổng công ty Điện lực Miền Nam", "26/05/2026", "25/06/2026", 1.8, 62, "Lê Thanh Sơn", "14/08/2026", 2], ["HĐ-2026/0518", 4, "24074-1-NASA2-PC-HDPC", "Công ty Điện lực Hải Dương", "20/05/2026", "19/06/2026", 4.2, 68, "Đặng Ngọc Trang", "16/08/2026", 3], ["HĐ-2026/0421", 3, "24074-1-NASA2-PC-HDPC", "Công ty Điện lực Hải Dương", "22/04/2026", "22/05/2026", 2.8, 95, "Đặng Ngọc Trang", "10/08/2026", 4], ["HĐ-2026/0711", 6, "24074-1-NASA2-PC-HDPC", "Công ty Điện lực Hải Dương", "12/07/2026", "11/08/2026", 1.8, 25, "Đặng Ngọc Trang", "28/08/2026", 0], ["HĐ-2026/0720", 6, "24041-2-GILO-P-NPMB", "Ban QLDA công trình điện Miền Bắc", "19/07/2026", "18/08/2026", 2.7, 18, "Nguyễn Kim Quý", "26/08/2026", 0], ["HĐ-2026/0412", 3, "24019-2-TĐHB-PCable-EVNPSC", "EVN Power Service Corp", "12/04/2026", "12/05/2026", 5.2, 105, "Trần Như Toàn", "08/08/2026", 5], ["HĐ-2026/0522", 4, "24019-2-TĐHB-PCable-EVNPSC", "EVN Power Service Corp", "22/05/2026", "21/06/2026", 2.6, 72, "Trần Như Toàn", "18/08/2026", 3], ["HĐ-2026/0708", 6, "24019-2-TĐHB-PCable-EVNPSC", "EVN Power Service Corp", "09/07/2026", "08/08/2026", 1.6, 30, "Trần Như Toàn", "24/08/2026", 1], ["HĐ-2026/0723", 6, "24059-1-LOBI-P-BA1", "Công ty Điện lực Lạng Sơn", "23/07/2026", "22/08/2026", 1.6, 14, "P. Tài chính", "30/08/2026", 0], ["HĐ-2026/0610", 5, "24059-1-LOBI-P-BA1", "Công ty Điện lực Lạng Sơn", "10/06/2026", "10/07/2026", 1.2, 58, "P. Tài chính", "20/08/2026", 2], ["HĐ-2026/0502", 4, "23079-HH3-BG-VISC", "Công ty CP Đầu tư VISC", "02/05/2026", "01/06/2026", 1.0, 88, "P. Tài chính", "12/08/2026", 3]], "payables": [["NCC-2026/0742", 6, "24041-2-GILO-P-NPMB", "Siemens Vietnam", "Thiết bị nhất thứ 220kV", "25/08/2026", 6.2, -19, "P. Vật tư", "25/08/2026", 0], ["NCC-2026/0738", 6, "24127-1-TRLI-P-BA3", "Hitachi Energy Vietnam", "Máy cắt 110kV", "21/08/2026", 4.85, -15, "P. Vật tư", "21/08/2026", 0], ["NCC-2026/0715", 6, "24035-1-G5MV-P-SPC", "Thibidi", "Máy biến áp phân phối", "14/08/2026", 3.75, -8, "P. Vật tư", "14/08/2026", 0], ["NCC-2026/0709", 6, "24038-2-PhBi2-P2T-BA3", "Cadivi", "Cáp lực & cáp điều khiển", "08/08/2026", 2.95, -2, "P. Vật tư", "08/08/2026", 1], ["NCC-2026/0704", 6, "24127-1-TRLI-P-BA3", "Eaton Vietnam", "Tủ trung thế 24kV", "03/08/2026", 1.45, 3, "P. Vật tư", "10/08/2026", 1], ["NCC-2026/0625", 5, "24038-2-PhBi2-P2T-BA3", "Hitachi Energy Vietnam", "Rơ le bảo vệ đường dây", "25/07/2026", 4.35, 12, "P. Vật tư", "12/08/2026", 2], ["NCC-2026/0618", 5, "24074-1-NASA2-PC-HDPC", "GE Grid Solutions", "Hệ thống điều khiển", "18/07/2026", 3.2, 19, "P. Vật tư", "15/08/2026", 1], ["NCC-2026/0611", 5, "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm 110kV", "11/07/2026", 2.1, 26, "P. Vật tư", "18/08/2026", 2], ["NCC-2026/0605", 5, "24074-1-NASA2-PC-HDPC", "Cơ khí Trần Phú", "Kết cấu cột thép", "05/07/2026", 1.75, 32, "P. Vật tư", "14/08/2026", 2], ["NCC-2026/0522", 4, "24038-2-PhBi2-P2T-BA3", "Siemens Vietnam", "Thiết bị đóng cắt", "21/06/2026", 2.85, 46, "P. Vật tư", "16/08/2026", 3], ["NCC-2026/0514", 4, "24041-2-GILO-P-NPMB", "GE Grid Solutions", "Tủ điều khiển trung tâm", "13/06/2026", 1.6, 54, "P. Vật tư", "20/08/2026", 2], ["NCC-2026/0506", 4, "24074-1-NASA2-PC-HDPC", "Cadivi", "Cáp điều khiển", "05/06/2026", 0.85, 62, "P. Vật tư", "13/08/2026", 3], ["NCC-2026/0418", 3, "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm đợt 1", "18/05/2026", 1.55, 80, "P. Vật tư", "11/08/2026", 4], ["NCC-2026/0409", 3, "24059-1-LOBI-P-BA1", "Cơ khí Trần Phú", "Giá đỡ & phụ kiện", "09/05/2026", 0.95, 89, "P. Vật tư", "09/08/2026", 4]], "journal": [["28/07/2026", 6, "Thu", "PT-26/0412", "24038-2-PhBi2-P2T-BA3", "Tổng công ty Truyền tải điện Quốc gia", "Thanh toán đợt nghiệm thu kéo dây", 8.6, "CK"], ["26/07/2026", 6, "Chi", "PC-26/0728", "24041-2-GILO-P-NPMB", "Siemens Vietnam", "Đặt cọc thiết bị nhất thứ 220kV", 6.2, "CK"], ["24/07/2026", 6, "Thu", "PT-26/0409", "24019-2-TĐHB-PCable-EVNPSC", "EVN Power Service Corp", "Nghiệm thu lắp đặt cáp ngầm", 5.4, "CK"], ["22/07/2026", 6, "Chi", "PC-26/0724", "24127-1-TRLI-P-BA3", "Hitachi Energy Vietnam", "Thanh toán máy cắt 110kV", 4.85, "CK"], ["17/07/2026", 6, "Thu", "PT-26/0405", "24127-1-TRLI-P-BA3", "Công ty Điện lực Bắc Giang", "Thanh toán giai đoạn thi công", 4.2, "CK"], ["12/07/2026", 6, "Thu", "PT-26/0401", "24059-1-LOBI-P-BA1", "Công ty Điện lực Lạng Sơn", "Quyết toán hợp đồng", 2.3, "CK"], ["08/07/2026", 6, "Chi", "PC-26/0716", "—", "Nội bộ", "Lương và bảo hiểm tháng 6/2026", 4.4, "CK"], ["05/07/2026", 6, "Chi", "PC-26/0712", "24127-1-TRLI-P-BA3", "Chi phí công trường", "Tạm ứng thi công đội lắp đặt", 0.35, "TM"], ["03/07/2026", 6, "Chi", "PC-26/0708", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm 110kV đợt cuối", 4.3, "CK"], ["28/06/2026", 5, "Thu", "PT-26/0388", "24074-1-NASA2-PC-HDPC", "Công ty Điện lực Hải Dương", "Nghiệm thu dựng cột đợt 2", 6.1, "CK"], ["24/06/2026", 5, "Chi", "PC-26/0691", "24074-1-NASA2-PC-HDPC", "Cơ khí Trần Phú", "Kết cấu cột thép đợt 3", 3.1, "CK"], ["19/06/2026", 5, "Chi", "PC-26/0684", "24035-1-G5MV-P-SPC", "Thibidi", "Máy biến áp phân phối lô 2", 3.75, "CK"], ["16/06/2026", 5, "Chi", "PC-26/0679", "24038-2-PhBi2-P2T-BA3", "Chi phí công trường", "Chi phí ăn ở đội thi công", 0.28, "TM"], ["14/06/2026", 5, "Thu", "PT-26/0375", "24038-2-PhBi2-P2T-BA3", "Tổng công ty Truyền tải điện Quốc gia", "Nghiệm thu móng cột đợt 4", 7.85, "CK"], ["09/06/2026", 5, "Chi", "PC-26/0668", "24038-2-PhBi2-P2T-BA3", "Cadivi", "Cáp lực & cáp điều khiển", 2.95, "CK"], ["04/06/2026", 5, "Chi", "PC-26/0661", "24127-1-TRLI-P-BA3", "Eaton Vietnam", "Tủ trung thế 24kV", 2.6, "CK"], ["27/05/2026", 4, "Thu", "PT-26/0352", "24019-2-TĐHB-PCable-EVNPSC", "EVN Power Service Corp", "Giao cáp & phụ kiện đợt 2", 6.75, "CK"], ["21/05/2026", 4, "Chi", "PC-26/0634", "24041-2-GILO-P-NPMB", "GE Grid Solutions", "Hệ thống điều khiển bảo vệ", 3.4, "CK"], ["18/05/2026", 4, "Chi", "PC-26/0629", "24074-1-NASA2-PC-HDPC", "Chi phí công trường", "Thuê máy cẩu dựng cột", 0.42, "TM"], ["15/05/2026", 4, "Thu", "PT-26/0341", "23079-HH3-BG-VISC", "Công ty CP Đầu tư VISC", "Giải phóng bảo lãnh bảo hành", 1.55, "CK"], ["08/05/2026", 4, "Chi", "PC-26/0618", "24074-1-NASA2-PC-HDPC", "Hitachi Energy Vietnam", "Rơ le bảo vệ đường dây", 4.35, "CK"], ["29/04/2026", 3, "Thu", "PT-26/0318", "24074-1-NASA2-PC-HDPC", "Công ty Điện lực Hải Dương", "Nghiệm thu móng cột", 5.2, "CK"], ["22/04/2026", 3, "Chi", "PC-26/0592", "24035-1-G5MV-P-SPC", "Siemens Vietnam", "Thiết bị đóng cắt trung thế", 5.1, "CK"], ["16/04/2026", 3, "Thu", "PT-26/0305", "24127-1-TRLI-P-BA3", "Công ty Điện lực Bắc Giang", "Giao vật tư thiết bị đợt 1", 6.4, "CK"], ["11/04/2026", 3, "Chi", "PC-26/0581", "—", "Chi phí công trường", "Văn phòng phẩm & công tác phí", 0.31, "TM"], ["09/04/2026", 3, "Chi", "PC-26/0577", "—", "Nội bộ", "Chi phí quản lý doanh nghiệp Q2", 3.85, "CK"], ["27/03/2026", 2, "Thu", "PT-26/0281", "24059-1-LOBI-P-BA1", "Công ty Điện lực Lạng Sơn", "Nghiệm thu giai đoạn cuối", 4.65, "CK"], ["18/03/2026", 2, "Chi", "PC-26/0549", "24019-2-TĐHB-PCable-EVNPSC", "LS Vina Cable", "Cáp ngầm 110kV đợt 1", 5.9, "CK"]], "plan30": [[1, "Nghiệm thu kéo dây đợt cuối", "Tổng công ty Truyền tải điện Quốc gia", "24038-2-PhBi2-P2T-BA3", "15/08", 8.5], [1, "Thu hồi nợ quá hạn trên 90 ngày", "EVN Power Service Corp", "24019-2-TĐHB-PCable-EVNPSC", "20/08", 5.2], [1, "Giao vật tư thiết bị đợt 2", "Công ty Điện lực Bắc Giang", "24127-1-TRLI-P-BA3", "22/08", 4.6], [1, "Nghiệm thu dựng cột đợt 3", "Công ty Điện lực Hải Dương", "24074-1-NASA2-PC-HDPC", "28/08", 3.8], [1, "Tạm ứng hợp đồng đợt 2", "Ban QLDA công trình điện Miền Bắc", "24041-2-GILO-P-NPMB", "30/08", 2.7], [0, "Thanh toán thiết bị nhất thứ", "Siemens Vietnam", "24041-2-GILO-P-NPMB", "25/08", 6.2], [0, "Thanh toán máy cắt 110kV", "Hitachi Energy Vietnam", "24127-1-TRLI-P-BA3", "21/08", 4.85], [0, "Lương và bảo hiểm tháng 8", "Nội bộ", "—", "05/09", 4.5], [0, "Máy biến áp phân phối", "Thibidi", "24035-1-G5MV-P-SPC", "14/08", 3.75], [0, "Cáp lực & cáp điều khiển", "Cadivi", "24038-2-PhBi2-P2T-BA3", "08/08", 2.95], [0, "Kết cấu thép thầu phụ", "Cơ khí Trần Phú", "24074-1-NASA2-PC-HDPC", "30/08", 1.75]], "chitiet": [["CP-26/0501", 5, "24127-1-TRLI-P-BA3", "Vật tư thiết bị", "Máy cắt SF6 110kV", "Hitachi Energy Vietnam", "06/06/2026", 7.44, "Đang xử lý"], ["CP-26/0502", 6, "24127-1-TRLI-P-BA3", "Vật tư thiết bị", "Máy biến áp lực 63MVA", "Thibidi", "17/07/2026", 4.56, "Chờ thanh toán"], ["CP-26/0503", 6, "24127-1-TRLI-P-BA3", "Nhân công & thi công", "Lắp dựng cột thép", "Đội thi công số 3", "11/07/2026", 2.29, "Chờ thanh toán"], ["CP-26/0504", 4, "24127-1-TRLI-P-BA3", "Nhân công & thi công", "Kéo rải dây dẫn & dây chống sét", "Đội thi công số 2", "22/05/2026", 1.41, "Đã thanh toán"], ["CP-26/0505", 4, "24127-1-TRLI-P-BA3", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "16/05/2026", 2.58, "Đã thanh toán"], ["CP-26/0506", 5, "24127-1-TRLI-P-BA3", "Sản xuất tủ điện", "Lắp ráp, đấu nối & thử nghiệm tủ", "Nhà máy tủ điện AIT", "27/06/2026", 1.58, "Đang xử lý"], ["CP-26/0507", 5, "24127-1-TRLI-P-BA3", "Thầu phụ & thuê ngoài", "Thuê cẩu & thiết bị nâng hạ", "Cho thuê thiết bị Đại Phát", "21/06/2026", 2.08, "Đang xử lý"], ["CP-26/0508", 6, "24127-1-TRLI-P-BA3", "Chi phí chung", "Chi phí quản lý dự án", "Nội bộ", "26/07/2026", 1.16, "Chờ thanh toán"], ["CP-26/0509", 3, "24038-2-PhBi2-P2T-BA3", "Vật tư thiết bị", "Cáp lực XLPE 110kV", "Cadivi", "13/04/2026", 19.57, "Đã thanh toán"], ["CP-26/0510", 4, "24038-2-PhBi2-P2T-BA3", "Vật tư thiết bị", "Dao cách ly & chống sét van", "Eaton Vietnam", "24/05/2026", 12.0, "Đã thanh toán"], ["CP-26/0511", 4, "24038-2-PhBi2-P2T-BA3", "Nhân công & thi công", "Nhân công lắp đặt thiết bị", "Đội thi công số 1", "18/05/2026", 9.25, "Đã thanh toán"], ["CP-26/0512", 5, "24038-2-PhBi2-P2T-BA3", "Nhân công & thi công", "Thi công móng cột & tiếp địa", "Đội thi công số 2", "07/06/2026", 5.67, "Đang xử lý"], ["CP-26/0513", 5, "24038-2-PhBi2-P2T-BA3", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "23/06/2026", 1.15, "Đang xử lý"], ["CP-26/0514", 3, "24038-2-PhBi2-P2T-BA3", "Thầu phụ & thuê ngoài", "Gia công kết cấu thép, giá đỡ", "Cơ khí Trần Phú", "06/04/2026", 4.27, "Đã thanh toán"], ["CP-26/0515", 4, "24038-2-PhBi2-P2T-BA3", "Thầu phụ & thuê ngoài", "Thầu phụ xây dựng nhà điều hành", "Xây lắp Hoàng Long", "17/05/2026", 2.62, "Đã thanh toán"], ["CP-26/0516", 4, "24038-2-PhBi2-P2T-BA3", "Chi phí chung", "Chi phí lán trại, điện nước", "Nội bộ", "11/05/2026", 2.87, "Đã thanh toán"], ["CP-26/0517", 6, "24035-1-G5MV-P-SPC", "Vật tư thiết bị", "Cáp ngầm 110kV & phụ kiện", "LS Vina Cable", "20/07/2026", 6.65, "Chờ thanh toán"], ["CP-26/0518", 5, "24035-1-G5MV-P-SPC", "Vật tư thiết bị", "Máy biến dòng, biến điện áp", "Siemens Vietnam", "09/06/2026", 4.08, "Đang xử lý"], ["CP-26/0519", 5, "24035-1-G5MV-P-SPC", "Nhân công & thi công", "Kéo rải dây dẫn & dây chống sét", "Đội thi công số 2", "25/06/2026", 0.37, "Đang xử lý"], ["CP-26/0520", 4, "24035-1-G5MV-P-SPC", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "08/05/2026", 0.24, "Đã thanh toán"], ["CP-26/0521", 6, "24035-1-G5MV-P-SPC", "Thầu phụ & thuê ngoài", "Thí nghiệm hiệu chỉnh & đóng điện", "EGRID", "13/07/2026", 0.37, "Chờ thanh toán"], ["CP-26/0522", 5, "24035-1-G5MV-P-SPC", "Chi phí chung", "Chi phí văn phòng công trường", "Nội bộ", "18/06/2026", 0.49, "Đang xử lý"], ["CP-26/0523", 5, "24074-1-NASA2-PC-HDPC", "Vật tư thiết bị", "Máy biến áp lực 63MVA", "Thibidi", "27/06/2026", 9.75, "Đang xử lý"], ["CP-26/0524", 6, "24074-1-NASA2-PC-HDPC", "Vật tư thiết bị", "Rơ le bảo vệ & đo lường", "Siemens Vietnam", "16/07/2026", 5.98, "Chờ thanh toán"], ["CP-26/0525", 6, "24074-1-NASA2-PC-HDPC", "Nhân công & thi công", "Thi công móng cột & tiếp địa", "Đội thi công số 2", "10/07/2026", 4.61, "Chờ thanh toán"], ["CP-26/0526", 4, "24074-1-NASA2-PC-HDPC", "Nhân công & thi công", "Lắp dựng cột thép", "Đội thi công số 3", "21/05/2026", 2.83, "Đã thanh toán"], ["CP-26/0527", 4, "24074-1-NASA2-PC-HDPC", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "15/05/2026", 0.57, "Đã thanh toán"], ["CP-26/0528", 5, "24074-1-NASA2-PC-HDPC", "Thầu phụ & thuê ngoài", "Thầu phụ xây dựng nhà điều hành", "Xây lắp Hoàng Long", "20/06/2026", 2.13, "Đang xử lý"], ["CP-26/0529", 6, "24074-1-NASA2-PC-HDPC", "Thầu phụ & thuê ngoài", "Thuê cẩu & thiết bị nâng hạ", "Cho thuê thiết bị Đại Phát", "09/07/2026", 1.3, "Chờ thanh toán"], ["CP-26/0530", 6, "24074-1-NASA2-PC-HDPC", "Chi phí chung", "Bảo hiểm công trình & thiết bị", "Bảo hiểm PVI", "25/07/2026", 1.43, "Chờ thanh toán"], ["CP-26/0531", 6, "24041-2-GILO-P-NPMB", "Vật tư thiết bị", "Dao cách ly & chống sét van", "Eaton Vietnam", "12/07/2026", 4.32, "Chờ thanh toán"], ["CP-26/0532", 5, "24041-2-GILO-P-NPMB", "Vật tư thiết bị", "Hệ thống điều khiển tích hợp", "GE Grid Solutions", "23/06/2026", 2.65, "Đang xử lý"], ["CP-26/0533", 5, "24041-2-GILO-P-NPMB", "Nhân công & thi công", "Thi công tuyến cáp ngầm", "Đội thi công số 4", "17/06/2026", 2.14, "Đang xử lý"], ["CP-26/0534", 4, "24041-2-GILO-P-NPMB", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "22/05/2026", 2.41, "Đã thanh toán"], ["CP-26/0535", 6, "24041-2-GILO-P-NPMB", "Thầu phụ & thuê ngoài", "Vận chuyển vật tư thiết bị", "Vận tải Tân Cảng", "27/07/2026", 1.21, "Chờ thanh toán"], ["CP-26/0536", 5, "24041-2-GILO-P-NPMB", "Chi phí chung", "Chi phí quản lý dự án", "Nội bộ", "10/06/2026", 0.67, "Đang xử lý"], ["CP-26/0537", 3, "24019-2-TĐHB-PCable-EVNPSC", "Vật tư thiết bị", "Máy biến dòng, biến điện áp", "Siemens Vietnam", "19/04/2026", 12.14, "Đã thanh toán"], ["CP-26/0538", 2, "24019-2-TĐHB-PCable-EVNPSC", "Vật tư thiết bị", "Máy cắt SF6 110kV", "Hitachi Energy Vietnam", "08/03/2026", 7.44, "Đã thanh toán"], ["CP-26/0539", 2, "24019-2-TĐHB-PCable-EVNPSC", "Nhân công & thi công", "Lắp dựng cột thép", "Đội thi công số 3", "24/03/2026", 4.38, "Đã thanh toán"], ["CP-26/0540", 1, "24019-2-TĐHB-PCable-EVNPSC", "Nhân công & thi công", "Kéo rải dây dẫn & dây chống sét", "Đội thi công số 2", "13/02/2026", 2.68, "Đã thanh toán"], ["CP-26/0541", 1, "24019-2-TĐHB-PCable-EVNPSC", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "07/02/2026", 0.32, "Đã thanh toán"], ["CP-26/0542", 3, "24019-2-TĐHB-PCable-EVNPSC", "Thầu phụ & thuê ngoài", "Thuê cẩu & thiết bị nâng hạ", "Cho thuê thiết bị Đại Phát", "12/04/2026", 2.19, "Đã thanh toán"], ["CP-26/0543", 2, "24019-2-TĐHB-PCable-EVNPSC", "Thầu phụ & thuê ngoài", "Thí nghiệm hiệu chỉnh & đóng điện", "EGRID", "23/03/2026", 1.34, "Đã thanh toán"], ["CP-26/0544", 2, "24019-2-TĐHB-PCable-EVNPSC", "Chi phí chung", "Chi phí lán trại, điện nước", "Nội bộ", "17/03/2026", 1.61, "Đã thanh toán"], ["CP-26/0545", 0, "24059-1-LOBI-P-BA1", "Vật tư thiết bị", "Rơ le bảo vệ & đo lường", "Siemens Vietnam", "26/01/2026", 7.58, "Đã thanh toán"], ["CP-26/0546", 1, "24059-1-LOBI-P-BA1", "Vật tư thiết bị", "Cáp lực XLPE 110kV", "Cadivi", "15/02/2026", 4.64, "Đã thanh toán"], ["CP-26/0547", 1, "24059-1-LOBI-P-BA1", "Nhân công & thi công", "Nhân công lắp đặt thiết bị", "Đội thi công số 1", "09/02/2026", 2.33, "Đã thanh toán"], ["CP-26/0548", 2, "24059-1-LOBI-P-BA1", "Nhân công & thi công", "Thi công móng cột & tiếp địa", "Đội thi công số 2", "20/03/2026", 1.43, "Đã thanh toán"], ["CP-26/0549", 2, "24059-1-LOBI-P-BA1", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "14/03/2026", 2.62, "Đã thanh toán"], ["CP-26/0550", 0, "24059-1-LOBI-P-BA1", "Sản xuất tủ điện", "Lắp ráp, đấu nối & thử nghiệm tủ", "Nhà máy tủ điện AIT", "25/01/2026", 1.61, "Đã thanh toán"], ["CP-26/0551", 0, "24059-1-LOBI-P-BA1", "Thầu phụ & thuê ngoài", "Gia công kết cấu thép, giá đỡ", "Cơ khí Trần Phú", "19/01/2026", 2.11, "Đã thanh toán"], ["CP-26/0552", 1, "24059-1-LOBI-P-BA1", "Chi phí chung", "Chi phí văn phòng công trường", "Nội bộ", "24/02/2026", 1.18, "Đã thanh toán"], ["CP-26/0553", 0, "23079-HH3-BG-VISC", "Vật tư thiết bị", "Hệ thống điều khiển tích hợp", "GE Grid Solutions", "11/01/2026", 5.46, "Đã thanh toán"], ["CP-26/0554", 1, "23079-HH3-BG-VISC", "Vật tư thiết bị", "Cáp ngầm 110kV & phụ kiện", "LS Vina Cable", "22/02/2026", 3.34, "Đã thanh toán"], ["CP-26/0555", 1, "23079-HH3-BG-VISC", "Nhân công & thi công", "Kéo rải dây dẫn & dây chống sét", "Đội thi công số 2", "16/02/2026", 2.58, "Đã thanh toán"], ["CP-26/0556", 2, "23079-HH3-BG-VISC", "Nhân công & thi công", "Thi công tuyến cáp ngầm", "Đội thi công số 4", "27/03/2026", 1.58, "Đã thanh toán"], ["CP-26/0557", 2, "23079-HH3-BG-VISC", "Sản xuất tủ điện", "Gia công cơ khí & sơn tĩnh điện", "Nhà máy tủ điện AIT", "21/03/2026", 0.32, "Đã thanh toán"], ["CP-26/0558", 0, "23079-HH3-BG-VISC", "Thầu phụ & thuê ngoài", "Thí nghiệm hiệu chỉnh & đóng điện", "EGRID", "26/01/2026", 1.92, "Đã thanh toán"], ["CP-26/0559", 1, "23079-HH3-BG-VISC", "Chi phí chung", "Bảo hiểm công trình & thiết bị", "Bảo hiểm PVI", "09/02/2026", 0.8, "Đã thanh toán"]], "dexuat": [["ĐXTU-26/0142", "24041-2-GILO-P-NPMB", "Nguyễn Kim Quý", "Tạm ứng mua thiết bị nhất thứ 220kV đợt 2", 8.5, "28/07/2026", 9, "Giám đốc", "Chờ duyệt", "SV-26/2841"], ["ĐXTU-26/0139", "24127-1-TRLI-P-BA3", "Phạm Duy Tùng", "Tạm ứng thi công móng & tiếp địa", 3.2, "25/07/2026", 12, "Giám đốc", "Chờ duyệt", "SV-26/2836"], ["ĐXTU-26/0137", "24074-1-NASA2-PC-HDPC", "Đặng Ngọc Trang", "Tạm ứng kết cấu cột thép đợt 4", 2.8, "22/07/2026", 15, "Phòng Tài chính", "Đang duyệt", "SV-26/2829"], ["ĐXTU-26/0135", "24035-1-G5MV-P-SPC", "Lê Thanh Sơn", "Tạm ứng đặt hàng máy biến áp lô 3", 4.6, "20/07/2026", 17, "Phòng Tài chính", "Đang duyệt", "SV-26/2822"], ["ĐXTU-26/0133", "24019-2-TĐHB-PCable-EVNPSC", "Trần Như Toàn", "Tạm ứng thí nghiệm hiệu chỉnh & đóng điện", 1.85, "18/07/2026", 19, "Trưởng phòng", "Đang duyệt", "SV-26/2815"], ["ĐXTU-26/0128", "24038-2-PhBi2-P2T-BA3", "Phạm Thị Hương Giang", "Tạm ứng kéo dây đợt cuối", 5.4, "10/07/2026", 27, "Giám đốc", "Chờ duyệt", "SV-26/2798"], ["ĐXTU-26/0124", "24127-1-TRLI-P-BA3", "Nguyễn Thùy Dương", "Tạm ứng vận chuyển VTTB về công trường", 0.95, "05/07/2026", 32, "Phòng Tài chính", "Đang duyệt", "SV-26/2784"], ["ĐXTU-26/0119", "24038-2-PhBi2-P2T-BA3", "Phạm Duy Tùng", "Tạm ứng nhân công lắp đặt đợt 3", 2.4, "28/06/2026", 39, "—", "Đã duyệt", "SV-26/2761"], ["ĐXTU-26/0115", "24074-1-NASA2-PC-HDPC", "Đặng Ngọc Trang", "Tạm ứng thuê cẩu dựng cột", 1.6, "22/06/2026", 45, "—", "Đã duyệt", "SV-26/2743"], ["ĐXTU-26/0111", "24041-2-GILO-P-NPMB", "Nguyễn Kim Quý", "Tạm ứng khảo sát địa chất bổ sung", 0.7, "15/06/2026", 52, "—", "Đã duyệt", "SV-26/2729"], ["ĐXTU-26/0108", "24035-1-G5MV-P-SPC", "Lê Thanh Sơn", "Tạm ứng chi phí lưu kho ngoài kế hoạch", 1.2, "08/06/2026", 59, "—", "Từ chối", "SV-26/2714"], ["ĐXTU-26/0104", "24059-1-LOBI-P-BA1", "P. Tài chính", "Tạm ứng chi phí hoàn công hồ sơ", 0.45, "02/06/2026", 65, "—", "Đã duyệt", "SV-26/2702"]]};
+
+const F=(n,d=1)=>Number(n).toFixed(d).replace('.',',');
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const P=D.projects.map(r=>{const o={};D.keys.forEach((k,i)=>o[k]=r[i]);return o;});
+const IDX={};P.forEach((p,i)=>IDX[p.ma]=i);
+const NM=D.months.length;
+const C={bl:'#2E6FB0',bl2:'#5b93cf',bl3:'#a8c8e6',og:'#e8a33d',gr:'#3FA875',rd:'#D2564A',pu:'#8b6fb0',grid:'#e7ecf3',mut:'#7c899b'};
+const PAL=[C.bl,C.bl2,C.og,C.gr,C.pu,C.bl3];
+Chart.defaults.font.family='Inter,sans-serif';
+Chart.defaults.font.size=11.5;
+Chart.defaults.color=C.mut;
+Chart.defaults.plugins.legend.labels.boxWidth=11;
+Chart.defaults.plugins.legend.labels.boxHeight=11;
+Chart.defaults.plugins.legend.labels.padding=13;
+Chart.defaults.maintainAspectRatio=false;
+const AX={grid:{color:C.grid,drawTicks:false},border:{display:false}};
+const AXn={...AX,beginAtZero:true};
+const AXx={grid:{display:false},border:{display:false}};
+const bienCol=b=>b>=18?C.gr:(b>=14?C.og:C.rd);
+const bar=(p,c)=>'<div class="bar"><i style="width:'+Math.min(100,Math.max(0,p))+'%;background:'+c+'"></i></div>';
+const short=m=>m==='—'?'—':m.split('-')[0];
+const bandOf=d=>d>90?3:(d>60?2:(d>30?1:0));
+
+/* ═══════ FILTER STATE ═══════ */
+const FS={pj:'all',a:0,b:NM-1,fl:'all'};
+let A={};
+function inR(m){return m>=FS.a&&m<=FS.b;}
+function inP(ma){return FS.pj==='all'||ma===FS.pj;}
+function rowsum(Mx,i){let s=0;for(let j=FS.a;j<=FS.b;j++)s+=Mx[i][j];return s;}
+
+function recompute(){
+  A.ps=FS.pj==='all'?P.map((_,i)=>i):[IDX[FS.pj]];
+  A.js=[];for(let j=FS.a;j<=FS.b;j++)A.js.push(j);
+  const S=Mx=>sum(A.ps.map(i=>rowsum(Mx,i)));
+  A.hd=sum(A.ps.map(i=>P[i].hd));
+  A.dt=S(D.heatDT); A.cp=S(D.heatCPM); A.thu=S(D.heatCF); A.chi=S(D.heatCHI); A.kh=S(D.heatKH);
+  A.ln=A.dt-A.cp; A.bien=A.dt?A.ln/A.dt*100:0;
+  A.ar=A.dt-A.thu; A.cfNet=A.thu-A.chi;
+  // ngân sách quy đổi theo tỷ trọng chi phí trong phạm vi lọc
+  A.ns=sum(A.ps.map(i=>{const tot=sum(D.heatCPM[i]);return tot?P[i].ns*rowsum(D.heatCPM,i)/tot:0;}));
+  A.pcp=A.ps.map(i=>{const tot=sum(D.heatCPM[i]);const f=tot?rowsum(D.heatCPM,i)/tot:0;
+    return {i,f,cp:rowsum(D.heatCPM,i),ns:P[i].ns*f,dt:rowsum(D.heatDT,i),thu:rowsum(D.heatCF,i)};});
+  A.inv=D.invoices.filter(v=>inP(v[2])&&inR(v[1]));
+  A.pay=D.payables.filter(v=>inP(v[2])&&inR(v[1]));
+  A.jn=D.journal.filter(v=>inP(v[3])&&inR(v[1])&&(FS.fl==='all'||v[2]===FS.fl));
+  A.jn0=D.journal.filter(v=>inP(v[4])&&inR(v[1]));
+  A.plan=D.plan30.filter(v=>inP(v[3]));
+  A.arT=sum(A.inv.map(v=>v[6])); A.apT=sum(A.pay.map(v=>v[6]));
+  A.arAg=[0,1,2,3].map(k=>sum(A.inv.filter(v=>bandOf(v[7])===k).map(v=>v[6])));
+  A.apAg=[0,1,2,3].map(k=>sum(A.pay.filter(v=>bandOf(Math.max(0,v[7]))===k).map(v=>v[6])));
+}
+
+/* ═══════ SERIES ═══════ */
+const ser=Mx=>A.js.map(j=>sum(A.ps.map(i=>Mx[i][j])));
+const labs=()=>A.js.map(j=>D.months[j]);
+
+/* ═══════ KPI ═══════ */
+function kpis(){
+  const S=(id,v)=>{const e=document.getElementById(id);if(e)e.innerHTML=v;};
+  const np=A.ps.length, nm=A.js.length;
+  S('d1',F(A.dt)+'<u>tỷ đ</u>'); S('d1d','Kế hoạch kỳ '+F(A.kh)+' tỷ đ');
+  S('d2',F(A.kh?A.dt/A.kh*100:0)+'<u>%</u>');
+  const g=A.dt-A.kh;
+  S('d2d','<span class="'+(g>=0?'up':'dn')+'">'+(g>=0?'Vượt ':'Thiếu ')+F(Math.abs(g))+' tỷ đ so kế hoạch</span>');
+  S('d3',F(A.ln)+'<u>tỷ đ</u>'); S('d4',F(A.bien)+'<u>%</u>');
+
+  S('c1',F(A.cp)+'<u>tỷ đ</u>'); S('c1d',F(A.dt?A.cp/A.dt*100:0)+'% doanh thu cùng kỳ');
+  S('c2',F(A.ns)+'<u>tỷ đ</u>');
+  const dv=A.cp-A.ns;
+  S('c3',(dv>0?'+':'')+F(dv)+'<u>tỷ đ</u>');
+  S('c3d','<span class="'+(dv>0?'dn':'up')+'">'+(dv>0?'Vượt ':'Thấp hơn ')+F(A.ns?Math.abs(dv/A.ns*100):0)+'% kế hoạch</span>');
+  const ov=A.pcp.filter(x=>x.cp>x.ns);
+  S('c4',ov.length+'<u>/ '+A.pcp.length+' dự án</u>');
+  S('c4d','Tổng vượt '+F(sum(ov.map(x=>x.cp-x.ns)))+' tỷ đ');
+
+}
+
+/* ═══════ HEATMAP ═══════ */
+function heat(tbl,rowLab,colLab,mat,eh,er,mode){
+  const flat=mat.flat(),mx=Math.max(...flat,0.0001);
+  const rs=mat.map(r=>sum(r));
+  tbl.querySelector('thead').innerHTML='<tr><th>Mã dự án</th>'
+    +colLab.map(c=>'<th class="n">'+c+'</th>').join('')+'<th class="n">Tổng</th>'+eh+'</tr>';
+  let b=rowLab.map((rn,i)=>{
+    let tr='<tr><td class="mono">'+rn+'</td>';
+    mat[i].forEach(v=>{
+      const a=(v/mx*0.62).toFixed(3);
+      const disp=mode==='p'?(rs[i]?F(v/rs[i]*100):'0,0')+'%':F(v);
+      tr+='<td class="n" style="background:rgba(46,117,182,'+a+')">'+disp+'</td>';
+    });
+    return tr+'<td class="n" style="font-weight:700">'+F(rs[i])+'</td>'+er(i)+'</tr>';
+  }).join('');
+  const cs=colLab.map((_,j)=>sum(mat.map(r=>r[j])));
+  b+='<tr class="tot"><td>TỔNG</td>'+cs.map(v=>'<td class="n">'+F(v)+'</td>').join('')
+    +'<td class="n">'+F(sum(cs))+'</td>'+er(-1)+'</tr>';
+  tbl.querySelector('tbody').innerHTML=b;
+}
+let modeCP='v';
+function drawHeatCP(){
+  // chi phí hạng mục quy đổi theo tỷ trọng tháng đã lọc
+  const mat=A.pcp.map(x=>D.heatCP[x.i].map(v=>Math.round(v*x.f*100)/100));
+  const eh='<th class="n">Kế hoạch</th><th class="n">Chênh</th><th class="n">% so KH</th><th class="n">Tiến độ</th><th class="n">Dự báo HT</th><th>Đánh giá</th>';
+  const er=k=>{
+    if(k<0){const fc=sum(A.pcp.map(x=>P[x.i].td>0?x.cp/(P[x.i].td/100):x.cp));
+      const tdv=A.cp-A.ns;
+      return '<td class="n">'+F(A.ns)+'</td>'
+        +'<td class="n" style="color:'+(tdv>0?C.rd:C.gr)+';font-weight:700">'+(tdv>0?'+':'')+F(tdv)+'</td>'
+        +'<td class="n" style="font-weight:700">'+F(A.ns?A.cp/A.ns*100:0)+'%</td>'
+        +'<td class="n">—</td><td class="n">'+F(fc)+'</td><td></td>';}
+    const x=A.pcp[k],p=P[x.i],dv=x.cp-x.ns,fc=p.td>0?x.cp/(p.td/100):x.cp,fdv=fc-x.ns;
+    let cl='p-g',tx='Trong ngân sách';
+    if(x.ns&&fdv/x.ns>0.05){cl='p-r';tx='Rủi ro vượt';}else if(fdv>0){cl='p-o';tx='Cần theo dõi';}
+    const pk=x.ns?x.cp/x.ns*100:0;
+    const mxd=Math.max(...A.pcp.map(y=>Math.abs(y.cp-y.ns)),0.01);
+    const al=(0.10+0.50*Math.abs(dv)/mxd).toFixed(3);
+    const bgd=Math.abs(dv)<0.005?'transparent':(dv>0?'rgba(215,90,84,':'rgba(67,167,118,')+al+')';
+    return '<td class="n">'+F(x.ns)+'</td>'
+      +'<td class="n" style="background:'+bgd+';color:'+(dv>0?C.rd:C.gr)+';font-weight:700">'+(dv>0?'+':'')+F(dv)+'</td>'
+      +'<td class="n" style="color:'+(pk>100?C.rd:C.gr)+';font-weight:700">'+F(pk)+'%</td>'
+      +'<td class="n">'+p.td+'%</td><td class="n">'+F(fc)+'</td><td><span class="pill '+cl+'">'+tx+'</span></td>';
+  };
+  heat(document.getElementById('tb_hcp'),A.ps.map(i=>short(P[i].ma)),D.cats,mat,eh,er,modeCP);
+}
+
+
+/* ═══════ TABLES ═══════ */
+const EMPTY=(tb,n,msg)=>{tb.querySelector('tbody').innerHTML='<tr><td colspan="'+n+'"><div class="empty">'+msg+'</div></td></tr>';};
+
+function tables(){
+  // Doanh thu
+  document.querySelector('#tb_dt tbody').innerHTML=A.pcp.map(x=>{
+    const p=P[x.i],ln=x.dt-x.cp,b=x.dt?ln/x.dt*100:0;
+    return '<tr><td class="mono">'+short(p.ma)+'</td><td style="color:var(--mut)">'+p.loai+'</td>'
+      +'<td class="n">'+F(p.hd)+'</td><td class="n">'+F(x.dt)+'</td><td class="n">'+F(x.cp)+'</td><td class="n">'+F(ln)+'</td>'
+      +'<td class="n" style="color:'+bienCol(b)+';font-weight:700">'+F(b)+'%</td><td class="n">'+F(p.hd-x.dt)+'</td></tr>';
+  }).join('')
+  +'<tr class="tot"><td colspan="2">TỔNG</td><td class="n">'+F(A.hd)+'</td><td class="n">'+F(A.dt)+'</td>'
+  +'<td class="n">'+F(A.cp)+'</td><td class="n">'+F(A.ln)+'</td><td class="n">'+F(A.bien)+'%</td><td class="n">'+F(A.hd-A.dt)+'</td></tr>';
+
+  // Mẫu thanh toán
+  document.querySelector('#tb_tm tbody').innerHTML=D.terms.map(t=>{
+    const cnt=A.ps.filter(i=>P[i].mau===t[0]).length;
+    return '<tr><td style="font-weight:800;font-size:15px;color:var(--bl)">'+t[0]+'</td><td style="font-weight:600">'+t[1]+'</td>'
+      +'<td>'+t[2].map(s=>'<span class="pill p-b" style="margin:2px 3px 2px 0">'+s[0]+' '+s[1]+'%</span>').join('')+'</td>'
+      +'<td class="n">'+cnt+'</td></tr>';
+  }).join('');
+
+
+  // Tiến độ thanh toán
+  const tt=document.getElementById('tb_tt');
+  if(!A.pcp.length){EMPTY(tt,9,'Không có dữ liệu');}
+  else tt.querySelector('tbody').innerHTML=A.pcp.map(x=>{
+    const p=P[x.i],tp=p.hd?x.thu/p.hd*100:0,gap=p.td-tp;
+    let cl='p-g',tx='Bình thường';
+    if(gap>20){cl='p-r';tx='Chậm thu tiền';}else if(gap>12){cl='p-o';tx='Theo dõi';}
+    const col=gap>20?C.rd:(gap>12?C.og:C.gr);
+    return '<tr><td class="mono">'+short(p.ma)+'</td><td class="n">'+F(p.hd)+'</td><td class="n">'+F(p.tu)+'</td>'
+      +'<td class="n">'+F(x.thu)+'</td><td class="n">'+F(p.hd-x.thu)+'</td>'
+      +'<td><div style="display:flex;align-items:center;gap:8px">'+bar(tp,col)+'<span style="font-size:12px">'+F(tp)+'%</span></div></td>'
+      +'<td class="n">'+p.td+'%</td><td class="n" style="color:'+col+';font-weight:700">'+F(gap)+'</td>'
+      +'<td><span class="pill '+cl+'">'+tx+'</span></td></tr>';
+  }).join('');
+
+  renderTU(); renderQT(); renderBL();
+}
+
+/* --- công nợ theo đối tác --- */
+
+
+/* --- hóa đơn --- */
+
+
+/* --- nhật ký --- */
+
+
+/* --- tạm ứng --- */
+function renderTU(){
+  const rows=A.pcp.map(x=>{
+    const p=P[x.i];
+    const rec=Math.min(p.tu,p.tu*(p.td/100)*1.05);
+    return {p,tu:p.tu,rec,bal:p.tu-rec,pct:p.tu?rec/p.tu*100:0};
+  });
+  const tTu=sum(rows.map(r=>r.tu)),tRec=sum(rows.map(r=>r.rec)),tBal=sum(rows.map(r=>r.bal));
+  const risky=rows.filter(r=>r.bal>0&&r.p.td>=85).length;
+  document.getElementById('mn_tu').innerHTML=
+    '<div class="mk"><u>Tổng tạm ứng</u><b>'+F(tTu)+'<small> tỷ đ</small></b></div>'
+   +'<div class="mk"><u>Đã thu hồi</u><b style="color:var(--gr)">'+F(tRec)+'<small> tỷ đ</small></b></div>'
+   +'<div class="mk"><u>Số dư chưa thu hồi</u><b style="color:var(--rd)">'+F(tBal)+'<small> tỷ đ</small></b></div>'
+   +'<div class="mk"><u>Cần thu hồi gấp</u><b style="color:var(--og)">'+risky+'<small> dự án</small></b></div>';
+  const tb=document.getElementById('tb_tu');
+  if(!rows.length){EMPTY(tb,9,'Không có dữ liệu');return;}
+  tb.querySelector('tbody').innerHTML=rows.map(r=>{
+    let cl='p-g',tx='Đúng tiến độ';
+    if(r.bal>0.05&&r.p.td>=85){cl='p-r';tx='Cần thu hồi gấp';}
+    else if(r.pct+15<r.p.td){cl='p-o';tx='Chậm thu hồi';}
+    const col=cl==='p-r'?C.rd:(cl==='p-o'?C.og:C.gr);
+    return '<tr><td class="mono">'+short(r.p.ma)+'</td><td class="n">'+F(r.p.hd)+'</td>'
+      +'<td class="n">'+F(r.tu,2)+'</td><td class="n">'+F(r.p.tu/r.p.hd*100)+'%</td>'
+      +'<td class="n">'+F(r.rec,2)+'</td><td class="n" style="font-weight:600">'+F(r.bal,2)+'</td>'
+      +'<td><div style="display:flex;align-items:center;gap:8px">'+bar(r.pct,col)+'<span style="font-size:12px">'+F(r.pct)+'%</span></div></td>'
+      +'<td class="n">'+r.p.td+'%</td><td><span class="pill '+cl+'">'+tx+'</span></td></tr>';
+  }).join('')
+  +'<tr class="tot"><td colspan="2">TỔNG</td><td class="n">'+F(tTu,2)+'</td><td></td>'
+  +'<td class="n">'+F(tRec,2)+'</td><td class="n">'+F(tBal,2)+'</td><td colspan="3"></td></tr>';
+}
+
+/* --- quyết toán --- */
+function renderQT(){
+  const src=D.quyettoan.filter(q=>inP(q[0]));
+  const tb=document.getElementById('tb_qt');
+  if(!src.length){EMPTY(tb,8,'Không có dữ liệu');return;}
+  const map={'Đã phê duyệt':'p-g','Đang lập hồ sơ':'p-o','Chưa lập':'p-b','Chưa đến giai đoạn':'p-n'};
+  tb.querySelector('tbody').innerHTML=src.map(q=>{
+    const p=P[IDX[q[0]]], qt=q[2], dv=qt===null?null:qt-q[1];
+    return '<tr><td class="mono">'+short(q[0])+'</td><td>'+p.ten+'</td>'
+      +'<td class="n">'+F(q[1],2)+'</td>'
+      +'<td class="n">'+(qt===null?'—':F(qt,2))+'</td>'
+      +'<td class="n"'+(dv===null?'':' style="color:'+(dv>0?C.og:C.gr)+';font-weight:600"')+'>'
+      +(dv===null?'—':(dv>0?'+':'')+F(dv,2))+'</td>'
+      +'<td><span class="pill '+map[q[3]]+'">'+q[3]+'</span></td>'
+      +'<td style="color:var(--mut)">'+q[4]+'</td><td style="color:var(--mut)">'+q[5]+'</td></tr>';
+  }).join('');
+}
+
+/* --- bảo lãnh --- */
+function renderBL(){
+  const src=D.guarantees.filter(g=>inP(g[0]));
+  const tb=document.getElementById('tb_bl');
+  if(!src.length){EMPTY(tb,7,'Không có bảo lãnh trong phạm vi lọc');return;}
+  const tcl={'Bảo lãnh tạm ứng':'p-b','Bảo lãnh thực hiện HĐ':'p-g','Bảo lãnh bảo hành':'p-n'};
+  tb.querySelector('tbody').innerHTML=src.map(g=>
+    '<tr><td class="mono">'+short(g[0])+'</td>'
+    +'<td><span class="pill '+tcl[g[1]]+'">'+g[1]+'</span></td>'
+    +'<td style="font-weight:600">'+g[2]+'</td><td class="n">'+F(g[3],2)+'</td>'
+    +'<td style="color:var(--mut)">'+g[4]+'</td><td>'+g[5]+'</td>'
+    +'<td><span class="pill '+(g[6]==='Sắp hết hạn'?'p-o':'p-g')+'">'+g[6]+'</span></td></tr>').join('')
+  +'<tr class="tot"><td colspan="3">TỔNG GIÁ TRỊ BẢO LÃNH</td><td class="n">'+F(sum(src.map(g=>g[3])),2)+'</td><td colspan="3"></td></tr>';
+}
+
+/* ═══════ NGHIỆM THU ═══════ */
+let ntCur=null;
+function nghiemthu(){
+  const list=A.ps;
+  if(!list.length){document.getElementById('ntnav').innerHTML='';document.getElementById('ntp').innerHTML='<div class="empty">Không có dự án</div>';return;}
+  if(ntCur===null||!list.includes(IDX[ntCur]))ntCur=P[list[0]].ma;
+  document.getElementById('ntnav').innerHTML=list.map(i=>{const p=P[i];
+    return '<button class="ntb'+(p.ma===ntCur?' on':'')+'" data-m="'+p.ma+'"><u>'+p.ma+'</u>'
+      +'<span>'+p.ten+' · mẫu '+p.mau+'</span></button>';}).join('');
+  document.querySelectorAll('.ntb').forEach(b=>b.addEventListener('click',()=>{ntCur=b.dataset.m;nghiemthu();}));
+  const p=P[IDX[ntCur]],bs=D.batch[ntCur];
+  const cls={'Đã thu':'ok','Đã nghiệm thu':'nt','Đang thực hiện':'dg','Chưa tới':''};
+  const ico={'Đã thu':'✓','Đã nghiệm thu':'✓','Đang thực hiện':'●','Chưa tới':'○'};
+  const pcl={'Đã thu':'p-g','Đã nghiệm thu':'p-b','Đang thực hiện':'p-o','Chưa tới':'p-n'};
+  document.getElementById('ntp').innerHTML=
+    '<div style="font-size:13px;margin-bottom:10px"><b>'+p.ten+'</b> · <span style="color:var(--mut)">'
+    +p.cdt+' · Giá trị HĐ '+F(p.hd)+' tỷ đ · mẫu thanh toán '+p.mau+'</span></div>'
+    +bs.map(b=>'<div class="stp '+cls[b[3]]+'"><b>'+ico[b[3]]+'</b><em>'+b[0]+'</em>'
+      +'<span class="pc">'+b[1]+'%</span><span class="vl">'+F(b[2],2)+'</span>'
+      +'<span class="pill '+pcl[b[3]]+'">'+b[3]+'</span></div>').join('');
+}
+
+/* ═══════ CHARTS ═══════ */
+const CH={};
+function mk(id,cfg){const el=document.getElementById(id);if(!el)return;if(CH[id])CH[id].destroy();CH[id]=new Chart(el,cfg);}
+function byLoai(get){const m={};A.pcp.forEach(x=>{const k=P[x.i].loai;m[k]=(m[k]||0)+get(x);});return{k:Object.keys(m),v:Object.values(m)};}
+const ttv=u=>({callbacks:{label:c=>c.dataset.label+': '+F(c.parsed.y!==undefined?c.parsed.y:c.parsed)+u}});
+
+
+let modeDT='th';
+function drawDT1(){
+  const lk=a=>{let s=0;return a.map(v=>s+=v);};
+  const th=ser(D.heatDT),kh=ser(D.heatKH),isL=modeDT==='lk';
+  mk('ch_dt1',{data:{labels:labs(),datasets:[
+    {type:'bar',label:isL?'Lũy kế thực tế':'Thực tế',data:isL?lk(th):th,backgroundColor:C.bl,borderRadius:3,order:2},
+    {type:'line',label:isL?'Lũy kế kế hoạch':'Kế hoạch',data:isL?lk(kh):kh,borderColor:C.og,backgroundColor:C.og,
+     borderWidth:2.5,pointRadius:3,tension:.3,fill:false,order:1}]},
+    options:{interaction:{mode:'index',intersect:false},scales:{x:AXx,y:AXn},
+      plugins:{legend:{position:'bottom'},tooltip:ttv(' tỷ')}}});
+}
+function drawDT(){
+  drawDT1();
+  const Ah=byLoai(x=>P[x.i].hd),Ad=byLoai(x=>x.dt);
+  mk('ch_dt2',{type:'bar',data:{labels:Ah.k,datasets:[
+    {label:'Giá trị HĐ',data:Ah.v,backgroundColor:C.bl3,borderRadius:3},
+    {label:'Doanh thu',data:Ad.v,backgroundColor:C.bl,borderRadius:3}]},
+    options:{scales:{x:AXx,y:AXn},plugins:{legend:{position:'bottom'},tooltip:ttv(' tỷ')}}});
+  const s=A.pcp.map(x=>({l:short(P[x.i].ma),b:x.dt?(x.dt-x.cp)/x.dt*100:0})).sort((a,b)=>b.b-a.b);
+  mk('ch_dt3',{type:'bar',data:{labels:s.map(x=>x.l),datasets:[{label:'Biên LN',data:s.map(x=>x.b),backgroundColor:s.map(x=>bienCol(x.b)),borderRadius:3}]},
+    options:{indexAxis:'y',scales:{x:{...AXn,ticks:{callback:v=>v+'%'}},y:AXx},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>F(c.parsed.x)+'%'}}}}});
+}
+function drawCP(){ drawCT();
+  const act=D.cats.map((_,k)=>sum(A.pcp.map(x=>D.heatCP[x.i][k]*x.f)));
+  const ns=act.map((v,k)=>v*D.nsCatR[k]);
+  mk('ch_cp1',{type:'bar',data:{labels:D.cats,datasets:[
+    {label:'Kế hoạch',data:ns,backgroundColor:C.bl3,borderRadius:3},
+    {label:'Thực tế',data:act,backgroundColor:act.map((v,k)=>v>ns[k]?C.rd:C.bl),borderRadius:3}]},
+    options:{scales:{x:{...AXx,ticks:{maxRotation:0,autoSkip:false,callback:function(v){const s=this.getLabelForValue(v);return s.length>16?s.slice(0,15)+'…':s;}}},y:AXn},
+      plugins:{legend:{position:'bottom'},tooltip:ttv(' tỷ')}}});
+  const cp=ser(D.heatCPM),dt=ser(D.heatDT);
+  mk('ch_cp2',{type:'bar',data:{labels:labs(),datasets:[
+    {label:'Chi phí',data:cp,backgroundColor:C.bl,borderRadius:3,yAxisID:'y',order:2},
+    {type:'line',label:'Chi phí / doanh thu',data:cp.map((v,i)=>dt[i]?v/dt[i]*100:0),borderColor:C.og,borderWidth:2.5,pointRadius:3,tension:.3,yAxisID:'y1',order:1}]},
+    options:{scales:{x:AXx,y:{...AXn,title:{display:true,text:'tỷ đồng'}},
+      y1:{position:'right',beginAtZero:false,grid:{display:false},border:{display:false},ticks:{callback:v=>F(v,0)+'%'}}},
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.datasetIndex===1?c.dataset.label+': '+F(c.parsed.y)+'%':c.dataset.label+': '+F(c.parsed.y)+' tỷ'}}}}});
+}
+
+
+
+/* ═══════════ CÔNG NỢ & DÒNG TIỀN — cấu trúc ECV ═══════════ */
+const AGC=['#2e75b6','#e8a33d','#d98936','#d75a54'];
+const band=d=>d>90?3:(d>60?2:(d>30?1:0));
+const hmOf=i=>D.hm[P[i].loai];
+let cfMode='month',cfHm='net',ptyMode='thu',agMode='pt',jrMode='thu',jfMode='all',invF='all';
+const cfExp=new Set(),cnExp=new Set();
+
+/* ---- 5 KPI dòng tiền ---- */
+function k5cf(){
+  const showFc=FS.b===NM-1;
+  const r=A.thu&&sum(P.map(p=>p.thu))?A.thu/sum(P.map(p=>p.thu)):0;
+  const fThu=showFc?sum(D.fcThu)*r:0, fChi=showFc?sum(D.fcChi)*r:0;
+  const cuoi=D.tienDauKy*(A.ps.length/P.length)+A.cfNet;
+  const p30Thu=sum(A.plan.filter(x=>x[0]===1).map(x=>x[5]));
+  const p30Chi=sum(A.plan.filter(x=>x[0]===0).map(x=>x[5]));
+  const ngh=sum(A.plan.filter(x=>x[0]===1&&!x[1].includes('Thu hồi')).map(x=>x[5]));
+  const luo=sum(A.plan.filter(x=>x[0]===0&&x[2]==='Nội bộ').map(x=>x[5]));
+  const K=(t,v,cl,rows)=>'<div class="k5c"><div class="ttl">'+t+'</div><div class="big" style="color:'+cl+'">'+v+'</div>'
+    +rows.map(x=>'<div class="rw"><span class="l">'+x[0]+'</span><span class="v'+(x[2]||'')+'">'+x[1]+'</span></div>').join('')+'</div>';
+  document.getElementById('k5_cf').innerHTML=
+    K('Dòng tiền thuần kỳ này',(A.cfNet>=0?'+':'')+F(A.cfNet)+'<small> tỷ</small>',A.cfNet>=0?'var(--gr)':'var(--rd)',
+      [['Đã thu',F(A.thu)+' tỷ'],['Đã chi',F(A.chi)+' tỷ']])
+   +K('Số dư tiền cuối kỳ',F(cuoi)+'<small> tỷ</small>','var(--bl)',
+      [['Đầu kỳ',F(D.tienDauKy*(A.ps.length/P.length))+' tỷ'],['Thay đổi',(A.cfNet>=0?'+':'')+F(A.cfNet)+' tỷ',A.cfNet>=0?' up':' dn']])
+   +K('Dự kiến thu 30 ngày tới',F(p30Thu)+'<small> tỷ</small>','var(--bl)',
+      [['Từ nghiệm thu',F(ngh)+' tỷ'],['Thu nợ',F(p30Thu-ngh)+' tỷ']])
+   +K('Dự kiến chi 30 ngày tới',F(p30Chi)+'<small> tỷ</small>','var(--bl)',
+      [['NCC / vật tư',F(p30Chi-luo)+' tỷ'],['Lương & khác',F(luo)+' tỷ']])
+   +K('Dòng tiền dự kiến ròng',((p30Thu-p30Chi)>=0?'+':'')+F(p30Thu-p30Chi)+'<small> tỷ</small>',
+      (p30Thu-p30Chi)>=0?'var(--gr)':'var(--rd)',
+      [['Dự báo '+(showFc?D.fcMonths[0]:'—'),showFc?(F(fThu-fChi)+' tỷ'):'—'],['Số dư dự kiến',F(cuoi+p30Thu-p30Chi)+' tỷ']]);
+}
+
+/* ---- 5 KPI công nợ ---- */
+function k5no(){
+  const ovAr=sum(A.inv.filter(v=>v[7]>60).map(v=>v[6]));
+  const ovAp=sum(A.pay.filter(v=>v[7]>0).map(v=>v[6]));
+  const due30=sum(A.pay.filter(v=>v[7]<=0&&v[7]>=-30).map(v=>v[6]));
+  const dso=A.dt?Math.round(A.arT/A.dt*A.js.length*30):0;
+  const K=(t,v,cl,rows)=>'<div class="k5c"><div class="ttl">'+t+'</div><div class="big" style="color:'+cl+'">'+v+'</div>'
+    +rows.map(x=>'<div class="rw"><span class="l">'+x[0]+'</span><span class="v'+(x[2]||'')+'">'+x[1]+'</span></div>').join('')+'</div>';
+  document.getElementById('k5_no').innerHTML=
+    K('Công nợ phải thu',F(A.arT)+'<small> tỷ</small>','var(--bl)',
+      [['Quá hạn trên 60 ngày',F(ovAr)+' tỷ',' dn'],['Tỷ lệ quá hạn',F(A.arT?ovAr/A.arT*100:0)+'%']])
+   +K('Công nợ phải trả',F(A.apT)+'<small> tỷ</small>','var(--bl)',
+      [['Đến hạn 30 ngày',F(due30)+' tỷ'],['Quá hạn',F(ovAp)+' tỷ',' dn']])
+   +K('Công nợ ròng',((A.arT-A.apT)>=0?'+':'')+F(A.arT-A.apT)+'<small> tỷ</small>',
+      (A.arT-A.apT)>=0?'var(--gr)':'var(--rd)',
+      [['Phải thu',F(A.arT)+' tỷ'],['Phải trả',F(A.apT)+' tỷ']])
+   +K('Nợ quá hạn phải thu',F(ovAr)+'<small> tỷ</small>','var(--rd)',
+      [['61–90 ngày',F(A.arAg[2])+' tỷ'],['Trên 90 ngày',F(A.arAg[3])+' tỷ',' dn']])
+   +K('Số ngày thu bình quân',dso+'<small> ngày</small>',dso>60?'var(--rd)':'var(--bl)',
+      [['Mục tiêu','≤ 45 ngày'],['Đánh giá',dso>60?'Cần cải thiện':'Trong ngưỡng',dso>60?' dn':' up']]);
+}
+
+/* ---- chart thu/chi theo tháng + dự kiến ---- */
+function drawCF(){
+  const showFc=FS.b===NM-1;
+  const r=sum(P.map(p=>p.thu))?A.thu/sum(P.map(p=>p.thu)):0;
+  let lb=labs().slice(), thu=ser(D.heatCF), chi=ser(D.heatCHI);
+  const nReal=lb.length;
+  if(showFc){lb=lb.concat(D.fcMonths);
+    thu=thu.concat(D.fcThu.map(v=>+(v*r).toFixed(2)));
+    chi=chi.concat(D.fcChi.map(v=>+(v*r).toFixed(2)));}
+  const isC=cfMode==='cumu';
+  let s=D.tienDauKy*(A.ps.length/P.length);
+  const line=isC?thu.map((v,i)=>s+=(v-chi[i])):thu.map((v,i)=>v-chi[i]);
+  const fc=i=>showFc&&i>=nReal;
+  mk('cn_cf',{data:{labels:lb,datasets:[
+    {type:'bar',label:'Thu',data:thu,backgroundColor:thu.map((_,i)=>fc(i)?C.gr+'59':C.gr),borderRadius:3,order:2},
+    {type:'bar',label:'Chi',data:chi.map(v=>-v),backgroundColor:chi.map((_,i)=>fc(i)?C.rd+'59':C.rd),borderRadius:3,order:2},
+    {type:'line',label:isC?'Số dư tiền':'Dòng tiền thuần',data:line,borderColor:'#22355c',borderWidth:2.5,tension:.3,pointRadius:3,order:1,
+     segment:{borderDash:c=>c.p0DataIndex>=nReal-1?[5,4]:undefined}}]},
+    options:{interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+F(Math.abs(c.parsed.y))+' tỷ'}}},
+      scales:{x:AXx,y:{grid:{color:c=>c.tick.value===0?'#b9c4d4':C.grid,lineWidth:c=>c.tick.value===0?1.5:1},
+        border:{display:false},ticks:{callback:v=>Math.abs(v)+' tỷ'}}}}});
+}
+
+/* ---- heatmap chung có drill-down ---- */
+function hmRender(tbl,cols,rows,expSet,onToggle,colFn,firstW){
+  let mx=0; rows.forEach(r=>r.v.forEach(v=>{if(Math.abs(v)>mx)mx=Math.abs(v);})); mx=mx||0.1;
+  tbl.querySelector('thead').innerHTML='<tr><th style="min-width:'+(firstW||190)+'px">Công trình / Hạng mục</th>'
+    +cols.map(c=>'<th class="n">'+c+'</th>').join('')+'<th class="n">Tổng</th></tr>';
+  let h='';
+  rows.forEach((r,i)=>{
+    const op=expSet.has(i);
+    h+='<tr class="pr" data-i="'+i+'"><td><span class="cr'+(op?' op':'')+'">▶</span> <span class="mono">'+r.code+'</span></td>'
+      +r.v.map(v=>{const a=Math.abs(v)/mx;
+        return '<td><div class="hc" style="background:'+colFn(v,a)+';color:'+(a>0.62?'#fff':'var(--tx)')+'">'+F(v)+'</div></td>';}).join('')
+      +'<td class="n" style="font-weight:700">'+F(sum(r.v))+'</td></tr>';
+    if(op) r.hm.forEach(hmr=>{
+      h+='<tr class="ch"><td>'+hmr.n+'</td>'
+        +hmr.v.map(v=>'<td class="n">'+F(v,2)+'</td>').join('')
+        +'<td class="n" style="font-weight:600">'+F(sum(hmr.v),2)+'</td></tr>';});
+  });
+  const cs=cols.map((_,j)=>sum(rows.map(r=>r.v[j])));
+  h+='<tr class="tot"><td>TỔNG</td>'+cs.map(v=>'<td class="n">'+F(v)+'</td>').join('')
+    +'<td class="n">'+F(sum(cs))+'</td></tr>';
+  tbl.querySelector('tbody').innerHTML=h;
+  tbl.querySelectorAll('tr.pr').forEach(tr=>tr.addEventListener('click',()=>onToggle(+tr.dataset.i)));
+}
+
+/* ---- heatmap dòng tiền ---- */
+function drawCFHM(){
+  const rows=A.ps.map(i=>{
+    const v=A.js.map(j=>{
+      const t=D.heatCF[i][j],c=D.heatCHI[i][j];
+      return +(cfHm==='thu'?t:cfHm==='chi'?c:t-c).toFixed(2);});
+    return {code:short(P[i].ma),v,hm:hmOf(i).map(([n,f])=>({n,v:v.map(x=>+(x*f).toFixed(2))}))};
+  });
+  const colFn=(v,a)=>v===0?'transparent':(v>0?'rgba(67,167,118,':'rgba(215,90,84,')+(0.12+0.55*a).toFixed(3)+')';
+  document.getElementById('cf_hmleg').innerHTML=
+    cfHm==='net'?'<span><i style="background:var(--gr)"></i>Dòng tiền dương</span><span><i style="background:var(--rd)"></i>Dòng tiền âm</span>'
+    :(cfHm==='thu'?'<span><i style="background:var(--gr)"></i>Tiền thu về theo tháng</span>'
+                  :'<span><i style="background:var(--rd)"></i>Tiền chi ra theo tháng</span>');
+  hmRender(document.getElementById('tb_cfhm'),labs(),rows,cfExp,
+    i=>{cfExp.has(i)?cfExp.delete(i):cfExp.add(i);drawCFHM();},colFn);
+}
+
+/* ---- chart đối tượng thu/chi ---- */
+function drawPty(){
+  const isT=ptyMode==='thu';
+  const m={};
+  A.jn0.filter(j=>j[2]===(isT?'Thu':'Chi')).forEach(j=>{m[j[5]]=(m[j[5]]||0)+j[7];});
+  const list=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,9);
+  const tot=sum(list.map(x=>x[1]));
+  document.getElementById('cs_pty').textContent=isT
+    ?'Tiền đã thu từ chủ đầu tư trong phạm vi lọc' : 'Tiền đã chi cho nhà cung cấp và nội bộ';
+  mk('cn_pty',{type:'bar',data:{labels:list.map(x=>x[0].length>28?x[0].slice(0,27)+'…':x[0]),
+    datasets:[{data:list.map(x=>x[1]),backgroundColor:isT?C.gr:C.rd,borderRadius:4}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>(isT?'Đã thu: ':'Đã chi: ')+F(c.parsed.x,2)+' tỷ ('+F(tot?c.parsed.x/tot*100:0)+'%)'}}},
+      scales:{x:{...AXn,ticks:{callback:v=>v+' tỷ'}},y:AXx}}});
+}
+
+/* ---- lịch 30 ngày ---- */
+function drawPlan(){
+  const tb=document.getElementById('tb_plan');
+  if(!A.plan.length){EMPTY(tb,5,'Không có khoản dự kiến');return;}
+  const sT=sum(A.plan.filter(x=>x[0]===1).map(x=>x[5])),sC=sum(A.plan.filter(x=>x[0]===0).map(x=>x[5]));
+  tb.querySelector('tbody').innerHTML=A.plan.map(x=>
+    '<tr><td><span class="pill '+(x[0]?'p-g':'p-r')+'">'+(x[0]?'Thu':'Chi')+'</span></td>'
+    +'<td>'+x[1]+'</td><td style="font-size:12px;color:var(--mut)">'+x[2]+'</td>'
+    +'<td style="white-space:nowrap">'+x[4]+'</td>'
+    +'<td class="n" style="font-weight:600;color:'+(x[0]?C.gr:C.rd)+'">'+(x[0]?'+':'−')+F(x[5],2)+'</td></tr>').join('')
+  +'<tr class="tot"><td colspan="4">RÒNG DỰ KIẾN</td><td class="n" style="color:'+(sT-sC>=0?C.gr:C.rd)+'">'
+  +(sT-sC>=0?'+':'−')+F(Math.abs(sT-sC),2)+'</td></tr>';
+}
+
+/* ---- nhật ký ---- */
+function drawJn(){
+  const src=A.jn0.filter(j=>j[2]===(jrMode==='thu'?'Thu':'Chi')).filter(j=>jfMode==='all'||j[8]===jfMode);
+  const tb=document.getElementById('tb_jn'), tot=sum(src.map(j=>j[7]));
+  const ck=sum(src.filter(j=>j[8]==='CK').map(j=>j[7])), tm=tot-ck;
+  document.getElementById('jr_sum').innerHTML=src.length+' giao dịch · tổng <b style="color:'
+    +(jrMode==='thu'?C.gr:C.rd)+'">'+F(tot,2)+' tỷ đ</b> · chuyển khoản '+F(ck,2)+' · tiền mặt '+F(tm,2);
+  if(!src.length){EMPTY(tb,7,'Không có giao dịch trong phạm vi lọc');return;}
+  const t=jrMode==='thu';
+  tb.querySelector('tbody').innerHTML=src.map(j=>
+    '<tr><td style="white-space:nowrap">'+j[0]+'</td><td class="mono">'+j[3]+'</td>'
+    +'<td>'+j[6]+'</td><td style="font-size:12px;color:var(--mut)">'+j[5]+'</td>'
+    +'<td class="mono">'+short(j[4])+'</td>'
+    +'<td class="n" style="font-weight:700;color:'+(t?C.gr:C.rd)+'">'+(t?'+':'−')+F(j[7],2)+'</td>'
+    +'<td><span class="pill '+(j[8]==='CK'?'p-b':'p-n')+'">'+(j[8]==='CK'?'Chuyển khoản':'Tiền mặt')+'</span></td></tr>').join('')
+  +'<tr class="tot"><td colspan="5">TỔNG</td><td class="n">'+F(tot,2)+'</td><td></td></tr>';
+}
+
+/* ---- tuổi nợ ---- */
+function drawAging(){
+  const isPt=agMode==='pt';
+  const ag=isPt?A.arAg:A.apAg;
+  document.getElementById('ag_leg').innerHTML=D.bands.map((b,i)=>
+    '<span><i style="background:'+AGC[i]+'"></i>'+b+'</span>').join('');
+  mk('cn_agL',{type:'bar',data:{labels:D.bands,datasets:[{data:ag,backgroundColor:AGC,borderRadius:5}]},
+    options:{plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>F(c.parsed.y,2)+' tỷ ('+F(sum(ag)?c.parsed.y/sum(ag)*100:0)+'%)'}}},
+      scales:{x:AXx,y:{...AXn,ticks:{callback:v=>v+' tỷ'}}}}});
+
+  const src=isPt?A.inv:A.pay, iAmt=isPt?6:6, iDay=isPt?7:7;
+  const m={};
+  src.forEach(v=>{const k=v[3];if(!m[k])m[k]=[0,0,0,0];
+    m[k][band(isPt?v[7]:Math.max(0,v[7]))]+=v[6];});
+  const list=Object.entries(m).map(([n,a])=>({n,a,s:sum(a)})).sort((x,y)=>y.s-x.s).slice(0,8);
+  mk('cn_agR',{type:'bar',data:{labels:list.map(o=>o.n.length>26?o.n.slice(0,25)+'…':o.n),
+    datasets:D.bands.map((b,i)=>({label:b,data:list.map(o=>o.a[i]),backgroundColor:AGC[i],stack:'s',
+      borderWidth:.5,borderColor:'rgba(255,255,255,.5)'}))},
+    options:{indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>c.dataset.label+': '+F(c.parsed.x,2)+' tỷ'}}},
+      scales:{x:{...AXn,stacked:true,ticks:{callback:v=>v+' tỷ'}},y:{...AXx,stacked:true}}}});
+}
+
+/* ---- heatmap công nợ × tuổi nợ ---- */
+function drawCNHM(){
+  const isPt=agMode==='pt', src=isPt?A.inv:A.pay;
+  document.getElementById('cnhm_t').innerHTML=(isPt?'Công nợ phải thu':'Công nợ phải trả')
+    +' theo công trình × tuổi nợ <span class="s2">· bấm dòng để mở hạng mục</span>';
+  document.getElementById('cnhm_leg').innerHTML=D.bands.map((b,i)=>
+    '<span><i style="background:'+AGC[i]+'"></i>'+b+'</span>').join('');
+  const rows=A.ps.map(i=>{
+    const v=[0,0,0,0];
+    src.filter(x=>x[2]===P[i].ma).forEach(x=>{v[band(isPt?x[7]:Math.max(0,x[7]))]+=x[6];});
+    const vr=v.map(x=>+x.toFixed(2));
+    return {code:short(P[i].ma),v:vr,hm:hmOf(i).map(([n,f])=>({n,v:vr.map(x=>+(x*f).toFixed(2))}))};
+  }).filter(r=>sum(r.v)>0);
+  const tb=document.getElementById('tb_cnhm');
+  if(!rows.length){tb.querySelector('thead').innerHTML='';EMPTY(tb,6,'Không có công nợ trong phạm vi lọc');return;}
+  const colFn=(v,a)=>v===0?'transparent':'rgba(46,117,182,'+(0.12+0.55*a).toFixed(3)+')';
+  hmRender(tb,D.bands,rows,cnExp,i=>{cnExp.has(i)?cnExp.delete(i):cnExp.add(i);drawCNHM();},colFn);
+}
+
+/* ---- cảnh báo hóa đơn ---- */
+function drawInv(){
+  const all=A.inv.map(v=>({c:v[0],o:v[3],p:v[2],t:'PT',d:v[5],a:v[6],q:v[7],ph:v[8],ck:v[9],nh:v[10]}))
+    .concat(A.pay.map(v=>({c:v[0],o:v[3],p:v[2],t:'PTr',d:v[5],a:v[6],q:v[7],ph:v[8],ck:v[9],nh:v[10]})));
+  const rows=all.filter(x=>invF==='all'?true:(invF==='over'?x.q>0:x.q<=0)).sort((a,b)=>b.q-a.q);
+  const tb=document.getElementById('tb_inv');
+  if(!rows.length){EMPTY(tb,10,'Không có hóa đơn phù hợp bộ lọc');return;}
+  const stt=q=>q>0?'<span class="pill p-r">Quá hạn '+q+' ngày</span>'
+    :(q>=-7?'<span class="pill p-o">Còn '+(-q)+' ngày</span>':'<span class="pill p-g">Trong hạn</span>');
+  tb.querySelector('tbody').innerHTML=rows.map(x=>
+    '<tr><td class="mono">'+x.c+'</td><td style="font-size:12px">'+x.o+'</td>'
+    +'<td class="mono">'+short(x.p)+'</td>'
+    +'<td><span class="pill '+(x.t==='PT'?'p-b':'p-n')+'">'+(x.t==='PT'?'Phải thu':'Phải trả')+'</span></td>'
+    +'<td style="white-space:nowrap">'+x.d+'</td>'
+    +'<td class="n" style="font-weight:600;color:'+(x.q>60?C.rd:'inherit')+'">'+F(x.a,2)+'</td>'
+    +'<td>'+stt(x.q)+'</td><td style="font-size:12px;color:var(--mut)">'+x.ph+'</td>'
+    +'<td style="white-space:nowrap;color:var(--mut)">'+x.ck+'</td>'
+    +'<td class="n" style="font-weight:700;color:'+(x.nh>=3?C.rd:(x.nh>0?C.og:C.mut))+'">'+x.nh+'</td></tr>').join('')
+  +'<tr class="tot"><td colspan="5">TỔNG '+rows.length+' CHỨNG TỪ</td><td class="n">'+F(sum(rows.map(x=>x.a)),2)+'</td><td colspan="4"></td></tr>';
+}
+
+
+/* ─── bảng chi tiết khoản chi (drill-down theo dự án) ─── */
+let ctCat='all'; const ctExp=new Set();
+function drawCT(){
+  const seg=document.getElementById('sg_ct');
+  if(seg && !seg.dataset.built){
+    seg.innerHTML='<button class="on" data-m="all">Tất cả</button>'
+      +D.cats.map(c=>'<button data-m="'+c+'">'+(c.length>18?c.slice(0,17)+'…':c)+'</button>').join('');
+    seg.dataset.built='1';
+    seg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+      ctCat=b.dataset.m; drawCT();}));
+  }
+  const src=D.chitiet.filter(v=>inP(v[2])&&inR(v[1])&&(ctCat==='all'||v[3]===ctCat));
+  const tb=document.getElementById('tb_ct'), tot=sum(src.map(v=>v[7]));
+  document.getElementById('cs_ct').innerHTML=src.length+' khoản chi · tổng <b style="color:var(--bl)">'
+    +F(tot,2)+' tỷ đ</b> · bấm dòng dự án để xem từng khoản chi';
+  if(!src.length){EMPTY(tb,8,'Không có khoản chi trong phạm vi lọc');return;}
+  const scl={'Đã thanh toán':'p-g','Chờ thanh toán':'p-o','Đang xử lý':'p-b'};
+  // gom theo dự án
+  const grp={};
+  src.forEach(v=>{(grp[v[2]]=grp[v[2]]||[]).push(v);});
+  const rows=Object.entries(grp).map(([ma,list])=>({ma,list,s:sum(list.map(v=>v[7]))}))
+    .sort((a,b)=>b.s-a.s);
+  let h='';
+  rows.forEach(r=>{
+    const op=ctExp.has(r.ma), p=P[IDX[r.ma]];
+    h+='<tr class="pr" data-m="'+r.ma+'"><td><span class="cr'+(op?' op':'')+'">▶</span> '
+      +'<span class="mono">'+short(r.ma)+'</span> <span style="color:var(--mut)">'+p.ten+'</span></td>'
+      +'<td style="color:var(--fnt)">'+r.list.length+' khoản</td><td colspan="3"></td>'
+      +'<td class="n" style="font-weight:700">'+F(r.s,2)+'</td>'
+      +'<td class="n">'+F(tot?r.s/tot*100:0)+'%</td><td></td></tr>';
+    if(op) r.list.slice().sort((a,b)=>b[7]-a[7]).forEach(v=>{
+      h+='<tr class="ch"><td>'+v[4]+'</td>'
+        +'<td style="font-size:11.5px;color:var(--mut)">'+v[3]+'</td>'
+        +'<td class="mono">'+v[0]+'</td><td style="white-space:nowrap">'+v[6]+'</td>'
+        +'<td style="font-size:11.5px;color:var(--mut)">'+v[5]+'</td>'
+        +'<td class="n" style="font-weight:600">'+F(v[7],2)+'</td>'
+        +'<td class="n" style="color:var(--fnt)">'+F(r.s?v[7]/r.s*100:0)+'%</td>'
+        +'<td><span class="pill '+scl[v[8]]+'">'+v[8]+'</span></td></tr>';});
+  });
+  h+='<tr class="tot"><td>TỔNG '+rows.length+' DỰ ÁN · '+src.length+' KHOẢN</td><td colspan="4"></td>'
+    +'<td class="n">'+F(tot,2)+'</td><td class="n">100,0%</td><td></td></tr>';
+  tb.querySelector('tbody').innerHTML=h;
+  tb.querySelectorAll('tr.pr').forEach(tr=>tr.addEventListener('click',()=>{
+    const k=tr.dataset.m; ctExp.has(k)?ctExp.delete(k):ctExp.add(k); drawCT();}));
+}
+
+/* ─── đề xuất tạm ứng ─── */
+let dxF='all';
+function drawDX(){
+  const all=D.dexuat.filter(v=>inP(v[1]));
+  const need=all.filter(v=>v[8]==='Chờ duyệt'), ing=all.filter(v=>v[8]==='Đang duyệt');
+  const late=all.filter(v=>(v[8]==='Chờ duyệt'||v[8]==='Đang duyệt')&&v[6]>14);
+  document.getElementById('mn_dx').innerHTML=
+    '<div class="mk"><u>Cần duyệt</u><b style="color:var(--rd)">'+need.length+'<small> đề xuất · '+F(sum(need.map(v=>v[4])),2)+' tỷ</small></b></div>'
+   +'<div class="mk"><u>Đang duyệt</u><b style="color:var(--og)">'+ing.length+'<small> đề xuất · '+F(sum(ing.map(v=>v[4])),2)+' tỷ</small></b></div>'
+   +'<div class="mk"><u>Tồn đọng trên 14 ngày</u><b style="color:var(--rd)">'+late.length+'<small> đề xuất</small></b></div>'
+   +'<div class="mk"><u>Tổng giá trị chờ xử lý</u><b>'+F(sum(need.concat(ing).map(v=>v[4])),2)+'<small> tỷ đ</small></b></div>';
+  const src=all.filter(v=>dxF==='all'?true:dxF==='need'?v[8]==='Chờ duyệt'
+    :dxF==='ing'?v[8]==='Đang duyệt':(v[8]==='Đã duyệt'||v[8]==='Từ chối'))
+    .sort((a,b)=>b[6]-a[6]);
+  const tb=document.getElementById('tb_dx');
+  if(!src.length){EMPTY(tb,10,'Không có đề xuất phù hợp bộ lọc');return;}
+  const scl={'Chờ duyệt':'p-r','Đang duyệt':'p-o','Đã duyệt':'p-g','Từ chối':'p-n'};
+  tb.querySelector('tbody').innerHTML=src.map(v=>{
+    const pend=(v[8]==='Chờ duyệt'||v[8]==='Đang duyệt');
+    const dc=pend&&v[6]>14?C.rd:(pend?C.og:C.mut);
+    return '<tr><td class="mono">'+v[0]+'</td><td class="mono">'+short(v[1])+'</td>'
+      +'<td style="font-size:12px">'+v[2]+'</td><td>'+v[3]+'</td>'
+      +'<td class="n" style="font-weight:600">'+F(v[4],2)+'</td>'
+      +'<td style="white-space:nowrap;color:var(--mut)">'+v[5]+'</td>'
+      +'<td class="n" style="color:'+dc+';font-weight:700">'+v[6]+'</td>'
+      +'<td style="font-size:12px;color:var(--mut)">'+v[7]+'</td>'
+      +'<td><span class="pill '+scl[v[8]]+'">'+v[8]+'</span></td>'
+      +'<td><a class="lk" href="https://service.base.vn/request/'+v[9].replace(/[^0-9]/g,'')+'" target="_blank" rel="noopener">'+v[9]+'</a></td></tr>';
+  }).join('')
+  +'<tr class="tot"><td colspan="4">TỔNG '+src.length+' ĐỀ XUẤT</td><td class="n">'+F(sum(src.map(v=>v[4])),2)+'</td><td colspan="5"></td></tr>';
+}
+
+function drawCN(){k5cf();k5no();drawCF();drawCFHM();drawPty();drawPlan();drawJn();drawAging();drawCNHM();drawInv();drawDX();}
+
+/* ═══════ NAV & FILTER ═══════ */
+const META={dt:['Doanh thu công trình','Doanh thu · lợi nhuận gộp · nghiệm thu · điều khoản thanh toán'],
+ cp:['Chi phí & kiểm soát ngân sách','Cơ cấu chi phí theo hạng mục · theo tháng · so sánh kế hoạch'],
+ cn:['Công nợ & dòng tiền','Phải thu · phải trả · dòng tiền · tạm ứng, quyết toán và bảo lãnh']};
+const DRAW={dt:drawDT,cp:drawCP,cn:drawCN};
+let cur='dt',curSub='cn1';
+function show(p){
+  cur=p;
+  document.querySelectorAll('button.nv').forEach(t=>t.classList.toggle('on',t.dataset.p===p));
+  document.querySelectorAll('.page').forEach(g=>g.classList.remove('on'));
+  document.getElementById('p-'+p).classList.add('on');
+  document.getElementById('ptit').textContent=META[p][0];
+  document.getElementById('psub').textContent=META[p][1];
+  document.getElementById('fg_fl').style.display=(p==='cn'&&curSub==='cn2')?'':'none';
+  DRAW[p]();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function refresh(){
+  recompute(); kpis(); tables(); nghiemthu();
+  drawHeatCP(); DRAW[cur]();
+  const np=A.ps.length,nm=A.js.length;
+  document.getElementById('f_st').innerHTML='Đang xem <b>'+np+'</b> dự án · <b>'+nm+'</b> tháng ('+D.months[FS.a]+' – '+D.months[FS.b]+')';
+}
+function buildFilters(){
+  const pj=document.getElementById('f_pj');
+  pj.innerHTML='<option value="all">Tất cả dự án</option>'+P.map(p=>'<option value="'+p.ma+'">'+p.ma+' · '+p.ten+'</option>').join('');
+  const opt=D.months.map((m,i)=>'<option value="'+i+'">'+m+'</option>').join('');
+  const a=document.getElementById('f_a'),b=document.getElementById('f_b');
+  a.innerHTML=opt; b.innerHTML=opt; a.value=0; b.value=NM-1;
+  pj.addEventListener('change',()=>{FS.pj=pj.value;refresh();});
+  a.addEventListener('change',()=>{FS.a=+a.value;if(FS.a>FS.b){FS.b=FS.a;b.value=FS.b;}refresh();});
+  b.addEventListener('change',()=>{FS.b=+b.value;if(FS.b<FS.a){FS.a=FS.b;a.value=FS.a;}refresh();});
+  document.getElementById('f_fl').addEventListener('change',e=>{FS.fl=e.target.value;jrMode=(e.target.value==='Chi')?'chi':'thu';drawJn();});
+  document.getElementById('f_rs').addEventListener('click',()=>{
+    FS.pj='all';FS.a=0;FS.b=NM-1;FS.fl='all';
+    pj.value='all';a.value=0;b.value=NM-1;document.getElementById('f_fl').value='all';refresh();});
+}
+document.querySelectorAll('button.nv').forEach(t=>t.addEventListener('click',()=>show(t.dataset.p)));
+document.querySelectorAll('.stab').forEach(t=>t.addEventListener('click',()=>{
+  curSub=t.dataset.s;
+  document.querySelectorAll('.stab').forEach(x=>x.classList.toggle('on',x===t));
+  document.querySelectorAll('.spane').forEach(x=>x.classList.remove('on'));
+  document.getElementById('s-'+curSub).classList.add('on');
+  document.getElementById('fg_fl').style.display=curSub==='cn2'?'':'none';
+  drawCN();
+}));
+const segBind=(id,fn)=>document.querySelectorAll('#'+id+' button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));fn(b.dataset.m);}));
+segBind('sg_dt',m=>{modeDT=m;drawDT1();});
+segBind('sg_cp',m=>{modeCP=m;drawHeatCP();});
+
+segBind('sg_cf1',m=>{cfMode=m;drawCF();});
+segBind('sg_cfm',m=>{cfHm=m;drawCFHM();});
+segBind('sg_pty',m=>{ptyMode=m;drawPty();});
+segBind('sg_jr',m=>{jrMode=m;drawJn();});
+segBind('sg_jf',m=>{jfMode=m;drawJn();});
+segBind('sg_ag',m=>{agMode=m;drawAging();drawCNHM();});
+segBind('sg_inv',m=>{invF=m;drawInv();});
+segBind('sg_dx',m=>{dxF=m;drawDX();});
+
+buildFilters(); refresh();
+</script>

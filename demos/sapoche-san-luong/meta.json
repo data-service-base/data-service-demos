@@ -1,0 +1,20 @@
+{
+  "slug": "sapoche-san-luong",
+  "title": "Sapoche — Báo cáo sản lượng",
+  "type": "dashboard",
+  "industry": "Sản xuất",
+  "department": "Vận hành",
+  "description": "Sản lượng sản xuất theo thời gian, công đoạn và sản phẩm.",
+  "tools": [
+    "HTML"
+  ],
+  "source": "https://tbinh-06.github.io/Sapoche_SanLuong/",
+  "source_repo": "https://github.com/tbinh-06/Sapoche_SanLuong",
+  "author": "Thanh Bình",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "sản lượng"
+  ]
+}
