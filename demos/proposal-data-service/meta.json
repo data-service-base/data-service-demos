@@ -1,0 +1,22 @@
+{
+  "slug": "proposal-data-service",
+  "title": "Proposal Base Data Service (18 slide)",
+  "type": "proposal",
+  "industry": "General",
+  "department": "All",
+  "description": "Deck đề xuất dịch vụ Data Service: bối cảnh, giải pháp, case study, khách hàng, chi phí, lộ trình. Có thư viện báo cáo mẫu và tuỳ chỉnh theo khách.",
+  "tools": [
+    "HTML",
+    "WebGL"
+  ],
+  "source": "https://claude.ai/artifact/C9SuRP7MQt5TKTeqhG8FE2",
+  "source_repo": "",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "proposal",
+    "deck"
+  ]
+}

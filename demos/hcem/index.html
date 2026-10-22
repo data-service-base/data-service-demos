@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Tài chính 2026 – TTQTMT</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--bg:#f0f2f5;--surface:#fff;--surface2:#f8f9fb;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--text:#1a1d23;--text2:#5a6072;--text3:#9aa0b0;--green:#0f8a5f;--green-bg:#e6f7f1;--red:#c93434;--red-bg:#fdf0f0;--blue:#1d4ed8;--blue-bg:#eff4ff;--amber:#92400e;--amber-bg:#fef3e2;--purple:#6d28d9;--purple-bg:#f3efff;--r:12px;--rs:8px;--sh:0 1px 3px rgba(0,0,0,0.09),0 1px 2px rgba(0,0,0,0.04)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+.topnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 22px;display:flex;align-items:center;gap:0;height:52px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.logo{margin-right:28px;flex-shrink:0;display:flex;align-items:center}
+.logo span{color:var(--blue)}
+.nav-tabs{display:flex;gap:2px}
+.ntab{padding:6px 16px;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--text2);border-radius:var(--rs);font-weight:500;transition:all .15s;line-height:1.3;text-align:center}
+.ntab small{display:block;font-size:9px;color:var(--text3);margin-bottom:1px}
+.ntab.on{color:var(--blue);background:var(--blue-bg)}
+.ntab.on small{color:#93b4f8}
+.tr{margin-left:auto;display:flex;gap:8px;align-items:center}
+.psel{font-size:12px;padding:5px 10px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--surface);color:var(--text);cursor:pointer}
+.page{display:none;padding:18px 22px}
+.page.on{display:block}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;box-shadow:var(--sh)}
+.cf{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px;box-shadow:var(--sh);margin-bottom:14px}
+.ct{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between}
+.ct span{font-weight:400;font-size:10px;color:var(--text3);text-transform:none;letter-spacing:0}
+.kl{font-size:11px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.kv{font-size:20px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+.ks{font-size:11px;color:var(--text3);margin-top:5px}
+.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.amber{color:var(--amber)}.purple{color:var(--purple)}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.bg{background:var(--green-bg);color:var(--green)}
+.br{background:var(--red-bg);color:var(--red)}
+.bb{background:var(--blue-bg);color:var(--blue)}
+.ba{background:var(--amber-bg);color:var(--amber)}
+.bp{background:var(--purple-bg);color:var(--purple)}
+.bneutral{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.tbl-w{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--surface2)}
+td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfc}
+.r{text-align:right}.c{text-align:center}
+.pb{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;margin-top:3px}
+.pf{height:5px;border-radius:3px;transition:width .4s}
+.leg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:9px}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.lda{width:14px;height:0;border-top:2px dashed;flex-shrink:0}
+.ch180{position:relative;height:180px}
+.ch200{position:relative;height:200px}
+.ch220{position:relative;height:220px}
+.ch260{position:relative;height:260px}
+.btng{display:flex;gap:4px}
+.bsm{font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;background:var(--surface);color:var(--text2);cursor:pointer;font-weight:500;transition:all .15s}
+.bsm.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tag{font-size:10px;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:4px}
+.hm-cell{height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:default}
+.hm-hdr{font-size:10px;font-weight:600;color:var(--text2);display:flex;align-items:center;justify-content:center}
+.hm-rhdr{font-size:11px;font-weight:500;color:var(--text);display:flex;align-items:center;padding-left:4px}
+.hml{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3);margin-top:6px}
+.hml-bar{display:flex;gap:2px}
+.hml-sw{width:18px;height:7px;border-radius:2px}
+.hm0{background:#eff6ff;color:#6b99d6}.hm1{background:#bfdbfe;color:#1e40af}.hm2{background:#93c5fd;color:#1e3a8a}.hm3{background:#3b82f6;color:#fff}.hm4{background:#1d4ed8;color:#fff}.hm5{background:#1e3a8a;color:#fff}
+.hmr0{background:#fff1f2;color:#d47070}.hmr1{background:#fecdd3;color:#9f1239}.hmr2{background:#fda4af;color:#881337}.hmr3{background:#f87171;color:#fff}.hmr4{background:#dc2626;color:#fff}.hmr5{background:#991b1b;color:#fff}
+.hmg0{background:#f0fdf4;color:#6bb87a}.hmg1{background:#bbf7d0;color:#166534}.hmg2{background:#86efac;color:#14532d}.hmg3{background:#4ade80;color:#fff}.hmg4{background:#16a34a;color:#fff}.hmg5{background:#14532d;color:#fff}
+
+
+
+</style>
+</head>
+<body>
+<div class="topnav">
+  <div class="logo" style="display:flex;align-items:center;gap:10px;padding:6px 0">
+    <img src="data:image/jpeg;base64,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" alt="HCEM Logo" style="height:38px;width:auto;object-fit:contain">
+    <span style="font-size:13px;font-weight:700;color:#1a1d23">Finance <span style="color:#1d4ed8">Dashboard</span></span>
+  </div>
+  <div class="nav-tabs">
+    <button class="ntab on" onclick="goPage(0,this)"><small>Trang 1</small>Tổng quan</button>
+    <button class="ntab" onclick="goPage(1,this)"><small>Trang 2</small>Chi tiết doanh thu</button>
+    <button class="ntab" onclick="goPage(2,this)"><small>Trang 3</small>Chi tiết chi phí</button>
+  </div>
+  <div class="tr">
+    <select class="psel" id="gPer" onchange="renderP1()">
+      <option value="1">Tháng 1/2025</option><option value="2">Tháng 2/2025</option>
+      <option value="3">Tháng 3/2025</option><option value="4">Tháng 4/2025</option>
+      <option value="5">Tháng 5/2025</option><option value="6">Tháng 6/2025</option>
+      <option value="7">Tháng 7/2025</option><option value="8">Tháng 8/2025</option>
+      <option value="9">Tháng 9/2025</option><option value="10">Tháng 10/2025</option>
+      <option value="11">Tháng 11/2025</option><option value="12" selected>Tháng 12/2025</option>
+      <option value="99">Cả năm 2025</option>
+    </select>
+    <span style="font-size:11px;color:var(--text3)">Năm 2025 · Đã kết sổ</span>
+  </div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page on" id="pg0">
+  <div class="g5" id="p1kpi"></div>
+    <div class="card" style="margin-bottom:14px">
+    <div class="ct">Lợi nhuận theo thời gian <span>Thực tế vs Năm trước</span></div>
+    <div class="leg">
+      <span class="li"><span class="lda" style="border-color:#94a3b8"></span>Năm trước</span>
+      <span class="li"><span class="ld" style="background:#1d4ed8"></span>DT thực tế</span>
+      <span class="li"><span class="ld" style="background:#0f8a5f"></span>Lợi nhuận TT</span>
+    </div>
+    <div class="ch200"><canvas id="c_p1_profit" role="img" aria-label="Lợi nhuận theo thời gian"></canvas></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Doanh thu theo tháng <span>Màu đỏ = thấp hơn KH · Xanh = cao hơn KH</span></div>
+      <div class="leg">
+        <span class="li"><span class="lda" style="border-color:#1d4ed8"></span>KH/tháng</span>
+        <span class="li"><span class="ld" style="background:#0f8a5f"></span>TT &ge; KH</span>
+        <span class="li"><span class="ld" style="background:#c93434"></span>TT &lt; KH</span>
+        <span class="li"><span class="lda" style="border-color:#f59e0b"></span>% đạt (trục P)</span>
+      </div>
+      <div class="ch220"><canvas id="c_p1_rev" role="img" aria-label="DT tháng KH vs TT với tỷ lệ %"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Chi phí theo tháng <span>Vàng = vượt KH · Đỏ = dưới KH</span></div>
+      <div class="leg">
+        <span class="li"><span class="lda" style="border-color:#94a3b8"></span>KH/tháng</span>
+        <span class="li"><span class="ld" style="background:#c93434"></span>CP Thực tế</span>
+        <span class="li"><span class="ld" style="background:#f59e0b"></span>Vượt KH</span>
+        <span class="li"><span class="lda" style="border-color:#6d28d9"></span>% thực hiện (trục P)</span>
+      </div>
+      <div class="ch220"><canvas id="c_p1_cost" role="img" aria-label="CP tháng KH vs TT"></canvas></div>
+    </div>
+  </div>
+  <div class="cf">
+    <div class="ct">Tổng hợp Doanh thu – Chi phí theo phòng ban <span>Lũy kế 4 tháng 2026</span></div>
+    <div class="tbl-w"><table>
+      <thead><tr>
+        <th style="width:20%">Phòng ban</th>
+        <th class="r">DT KH/T (tỷ)</th><th class="r">DT KH 4T</th><th class="r">DT TT 4T</th>
+        <th class="r">CP KH/T (tỷ)</th><th class="r">CP KH 4T</th><th class="r">CP TT 4T</th>
+        <th style="width:10%">DT %đạt</th><th style="width:10%">CP %đạt</th><th class="c">Tình trạng</th>
+      </tr></thead>
+      <tbody id="p1_dept"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="pg1">
+  <div class="frow" style="margin-bottom:10px">
+    <label style="font-size:11px;color:var(--text2)">Kỳ xem:</label>
+    <select class="psel" id="p2Per" onchange="renderP2()">
+      <option value="1">T1/2025</option><option value="2">T2/2025</option>
+      <option value="3">T3/2025</option><option value="4">T4/2025</option>
+      <option value="5">T5/2025</option><option value="6">T6/2025</option>
+      <option value="7">T7/2025</option><option value="8">T8/2025</option>
+      <option value="9">T9/2025</option><option value="10">T10/2025</option>
+      <option value="11">T11/2025</option><option value="12" selected>T12/2025</option>
+    </select>
+  </div>
+  <div class="g4" id="p2kpi"></div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Doanh thu theo tháng <span>KH phân bổ vs Thực tế</span></div>
+      <div class="leg">
+        <span class="li"><span class="lda" style="border-color:#94a3b8"></span>Năm trước</span>
+        <span class="li"><span class="lda" style="border-color:#1d4ed8"></span>KH 2026/tháng</span>
+        <span class="li"><span class="ld" style="background:#0f8a5f"></span>TT 2026</span>
+      </div>
+      <div class="ch220"><canvas id="c_p2_trend" role="img" aria-label="DT tháng 2 năm"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Tỷ trọng doanh thu theo nhóm <span>KH tháng – TT – Tỷ lệ đạt</span></div>
+      <div class="leg">
+        <span class="li"><span class="ld" style="background:rgba(29,78,216,0.25)"></span>KH tháng</span>
+        <span class="li"><span class="ld" style="background:#0f8a5f"></span>TT lũy kế 4T</span>
+      </div>
+      <div class="ch220"><canvas id="c_p2_grp" role="img" aria-label="Tỷ trọng theo nhóm"></canvas></div>
+    </div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Top 10 khách hàng doanh thu lớn nhất <span>Lũy kế 4T/2026 · Đơn vị: triệu đồng</span></div>
+      <div class="ch220"><canvas id="c_p2_top10" role="img" aria-label="Top 10 khách hàng doanh thu"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Dự thu tháng tới <span>Tháng 5/2026</span></div>
+      <div id="p2_fc" style="overflow-y:auto;max-height:220px"></div>
+    </div>
+  </div>
+  <div class="cf">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ct" style="margin:0">Heatmap – Loại doanh thu × Tháng</div>
+      <div class="btng">
+        <button class="bsm on" onclick="setHMR('val',this)">Doanh thu (tỷ)</button>
+        <button class="bsm" onclick="setHMR('pct',this)">% TT vs KH</button>
+      </div>
+    </div>
+    <div id="hm_rev"></div>
+    <div class="hml"><span>Thấp</span><div class="hml-bar" id="hml_rev"></div><span>Cao</span></div>
+  </div>
+  <div class="cf">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ct" style="margin:0">Chi tiết hợp đồng dịch vụ <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none">2.731 đơn · Lọc trạng thái</span></div>
+      <div class="btng">
+        <button class="bsm on" onclick="fContracts('all',this)">Tất cả</button>
+        <button class="bsm" onclick="fContracts('cho',this)">Chờ thu</button>
+        <button class="bsm" onclick="fContracts('done',this)">Đã thu</button>
+      </div>
+    </div>
+    <div class="tbl-w"><table>
+      <thead><tr>
+        <th style="width:30%">Tên hợp đồng</th><th style="width:20%">Khách hàng</th>
+        <th>Loại</th><th class="r">Giá trị HĐ</th><th class="r">Đã thu</th>
+        <th class="r">Còn phải thu</th><th class="c">Trạng thái</th>
+      </tr></thead>
+      <tbody id="p2_contracts"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="pg2">
+  <div class="frow" style="margin-bottom:10px">
+    <label style="font-size:11px;color:var(--text2)">Kỳ xem:</label>
+    <select class="psel" id="p3Per" onchange="renderP3()">
+      <option value="1">T1/2025</option><option value="2">T2/2025</option>
+      <option value="3">T3/2025</option><option value="4">T4/2025</option>
+      <option value="5">T5/2025</option><option value="6">T6/2025</option>
+      <option value="7">T7/2025</option><option value="8">T8/2025</option>
+      <option value="9">T9/2025</option><option value="10">T10/2025</option>
+      <option value="11">T11/2025</option><option value="12" selected>T12/2025</option>
+    </select>
+  </div>
+  <div class="g4" id="p3kpi"></div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Chi phí theo tháng <span>KH phân bổ vs Thực chi</span></div>
+      <div class="leg">
+        <span class="li"><span class="lda" style="border-color:#94a3b8"></span>Năm trước</span>
+        <span class="li"><span class="lda" style="border-color:#1d4ed8"></span>KH 2026/tháng</span>
+        <span class="li"><span class="ld" style="background:#c93434"></span>TT 2026</span>
+      </div>
+      <div class="ch220"><canvas id="c_p3_trend" role="img" aria-label="CP tháng 2 năm"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Tỷ trọng chi phí theo mục <span>KH tháng – TT – Tỷ lệ đạt</span></div>
+      <div class="leg">
+        <span class="li"><span class="ld" style="background:rgba(29,78,216,0.25)"></span>KH tháng</span>
+        <span class="li"><span class="ld" style="background:#c93434"></span>TT lũy kế 4T</span>
+      </div>
+      <div class="ch220"><canvas id="c_p3_grp" role="img" aria-label="Tỷ trọng cp theo mục"></canvas></div>
+    </div>
+  </div>
+  <div class="g21">
+    <div class="card">
+      <div class="ct">Top 10 nhà cung cấp / đơn vị thụ hưởng <span>Lũy kế 4T/2026 · tỷ đồng</span></div>
+      <div class="ch220"><canvas id="c_p3_top10" role="img" aria-label="Top 10 NCC chi phí lớn nhất"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Dự chi tháng tới <span>Tháng 5/2026</span></div>
+      <div id="p3_fc" style="overflow-y:auto;max-height:220px"></div>
+    </div>
+  </div>
+  <div class="cf">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ct" style="margin:0">Heatmap – Mục chi phí × Tháng</div>
+      <div class="btng">
+        <button class="bsm on" onclick="setHMC('val',this)">Chi phí (tỷ)</button>
+        <button class="bsm" onclick="setHMC('pct',this)">% TT vs KH</button>
+      </div>
+    </div>
+    <div id="hm_cost"></div>
+    <div class="hml"><span>Thấp</span><div class="hml-bar" id="hml_cost"></div><span>Cao</span></div>
+  </div>
+  <div class="cf" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="ct" style="margin:0">Chi tiết khoản chi phí <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none">Lọc theo nguồn ngân sách</span></div>
+      <div class="btng">
+        <button class="bsm on" onclick="fCost('all',this)">Tất cả</button>
+        <button class="bsm" onclick="fCost('dh',this)">Đặt hàng</button>
+        <button class="bsm" onclick="fCost('dv',this)">Dịch vụ</button>
+        <button class="bsm" onclick="fCost('quy',this)">Nguồn quỹ</button>
+      </div>
+    </div>
+    <div class="tbl-w"><table>
+      <thead><tr>
+        <th style="width:26%">Mục chi phí</th><th>Nguồn NS</th>
+        <th class="r">KH tháng (tỷ)</th><th class="r">KH tháng (tỷ)</th>
+        <th class="r">TT tháng 4</th><th class="r">TT lũy kế 4T</th>
+        <th style="width:14%">% thực hiện</th><th class="c">Trạng thái</th>
+      </tr></thead>
+      <tbody id="p3_tbl"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<script>
+const MN=['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+const DEPTS=['P.Tư vấn CN','P.Quan trắc','P.Thử nghiệm','P.QTTĐ & DL','P.Kiểm định'];
+
+// ── KẾ HOẠCH tháng 2025 (phân bổ mùa vụ) ──
+const REV_KH_M=[14.2,13.8,16.5,17.2,18.1,19.4,18.8,16.9,15.8,17.4,16.2,15.9]; // tổng 200.2B
+const COST_KH_M=[9.2,8.8,11.5,10.8,11.2,12.1,11.8,10.2,10.5,11.9,10.8,9.8];                                         // tổng 128.6B
+
+// KH phòng ban (% tổng)
+const DW=[0.13,0.15,0.22,0.19,0.31];
+const CW=[0.04,0.06,0.28,0.13,0.49];
+const DKM=REV_KH_M.map(v=>DW.map(w=>+(v*w).toFixed(2)));
+const CKM=COST_KH_M.map(v=>CW.map(w=>+(v*w).toFixed(2)));
+const DKY=DW.map(w=>+(REV_KH_M.reduce((a,b)=>a+b,0)*w).toFixed(1));
+const CKY=CW.map(w=>+(COST_KH_M.reduce((a,b)=>a+b,0)*w).toFixed(1));
+
+// ── THỰC TẾ 2025 (đủ 12 tháng, có tháng đỏ tháng xanh) ──
+// T1: đỏ  T2: xanh  T3: xanh  T4: đỏ  T5: xanh  T6: xanh mạnh
+// T7: đỏ  T8: đỏ   T9: xanh  T10: đỏ T11: xanh T12: đỏ
+const REV_ACT=[12.8,16.2,17.9,15.4,19.8,22.1,17.2,14.6,18.3,16.8,19.5,14.2];
+const COST_ACT=[10.5,7.2,12.8,9.6,11.8,13.4,10.2,9.1,11.6,12.8,9.4,8.9];
+
+// DTT[dept][month] – tổng = REV_ACT từng tháng
+const DTT_W=[0.13,0.15,0.22,0.19,0.31];
+const CTT_W=[0.04,0.06,0.28,0.13,0.49];
+const DTT=DTT_W.map(w=>REV_ACT.map(v=>+(v*w).toFixed(3)));
+const CTT=CTT_W.map(w=>COST_ACT.map(v=>+(v*w).toFixed(3)));
+
+const RKM=+(REV_KH_M.reduce((a,b)=>a+b,0)/12).toFixed(2);
+const CKM_TOT=+(COST_KH_M.reduce((a,b)=>a+b,0)/12).toFixed(2);
+const REV_PY=[10.9,13.6,15,12.8,16.4,18.4,14.2,12.3,15.3,14,16.2,12.1];
+const COST_PY=[9.4,6.5,11.3,8.5,10.6,11.8,9,8.2,10.4,11.5,8.4,8.1];
+const PROFIT_PY=REV_PY.map((v,i)=>+(v-COST_PY[i]).toFixed(2));
+
+// Nhóm DT: KH tháng trung bình, TT cả năm
+const RGRPS=['Đặt hàng NN','Dịch vụ & QT','Kiểm định','Tư vấn MT'];
+const RGRP_GW=[0.55,0.35,0.06,0.04];
+const RGRP_KHY=RGRP_GW.map(w=>+(REV_KH_M.reduce((a,b)=>a+b,0)*w/12).toFixed(2));
+const RGRP_ACT=RGRP_GW.map(w=>+(REV_ACT.reduce((a,b)=>a+b,0)*w).toFixed(2));
+
+
+// Heatmap DT: nhóm x tháng – MỖI nhóm có tỷ lệ RIÊNG BIỆT
+const HM_RD=[[6.5,9.8,10.8,7.2,12.4,13.6,8.9,7.2,11.5,7.8,12.1,6.8],[4.1,5.2,5.8,6.1,5.9,7.1,6.2,5.8,5.4,7.2,5.8,6.2],[1.4,0.8,0.9,1.2,0.9,0.7,1.1,0.8,0.9,1,1.2,0.8],[0.8,0.4,0.4,0.9,0.6,0.7,1,0.8,0.5,0.8,0.4,0.4]];
+const HM_RKM=[[7.81,7.59,9.08,9.46,9.96,10.67,10.34,9.29,8.69,9.57,8.91,8.75],[4.97,4.83,5.77,6.02,6.33,6.79,6.58,5.91,5.53,6.09,5.67,5.56],[0.85,0.83,0.99,1.03,1.09,1.16,1.13,1.01,0.95,1.04,0.97,0.95],[0.57,0.55,0.66,0.69,0.72,0.78,0.75,0.68,0.63,0.7,0.65,0.64]];
+
+// Heatmap CP: mục x tháng – MỖI mục có pattern RIÊNG
+const HM_CCAT=['Lương & TL','BHXH','Thuê ngoài','Hóa chất & CC','HC & VH'];
+const HM_CW=[0.27,0.06,0.28,0.22,0.11];
+const HM_CD=[[2.4,2.2,2.8,2.6,2.7,2.9,2.8,2.5,2.9,2.8,2.5,2.6],[0.5,0.5,0.6,0.5,0.6,0.6,0.6,0.5,0.6,0.6,0.5,0.5],[4.2,1.8,4.8,2.8,3.6,4.5,3.2,2.6,3.9,4.8,2.8,2.5],[2.1,1.8,3.2,2.4,3.4,4.1,2.8,2.2,3.1,3.2,2.4,2.1],[1.3,0.9,1.4,1.3,1.5,1.3,0.8,1.3,1.1,1.4,1.2,1.2]];
+const HM_CKM=[[2.48,2.38,3.11,2.92,3.02,3.27,3.19,2.75,2.83,3.21,2.92,2.65],[0.55,0.53,0.69,0.65,0.67,0.73,0.71,0.61,0.63,0.71,0.65,0.59],[2.58,2.46,3.22,3.02,3.14,3.39,3.3,2.86,2.94,3.33,3.02,2.74],[2.02,1.94,2.53,2.38,2.46,2.66,2.6,2.24,2.31,2.62,2.38,2.16],[1.01,0.97,1.26,1.19,1.23,1.33,1.3,1.12,1.16,1.31,1.19,1.08]];
+const CCAT=[
+  {name:'Lương & các khoản TL',ns:'dh',yr:32.6,lk:34.72},
+  {name:'BHXH & Công đoàn',ns:'dh',yr:7.5,lk:7.72},
+  {name:'Thuê dịch vụ ngoài',ns:'dv',yr:15.6,lk:36.01},
+  {name:'Hóa chất & Công cụ',ns:'dv',yr:22.5,lk:28.29},
+  {name:'Hành chính & Vận hành',ns:'dh',yr:9.1,lk:14.15},
+  {name:'Khấu hao TSCĐ',ns:'dh',yr:12.4,lk:5.14},
+  {name:'Sửa chữa thiết bị',ns:'dv',yr:6.5,lk:2.57},
+  {name:'Đào tạo & phát triển',ns:'quy',yr:0.74,lk:0},
+  {name:'Dự phòng',ns:'quy',yr:4.0,lk:0},
+];
+const CAT4={};
+CCAT.forEach(c=>CAT4[c.name]=[0.82,0.19,1.20,0.65,0.43,0,0.43,0,0][CCAT.indexOf(c)]||0);
+
+const CONTRACTS=[
+  {nm:'Quan trắc môi trường KCN Nam Tân Uyên – Năm 2026',kh:'Cty cp KCN Nam Tân Uyên',tp:'Đặt hàng',val:73.9,paid:0,st:'cho'},
+  {nm:'Thực phẩm Á Châu III – Quan trắc Q1',kh:'MTV Thực Phẩm Á Châu III',tp:'Dịch vụ',val:100.8,paid:100.8,st:'done'},
+  {nm:'Xét nghiệm mẫu – Leoch Super Power',kh:'TNHH Leoch Super Power',tp:'Dịch vụ',val:2.4,paid:0,st:'cho'},
+  {nm:'KĐ – Năm – Frieslandcampina VN',kh:'Frieslandcampina VN',tp:'Kiểm định',val:7.6,paid:0,st:'cho'},
+  {nm:'Lâm sản & XNK Tổng hợp – Năm',kh:'Cty Lâm sản XNK',tp:'Đặt hàng',val:56.2,paid:30.0,st:'cho'},
+  {nm:'Quan trắc Dệt May 7 – Q1',kh:'Cty cp Dệt May 7',tp:'Dịch vụ',val:11.9,paid:0,st:'cho'},
+  {nm:'Kiểm định khí thải – Tân Hiệp Phát',kh:'Cty Tân Hiệp Phát',tp:'Kiểm định',val:18.5,paid:18.5,st:'done'},
+  {nm:'Quan trắc New Decor Wood',kh:'New Decor Wood Industries',tp:'Dịch vụ',val:52.8,paid:0,st:'cho'},
+  {nm:'Tư vấn ĐTM – Dự án Điện Mặt Trời',kh:'EVN Solar',tp:'Tư vấn',val:320.0,paid:160.0,st:'cho'},
+  {nm:'Quan trắc Lee & Suy Vina – Năm',kh:'TNHH Lee & Suy Vina',tp:'Dịch vụ',val:10.3,paid:5.2,st:'cho'},
+];
+
+const TOP10KH=['KCN Nam Tân Uyên','Thực Phẩm Á Châu III','EVN Solar','Lâm sản XNK','New Decor Wood','Frieslandcampina','Tân Hiệp Phát','Dệt May 7','Lee & Suy Vina','Leoch SP'];
+const TOP10KH_V=[73.9,100.8,320.0,56.2,52.8,7.6,18.5,11.9,10.3,2.4];
+const TOP10NCC=['Cty Hóa chất A','Công ty Thuê xe D','Cty thiết bị E','BHXH tỉnh','Điện lực F','In ấn G','Hóa chất B','Xăng dầu C','STC I','Cty J'];
+const TOP10NCC_V=[4.5,3.8,3.0,2.8,2.5,2.1,1.8,1.5,1.2,0.9];
+
+
+let hmRM='val',hmCM='val',cFilt='all',cpFilt='all';
+let AC={};
+
+function bf(v){return v==null?'—':v>=1?v.toFixed(2)+' tỷ':v>0?(v*1000).toFixed(0)+' tr':'0'}
+function bfs(v){return v==null?'—':v>=1?v.toFixed(2)+'B':(v*1000).toFixed(0)+'tr'}
+function pct(a,b){return b>0?+(a/b*100).toFixed(1):0}
+function bdg(p){return p>=80?'<span class="badge bg">Đạt</span>':p>=50?'<span class="badge bb">Đang TH</span>':'<span class="badge br">Thấp</span>'}
+function prog(p,over){const w=Math.min(100,p),c=over?'#f59e0b':p>=80?'#0f8a5f':p>=50?'#1d4ed8':'#c93434';return `<div class="pb"><div class="pf" style="width:${w}%;background:${c}"></div></div><span style="font-size:10px;color:var(--text2)">${p.toFixed(0)}%</span>`}
+function dk(id){if(AC[id]){try{AC[id].destroy()}catch(e){}delete AC[id]}}
+function mk(id,cfg){dk(id);AC[id]=new Chart(document.getElementById(id),cfg);return AC[id]}
+const gc='rgba(0,0,0,0.05)';
+const baseOpts={responsive:true,maintainAspectRatio:false};
+const noLeg={plugins:{legend:{display:false}}};
+
+function goPage(i,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg'+i).classList.add('on');
+  el.classList.add('on');
+  [renderP1,renderP2,renderP3][i]();
+}
+
+// ── PAGE 1 ──────────────────────────────────
+function renderP1(){
+  const per=+document.getElementById('gPer').value,ytd=per===99,idx=ytd?11:per-1;
+  const ttR=ytd?+(REV_ACT.reduce((a,b)=>a+(b||0),0)).toFixed(2):REV_ACT[idx];
+  const khR=ytd?+(REV_KH_M.reduce((a,b)=>a+b,0)).toFixed(2):REV_KH_M[idx];
+  const ttC=ytd?+(COST_ACT.reduce((a,b)=>a+(b||0),0)).toFixed(2):COST_ACT[idx];
+  const khC=ytd?+(COST_KH_M.reduce((a,b)=>a+b,0)).toFixed(2):COST_KH_M[idx];
+  const prof=+(ttR-ttC).toFixed(2);
+  const pprev=ytd?PROFIT_PY.slice(0,4).reduce((a,b)=>a+b,0):PROFIT_PY[idx];
+  const chgP=pprev?+((prof-pprev)/Math.abs(pprev)*100).toFixed(1):0;
+
+  document.getElementById('p1kpi').innerHTML=[
+    {l:'Tổng lợi nhuận',v:bf(prof),s:`Biên LN: ${pct(prof,ttR).toFixed(1)}% · So KN: ${chgP>=0?'+':''}${chgP}%`,c:prof>=0?'green':'red'},
+    {l:'Doanh thu thực tế',v:bf(ttR),s:`KH tháng: ${bf(khR)} · Đạt ${pct(ttR,khR).toFixed(0)}%`,c:'blue'},
+    {l:'Chi phí thực tế',v:bf(ttC),s:`KH tháng: ${bf(khC)} · ${pct(ttC,khC).toFixed(0)}% thực hiện`,c:'red'},
+    {l:'Còn phải thu',v:'118,3 tỷ',s:'2.731 đơn · Chờ thu',c:'amber'},
+    {l:'Đơn BH dự thu',v:'235,4 tỷ',s:'Thực thu: 118,7 tỷ · Đạt 50,4%',c:'purple'},
+  ].map(k=>`<div class="card"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div><div class="ks">${k.s}</div></div>`).join('');
+
+  const rp=pct(ttR,khR),cp=pct(ttC,khC);
+
+  const pData=MN.map((_,i)=>i<4?+(REV_ACT[i]-COST_ACT[i]).toFixed(2):null);
+  mk('c_p1_profit',{type:'line',data:{labels:MN,datasets:[
+    {label:'Năm trước',data:PROFIT_PY,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:.3},
+    {label:'DT TT',data:REV_ACT,borderColor:'#1d4ed8',borderWidth:1.5,pointRadius:0,tension:.3,borderDash:[3,2],spanGaps:false},
+    {label:'Lợi nhuận TT',data:pData,borderColor:'#0f8a5f',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#0f8a5f',tension:.3,spanGaps:false,fill:{target:'origin',above:'rgba(15,138,95,.07)',below:'rgba(201,52,52,.07)'}},
+  ]},options:{...baseOpts,...noLeg,scales:{x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}}},plugins:{...noLeg.plugins,tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+  const rC=MN.map((_,i)=>i<4?(REV_ACT[i]>=REV_KH_M[i]?'#0f8a5f':'#c93434'):'rgba(0,0,0,0.04)');
+  const rPL=MN.map((_,i)=>REV_ACT[i]!=null?+((REV_ACT[i]/REV_KH_M[i])*100).toFixed(1):null);
+  mk('c_p1_rev',{type:'bar',data:{labels:MN,datasets:[
+    {type:'bar',label:'KH tháng',data:REV_KH_M,backgroundColor:'rgba(29,78,216,0.18)',borderColor:'#1d4ed8',borderWidth:1.5,borderRadius:4,order:2,yAxisID:'y'},
+    {type:'bar',label:'TT tháng',data:REV_ACT,backgroundColor:rC,borderRadius:4,borderWidth:0,order:2,yAxisID:'y'},
+    {type:'line',label:'% TT/KH',data:rPL,borderColor:'#f59e0b',borderWidth:2,pointRadius:3,pointBackgroundColor:rPL.map(v=>v==null?'transparent':v>=100?'#0f8a5f':'#c93434'),pointBorderColor:'transparent',tension:.3,yAxisID:'y2',spanGaps:false,order:1,z:10},
+  ]},options:{...baseOpts,interaction:{mode:'index'},scales:{
+    x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},
+    y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}},
+    y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%',font:{size:10}},min:0,max:160}
+  },plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y2'?' % TT/KH: '+c.parsed.y?.toFixed(1)+'%':' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+  const cC=MN.map((_,i)=>i<4?(COST_ACT[i]>COST_KH_M[i]?'#f59e0b':'#c93434'):'rgba(0,0,0,0.04)');
+  const cPL=MN.map((_,i)=>COST_ACT[i]!=null?+((COST_ACT[i]/COST_KH_M[i])*100).toFixed(1):null);
+  mk('c_p1_cost',{type:'bar',data:{labels:MN,datasets:[
+    {type:'bar',label:'KH tháng',data:COST_KH_M,backgroundColor:'rgba(148,163,184,0.22)',borderColor:'#94a3b8',borderWidth:1.5,borderRadius:4,order:2,yAxisID:'y'},
+    {type:'bar',label:'TT tháng',data:COST_ACT,backgroundColor:cC,borderRadius:4,borderWidth:0,order:2,yAxisID:'y'},
+    {type:'line',label:'% TT/KH',data:cPL,borderColor:'#6d28d9',borderWidth:2,pointRadius:3,pointBackgroundColor:cPL.map(v=>v==null?'transparent':v>100?'#f59e0b':'#0f8a5f'),pointBorderColor:'transparent',tension:.3,yAxisID:'y2',spanGaps:false,order:1,z:10},
+  ]},options:{...baseOpts,interaction:{mode:'index'},scales:{
+    x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},
+    y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}},
+    y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%',font:{size:10}},min:0,max:160}
+  },plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y2'?' % TT/KH: '+c.parsed.y?.toFixed(1)+'%':' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+  document.getElementById('p1_dept').innerHTML=DEPTS.map((d,i)=>{
+    const dkm=+(DKM.reduce((s,m)=>s+(m[i]||0),0)/4).toFixed(3),dk4=+(DKM.reduce((s,m)=>s+(m[i]||0),0)).toFixed(2),dtt=+(DTT[i].slice(0,4).reduce((a,b)=>a+b,0)).toFixed(2);
+    const ckm=+(CKM.reduce((s,m)=>s+(m[i]||0),0)/4).toFixed(3),ck4=+(CKM.reduce((s,m)=>s+(m[i]||0),0)).toFixed(2),ctt=+(CTT[i].slice(0,4).reduce((a,b)=>a+b,0)).toFixed(2);
+    const dp=pct(dtt,dk4),cp2=pct(ctt,ck4);
+    return `<tr><td><b>${d}</b></td>
+    <td class="r">${bfs(dkm)}</td><td class="r">${bfs(dk4)}</td><td class="r ${dp>=80?'green':'red'}">${bfs(dtt)}</td>
+    <td class="r">${bfs(ckm)}</td><td class="r">${bfs(ck4)}</td><td class="r red">${bfs(ctt)}</td>
+    <td>${prog(dp)}</td><td>${prog(cp2,cp2>100)}</td>
+    <td class="c">${dp>=80&&cp2<=120?'<span class="badge bg">Tốt</span>':dp<50?'<span class="badge br">Thấp</span>':'<span class="badge bb">TB</span>'}</td></tr>`;
+  }).join('');
+}
+
+
+// ── PAGE 2 ──────────────────────────────────
+function renderP2(){
+  const tot4=REV_ACT.reduce((a,b)=>a+(b||0),0);
+  document.getElementById('p2kpi').innerHTML=[
+    {l:'DT lũy kế 4T',v:bf(tot4),s:`KH 4T: ${bf(RKM*4)} · Đạt ${pct(tot4,RKM*4).toFixed(0)}%`,c:'green'},
+    {l:'KH doanh thu tháng',v:'194,4 tỷ',s:'Phân bổ: '+(RKM).toFixed(2)+' tỷ/tháng',c:'blue'},
+    {l:'Đơn BH – Dự thu',v:'312,5 tỷ',s:'3.218 đơn bán hàng',c:'purple'},
+    {l:'Còn phải thu',v:'107,7 tỷ',s:'Đã thu 204,8 tỷ · Tỷ lệ 65%',c:'amber'},
+  ].map(k=>`<div class="card"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div><div class="ks">${k.s}</div></div>`).join('');
+
+  mk('c_p2_trend',{type:'line',data:{labels:MN,datasets:[
+    {label:'Năm trước',data:REV_PY,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:.3},
+    {label:'KH 2026',data:REV_KH_M,borderColor:'#1d4ed8',borderWidth:1.5,borderDash:[5,3],pointRadius:0},
+    {label:'TT 2026',data:REV_ACT,borderColor:'#0f8a5f',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#0f8a5f',tension:.3,spanGaps:false},
+  ]},options:{...baseOpts,...noLeg,scales:{x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}}},plugins:{...noLeg.plugins,tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+  const p2idx=(+document.getElementById('p2Per').value||12)-1;
+  const p2GrpKH=RGRP_GW.map(w=>+(REV_KH_M[p2idx]*w).toFixed(2));
+  const p2GrpTT=RGRP_GW.map(w=>+(REV_ACT[p2idx]*w).toFixed(2));
+  const p2GrpPct=p2GrpKH.map((v,i)=>v>0?+((p2GrpTT[i]/v)*100).toFixed(1):null);
+  const p2GrpPC=p2GrpPct.map(v=>v>=100?'#0f8a5f':'#c93434');
+  mk('c_p2_grp',{type:'bar',data:{labels:RGRPS,datasets:[
+    {type:'bar',label:'KH tháng',data:p2GrpKH,backgroundColor:'rgba(29,78,216,0.18)',borderColor:'#1d4ed8',borderWidth:1.5,borderRadius:4,order:2,yAxisID:'y'},
+    {type:'bar',label:'TT tháng',data:p2GrpTT,backgroundColor:p2GrpPC,borderRadius:4,borderWidth:0,order:2,yAxisID:'y'},
+    {type:'line',label:'% TT/KH',data:p2GrpPct,borderColor:'#f59e0b',borderWidth:2.5,pointRadius:6,pointBackgroundColor:p2GrpPC,pointBorderColor:'#fff',pointBorderWidth:2,tension:.3,yAxisID:'y2',order:1},
+  ]},options:{...baseOpts,interaction:{mode:'index'},scales:{
+    x:{grid:{display:false},ticks:{font:{size:10}}},
+    y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}},
+    y2:{position:'right',grid:{display:false},ticks:{callback:v=>v+'%',font:{size:10}},min:0,max:160}
+  },plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.yAxisID==='y2'?' % TT/KH: '+c.parsed.y?.toFixed(1)+'%':' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+  const s10=TOP10KH.map((k,i)=>({k,v:TOP10KH_V[i]})).sort((a,b)=>b.v-a.v);
+  mk('c_p2_top10',{type:'bar',data:{labels:s10.map(x=>x.k),datasets:[{label:'Doanh thu',data:s10.map(x=>x.v),backgroundColor:'#1d4ed8',borderRadius:4,borderWidth:0}]},
+    options:{...baseOpts,...noLeg,indexAxis:'y',scales:{x:{grid:{color:gc},ticks:{callback:v=>v+' tr',font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}},plugins:{...noLeg.plugins,tooltip:{callbacks:{label:c=>' '+c.parsed.x.toFixed(1)+' triệu đồng'}}}}});
+
+  document.getElementById('p2_fc').innerHTML=`<table><thead><tr><th>Phòng ban</th><th class="r">Dự thu T5 (tỷ)</th></tr></thead><tbody>
+    ${DEPTS.map((d,i)=>`<tr><td>${d}</td><td class="r blue">${bfs(+(DKM.reduce((s,m)=>s+(m[i]||0),0)/4*1.08).toFixed(2))}</td></tr>`).join('')}
+    <tr style="font-weight:700;border-top:2px solid var(--border2)"><td>Tổng</td><td class="r blue">${bfs(DKM.reduce((a,b)=>a+b,0)*1.08)}</td></tr>
+  </tbody></table>`;
+
+  renderHMR();
+  renderContracts();
+}
+
+function setHMR(m,el){hmRM=m;document.querySelectorAll('#pg1 .btng .bsm').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderHMR();}
+function renderHMR(){
+  const cols=['T1','T2','T3','T4'],rows=RGRPS,isV=hmRM==='val';
+  let vs=[];
+  rows.forEach((_,ri)=>cols.forEach((_,ci)=>vs.push(isV?HM_RD[ri][ci]:+(HM_RD[ri][ci]/(HM_RKM[ri][ci]||1)*100).toFixed(0))));
+  const mn=Math.min(...vs),mx=Math.max(...vs);
+  const sc=v=>Math.min(5,Math.floor((v-mn)/(mx-mn+.001)*6));
+  const cls=['hm0','hm1','hm2','hm3','hm4','hm5'];
+  let h=`<div style="display:grid;grid-template-columns:130px repeat(4,1fr);gap:2px">`;
+  h+=`<div class="hm-hdr"></div>`;
+  cols.forEach(c=>h+=`<div class="hm-hdr">${c}</div>`);
+  rows.forEach((r,ri)=>{
+    h+=`<div class="hm-rhdr">${r}</div>`;
+    cols.forEach((_,ci)=>{
+      const v=isV?HM_RD[ri][ci]:+(HM_RD[ri][ci]/(HM_RKM[ri][ci]||1)*100).toFixed(0);
+      h+=`<div class="hm-cell ${cls[sc(v)]}">${isV?v.toFixed(1)+'B':v+'%'}</div>`;
+    });
+  });
+  h+='</div>';
+  document.getElementById('hm_rev').innerHTML=h;
+  document.getElementById('hml_rev').innerHTML=cls.map(c=>`<div class="hml-sw ${c}"></div>`).join('');
+}
+
+function fContracts(f,el){cFilt=f;document.querySelectorAll('#pg1 ~ div .btng .bsm, [onclick*="fContracts"]').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderContracts();}
+function renderContracts(){
+  const list=CONTRACTS.filter(c=>cFilt==='all'||c.st===cFilt);
+  document.getElementById('p2_contracts').innerHTML=list.map(c=>{
+    const rem=+(c.val-c.paid).toFixed(1);
+    return `<tr><td><b>${c.nm}</b></td><td>${c.kh}</td><td><span class="tag">${c.tp}</span></td>
+    <td class="r">${c.val.toFixed(1)} tr</td>
+    <td class="r green">${c.paid>0?c.paid.toFixed(1)+' tr':'—'}</td>
+    <td class="r amber">${rem>0?rem.toFixed(1)+' tr':'—'}</td>
+    <td class="c">${c.st==='done'?'<span class="badge bg">Đã thu</span>':'<span class="badge bb">Chờ thu</span>'}</td></tr>`;
+  }).join('');
+}
+
+// ── PAGE 3 ──────────────────────────────────
+function renderP3(){
+  const tot4=COST_ACT.reduce((a,b)=>a+(b||0),0);
+  const khd=CKM_TOT*4,rem=+(khd-tot4).toFixed(2);
+  document.getElementById('p3kpi').innerHTML=[
+    {l:'CP thực lũy kế 4T',v:bf(tot4),s:`KH 4T: ${bf(khd)} · Đạt ${pct(tot4,khd).toFixed(0)}%`,c:'red'},
+    {l:'KH chi phí tháng',v:bf(CKM_TOT),s:'Phân bổ đều từ KH tháng 124,6 tỷ',c:'blue'},
+    {l:'CP tháng 4 thực tế',v:bf(COST_ACT[3]),s:'So tháng trước: −36,22%',c:'amber'},
+    {l:'Còn có thể chi (4T)',v:bf(rem),s:'Ngân sách khả dụng lũy kế',c:'green'},
+  ].map(k=>`<div class="card"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div><div class="ks">${k.s}</div></div>`).join('');
+
+  mk('c_p3_trend',{type:'line',data:{labels:MN,datasets:[
+    {label:'Năm trước',data:COST_PY,borderColor:'#94a3b8',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:.3},
+    {label:'KH 2026',data:COST_KH_M,borderColor:'#1d4ed8',borderWidth:1.5,borderDash:[5,3],pointRadius:0},
+    {label:'TT 2026',data:COST_ACT,borderColor:'#c93434',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#c93434',tension:.3,spanGaps:false},
+  ]},options:{...baseOpts,...noLeg,scales:{x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}}},plugins:{...noLeg.plugins,tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+c.parsed.y?.toFixed(2)+' tỷ'}}}}});
+
+    // Tỷ trọng CP theo mục: KH tháng vs TT từng tháng (mỗi tháng 2 cột xếp cạnh nhau)
+  const cgCats=['Lương & TL','BHXH','Thuê ngoài','Hóa chất & CC','HC & VH'];
+  const cgColors=['#1d4ed8','#7c3aed','#c93434','#f59e0b','#0f8a5f'];
+  const cgDsets=[
+    ...cgCats.map((name,ci)=>({
+      label:'KH - '+name,
+      data:MN.map((_,mi)=>HM_CKM[ci]?.[mi]??0),
+      backgroundColor:cgColors[ci]+'40',
+      borderColor:cgColors[ci],
+      borderWidth:1.5,
+      borderRadius:3,
+      stack:'kh'+ci,
+      order:2,
+    })),
+    ...cgCats.map((name,ci)=>({
+      label:'TT - '+name,
+      data:MN.map((_,mi)=>HM_CD[ci]?.[mi]??0),
+      backgroundColor:cgColors[ci],
+      borderRadius:3,
+      stack:'tt'+ci,
+      order:2,
+    })),
+  ];
+  mk('c_p3_grp',{type:'bar',data:{labels:MN,datasets:cgDsets},
+    options:{...baseOpts,
+      scales:{
+        x:{grid:{display:false},ticks:{autoSkip:false,maxRotation:0,font:{size:10}}},
+        y:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}}
+      },
+      plugins:{
+        legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10},
+          filter:(item)=>item.datasetIndex<cgCats.length
+        }},
+        tooltip:{mode:'index',intersect:false,callbacks:{label:c=>{
+          const isKH=c.datasetIndex<cgCats.length;
+          const cat=cgCats[c.datasetIndex%cgCats.length];
+          return ' '+(isKH?'KH':'TT')+' '+cat+': '+c.parsed.y.toFixed(2)+' tỷ';
+        }}}
+      }
+    }
+  });
+
+  const sn=TOP10NCC.map((k,i)=>({k,v:TOP10NCC_V[i]})).sort((a,b)=>b.v-a.v);
+  mk('c_p3_top10',{type:'bar',data:{labels:sn.map(x=>x.k),datasets:[{label:'Chi phí',data:sn.map(x=>x.v),backgroundColor:'#c93434',borderRadius:4,borderWidth:0}]},
+    options:{...baseOpts,...noLeg,indexAxis:'y',scales:{x:{grid:{color:gc},ticks:{callback:v=>v+'B',font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}},plugins:{...noLeg.plugins,tooltip:{callbacks:{label:c=>' '+c.parsed.x.toFixed(2)+' tỷ'}}}}});
+
+  document.getElementById('p3_fc').innerHTML=`<table><thead><tr><th>Mục chi</th><th class="r">Dự chi T5 (tỷ)</th></tr></thead><tbody>
+    ${CCAT.map(c=>`<tr><td>${c.name}</td><td class="r red">${bfs(c.yr/12)}</td></tr>`).join('')}
+    <tr style="font-weight:700;border-top:2px solid var(--border2)"><td>Tổng</td><td class="r red">${bfs(CKM_TOT)}</td></tr>
+  </tbody></table>`;
+
+  renderHMC();
+  renderCostTbl();
+}
+
+function setHMC(m,el){hmCM=m;document.querySelectorAll('#pg2 .btng .bsm').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderHMC();}
+function renderHMC(){
+  const cols=['T1','T2','T3','T4'],rows=HM_CCAT,isV=hmCM==='val';
+  let vs=[];
+  rows.forEach((_,ri)=>cols.forEach((_,ci)=>vs.push(isV?HM_CD[ri][ci]:+(HM_CD[ri][ci]/(HM_CKM[ri][ci]||1)*100).toFixed(0))));
+  const mn=Math.min(...vs),mx=Math.max(...vs);
+  const sc=v=>Math.min(5,Math.floor((v-mn)/(mx-mn+.001)*6));
+  const cls=['hmr0','hmr1','hmr2','hmr3','hmr4','hmr5'];
+  let h=`<div style="display:grid;grid-template-columns:110px repeat(4,1fr);gap:2px">`;
+  h+=`<div class="hm-hdr"></div>`;
+  cols.forEach(c=>h+=`<div class="hm-hdr">${c}</div>`);
+  rows.forEach((r,ri)=>{
+    h+=`<div class="hm-rhdr">${r}</div>`;
+    cols.forEach((_,ci)=>{
+      const v=isV?HM_CD[ri][ci]:+(HM_CD[ri][ci]/(HM_CKM[ri][ci]||1)*100).toFixed(0);
+      h+=`<div class="hm-cell ${cls[sc(v)]}">${isV?v.toFixed(2)+'B':v+'%'}</div>`;
+    });
+  });
+  h+='</div>';
+  document.getElementById('hm_cost').innerHTML=h;
+  document.getElementById('hml_cost').innerHTML=cls.map(c=>`<div class="hml-sw ${c}"></div>`).join('');
+}
+
+function fCost(f,el){cpFilt=f;document.querySelectorAll('[onclick*="fCost"]').forEach(b=>b.classList.remove('on'));el.classList.add('on');renderCostTbl();}
+function renderCostTbl(){
+  const nsL={dh:'Đặt hàng',dv:'Dịch vụ',quy:'Nguồn quỹ'};
+  const list=CCAT.filter(c=>cpFilt==='all'||c.ns===cpFilt);
+  document.getElementById('p3_tbl').innerHTML=list.map(c=>{
+    const kh4=+(c.yr/12).toFixed(2),ttM=CAT4[c.name]||0,p=c.lk&&kh4?pct(c.lk,kh4):0;
+    return `<tr><td><b>${c.name}</b></td>
+    <td><span class="badge bb">${nsL[c.ns]}</span></td>
+    <td class="r">${c.yr.toFixed(1)}</td><td class="r">${kh4.toFixed(2)}</td>
+    <td class="r red">${ttM>0?ttM.toFixed(2):'—'}</td>
+    <td class="r red">${c.lk>0?c.lk.toFixed(2):'—'}</td>
+    <td>${c.lk>0?prog(p,p>100):'<span style="font-size:10px;color:var(--text3)">Chưa phát sinh</span>'}</td>
+    <td class="c">${c.lk>0?bdg(p):'<span class="badge ba">Chờ</span>'}</td></tr>`;
+  }).join('');
+}
+
+renderP1();
+
+
+
+
+</script>
+</body>
+</html>

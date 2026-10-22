@@ -1,0 +1,37 @@
+name: Kiểm tra demo
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Kiểm tra các demo có thay đổi
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          slugs=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD" -- demos/ | cut -d/ -f2 | sort -u)
+          if [ -z "$slugs" ]; then echo "Pull request không đổi demo nào."; exit 0; fi
+          fail=0
+          for s in $slugs; do
+            [ -d "demos/$s" ] || continue   # demo bị xoá
+            echo "::group::demos/$s"
+            out=$(python3 scripts/check_demo.py "demos/$s") || fail=1
+            echo "$out"
+            echo "::endgroup::"
+            echo "$out" | grep -q '^! soát lại dữ liệu thật' && echo "::warning title=demos/$s::Có email hoặc số điện thoại, người duyệt soát lại xem có phải dữ liệu thật không"
+            echo "$out" | grep -q '^! chưa có thumb' && echo "::warning title=demos/$s::Chưa có thumb.jpg (chạy scripts/make_thumb.py)"
+          done
+          exit $fail
+      - name: Build catalog
+        env:
+          PYTHONIOENCODING: utf-8
+        run: python3 scripts/build_catalog.py

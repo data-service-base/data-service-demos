@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo tổng hợp lương – Tập đoàn cao su</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f8;color:#2d3748;font-size:14px}
+:root{
+  --g1:#1b5e20;--g2:#2e7d32;--g3:#43a047;--g4:#a5d6a7;
+  --r1:#5d1a00;--r2:#bf360c;--r3:#e64a19;--r4:#ffccbc;h
+  --amber:#f57f17;--ambL:#ffe082;--blue:#1565c0;--blueL:#90caf9;
+  --white:#fff;--bg:#f0f4f8;--card:#fff;--b1:#e2e8f0;--b2:#a0aec0;--b3:#4a5568;
+  --sh:0 2px 8px rgba(0,0,0,.1);--rd:8px
+}
+
+/* HEADER */
+header{background:linear-gradient(135deg,var(--g1) 0%,var(--r1) 100%);color:#fff;
+  padding:0 24px;display:flex;align-items:center;justify-content:space-between;
+  height:60px;box-shadow:0 2px 12px rgba(0,0,0,.3);position:sticky;top:0;z-index:200}
+.h-brand{display:flex;align-items:center;gap:10px}
+.h-icon{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px}
+.h-co{font-size:11px;opacity:.75}
+.h-title{font-size:15px;font-weight:700}
+.h-period{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  border-radius:16px;padding:3px 12px;font-size:12px;color:#fff;cursor:pointer;
+  display:flex;align-items:center;gap:5px}
+
+/* MAIN TABS */
+.main-tabs{background:#fff;border-bottom:3px solid var(--b1);padding:0 24px;
+  display:flex;gap:0;position:sticky;top:60px;z-index:150;box-shadow:var(--sh)}
+.main-tab{padding:13px 22px;border:none;background:none;cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--b2);border-bottom:3px solid transparent;
+  margin-bottom:-3px;transition:all .2s;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.main-tab.active.green{color:var(--g2);border-bottom-color:var(--g2)}
+.main-tab.active.red{color:var(--r2);border-bottom-color:var(--r2)}
+.main-tab.active.blue{color:var(--blue);border-bottom-color:var(--blue)}
+.main-tab:hover:not(.active){color:var(--b3);background:#f7f8fa}
+
+/* SUB TABS */
+.sub-tabs{background:#f7f8fa;border-bottom:1px solid var(--b1);padding:0 24px;
+  display:flex;gap:0;position:sticky;top:103px;z-index:140}
+.sub-tabs.hidden{display:none}
+.sub-tab{padding:9px 16px;border:none;background:none;cursor:pointer;
+  font-size:12px;font-weight:600;color:var(--b2);border-bottom:2px solid transparent;
+  margin-bottom:-1px;transition:all .15s;white-space:nowrap}
+.sub-tab.active{color:var(--g2);border-bottom-color:var(--g2)}
+.sub-tab.red.active{color:var(--r2);border-bottom-color:var(--r2)}
+.sub-tab:hover:not(.active){color:var(--b3)}
+
+/* FILTER BAR */
+.filter-bar{background:#fff;border-bottom:1px solid var(--b1);padding:8px 24px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.f-label{font-size:11px;color:var(--b2);font-weight:600;white-space:nowrap}
+.f-sel{border:1px solid var(--b1);border-radius:6px;padding:4px 10px;
+  font-size:12px;color:var(--b3);background:#fff;cursor:pointer;outline:none}
+.f-sel:focus{border-color:var(--g3)}
+.f-div{width:1px;height:20px;background:var(--b1)}
+.f-chip{border:1px solid var(--b1);border-radius:16px;padding:3px 10px;
+  font-size:11px;cursor:pointer;background:#fff;color:var(--b3)}
+.f-chip:hover{background:var(--b1)}
+
+/* CONTENT */
+.content{padding:20px 24px;max-width:1400px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:var(--rd);padding:18px;box-shadow:var(--sh);
+  border-left:4px solid var(--g3);position:relative;overflow:hidden}
+.kpi.amber{border-left-color:var(--amber)}
+.kpi.red{border-left-color:var(--r3)}
+.kpi.blue{border-left-color:var(--blue)}
+.kpi.dark{border-left-color:var(--g1)}
+.kpi-ico{position:absolute;top:14px;right:14px;font-size:26px;opacity:.12}
+.kpi-lbl{font-size:10px;color:var(--b2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.kpi-val{font-size:22px;font-weight:800;color:var(--b3);line-height:1}
+.kpi-sub{font-size:11px;color:var(--b2);margin-top:5px}
+.delta{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:4px}
+.delta.pos{background:#e8f5e9;color:var(--g2)}.delta.neg{background:#ffebee;color:#c62828}
+
+/* CHARTS */
+.chart-row{display:grid;gap:14px;margin-bottom:16px}
+.chart-row-2{grid-template-columns:2fr 1fr}
+.chart-row-3{grid-template-columns:1fr 1fr 1fr}
+.chart-row-2h{grid-template-columns:1fr 1fr}
+.chart-card{background:#fff;border-radius:var(--rd);padding:18px;box-shadow:var(--sh)}
+.chart-title{font-size:13px;font-weight:700;color:var(--b3);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.ct-icon{font-size:16px}
+.chart-wrap{position:relative}
+.h200{height:200px}.h240{height:240px}.h260{height:260px}.h300{height:300px}.h320{height:320px}
+
+/* TABLES */
+.tcard{background:#fff;border-radius:var(--rd);padding:18px;box-shadow:var(--sh);margin-bottom:14px;overflow-x:auto}
+.thead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ttitle{font-size:13px;font-weight:700;color:var(--b3);display:flex;align-items:center;gap:7px}
+.tscroll{max-height:420px;overflow-y:auto}
+.tscroll thead th{position:sticky;top:0;z-index:2}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--g1);color:#fff;padding:9px 11px;text-align:left;font-weight:600;white-space:nowrap}
+th.r,td.r{text-align:right}th.c,td.c{text-align:center}
+td{padding:8px 11px;border-bottom:1px solid var(--b1);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f0f9f0}
+.tr-total td{background:#e8f5e9;font-weight:700;color:var(--g1)}
+.tr-red td{background:#fbe9e7}
+
+/* BADGES */
+.bdg{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700}
+.bdg-g{background:#e8f5e9;color:var(--g2)}
+.bdg-y{background:#fff8e1;color:#f57f17}
+.bdg-r{background:#ffebee;color:#c62828}
+.bdg-b{background:#e3f2fd;color:var(--blue)}
+.bdg-o{background:#fbe9e7;color:var(--r2)}
+
+/* PROGRESS */
+.pbar{background:#e2e8f0;border-radius:8px;height:10px;overflow:hidden;min-width:90px}
+.pfill{height:100%;border-radius:8px;transition:width .4s}
+.p-g{background:linear-gradient(90deg,var(--g3),var(--g2))}
+.p-y{background:linear-gradient(90deg,#ffca28,var(--amber))}
+.p-r{background:linear-gradient(90deg,#ef9a9a,#c62828)}
+
+/* SECTION HEADER */
+.sh{margin-bottom:18px}
+.sh-title{font-size:17px;font-weight:800;margin-bottom:3px}
+.sh-sub{font-size:12px;color:var(--b2)}
+.g-title{color:var(--g1)}.r-title{color:var(--r1)}
+
+/* NOTICE */
+.notice{background:#e8f5e9;border:1px solid var(--g4);border-radius:var(--rd);
+  padding:10px 14px;font-size:12px;color:var(--g1);margin-bottom:14px}
+.notice.red{background:#fbe9e7;border-color:var(--r4);color:var(--r2)}
+
+/* SALARY FLOW */
+.flow-wrap{display:flex;align-items:stretch;gap:0;margin-bottom:4px;overflow-x:auto}
+.flow-step{flex:1;min-width:160px;background:#f7f9fb;border:1.5px solid #e2e8f0;border-radius:10px;
+  padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.flow-step.cs{background:#e8f5e9;border-color:#a5d6a7}
+.flow-step.kt{background:#fbe9e7;border-color:#ffccbc}
+.flow-hd{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.flow-formula{font-size:11px;color:#718096;padding:3px 7px;background:#fff;border-radius:5px;border:1px solid #e2e8f0;font-family:monospace}
+.flow-val{font-size:15px;font-weight:800;color:#2d3748}
+.flow-val.g{color:var(--g1)}.flow-val.r{color:var(--r2)}.flow-val.b{color:var(--blue)}
+.flow-sub{font-size:11px;color:#718096}
+.flow-row{display:flex;flex-direction:column;gap:3px}
+.flow-item{font-size:11px;color:#4a5568;display:flex;justify-content:space-between;gap:8px;padding:2px 0;border-bottom:1px dashed #e2e8f0}
+.flow-item:last-child{border-bottom:none;font-weight:700}
+.flow-arr{display:flex;align-items:center;padding:0 6px;font-size:22px;color:#a0aec0;flex-shrink:0}
+
+/* SALARY SUMMARY ROW */
+.sal-sum{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.sal-box{flex:1;min-width:140px;background:#f7f8fa;border-radius:var(--rd);
+  padding:12px 14px;border:1px solid var(--b1)}
+.sal-box-lbl{font-size:10px;color:var(--b2);font-weight:600;margin-bottom:6px;text-transform:uppercase}
+.sal-box-val{font-size:16px;font-weight:700}
+.cv-g{color:var(--g2)}.cv-r{color:var(--r2)}.cv-a{color:var(--amber)}.cv-b{color:var(--blue)}
+
+/* EMP DETAIL CARD */
+.emp-detail-wrap{margin-bottom:16px}
+.emp-selector{display:flex;align-items:center;gap:12px;margin-bottom:16px;
+  background:#fff;border-radius:var(--rd);padding:14px 18px;box-shadow:var(--sh)}
+.emp-sel-lbl{font-size:13px;font-weight:700;color:var(--b3);white-space:nowrap}
+.emp-sel-select{border:2px solid var(--g3);border-radius:8px;padding:7px 14px;
+  font-size:13px;font-weight:600;color:var(--b3);cursor:pointer;outline:none;flex:1;max-width:400px}
+.emp-card{background:#fff;border-radius:var(--rd);padding:20px;box-shadow:var(--sh);
+  display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+.emp-ava{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--g2),var(--g3));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.emp-info-name{font-size:16px;font-weight:800;color:var(--b3);margin-bottom:2px}
+.emp-info-sub{font-size:12px;color:var(--b2);margin-bottom:12px}
+.emp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.emp-stat{background:#f7f8fa;border-radius:6px;padding:10px 12px;text-align:center}
+.emp-stat-lbl{font-size:10px;color:var(--b2);font-weight:600;margin-bottom:4px}
+.emp-stat-val{font-size:15px;font-weight:800;color:var(--b3)}
+
+/* MISC */
+.tag{display:inline-block;background:#e8f5e9;color:var(--g2);border-radius:4px;
+  padding:1px 6px;font-size:11px;font-weight:600}
+.tag-r{background:#fbe9e7;color:var(--r2)}
+.tag-b{background:#e3f2fd;color:var(--blue)}
+.tag-a{background:#fff8e1;color:var(--amber)}
+.sep{height:1px;background:var(--b1);margin:14px 0}
+.fw7{font-weight:700}.tg{color:var(--g2)}.tr{color:var(--r2)}.ta{color:var(--amber)}
+
+@media(max-width:768px){
+  .chart-row-2,.chart-row-3,.chart-row-2h{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .main-tab{padding:10px 12px;font-size:12px}
+  .content{padding:12px}
+  .emp-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="h-brand">
+    <div class="h-icon">🌿</div>
+    <div>
+      <div class="h-co">Tập đoàn cao su</div>
+      <div class="h-title">Báo cáo tổng hợp sản lượng & lương</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <select id="periodSel" class="h-period" onchange="onPeriodChange(this.value)">
+      <option value="06/2026">📅 Tháng 06/2026</option>
+      <option value="05/2026">📅 Tháng 05/2026</option>
+      <option value="04/2026">📅 Tháng 04/2026</option>
+    </select>
+    <div style="font-size:11px;opacity:.7">🌿 VN + 🇰🇭 KH</div>
+  </div>
+</header>
+
+<!-- MAIN TABS -->
+<div class="main-tabs">
+  <button class="main-tab active blue" data-m="tq" onclick="switchMain('tq',this,'blue')">🏠 Tổng quan</button>
+  <button class="main-tab" data-m="kt" onclick="switchMain('kt',this,'red')">🧪 Khai thác mủ</button>
+  <button class="main-tab" data-m="cs" onclick="switchMain('cs',this,'green')">🌱 Chăm sóc vườn cây</button>
+</div>
+
+<!-- SUB TABS (shown per main) -->
+<div class="sub-tabs hidden" id="sub-kt">
+  <button class="sub-tab red active" onclick="switchSub('kt','sl',this)">📦 Sản lượng mủ</button>
+  <button class="sub-tab red" onclick="switchSub('kt','lc',this)">💰 Bảng lương</button>
+</div>
+<div class="sub-tabs hidden" id="sub-cs">
+  <button class="sub-tab active" onclick="switchSub('cs','kh',this)">📋 Kế hoạch</button>
+  <button class="sub-tab" onclick="switchSub('cs','nt',this)">✅ Nghiệm thu</button>
+  <button class="sub-tab" onclick="switchSub('cs','kl',this)">🌳 KL Vườn cây</button>
+  <button class="sub-tab" onclick="switchSub('cs','ct',this)">👤 Chi tiết NT</button>
+  <button class="sub-tab" onclick="switchSub('cs','bl',this)">💵 Bảng lương</button>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="f-label">🔍 Lọc:</span>
+  <div class="f-div"></div>
+  <span class="f-label">Kỳ</span>
+  <select class="f-sel" id="fPeriod" onchange="applyFilter()">
+    <option>06/2026</option><option>05/2026</option><option>04/2026</option>
+  </select>
+  <div class="f-div"></div>
+  <span class="f-label" id="f2lbl">Tổ (KT)</span>
+  <select class="f-sel" id="fTo" onchange="applyFilter()">
+    <option value="">Tất cả</option>
+    <option value="1">Tổ 1</option><option value="2">Tổ 2</option>
+    <option value="3">Tổ 3</option><option value="4">Tổ 4</option><option value="5">Tổ 5</option>
+  </select>
+  <div class="f-div"></div>
+  <span class="f-label">Vườn/Đội</span>
+  <select class="f-sel" id="fVuon" onchange="applyFilter()">
+    <option value="">Tất cả</option>
+    <option value="A">Vườn A</option><option value="B">Vườn B</option>
+    <option value="C">Vườn C</option><option value="D">Vườn D</option>
+    <option value="Đội A">Đội A (VN)</option>
+  </select>
+  <button class="f-chip" onclick="resetFilter()">✕ Xóa lọc</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ========== TỔNG QUAN ========== -->
+<div id="sec-tq" class="section active">
+  <div class="sh">
+    <div class="sh-title" style="color:var(--blue)">🏠 Tổng quan tập đoàn – Tháng 06/2026</div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi dark">
+      <div class="kpi-ico">🧪</div>
+      <div class="kpi-lbl">Tổng lương khai thác mủ</div>
+      <div class="kpi-val" id="tq-kt-total">—</div>
+      <div class="kpi-sub">Riel | 30 CN Campuchia</div>
+      <span class="delta pos">+3.9% vs tháng trước</span>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-ico">🌱</div>
+      <div class="kpi-lbl">Thành tiền chăm sóc VCây</div>
+      <div class="kpi-val" id="tq-cs-total">—</div>
+      <div class="kpi-sub">VND | 10 CN Việt Nam</div>
+      <span class="delta pos" id="tq-cs-delta">—</span>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-ico">👥</div>
+      <div class="kpi-lbl">Tổng nhân sự</div>
+      <div class="kpi-val">40</div>
+      <div class="kpi-sub">30 KT mủ + 10 Chăm sóc</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-ico">🪣</div>
+      <div class="kpi-lbl">Tổng mủ tươi T06</div>
+      <div class="kpi-val">88,600</div>
+      <div class="kpi-sub">kg | DRC 50% → 44,300 kg khô</div>
+      <span class="delta pos">98.4% KH</span>
+    </div>
+    <div class="kpi">
+      <div class="kpi-ico">💰</div>
+      <div class="kpi-lbl">Tiết kiệm quỹ lương (CS)</div>
+      <div class="kpi-val tg" id="tq-cs-tietkiem">—</div>
+      <div class="kpi-sub">VND – Chăm sóc VCây</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-ico">📊</div>
+      <div class="kpi-lbl">Hiệu suất SL trung bình</div>
+      <div class="kpi-val">98.4%</div>
+      <div class="kpi-sub">Khai thác mủ – Tháng 06</div>
+      <span class="delta pos">+2.1% vs KH</span>
+    </div>
+  </div>
+
+  <!-- CS Salary Flow -->
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="chart-title"><span class="ct-icon">🌱</span>Cơ cấu hình thành lương – Chăm sóc vườn cây (Tháng 06/2026)</div>
+    <div class="flow-wrap">
+
+      <div class="flow-step cs">
+        <div class="flow-hd">🏢 Công ty giao</div>
+        <div class="flow-item"><span>Số lô vườn</span><span><strong>9 lô</strong></span></div>
+        <div class="flow-item"><span>Tổng diện tích</span><span><strong>173.67 ha</strong></span></div>
+        <div class="flow-item"><span>Định mức</span><span>5 – 11.2 công/ha</span></div>
+        <div class="flow-item"><span>Đơn giá</span><span>155K – 185K đ/công</span></div>
+      </div>
+
+      <div class="flow-arr">→</div>
+
+      <div class="flow-step">
+        <div class="flow-hd">📋 Quỹ lương KH</div>
+        <div class="flow-formula">Tổng công = DT × ĐM</div>
+        <div style="margin:5px 0 8px">
+          <div class="flow-sub">Tổng công KH</div>
+          <div class="flow-val b" id="flow-tc-kh">—</div>
+        </div>
+        <div class="flow-formula">Quỹ KH = TC × ĐG</div>
+        <div style="margin-top:5px">
+          <div class="flow-sub">Tổng quỹ lương KH</div>
+          <div class="flow-val g" id="flow-tl-kh">—</div>
+        </div>
+      </div>
+
+      <div class="flow-arr">→</div>
+
+      <div class="flow-step">
+        <div class="flow-hd">✅ Nghiệm thu</div>
+        <div class="flow-item"><span>Công hoàn thành</span><span id="flow-tc-nt" style="font-weight:600">—</span></div>
+        <div class="flow-item"><span>Tỉ lệ HT</span><span id="flow-pct-nt" style="color:#f57f17;font-weight:700">—</span></div>
+        <div class="flow-item" style="border-top:2px solid #e2e8f0;margin-top:4px;padding-top:5px">
+          <span>Thành tiền NT</span>
+          <span id="flow-tl-nt" style="font-weight:700;color:#2e7d32">—</span>
+        </div>
+      </div>
+
+      <div class="flow-arr">→</div>
+
+      <div class="flow-step cs">
+        <div class="flow-hd">💵 Thực lĩnh (10 CN)</div>
+        <div class="flow-item"><span>Thành tiền NT</span><span id="flow-tl-nt2">—</span></div>
+        <div class="flow-item"><span>(−) BHXH,YT,TN</span><span id="flow-bh" style="color:#e53935">—</span></div>
+        <div class="flow-item"><span>(−) Công đoàn</span><span id="flow-cd" style="color:#e53935">—</span></div>
+        <div class="flow-item" style="border-top:2px solid #a5d6a7;margin-top:4px;padding-top:5px">
+          <span>Tổng thực lĩnh</span>
+          <span id="flow-ll" style="font-size:14px;font-weight:800;color:#1b5e20">—</span>
+        </div>
+        <div class="flow-sub" style="margin-top:5px" id="flow-ll-pp">— đ/người</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Charts row 1 -->
+  <div class="chart-row chart-row-2" style="margin-bottom:14px">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">📉</span>Xu hướng quỹ lương 6 tháng (01–06/2026)</div>
+      <div class="chart-wrap h260"><canvas id="ch-tq-trend"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">🥧</span>Cơ cấu chi phí lương tập đoàn (quy VND)</div>
+      <div class="chart-wrap h260"><canvas id="ch-tq-pie"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Charts row 2 -->
+  <div class="chart-row chart-row-2h">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">📊</span>So sánh quỹ lương KH vs thực trả</div>
+      <div class="chart-wrap h240"><canvas id="ch-tq-compare"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">🧩</span>Cơ cấu lương khai thác mủ (Chuyên cần + SL + KT)</div>
+      <div class="chart-wrap h240"><canvas id="ch-tq-struct"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== KHAI THÁC MỦ - SẢN LƯỢNG ========== -->
+<div id="sec-kt-sl" class="section">
+  <div class="sh">
+    <div class="sh-title r-title">🧪 Báo cáo sản lượng mủ – Tháng 06/2026</div>
+    <div class="sh-sub">4 Vườn (A/B/C/D) | 24 lô | DRC trung bình 50%</div>
+  </div>
+
+  <div class="kpi-grid" style="grid-template-columns:repeat(5,1fr)">
+    <div class="kpi red"><div class="kpi-ico">🪣</div><div class="kpi-lbl">Tổng mủ tươi</div><div class="kpi-val">88,600</div><div class="kpi-sub">kg</div></div>
+    <div class="kpi amber"><div class="kpi-ico">💧</div><div class="kpi-lbl">Tổng mủ khô (DRC)</div><div class="kpi-val">44,300</div><div class="kpi-sub">kg | DRC 50%</div></div>
+    <div class="kpi"><div class="kpi-ico">🎯</div><div class="kpi-lbl">Kế hoạch tháng</div><div class="kpi-val">90,000</div><div class="kpi-sub">kg mủ tươi</div></div>
+    <div class="kpi green"><div class="kpi-ico">📈</div><div class="kpi-lbl">% Hoàn thành KH</div><div class="kpi-val">98.4%</div><div class="kpi-sub">↑ tốt</div></div>
+    <div class="kpi blue"><div class="kpi-ico">🚛</div><div class="kpi-lbl">Số chuyến cân</div><div class="kpi-val">64</div><div class="kpi-sub">chuyến trong tháng</div></div>
+  </div>
+
+  <div class="chart-row chart-row-2">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">🌿</span>Sản lượng mủ tươi theo Vườn (KH vs Thực tế)</div>
+      <div class="chart-wrap h260"><canvas id="ch-kt-vuon"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">👥</span>Hiệu suất trung bình theo Tổ (%)</div>
+      <div class="chart-wrap h260"><canvas id="ch-kt-to"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="chart-title"><span class="ct-icon">📉</span>Xu hướng sản lượng mủ tươi 6 tháng (tấn)</div>
+    <div class="chart-wrap h200"><canvas id="ch-kt-trend-sl"></canvas></div>
+  </div>
+
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="chart-title" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:7px"><span class="ct-icon">🧫</span>Theo dõi DRC theo từng đợt cân – Tháng 06/2026</span>
+      <span style="font-size:11px;font-weight:500;color:#718096">Mục tiêu: <strong style="color:#e64a19">50.0%</strong> | 4 Vườn (A/B/C/D)</span>
+    </div>
+    <div class="chart-row chart-row-2h" style="margin-top:0;margin-bottom:12px">
+      <div style="background:#fafafa;border-radius:6px;padding:10px 14px;display:flex;flex-direction:column;gap:4px">
+        <div style="font-size:11px;color:#718096;font-weight:600">DRC TB tháng 06</div>
+        <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:4px">
+          <span style="font-size:12px">🌿 <strong style="color:#2e7d32">Vườn A</strong>: <span id="drc-avg-A">—</span>%</span>
+          <span style="font-size:12px">🌿 <strong style="color:#f57f17">Vườn B</strong>: <span id="drc-avg-B">—</span>%</span>
+          <span style="font-size:12px">🌿 <strong style="color:#1565c0">Vườn C</strong>: <span id="drc-avg-C">—</span>%</span>
+          <span style="font-size:12px">🌿 <strong style="color:#bf360c">Vườn D</strong>: <span id="drc-avg-D">—</span>%</span>
+        </div>
+      </div>
+      <div style="background:#fafafa;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:18px">
+        <div><div style="font-size:11px;color:#718096;font-weight:600">DRC TB toàn vườn</div><div id="drc-avg-all" style="font-size:22px;font-weight:800;color:#2d3748;margin-top:2px">—%</div></div>
+        <div><div style="font-size:11px;color:#718096;font-weight:600">So mục tiêu</div><div id="drc-vs-target" style="font-size:14px;font-weight:700;margin-top:2px">—</div></div>
+      </div>
+    </div>
+    <div class="chart-wrap h280"><canvas id="ch-drc"></canvas></div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead">
+      <div class="ttitle">🏆 Xếp hạng hiệu suất công nhân khai thác</div>
+      <div><span class="tag-b tag">Tháng 06/2026</span></div>
+    </div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th class="c">Hạng</th><th>Mã NV</th><th>Họ tên</th><th class="c">Tổ</th>
+        <th class="r">KH (kg)</th><th class="r">Thực tế (kg)</th>
+        <th class="r">Hiệu suất</th><th class="c">XH KT</th><th class="c">Trạng thái</th>
+      </tr></thead>
+      <tbody id="tbl-kt-rank"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== KHAI THÁC MỦ - BẢNG LƯƠNG ========== -->
+<div id="sec-kt-lc" class="section">
+  <div class="sh">
+    <div class="sh-title r-title">💰 Bảng lương công nhân khai thác mủ – Tháng 06/2026</div>
+    <div class="sh-sub">30 công nhân | 5 tổ | Đơn vị: Riel (R)</div>
+  </div>
+
+  <div class="sal-sum">
+    <div class="sal-box"><div class="sal-box-lbl">Tổng Chuyên cần</div><div class="sal-box-val cv-b" id="kt-total-cc">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng Sản lượng</div><div class="sal-box-val cv-r" id="kt-total-sl">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng Kỹ thuật</div><div class="sal-box-val cv-g" id="kt-total-kt">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng lương</div><div class="sal-box-val cv-a fw7" id="kt-total-all">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Bình quân/CN</div><div class="sal-box-val" id="kt-avg">—</div></div>
+  </div>
+
+  <div class="chart-row chart-row-2h" style="margin-bottom:14px">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">📊</span>Top 10 lương cao nhất (Riel)</div>
+      <div class="chart-wrap h260"><canvas id="ch-kt-sal-bar"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">🥧</span>Cơ cấu lương khai thác (CC / SL / KT)</div>
+      <div class="chart-wrap h260"><canvas id="ch-kt-sal-pie"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead">
+      <div class="ttitle">📄 Bảng lương chi tiết – <span id="kt-filter-lbl">Tất cả Tổ</span></div>
+      <div id="kt-tbl-summary"></div>
+    </div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th class="c">STT</th><th>Mã NV</th><th>Họ tên</th><th class="c">Tổ</th>
+        <th class="r">Công</th><th class="r">CN ngày</th>
+        <th class="r">Chuyên cần (R)</th><th class="r">SL thực tế (kg)</th>
+        <th class="r">Tiền SL (R)</th><th class="c">Hạng KT</th>
+        <th class="r">Tiền KT (R)</th><th class="r fw7">TỔNG (R)</th>
+      </tr></thead>
+      <tbody id="tbl-kt-luong"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="6">TỔNG CỘNG</td>
+        <td class="r" id="f-kt-cc"></td><td class="r" id="f-kt-kg"></td>
+        <td class="r" id="f-kt-sl"></td><td></td><td class="r" id="f-kt-kt"></td>
+        <td class="r fw7" id="f-kt-all"></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CHĂM SÓC - KẾ HOẠCH ========== -->
+<div id="sec-cs-kh" class="section">
+  <div class="sh">
+    <div class="sh-title g-title">📋 Kế hoạch sản lượng & Quỹ lương – Tháng 06/2026</div>
+    <div class="sh-sub">Hạng mục công việc chăm sóc vườn cây – Đội A</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi green"><div class="kpi-lbl">Tổng công KH</div><div class="kpi-val" id="cs-kh-tc">—</div><div class="kpi-sub">công – 9 hạng mục</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Tổng quỹ lương KH</div><div class="kpi-val" id="cs-kh-tl">—</div><div class="kpi-sub">VND</div></div>
+    <div class="kpi blue"><div class="kpi-lbl">Diện tích canh tác</div><div class="kpi-val">173.67</div><div class="kpi-sub">ha – 9 lô vườn</div></div>
+    <div class="kpi"><div class="kpi-lbl">Đơn giá BQ</div><div class="kpi-val">168,889</div><div class="kpi-sub">đ/công</div></div>
+  </div>
+  <div class="tcard">
+    <div class="thead">
+      <div class="ttitle">📋 Danh sách kế hoạch hạng mục</div>
+      <div id="cs-kh-badge"></div>
+    </div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th>ID</th><th>Hạng mục</th><th>Nội dung</th><th class="c">Đội</th>
+        <th class="r">MĐ</th><th class="c">ĐVT</th><th class="r">ĐM</th>
+        <th class="r">Diện tích (ha)</th><th class="r">Tổng công</th>
+        <th class="r">Đơn giá (đ)</th><th class="r">Thành tiền (đ)</th>
+      </tr></thead>
+      <tbody id="tbl-cs-kh"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="8">TỔNG</td>
+        <td class="r fw7" id="f-cs-kh-tc"></td><td></td><td class="r fw7" id="f-cs-kh-tl"></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CHĂM SÓC - NGHIỆM THU ========== -->
+<div id="sec-cs-nt" class="section">
+  <div class="sh">
+    <div class="sh-title g-title">✅ Kết quả nghiệm thu – So sánh Kế hoạch</div>
+    <div class="sh-sub">Tháng 06/2026 – Chất lượng đánh giá bởi tổ nghiệm thu</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi green"><div class="kpi-lbl">Tổng công NT</div><div class="kpi-val" id="nt-tc">—</div><div class="kpi-sub">công</div></div>
+    <div class="kpi amber"><div class="kpi-lbl">Tổng tiền NT</div><div class="kpi-val" id="nt-tl">—</div><div class="kpi-sub">VND</div></div>
+    <div class="kpi"><div class="kpi-lbl">% so KH</div><div class="kpi-val" id="nt-pct">—</div><div class="kpi-sub">tổng công</div></div>
+    <div class="kpi green"><div class="kpi-lbl">Tiết kiệm</div><div class="kpi-val tg" id="nt-tietkiem">—</div><div class="kpi-sub">VND</div></div>
+  </div>
+  <div class="chart-row chart-row-2h" style="margin-bottom:14px">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">📊</span>So sánh Công KH vs Công NT</div>
+      <div class="chart-wrap h240"><canvas id="ch-nt-cong"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">💵</span>So sánh Tiền KH vs Tiền NT</div>
+      <div class="chart-wrap h240"><canvas id="ch-nt-tien"></canvas></div>
+    </div>
+  </div>
+  <div class="tcard">
+    <div class="thead"><div class="ttitle">✅ Bảng so sánh KH – NT</div><div id="nt-badge"></div></div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th>ID</th><th>Nội dung</th><th class="r">MĐ</th><th class="r">DT(ha)</th><th class="r">ĐG(đ)</th>
+        <th class="r">Công KH</th><th class="r">Tiền KH(đ)</th>
+        <th class="r">Công NT</th><th class="c">Chất lượng</th>
+        <th class="r">Tiền NT(đ)</th><th class="r">Chênh(đ)</th><th class="c">%TH</th>
+      </tr></thead>
+      <tbody id="tbl-nt"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="5">TỔNG</td>
+        <td class="r fw7" id="f-nt-ckh"></td><td class="r fw7" id="f-nt-tkh"></td>
+        <td class="r fw7" id="f-nt-cnt"></td><td></td>
+        <td class="r fw7" id="f-nt-tnt"></td>
+        <td class="r fw7 tg" id="f-nt-ch"></td><td class="c fw7" id="f-nt-pct"></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CHĂM SÓC - KL VƯỜN CÂY ========== -->
+<div id="sec-cs-kl" class="section">
+  <div class="sh">
+    <div class="sh-title g-title">🌳 Theo dõi khối lượng vườn cây theo Lô</div>
+    <div class="sh-sub">Tiến độ KL giao vs hoàn thành – 9 lô vườn – Tháng 06/2026</div>
+  </div>
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="chart-title"><span class="ct-icon">📊</span>KL giao vs KL hoàn thành theo Lô vườn (công)</div>
+    <div class="chart-wrap h320"><canvas id="ch-kl-bar"></canvas></div>
+  </div>
+  <div class="tcard">
+    <div class="thead">
+      <div class="ttitle">🌳 Chi tiết KL theo Lô – <span id="kl-filter-lbl">Tất cả</span></div>
+      <div><span class="tag">9 lô vườn</span></div>
+    </div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th class="c">STT</th><th>Task ID</th><th>Tên lô</th><th>Hạng mục</th>
+        <th class="r">Năm trồng</th><th class="r">Diện tích (ha)</th>
+        <th class="r">KL giao (công)</th><th class="r">KL HT (công)</th>
+        <th class="r">% HT</th><th class="c">Trạng thái</th>
+      </tr></thead>
+      <tbody id="tbl-kl"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="5">TỔNG</td>
+        <td class="r fw7" id="f-kl-dt"></td>
+        <td class="r fw7" id="f-kl-giao"></td>
+        <td class="r fw7" id="f-kl-ht"></td>
+        <td class="r fw7" id="f-kl-pct"></td><td></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CHĂM SÓC - CHI TIẾT NT ========== -->
+<div id="sec-cs-ct" class="section">
+  <div class="sh">
+    <div class="sh-title g-title">👤 Chi tiết nghiệm thu từng nhân sự</div>
+    <div class="sh-sub">Tháng 06/2026 | Đội A | Chọn nhân sự để xem chi tiết</div>
+  </div>
+
+  <div class="emp-selector">
+    <span class="emp-sel-lbl">👤 Chọn nhân sự:</span>
+    <select id="empSel" class="emp-sel-select" onchange="renderEmpDetail()">
+    </select>
+  </div>
+  <div id="empDetailWrap" class="emp-card" style="margin-bottom:16px">
+    <!-- Filled by JS -->
+  </div>
+
+  <div class="chart-card" style="margin-bottom:14px">
+    <div class="chart-title"><span class="ct-icon">📊</span>Phân bổ công theo hạng mục (MĐ571 + MĐ714)</div>
+    <div class="chart-wrap h200"><canvas id="ch-emp-detail"></canvas></div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead"><div class="ttitle">📄 Bảng chi tiết nghiệm thu tất cả nhân sự</div></div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th class="c">STT</th><th>Họ và tên</th>
+        <th class="r">DT MĐ571(ha)</th><th class="r">Công MĐ571</th>
+        <th class="r">DT MĐ714(ha)</th><th class="r">Công MĐ714</th>
+        <th class="r">Tổng công</th><th class="r">Đơn giá(đ)</th>
+        <th class="r">Thành tiền(đ)</th><th class="c">Ký</th>
+      </tr></thead>
+      <tbody id="tbl-ct"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="2">TỔNG</td>
+        <td class="r">38.11</td><td class="r">343.00</td>
+        <td class="r">11.17</td><td class="r">125.10</td>
+        <td class="r">468.10</td><td></td>
+        <td class="r fw7" id="f-ct-total"></td><td></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CHĂM SÓC - BẢNG LƯƠNG ========== -->
+<div id="sec-cs-bl" class="section">
+  <div class="sh">
+    <div class="sh-title g-title">💵 Bảng thanh toán tiền lương – Tháng 06/2026</div>
+    <div class="sh-sub">Đội A | 10 nhân sự | Chăm sóc vườn cây tái canh 2025</div>
+  </div>
+
+  <div class="sal-sum">
+    <div class="sal-box"><div class="sal-box-lbl">Quỹ lương KH</div><div class="sal-box-val cv-a">93,400,000 đ</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng lương gross</div><div class="sal-box-val cv-b" id="cs-bl-gross">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng khấu trừ</div><div class="sal-box-val cv-r" id="cs-bl-deduct">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tổng thực lĩnh</div><div class="sal-box-val cv-g fw7" id="cs-bl-net">—</div></div>
+    <div class="sal-box"><div class="sal-box-lbl">Tiết kiệm QĨ</div><div class="sal-box-val cv-g">9,200,000 đ</div></div>
+  </div>
+
+  <div class="chart-row chart-row-2h" style="margin-bottom:14px">
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">💰</span>Lương thực lĩnh vs BQ quỹ/người</div>
+      <div class="chart-wrap h240"><canvas id="ch-bl-bar"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title"><span class="ct-icon">🥧</span>Cơ cấu khấu trừ (BHXH + CĐ)</div>
+      <div class="chart-wrap h240"><canvas id="ch-bl-pie"></canvas></div>
+    </div>
+  </div>
+
+  <div class="tcard">
+    <div class="thead">
+      <div class="ttitle">💵 Bảng lương chi tiết</div>
+      <div id="bl-badge"></div>
+    </div>
+    <div class="tscroll"><table>
+      <thead><tr>
+        <th class="c">STT</th><th>Họ và tên</th><th class="r">Hệ số LCB</th>
+        <th class="r">Số công</th><th class="r">MĐ HT(%)</th>
+        <th class="r">Thành tiền(đ)</th><th class="r">Công đoàn(đ)</th>
+        <th class="r">BHXH,YT,TN(đ)</th><th class="r">Thực lĩnh(đ)</th>
+        <th class="c">So KH</th>
+      </tr></thead>
+      <tbody id="tbl-bl"></tbody>
+      <tfoot><tr class="tr-total">
+        <td colspan="3">TỔNG</td>
+        <td class="r fw7" id="f-bl-cong"></td><td></td>
+        <td class="r fw7" id="f-bl-tt"></td>
+        <td class="r fw7" id="f-bl-cd"></td>
+        <td class="r fw7" id="f-bl-bh"></td>
+        <td class="r fw7" id="f-bl-ll"></td><td></td>
+      </tr></tfoot>
+    </table></div>
+  </div>
+</div>
+
+</div><!-- end .content -->
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+// Trend (Jan-Jun 2026)
+const TREND = {
+  periods: ['01/2026','02/2026','03/2026','04/2026','05/2026','06/2026'],
+  ktQuy:   [82000000,88000000,94000000,101000000,108000000,112000000],
+  ktThuc:  [75000000,81000000,87000000, 94000000,100000000,105000000],
+  csQuy:   [89963100,85200000,91500000, 87800000, 90100000, 233054780],
+  csThuc:  [80036550,76500000,82100000, 78900000, 81200000, 210334050],
+  slTuoi:  [72.1, 78.4, 85.2, 90.6, 86.3, 88.6], // tấn
+};
+
+// DRC đo theo đợt cân tháng 06/2026
+const DRC = {
+  dots: ['Đợt 1\n(03/06)', 'Đợt 2\n(07/06)', 'Đợt 3\n(11/06)', 'Đợt 4\n(15/06)', 'Đợt 5\n(19/06)', 'Đợt 6\n(23/06)', 'Đợt 7\n(27/06)'],
+  vuonA: [48.2, 49.5, 50.8, 51.3, 50.6, 52.1, 51.8],
+  vuonB: [47.5, 48.8, 49.4, 50.0, 49.7, 51.0, 50.5],
+  vuonC: [49.0, 50.2, 51.5, 52.3, 51.9, 53.2, 52.7],
+  vuonD: [46.8, 47.9, 48.5, 49.8, 49.2, 50.5, 50.0],
+  target: 50.0, // DRC mục tiêu %
+};
+
+// Khai thác mủ workers
+const KT_W = [
+  {id:233,name:'SO SREYPAN',     to:1,vuon:'A',kh:4355,sl:3940,cong:26,cn:3,rank:'A'},
+  {id:234,name:'KAKK SOKKHEY',   to:1,vuon:'B',kh:3333,sl:3200,cong:27,cn:3,rank:'B'},
+  {id:235,name:'KOEMHENG KHENG', to:1,vuon:'C',kh:1808,sl:1590,cong:25,cn:2,rank:'A'},
+  {id:236,name:'SRENG SEANGHIM', to:1,vuon:'D',kh:1410,sl:1350,cong:26,cn:3,rank:'A+'},
+  {id:237,name:'KHEAM PHOEUN',   to:2,vuon:'A',kh:3439,sl:3610,cong:27,cn:4,rank:'A'},
+  {id:238,name:'HEANG SEANGLY',  to:2,vuon:'B',kh:2500,sl:2450,cong:27,cn:4,rank:'A+'},
+  {id:239,name:'NET DINA',       to:2,vuon:'C',kh:2682,sl:2750,cong:28,cn:4,rank:'A'},
+  {id:240,name:'ERT SOPHEAK',    to:2,vuon:'D',kh:2889,sl:3100,cong:27,cn:3,rank:'A+'},
+  {id:241,name:'NHIEN TROLACH',  to:2,vuon:'A',kh:5957,sl:5800,cong:26,cn:4,rank:'A'},
+  {id:242,name:'YORN NET',       to:2,vuon:'B',kh:2682,sl:2520,cong:26,cn:3,rank:'B'},
+  {id:243,name:'HIM SARETH',     to:3,vuon:'C',kh:1996,sl:2100,cong:27,cn:3,rank:'A'},
+  {id:244,name:'SAO NEANG',      to:3,vuon:'A',kh:4264,sl:4400,cong:27,cn:4,rank:'A+'},
+  {id:245,name:'VE SAVONG',      to:3,vuon:'B',kh:1340,sl:1200,cong:25,cn:2,rank:'C'},
+  {id:246,name:'TOEU KHEAM',     to:3,vuon:'C',kh:2031,sl:1980,cong:26,cn:3,rank:'A'},
+  {id:247,name:'CHEA PHOEN',     to:3,vuon:'D',kh:3493,sl:3750,cong:27,cn:4,rank:'A+'},
+  {id:248,name:'NTH LINA',       to:3,vuon:'A',kh:2602,sl:2450,cong:26,cn:3,rank:'A'},
+  {id:249,name:'KEAN ROEUN',     to:3,vuon:'B',kh:4907,sl:5200,cong:27,cn:4,rank:'A'},
+  {id:250,name:'CHHOUENG HANN',  to:4,vuon:'C',kh:3793,sl:3600,cong:26,cn:3,rank:'B'},
+  {id:251,name:'LOEUNG SAM',     to:4,vuon:'D',kh:3600,sl:3200,cong:25,cn:2,rank:'C'},
+  {id:252,name:'THOL CHANTHY',   to:4,vuon:'A',kh:2900,sl:2850,cong:26,cn:3,rank:'A'},
+  {id:253,name:'CHHOM SREYON',   to:4,vuon:'B',kh:2350,sl:2200,cong:26,cn:4,rank:'B'},
+  {id:254,name:'TAM SROUCH',     to:4,vuon:'C',kh:3580,sl:3350,cong:26,cn:3,rank:'A'},
+  {id:255,name:'MAO EARY',       to:5,vuon:'D',kh:2700,sl:2800,cong:27,cn:4,rank:'A+'},
+  {id:256,name:'LEANG SOUM',     to:5,vuon:'A',kh:3300,sl:3100,cong:26,cn:3,rank:'A'},
+  {id:257,name:'SONG THET',      to:5,vuon:'B',kh:3000,sl:2950,cong:27,cn:3,rank:'B'},
+  {id:258,name:'DOEM DOEUN',     to:5,vuon:'C',kh:2700,sl:2450,cong:25,cn:2,rank:'C'},
+  {id:259,name:'NOY VANNY',      to:5,vuon:'D',kh:3200,sl:2800,cong:26,cn:3,rank:'A'},
+  {id:261,name:'KHMON KHEAM',    to:5,vuon:'A',kh:2900,sl:2600,cong:26,cn:4,rank:'B'},
+  {id:262,name:'MEAS SOPHEA',    to:4,vuon:'B',kh:3100,sl:2900,cong:26,cn:3,rank:'A'},
+  {id:263,name:'KIM SOKHA',      to:3,vuon:'C',kh:1900,sl:1800,cong:25,cn:2,rank:'B'},
+];
+
+// Garden production (khai thác)
+const KT_VUON = [
+  {vuon:'A',kh:28000,sl:27500},
+  {vuon:'B',kh:20000,sl:21200},
+  {vuon:'C',kh:19000,sl:17800},
+  {vuon:'D',kh:23000,sl:22100},
+];
+
+// CS Employees
+const CS_EMP = [
+  {id:1, name:'Nguyễn Hữu Minh',     team:'A', heSo:1.88, bhBase:3700000},
+  {id:2, name:'Phùng Thị Thành',     team:'A', heSo:1.81, bhBase:3700000},
+  {id:3, name:'Nguyễn Thị Kim Oanh', team:'A', heSo:1.96, bhBase:3700000},
+  {id:4, name:'Lê Thị Hoa',          team:'A', heSo:1.81, bhBase:3700000},
+  {id:5, name:'Phạm Thị Tú',         team:'A', heSo:1.96, bhBase:3700000},
+  {id:6, name:'Nguyễn Xuân Nam',     team:'A', heSo:1.96, bhBase:3700000},
+  {id:7, name:'Nguyễn Thị Phương',   team:'A', heSo:1.96, bhBase:3700000},
+  {id:8, name:'Mai Thị Tình',        team:'A', heSo:1.96, bhBase:3700000},
+  {id:9, name:'Trần Văn Lượng',      team:'A', heSo:1.74, bhBase:3700000},
+  {id:10,name:'Trần Gia Chinh',      team:'A', heSo:1.81, bhBase:3700000},
+];
+
+// CS Plans (9 plots)
+const CS_PLANS = [
+  {id:'CSVC_TN_571',    lbl:'Tưới nước',     lo:'Lô 1', dt:44.63,md:571,dm:9,   dg:171000},
+  {id:'CSVC_TN_714',    lbl:'Tưới nước',     lo:'Lô 2', dt:11.11,md:714,dm:11.2,dg:171000},
+  {id:'CSVC_BP_571',    lbl:'Bón phân NPK',  lo:'Lô 3', dt:23.24,md:571,dm:6,   dg:185000},
+  {id:'CSVC_PTC_714',   lbl:'Phun thuốc cỏ', lo:'Lô 4', dt:10.23,md:714,dm:7,   dg:155000},
+  {id:'CSVC_LC_571',    lbl:'Làm cỏ tay',    lo:'Lô 5', dt:23.23,md:571,dm:8,   dg:165000},
+  {id:'CSVC_TN_571_L6', lbl:'Tưới nước',     lo:'Lô 6', dt:21.62,md:571,dm:9,   dg:171000},
+  {id:'CSVC_BP_571_L7', lbl:'Bón phân NPK',  lo:'Lô 7', dt:11.97,md:571,dm:6,   dg:185000},
+  {id:'CSVC_LC_714',    lbl:'Làm cỏ tay',    lo:'Lô 8', dt:8.63, md:714,dm:10,  dg:165000},
+  {id:'CSVC_PTC_571_L9',lbl:'Phun thuốc cỏ', lo:'Lô 9', dt:19.01,md:571,dm:5,   dg:155000},
+];
+
+// CS Plots acceptance
+const CS_PLOTS = [
+  {lo:'Lô 1',taskId:'CSVC_TN_571',    klGiao:401.67,klHT:342.99},
+  {lo:'Lô 2',taskId:'CSVC_TN_714',    klGiao:124.43,klHT:125.06},
+  {lo:'Lô 3',taskId:'CSVC_BP_571',    klGiao:139.44,klHT:125.50},
+  {lo:'Lô 4',taskId:'CSVC_PTC_714',   klGiao:71.61, klHT:68.00},
+  {lo:'Lô 5',taskId:'CSVC_LC_571',    klGiao:185.84,klHT:165.00},
+  {lo:'Lô 6',taskId:'CSVC_TN_571_L6', klGiao:194.58,klHT:180.00},
+  {lo:'Lô 7',taskId:'CSVC_BP_571_L7', klGiao:71.82, klHT:65.00},
+  {lo:'Lô 8',taskId:'CSVC_LC_714',    klGiao:86.30, klHT:78.00},
+  {lo:'Lô 9',taskId:'CSVC_PTC_571_L9',klGiao:95.05, klHT:88.00},
+];
+
+// CS employee work per period (equal split)
+const CS_EW = {dt571:3.811,c571:34.3,dt714:1.117,c714:12.51,total:46.81,dg:171000};
+
+// ============================================================
+// HELPERS
+// ============================================================
+const fmt = n => Math.round(n).toLocaleString('vi-VN');
+const fd = (n,d=2) => (+n).toFixed(d);
+const pct = (a,b) => b ? (a/b*100).toFixed(1)+'%' : '—';
+const G='#2e7d32',A='#f57f17',R='#e64a19',B='#1565c0',
+      GL='#a5d6a7',AL='#ffe082',RL='#ffccbc',BL='#90caf9',RD='#bf360c';
+
+function ktSalary(w) {
+  const rate = w.cong > 26 ? 20000 : 18000;
+  const cc = rate*(w.cong+w.cn) + (w.cong>26 ? 0 : w.cn*10000);
+  // Actually: IF cong>26: 20000*(cong+cn); ELSE: 18000*cong+10000*cn
+  const cc2 = w.cong > 26 ? 20000*(w.cong+w.cn) : 18000*w.cong + 10000*w.cn;
+  const hs = w.sl/w.kh;
+  const slRate = hs < 0.9 ? 300 : hs <= 1.0 ? 320 : 350;
+  const sl = Math.round(w.sl * slRate);
+  const ktMap = {'A+':50000,'A':40000,'B':0,'C':-40000,'D':-50000};
+  const kt = ktMap[w.rank] || 0;
+  return {cc:cc2, sl, kt, total:cc2+sl+kt, hs};
+}
+
+function csSalary(emp, thanhTien) {
+  const bh = (emp.heSo+0.15)*emp.bhBase*0.105;
+  const cd = (thanhTien-bh)*0.005;
+  return {bh:Math.round(bh), cd:Math.round(cd), net:Math.round(thanhTien-bh-cd)};
+}
+
+function statusBdg(pctVal) {
+  if(pctVal>=95) return '<span class="bdg bdg-g">✅ Đạt</span>';
+  if(pctVal>=85) return '<span class="bdg bdg-y">⚠️ Theo dõi</span>';
+  return '<span class="bdg bdg-r">❌ Chậm</span>';
+}
+function pBar(pctVal) {
+  const w = Math.min(pctVal, 100).toFixed(1);
+  const color = pctVal >= 100 ? '#2e7d32'
+              : pctVal >= 90  ? '#43a047'
+              : pctVal >= 80  ? '#f57f17'
+              : '#e53935';
+  return `<div class="pbar"><div class="pfill" style="width:${w}%;background:${color}"></div></div>`;
+}
+function rankBdg(r) {
+  const m = {'A+':'bdg-g','A':'bdg-b','B':'bdg-b','C':'bdg-y','D':'bdg-r'};
+  return `<span class="bdg ${m[r]||'bdg-b'}">${r}</span>`;
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function renderTQ() {
+  // Compute totals
+  const ktTotal = KT_W.reduce((s,w)=>s+ktSalary(w).total,0);
+  document.getElementById('tq-kt-total').textContent = fmt(ktTotal)+' R';
+}
+
+function renderKTRank() {
+  const ranked = [...KT_W].map(w=>({...w,...ktSalary(w)}))
+    .sort((a,b)=>b.hs-a.hs);
+  const tbody = document.getElementById('tbl-kt-rank');
+  tbody.innerHTML = ranked.map((w,i)=>{
+    const hsPct = (w.hs*100).toFixed(1);
+    return `<tr ${w.rank==='C'||w.rank==='D'?'class="tr-red"':''}>
+      <td class="c fw7">${i+1}</td>
+      <td>${w.id}</td><td><strong>${w.name}</strong></td>
+      <td class="c"><span class="tag-b tag">Tổ ${w.to}</span></td>
+      <td class="r">${fmt(w.kh)}</td>
+      <td class="r fw7">${fmt(w.sl)}</td>
+      <td class="r">${pBar(w.hs*100)}<small class="${w.hs>=1?'tg':'ta'}">${hsPct}%</small></td>
+      <td class="c">${rankBdg(w.rank)}</td>
+      <td class="c">${statusBdg(w.hs*100)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderKTLuong(filterTo='') {
+  const workers = filterTo ? KT_W.filter(w=>w.to==filterTo) : KT_W;
+  const tbody = document.getElementById('tbl-kt-luong');
+  let sCC=0,sSL_kg=0,sSL=0,sKT=0,sAll=0;
+  tbody.innerHTML = workers.map((w,i)=>{
+    const s=ktSalary(w);
+    sCC+=s.cc; sSL_kg+=w.sl; sSL+=s.sl; sKT+=s.kt; sAll+=s.total;
+    const ktCls=s.kt>0?'tg':s.kt<0?'tr':'';
+    return `<tr>
+      <td class="c">${i+1}</td><td>${w.id}</td><td><strong>${w.name}</strong></td>
+      <td class="c"><span class="tag-b tag">Tổ ${w.to}</span></td>
+      <td class="r">${w.cong}</td><td class="r">${w.cn}</td>
+      <td class="r">${fmt(s.cc)}</td><td class="r">${fmt(w.sl)}</td>
+      <td class="r">${fmt(s.sl)}</td>
+      <td class="c">${rankBdg(w.rank)}</td>
+      <td class="r ${ktCls}">${s.kt>0?'+':''}${fmt(s.kt)}</td>
+      <td class="r fw7 ta">${fmt(s.total)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-kt-cc').textContent=fmt(sCC);
+  document.getElementById('f-kt-kg').textContent=fmt(sSL_kg);
+  document.getElementById('f-kt-sl').textContent=fmt(sSL);
+  document.getElementById('f-kt-kt').textContent=(sKT>=0?'+':'')+fmt(sKT);
+  document.getElementById('f-kt-all').textContent=fmt(sAll);
+  document.getElementById('kt-total-cc').textContent=fmt(sCC)+' R';
+  document.getElementById('kt-total-sl').textContent=fmt(sSL)+' R';
+  document.getElementById('kt-total-kt').textContent=(sKT>=0?'+':'')+fmt(sKT)+' R';
+  document.getElementById('kt-total-all').textContent=fmt(sAll)+' R';
+  document.getElementById('kt-avg').textContent=fmt(Math.round(sAll/workers.length))+' R';
+  document.getElementById('kt-filter-lbl').textContent=filterTo?`Tổ ${filterTo}`:'Tất cả Tổ';
+}
+
+function renderCSKH() {
+  const tbody = document.getElementById('tbl-cs-kh');
+  let tTC=0,tTL=0;
+  tbody.innerHTML = CS_PLANS.map(p=>{
+    const tc = +(p.dt*p.dm).toFixed(2);
+    const tl = Math.round(tc*p.dg);
+    tTC+=tc; tTL+=tl;
+    return `<tr>
+      <td><code style="font-size:10px;color:var(--g2)">${p.id}</code></td>
+      <td>Chăm sóc VCTC 2025</td>
+      <td><span class="tag">${p.lbl}</span></td>
+      <td class="c"><span class="bdg bdg-b">A</span></td>
+      <td class="r">${p.md}</td><td class="c">công/ha</td>
+      <td class="r">${fd(p.dm)}</td><td class="r">${fd(p.dt)}</td>
+      <td class="r fw7">${fd(tc)}</td>
+      <td class="r">${fmt(p.dg)}</td>
+      <td class="r fw7 ta">${fmt(tl)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-cs-kh-tc').textContent=fd(tTC);
+  document.getElementById('f-cs-kh-tl').textContent=fmt(tTL);
+  document.getElementById('cs-kh-tc').textContent=fd(tTC);
+  document.getElementById('cs-kh-tl').textContent=fmt(tTL);
+  document.getElementById('cs-kh-badge').innerHTML=`<span class="tag">Tổng: ${fmt(tTL)} đ</span>`;
+}
+
+function buildAcceptance() {
+  // Build NT from plans + plots
+  return CS_PLANS.map(p=>{
+    const plot = CS_PLOTS.find(pl=>pl.taskId===p.id)||{klGiao:0,klHT:0};
+    const tc = +(p.dt*p.dm).toFixed(2);
+    const tl = Math.round(tc*p.dg);
+    return {
+      id:p.id, lbl:p.lbl, lo:p.lo, md:p.md, dt:p.dt, dg:p.dg,
+      cKH:plot.klGiao, tKH:Math.round(plot.klGiao*p.dg),
+      cNT:plot.klHT,   tNT:Math.round(plot.klHT*p.dg),
+      cl:1.0
+    };
+  });
+}
+
+function renderNT() {
+  const acc = buildAcceptance();
+  const tbody = document.getElementById('tbl-nt');
+  let sCKH=0,sTKH=0,sCNT=0,sTNT=0;
+  tbody.innerHTML = acc.map(a=>{
+    const pv = a.cKH>0 ? a.cNT/a.cKH*100 : 0;
+    const ch = a.tKH-a.tNT;
+    sCKH+=a.cKH; sTKH+=a.tKH; sCNT+=a.cNT; sTNT+=a.tNT;
+    return `<tr>
+      <td><code style="font-size:10px;color:var(--g2)">${a.id}</code></td>
+      <td><span class="tag">${a.lbl}</span></td>
+      <td class="r">${a.md}</td><td class="r">${fd(a.dt)}</td>
+      <td class="r">${fmt(a.dg)}</td>
+      <td class="r">${fd(a.cKH)}</td><td class="r">${fmt(a.tKH)}</td>
+      <td class="r fw7">${fd(a.cNT)}</td>
+      <td class="c"><span class="bdg bdg-g">⭐ Đạt</span></td>
+      <td class="r fw7 tg">${fmt(a.tNT)}</td>
+      <td class="r ${ch>=0?'tg':'tr'}">${ch>=0?'+':''}${fmt(ch)}</td>
+      <td class="c">${statusBdg(pv)}<br><small>${pv.toFixed(1)}%</small></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-nt-ckh').textContent=fd(sCKH);
+  document.getElementById('f-nt-tkh').textContent=fmt(sTKH);
+  document.getElementById('f-nt-cnt').textContent=fd(sCNT);
+  document.getElementById('f-nt-tnt').textContent=fmt(sTNT);
+  const ch=sTKH-sTNT;
+  document.getElementById('f-nt-ch').textContent=(ch>=0?'+':'')+fmt(ch);
+  document.getElementById('f-nt-pct').textContent=pct(sCNT,sCKH);
+  document.getElementById('nt-tc').textContent=fd(sCNT);
+  document.getElementById('nt-tl').textContent=fmt(sTNT);
+  document.getElementById('nt-pct').textContent=pct(sCNT,sCKH);
+  document.getElementById('nt-tietkiem').textContent=fmt(ch);
+  document.getElementById('nt-badge').innerHTML=`<span class="tag">Đạt ${pct(sCNT,sCKH)} KH</span>`;
+}
+
+function renderKL() {
+  const tbody = document.getElementById('tbl-kl');
+  let sDT=0,sG=0,sHT=0;
+  tbody.innerHTML = CS_PLANS.map((p,i)=>{
+    const plot = CS_PLOTS.find(pl=>pl.taskId===p.id)||{klGiao:0,klHT:0};
+    const pv = plot.klGiao>0 ? plot.klHT/plot.klGiao*100 : 0;
+    sDT+=p.dt; sG+=plot.klGiao; sHT+=plot.klHT;
+    return `<tr>
+      <td class="c">${i+1}</td>
+      <td><code style="font-size:10px;color:var(--g2)">${p.id}</code></td>
+      <td><strong>${p.lo}</strong></td>
+      <td><span class="tag">${p.lbl}</span></td>
+      <td class="r">2025</td><td class="r">${fd(p.dt)}</td>
+      <td class="r">${fd(plot.klGiao)}</td>
+      <td class="r fw7">${fd(plot.klHT)}</td>
+      <td class="r">${pBar(pv)}<small class="${pv>=95?'tg':pv>=85?'ta':'tr'}">${pv.toFixed(1)}%</small></td>
+      <td class="c">${statusBdg(pv)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-kl-dt').textContent=fd(sDT);
+  document.getElementById('f-kl-giao').textContent=fd(sG);
+  document.getElementById('f-kl-ht').textContent=fd(sHT);
+  document.getElementById('f-kl-pct').textContent=pct(sHT,sG);
+}
+
+// Employee detail for CT tab
+function buildEmpSel() {
+  const sel = document.getElementById('empSel');
+  sel.innerHTML = CS_EMP.map(e=>`<option value="${e.id}">${e.id}. ${e.name}</option>`).join('');
+  renderEmpDetail();
+}
+
+function renderEmpDetail() {
+  const id = parseInt(document.getElementById('empSel').value);
+  const emp = CS_EMP.find(e=>e.id===id);
+  if(!emp) return;
+  const tt = CS_EW.total * CS_EW.dg;
+  const sal = csSalary(emp, tt);
+  const initials = emp.name.split(' ').slice(-2).map(w=>w[0]).join('');
+  const hs = (CS_EW.total/(93400000/10/CS_EW.dg)*100).toFixed(1);
+  document.getElementById('empDetailWrap').innerHTML = `
+    <div class="emp-ava">${initials}</div>
+    <div>
+      <div class="emp-info-name">${emp.name}</div>
+      <div class="emp-info-sub">Đội ${emp.team} | Hệ số LCB: ${emp.heSo} | MSNV: CN-0${emp.id}</div>
+      <div class="emp-stats">
+        <div class="emp-stat"><div class="emp-stat-lbl">DT MĐ571</div><div class="emp-stat-val">${CS_EW.dt571} ha</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">Công MĐ571</div><div class="emp-stat-val">${CS_EW.c571}</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">DT MĐ714</div><div class="emp-stat-val">${CS_EW.dt714} ha</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">Công MĐ714</div><div class="emp-stat-val">${CS_EW.c714}</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">Tổng công</div><div class="emp-stat-val fw7 tg">${CS_EW.total}</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">Thành tiền</div><div class="emp-stat-val ta">${fmt(tt)} đ</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">Thực lĩnh</div><div class="emp-stat-val cv-g fw7">${fmt(sal.net)} đ</div></div>
+        <div class="emp-stat"><div class="emp-stat-lbl">MĐ HT</div><div class="emp-stat-val">${hs}%</div></div>
+      </div>
+    </div>`;
+  updateEmpChart(emp);
+}
+
+function renderCT() {
+  const tbody = document.getElementById('tbl-ct');
+  let tTotal=0;
+  tbody.innerHTML = CS_EMP.map(e=>{
+    const tt = CS_EW.total * CS_EW.dg;
+    tTotal+=tt;
+    return `<tr>
+      <td class="c">${e.id}</td><td><strong>${e.name}</strong></td>
+      <td class="r">${CS_EW.dt571}</td><td class="r">${CS_EW.c571}</td>
+      <td class="r">${CS_EW.dt714}</td><td class="r">${CS_EW.c714}</td>
+      <td class="r fw7">${CS_EW.total}</td>
+      <td class="r">171,000</td>
+      <td class="r fw7 ta">${fmt(tt)}</td>
+      <td class="c">........</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-ct-total').textContent=fmt(tTotal);
+}
+
+function renderBL() {
+  const tbody = document.getElementById('tbl-bl');
+  // Compute NT thành tiền from CS_PLOTS (consistent with Nghiệm thu tab)
+  let totalNT = 0;
+  CS_PLOTS.forEach(pl => {
+    const plan = CS_PLANS.find(p => p.id === pl.taskId);
+    if (plan) totalNT += Math.round(pl.klHT * plan.dg);
+  });
+  let totalKH = 0;
+  CS_PLANS.forEach(p => { totalKH += Math.round(p.dt * p.dm * p.dg); });
+  const quyKH = totalKH / CS_EMP.length;
+  const tt = totalNT / CS_EMP.length;
+  let tCong=0,tTT=0,tCD=0,tBH=0,tLL=0;
+  tbody.innerHTML = CS_EMP.map(e=>{
+    const sal = csSalary(e,tt);
+    const mdHT = (tt/quyKH*100).toFixed(1);
+    tCong+=CS_EW.total; tTT+=tt; tCD+=sal.cd; tBH+=sal.bh; tLL+=sal.net;
+    const diff=tt-quyKH;
+    const soKH=diff>0?`<span class="bdg bdg-r">+${fmt(diff)}</span>`:`<span class="bdg bdg-g">-${fmt(-diff)}</span>`;
+    return `<tr>
+      <td class="c">${e.id}</td><td><strong>${e.name}</strong></td>
+      <td class="r">${e.heSo}</td><td class="r">${CS_EW.total}</td>
+      <td class="c">${mdHT}%</td>
+      <td class="r fw7">${fmt(tt)}</td>
+      <td class="r">${fmt(sal.cd)}</td>
+      <td class="r">${fmt(sal.bh)}</td>
+      <td class="r fw7 tg">${fmt(sal.net)}</td>
+      <td class="c">${soKH}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('f-bl-cong').textContent=fd(tCong);
+  document.getElementById('f-bl-tt').textContent=fmt(tTT);
+  document.getElementById('f-bl-cd').textContent=fmt(tCD);
+  document.getElementById('f-bl-bh').textContent=fmt(tBH);
+  document.getElementById('f-bl-ll').textContent=fmt(tLL);
+  document.getElementById('cs-bl-gross').textContent=fmt(tTT)+' đ';
+  document.getElementById('cs-bl-deduct').textContent=fmt(tCD+tBH)+' đ';
+  document.getElementById('cs-bl-net').textContent=fmt(tLL)+' đ';
+  document.getElementById('bl-badge').innerHTML=`<span class="tag">Thực lĩnh: ${fmt(tLL)} đ</span>`;
+}
+
+function updateCSFlow() {
+  let tTC_KH=0, tTL_KH=0;
+  CS_PLANS.forEach(p => {
+    const tc = +(p.dt*p.dm).toFixed(2);
+    tTC_KH += tc;
+    tTL_KH += Math.round(tc*p.dg);
+  });
+  let tTC_NT=0, tTL_NT=0;
+  CS_PLOTS.forEach(pl => {
+    const plan = CS_PLANS.find(p=>p.id===pl.taskId);
+    if (plan) { tTC_NT += pl.klHT; tTL_NT += Math.round(pl.klHT*plan.dg); }
+  });
+  const ttPP = tTL_NT / CS_EMP.length;
+  const tBH = CS_EMP.reduce((s,e)=>s+Math.round((e.heSo+0.15)*e.bhBase*0.105),0);
+  const tCD = CS_EMP.reduce((s,e)=>s+Math.round((ttPP-Math.round((e.heSo+0.15)*e.bhBase*0.105))*0.005),0);
+  const tLL = tTL_NT - tBH - tCD;
+  const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('flow-tc-kh', fd(tTC_KH)+' công');
+  set('flow-tl-kh', fmt(tTL_KH)+' đ');
+  set('flow-tc-nt', fd(tTC_NT)+' công');
+  set('flow-pct-nt', (tTC_NT/tTC_KH*100).toFixed(1)+'%');
+  set('flow-tl-nt', fmt(tTL_NT)+' đ');
+  set('flow-tl-nt2', fmt(tTL_NT)+' đ');
+  set('flow-bh', '−'+fmt(tBH)+' đ');
+  set('flow-cd', '−'+fmt(tCD)+' đ');
+  set('flow-ll', fmt(tLL)+' đ');
+  set('flow-ll-pp', '≈ '+fmt(Math.round(tLL/CS_EMP.length))+' đ/người');
+  set('tq-cs-total', fmt(tTL_NT));
+  set('tq-cs-delta', '+'+((tTL_NT/210334050-1)*100).toFixed(1)+'% vs T05');
+  set('tq-cs-tietkiem', fmt(tTL_KH-tTL_NT));
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+const CHS = {};
+function dc(id){if(CHS[id]){CHS[id].destroy();delete CHS[id];}}
+
+function initCharts() {
+  // TQ Trend
+  dc('tq-trend');
+  CHS['tq-trend'] = new Chart(document.getElementById('ch-tq-trend'),{
+    type:'line',
+    data:{
+      labels:TREND.periods,
+      datasets:[
+        {label:'Quỹ lương KT mủ (Riel)',data:TREND.ktQuy,borderColor:RD,backgroundColor:RL+'55',fill:true,tension:.3,pointRadius:4,yAxisID:'y'},
+        {label:'Thực trả KT mủ (Riel)',data:TREND.ktThuc,borderColor:R,backgroundColor:RL+'33',fill:false,tension:.3,pointRadius:4,borderDash:[4,3],yAxisID:'y'},
+        {label:'Quỹ lương CS VCây (VND)',data:TREND.csQuy,borderColor:A,backgroundColor:AL+'55',fill:true,tension:.3,pointRadius:4,yAxisID:'y2'},
+        {label:'Thực trả CS VCây (VND)',data:TREND.csThuc,borderColor:G,backgroundColor:GL+'33',fill:false,tension:.3,pointRadius:4,borderDash:[4,3],yAxisID:'y2'},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:11}}}},
+      scales:{
+        y:{type:'linear',position:'left',ticks:{callback:v=>fmt(v)+'R',font:{size:10}},title:{display:true,text:'Riel (KT mủ)'}},
+        y2:{type:'linear',position:'right',ticks:{callback:v=>(v/1000000).toFixed(0)+'M đ',font:{size:10}},grid:{drawOnChartArea:false},title:{display:true,text:'VND (CS VCây)'}}
+      }
+    }
+  });
+
+  // TQ Pie
+  const ktTotal = KT_W.reduce((s,w)=>s+ktSalary(w).total,0);
+  const ktVnd = ktTotal * 6.2;
+  const csVnd = 84200000;
+  dc('tq-pie');
+  CHS['tq-pie'] = new Chart(document.getElementById('ch-tq-pie'),{
+    type:'doughnut',
+    data:{
+      labels:['Khai thác mủ (quy VND)','Chăm sóc VCây (VND)'],
+      datasets:[{data:[Math.round(ktVnd),csVnd],backgroundColor:[RD,G],borderWidth:3,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmt(ctx.raw)} đ`}}}
+    }
+  });
+
+  // TQ Compare
+  dc('tq-compare');
+  CHS['tq-compare'] = new Chart(document.getElementById('ch-tq-compare'),{
+    type:'bar',
+    data:{
+      labels:['KT mủ T06\n(Triệu R)','CS VCây T06\n(Triệu đ)'],
+      datasets:[
+        {label:'Quỹ lương KH',data:[112,93.4],backgroundColor:AL,borderColor:A,borderWidth:2,borderRadius:4},
+        {label:'Thực trả',data:[105,84.2],backgroundColor:GL,borderColor:G,borderWidth:2,borderRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'}},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'Triệu (đơn vị tương ứng)'}}}
+    }
+  });
+
+  // TQ Structure
+  const tCC = KT_W.reduce((s,w)=>s+ktSalary(w).cc,0);
+  const tSL = KT_W.reduce((s,w)=>s+ktSalary(w).sl,0);
+  const tKT = KT_W.reduce((s,w)=>s+ktSalary(w).kt,0);
+  dc('tq-struct');
+  CHS['tq-struct'] = new Chart(document.getElementById('ch-tq-struct'),{
+    type:'doughnut',
+    data:{
+      labels:['Chuyên cần','Sản lượng','Kỹ thuật (thưởng)'],
+      datasets:[{data:[tCC,tSL,Math.max(tKT,0)],backgroundColor:[B,RD,G],borderWidth:3,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmt(ctx.raw)} R`}}}
+    }
+  });
+
+  // KT Vuon
+  dc('kt-vuon');
+  CHS['kt-vuon'] = new Chart(document.getElementById('ch-kt-vuon'),{
+    type:'bar',
+    data:{
+      labels:KT_VUON.map(v=>`Vườn ${v.vuon}`),
+      datasets:[
+        {label:'Kế hoạch (kg)',data:KT_VUON.map(v=>v.kh),backgroundColor:AL,borderColor:A,borderWidth:2,borderRadius:4},
+        {label:'Thực tế (kg)',data:KT_VUON.map(v=>v.sl),backgroundColor:RL,borderColor:RD,borderWidth:2,borderRadius:4},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'}},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'kg mủ tươi'}}}
+    }
+  });
+
+  // KT To hieuSuat
+  const toData = [1,2,3,4,5].map(t=>{
+    const ws = KT_W.filter(w=>w.to===t);
+    const avg = ws.reduce((s,w)=>s+ktSalary(w).hs,0)/ws.length;
+    return +(avg*100).toFixed(1);
+  });
+  dc('kt-to');
+  CHS['kt-to'] = new Chart(document.getElementById('ch-kt-to'),{
+    type:'bar',
+    data:{
+      labels:['Tổ 1','Tổ 2','Tổ 3','Tổ 4','Tổ 5'],
+      datasets:[{
+        label:'Hiệu suất TB (%)',
+        data:toData,
+        backgroundColor:toData.map(v=>v>=100?GL:v>=90?AL:RL),
+        borderColor:toData.map(v=>v>=100?G:v>=90?A:RD),
+        borderWidth:2,borderRadius:4
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{min:80,max:115,title:{display:true,text:'%'}}}
+    }
+  });
+
+  // KT trend SL
+  dc('kt-trend-sl');
+  CHS['kt-trend-sl'] = new Chart(document.getElementById('ch-kt-trend-sl'),{
+    type:'line',
+    data:{
+      labels:TREND.periods,
+      datasets:[{label:'Mủ tươi (tấn)',data:TREND.slTuoi,borderColor:RD,backgroundColor:RL+'55',fill:true,tension:.3,pointRadius:5}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{title:{display:true,text:'Tấn'}}}
+    }
+  });
+
+  // DRC chart
+  (function(){
+    const avg = arr => (arr.reduce((s,v)=>s+v,0)/arr.length).toFixed(1);
+    document.getElementById('drc-avg-A').textContent = avg(DRC.vuonA);
+    document.getElementById('drc-avg-B').textContent = avg(DRC.vuonB);
+    document.getElementById('drc-avg-C').textContent = avg(DRC.vuonC);
+    document.getElementById('drc-avg-D').textContent = avg(DRC.vuonD);
+    const allAvg = ((+avg(DRC.vuonA)+ +avg(DRC.vuonB)+ +avg(DRC.vuonC)+ +avg(DRC.vuonD))/4).toFixed(1);
+    document.getElementById('drc-avg-all').textContent = allAvg + '%';
+    const diff = (allAvg - DRC.target).toFixed(1);
+    const el = document.getElementById('drc-vs-target');
+    el.textContent = (diff>=0?'+':'')+diff+'% so MT';
+    el.style.color = diff>=0 ? G : R;
+    dc('drc');
+    CHS['drc'] = new Chart(document.getElementById('ch-drc'),{
+      type:'line',
+      data:{
+        labels: DRC.dots,
+        datasets:[
+          {label:'Vườn A',data:DRC.vuonA,borderColor:G,backgroundColor:GL+'44',fill:false,tension:.3,pointRadius:5,pointHoverRadius:7},
+          {label:'Vườn B',data:DRC.vuonB,borderColor:A,backgroundColor:AL+'44',fill:false,tension:.3,pointRadius:5,pointHoverRadius:7},
+          {label:'Vườn C',data:DRC.vuonC,borderColor:B,backgroundColor:BL+'44',fill:false,tension:.3,pointRadius:5,pointHoverRadius:7},
+          {label:'Vườn D',data:DRC.vuonD,borderColor:RD,backgroundColor:RL+'44',fill:false,tension:.3,pointRadius:5,pointHoverRadius:7},
+          {label:'Mục tiêu 50%',data:Array(DRC.dots.length).fill(DRC.target),
+           borderColor:'#9e9e9e',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false},
+        ]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          legend:{position:'bottom'},
+          tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}
+        },
+        scales:{
+          y:{min:44, max:56, title:{display:true,text:'DRC (%)'},
+            ticks:{callback:v=>v+'%'},
+            grid:{color:'#e2e8f0'}
+          },
+          x:{grid:{display:false}}
+        }
+      }
+    });
+  })();
+
+  // KT salary bar top10
+  const top10 = [...KT_W].map(w=>({...w,...ktSalary(w)})).sort((a,b)=>b.total-a.total).slice(0,10);
+  dc('kt-sal-bar');
+  CHS['kt-sal-bar'] = new Chart(document.getElementById('ch-kt-sal-bar'),{
+    type:'bar',
+    data:{
+      labels:top10.map(w=>w.name.split(' ')[0]),
+      datasets:[
+        {label:'Chuyên cần',data:top10.map(w=>w.cc),backgroundColor:BL,borderRadius:2},
+        {label:'Sản lượng',data:top10.map(w=>w.sl),backgroundColor:RL,borderRadius:2},
+        {label:'Kỹ thuật',data:top10.map(w=>w.kt),backgroundColor:GL,borderRadius:2},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'}},
+      scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>fmt(v)+'R'}}}
+    }
+  });
+
+  // KT salary pie
+  dc('kt-sal-pie');
+  CHS['kt-sal-pie'] = new Chart(document.getElementById('ch-kt-sal-pie'),{
+    type:'doughnut',
+    data:{
+      labels:['Chuyên cần','Sản lượng','Kỹ thuật'],
+      datasets:[{data:[tCC,tSL,Math.max(tKT,0)],backgroundColor:[B,RD,G],borderWidth:3,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmt(ctx.raw)} R`}}}
+    }
+  });
+
+  // NT charts
+  const acc = buildAcceptance();
+  dc('nt-cong');
+  CHS['nt-cong'] = new Chart(document.getElementById('ch-nt-cong'),{
+    type:'bar',
+    data:{
+      labels:acc.map(a=>a.lo),
+      datasets:[
+        {label:'Công KH',data:acc.map(a=>a.cKH),backgroundColor:AL,borderColor:A,borderWidth:2,borderRadius:3},
+        {label:'Công NT',data:acc.map(a=>a.cNT),backgroundColor:GL,borderColor:G,borderWidth:2,borderRadius:3},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:false}}}
+  });
+  dc('nt-tien');
+  CHS['nt-tien'] = new Chart(document.getElementById('ch-nt-tien'),{
+    type:'bar',
+    data:{
+      labels:acc.map(a=>a.lo),
+      datasets:[
+        {label:'Tiền KH (đ)',data:acc.map(a=>a.tKH),backgroundColor:AL,borderColor:A,borderWidth:2,borderRadius:3},
+        {label:'Tiền NT (đ)',data:acc.map(a=>a.tNT),backgroundColor:GL,borderColor:G,borderWidth:2,borderRadius:3},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmt(ctx.raw)} đ`}}},
+      scales:{y:{ticks:{callback:v=>(v/1000000).toFixed(0)+'M'}}}
+    }
+  });
+
+  // KL horizontal bar
+  const klLabels = CS_PLANS.map(p=>p.lo+' ('+p.lbl+')');
+  const klGiao = CS_PLOTS.map(pl=>pl.klGiao);
+  const klHT = CS_PLOTS.map(pl=>pl.klHT);
+  dc('kl-bar');
+  CHS['kl-bar'] = new Chart(document.getElementById('ch-kl-bar'),{
+    type:'bar',
+    data:{
+      labels:klLabels,
+      datasets:[
+        {label:'KL giao (công)',data:klGiao,backgroundColor:BL+'cc',borderColor:B,borderWidth:2,borderRadius:3},
+        {label:'KL hoàn thành (công)',data:klHT,backgroundColor:AL+'dd',borderColor:A,borderWidth:2,borderRadius:3},
+      ]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fd(ctx.raw)} công`}}},
+      scales:{x:{beginAtZero:true,title:{display:true,text:'Số công'}}}
+    }
+  });
+
+  // BL chart
+  const empSals = CS_EMP.map(e=>csSalary(e, CS_EW.total*CS_EW.dg).net);
+  const avgSal = empSals.reduce((a,b)=>a+b,0)/empSals.length;
+  dc('bl-bar');
+  CHS['bl-bar'] = new Chart(document.getElementById('ch-bl-bar'),{
+    type:'bar',
+    data:{
+      labels:CS_EMP.map(e=>e.name.split(' ').pop()),
+      datasets:[
+        {label:'Lương thực lĩnh (đ)',data:empSals,backgroundColor:empSals.map(s=>s>=avgSal?GL:AL),borderColor:empSals.map(s=>s>=avgSal?G:A),borderWidth:2,borderRadius:4},
+        {type:'line',label:'BQ/người (đ)',data:Array(10).fill(Math.round(avgSal)),borderColor:B,borderWidth:2,pointRadius:0,fill:false},
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmt(ctx.raw)} đ`}}},
+      scales:{y:{ticks:{callback:v=>(v/1000000).toFixed(1)+'M'}}}
+    }
+  });
+
+  const tBH = CS_EMP.reduce((s,e)=>s+csSalary(e,CS_EW.total*CS_EW.dg).bh,0);
+  const tCD = CS_EMP.reduce((s,e)=>s+csSalary(e,CS_EW.total*CS_EW.dg).cd,0);
+  const tLL = CS_EMP.reduce((s,e)=>s+csSalary(e,CS_EW.total*CS_EW.dg).net,0);
+  dc('bl-pie');
+  const pieSliceLabel = {
+    id:'pieSliceLabel',
+    afterDraw(chart){
+      const {ctx,data}=chart;
+      const total=data.datasets[0].data.reduce((a,b)=>a+b,0);
+      chart.getDatasetMeta(0).data.forEach((arc,i)=>{
+        const val=data.datasets[0].data[i];
+        const pct=(val/total*100).toFixed(1);
+        if(pct<2) return;
+        const mid=(arc.startAngle+arc.endAngle)/2;
+        const r=(arc.innerRadius+arc.outerRadius)/2;
+        ctx.save();
+        ctx.fillStyle='#fff';
+        ctx.font='bold 12px Segoe UI,system-ui,sans-serif';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(pct+'%', arc.x+Math.cos(mid)*r, arc.y+Math.sin(mid)*r);
+        ctx.restore();
+      });
+    }
+  };
+  CHS['bl-pie'] = new Chart(document.getElementById('ch-bl-pie'),{
+    type:'doughnut',
+    data:{
+      labels:['Lương thực lĩnh','BHXH/YT/TN','Công đoàn'],
+      datasets:[{data:[tLL,tBH,tCD],backgroundColor:[G,RL,AL],borderWidth:3,borderColor:'#fff'}]
+    },
+    plugins:[pieSliceLabel],
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom'},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmt(ctx.raw)} đ`}}
+      }
+    }
+  });
+}
+
+let empDetailChart = null;
+function updateEmpChart(emp) {
+  if(empDetailChart){empDetailChart.destroy(); empDetailChart=null;}
+  const ctx = document.getElementById('ch-emp-detail');
+  if(!ctx) return;
+  empDetailChart = new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:['Công MĐ 571 (9c/ha)','Công MĐ 714 (11.2c/ha)'],
+      datasets:[{data:[CS_EW.c571,CS_EW.c714],backgroundColor:[G,B],borderWidth:3,borderColor:'#fff'}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw} công (${fmt(ctx.raw*CS_EW.dg)} đ)`}}}
+    }
+  });
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+let curMain='tq', curSub={kt:'sl',cs:'kh'};
+
+function switchMain(name, btn, color) {
+  curMain = name;
+  document.querySelectorAll('.main-tab').forEach(b=>{b.classList.remove('active','green','red','blue');});
+  btn.classList.add('active',color);
+  document.querySelectorAll('[id^="sub-"]').forEach(s=>s.classList.add('hidden'));
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  if(name==='tq'){
+    document.getElementById('sec-tq').classList.add('active');
+  } else {
+    const subEl=document.getElementById('sub-'+name);
+    if(subEl) subEl.classList.remove('hidden');
+    showSub(name, curSub[name]||Object.keys({kt:'sl',cs:'kh'})[0]);
+  }
+  document.getElementById('f2lbl').textContent = name==='kt'?'Tổ (KT)':'Đội (CS)';
+}
+
+function switchSub(main, sub, btn) {
+  curSub[main]=sub;
+  const subEl=document.getElementById('sub-'+main);
+  if(subEl) subEl.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  showSub(main, sub);
+}
+
+function showSub(main, sub) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(`sec-${main}-${sub}`);
+  if(el) el.classList.add('active');
+}
+
+function applyFilter() {
+  const to = document.getElementById('fTo').value;
+  const vuon = document.getElementById('fVuon').value;
+  if(curMain==='kt') renderKTLuong(to);
+  // Table row filtering
+  document.querySelectorAll('#tbl-kt-luong tr').forEach(row=>{
+    const cells=row.querySelectorAll('td');
+    if(!cells.length) return;
+    const rowTo=cells[3]?.textContent||'';
+    row.style.display=(!to||rowTo.includes(`Tổ ${to}`))?'':'none';
+  });
+}
+
+function resetFilter() {
+  document.getElementById('fTo').value='';
+  document.getElementById('fVuon').value='';
+  applyFilter();
+}
+
+function onPeriodChange(val) {
+  document.querySelector('.h-title').textContent = 'Báo cáo tổng hợp – Tháng '+val;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderTQ();
+  renderKTRank();
+  renderKTLuong();
+  renderCSKH();
+  renderNT();
+  renderKL();
+  buildEmpSel();
+  renderCT();
+  renderBL();
+  updateCSFlow();
+  setTimeout(initCharts, 150);
+});
+</script>
+</body>
+</html>

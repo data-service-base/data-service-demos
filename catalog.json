@@ -1,0 +1,314 @@
+{
+ "config": {
+  "title": "Kho demo Data Service",
+  "team": "Base.vn · Data Service",
+  "repo": "",
+  "repo_branch": "main"
+ },
+ "items": [
+  {
+   "slug": "ahs-quy-luong",
+   "title": "Tổng quan quỹ lương & phiếu lương",
+   "type": "dashboard",
+   "industry": "BĐS - CĐT - Nhà thầu",
+   "department": "HR",
+   "description": "Tổng quan quỹ lương theo khối và phiếu lương nhân viên (2 tab).",
+   "tools": [
+    "HTML",
+    "Chart.js",
+    "SheetJS"
+   ],
+   "source": "https://github.com/tbinh-06/AHS-demodashboard",
+   "source_repo": "https://github.com/tbinh-06/AHS-demodashboard",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "lương",
+    "phiếu lương"
+   ],
+   "path": "demos/ahs-quy-luong/",
+   "thumb": "demos/ahs-quy-luong/thumb.jpg"
+  },
+  {
+   "slug": "proposal-data-service",
+   "title": "Proposal Base Data Service (18 slide)",
+   "type": "proposal",
+   "industry": "General",
+   "department": "All",
+   "description": "Deck đề xuất dịch vụ Data Service: bối cảnh, giải pháp, case study, khách hàng, chi phí, lộ trình. Có thư viện báo cáo mẫu và tuỳ chỉnh theo khách.",
+   "tools": [
+    "HTML",
+    "WebGL"
+   ],
+   "source": "https://claude.ai/artifact/C9SuRP7MQt5TKTeqhG8FE2",
+   "source_repo": "",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [
+    "proposal",
+    "deck"
+   ],
+   "path": "demos/proposal-data-service/",
+   "thumb": "demos/proposal-data-service/thumb.jpg"
+  },
+  {
+   "slug": "jsc-inventory",
+   "title": "Báo cáo tồn kho cao su & QL hợp đồng",
+   "type": "dashboard",
+   "industry": "Cao su",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://du-yt01.github.io/JSC_Inventory/",
+   "source_repo": "https://github.com/du-yt01/JSC_Inventory",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/jsc-inventory/",
+   "thumb": "demos/jsc-inventory/thumb.jpg"
+  },
+  {
+   "slug": "hcem",
+   "title": "Báo cáo theo dõi doanh thu, chi phí",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://haiyenbase.github.io/HCEM/",
+   "source_repo": "https://github.com/haiyenbase/HCEM",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/hcem/",
+   "thumb": "demos/hcem/thumb.jpg"
+  },
+  {
+   "slug": "cao-su-siem-riep",
+   "title": "Báo cáo sản lượng cao su",
+   "type": "dashboard",
+   "industry": "Cao su",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://haiyenbase.github.io/cao_su_siem_riep/",
+   "source_repo": "https://github.com/haiyenbase/cao_su_siem_riep",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/cao-su-siem-riep/",
+   "thumb": "demos/cao-su-siem-riep/thumb.jpg"
+  },
+  {
+   "slug": "inventory-construction",
+   "title": "Báo cáo quản lý xuất nhập tồn",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "ECharts"
+   ],
+   "source": "https://du-yt01.github.io/Inventory_construction/",
+   "source_repo": "https://github.com/du-yt01/Inventory_construction",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/inventory-construction/",
+   "thumb": "demos/inventory-construction/thumb.jpg"
+  },
+  {
+   "slug": "cnt",
+   "title": "Báo cáo quản lý tổng quan BLĐ",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://haiyenbase.github.io/CNT/",
+   "source_repo": "https://github.com/haiyenbase/CNT",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/cnt/",
+   "thumb": "demos/cnt/thumb.jpg"
+  },
+  {
+   "slug": "vinaconex-02-tai-san",
+   "title": "Báo cáo quản lý tài sản",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://haiyenbase.github.io/Vinaconex_02_tai_san/",
+   "source_repo": "https://github.com/haiyenbase/Vinaconex_02_tai_san",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/vinaconex-02-tai-san/",
+   "thumb": "demos/vinaconex-02-tai-san/thumb.jpg"
+  },
+  {
+   "slug": "revenue",
+   "title": "Báo cáo quản lý ngân sách",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "ECharts"
+   ],
+   "source": "https://du-yt01.github.io/Revenue/",
+   "source_repo": "https://github.com/du-yt01/Revenue",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/revenue/",
+   "thumb": "demos/revenue/thumb.jpg"
+  },
+  {
+   "slug": "bds",
+   "title": "Báo cáo quản lý mục tiêu",
+   "type": "dashboard",
+   "industry": "BĐS - CĐT - Nhà thầu",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js",
+    "chartjs-plugin-datalabels"
+   ],
+   "source": "https://haiyenbase.github.io/bds/",
+   "source_repo": "https://github.com/haiyenbase/bds",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/bds/",
+   "thumb": "demos/bds/thumb.jpg"
+  },
+  {
+   "slug": "vacs",
+   "title": "Báo cáo quản lý man-hour",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "Vận hành",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js",
+    "chartjs-plugin-datalabels"
+   ],
+   "source": "https://haiyenbase.github.io/VACs/",
+   "source_repo": "https://github.com/haiyenbase/VACs",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/vacs/",
+   "thumb": "demos/vacs/thumb.jpg"
+  },
+  {
+   "slug": "vinaconex-chi-phi",
+   "title": "Báo cáo quản lý chi phí",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://haiyenbase.github.io/Vinaconex_chi_phi/",
+   "source_repo": "https://github.com/haiyenbase/Vinaconex_chi_phi",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/vinaconex-chi-phi/",
+   "thumb": "demos/vinaconex-chi-phi/thumb.jpg"
+  },
+  {
+   "slug": "cao-su-karatie",
+   "title": "Báo cáo khai thác & chăm sóc cao su",
+   "type": "dashboard",
+   "industry": "Cao su",
+   "department": "All",
+   "description": "",
+   "tools": [
+    "HTML",
+    "Chart.js"
+   ],
+   "source": "https://nvnghianeu-oss.github.io/cao-su---Karatie/",
+   "source_repo": "https://github.com/nvnghianeu-oss/cao-su---Karatie",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/cao-su-karatie/",
+   "thumb": "demos/cao-su-karatie/thumb.jpg"
+  },
+  {
+   "slug": "dashboard-finance",
+   "title": "Báo cáo Tài chính",
+   "type": "dashboard",
+   "industry": "General",
+   "department": "Supply Chain",
+   "description": "",
+   "tools": [
+    "HTML",
+    "ECharts",
+    "D3"
+   ],
+   "source": "https://du-yt01.github.io/dashboard_finance/",
+   "source_repo": "https://github.com/du-yt01/dashboard_finance",
+   "author": "",
+   "added": "2026-10-22",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/dashboard-finance/",
+   "thumb": "demos/dashboard-finance/thumb.jpg"
+  }
+ ]
+}

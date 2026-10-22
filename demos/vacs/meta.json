@@ -1,0 +1,20 @@
+{
+  "slug": "vacs",
+  "title": "Báo cáo quản lý man-hour",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "Vận hành",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js",
+    "chartjs-plugin-datalabels"
+  ],
+  "source": "https://haiyenbase.github.io/VACs/",
+  "source_repo": "https://github.com/haiyenbase/VACs",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

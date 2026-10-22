@@ -1,0 +1,19 @@
+{
+  "slug": "inventory-construction",
+  "title": "Báo cáo quản lý xuất nhập tồn",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "ECharts"
+  ],
+  "source": "https://du-yt01.github.io/Inventory_construction/",
+  "source_repo": "https://github.com/du-yt01/Inventory_construction",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

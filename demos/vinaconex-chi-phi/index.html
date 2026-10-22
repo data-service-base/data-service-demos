@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Báo cáo Chi phí Văn phòng – Vinaconex T3/2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Sora:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0D2240;--navy-mid:#16355e;--navy-soft:#1e4a82;
+  --gold:#B8872C;--gold-lt:#d4a84b;--gold-pale:#f7edda;
+  --paper:#F4F6F9;--white:#fff;
+  --ink:#0D2240;--ink-mid:#4a5a72;--ink-faint:#97a8be;
+  --green:#1b6e48;--green-lt:#e3f5eb;
+  --red:#b02020;--red-lt:#fde8e8;
+  --orange:#c05a10;--border:#dfe6f0;
+  --shadow:0 2px 18px rgba(13,34,64,.08);--r:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',sans-serif;background:var(--paper);color:var(--ink);padding:36px 0 64px;font-size:13px;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+.wrap-wide{max-width:1320px;margin:0 auto;padding:0 28px}
+
+/* HEADER */
+.rh{background:var(--navy);border-radius:18px;padding:34px 42px;margin-bottom:24px;position:relative;overflow:hidden}
+.rh::before{content:'';position:absolute;right:-60px;top:-60px;width:340px;height:340px;background:radial-gradient(circle,rgba(184,135,44,.15) 0%,transparent 65%);pointer-events:none}
+.rh::after{content:'';position:absolute;left:0;bottom:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+.rh-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px}
+.rh-co{font-size:9.5px;font-weight:600;color:rgba(255,255,255,.38);letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px}
+.rh-title{font-family:'Lora',serif;font-size:32px;font-weight:700;color:#fff;line-height:1.15}
+.rh-title span{color:var(--gold-lt)}
+.rh-meta{margin-top:12px;font-size:11px;color:rgba(255,255,255,.35);display:flex;gap:22px}
+.rh-stamp-big{font-family:'Lora',serif;font-size:60px;font-weight:700;color:rgba(255,255,255,.06);line-height:1}
+.rh-stamp-label{font-size:10px;color:var(--gold-lt);font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-align:right;margin-top:4px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.09);border-radius:12px;overflow:hidden}
+.kpi{background:rgba(255,255,255,.05);padding:16px 20px}
+.kpi-lbl{font-size:9px;font-weight:600;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px}
+.kpi-val{font-family:'Lora',serif;font-size:23px;font-weight:700;color:#fff;line-height:1}
+.kpi-val small{font-family:'Sora',sans-serif;font-size:11px;font-weight:300;opacity:.5;margin-left:3px}
+.kpi-note{font-size:10px;margin-top:5px}
+.up{color:#fb923c}.dn{color:#4ade80}
+
+/* ALERT */
+.alert{background:#fffbf0;border:1px solid #f5d882;border-left:4px solid var(--gold);border-radius:var(--r);padding:12px 18px;display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;font-size:12.5px;color:#6b4510;line-height:1.55}
+.alert-ico{font-size:15px;flex-shrink:0;margin-top:2px}
+
+/* SECTION */
+.sec{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.sec h2{font-family:'Lora',serif;font-size:17px;font-weight:700;color:var(--navy);white-space:nowrap}
+.sec-line{flex:1;height:1px;background:var(--border)}
+.sec-note{font-size:11px;color:var(--ink-faint);white-space:nowrap}
+
+/* CARD */
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.ch{padding:18px 24px 0;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+.ch h3{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--navy)}
+.ch p{font-size:11px;color:var(--ink-faint);margin-top:3px}
+.cp{padding:0 24px 22px}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;margin-bottom:22px}
+.g1{margin-bottom:22px}
+
+/* TABS (trend) */
+.tab-bar{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--border)}
+.tab-btn{padding:10px 16px;font-family:'Sora',sans-serif;font-size:11.5px;font-weight:500;color:var(--ink-faint);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .18s;margin-bottom:-1px}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold);font-weight:600}
+.tab-btn:hover:not(.active){color:var(--ink-mid)}
+
+/* TOGGLE BUTTONS (heatmap mode) */
+.toggle-group{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.toggle-btn{padding:6px 14px;font-family:'Sora',sans-serif;font-size:11px;font-weight:500;color:var(--ink-mid);background:var(--white);border:none;cursor:pointer;transition:all .18s}
+.toggle-btn.active{background:var(--navy);color:#fff;font-weight:600}
+.toggle-btn:hover:not(.active){background:#f0f4fa}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+thead th{background:#edf1f9;padding:10px 14px;font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.09em;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap}
+tbody td{padding:10px 14px;font-size:12.5px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f6f9ff}
+.mono{font-family:'Fira Code',monospace;font-size:12px}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.02em}
+.b-green{background:var(--green-lt);color:var(--green)}
+.b-orange{background:#fef3e2;color:var(--orange)}
+.b-red{background:var(--red-lt);color:var(--red)}
+.b-blue{background:#e5edf9;color:var(--navy-soft)}
+.b-navy{background:var(--navy);color:#fff}
+
+/* SUMMARY TABLE */
+.sum-table thead th{background:var(--navy);color:rgba(255,255,255,.6);border-bottom:none}
+.grp-row{cursor:pointer;user-select:none}
+.grp-row td{background:#eef2fb;padding:10px 14px;font-family:'Sora',sans-serif;font-size:11.5px;font-weight:600;color:var(--navy);border-bottom:1px solid var(--border);transition:background .15s}
+.grp-row:hover td{background:#e4eaf7}
+.grp-chevron{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;background:rgba(30,74,130,.12);color:var(--navy-soft);font-size:11px;flex-shrink:0;transition:transform .25s ease}
+.grp-row.open .grp-chevron{transform:rotate(90deg)}
+.item-row td{background:var(--white);font-size:12px;color:var(--ink-mid)}
+.item-row.hidden{display:none}
+.sub-row td{background:#f6f9fc;font-weight:600;font-size:12px;color:var(--navy);border-top:1px solid var(--border)}
+.sub-row.hidden{display:none}
+.total-row td{background:var(--gold-pale);font-weight:700;color:var(--navy)}
+
+/* GROUP PROGRESS BAR inside summary */
+.grp-prog-wrap{display:flex;align-items:center;gap:8px;margin-top:5px}
+.grp-prog-track{flex:1;height:5px;background:rgba(0,0,0,.1);border-radius:3px;overflow:hidden}
+.grp-prog-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.grp-prog-label{font-family:'Fira Code',monospace;font-size:10px;white-space:nowrap;min-width:36px}
+
+/* TX TABLE */
+.tx-table{table-layout:fixed}
+.tx-table th:nth-child(1){width:106px}
+.tx-table th:nth-child(3){width:136px}
+.tx-table th:nth-child(4){width:128px}
+.tx-table th:nth-child(5){width:165px}
+.tx-table th:nth-child(6){width:116px}
+.tx-table th:nth-child(7){width:104px}
+.tx-table th:nth-child(8){width:92px}
+
+/* INLINE BAR */
+.ib-wrap{display:flex;align-items:center;gap:7px}
+.ib-track{flex:1;height:6px;background:#e8eef8;border-radius:3px;overflow:hidden}
+.ib-fill{height:100%;border-radius:3px}
+.ib-val{font-family:'Fira Code',monospace;font-size:10px;color:var(--ink-faint);white-space:nowrap;min-width:42px;text-align:right}
+
+/* HEATMAP */
+.heatmap-wrap{overflow-x:auto;padding-bottom:4px}
+.heatmap-table{border-collapse:separate;border-spacing:4px;width:100%}
+.hm-corner{width:120px;font-size:9.5px;color:var(--ink-faint);font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:4px 6px;vertical-align:bottom}
+.hm-col-head{font-size:9.5px;font-weight:600;color:var(--ink-mid);text-align:center;padding:4px 2px;white-space:nowrap}
+.hm-row-head{font-size:11px;font-weight:500;color:var(--ink);padding:4px 8px 4px 0;white-space:nowrap;text-align:right;min-width:108px}
+.hm-cell{width:76px;height:38px;border-radius:7px;text-align:center;vertical-align:middle;font-family:'Fira Code',monospace;font-size:10.5px;font-weight:500;cursor:default;transition:transform .15s,box-shadow .15s;position:relative}
+.hm-cell:hover{transform:scale(1.1);box-shadow:0 4px 12px rgba(0,0,0,.18);z-index:2}
+
+/* Amount mode colors */
+.hm-cell.amt-l0{background:#f0f4fa;color:var(--ink-faint)}
+.hm-cell.amt-l1{background:#cfe2f5;color:#1e4a82}
+.hm-cell.amt-l2{background:#93c5e8;color:#0d2f5a}
+.hm-cell.amt-l3{background:#4a90d4;color:#fff}
+.hm-cell.amt-l4{background:#1e4a82;color:#fff}
+.hm-cell.amt-over{outline:2px solid var(--red);outline-offset:-2px}
+
+/* Rate mode colors — green→yellow→orange→red gradient */
+.hm-cell.rate-0 {background:#e3f5eb;color:#1b6e48}   /* <50% */
+.hm-cell.rate-1 {background:#b7e8c8;color:#14543a}   /* 50-70% */
+.hm-cell.rate-2 {background:#7dd6a1;color:#0e3d2a}   /* 70-85% */
+.hm-cell.rate-3 {background:#fef3c7;color:#92400e}   /* 85-95% */
+.hm-cell.rate-4 {background:#fdba74;color:#7c2d12}   /* 95-105% */
+.hm-cell.rate-5 {background:#f87171;color:#7f1d1d}   /* 105-120% */
+.hm-cell.rate-6 {background:#b91c1c;color:#fff}       /* >120% */
+
+/* LEGEND */
+.hm-legend{display:flex;align-items:center;gap:5px;margin-top:12px;font-size:10.5px;color:var(--ink-faint);flex-wrap:wrap}
+.hm-leg-box{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);margin-top:36px;padding-top:16px;display:flex;justify-content:space-between;font-size:11px;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="rh">
+  <div class="rh-top">
+    <div>
+      <div class="rh-co">Tổng Công ty Vinaconex – Phòng Hành chính Quản trị</div>
+      <div class="rh-title">Báo cáo Chi phí<br><span>Văn phòng</span></div>
+      <div class="rh-meta">
+        <span>📅 Kỳ: Tháng 3 / 2025</span>
+        <span>🏢 Toàn công ty</span>
+        <span>🖨️ Xuất: 28/03/2025</span>
+      </div>
+    </div>
+    <div><div class="rh-stamp-big">T3</div><div class="rh-stamp-label">2025</div></div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-lbl">Tổng thực hiện</div>
+      <div class="kpi-val">1.842,5 <small>tr đ</small></div>
+      <div class="kpi-note up">▲ 6,8% so tháng trước</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Kế hoạch 2025</div>
+      <div class="kpi-val">2.100,0 <small>tr đ</small></div>
+      <div class="kpi-note" style="color:rgba(255,255,255,.3)">Còn dư 257,5 tr đ</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Tỉ lệ thực hiện KH</div>
+      <div class="kpi-val">87,7 <small>%</small></div>
+      <div class="kpi-note dn">✓ Trong ngưỡng</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Danh mục vượt KH</div>
+      <div class="kpi-val">3 <small>mục</small></div>
+      <div class="kpi-note up">⚠ Nhóm I, II cần xem</div>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT -->
+<div class="alert">
+  <div class="alert-ico">⚠️</div>
+  <div><strong>Lưu ý:</strong> 3 danh mục vượt kế hoạch —
+    <strong>Chi phí điện</strong> (+12,2%), <strong>Văn phòng phẩm, mực in</strong> (+14,5%),
+    <strong>Chi phí tiếp khách</strong> (+17,6%). Đề xuất rà soát từ tháng 4/2025.</div>
+</div>
+
+<!-- ROW 1: Trend + Dept chart -->
+<div class="g2">
+  <!-- Trend with tabs -->
+  <div class="card">
+    <div class="ch">
+      <div><h3>Xu hướng chi phí 8 tháng</h3><p id="trendSubtitle">Thực hiện vs Kế hoạch · triệu đồng</p></div>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTrend('monthly',this)">Theo tháng</button>
+      <button class="tab-btn" onclick="switchTrend('cumulative',this)">Lũy kế</button>
+    </div>
+    <div class="cp" style="padding-top:14px">
+      <div style="position:relative;height:220px"><canvas id="trendChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Dept: column bars + rate line -->
+  <div class="card">
+    <div class="ch">
+      <div><h3>Chi phí theo phòng ban</h3><p>Cột: TH (tr đ) · Đường: % tỷ lệ thực hiện KH</p></div>
+    </div>
+    <div class="cp">
+      <div style="position:relative;height:260px"><canvas id="deptChart"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY TABLE -->
+<div class="g1">
+  <div class="sec">
+    <h2>Bảng tổng hợp chi phí</h2>
+    <div class="sec-line"></div>
+    <div class="sec-note">Nhấn nhóm để mở · KH 2025 · TH 2025 · ± So KH · ± Năm trước · KH 2026 (tr đ)</div>
+  </div>
+  <div class="card">
+    <table class="sum-table">
+      <thead>
+        <tr>
+          <th style="width:38px"></th>
+          <th>Nội dung chi phí</th>
+          <th style="text-align:right;width:112px">KH 2025</th>
+          <th style="text-align:right;width:112px">TH 2025</th>
+          <th style="text-align:right;width:90px">± So KH</th>
+          <th style="text-align:right;width:110px">± Năm trước</th>
+          <th style="text-align:right;width:112px">KH 2026</th>
+          <th style="text-align:center;width:96px">Tình trạng</th>
+        </tr>
+      </thead>
+      <tbody id="sumTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- HEATMAP -->
+<div class="g1">
+  <div class="sec">
+    <h2>Phân bổ chi phí: Phòng ban × Loại chi phí</h2>
+    <div class="sec-line"></div>
+    <div class="sec-note"></div>
+  </div>
+  <div class="card">
+    <div class="ch" style="align-items:center">
+      <div>
+        <p id="hmSubtitle" style="font-size:11.5px;color:var(--ink-mid)">Đơn vị: triệu đồng · viền đỏ = vượt KH</p>
+      </div>
+      <div class="toggle-group">
+        <button class="toggle-btn active" onclick="switchHM('amt',this)">Tổng chi phí</button>
+        <button class="toggle-btn" onclick="switchHM('rate',this)">Tỷ lệ hạn mức</button>
+      </div>
+    </div>
+    <div class="cp" style="padding-top:4px">
+      <div class="heatmap-wrap">
+        <table class="heatmap-table" id="heatmapTable"></table>
+      </div>
+      <div class="hm-legend" id="hmLegend"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- TX TABLE -->
+<div class="wrap-wide">
+  <div class="sec">
+    <h2>Chi tiết giao dịch</h2>
+    <div class="sec-line"></div>
+    <div class="sec-note">Ngày · Nội dung · Số tiền · Tỉ trọng · Người chi · Đơn vị</div>
+  </div>
+  <div class="card">
+    <table class="tx-table">
+      <thead>
+        <tr>
+          <th>Ngày</th><th>Nội dung chi</th><th>Danh mục</th>
+          <th style="text-align:right">Số tiền (đ)</th><th>Tỉ trọng</th>
+          <th>Người chi</th><th>Đơn vị</th><th style="text-align:center">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody id="txTable"></tbody>
+    </table>
+  </div>
+  <div class="footer">
+    <span>VINACONEX · Phòng Hành chính – Quản trị · Báo cáo tự động</span>
+    <span>Tháng 3/2025 · Xuất ngày 28/03/2025</span>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════
+const GROUPS = [
+  { roman:'I', label:'Chi phí DV mua ngoài của Tcty', color:'#1e4a82', items:[
+    {stt:'1',name:'Chi phí điện thoại, Fax, Telex, Internet',kh:85, th:88, th24:82, kh26:90},
+    {stt:'2',name:'Chi phí điện',                            kh:180,th:202,th24:188,kh26:195},
+    {stt:'3',name:'Chi phí nước uống',                       kh:40, th:37, th24:35, kh26:42},
+    {stt:'4',name:'Phí cầu bến đỗ + dự phòng',              kh:30, th:28, th24:26, kh26:32},
+    {stt:'5',name:'Chi phí sửa chữa xe',                     kh:60, th:54, th24:50, kh26:62},
+    {stt:'6',name:'Chi phí xăng dầu',                        kh:75, th:70, th24:65, kh26:80},
+    {stt:'7',name:'Bảo hiểm xe, phí tiêm định, rửa xe',      kh:30, th:26, th24:24, kh26:32},
+  ]},
+  { roman:'II', label:'Chi phí đồ dùng VP của Tcty', color:'#1b6e48', items:[
+    {stt:'1',name:'Mua máy móc, thiết bị văn phòng',   kh:200,th:185,th24:170,kh26:210},
+    {stt:'2',name:'Các dịch vụ phần mềm',              kh:80, th:72, th24:68, kh26:85},
+    {stt:'3',name:'Văn phòng phẩm, mực in',            kh:55, th:63, th24:55, kh26:60},
+    {stt:'4',name:'Sửa chữa, cải tạo văn phòng',       kh:90, th:82, th24:78, kh26:100},
+    {stt:'5',name:'Mua cây cảnh, hoa, đồ trang trí VP',kh:20, th:18, th24:15, kh26:22},
+    {stt:'6',name:'Bàn ghế, tủ tài liệu, trang bị VP', kh:60, th:55, th24:50, kh26:65},
+    {stt:'7',name:'Sửa chữa máy móc, trang thiết bị VP',kh:45,th:40, th24:38, kh26:50},
+  ]},
+  { roman:'III', label:'Chi phí bằng tiền khác', color:'#7c3aed', items:[
+    {stt:'1',name:'Chi phí tiếp khách',                          kh:85, th:100,th24:88, kh26:90},
+    {stt:'2',name:'Chi phí trà, bánh kẹo, hội họp, sự kiện',    kh:40, th:38, th24:36, kh26:42},
+    {stt:'3',name:'Chi phí đi công tác',                         kh:120,th:108,th24:100,kh26:130},
+    {stt:'4',name:'Chi phí photo, chứng thực, mua hồ sơ thầu',  kh:25, th:22, th24:20, kh26:26},
+    {stt:'5',name:'Chi phí phục vụ cổ đông, ĐHCĐ',               kh:50, th:45, th24:42, kh26:52},
+    {stt:'6',name:'Chi phí khác (dự phòng...)',                   kh:80, th:67, th24:60, kh26:85},
+  ]},
+  { roman:'IV', label:'Chi phí theo chỉ đạo lãnh đạo Tcty', color:'#c05a10', items:[
+    {stt:'1',name:'Chi phí tổ chức sự kiện tổng kết cuối năm',kh:80,th:70,th24:65,kh26:85},
+    {stt:'2',name:'Chi phí trực tết và Lễ tết',               kh:60,th:55,th24:50,kh26:65},
+    {stt:'3',name:'Chi phí tổ chức sự kiện Khai xuân',        kh:40,th:36,th24:32,kh26:42},
+  ]},
+];
+
+const GRP_TOTALS = GROUPS.map(g=>({
+  roman:g.roman,label:g.label,color:g.color,
+  kh:   g.items.reduce((s,i)=>s+(i.kh  ||0),0),
+  th:   g.items.reduce((s,i)=>s+(i.th  ||0),0),
+  th24: g.items.reduce((s,i)=>s+(i.th24||0),0),
+  kh26: g.items.reduce((s,i)=>s+(i.kh26||0),0),
+}));
+const TOTAL_KH   = GRP_TOTALS.reduce((s,g)=>s+g.kh,  0);
+const TOTAL_TH   = GRP_TOTALS.reduce((s,g)=>s+g.th,  0);
+const TOTAL_TH24 = GRP_TOTALS.reduce((s,g)=>s+g.th24,0);
+const TOTAL_KH26 = GRP_TOTALS.reduce((s,g)=>s+g.kh26,0);
+const GRP_COLOR_MAP={};
+GROUPS.forEach(g=>{GRP_COLOR_MAP[g.roman]=g.color});
+
+// Departments
+const DEPTS     = ['Văn phòng','Ban TC-KH','Ban XD','Ban ĐT','Ban QL Giá','Ban PT NL','Ban Đối ngoại','Ban KT Nội bộ'];
+const CAT_LABELS= ['Điện/Nước/VT','Xăng xe','VP phẩm','Thiết bị','Tiếp khách','Công tác','Sửa chữa','Khác'];
+
+// [dept][cat] = {th, kh}
+const HM_DATA=[
+  [{th:55,kh:50},{th:18,kh:20},{th:28,kh:25},{th:45,kh:50},{th:42,kh:35},{th:28,kh:30},{th:32,kh:35},{th:22,kh:25}],
+  [{th:28,kh:25},{th:8, kh:10},{th:12,kh:10},{th:30,kh:35},{th:18,kh:15},{th:22,kh:20},{th:10,kh:12},{th:15,kh:18}],
+  [{th:20,kh:18},{th:12,kh:10},{th:8, kh:8 },{th:22,kh:25},{th:10,kh:8 },{th:18,kh:15},{th:18,kh:15},{th:8, kh:10}],
+  [{th:22,kh:20},{th:10,kh:10},{th:6, kh:5 },{th:18,kh:20},{th:12,kh:10},{th:20,kh:18},{th:8, kh:10},{th:10,kh:12}],
+  [{th:18,kh:15},{th:6, kh:8 },{th:5, kh:5 },{th:12,kh:15},{th:8, kh:8 },{th:15,kh:12},{th:5, kh:5 },{th:8, kh:10}],
+  [{th:25,kh:22},{th:5, kh:5 },{th:4, kh:4 },{th:10,kh:12},{th:6, kh:5 },{th:10,kh:8 },{th:4, kh:5 },{th:4, kh:5 }],
+  [{th:15,kh:12},{th:4, kh:5 },{th:3, kh:3 },{th:8, kh:10},{th:4, kh:4 },{th:8, kh:6 },{th:3, kh:4 },{th:4, kh:5 }],
+  [{th:12,kh:10},{th:3, kh:3 },{th:2, kh:2 },{th:6, kh:8 },{th:2, kh:2 },{th:5, kh:4 },{th:2, kh:3 },{th:3, kh:4 }],
+];
+
+const DEPT_TH = HM_DATA.map(row=>row.reduce((s,c)=>s+c.th,0));
+const DEPT_KH = HM_DATA.map(row=>row.reduce((s,c)=>s+c.kh,0));
+const DEPT_RATE = DEPT_TH.map((th,i)=>DEPT_KH[i]>0?+((th/DEPT_KH[i]*100).toFixed(1)):0);
+
+const TXNS=[
+  {date:'28/03/2025',content:'Hóa đơn điện tháng 3',               cat:'Chi phí điện',         grp:'I',  amt:68240000, person:'Trần Văn A',  unit:'VP Hà Nội', st:'green'},
+  {date:'27/03/2025',content:'Mua văn phòng phẩm & mực in Q1',     cat:'VP phẩm, mực in',       grp:'II', amt:12500000, person:'Lê Thị B',    unit:'VP Hà Nội', st:'green'},
+  {date:'26/03/2025',content:'Tiếp khách đối tác chiến lược',       cat:'Chi phí tiếp khách',    grp:'III',amt:18600000, person:'Phạm Quang C',unit:'CN HCM',    st:'orange'},
+  {date:'25/03/2025',content:'Nước uống văn phòng tháng 3',         cat:'Chi phí nước uống',     grp:'I',  amt:3200000,  person:'Nguyễn D',    unit:'VP Hà Nội', st:'green'},
+  {date:'24/03/2025',content:'Phí Internet tháng 3',                cat:'ĐT, Fax, Internet',     grp:'I',  amt:8900000,  person:'Trần E',      unit:'VP Hà Nội', st:'green'},
+  {date:'22/03/2025',content:'Mua màn hình họp 65 inch',            cat:'Máy móc, thiết bị VP',  grp:'II', amt:35000000, person:'Lê F',        unit:'CN HCM',    st:'orange'},
+  {date:'20/03/2025',content:'Chi phí đi công tác Đà Nẵng',         cat:'Chi phí đi công tác',   grp:'III',amt:22400000, person:'Phạm G',      unit:'CN HCM',    st:'green'},
+  {date:'18/03/2025',content:'Phí phần mềm quản lý T3',             cat:'Dịch vụ phần mềm',      grp:'II', amt:9600000,  person:'Nguyễn H',    unit:'VP Hà Nội', st:'green'},
+  {date:'15/03/2025',content:'Xăng dầu xe công vụ T3',              cat:'Chi phí xăng dầu',      grp:'I',  amt:11200000, person:'Trần I',      unit:'VP Hà Nội', st:'green'},
+  {date:'12/03/2025',content:'Sửa chữa cải tạo phòng họp P2',       cat:'Sửa chữa, cải tạo VP',  grp:'II', amt:28500000, person:'Lê K',        unit:'CN Đà Nẵng',st:'orange'},
+  {date:'10/03/2025',content:'Trà, bánh kẹo cuộc họp HĐQT',         cat:'Trà, bánh kẹo, hội họp',grp:'III',amt:4200000,  person:'Phạm L',      unit:'VP Hà Nội', st:'green'},
+  {date:'08/03/2025',content:'Photo hồ sơ thầu dự án HN',           cat:'Photo, chứng thực HS',  grp:'III',amt:2800000,  person:'Nguyễn M',    unit:'VP Hà Nội', st:'green'},
+];
+
+// ════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════
+function fmt(n){
+  const num=Number(n);
+  if(n===undefined||n===null||isNaN(num))return'—';
+  try{return num.toLocaleString('vi-VN')}catch(e){return num.toLocaleString()}
+}
+function fmtPct(a,b){
+  if(!b||isNaN(Number(a))||isNaN(Number(b)))return'—';
+  return((Number(a)/Number(b))*100).toFixed(1)+'%';
+}
+
+// ════════════════════════════════════════════
+// TREND CHART
+// ════════════════════════════════════════════
+const MONTHS=['T8/24','T9/24','T10/24','T11/24','T12/24','T1/25','T2/25','T3/25'];
+const ACT_M=[1520,1610,1580,1720,1890,1700,1725,1842.5];
+const PLN_M=[1700,1700,1750,1800,1950,1850,1900,2100];
+const ACT_C=ACT_M.map((_,i)=>ACT_M.slice(0,i+1).reduce((s,x)=>s+x,0));
+const PLN_C=PLN_M.map((_,i)=>PLN_M.slice(0,i+1).reduce((s,x)=>s+x,0));
+
+const trendChart=new Chart(document.getElementById('trendChart').getContext('2d'),{
+  type:'bar',
+  data:{labels:MONTHS,datasets:[
+    {label:'Thực hiện',data:[...ACT_M],backgroundColor:'rgba(30,74,130,0.8)',borderRadius:5,borderSkipped:false,order:2},
+    {label:'Kế hoạch', data:[...PLN_M],type:'line',borderColor:'rgba(184,135,44,0.9)',backgroundColor:'rgba(184,135,44,0.07)',borderWidth:2.5,pointBackgroundColor:'#B8872C',pointRadius:4,fill:false,tension:0.4,order:1}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'bottom',labels:{font:{family:'Sora',size:10.5},color:'#4a5a72',boxWidth:12,padding:16}},
+             tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${fmt(c.parsed.y)} tr đ`}}},
+    scales:{x:{grid:{display:false},ticks:{font:{family:'Sora',size:10},color:'#97a8be'}},
+            y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:'Fira Code',size:10},color:'#97a8be',callback:v=>v+' tr'},min:0}}}
+});
+
+function switchTrend(mode,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const cum=mode==='cumulative';
+  trendChart.data.datasets[0].data=cum?ACT_C:ACT_M;
+  trendChart.data.datasets[1].data=cum?PLN_C:PLN_M;
+  document.getElementById('trendSubtitle').textContent=
+    cum?'Lũy kế tích lũy 8 tháng · triệu đồng':'Thực hiện vs Kế hoạch · triệu đồng';
+  trendChart.update();
+}
+
+// ════════════════════════════════════════════
+// DEPT CHART — column bars (TH) + line (% rate)
+// ════════════════════════════════════════════
+// Color bars by over/under
+const deptBarBg   = DEPTS.map((_,i)=>DEPT_TH[i]>DEPT_KH[i]?'rgba(176,32,32,0.78)':'rgba(30,74,130,0.75)');
+const deptBarBd   = DEPTS.map((_,i)=>DEPT_TH[i]>DEPT_KH[i]?'#b02020':'#1e4a82');
+const linePointBg = DEPT_RATE.map(r=>r>100?'#b02020':r>90?'#c05a10':'#1b6e48');
+
+new Chart(document.getElementById('deptChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:DEPTS,
+    datasets:[
+      { label:'TH (tr đ)', data:DEPT_TH,
+        backgroundColor:deptBarBg, borderColor:deptBarBd,
+        borderWidth:0, borderRadius:5, borderSkipped:false,
+        yAxisID:'yAmt', order:2 },
+      { label:'% TH/KH', data:DEPT_RATE,
+        type:'line',
+        borderColor:'rgba(184,135,44,0.95)',
+        backgroundColor:'rgba(184,135,44,0)',
+        borderWidth:2.5,
+        pointBackgroundColor:linePointBg,
+        pointBorderColor:'#fff',
+        pointBorderWidth:1.5,
+        pointRadius:5,
+        fill:false, tension:0.35,
+        yAxisID:'yPct', order:1 }
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:true,position:'bottom',labels:{font:{family:'Sora',size:10.5},color:'#4a5a72',boxWidth:12,padding:14}},
+      tooltip:{callbacks:{label:c=>{
+        if(c.datasetIndex===0) return ` TH: ${fmt(c.parsed.y)} tr đ (KH: ${fmt(DEPT_KH[c.dataIndex])} tr)`;
+        return ` Tỷ lệ: ${c.parsed.y}%`;
+      }}}
+    },
+    scales:{
+      x:{grid:{display:false},ticks:{font:{family:'Sora',size:10},color:'#4a5a72',maxRotation:35}},
+      yAmt:{position:'left',grid:{color:'rgba(0,0,0,0.04)'},
+             ticks:{font:{family:'Fira Code',size:10},color:'#97a8be',callback:v=>v+' tr'}},
+      yPct:{position:'right',grid:{display:false},
+             min:0,max:140,
+             ticks:{font:{family:'Fira Code',size:10},color:'#d4a84b',callback:v=>v+'%'},
+             afterDataLimits(scale){scale.max=140}}
+    }
+  }
+});
+
+// ════════════════════════════════════════════
+// SUMMARY TABLE — collapsible with group progress
+// ════════════════════════════════════════════
+const sumTb=document.getElementById('sumTable');
+
+// Totals sub-header
+const totalsHdr=document.createElement('tr');
+totalsHdr.style.cssText='background:#162d52';
+totalsHdr.innerHTML=`
+  <td></td>
+  <td style="font-size:11px;font-weight:600;color:rgba(255,255,255,.7);font-family:'Sora',sans-serif">
+    TỔNG KH: <span style="color:#d4a84b;font-family:'Fira Code',monospace">${fmt(TOTAL_KH)} tr</span>
+    &nbsp;·&nbsp;
+    TỔNG TH: <span style="color:#4ade80;font-family:'Fira Code',monospace">${fmt(TOTAL_TH)} tr</span>
+    &nbsp;·&nbsp;
+    TỈ LỆ: <span style="color:#fb923c;font-family:'Fira Code',monospace">${fmtPct(TOTAL_TH,TOTAL_KH)}</span>
+  </td>
+  <td class="mono" style="text-align:right;color:rgba(255,255,255,.55);font-size:11px">${fmt(TOTAL_KH)}</td>
+  <td class="mono" style="text-align:right;color:#4ade80;font-size:11px;font-weight:600">${fmt(TOTAL_TH)}</td>
+  <td class="mono" style="text-align:right;font-size:11px;color:${(TOTAL_TH-TOTAL_KH)>0?'#f87171':'#4ade80'}">
+    ${(TOTAL_TH-TOTAL_KH)>0?'+':''}${fmt(TOTAL_TH-TOTAL_KH)}</td>
+  <td class="mono" style="text-align:right;font-size:11px;color:${(TOTAL_TH-TOTAL_TH24)>0?'#fb923c':'#4ade80'}">
+    ${(TOTAL_TH-TOTAL_TH24)>0?'+':''}${fmt(TOTAL_TH-TOTAL_TH24)}</td>
+  <td class="mono" style="text-align:right;color:rgba(255,255,255,.55);font-size:11px">${fmt(TOTAL_KH26)}</td>
+  <td style="text-align:center"><span class="badge b-navy">${fmtPct(TOTAL_TH,TOTAL_KH)} KH</span></td>`;
+sumTb.appendChild(totalsHdr);
+
+GROUPS.forEach((g,gi)=>{
+  const gt   = GRP_TOTALS[gi];          // ← totals for this group
+  const gKH  = gt.kh;
+  const gTH  = gt.th;
+  const gTH24= gt.th24;
+  const gKH26= gt.kh26;
+  const gd   = gTH - gKH;
+  const gov  = gd > 0;
+  const pctNum = gKH > 0 ? Math.min((gTH/gKH)*100, 130) : 0;
+  const progColor = gov ? 'var(--red)' : 'var(--green)';
+  const groupId = `grp-${gi}`;
+
+  const grpTr=document.createElement('tr');
+  grpTr.className='grp-row';
+  grpTr.dataset.group=groupId;
+  grpTr.innerHTML=`
+    <td style="width:38px"><span class="grp-chevron">›</span></td>
+    <td style="color:${g.color};font-weight:600">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+        <span style="font-family:'Fira Code',monospace;font-size:11px;background:${g.color}18;color:${g.color};padding:2px 7px;border-radius:4px">${g.roman}</span>
+        <span>${g.label}</span>
+        <span style="font-size:10px;color:var(--ink-faint);font-weight:400">${g.items.length} mục</span>
+      </div>
+      <div class="grp-prog-wrap">
+        <div class="grp-prog-track" style="background:${g.color}22">
+          <div class="grp-prog-fill" style="width:${pctNum}%;background:${progColor}"></div>
+        </div>
+        <span class="grp-prog-label" style="color:${progColor}">${fmtPct(gTH,gKH)}</span>
+      </div>
+    </td>
+    <td class="mono" style="text-align:right;font-weight:600;color:var(--ink-mid)">${fmt(gKH)}</td>
+    <td class="mono" style="text-align:right;font-weight:700;color:${g.color}">${fmt(gTH)}</td>
+    <td class="mono" style="text-align:right;font-weight:700;color:${gov?'var(--red)':'var(--green)'}">
+      ${gov?'+':''}${fmt(gd)}</td>
+    <td class="mono" style="text-align:right;font-weight:600;color:${(gTH-gTH24)>0?'var(--orange)':'var(--green)'}">
+      ${(gTH-gTH24)>0?'+':''}${fmt(gTH-gTH24)}</td>
+    <td class="mono" style="text-align:right;font-weight:600;color:var(--ink-mid)">${fmt(gKH26)}</td>
+    <td style="text-align:center"><span class="badge ${gov?'b-orange':'b-green'}">${fmtPct(gTH,gKH)}</span></td>`;
+  sumTb.appendChild(grpTr);
+
+  g.items.forEach(it=>{
+    const d=(it.th||0)-(it.kh||0);
+    const dy=(it.th||0)-(it.th24||0);
+    const ov=d>0;
+    const tr=document.createElement('tr');
+    tr.className='item-row hidden';
+    tr.dataset.group=groupId;
+    tr.innerHTML=`
+      <td class="mono" style="color:var(--ink-faint);padding-left:32px;font-size:10.5px">${it.stt||''}</td>
+      <td style="font-size:12px;padding-left:18px">${it.name||''}</td>
+      <td class="mono" style="text-align:right;color:var(--ink-faint)">${fmt(it.kh)}</td>
+      <td class="mono" style="text-align:right;font-weight:600">${fmt(it.th)}</td>
+      <td class="mono" style="text-align:right;font-weight:600;color:${ov?'var(--red)':'var(--green)'}">
+        ${ov?'+':''}${fmt(d)}</td>
+      <td class="mono" style="text-align:right;font-weight:500;color:${dy>0?'var(--orange)':'var(--green)'}">
+        ${dy>0?'+':''}${fmt(dy)}</td>
+      <td class="mono" style="text-align:right;color:var(--ink-faint)">${fmt(it.kh26)}</td>
+      <td style="text-align:center"><span class="badge ${ov?'b-orange':'b-green'}">${ov?'Vượt KH':'Đạt KH'}</span></td>`;
+    sumTb.appendChild(tr);
+  });
+
+  const subTr=document.createElement('tr');
+  subTr.className='sub-row hidden';
+  subTr.dataset.group=groupId;
+  subTr.innerHTML=`
+    <td></td>
+    <td style="padding-left:18px;color:var(--navy)">↳ Cộng nhóm ${g.roman}</td>
+    <td class="mono" style="text-align:right">${fmt(gKH)}</td>
+    <td class="mono" style="text-align:right;color:var(--navy)">${fmt(gTH)}</td>
+    <td class="mono" style="text-align:right;color:${gov?'var(--red)':'var(--green)'}">
+      ${gov?'+':''}${fmt(gd)}</td>
+    <td class="mono" style="text-align:right;color:${(gTH-gTH24)>0?'var(--orange)':'var(--green)'}">
+      ${(gTH-gTH24)>0?'+':''}${fmt(gTH-gTH24)}</td>
+    <td class="mono" style="text-align:right">${fmt(gKH26)}</td>
+    <td style="text-align:center"><span class="badge ${gov?'b-orange':'b-green'}">${fmtPct(gTH,gKH)}</span></td>`;
+  sumTb.appendChild(subTr);
+});
+
+const grandDiff=TOTAL_TH-TOTAL_KH;
+const grandDiffY=TOTAL_TH-TOTAL_TH24;
+const totalTr=document.createElement('tr');
+totalTr.className='total-row';
+totalTr.innerHTML=`
+  <td></td>
+  <td style="font-family:'Lora',serif;font-size:14px">TỔNG CỘNG</td>
+  <td class="mono" style="text-align:right">${fmt(TOTAL_KH)}</td>
+  <td class="mono" style="text-align:right">${fmt(TOTAL_TH)}</td>
+  <td class="mono" style="text-align:right;color:${grandDiff>0?'var(--red)':'var(--green)'}">
+    ${grandDiff>0?'+':''}${fmt(grandDiff)}</td>
+  <td class="mono" style="text-align:right;font-weight:700;color:${grandDiffY>0?'var(--orange)':'var(--green)'}">
+    ${grandDiffY>0?'+':''}${fmt(grandDiffY)}</td>
+  <td class="mono" style="text-align:right">${fmt(TOTAL_KH26)}</td>
+  <td style="text-align:center"><span class="badge b-navy">${fmtPct(TOTAL_TH,TOTAL_KH)} KH</span></td>`;
+sumTb.appendChild(totalTr);
+
+sumTb.addEventListener('click',e=>{
+  const grpRow=e.target.closest('.grp-row');
+  if(!grpRow)return;
+  const id=grpRow.dataset.group;
+  const isOpen=grpRow.classList.contains('open');
+  grpRow.classList.toggle('open',!isOpen);
+  sumTb.querySelectorAll(`[data-group="${id}"]:not(.grp-row)`).forEach(r=>{
+    r.classList.toggle('hidden',isOpen);
+  });
+});
+
+// ════════════════════════════════════════════
+// HEATMAP — dual mode (amt / rate)
+// ════════════════════════════════════════════
+const hmTable=document.getElementById('heatmapTable');
+const allVals=HM_DATA.flat().map(c=>c.th);
+const hmMax=Math.max(...allVals);
+
+function rateClass(rate){
+  if(rate<50)  return 'rate-0';
+  if(rate<70)  return 'rate-1';
+  if(rate<85)  return 'rate-2';
+  if(rate<95)  return 'rate-3';
+  if(rate<105) return 'rate-4';
+  if(rate<120) return 'rate-5';
+  return 'rate-6';
+}
+function amtClass(val){
+  const r=hmMax>0?val/hmMax:0;
+  if(val===0) return 'amt-l0';
+  if(r<0.2)   return 'amt-l1';
+  if(r<0.4)   return 'amt-l2';
+  if(r<0.65)  return 'amt-l3';
+  return 'amt-l4';
+}
+
+// Build header
+const hdrRow=document.createElement('tr');
+const corner=document.createElement('th');
+corner.className='hm-corner';
+corner.innerHTML='Phòng ban ↓&nbsp; Loại CP →';
+hdrRow.appendChild(corner);
+CAT_LABELS.forEach(cl=>{
+  const th=document.createElement('th');
+  th.className='hm-col-head';
+  th.textContent=cl;
+  hdrRow.appendChild(th);
+});
+hmTable.appendChild(hdrRow);
+
+// Build cells — store references
+const hmCells=[];
+DEPTS.forEach((dept,di)=>{
+  const tr=document.createElement('tr');
+  const rowHead=document.createElement('td');
+  rowHead.className='hm-row-head';
+  rowHead.textContent=dept;
+  tr.appendChild(rowHead);
+  hmCells.push([]);
+
+  CAT_LABELS.forEach((_,ci)=>{
+    const cell=HM_DATA[di][ci];
+    const val=cell?cell.th:0;
+    const kh =cell?cell.kh:0;
+    const rate=kh>0?+((val/kh*100).toFixed(1)):0;
+    const over=val>kh;
+
+    const td=document.createElement('td');
+    td.className=`hm-cell ${amtClass(val)}${over?' amt-over':''}`;
+    td.textContent=val>0?val:'–';
+    td.dataset.val=val;
+    td.dataset.kh=kh;
+    td.dataset.rate=rate;
+    td.dataset.over=over?'1':'0';
+    td.title=`${dept} · ${CAT_LABELS[ci]}\nTH: ${val} tr / KH: ${kh} tr = ${rate}%${over?' ⚠ Vượt KH':''}`;
+    tr.appendChild(td);
+    hmCells[di].push(td);
+  });
+  hmTable.appendChild(tr);
+});
+
+// Legend
+const hmLegend=document.getElementById('hmLegend');
+function renderLegend(mode){
+  hmLegend.innerHTML='';
+  if(mode==='amt'){
+    const boxes=[['#f0f4fa','Thấp'],['#cfe2f5',''],['#93c5e8',''],['#4a90d4',''],['#1e4a82','Cao']];
+    hmLegend.innerHTML='<span>Ít</span>';
+    boxes.forEach(([bg])=>{
+      const d=document.createElement('div');
+      d.className='hm-leg-box';
+      d.style.background=bg;
+      if(bg==='#f0f4fa')d.style.border='1px solid #dfe6f0';
+      hmLegend.appendChild(d);
+    });
+    hmLegend.innerHTML+=`<span>Nhiều</span>
+      <span style="margin-left:16px;display:flex;align-items:center;gap:5px">
+        <span style="display:inline-block;width:14px;height:14px;border-radius:3px;border:2px solid var(--red)"></span>
+        Vượt KH
+      </span>`;
+  } else {
+    const steps=[
+      {bg:'#e3f5eb',label:'<50%'},
+      {bg:'#b7e8c8',label:'50–70%'},
+      {bg:'#7dd6a1',label:'70–85%'},
+      {bg:'#fef3c7',label:'85–95%'},
+      {bg:'#fdba74',label:'95–105%'},
+      {bg:'#f87171',label:'105–120%'},
+      {bg:'#b91c1c',label:'>120%'},
+    ];
+    steps.forEach(s=>{
+      const d=document.createElement('div');
+      d.className='hm-leg-box';
+      d.style.background=s.bg;
+      hmLegend.appendChild(d);
+      const sp=document.createElement('span');
+      sp.style.marginRight='8px';
+      sp.textContent=s.label;
+      hmLegend.appendChild(sp);
+    });
+  }
+}
+renderLegend('amt');
+
+let hmMode='amt';
+function switchHM(mode,btn){
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  hmMode=mode;
+
+  const subtitle=document.getElementById('hmSubtitle');
+  subtitle.textContent=mode==='amt'
+    ?'Đơn vị: triệu đồng · viền đỏ = vượt KH'
+    :'Tỷ lệ thực hiện / kế hoạch (%) · xanh = đạt, đỏ = vượt';
+
+  DEPTS.forEach((_,di)=>{
+    CAT_LABELS.forEach((_,ci)=>{
+      const td=hmCells[di][ci];
+      const val=+td.dataset.val;
+      const kh=+td.dataset.kh;
+      const rate=+td.dataset.rate;
+      const over=td.dataset.over==='1';
+
+      if(mode==='amt'){
+        td.className=`hm-cell ${amtClass(val)}${over?' amt-over':''}`;
+        td.textContent=val>0?val:'–';
+      } else {
+        td.className=`hm-cell ${rateClass(rate)}`;
+        td.textContent=kh>0?rate+'%':'–';
+      }
+    });
+  });
+  renderLegend(mode);
+}
+
+// ════════════════════════════════════════════
+// TX TABLE
+// ════════════════════════════════════════════
+const txTb=document.getElementById('txTable');
+const maxAmt=Math.max(...TXNS.map(t=>Number(t.amt)||0));
+TXNS.forEach(t=>{
+  const cls=t.st==='green'?'b-green':t.st==='orange'?'b-orange':'b-red';
+  const lbl=t.st==='green'?'Đã duyệt':t.st==='orange'?'Chờ duyệt':'Từ chối';
+  const amt=Number(t.amt)||0;
+  const barPct=maxAmt>0?(amt/maxAmt*100).toFixed(1):0;
+  const barColor=GRP_COLOR_MAP[t.grp]||'#1e4a82';
+  const amtM=(amt/1e6).toFixed(1);
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td style="white-space:nowrap;color:var(--ink-faint);font-size:11px">${t.date}</td>
+    <td style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.content}</td>
+    <td><span class="badge b-blue">${t.cat}</span></td>
+    <td class="mono" style="text-align:right;white-space:nowrap">${fmt(amt)}</td>
+    <td><div class="ib-wrap">
+      <div class="ib-track"><div class="ib-fill" style="width:${barPct}%;background:${barColor}cc"></div></div>
+      <span class="ib-val">${amtM} tr</span>
+    </div></td>
+    <td style="font-size:12px;white-space:nowrap">${t.person}</td>
+    <td style="font-size:11px;color:var(--ink-faint);white-space:nowrap">${t.unit}</td>
+    <td style="text-align:center"><span class="badge ${cls}">${lbl}</span></td>`;
+  txTb.appendChild(tr);
+});
+</script>
+</body>
+</html>

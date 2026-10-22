@@ -1,0 +1,19 @@
+{
+  "slug": "cao-su-karatie",
+  "title": "Báo cáo khai thác & chăm sóc cao su",
+  "type": "dashboard",
+  "industry": "Cao su",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js"
+  ],
+  "source": "https://nvnghianeu-oss.github.io/cao-su---Karatie/",
+  "source_repo": "https://github.com/nvnghianeu-oss/cao-su---Karatie",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

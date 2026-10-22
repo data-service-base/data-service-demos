@@ -1,0 +1,19 @@
+{
+  "slug": "revenue",
+  "title": "Báo cáo quản lý ngân sách",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "ECharts"
+  ],
+  "source": "https://du-yt01.github.io/Revenue/",
+  "source_repo": "https://github.com/du-yt01/Revenue",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

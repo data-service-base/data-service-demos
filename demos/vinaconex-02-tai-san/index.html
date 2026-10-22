@@ -1,0 +1,2645 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Quản Lý Tài Sản - Vinaconex</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:wght@600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Be Vietnam Pro', 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F4F6F9;
+            color: #0D2240;
+            min-height: 100vh;
+            font-size: 13px;
+        }
+        
+        .header {
+            background: #0D2240;
+            color: #fff;
+            padding: 20px 24px;
+            box-shadow: 0 2px 12px rgba(13,34,64,.18);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            right: -60px; top: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(184,135,44,.12) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            left: 0; bottom: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #B8872C, transparent);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: rgba(184,135,44,.18);
+            border: 1.5px solid rgba(184,135,44,.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .header-text h1 {
+            font-family: 'Lora', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+        
+        .header-text p {
+            font-size: 11px;
+            color: rgba(255,255,255,.45);
+        }
+        
+        .tabs {
+            background: #fff;
+            border-bottom: 2px solid #dfe6f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(13,34,64,.06);
+        }
+        
+        .tabs-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            padding: 0 24px;
+            overflow-x: auto;
+            gap: 6px;
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a5a72;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-radius: 6px 6px 0 0;
+            margin-bottom: -2px;
+        }
+        
+        .tab-button:hover {
+            color: #0D2240;
+            background: rgba(184,135,44,.06);
+        }
+        
+        .tab-button.active {
+            color: #0D2240;
+            border-bottom-color: #B8872C;
+            background: rgba(184,135,44,.07);
+            font-weight: 700;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .tab-content.active { display: block; }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 18px rgba(13,34,64,.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #dfe6f0;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(13,34,64,.13);
+        }
+        
+        .card-label {
+            font-size: 9.5px;
+            color: #97a8be;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        
+        .card-value {
+            font-family: 'Lora', serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0D2240;
+            margin-bottom: 6px;
+        }
+        
+        .card-change {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .positive { color: #15803d; }
+        .negative { color: #dc2626; }
+        
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 18px rgba(13,34,64,.08);
+            border: 1px solid #dfe6f0;
+        }
+        
+        .section-title {
+            font-family: 'Lora', serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #0D2240;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 18px;
+            background: linear-gradient(180deg, #B8872C 0%, #0D2240 100%);
+            border-radius: 2px;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+        }
+        
+        .chart-large {
+            height: 260px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .heatmap-wrapper {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+        }
+        
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: minmax(96px, 120px) repeat(var(--heatmap-cols, 1), minmax(var(--heatmap-cell-size, 42px), 1fr));
+            gap: 4px;
+            background: transparent;
+            padding: 0;
+            margin-top: 12px;
+            width: 100%;
+            align-items: stretch;
+        }
+        
+        .heatmap-row {
+            display: contents;
+        }
+        
+        .heatmap-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #edf1f9;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: #4a5a72;
+            border-radius: 6px;
+            white-space: normal;
+            line-height: 1.2;
+            border: 1px solid #dfe6f0;
+            min-height: 36px;
+        }
+        
+        .heatmap-label:first-child {
+            justify-content: flex-start;
+            font-weight: 700;
+            background: white;
+            color: #0D2240;
+            min-width: 88px;
+        }
+        
+        .heatmap-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: var(--heatmap-cell-height, 38px);
+            padding: 4px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .heatmap-cell:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+        
+        .heatmap-legend {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            padding: 8px 12px;
+            background: #f4f6f9;
+            border-radius: 6px;
+            border: 1px solid #dfe6f0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #4a5a72;
+        }
+        
+        .legend-box {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        th {
+            text-align: left;
+            padding: 10px 14px;
+            color: #97a8be;
+            font-weight: 600;
+            border-bottom: 2px solid #dfe6f0;
+            background: #edf1f9;
+            white-space: nowrap;
+            font-size: 9.5px;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+        }
+        
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #dfe6f0;
+            font-size: 12.5px;
+        }
+        
+        tr:hover td {
+            background: #f6f9ff;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        .badge-success {
+            background: linear-gradient(135deg, #bbf7d0 0%, #4ade80 100%);
+            color: #14532d;
+            box-shadow: 0 2px 4px rgba(21, 128, 61, 0.2);
+        }
+        
+        .badge-warning {
+            background: linear-gradient(135deg, #fde68a 0%, #fbbf24 100%);
+            color: #78350f;
+            box-shadow: 0 2px 4px rgba(180, 83, 9, 0.2);
+        }
+        
+        .badge-danger {
+            background: linear-gradient(135deg, #fde8e8 0%, #f87171 100%);
+            color: #7f1d1d;
+            box-shadow: 0 1px 3px rgba(176,32,32,.2);
+        }
+        
+        .badge-info {
+            background: #e5edf9;
+            color: #1e4a82;
+            box-shadow: 0 1px 3px rgba(13,34,64,.12);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* --- Lookup filter --- */
+        .filter-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #97a8be;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 5px;
+        }
+        .filter-input {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1.5px solid #dfe6f0;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: #f4f6f9;
+            color: #0D2240;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-input:focus {
+            border-color: #1e4a82;
+            background: #fff;
+        }
+        .filter-btn {
+            padding: 7px 16px;
+            background: #0D2240;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .filter-btn:hover { opacity: 0.85; }
+        .filter-btn-reset {
+            background: #edf1f9;
+            color: #4a5a72;
+            border: 1.5px solid #dfe6f0;
+        }
+        .emp-lbl {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 600;
+            color: #97a8be;
+            text-transform: uppercase;
+            letter-spacing: .12em;
+            margin-bottom: 2px;
+        }
+        .emp-val {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #0D2240;
+        }
+        .badge-inuse   { background:linear-gradient(135deg,#bbf7d0,#4ade80);color:#14532d;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700; }
+        .badge-avail   { background:linear-gradient(135deg,#fef08a,#fbbf24);color:#78350f;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700; }
+        .badge-unusable{ background:linear-gradient(135deg,#fecdd3,#f87171);color:#9f1239;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700; }
+        .doc-link { color:#1e4a82;font-weight:600;text-decoration:none;font-size:11px; }
+        .doc-link:hover { color:#B8872C;text-decoration:underline; }
+        
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .charts-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+        .stat-card-single{padding:24px 20px;text-align:center}
+        .stat-label-alt{font-size:10px;color:#97a8be;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em}
+        .stat-value-alt{font-family:'Lora',serif;font-size:32px;font-weight:700;color:#0D2240}
+        .chart-card-compact{padding:20px;display:flex;flex-direction:column}
+        .chart-card-title{font-size:12px;font-weight:700;color:#0D2240;margin-bottom:16px;text-align:center}
+        .chart-canvas-wrapper-compact{flex:1;position:relative;min-height:220px;max-height:250px;display:flex;align-items:center;justify-content:center;padding:10px 5px}
+        .chart-canvas-wrapper-compact canvas{max-height:100%!important}
+        .asset-table-container{background:#fff;border-radius:12px;box-shadow:0 2px 18px rgba(13,34,64,.08);border:1px solid #dfe6f0;overflow:hidden}
+        .asset-table-header{padding:20px 24px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+        .asset-table-title{font-size:16px;font-weight:700;color:#0D2240}
+        .asset-search-box{position:relative;width:300px}
+        .asset-search-box input{width:100%;padding:8px 12px 8px 36px;border:1px solid #dfe6f0;border-radius:8px;font-size:12px;transition:all .2s}
+        .asset-search-box input:focus{outline:none;border-color:#B8872C;box-shadow:0 0 0 3px rgba(184,135,44,.1)}
+        .asset-search-box::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px}
+        .asset-detail-btn{padding:6px 12px;background:#B8872C;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;transition:background .2s}
+        .asset-detail-btn:hover{background:#9a6f23}
+        .chart-modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+        .chart-modal-content{background-color:#fff;margin:2% auto;padding:0;border-radius:16px;width:95%;max-width:1400px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(13,34,64,.25);animation:slideDown .3s ease-out}
+        @keyframes slideDown{from{opacity:0;transform:translateY(-50px)}to{opacity:1;transform:translateY(0)}}
+        .chart-modal-header{padding:24px 28px;border-bottom:2px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#0D2240 0%,#1e3a5f 100%);border-radius:16px 16px 0 0;flex-shrink:0}
+        .chart-modal-title{font-size:18px;font-weight:700;color:#fff}
+        .chart-modal-close{color:rgba(255,255,255,.7);font-size:32px;font-weight:300;cursor:pointer;transition:color .2s;line-height:1}
+        .chart-modal-close:hover{color:#fff}
+        .chart-modal-body{padding:28px;overflow-y:auto;flex:1}
+        .asset-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px;padding:20px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0}
+        .info-item{display:flex;flex-direction:column}
+        .info-label{font-size:10px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+        .info-value{font-size:14px;color:#0D2240;font-weight:600}
+        .modal-charts-container{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+        .modal-chart-wrapper{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px}
+        .modal-chart-title{font-size:13px;font-weight:700;color:#0D2240;margin-bottom:16px;text-align:center}
+        /* Component table styles */
+        .component-section{margin-top:28px;}
+        .component-section-title{font-size:15px;font-weight:700;color:#0D2240;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;}
+        .component-table{width:100%;border-collapse:collapse;font-size:13px;}
+        .component-table thead tr{background:linear-gradient(135deg,#1e3a5f 0%,#2d5a8a 100%);color:#fff;}
+        .component-table th{padding:12px 14px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;}
+        .component-table td{padding:11px 14px;border-bottom:1px solid #e8eef6;}
+        .component-table tr:hover td{background:#f1f7ff;}
+        .component-table tr:nth-child(even) td{background:#fafbfc;}
+        .component-table tr:nth-child(even):hover td{background:#f1f7ff;}
+        .comp-badge-active{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;background:#dcfce7;color:#166534;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #bbf7d0;}
+        .comp-badge-inactive{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;background:#fff7ed;color:#9a3412;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #fed7aa;}
+        .comp-badge-broken{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;background:#fee2e2;color:#991b1b;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #fca5a5;}
+        .comp-badge-stored{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;background:#eff6ff;color:#1e40af;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #bfdbfe;}
+        .comp-type-tag{display:inline-block;padding:3px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:10px;font-weight:600;border:1px solid #e2e8f0;}
+        /* Expandable row styles - lookup table */
+        .lk-expand-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 10px; background: #eff6ff; color: #1e40af;
+            border: 1.5px solid #bfdbfe; border-radius: 6px;
+            font-size: 11px; font-weight: 700; cursor: pointer;
+            transition: all 0.18s; white-space: nowrap;
+        }
+        .lk-expand-btn:hover { background: #dbeafe; border-color: #93c5fd; }
+        .lk-expand-btn.open  { background: #0D2240; color: #fff; border-color: #0D2240; }
+        .lk-expand-btn .arrow {
+            display: inline-block;
+            width: 0; height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 8px solid currentColor;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .lk-expand-btn.open .arrow { transform: rotate(90deg); }
+        .lk-component-row { display: none; }
+        .lk-component-row.open { display: table-row; }
+        .lk-component-cell {
+            padding: 0 !important; border-bottom: 2px solid #B8872C !important;
+            background: #f0f6ff !important;
+        }
+        .lk-component-inner {
+            padding: 16px 24px 20px 48px;
+        }
+        .lk-comp-title {
+            font-size: 12px; font-weight: 700; color: #0D2240;
+            margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+        }
+        .lk-comp-title::before { content:'🔩'; }
+        .lk-comp-none {
+            font-size: 12px; color: #94a3b8; font-style: italic; padding: 8px 0;
+        }
+        .lk-comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .lk-comp-table th {
+            padding: 8px 12px; background: #1e3a5f; color: #fff;
+            font-size: 10px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: .06em; text-align: left;
+        }
+        .lk-comp-table td { padding: 9px 12px; border-bottom: 1px solid #dbeafe; }
+        .lk-comp-table tr:last-child td { border-bottom: none; }
+        .lk-comp-table tr:nth-child(even) td { background: #f8fbff; }
+        .lk-comp-table tr:hover td { background: #eff6ff; }
+
+        .no-component-msg{text-align:center;padding:28px;color:#94a3b8;font-size:13px;font-style:italic;}
+
+        @media (max-width:1200px){
+            .charts-row{grid-template-columns:1fr}
+            .stats-row{grid-template-columns:1fr}
+        }
+        @media (max-width:768px){
+            .charts-row{grid-template-columns:1fr}
+            .stats-row{grid-template-columns:1fr}
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            }
+            
+            body {
+                font-size: 12px;
+            }
+
+            .heatmap-grid {
+                gap: 4px;
+            }
+
+            .heatmap-label,
+            .heatmap-cell {
+                min-height: 34px;
+                font-size: 10px;
+            }
+
+            .heatmap-cell {
+                height: var(--heatmap-cell-height, 34px);
+            }
+
+            .heatmap-label:first-child {
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🏢</div>
+            <div class="header-text">
+                <h1>Hệ Thống Quản Lý Tài Sản</h1>
+                <p>Tổng Công Ty Vinaconex • Dashboard Analytics</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tabs-container">
+            <button class="tab-button active" onclick="showTab(event, 'overview')">📊 Tổng Quan</button>
+            <button class="tab-button" onclick="showTab(event, 'asset-stats')">📈 Thống Kê Tài Sản</button>
+            <button class="tab-button" onclick="showTab(event, 'vpp')">📝 Văn Phòng Phẩm</button>
+            <button class="tab-button" onclick="showTab(event, 'equipment')">💻 Thiết Bị</button>
+            <button class="tab-button" onclick="showTab(event, 'proposal')">📋 Đề Xuất</button>
+            <button class="tab-button" onclick="showTab(event, 'lookup')">🔍 Tra Cứu Tài Sản</button>
+        </div>
+    </div>
+
+    <div id="overview" class="tab-content active">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Tổng số tài sản</div>
+                <div class="card-value">1,245</div>
+                <div class="card-change positive">▲ +85 so tháng trước</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Tổng giá trị</div>
+                <div class="card-value">2.8 tỷ₫</div>
+                <div class="card-change positive">▲ +12.5%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Đang sử dụng</div>
+                <div class="card-value">1,089</div>
+                <div class="card-change">87.5% tỷ lệ</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Cần bảo dưỡng</div>
+                <div class="card-value">47</div>
+                <div class="card-change negative">Cần xử lý</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Chi phí tháng này</div>
+                <div class="card-value">285M₫</div>
+                <div class="card-change">71.3% ngân sách</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Chi phí Thực tế vs Kế hoạch (12 tháng)</div>
+            <div class="chart-container chart-large">
+                <canvas id="actualVsPlanChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Tỷ trọng chi phí theo loại</div>
+                <div class="chart-container">
+                    <canvas id="costRatioChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Tình trạng thiết bị</div>
+                <div class="chart-container">
+                    <canvas id="conditionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Heatmap: Tài sản × Tình trạng Thiết bị</div>
+                <div class="heatmap-legend">
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#bbf7d0,#4ade80);"></div><span>Tốt (≥70%)</span></div>
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fef08a,#fbbf24);"></div><span>Trung bình (40-70%)</span></div>
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fecdd3,#f87171);"></div><span>Kém (<40%)</span></div>
+                </div>
+                <div id="heatmapOverview"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">Tài sản theo phòng ban (CCDC & CNTT)</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Phòng ban</th>
+                                <th>Tổng CCDC</th>
+                                <th>CCDC đang dùng</th>
+                                <th>Tỷ lệ CCDC</th>
+                                <th>Tổng CNTT</th>
+                                <th>CNTT đang dùng</th>
+                                <th>Tỷ lệ CNTT</th>
+                                <th>Tổng cộng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deptAssetTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Bảng kê chi tiết tài sản</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã TS</th>
+                            <th>Tên tài sản</th>
+                            <th>Loại</th>
+                            <th>Phòng ban</th>
+                            <th>Ngày mua</th>
+                            <th>Giá trị</th>
+                            <th>Trạng thái</th>
+                            <th>Tình trạng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="overviewAssetTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<div id="asset-stats" class="tab-content">
+<div class="stats-row">
+<div class="card stat-card-single">
+<div class="stat-label-alt">Tổng số tài sản</div>
+<div class="stat-value-alt" id="totalAssets">0</div>
+</div>
+<div class="card stat-card-single">
+<div class="stat-label-alt">Tổng giá trị</div>
+<div class="stat-value-alt" id="totalValue">0₫</div>
+</div>
+<div class="card stat-card-single">
+<div class="stat-label-alt">Giá trị sổ sách</div>
+<div class="stat-value-alt" id="bookValue">0₫</div>
+</div>
+</div>
+<div class="charts-row">
+<div class="card chart-card-compact">
+<div class="chart-card-title">📊 Quy Trình Mua Hàng (Funnel)</div>
+<div class="chart-canvas-wrapper-compact"><canvas id="statusChart"></canvas></div>
+</div>
+<div class="card chart-card-compact">
+<div class="chart-card-title">📦 Phân Bố Theo Loại Tài Sản</div>
+<div class="chart-canvas-wrapper-compact"><canvas id="categoryChart"></canvas></div>
+</div>
+<div class="card chart-card-compact">
+<div class="chart-card-title">📊 Số Lượng & Chi Phí Tài Sản Theo Thời Gian</div>
+<div class="chart-canvas-wrapper-compact"><canvas id="combinedChart"></canvas></div>
+</div>
+</div>
+<div class="asset-table-container">
+<div class="asset-table-header">
+<div class="asset-table-title">📋 Danh Sách Chi Tiết Tài Sản</div>
+<div class="asset-search-box"><input type="text" id="searchAssetInput" placeholder="Tìm kiếm tài sản..." onkeyup="filterAssetTable()"></div>
+</div>
+<table><thead><tr><th>Mã tài sản</th><th>Tên tài sản</th><th>Loại</th><th>Số lượng</th><th>Trạng thái</th><th>Giá mua</th><th>Giá trị sổ sách</th><th style="white-space:nowrap;">⚠ Linh kiện</th><th>Chi tiết</th></tr></thead><tbody id="assetStatsTableBody"></tbody></table>
+</div>
+</div>
+<div id="assetChartModal" class="chart-modal">
+<div class="chart-modal-content">
+<div class="chart-modal-header">
+<div class="chart-modal-title" id="assetModalTitle">Chi Tiết Tài Sản</div>
+<span class="chart-modal-close" onclick="closeAssetModal()">&times;</span>
+</div>
+<div class="chart-modal-body">
+<div class="asset-info-grid" id="assetModalInfoGrid"></div>
+<div id="assetModalTables" style="margin-bottom:28px;"></div>
+<div class="modal-charts-container">
+<div class="modal-chart-wrapper"><div class="modal-chart-title">Số Lượng Theo Thời Gian</div><canvas id="assetQuantityChart"></canvas></div>
+<div class="modal-chart-wrapper"><div class="modal-chart-title">Đơn Giá Theo Thời Gian</div><canvas id="assetPriceChart"></canvas></div>
+<div class="modal-chart-wrapper"><div class="modal-chart-title">📦 Tiến Độ Đơn Hàng</div><canvas id="orderProgressChart"></canvas></div>
+</div>
+</div>
+</div>
+</div>
+    <div id="vpp" class="tab-content">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Tổng số mặt hàng VPP</div>
+                <div class="card-value">485</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Chi phí tháng này</div>
+                <div class="card-value">42.5M₫</div>
+                <div class="card-change positive">▲ +8.3%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Vượt định mức</div>
+                <div class="card-value" style="-webkit-text-fill-color: #f87171;">8</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Tỷ lệ sử dụng</div>
+                <div class="card-value" style="font-size: 24px;">87.3%</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Chi phí VPP: Thực tế vs Kế hoạch</div>
+            <div class="chart-container chart-large">
+                <canvas id="vppCostTimeChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Chi phí theo phòng ban</div>
+                <div class="chart-container">
+                    <canvas id="vppDeptCostChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Cơ cấu theo nhóm VPP</div>
+                <div class="chart-container">
+                    <canvas id="vppGroupChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Top 10 VPP sử dụng nhiều nhất</div>
+                <div class="chart-container">
+                    <canvas id="vppTop10Chart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Heatmap: Định mức VPP</div>
+                <div class="heatmap-legend">
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#bbf7d0,#4ade80);"></div><span>Tốt (≥70%)</span></div>
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fef08a,#fbbf24);"></div><span>Trung bình (40-70%)</span></div>
+                    <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fecdd3,#f87171);"></div><span>Kém (<40%)</span></div>
+                </div>
+                <div id="heatmapVPP"></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Bảng kê chi tiết VPP</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên VPP</th>
+                            <th>Nhóm</th>
+                            <th>Đơn vị</th>
+                            <th>Chu kỳ</th>
+                            <th>Định mức</th>
+                            <th>Đã cấp</th>
+                            <th>Tỷ lệ</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vppDetailTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="equipment" class="tab-content">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Tổng số thiết bị</div>
+                <div class="card-value">760</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Chi phí tháng này</div>
+                <div class="card-value">242M₫</div>
+                <div class="card-change positive">▲ +15.2%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Đang hoạt động</div>
+                <div class="card-value" style="-webkit-text-fill-color: #4ade80;">687</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Cần bảo dưỡng</div>
+                <div class="card-value" style="-webkit-text-fill-color: #fbbf24;">47</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Hỏng hóc</div>
+                <div class="card-value" style="-webkit-text-fill-color: #f87171;">16</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Chi phí thiết bị: Thực tế vs Kế hoạch</div>
+            <div class="chart-container chart-large">
+                <canvas id="equipCostTimeChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Cơ cấu chi phí</div>
+                <div class="chart-container">
+                    <canvas id="equipCostStructureChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Phân loại thiết bị</div>
+                <div class="chart-container">
+                    <canvas id="equipCategoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Heatmap: Phòng ban × Tình trạng Thiết bị</div>
+            <div class="heatmap-legend">
+                <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#bbf7d0,#4ade80);"></div><span>Tốt (≥70%)</span></div>
+                <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fef08a,#fbbf24);"></div><span>Trung bình (40-70%)</span></div>
+                <div class="legend-item"><div class="legend-box" style="background: linear-gradient(135deg,#fecdd3,#f87171);"></div><span>Kém (<40%)</span></div>
+            </div>
+            <div id="heatmapEquip"></div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Bảng kê chi tiết thiết bị</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã TB</th>
+                            <th>Tên thiết bị</th>
+                            <th>Loại</th>
+                            <th>Phòng ban</th>
+                            <th>Ngày mua</th>
+                            <th>Giá trị</th>
+                            <th>Trạng thái</th>
+                            <th>Tình trạng</th>
+                            <th>Bảo dưỡng cuối</th>
+                            <th>Bảo dưỡng tiếp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipDetailTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="proposal" class="tab-content">
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-label">Tổng số đề xuất</div>
+                <div class="card-value">127</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Tổng chi phí đề xuất</div>
+                <div class="card-value">458M₫</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Đã duyệt</div>
+                <div class="card-value" style="-webkit-text-fill-color: #4ade80;">89</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Chờ duyệt</div>
+                <div class="card-value" style="-webkit-text-fill-color: #fbbf24;">28</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Vượt hạn mức</div>
+                <div class="card-value" style="-webkit-text-fill-color: #f87171;">10</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Theo dõi Số lượng & Chi phí Đề xuất</div>
+            <div class="chart-container chart-large">
+                <canvas id="proposalTimeChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="grid-2">
+            <div class="section">
+                <div class="section-title">Đề xuất theo phòng ban (Số lượng & Chi phí)</div>
+                <div class="chart-container">
+                    <canvas id="proposalDeptChart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Trạng thái đề xuất</div>
+                <div class="chart-container">
+                    <canvas id="proposalStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Chi tiết tài sản phòng ban (Ngân sách vs Thực tế)</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phòng ban</th>
+                            <th>Ngân sách</th>
+                            <th>Thực tế</th>
+                            <th>Chênh lệch</th>
+                            <th>Tỷ lệ sử dụng</th>
+                            <th>Số đề xuất</th>
+                            <th>Vượt hạn mức</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proposalDeptDetailTable"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Bảng kê các đề xuất (⚠️ Cảnh báo vượt hạn mức)</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã đề xuất</th>
+                            <th>Ngày tạo</th>
+                            <th>Phòng ban</th>
+                            <th>Loại</th>
+                            <th>Mô tả</th>
+                            <th>Chi phí dự kiến</th>
+                            <th>Mức cho phép</th>
+                            <th>Trạng thái</th>
+                            <th>Cảnh báo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proposalDetailTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRA CỨU TÀI SẢN -->
+    <div id="lookup" class="tab-content">
+
+        <!-- BỘ LỌC -->
+        <div class="section" style="margin-bottom:16px;">
+            <div class="section-title">Bộ lọc tra cứu</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end;">
+                <div>
+                    <label class="filter-label">Nhân viên / Mã NV</label>
+                    <input id="lk-emp" class="filter-input" type="text" placeholder="Tìm tên hoặc mã NV…" oninput="lookupFilter()">
+                </div>
+                <div>
+                    <label class="filter-label">Phòng ban</label>
+                    <select id="lk-dept" class="filter-input" onchange="lookupFilter()">
+                        <option value="">-- Tất cả --</option>
+                        <option>Ban Xây dựng</option>
+                        <option>Ban TC-KH</option>
+                        <option>Ban Đầu tư</option>
+                        <option>Văn phòng</option>
+                        <option>Ban PTNL</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="filter-label">Loại tài sản</label>
+                    <select id="lk-type" class="filter-input" onchange="lookupFilter()">
+                        <option value="">-- Tất cả --</option>
+                        <option>Máy tính</option>
+                        <option>Màn hình</option>
+                        <option>Điện thoại</option>
+                        <option>Điều hòa</option>
+                        <option>Máy in</option>
+                        <option>Nội thất</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="filter-label">Trạng thái</label>
+                    <select id="lk-status" class="filter-input" onchange="lookupFilter()">
+                        <option value="">-- Tất cả --</option>
+                        <option>Đang sử dụng</option>
+                        <option>Khả dụng</option>
+                        <option>Hỏng</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="filter-label">Từ ngày</label>
+                    <input id="lk-from" class="filter-input" type="date" onchange="lookupFilter()">
+                </div>
+                <div>
+                    <label class="filter-label">Đến ngày</label>
+                    <input id="lk-to" class="filter-input" type="date" onchange="lookupFilter()">
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="filter-btn" onclick="lookupFilter()">🔍 Tìm kiếm</button>
+                    <button class="filter-btn filter-btn-reset" onclick="lookupReset()">↺ Xóa lọc</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- THÔNG TIN NHÂN VIÊN -->
+        <div id="lk-emp-card" class="section" style="display:none;margin-bottom:16px;">
+            <div class="section-title">Thông tin nhân viên</div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:0 24px;align-items:start;">
+                <div style="grid-row:1/5;width:72px;height:72px;border-radius:50%;background:#0D2240;border:3px solid #B8872C;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;">👤</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px 20px;">
+                    <div><span class="emp-lbl">Họ tên</span><span id="ei-name" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Mã NV</span><span id="ei-code" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Phòng ban</span><span id="ei-dept" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Chức vụ</span><span id="ei-title" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Email</span><span id="ei-email" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Điện thoại</span><span id="ei-phone" class="emp-val"></span></div>
+                    <div><span class="emp-lbl">Tổng tài sản đang dùng</span><span id="ei-total" class="emp-val" style="color:#1e4a82;font-weight:800;"></span></div>
+                    <div><span class="emp-lbl">Tổng giá trị</span><span id="ei-value" class="emp-val" style="color:#1e4a82;font-weight:800;"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BẢNG KÊ KHAI CHI TIẾT -->
+        <div class="section">
+            <div class="section-title">Bảng kê khai tài sản chi tiết</div>
+            <div style="margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <span id="lk-count" style="font-size:12px;color:#97a8be;"></span>
+                <button class="filter-btn" onclick="exportLookupCSV()" style="font-size:11px;">⬇ Xuất CSV</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Mã TS</th>
+                            <th>Tài sản</th>
+                            <th>Người sử dụng</th>
+                            <th>Loại tài sản</th>
+                            <th>Nhà cung cấp</th>
+                            <th>Ngày mua</th>
+                            <th>Trạng thái</th>
+                            <th>Giá mua</th>
+                            <th>Giá trị sổ sách</th>
+                            <th>Hồ sơ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lookupTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script>
+
+function showTab(evt, tabName) {
+    document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-button').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById(tabName).classList.add('active');
+    evt.currentTarget.classList.add('active');
+}
+
+function getHeatmapCellMinSize(columnCount) {
+    if (columnCount <= 3) return 64;
+    if (columnCount === 4) return 56;
+    if (columnCount <= 6) return 48;
+    return 40;
+}
+
+function generateHeatmap(containerId, data) {
+    var container = document.getElementById(containerId);
+    var departments = Object.keys(data);
+    var categories = Object.keys(data[departments[0]]);
+    var cellMinSize = getHeatmapCellMinSize(categories.length);
+    
+    var html = '<div class="heatmap-wrapper"><div class="heatmap-grid" style="--heatmap-cols: ' + categories.length + '; --heatmap-cell-size: ' + cellMinSize + 'px; --heatmap-cell-height: 38px;">';
+    
+    // Header row
+    html += '<div class="heatmap-row">';
+    html += '<div class="heatmap-label"></div>';
+    categories.forEach(function(cat) {
+        html += '<div class="heatmap-label">' + cat + '</div>';
+    });
+    html += '</div>';
+    
+    // Data rows
+    departments.forEach(function(dept) {
+        html += '<div class="heatmap-row">';
+        html += '<div class="heatmap-label">' + dept + '</div>';
+        categories.forEach(function(cat) {
+            var value = data[dept][cat];
+            var color;
+            // 3 màu gradient
+            if (value >= 70) {
+                color = 'linear-gradient(135deg, #bbf7d0 0%, #4ade80 100%)';
+            } else if (value >= 40) {
+                color = 'linear-gradient(135deg, #fef08a 0%, #fbbf24 100%)';
+            } else {
+                color = 'linear-gradient(135deg, #fecdd3 0%, #f87171 100%)';
+            }
+            html += '<div class="heatmap-cell" style="background: ' + color + '; color: #111827;">' + value + '%</div>';
+        });
+        html += '</div>';
+    });
+    
+    html += '</div></div>';
+    container.innerHTML = html;
+}
+
+var monthData = ['T5/23', 'T6/23', 'T7/23', 'T8/23', 'T9/23', 'T10/23', 'T11/23', 'T12/23', 'T1/24', 'T2/24', 'T3/24', 'T4/24'];
+var depts = ['Ban XD', 'Ban TC-KH', 'Ban ĐT', 'VP', 'Ban PTNL'];
+
+Chart.defaults.font.family = "'Be Vietnam Pro', 'Sora', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#4a5a72';
+
+// Palette v2 – Navy · Gold · Green (matching vinaconex_report_v2)
+var colors = {
+    primary: '#2d6cc0',      // Navy soft
+    primaryLight: 'rgba(30,74,130,0.78)',
+    success: '#2a9162',      // Green
+    successLight: 'rgba(27,110,72,0.78)',
+    warning: '#d4a84b',      // Gold
+    warningLight: 'rgba(184,135,44,0.12)',
+    danger: '#d44040',       // Red
+    dangerLight: 'rgba(176,32,32,0.78)',
+    info: '#2d6cc0',         // Navy
+    infoLight: 'rgba(30,74,130,0.78)',
+    navy: '#0D2240',
+    navyLight: '#edf1f9',
+    gold: '#d4a84b',
+    goldLight: '#f7edda',
+    gray: '#94a3b8'
+};
+
+// Plugin để highlight vượt kế hoạch
+var highlightOverBudget = {
+    id: 'highlightOverBudget',
+    afterDatasetsDraw: function(chart) {
+        if (!chart.options.plugins.highlightOver) return;
+        var ctx = chart.ctx;
+        var meta = chart.getDatasetMeta(0);
+        var planData = chart.data.datasets[1].data;
+        
+        meta.data.forEach(function(bar, index) {
+            var actualValue = chart.data.datasets[0].data[index];
+            var planValue = planData[index];
+            if (actualValue > planValue) {
+                ctx.save();
+                ctx.strokeStyle = '#f87171';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(bar.x - bar.width/2, bar.y, bar.width, bar.height);
+                ctx.restore();
+            }
+        });
+    }
+};
+
+Chart.register(highlightOverBudget);
+
+// TỔNG QUAN - Chi phí với highlight
+var actualData = [245, 258, 272, 265, 289, 305, 298, 287, 315, 292, 278, 285];
+var planData = [250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360];
+
+new Chart(document.getElementById('actualVsPlanChart'), {
+    type: 'bar',
+    data: {
+        labels: monthData,
+        datasets: [{
+            label: 'Kế hoạch',
+            data: planData,
+            type: 'line',
+            borderColor: 'rgba(184,135,44,0.9)',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 3,
+            pointBackgroundColor: '#d4a84b',
+            tension: 0.4,
+            order: 1
+        }, {
+            label: 'Thực tế',
+            data: actualData,
+            backgroundColor: actualData.map(function(val, i) {
+                return val > planData[i] ? 'rgba(176,32,32,0.82)' : 'rgba(30,74,130,0.82)';
+            }),
+            borderColor: actualData.map(function(val, i) {
+                return val > planData[i] ? '#d44040' : '#2d6cc0';
+            }),
+            borderWidth: 2,
+            borderRadius: 6,
+            order: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    padding: 12,
+                    font: { size: 11, weight: '600' },
+                    usePointStyle: true
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(context) {
+                        if (context.datasetIndex === 1) {
+                            var actual = context.parsed.y;
+                            var plan = planData[context.dataIndex];
+                            if (actual > plan) {
+                                return '⚠️ Vượt ' + (actual - plan).toFixed(0) + 'M₫';
+                            }
+                        }
+                        return '';
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: '#edf1f9' },
+                ticks: { callback: function(v) { return v + 'M₫'; } }
+            },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+new Chart(document.getElementById('costRatioChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Công cụ dụng cụ', 'Thiết bị CNTT', 'Khác'],
+        datasets: [{
+            data: [485, 312, 103],
+            backgroundColor: ['rgba(30,74,130,0.82)', 'rgba(74,144,212,0.82)', 'rgba(184,135,44,0.82)'],
+            borderColor: ['#2d6cc0', '#6aaee0', '#d4a84b'],
+            borderWidth: 2,
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+            tooltip: { callbacks: { label: function(c){ return ' ' + c.parsed.x + ' mục'; } } }
+        },
+        scales: {
+            x: { grid: { color: '#edf1f9' }, ticks: { font: { size: 10 } } },
+            y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+    }
+});
+
+new Chart(document.getElementById('conditionChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Tốt', 'Bình thường', 'Cần sửa', 'Hỏng'],
+        datasets: [{
+            data: [687, 333, 125, 100],
+            backgroundColor: ['#2a9162', '#6aaee0', '#d4a84b', '#d44040'],
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } }
+        }
+    }
+});
+
+generateHeatmap('heatmapOverview', {
+    'Ban Xây dựng': { 'CCDC': 82, 'CNTT': 75, 'Nội thất': 88 },
+    'Ban TC-KH': { 'CCDC': 91, 'CNTT': 85, 'Nội thất': 78 },
+    'Ban Đầu tư': { 'CCDC': 76, 'CNTT': 92, 'Nội thất': 85 },
+    'Văn phòng': { 'CCDC': 88, 'CNTT': 90, 'Nội thất': 82 },
+    'Ban PTNL': { 'CCDC': 79, 'CNTT': 68, 'Nội thất': 75 }
+});
+
+var deptAssetData = [
+    { dept: 'Ban Xây dựng', ccdc: 185, ccdcActive: 152, cntt: 78, cnttActive: 68 },
+    { dept: 'Ban TC-KH', ccdc: 142, ccdcActive: 129, cntt: 65, cnttActive: 58 },
+    { dept: 'Ban Đầu tư', ccdc: 98, ccdcActive: 75, cntt: 52, cnttActive: 48 },
+    { dept: 'Văn phòng', ccdc: 87, ccdcActive: 76, cntt: 42, cnttActive: 39 },
+    { dept: 'Ban PTNL', ccdc: 76, ccdcActive: 60, cntt: 31, cnttActive: 21 }
+];
+
+function rateCell(rate) {
+    var bg, color;
+    if (rate >= 80) { bg = '#bbf7d0'; color = '#14532d'; }
+    else if (rate >= 60) { bg = '#fef08a'; color = '#78350f'; }
+    else { bg = '#fecdd3'; color = '#9f1239'; }
+    return '<td style="background:' + bg + ';color:' + color + ';font-weight:700;border-radius:6px;text-align:center;padding:5px 8px;">' + rate + '%</td>';
+}
+
+document.getElementById('deptAssetTable').innerHTML = deptAssetData.map(function(row) {
+    var ccdcRate = Math.round((row.ccdcActive / row.ccdc) * 100);
+    var cnttRate = Math.round((row.cnttActive / row.cntt) * 100);
+    return '<tr><td><strong>' + row.dept + '</strong></td><td>' + row.ccdc + '</td><td>' + row.ccdcActive + '</td>' + rateCell(ccdcRate) + '<td>' + row.cntt + '</td><td>' + row.cnttActive + '</td>' + rateCell(cnttRate) + '<td><strong>' + (row.ccdc + row.cntt) + '</strong></td></tr>';
+}).join('');
+
+var assetData = [
+    { id: 'TS0001', name: 'Máy tính Dell Optiplex 7090', type: 'CNTT', dept: 'Ban Xây dựng', date: '15/03/2023', value: 18500000, status: 'Đang sử dụng', condition: 'Tốt' },
+    { id: 'TS0002', name: 'Máy in HP LaserJet Pro', type: 'CNTT', dept: 'Ban TC-KH', date: '22/04/2023', value: 8500000, status: 'Đang sử dụng', condition: 'Tốt' },
+    { id: 'TS0003', name: 'Bàn làm việc gỗ', type: 'CCDC', dept: 'Văn phòng', date: '10/01/2023', value: 4500000, status: 'Đang sử dụng', condition: 'Bình thường' },
+    { id: 'TS0004', name: 'Ghế xoay văn phòng', type: 'CCDC', dept: 'Ban Đầu tư', date: '18/02/2023', value: 2800000, status: 'Đang sử dụng', condition: 'Tốt' },
+    { id: 'TS0005', name: 'Laptop Dell Latitude 5520', type: 'CNTT', dept: 'Ban PTNL', date: '05/05/2023', value: 22000000, status: 'Trong kho', condition: 'Tốt' }
+];
+
+document.getElementById('overviewAssetTableBody').innerHTML = assetData.map(function(asset) {
+    var statusClass = asset.status === 'Đang sử dụng' ? 'success' : 'info';
+    var condClass = asset.condition === 'Tốt' ? 'success' : 'info';
+    return '<tr><td><strong>' + asset.id + '</strong></td><td>' + asset.name + '</td><td>' + asset.type + '</td><td>' + asset.dept + '</td><td>' + asset.date + '</td><td>' + new Intl.NumberFormat('vi-VN').format(asset.value) + '₫</td><td><span class="badge badge-' + statusClass + '">' + asset.status + '</span></td><td><span class="badge badge-' + condClass + '">' + asset.condition + '</span></td></tr>';
+}).join('');
+
+// VĂN PHÒNG PHẨM - Chi phí với kế hoạch
+var vppActual = [35, 38, 42, 39, 45, 48, 43, 41, 47, 42, 38, 42.5];
+var vppPlan = [36, 38, 40, 40, 42, 44, 44, 42, 44, 40, 38, 40];
+
+new Chart(document.getElementById('vppCostTimeChart'), {
+    type: 'bar',
+    data: {
+        labels: monthData,
+        datasets: [{
+            label: 'Kế hoạch',
+            data: vppPlan,
+            type: 'line',
+            borderColor: 'rgba(184,135,44,0.9)',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0,
+            order: 1
+        }, {
+            label: 'Thực tế',
+            data: vppActual,
+            backgroundColor: vppActual.map(function(val, i) {
+                return val > vppPlan[i] ? colors.dangerLight : colors.successLight;
+            }),
+            borderColor: vppActual.map(function(val, i) {
+                return val > vppPlan[i] ? colors.danger : colors.success;
+            }),
+            borderWidth: 2,
+            borderRadius: 6,
+            order: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { padding: 10, font: { size: 11 }, usePointStyle: true } }
+        },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#edf1f9' }, ticks: { callback: function(v) { return v + 'M₫'; } } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+// Chi phí theo phòng ban với highlight vượt
+var deptActual = [12.5, 9.8, 7.2, 6.5, 6.5];
+var deptBudget = [12, 10, 8, 7, 6];
+
+new Chart(document.getElementById('vppDeptCostChart'), {
+    type: 'bar',
+    data: {
+        labels: depts,
+        datasets: [{
+            label: 'Thực tế',
+            data: deptActual,
+            backgroundColor: deptActual.map(function(val, i) {
+                return val > deptBudget[i] ? colors.dangerLight : colors.infoLight;
+            }),
+            borderColor: deptActual.map(function(val, i) {
+                return val > deptBudget[i] ? colors.danger : colors.info;
+            }),
+            borderWidth: 2,
+            borderRadius: 5
+        }, {
+            label: 'Ngân sách',
+            data: deptBudget,
+            backgroundColor: '#e2e8f0',
+            borderColor: '#cbd5e1',
+            borderWidth: 2,
+            borderRadius: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { padding: 10, font: { size: 11 }, usePointStyle: true } },
+            tooltip: {
+                callbacks: {
+                    afterLabel: function(context) {
+                        if (context.datasetIndex === 0) {
+                            var actual = context.parsed.y;
+                            var budget = deptBudget[context.dataIndex];
+                            if (actual > budget) {
+                                return '⚠️ Vượt ' + (actual - budget).toFixed(1) + 'M₫';
+                            }
+                        }
+                        return '';
+                    }
+                }
+            }
+        },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#edf1f9' }, ticks: { callback: function(v) { return v + 'M₫'; } } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+new Chart(document.getElementById('vppGroupChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Giấy in & VP', 'Bút viết', 'Dụng cụ VP', 'File & Lưu trữ', 'Khác'],
+        datasets: [{
+            data: [185, 98, 87, 76, 39],
+            backgroundColor: ['#2d6cc0', '#14b8a6', '#2a9162', '#d4a84b', '#e07828'],
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 10, font: { size: 10 }, usePointStyle: true, pointStyle: 'circle' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('vppTop10Chart'), {
+    type: 'bar',
+    data: {
+        labels: ['Giấy A4', 'Phong bì VCX', 'Bút bi', 'Hộp ghim', 'Giấy A3', 'File tài liệu', 'Bút chì', 'Kẹp cặng', 'Sổ ghi chép', 'Phong bì'],
+        datasets: [{
+            data: [485, 287, 342, 148, 128, 234, 156, 256, 245, 195],
+            backgroundColor: 'rgba(30,74,130,0.8)',
+            borderColor: '#2d6cc0',
+            borderWidth: 2,
+            borderRadius: 5
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { color: '#edf1f9' } },
+            y: { grid: { display: false } }
+        }
+    }
+});
+
+generateHeatmap('heatmapVPP', {
+    'Ban Xây dựng': { 'Giấy in': 105, 'Bút viết': 88, 'Dụng cụ': 92, 'File': 78 },
+    'Ban TC-KH': { 'Giấy in': 95, 'Bút viết': 102, 'Dụng cụ': 85, 'File': 88 },
+    'Ban Đầu tư': { 'Giấy in': 82, 'Bút viết': 75, 'Dụng cụ': 79, 'File': 85 },
+    'Văn phòng': { 'Giấy in': 78, 'Bút viết': 82, 'Dụng cụ': 75, 'File': 80 },
+    'Ban PTNL': { 'Giấy in': 72, 'Bút viết': 68, 'Dụng cụ': 70, 'File': 75 }
+});
+
+var vppData = [
+    { stt: 1, name: 'Giấy in A4', group: 'Giấy in & VP', unit: 'ram', cycle: 'Theo tháng', quota: 2, used: 485, price: 45000 },
+    { stt: 2, name: 'Bút bi', group: 'Bút viết', unit: 'chiếc', cycle: 'Theo tháng', quota: 1, used: 342, price: 3000 },
+    { stt: 3, name: 'Phong bì Vinaconex', group: 'Dụng cụ VP', unit: 'cái', cycle: 'Theo tháng', quota: 50, used: 2850, price: 500 },
+    { stt: 4, name: 'Hộp ghim vòng', group: 'Dụng cụ VP', unit: 'hộp', cycle: 'Theo tháng', quota: 1, used: 148, price: 12000 },
+    { stt: 5, name: 'File tài liệu', group: 'File & Lưu trữ', unit: 'cái', cycle: 'Theo quý', quota: 1, used: 234, price: 8000 }
+];
+
+document.getElementById('vppDetailTableBody').innerHTML = vppData.map(function(item) {
+    var ratio = Math.round((item.used / (item.quota * 148)) * 100);
+    var statusClass = ratio > 100 ? 'danger' : ratio > 85 ? 'warning' : 'success';
+    var statusText = ratio > 100 ? 'Vượt mức' : ratio > 85 ? 'Cảnh báo' : 'Bình thường';
+    return '<tr><td>' + item.stt + '</td><td><strong>' + item.name + '</strong></td><td>' + item.group + '</td><td>' + item.unit + '</td><td>' + item.cycle + '</td><td>' + item.quota + '</td><td>' + item.used + '</td><td>' + ratio + '%</td><td>' + new Intl.NumberFormat('vi-VN').format(item.price) + '₫</td><td><strong>' + new Intl.NumberFormat('vi-VN').format(item.used * item.price) + '₫</strong></td><td><span class="badge badge-' + statusClass + '">' + statusText + '</span></td></tr>';
+}).join('');
+
+// THIẾT BỊ - Chi phí với kế hoạch
+var equipActual = [210, 220, 230, 226, 244, 257, 255, 246, 268, 250, 240, 242];
+var equipPlan = [215, 220, 225, 230, 235, 240, 245, 250, 255, 260, 265, 270];
+
+new Chart(document.getElementById('equipCostTimeChart'), {
+    type: 'bar',
+    data: {
+        labels: monthData,
+        datasets: [{
+            label: 'Kế hoạch',
+            data: equipPlan,
+            type: 'line',
+            borderColor: 'rgba(184,135,44,0.9)',
+            borderDash: [5, 5],
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0,
+            order: 1
+        }, {
+            label: 'Thực tế',
+            data: equipActual,
+            backgroundColor: equipActual.map(function(val, i) {
+                return val > equipPlan[i] ? colors.dangerLight : colors.successLight;
+            }),
+            borderColor: equipActual.map(function(val, i) {
+                return val > equipPlan[i] ? colors.danger : colors.success;
+            }),
+            borderWidth: 2,
+            borderRadius: 6,
+            order: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { padding: 10, font: { size: 11 }, usePointStyle: true } }
+        },
+        scales: {
+            y: { beginAtZero: true, grid: { color: '#edf1f9' }, ticks: { callback: function(v) { return v + 'M₫'; } } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+new Chart(document.getElementById('equipCostStructureChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Mua mới', 'Bảo dưỡng', 'Sửa chữa', 'Thanh lý'],
+        datasets: [{
+            data: [152, 58, 25, 7],
+            backgroundColor: ['#2d6cc0', '#6aaee0', '#d4a84b', '#d44040'],
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } }
+        }
+    }
+});
+
+new Chart(document.getElementById('equipCategoryChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Máy tính & Laptop', 'Máy in', 'Thiết bị VP', 'Nội thất', 'Khác'],
+        datasets: [{
+            data: [312, 89, 124, 178, 57],
+            backgroundColor: ['rgba(30,74,130,0.82)', 'rgba(74,144,212,0.82)', 'rgba(27,110,72,0.82)', 'rgba(184,135,44,0.82)', 'rgba(192,90,16,0.82)'],
+            borderColor: ['#2d6cc0', '#6aaee0', '#2a9162', '#d4a84b', '#e07828'],
+            borderWidth: 2,
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false },
+            tooltip: { callbacks: { label: function(c){ return ' ' + c.parsed.x + ' thiết bị'; } } }
+        },
+        scales: {
+            x: { grid: { color: '#edf1f9' }, ticks: { font: { size: 10 } } },
+            y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+    }
+});
+
+generateHeatmap('heatmapEquip', {
+    'Ban Xây dựng': { 'Máy tính': 85, 'Máy in': 78, 'TB VP': 82, 'Nội thất': 90 },
+    'Ban TC-KH': { 'Máy tính': 92, 'Máy in': 88, 'TB VP': 85, 'Nội thất': 88 },
+    'Ban Đầu tư': { 'Máy tính': 88, 'Máy in': 75, 'TB VP': 80, 'Nội thất': 85 },
+    'Văn phòng': { 'Máy tính': 90, 'Máy in': 92, 'TB VP': 88, 'Nội thất': 92 },
+    'Ban PTNL': { 'Máy tính': 75, 'Máy in': 68, 'TB VP': 70, 'Nội thất': 78 }
+});
+
+var equipData = [
+    { id: 'TB0001', name: 'Dell Optiplex 7090', type: 'Máy tính', dept: 'Ban Xây dựng', date: '15/03/2023', value: 18500000, status: 'Đang hoạt động', condition: 'Tốt', lastMaint: '15/01/2024', nextMaint: '15/04/2024' },
+    { id: 'TB0002', name: 'HP LaserJet Pro', type: 'Máy in', dept: 'Ban TC-KH', date: '22/04/2023', value: 8500000, status: 'Đang hoạt động', condition: 'Tốt', lastMaint: '22/02/2024', nextMaint: '22/05/2024' },
+    { id: 'TB0003', name: 'Bàn làm việc', type: 'Nội thất', dept: 'Văn phòng', date: '10/01/2023', value: 4500000, status: 'Đang hoạt động', condition: 'Bình thường', lastMaint: '10/12/2023', nextMaint: '10/06/2024' },
+    { id: 'TB0004', name: 'Máy photocopy Ricoh', type: 'Máy in', dept: 'Ban Đầu tư', date: '18/02/2023', value: 25000000, status: 'Bảo dưỡng', condition: 'Cần sửa', lastMaint: '18/03/2024', nextMaint: '18/04/2024' },
+    { id: 'TB0005', name: 'Laptop Dell', type: 'Máy tính', dept: 'Ban PTNL', date: '05/05/2023', value: 22000000, status: 'Đang hoạt động', condition: 'Tốt', lastMaint: '05/02/2024', nextMaint: '05/05/2024' }
+];
+
+document.getElementById('equipDetailTableBody').innerHTML = equipData.map(function(equip) {
+    var statusClass = equip.status === 'Đang hoạt động' ? 'success' : 'warning';
+    var condClass = equip.condition === 'Tốt' ? 'success' : equip.condition === 'Bình thường' ? 'info' : 'warning';
+    return '<tr><td><strong>' + equip.id + '</strong></td><td>' + equip.name + '</td><td>' + equip.type + '</td><td>' + equip.dept + '</td><td>' + equip.date + '</td><td>' + new Intl.NumberFormat('vi-VN').format(equip.value) + '₫</td><td><span class="badge badge-' + statusClass + '">' + equip.status + '</span></td><td><span class="badge badge-' + condClass + '">' + equip.condition + '</span></td><td>' + equip.lastMaint + '</td><td>' + equip.nextMaint + '</td></tr>';
+}).join('');
+
+// ĐỀ XUẤT
+new Chart(document.getElementById('proposalTimeChart'), {
+    type: 'bar',
+    data: {
+        labels: monthData,
+        datasets: [{
+            label: 'Chi phí (M₫)',
+            data: [125, 145, 138, 115, 132, 168, 142, 135, 152, 138, 128, 142],
+            type: 'line',
+            borderColor: colors.warning,
+            backgroundColor: 'rgba(184,135,44,0.08)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 3,
+            pointRadius: 4,
+            yAxisID: 'y1',
+            order: 1
+        }, {
+            label: 'Số lượng',
+            data: [45, 52, 48, 38, 42, 58, 43, 41, 47, 42, 38, 42],
+            backgroundColor: colors.primaryLight,
+            borderColor: colors.primary,
+            borderWidth: 2,
+            borderRadius: 6,
+            yAxisID: 'y',
+            order: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { padding: 10, font: { size: 11 }, usePointStyle: true } }
+        },
+        scales: {
+            y: { type: 'linear', position: 'left', beginAtZero: true, grid: { color: '#edf1f9' } },
+            y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { display: false } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+// Đề xuất theo phòng ban với LINE CHI PHÍ
+new Chart(document.getElementById('proposalDeptChart'), {
+    type: 'bar',
+    data: {
+        labels: depts,
+        datasets: [{
+            label: 'Chi phí (M₫)',
+            data: [102.5, 68, 71, 52, 48],
+            type: 'line',
+            borderColor: colors.warning,
+            backgroundColor: 'rgba(184,135,44,0.12)',
+            fill: true,
+            tension: 0.3,
+            borderWidth: 4,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            pointBackgroundColor: colors.warningLight,
+            pointBorderColor: colors.warning,
+            pointBorderWidth: 3,
+            pointHoverBackgroundColor: colors.warningLight,
+            pointHoverBorderColor: colors.warning,
+            yAxisID: 'y1',
+            order: 1
+        }, {
+            label: 'Số lượng đề xuất',
+            data: [35, 28, 22, 25, 17],
+            backgroundColor: colors.successLight,
+            borderColor: colors.success,
+            borderWidth: 2,
+            borderRadius: 6,
+            yAxisID: 'y',
+            order: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'top', labels: { padding: 10, font: { size: 11, weight: 'bold' }, usePointStyle: true } }
+        },
+        scales: {
+            y: { type: 'linear', position: 'left', beginAtZero: true, grid: { color: '#edf1f9' }, title: { display: true, text: 'Số lượng', font: { size: 11, weight: 'bold' } } },
+            y1: { type: 'linear', position: 'right', beginAtZero: true, grid: { display: false }, title: { display: true, text: 'Chi phí (M₫)', font: { size: 11, weight: 'bold' }, color: colors.warning } },
+            x: { grid: { display: false } }
+        }
+    }
+});
+
+new Chart(document.getElementById('proposalStatusChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Đã duyệt', 'Chờ duyệt', 'Từ chối'],
+        datasets: [{
+            data: [89, 28, 10],
+            backgroundColor: ['#2a9162', '#d4a84b', '#d44040'],
+            borderWidth: 2,
+            borderColor: '#fff',
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } }
+        }
+    }
+});
+
+var proposalDeptData = [
+    { dept: 'Ban Xây dựng', budget: 95000000, actual: 102500000, proposals: 35, over: 3 },
+    { dept: 'Ban TC-KH', budget: 75000000, actual: 68000000, proposals: 28, over: 2 },
+    { dept: 'Ban Đầu tư', budget: 65000000, actual: 71000000, proposals: 22, over: 2 },
+    { dept: 'Văn phòng', budget: 55000000, actual: 52000000, proposals: 25, over: 1 },
+    { dept: 'Ban PTNL', budget: 45000000, actual: 48000000, proposals: 17, over: 2 }
+];
+
+document.getElementById('proposalDeptDetailTable').innerHTML = proposalDeptData.map(function(row) {
+    var diff = row.actual - row.budget;
+    var ratio = Math.round((row.actual / row.budget) * 100);
+    var statusClass = ratio > 100 ? 'danger' : ratio > 90 ? 'warning' : 'success';
+    var statusText = ratio > 100 ? 'Vượt ngân sách' : ratio > 90 ? 'Gần hết' : 'Trong mức';
+    return '<tr><td><strong>' + row.dept + '</strong></td><td>' + new Intl.NumberFormat('vi-VN').format(row.budget) + '₫</td><td>' + new Intl.NumberFormat('vi-VN').format(row.actual) + '₫</td><td style="color: ' + (diff > 0 ? '#f87171' : '#4ade80') + '; font-weight: 700;"><strong>' + (diff > 0 ? '+' : '') + new Intl.NumberFormat('vi-VN').format(diff) + '₫</strong></td><td>' + ratio + '%</td><td>' + row.proposals + '</td><td>' + (row.over > 0 ? '<span class="badge badge-danger">' + row.over + '</span>' : '-') + '</td><td><span class="badge badge-' + statusClass + '">' + statusText + '</span></td></tr>';
+}).join('');
+
+var proposalData = [
+    { id: 'DX0001', date: '12/04/2024', dept: 'Ban Xây dựng', type: 'Mua sắm mới', desc: 'Mua 5 máy tính mới', cost: 92500000, limit: 80000000, status: 'Chờ duyệt' },
+    { id: 'DX0002', date: '11/04/2024', dept: 'Ban TC-KH', type: 'Bảo dưỡng', desc: 'Bảo dưỡng máy photocopy', cost: 3500000, limit: 5000000, status: 'Đã duyệt' },
+    { id: 'DX0003', date: '10/04/2024', dept: 'Ban Đầu tư', type: 'Sửa chữa', desc: 'Sửa máy in bị hỏng', cost: 4200000, limit: 4000000, status: 'Chờ duyệt' },
+    { id: 'DX0004', date: '09/04/2024', dept: 'Văn phòng', type: 'Mua sắm mới', desc: 'Mua bàn ghế văn phòng', cost: 15000000, limit: 20000000, status: 'Đã duyệt' },
+    { id: 'DX0005', date: '08/04/2024', dept: 'Ban PTNL', type: 'Thay thế', desc: 'Thay laptop cũ', cost: 28000000, limit: 25000000, status: 'Chờ duyệt' }
+];
+
+document.getElementById('proposalDetailTableBody').innerHTML = proposalData.map(function(prop) {
+    var statusClass = prop.status === 'Đã duyệt' ? 'success' : 'warning';
+    var overLimit = prop.cost > prop.limit;
+    return '<tr><td><strong>' + prop.id + '</strong></td><td>' + prop.date + '</td><td>' + prop.dept + '</td><td>' + prop.type + '</td><td>' + prop.desc + '</td><td>' + new Intl.NumberFormat('vi-VN').format(prop.cost) + '₫</td><td>' + new Intl.NumberFormat('vi-VN').format(prop.limit) + '₫</td><td><span class="badge badge-' + statusClass + '">' + prop.status + '</span></td><td>' + (overLimit ? '<span class="badge badge-danger">⚠️ Vượt mức</span>' : '-') + '</td></tr>';
+}).join('');
+
+
+/* ===================== TRA CỨU TÀI SẢN ===================== */
+var employeeDB = [
+    { code:'NV001', name:'Nguyễn Văn An',   dept:'Ban Xây dựng', title:'Trưởng ban',        email:'an.nv@vinaconex.com.vn',     phone:'0912 345 678' },
+    { code:'NV002', name:'Trần Thị Bích',   dept:'Ban TC-KH',    title:'Kế toán trưởng',    email:'bich.tt@vinaconex.com.vn',   phone:'0912 456 789' },
+    { code:'NV003', name:'Lê Minh Chính',   dept:'Ban Đầu tư',   title:'Chuyên viên ĐT',    email:'chinh.lm@vinaconex.com.vn',  phone:'0912 567 890' },
+    { code:'NV004', name:'Phạm Thị Dung',   dept:'Văn phòng',    title:'Thư ký VP',         email:'dung.pt@vinaconex.com.vn',   phone:'0912 678 901' },
+    { code:'NV005', name:'Hoàng Văn Em',    dept:'Ban PTNL',     title:'Chuyên viên PTNL',  email:'em.hv@vinaconex.com.vn',     phone:'0912 789 012' },
+    { code:'NV006', name:'Thanh Thảo',      dept:'Văn phòng',    title:'Nhân viên VP',      email:'thao.th@vinaconex.com.vn',   phone:'0912 890 123' },
+    { code:'NV007', name:'Base Demo',       dept:'Ban Xây dựng', title:'Kỹ sư xây dựng',   email:'demo@vinaconex.com.vn',      phone:'0912 901 234' }
+];
+
+var assetDB = [
+    { id:'MT-02374918', name:'Dell U3123EU',             user:'NV007', type:'Máy tính',  supplier:'--',             loc:'Kho Hà Nội',    date:'2026-04-01', status:'AVAILABLE', price:0,           book:0,          doc:'HS-2026-001' },
+    { id:'MM-02375856', name:'Dell U3223QE',             user:'NV007', type:'Màn hình',  supplier:'--',             loc:'Kho Hà Nội',    date:'1970-01-01', status:'IN USE',     price:0,           book:0,          doc:'HS-2024-012' },
+    { id:'MM-02375857', name:'Dell U2724DE',             user:'NV007', type:'Màn hình',  supplier:'--',             loc:'Kho Hà Nội',    date:'1970-01-01', status:'AVAILABLE', price:0,           book:0,          doc:'HS-2024-013' },
+    { id:'MT-02374856', name:'Apple Macbook Max 14"-36GB', user:'NV007', type:'Máy tính', supplier:'--',            loc:'Kho Hà Nội',    date:'2025-04-25', status:'IN USE',     price:0,           book:0,          doc:'HS-2025-040' },
+    { id:'MT011',       name:'Máy tính Dell Bạc',        user:'NV007', type:'Máy tính',  supplier:'Linh kiện điện tử', loc:'Kho tổng',   date:'2025-11-18', status:'IN USE',     price:20000000,    book:10000000,   doc:'HS-2025-118' },
+    { id:'DH-02261832', name:'Điều hòa treo tường Misubishi', user:'NV006', type:'Điều hòa', supplier:'--',         loc:'Kho tổng',      date:'2025-11-08', status:'IN USE',     price:15000000,    book:0,          doc:'HS-2025-108' },
+    { id:'DD-093363474',name:'iPhone 16 Pro Max',        user:'NV006', type:'Điện thoại',supplier:'Laptop 24h',     loc:'Kho Hà Nội',    date:'2024-11-19', status:'UNUSABLE',  price:150000000,   book:0,          doc:'HS-2024-119' },
+    { id:'TS0001',      name:'Máy tính Dell Optiplex 7090', user:'NV001', type:'Máy tính', supplier:'Dell VN',      loc:'Kho Hà Nội',    date:'2023-03-15', status:'IN USE',     price:18500000,    book:12000000,   doc:'HS-2023-031' },
+    { id:'TS0002',      name:'Máy in HP LaserJet Pro',   user:'NV002', type:'Máy in',    supplier:'HP VN',          loc:'Kho Hà Nội',    date:'2023-04-22', status:'IN USE',     price:8500000,     book:5500000,    doc:'HS-2023-042' },
+    { id:'TS0003',      name:'Bàn làm việc gỗ',          user:'NV004', type:'Nội thất',  supplier:'Fami',           loc:'Văn phòng',     date:'2023-01-10', status:'IN USE',     price:4500000,     book:3200000,    doc:'HS-2023-010' },
+    { id:'TS0004',      name:'Ghế xoay văn phòng',       user:'NV003', type:'Nội thất',  supplier:'Fami',           loc:'Văn phòng',     date:'2023-02-18', status:'IN USE',     price:2800000,     book:2000000,    doc:'HS-2023-021' },
+    { id:'TS0005',      name:'Laptop Dell Latitude 5520',user:'NV005',  type:'Máy tính',  supplier:'Dell VN',       loc:'Kho Hà Nội',    date:'2023-05-05', status:'AVAILABLE', price:22000000,    book:16000000,   doc:'HS-2023-055' }
+];
+
+function statusBadge(s) {
+    if (s === 'IN USE')     return '<span class="badge-inuse">Đang sử dụng</span>';
+    if (s === 'AVAILABLE')  return '<span class="badge-avail">Khả dụng</span>';
+    return '<span class="badge-unusable">Hỏng</span>';
+}
+
+function lookupFilter() {
+    var empQ   = (document.getElementById('lk-emp').value   || '').toLowerCase().trim();
+    var deptQ  = document.getElementById('lk-dept').value;
+    var typeQ  = document.getElementById('lk-type').value;
+    var stQ    = document.getElementById('lk-status').value;
+    var fromQ  = document.getElementById('lk-from').value;
+    var toQ    = document.getElementById('lk-to').value;
+
+    // Resolve employee to userCode list
+    var empCodes = [];
+    if (empQ) {
+        employeeDB.forEach(function(e) {
+            if (e.name.toLowerCase().includes(empQ) || e.code.toLowerCase().includes(empQ)) empCodes.push(e.code);
+        });
+    }
+    if (deptQ) {
+        employeeDB.forEach(function(e) {
+            if (e.dept === deptQ && (!empQ || empCodes.indexOf(e.code) > -1)) {
+                if (empCodes.indexOf(e.code) === -1) empCodes.push(e.code);
+            }
+        });
+        if (!empQ) { empCodes = []; employeeDB.filter(function(e){return e.dept===deptQ;}).forEach(function(e){empCodes.push(e.code);}); }
+    }
+
+    var rows = assetDB.filter(function(a) {
+        if (empCodes.length && empCodes.indexOf(a.user) === -1) return false;
+        if (typeQ && a.type !== typeQ) return false;
+        if (stQ) {
+            var stMap = { 'Đang sử dụng':'IN USE', 'Khả dụng':'AVAILABLE', 'Hỏng':'UNUSABLE' };
+            if (a.status !== stMap[stQ]) return false;
+        }
+        if (fromQ && a.date < fromQ) return false;
+        if (toQ   && a.date > toQ)   return false;
+        return true;
+    });
+
+    // Update employee card (show when single employee matched)
+    var matchedEmps = empCodes.map(function(c){ return employeeDB.find(function(e){return e.code===c;}); }).filter(Boolean);
+    var empCard = document.getElementById('lk-emp-card');
+    if (matchedEmps.length === 1) {
+        var e = matchedEmps[0];
+        var inUseCount = rows.filter(function(a){return a.user===e.code&&a.status==='IN USE';}).length;
+        var totalVal   = rows.filter(function(a){return a.user===e.code;}).reduce(function(s,a){return s+a.price;},0);
+        document.getElementById('ei-name').textContent  = e.name;
+        document.getElementById('ei-code').textContent  = e.code;
+        document.getElementById('ei-dept').textContent  = e.dept;
+        document.getElementById('ei-title').textContent = e.title;
+        document.getElementById('ei-email').textContent = e.email;
+        document.getElementById('ei-phone').textContent = e.phone;
+        document.getElementById('ei-total').textContent = inUseCount + ' tài sản';
+        document.getElementById('ei-value').textContent = new Intl.NumberFormat('vi-VN').format(totalVal) + '₫';
+        empCard.style.display = 'block';
+    } else {
+        empCard.style.display = 'none';
+    }
+
+    renderLookupTable(rows);
+}
+
+function toggleLookupComponent(assetId) {
+    var compRow = document.getElementById('comp-row-' + assetId);
+    var btn     = document.getElementById('comp-btn-' + assetId);
+    if (!compRow) return;
+    var opening = compRow.style.display === 'none' || compRow.style.display === '';
+    compRow.style.display = opening ? 'table-row' : 'none';
+    if (btn) {
+        btn.style.background    = opening ? '#0D2240' : '';
+        btn.style.color         = opening ? '#fff'    : '';
+        btn.style.borderColor   = opening ? '#0D2240' : '';
+        var arrow = btn.querySelector('.lk-arrow');
+        if (arrow) arrow.style.transform = opening ? 'rotate(90deg)' : 'rotate(0deg)';
+    }
+}
+
+function renderLookupComponentInline(assetId) {
+    var comps = componentDB[assetId];
+    if (!comps || comps.length === 0) {
+        return '<div style="padding:14px 0;color:#94a3b8;font-style:italic;font-size:12px;">Không có linh kiện liên quan cho tài sản này.</div>';
+    }
+    var active   = comps.filter(function(c){return c.status==='ACTIVE';}).length;
+    var broken   = comps.filter(function(c){return c.status==='BROKEN';}).length;
+    var inactive = comps.filter(function(c){return c.status==='INACTIVE';}).length;
+    var stored   = comps.filter(function(c){return c.status==='STORED';}).length;
+
+    var html = '<div style="padding:16px 20px 20px 44px;">';
+    html += '<div style="font-size:12px;font-weight:700;color:#0D2240;margin-bottom:12px;display:flex;align-items:center;gap:10px;">'
+          + '<span style="font-size:14px;">🔩</span> Linh kiện liên quan'
+          + '<span style="font-size:11px;color:#64748b;font-weight:500;margin-left:4px;">(' + comps.length + ' mục)</span>'
+          + '<span style="margin-left:auto;display:flex;gap:6px;">'
+          + '<span class="comp-badge-active">' + active + ' đang dùng</span>'
+          + (broken   ? '<span class="comp-badge-broken">'   + broken   + ' hỏng</span>'      : '')
+          + (inactive ? '<span class="comp-badge-inactive">' + inactive + ' không HĐ</span>'  : '')
+          + (stored   ? '<span class="comp-badge-stored">'   + stored   + ' trong kho</span>' : '')
+          + '</span></div>';
+    html += '<div style="overflow-x:auto;">'
+          + '<table class="lk-comp-table"><thead><tr>'
+          + '<th>Mã linh kiện</th><th>Tên linh kiện</th><th>Loại</th><th>Ngày lắp đặt</th><th>Trạng thái</th><th>Ghi chú</th>'
+          + '</tr></thead><tbody>';
+    comps.forEach(function(c, idx) {
+        var bg = idx % 2 === 0 ? '#f8fbff' : '#fff';
+        html += '<tr style="background:' + bg + ';">'
+            + '<td><strong style="font-family:monospace;color:#1e40af;font-size:11px;">' + c.code + '</strong></td>'
+            + '<td style="font-weight:600;">' + c.name + '</td>'
+            + '<td><span class="comp-type-tag">' + c.type + '</span></td>'
+            + '<td style="color:#64748b;">' + c.installDate + '</td>'
+            + '<td>' + componentBadge(c.status) + '</td>'
+            + '<td style="color:#64748b;font-size:12px;">' + c.note + '</td>'
+            + '</tr>';
+    });
+    html += '</tbody></table></div></div>';
+    return html;
+}
+
+function renderLookupTable(rows) {
+    var tbody = document.getElementById('lookupTableBody');
+    document.getElementById('lk-count').textContent = 'Hiển thị ' + rows.length + ' kết quả';
+    if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:#94a3b8;">Không tìm thấy kết quả</td></tr>';
+        return;
+    }
+    var html = '';
+    rows.forEach(function(a) {
+        var emp      = employeeDB.find(function(e){ return e.code === a.user; });
+        var empName  = emp ? emp.name : '--';
+        var dateDisp = (a.date === '1970-01-01') ? '--' : a.date.split('-').reverse().join('/');
+        var docHtml  = a.doc ? '<a href="#" class="doc-link" onclick="return false;">📄 ' + a.doc + '</a>' : '--';
+        var comps    = componentDB[a.id];
+        var hasComps = comps && comps.length > 0;
+
+        // Expand button
+        var expandCell = hasComps
+            ? '<button class="lk-expand-btn" id="comp-btn-' + a.id + '" onclick="toggleLookupComponent(\'' + a.id + '\')">'
+              + '<span class="lk-arrow" style="display:inline-block;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid currentColor;transition:transform 0.2s;"></span>'
+              + '&nbsp;Linh kiện&nbsp;<span style="background:rgba(30,64,175,0.12);color:#1e40af;padding:1px 6px;border-radius:4px;font-size:10px;">' + comps.length + '</span>'
+              + '</button>'
+            : '<span style="color:#cbd5e1;font-size:11px;padding-left:4px;">—</span>';
+
+        // Main row
+        html += '<tr style="border-left: 3px solid transparent;" onmouseover="this.style.borderLeftColor=\'#B8872C\'" onmouseout="this.style.borderLeftColor=\'transparent\'">'
+            + '<td style="width:130px;">' + expandCell + '</td>'
+            + '<td><strong style="color:#0D2240;">' + a.id + '</strong></td>'
+            + '<td>' + a.name + '</td>'
+            + '<td>' + empName + '</td>'
+            + '<td><span class="comp-type-tag">' + a.type + '</span></td>'
+            + '<td style="color:#64748b;">' + a.supplier + '</td>'
+            + '<td style="color:#64748b;">' + dateDisp + '</td>'
+            + '<td>' + statusBadge(a.status) + '</td>'
+            + '<td style="font-weight:600;">' + (a.price ? new Intl.NumberFormat('vi-VN').format(a.price) + '₫' : '—') + '</td>'
+            + '<td style="color:#64748b;">' + (a.book ? new Intl.NumberFormat('vi-VN').format(a.book) + '₫' : '—') + '</td>'
+            + '<td>' + docHtml + '</td>'
+            + '</tr>';
+
+        // Component expand row (hidden by default)
+        html += '<tr id="comp-row-' + a.id + '" style="display:none;background:#f0f6ff;">'
+            + '<td colspan="11" style="padding:0;border-bottom:2px solid #B8872C;">'
+            + renderLookupComponentInline(a.id)
+            + '</td></tr>';
+    });
+    tbody.innerHTML = html;
+}
+
+function lookupReset() {
+    document.getElementById('lk-emp').value   = '';
+    document.getElementById('lk-dept').value  = '';
+    document.getElementById('lk-type').value  = '';
+    document.getElementById('lk-status').value= '';
+    document.getElementById('lk-from').value  = '';
+    document.getElementById('lk-to').value    = '';
+    document.getElementById('lk-emp-card').style.display = 'none';
+    renderLookupTable(assetDB);
+}
+
+function exportLookupCSV() {
+    var rows = Array.from(document.querySelectorAll('#lookupTableBody tr'));
+    var headers = ['Mã TS','Tài sản','Người sử dụng','Loại','Nhà cung cấp','Ngày mua','Trạng thái','Giá mua','Giá trị sổ sách','Hồ sơ'];
+    var csv = headers.join(',') + '\n';
+    rows.forEach(function(r) {
+        csv += Array.from(r.cells).map(function(c){ return '"' + c.innerText.replace(/"/g,'""') + '"'; }).join(',') + '\n';
+    });
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'asset_lookup.csv';
+    link.click();
+}
+</script>
+<script>
+var assetStatsDB=[{id:'MT-001',name:'Dell U3123EU',type:'Máy tính',status:'AVAILABLE',price:22000000,book:18000000,supplier:'Dell Vietnam',purchaseDate:'15/03/2023',location:'Kho HN',warranty:'36 tháng',specs:'Intel i7, 16GB RAM, 512GB SSD',orders:[{date:'15/03/2023',orderNo:'PO-2023-001',qty:5,unitPrice:20000000,total:100000000,supplier:'Dell Vietnam',status:'Đã nhận'},{date:'10/06/2023',orderNo:'PO-2023-045',qty:3,unitPrice:21000000,total:63000000,supplier:'Dell Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:5,price:20000000},{date:'2024-04',quantity:8,price:21000000},{date:'2024-10',quantity:12,price:22000000},{date:'2025-04',quantity:15,price:22000000}]},{id:'MT-002',name:'Apple Macbook Pro 14"',type:'Máy tính',status:'IN USE',price:65000000,book:58000000,supplier:'Apple Store',purchaseDate:'25/04/2024',location:'VP HN',warranty:'12 tháng',specs:'M3 Pro, 36GB RAM, 1TB SSD',orders:[{date:'25/04/2024',orderNo:'PO-2024-035',qty:2,unitPrice:60000000,total:120000000,supplier:'Apple Store',status:'Đã nhận'},{date:'15/08/2024',orderNo:'PO-2024-068',qty:2,unitPrice:62000000,total:124000000,supplier:'Apple Store',status:'Đã nhận'}],history:[{date:'2024-01',quantity:2,price:60000000},{date:'2024-04',quantity:4,price:62000000},{date:'2024-10',quantity:8,price:65000000},{date:'2025-04',quantity:12,price:65000000}]},{id:'MT-003',name:'HP EliteBook 850',type:'Máy tính',status:'IN USE',price:28000000,book:22000000,supplier:'HP Vietnam',purchaseDate:'10/06/2023',location:'VP HCM',warranty:'24 tháng',specs:'Intel i5, 16GB RAM, 512GB SSD',orders:[{date:'10/06/2023',orderNo:'PO-2023-042',qty:12,unitPrice:26000000,total:312000000,supplier:'HP Vietnam',status:'Đã nhận'},{date:'05/09/2023',orderNo:'PO-2023-072',qty:6,unitPrice:27000000,total:162000000,supplier:'HP Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:12,price:26000000},{date:'2024-04',quantity:18,price:27000000},{date:'2024-10',quantity:25,price:28000000},{date:'2025-04',quantity:30,price:28000000}]},{id:'MM-001',name:'Dell U3223QE 32"',type:'Màn hình',status:'IN USE',price:12000000,book:9500000,supplier:'Dell Vietnam',purchaseDate:'22/04/2023',location:'VP HN',warranty:'36 tháng',specs:'32", 4K UHD, IPS, USB-C',orders:[{date:'22/04/2023',orderNo:'PO-2023-032',qty:10,unitPrice:11000000,total:110000000,supplier:'Dell Vietnam',status:'Đã nhận'},{date:'15/07/2023',orderNo:'PO-2023-058',qty:5,unitPrice:11500000,total:57500000,supplier:'Dell Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:10,price:11000000},{date:'2024-04',quantity:15,price:11500000},{date:'2024-10',quantity:25,price:12000000},{date:'2025-04',quantity:30,price:12000000}]},{id:'DH-001',name:'Điều hòa Mitsubishi 2HP',type:'Điều hòa',status:'IN USE',price:15000000,book:12000000,supplier:'Mitsubishi',purchaseDate:'08/11/2023',location:'VP HN',warranty:'24 tháng',specs:'2HP, Inverter, R32',orders:[{date:'08/11/2023',orderNo:'PO-2023-095',qty:15,unitPrice:14000000,total:210000000,supplier:'Mitsubishi',status:'Đã nhận'},{date:'18/01/2024',orderNo:'PO-2024-006',qty:3,unitPrice:14500000,total:43500000,supplier:'Mitsubishi',status:'Đã nhận'}],history:[{date:'2024-01',quantity:15,price:14000000},{date:'2024-04',quantity:18,price:14500000},{date:'2024-10',quantity:25,price:15000000},{date:'2025-04',quantity:30,price:15000000}]},{id:'DT-001',name:'iPhone 16 Pro Max',type:'Điện thoại',status:'IN USE',price:35000000,book:30000000,supplier:'FPT Shop',purchaseDate:'19/11/2024',location:'VP HN',warranty:'12 tháng',specs:'256GB, Natural Titanium',orders:[{date:'19/11/2024',orderNo:'PO-2024-095',qty:5,unitPrice:33000000,total:165000000,supplier:'FPT Shop',status:'Đã nhận'},{date:'15/01/2025',orderNo:'PO-2025-003',qty:2,unitPrice:35000000,total:70000000,supplier:'FPT Shop',status:'Đã nhận'}],history:[{date:'2024-01',quantity:0,price:0},{date:'2024-07',quantity:5,price:33000000},{date:'2024-10',quantity:10,price:34000000},{date:'2025-04',quantity:15,price:35000000}]},{id:'DT-002',name:'Xiaomi 14 Pro',type:'Điện thoại',status:'UNUSABLE',price:15000000,book:10000000,supplier:'Xiaomi',purchaseDate:'10/03/2024',location:'VP HN',warranty:'18 tháng',specs:'256GB, Black',orders:[{date:'10/03/2024',orderNo:'PO-2024-023',qty:5,unitPrice:14000000,total:70000000,supplier:'Xiaomi Vietnam',status:'Đã nhận'},{date:'22/05/2024',orderNo:'PO-2024-045',qty:3,unitPrice:14500000,total:43500000,supplier:'Xiaomi Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:5,price:14000000},{date:'2024-04',quantity:8,price:14500000},{date:'2024-10',quantity:12,price:15000000},{date:'2025-04',quantity:15,price:15000000}]},{id:'MI-001',name:'HP LaserJet Pro',type:'Máy in',status:'IN USE',price:8500000,book:5500000,supplier:'HP Vietnam',purchaseDate:'05/07/2023',location:'VP HN',warranty:'12 tháng',specs:'Laser, A4, Duplex',orders:[{date:'05/07/2023',orderNo:'PO-2023-055',qty:10,unitPrice:8000000,total:80000000,supplier:'HP Vietnam',status:'Đã nhận'},{date:'18/09/2023',orderNo:'PO-2023-075',qty:2,unitPrice:8200000,total:16400000,supplier:'HP Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:10,price:8000000},{date:'2024-04',quantity:12,price:8200000},{date:'2024-10',quantity:18,price:8500000},{date:'2025-04',quantity:22,price:8500000}]},{id:'NT-001',name:'Bàn làm việc gỗ',type:'Nội thất',status:'IN USE',price:4500000,book:3200000,supplier:'Fami',purchaseDate:'10/01/2023',location:'VP HN',warranty:'24 tháng',specs:'1.4m x 70cm, MDF',orders:[{date:'10/01/2023',orderNo:'PO-2023-003',qty:50,unitPrice:4000000,total:200000000,supplier:'Fami',status:'Đã nhận'},{date:'15/04/2023',orderNo:'PO-2023-030',qty:5,unitPrice:4200000,total:21000000,supplier:'Fami',status:'Đã nhận'}],history:[{date:'2024-01',quantity:50,price:4000000},{date:'2024-04',quantity:55,price:4200000},{date:'2024-10',quantity:65,price:4500000},{date:'2025-04',quantity:70,price:4500000}]},{id:'NT-002',name:'Ghế văn phòng',type:'Nội thất',status:'IN USE',price:2800000,book:2000000,supplier:'Hòa Phát',purchaseDate:'18/02/2023',location:'VP HCM',warranty:'24 tháng',specs:'Lưng lưới, Ergonomic',orders:[{date:'18/02/2023',orderNo:'PO-2023-015',qty:60,unitPrice:2500000,total:150000000,supplier:'Hòa Phát',status:'Đã nhận'},{date:'10/05/2023',orderNo:'PO-2023-038',qty:10,unitPrice:2600000,total:26000000,supplier:'Hòa Phát',status:'Đã nhận'}],history:[{date:'2024-01',quantity:60,price:2500000},{date:'2024-04',quantity:70,price:2600000},{date:'2024-10',quantity:85,price:2800000},{date:'2025-04',quantity:95,price:2800000}]},{id:'PC-001',name:'Ricoh MP 3055SP',type:'Máy photocopy',status:'IN USE',price:45000000,book:35000000,supplier:'Ricoh',purchaseDate:'15/09/2023',location:'VP HN',warranty:'12 tháng',specs:'30 trang/phút, Duplex',orders:[{date:'15/09/2023',orderNo:'PO-2023-074',qty:3,unitPrice:42000000,total:126000000,supplier:'Ricoh Vietnam',status:'Đã nhận'},{date:'20/12/2023',orderNo:'PO-2023-106',qty:1,unitPrice:43500000,total:43500000,supplier:'Ricoh Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:3,price:42000000},{date:'2024-04',quantity:4,price:43500000},{date:'2024-10',quantity:6,price:45000000},{date:'2025-04',quantity:8,price:45000000}]},{id:'MC-001',name:'Epson EB-2247U',type:'Máy chiếu',status:'IN USE',price:18000000,book:14000000,supplier:'Epson',purchaseDate:'12/11/2023',location:'Phòng họp',warranty:'36 tháng',specs:'4200 Lumens, WUXGA',orders:[{date:'12/11/2023',orderNo:'PO-2023-096',qty:8,unitPrice:17000000,total:136000000,supplier:'Epson Vietnam',status:'Đã nhận'},{date:'25/01/2024',orderNo:'PO-2024-008',qty:2,unitPrice:17500000,total:35000000,supplier:'Epson Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:8,price:17000000},{date:'2024-04',quantity:10,price:17500000},{date:'2024-10',quantity:14,price:18000000},{date:'2025-04',quantity:16,price:18000000}]},{id:'TV-001',name:'Samsung 55" QLED',type:'Tivi',status:'IN USE',price:25000000,book:20000000,supplier:'Samsung',purchaseDate:'18/01/2024',location:'Phòng VIP',warranty:'24 tháng',specs:'55", 4K QLED, Smart TV',orders:[{date:'18/01/2024',orderNo:'PO-2024-005',qty:5,unitPrice:23000000,total:115000000,supplier:'Samsung Vietnam',status:'Đã nhận'},{date:'05/04/2024',orderNo:'PO-2024-030',qty:2,unitPrice:24000000,total:48000000,supplier:'Samsung Vietnam',status:'Đã nhận'}],history:[{date:'2024-01',quantity:5,price:23000000},{date:'2024-04',quantity:7,price:24000000},{date:'2024-10',quantity:11,price:25000000},{date:'2025-04',quantity:13,price:25000000}]}];
+
+/* ===== DATABASE LINH KIỆN LIÊN QUAN (dùng chung cho assetStatsDB + assetDB) ===== */
+var componentDB = {
+    // ── assetStatsDB IDs ──────────────────────────────────────────
+    'MT-001': [
+        { code:'RAM-MT001-01', name:'RAM Kingston 16GB DDR4',        type:'RAM',         installDate:'15/03/2023', status:'ACTIVE',   note:'Slot 1' },
+        { code:'SSD-MT001-01', name:'SSD Samsung 512GB NVMe',        type:'Ổ cứng',      installDate:'15/03/2023', status:'ACTIVE',   note:'M.2 slot' },
+        { code:'GPU-MT001-01', name:'Card màn hình Intel UHD 730',   type:'Card đồ họa', installDate:'15/03/2023', status:'ACTIVE',   note:'Tích hợp bo mạch' }
+    ],
+    'MT-002': [
+        { code:'RAM-MT002-01', name:'RAM Apple 36GB Unified',        type:'RAM',         installDate:'25/04/2024', status:'ACTIVE',   note:'Gắn liền bo mạch' },
+        { code:'SSD-MT002-01', name:'SSD Apple 1TB NVMe',            type:'Ổ cứng',      installDate:'25/04/2024', status:'ACTIVE',   note:'Gắn liền bo mạch' },
+        { code:'CAM-MT002-01', name:'Webcam Apple FaceTime HD',      type:'Camera',      installDate:'25/04/2024', status:'ACTIVE',   note:'Tích hợp màn hình' }
+    ],
+    'MT-003': [
+        { code:'RAM-MT003-01', name:'RAM Kingston 16GB DDR4',        type:'RAM',         installDate:'10/06/2023', status:'ACTIVE',   note:'Slot 1' },
+        { code:'SSD-MT003-01', name:'SSD WD Blue 512GB',             type:'Ổ cứng',      installDate:'10/06/2023', status:'BROKEN',   note:'Cần thay - bad sector' },
+        { code:'BAT-MT003-01', name:'Pin HP BN06XL 3 cell',          type:'Pin',         installDate:'10/06/2023', status:'INACTIVE', note:'Chai pin, còn 42%' },
+        { code:'KEY-MT003-01', name:'Bàn phím HP thay thế',          type:'Bàn phím',    installDate:'20/01/2024', status:'ACTIVE',   note:'Thay thế bàn phím gốc' }
+    ],
+    'MM-001': [
+        { code:'CBL-MM001-01', name:'Cáp HDMI 2.0 2m',              type:'Cáp kết nối', installDate:'22/04/2023', status:'ACTIVE',   note:'Kết nối máy chính' },
+        { code:'CBL-MM001-02', name:'Cáp USB-C 1.5m',               type:'Cáp kết nối', installDate:'22/04/2023', status:'ACTIVE',   note:'Nguồn + data' },
+        { code:'ARM-MM001-01', name:'Giá đỡ màn hình Ergotron LX',  type:'Phụ kiện',    installDate:'05/05/2023', status:'STORED',   note:'Trong kho dự phòng' }
+    ],
+    'DH-001': [
+        { code:'FIL-DH001-01', name:'Lọc không khí Mitsubishi',     type:'Bộ lọc',      installDate:'08/11/2023', status:'ACTIVE',   note:'Thay định kỳ 3 tháng' },
+        { code:'RMC-DH001-01', name:'Remote điều khiển Mitsubishi', type:'Điều khiển',  installDate:'08/11/2023', status:'ACTIVE',   note:'Phòng tầng 3' },
+        { code:'PIP-DH001-01', name:'Đường ống gas R32',            type:'Hệ thống',    installDate:'08/11/2023', status:'ACTIVE',   note:'Kết nối cục ngoài' }
+    ],
+    'DT-001': [
+        { code:'CAS-DT001-01', name:'Ốp lưng Apple MagSafe',        type:'Vỏ bảo vệ',  installDate:'19/11/2024', status:'ACTIVE',   note:'iPhone 16 Pro Max' },
+        { code:'CHG-DT001-01', name:'Sạc nhanh Apple 30W USB-C',    type:'Sạc',         installDate:'19/11/2024', status:'ACTIVE',   note:'Đi kèm máy' },
+        { code:'EAR-DT001-01', name:'AirPods Pro 2',                type:'Tai nghe',    installDate:'01/12/2024', status:'BROKEN',   note:'Hỏng 1 tai' }
+    ],
+    'DT-002': [
+        { code:'CHG-DT002-01', name:'Sạc Xiaomi 67W',               type:'Sạc',         installDate:'10/03/2024', status:'STORED',   note:'Trong kho - máy hỏng' },
+        { code:'CAS-DT002-01', name:'Ốp lưng Spigen Xiaomi 14',     type:'Vỏ bảo vệ',  installDate:'10/03/2024', status:'STORED',   note:'Trong kho - máy hỏng' }
+    ],
+    'MI-001': [
+        { code:'TNR-MI001-01', name:'Hộp mực HP CF258A',            type:'Mực in',      installDate:'05/07/2023', status:'INACTIVE', note:'Đã hết - cần thay' },
+        { code:'TNR-MI001-02', name:'Hộp mực HP CF258A (dự phòng)', type:'Mực in',      installDate:'15/10/2023', status:'STORED',   note:'Trong kho dự phòng' },
+        { code:'DRM-MI001-01', name:'Drum HP CF232A',               type:'Drum',        installDate:'05/07/2023', status:'ACTIVE',   note:'Dùng được ~20.000 trang' }
+    ],
+    'NT-001': [
+        { code:'KEY-NT001-01', name:'Khóa ngăn kéo Fami',           type:'Khóa',        installDate:'10/01/2023', status:'ACTIVE',   note:'2 chìa khóa' },
+        { code:'MAT-NT001-01', name:'Tấm lót bàn da PVC',           type:'Phụ kiện',    installDate:'10/01/2023', status:'INACTIVE', note:'Đã mòn - cần thay' }
+    ],
+    'NT-002': [
+        { code:'ARM-NT002-01', name:'Tay vịn ghế thay thế Hòa Phát',type:'Phụ kiện',   installDate:'10/05/2023', status:'ACTIVE',   note:'Thay tay vịn bị gãy' },
+        { code:'WHL-NT002-01', name:'Bánh xe ghế 55mm (5 bánh)',    type:'Bánh xe',     installDate:'18/02/2023', status:'ACTIVE',   note:'PU không trầy sàn' }
+    ],
+    'PC-001': [
+        { code:'TNR-PC001-01', name:'Mực in Ricoh MP 3055',         type:'Mực in',      installDate:'15/09/2023', status:'ACTIVE',   note:'Dung tích 10.000 trang' },
+        { code:'DRM-PC001-01', name:'Drum Ricoh type 3055',         type:'Drum',        installDate:'15/09/2023', status:'ACTIVE',   note:'~60.000 trang' },
+        { code:'STF-PC001-01', name:'Bộ nạp giấy tự động ADF',     type:'Bộ phận',     installDate:'15/09/2023', status:'ACTIVE',   note:'50 tờ/lần' },
+        { code:'MTC-PC001-01', name:'Card mạng LAN Ricoh',          type:'Card mạng',   installDate:'10/10/2023', status:'ACTIVE',   note:'Gigabit Ethernet' }
+    ],
+    'MC-001': [
+        { code:'LMP-MC001-01', name:'Bóng đèn Epson ELPLP97',      type:'Bóng đèn',    installDate:'12/11/2023', status:'ACTIVE',   note:'Đã dùng 1.200/5.000h' },
+        { code:'CBL-MC001-01', name:'Cáp HDMI 10m',                type:'Cáp kết nối', installDate:'12/11/2023', status:'ACTIVE',   note:'Kết nối phòng họp' },
+        { code:'RMC-MC001-01', name:'Remote Epson EB-2247U',       type:'Điều khiển',  installDate:'12/11/2023', status:'BROKEN',   note:'Mất remote - đặt mới' }
+    ],
+    'TV-001': [
+        { code:'CBL-TV001-01', name:'Cáp HDMI 2.1 3m',             type:'Cáp kết nối', installDate:'18/01/2024', status:'ACTIVE',   note:'Kết nối laptop phòng VIP' },
+        { code:'MNT-TV001-01', name:'Giá treo tường Samsung WMN-M15',type:'Giá treo',  installDate:'18/01/2024', status:'ACTIVE',   note:'Lắp cố định tường' },
+        { code:'RMC-TV001-01', name:'Remote Samsung BN59-01385A',  type:'Điều khiển',  installDate:'18/01/2024', status:'STORED',   note:'Dự phòng trong kho' }
+    ],
+    // ── assetDB (Tra cứu) IDs ─────────────────────────────────────
+    'MT-02374918': [
+        { code:'RAM-02374918-01', name:'RAM Kingston 16GB DDR4',       type:'RAM',         installDate:'01/04/2026', status:'ACTIVE',   note:'Slot 1' },
+        { code:'SSD-02374918-01', name:'SSD Samsung 512GB NVMe',       type:'Ổ cứng',      installDate:'01/04/2026', status:'ACTIVE',   note:'M.2 slot' },
+        { code:'GPU-02374918-01', name:'Card màn hình Intel UHD 730',  type:'Card đồ họa', installDate:'01/04/2026', status:'ACTIVE',   note:'Tích hợp bo mạch' }
+    ],
+    'MM-02375856': [
+        { code:'CBL-02375856-01', name:'Cáp HDMI 2.0 2m',             type:'Cáp kết nối', installDate:'01/01/2024', status:'ACTIVE',   note:'Kết nối máy tính chính' },
+        { code:'CBL-02375856-02', name:'Cáp USB-C 1.5m',              type:'Cáp kết nối', installDate:'01/01/2024', status:'ACTIVE',   note:'Nguồn + data' }
+    ],
+    'MM-02375857': [
+        { code:'CBL-02375857-01', name:'Cáp DisplayPort 1.4 2m',      type:'Cáp kết nối', installDate:'01/01/2024', status:'ACTIVE',   note:'Kết nối laptop' },
+        { code:'ARM-02375857-01', name:'Giá đỡ màn hình Ergotron LX', type:'Phụ kiện',    installDate:'15/01/2024', status:'STORED',   note:'Trong kho dự phòng' }
+    ],
+    'MT-02374856': [
+        { code:'RAM-02374856-01', name:'RAM Apple 36GB Unified Memory',type:'RAM',         installDate:'25/04/2025', status:'ACTIVE',   note:'Gắn liền bo mạch' },
+        { code:'SSD-02374856-01', name:'SSD Apple 1TB NVMe',           type:'Ổ cứng',      installDate:'25/04/2025', status:'ACTIVE',   note:'Gắn liền bo mạch' },
+        { code:'CHG-02374856-01', name:'Sạc Apple 140W MagSafe 3',     type:'Sạc',         installDate:'25/04/2025', status:'ACTIVE',   note:'Đi kèm máy' },
+        { code:'CAM-02374856-01', name:'Webcam Apple FaceTime HD 1080p',type:'Camera',     installDate:'25/04/2025', status:'ACTIVE',   note:'Tích hợp màn hình' }
+    ],
+    'MT011': [
+        { code:'RAM-MT011-01',    name:'RAM Kingston 8GB DDR4',        type:'RAM',         installDate:'18/11/2025', status:'INACTIVE', note:'Cần nâng cấp lên 16GB' },
+        { code:'SSD-MT011-01',    name:'SSD WD Blue 256GB',            type:'Ổ cứng',      installDate:'18/11/2025', status:'ACTIVE',   note:'Ổ hệ điều hành' },
+        { code:'HDD-MT011-01',    name:'HDD Seagate 1TB',              type:'Ổ cứng',      installDate:'18/11/2025', status:'ACTIVE',   note:'Ổ lưu trữ dữ liệu' },
+        { code:'GPU-MT011-01',    name:'Card AMD Radeon RX 550',       type:'Card đồ họa', installDate:'18/11/2025', status:'BROKEN',   note:'Lỗi driver - cần thay' }
+    ],
+    'DH-02261832': [
+        { code:'FIL-02261832-01', name:'Bộ lọc không khí Mitsubishi',  type:'Bộ lọc',      installDate:'08/11/2025', status:'ACTIVE',   note:'Thay định kỳ 3 tháng' },
+        { code:'RMC-02261832-01', name:'Remote điều khiển Mitsubishi', type:'Điều khiển',  installDate:'08/11/2025', status:'ACTIVE',   note:'Phòng làm việc tầng 3' },
+        { code:'PIP-02261832-01', name:'Đường ống gas R32',            type:'Hệ thống',    installDate:'08/11/2025', status:'ACTIVE',   note:'Kết nối dàn nóng/lạnh' }
+    ],
+    'DD-093363474': [
+        { code:'CAS-093363474-01',name:'Ốp lưng Apple MagSafe',        type:'Vỏ bảo vệ',   installDate:'19/11/2024', status:'STORED',   note:'Trong kho - máy hỏng' },
+        { code:'CHG-093363474-01',name:'Sạc nhanh Apple 30W USB-C',    type:'Sạc',         installDate:'19/11/2024', status:'STORED',   note:'Trong kho - máy hỏng' },
+        { code:'EAR-093363474-01',name:'EarPods USB-C',                type:'Tai nghe',    installDate:'19/11/2024', status:'STORED',   note:'Chưa bóc hộp' }
+    ],
+    'TS0001': [
+        { code:'RAM-TS0001-01',   name:'RAM Kingston 16GB DDR4 3200',  type:'RAM',         installDate:'15/03/2023', status:'ACTIVE',   note:'2 thanh x 8GB' },
+        { code:'SSD-TS0001-01',   name:'SSD Kingston 512GB NVMe',      type:'Ổ cứng',      installDate:'15/03/2023', status:'ACTIVE',   note:'M.2 PCIe Gen4' },
+        { code:'GPU-TS0001-01',   name:'Card Intel UHD Graphics 630',  type:'Card đồ họa', installDate:'15/03/2023', status:'ACTIVE',   note:'Onboard' },
+        { code:'MON-TS0001-01',   name:'Màn hình Dell 24" FHD',        type:'Màn hình',    installDate:'15/03/2023', status:'ACTIVE',   note:'Đi kèm máy bộ' }
+    ],
+    'TS0002': [
+        { code:'TNR-TS0002-01',   name:'Hộp mực HP CF258A Black',      type:'Mực in',      installDate:'22/04/2023', status:'INACTIVE', note:'Đã hết - cần thay' },
+        { code:'TNR-TS0002-02',   name:'Hộp mực HP CF258A (dự phòng)',  type:'Mực in',      installDate:'10/10/2023', status:'STORED',   note:'Trong kho dự phòng' },
+        { code:'DRM-TS0002-01',   name:'Drum HP CF232A',               type:'Drum',        installDate:'22/04/2023', status:'ACTIVE',   note:'Đã in ~20.000 trang' }
+    ],
+    'TS0003': [
+        { code:'KEY-TS0003-01',   name:'Khóa ngăn kéo Fami',          type:'Khóa',        installDate:'10/01/2023', status:'ACTIVE',   note:'2 chìa khóa' },
+        { code:'MAT-TS0003-01',   name:'Tấm lót bàn da PVC 90x45cm',  type:'Phụ kiện',    installDate:'10/01/2023', status:'INACTIVE', note:'Đã mòn - cần thay mới' }
+    ],
+    'TS0004': [
+        { code:'ARM-TS0004-01',   name:'Tay vịn ghế thay thế Hòa Phát',type:'Phụ kiện',   installDate:'10/05/2023', status:'ACTIVE',   note:'Thay tay vịn bị gãy' },
+        { code:'WHL-TS0004-01',   name:'Bộ bánh xe ghế 55mm (5 bánh)',  type:'Bánh xe',    installDate:'18/02/2023', status:'ACTIVE',   note:'PU không trầy sàn' }
+    ],
+    'TS0005': [
+        { code:'RAM-TS0005-01',   name:'RAM SK Hynix 16GB DDR4',       type:'RAM',         installDate:'05/05/2023', status:'ACTIVE',   note:'Onboard' },
+        { code:'SSD-TS0005-01',   name:'SSD Micron 512GB NVMe',        type:'Ổ cứng',      installDate:'05/05/2023', status:'ACTIVE',   note:'M.2 2280' },
+        { code:'BAT-TS0005-01',   name:'Pin Dell 3-cell 42WHr',        type:'Pin',         installDate:'05/05/2023', status:'INACTIVE', note:'Chai pin còn 55% capacity' },
+        { code:'CHG-TS0005-01',   name:'Sạc Dell 65W USB-C',           type:'Sạc',         installDate:'05/05/2023', status:'ACTIVE',   note:'Đi kèm máy' }
+    ]
+};
+
+function componentBadge(status) {
+    if (status === 'ACTIVE')   return '<span class="comp-badge-active">✓ Đang dùng</span>';
+    if (status === 'INACTIVE') return '<span class="comp-badge-inactive">⚠ Không hoạt động</span>';
+    if (status === 'BROKEN')   return '<span class="comp-badge-broken">✕ Hỏng</span>';
+    if (status === 'STORED')   return '<span class="comp-badge-stored">📦 Trong kho</span>';
+    return '<span class="comp-badge-stored">--</span>';
+}
+
+function renderComponentTable(assetId) {
+    var comps = componentDB[assetId];
+    if (!comps || comps.length === 0) {
+        return '<div class="no-component-msg">🔩 Không có linh kiện liên quan</div>';
+    }
+    var countBadge = '<span style="font-size:12px;color:#64748b;font-weight:500;">Tổng: ' + comps.length + ' linh kiện</span>';
+    var html = '<div class="component-section"><div class="component-section-title"><span>🔩 Các Mã Linh Kiện Liên Quan</span>' + countBadge + '</div>';
+    html += '<div style="overflow-x:auto;"><table class="component-table"><thead><tr>'
+        + '<th>Mã linh kiện</th><th>Tên linh kiện</th><th>Loại</th><th>Ngày lắp đặt</th><th>Trạng thái</th><th>Ghi chú</th>'
+        + '</tr></thead><tbody>';
+    comps.forEach(function(c, idx) {
+        var rowBg = idx % 2 === 0 ? 'background:#fafbfc;' : 'background:#fff;';
+        html += '<tr style="' + rowBg + '">'
+            + '<td><strong style="font-family:monospace;color:#0D2240;">' + c.code + '</strong></td>'
+            + '<td>' + c.name + '</td>'
+            + '<td><span class="comp-type-tag">' + c.type + '</span></td>'
+            + '<td style="color:#475569;">' + c.installDate + '</td>'
+            + '<td>' + componentBadge(c.status) + '</td>'
+            + '<td style="color:#64748b;font-size:12px;">' + c.note + '</td>'
+            + '</tr>';
+    });
+    // Summary row
+    var active   = comps.filter(function(c){return c.status==='ACTIVE';}).length;
+    var broken   = comps.filter(function(c){return c.status==='BROKEN';}).length;
+    var inactive = comps.filter(function(c){return c.status==='INACTIVE';}).length;
+    var stored   = comps.filter(function(c){return c.status==='STORED';}).length;
+    html += '<tr style="background:linear-gradient(135deg,#f8fafc,#e9eef6);font-weight:700;border-top:3px solid #B8872C;">'
+        + '<td colspan="4" style="padding:13px 14px;color:#0D2240;font-size:12px;">Tổng hợp trạng thái:</td>'
+        + '<td colspan="2" style="padding:13px 14px;">'
+        + '<span class="comp-badge-active" style="margin-right:6px;">' + active + ' đang dùng</span>'
+        + (broken   ? '<span class="comp-badge-broken"   style="margin-right:6px;">' + broken   + ' hỏng</span>' : '')
+        + (inactive ? '<span class="comp-badge-inactive" style="margin-right:6px;">' + inactive + ' không HĐ</span>' : '')
+        + (stored   ? '<span class="comp-badge-stored"   style="margin-right:6px;">' + stored   + ' trong kho</span>' : '')
+        + '</td></tr>';
+    html += '</tbody></table></div></div>';
+    return html;
+}
+
+function statusBadgeStats(s){
+    if(s==='IN USE')return '<span class="badge-inuse">Đang sử dụng</span>';
+    if(s==='AVAILABLE')return '<span class="badge-avail">Khả dụng</span>';
+    return '<span class="badge-unusable">Hỏng</span>';
+}
+
+function formatCurrencyStats(v){
+    return new Intl.NumberFormat('vi-VN').format(v)+'₫';
+}
+
+function calculateAssetStatistics(){
+    var total=assetStatsDB.length;
+    var totalValue=assetStatsDB.reduce(function(s,a){return s+a.price;},0);
+    var bookValue=assetStatsDB.reduce(function(s,a){return s+a.book;},0);
+    document.getElementById('totalAssets').textContent=total;
+    document.getElementById('totalValue').textContent=formatCurrencyStats(totalValue);
+    document.getElementById('bookValue').textContent=formatCurrencyStats(bookValue);
+}
+
+function renderAssetStatsTable(){
+    var tbody=document.getElementById('assetStatsTableBody');
+    tbody.innerHTML=assetStatsDB.map(function(asset){
+        var currentQuantity=asset.history[asset.history.length-1].quantity;
+
+        // Tính linh kiện hỏng / cảnh báo
+        var comps = componentDB[asset.id] || [];
+        var broken   = comps.filter(function(c){return c.status==='BROKEN';}).length;
+        var inactive = comps.filter(function(c){return c.status==='INACTIVE';}).length;
+        var total    = comps.length;
+        var warn     = broken + inactive;
+
+        var compCell;
+        if (total === 0) {
+            compCell = '<span style="color:#cbd5e1;font-size:11px;">—</span>';
+        } else if (broken > 0) {
+            compCell = '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:#fee2e2;color:#991b1b;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #fca5a5;">'
+                     + '✕ ' + broken + ' hỏng'
+                     + (inactive > 0 ? ' &nbsp;·&nbsp; <span style="color:#9a3412;">⚠ ' + inactive + ' không HĐ</span>' : '')
+                     + '</span>';
+        } else if (inactive > 0) {
+            compCell = '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:#fff7ed;color:#9a3412;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #fed7aa;">'
+                     + '⚠ ' + inactive + ' không HĐ'
+                     + '</span>';
+        } else {
+            compCell = '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:#dcfce7;color:#166534;border-radius:6px;font-size:11px;font-weight:600;border:1px solid #bbf7d0;">'
+                     + '✓ ' + total + ' bình thường'
+                     + '</span>';
+        }
+
+        return '<tr onclick="showAssetChartModal(\''+asset.id+'\')">'
+            +'<td><strong>'+asset.id+'</strong></td>'
+            +'<td>'+asset.name+'</td>'
+            +'<td>'+asset.type+'</td>'
+            +'<td>'+currentQuantity+'</td>'
+            +'<td>'+statusBadgeStats(asset.status)+'</td>'
+            +'<td>'+formatCurrencyStats(asset.price)+'</td>'
+            +'<td>'+formatCurrencyStats(asset.book)+'</td>'
+            +'<td style="white-space:nowrap;">'+compCell+'</td>'
+            +'<td><button class="asset-detail-btn" onclick="event.stopPropagation();showAssetChartModal(\''+asset.id+'\')">Xem chi tiết</button></td>'
+            +'</tr>';
+    }).join('');
+}
+
+function filterAssetTable(){
+    var searchTerm=document.getElementById('searchAssetInput').value.toLowerCase();
+    var rows=document.querySelectorAll('#assetStatsTableBody tr');
+    rows.forEach(function(row){
+        var text=row.textContent.toLowerCase();
+        row.style.display=text.includes(searchTerm)?'':'none';
+    });
+}
+
+var assetStatusChartInstance=null;
+var assetCategoryChartInstance=null;
+var assetQuantityChartInstance=null;
+var assetPriceChartInstance=null;
+var totalQuantityChartInstance=null;
+var totalCostChartInstance=null;
+
+function renderAssetOverviewCharts(){
+    // Funnel chart cho quy trình mua hàng
+    var totalAssets=assetStatsDB.length;
+    var totalOrders=assetStatsDB.reduce(function(sum,a){return sum+(a.orders?a.orders.length:0);},0);
+    var completedOrders=assetStatsDB.reduce(function(sum,a){return sum+(a.orders?a.orders.filter(function(o){return o.status==='Đã nhận';}).length:0);},0);
+    var inUseAssets=assetStatsDB.filter(function(a){return a.status==='IN USE';}).length;
+    
+    // Tạo funnel: Yêu cầu -> Phê duyệt -> Đặt hàng -> Nhận hàng -> Đang sử dụng
+    var funnelData=[
+        {stage:'Yêu cầu mua hàng',value:totalOrders+50,color:'#3b82f6'},
+        {stage:'Phê duyệt',value:totalOrders+30,color:'#8b5cf6'},
+        {stage:'Đặt hàng (PO)',value:totalOrders,color:'#f59e0b'},
+        {stage:'Nhận hàng',value:completedOrders,color:'#10b981'},
+        {stage:'Đang sử dụng',value:inUseAssets,color:'#22c55e'}
+    ];
+    
+    var statusCtx=document.getElementById('statusChart').getContext('2d');
+    if(assetStatusChartInstance)assetStatusChartInstance.destroy();
+    assetStatusChartInstance=new Chart(statusCtx,{
+        type:'bar',
+        data:{
+            labels:funnelData.map(function(d){return d.stage;}),
+            datasets:[{
+                data:funnelData.map(function(d){return d.value;}),
+                backgroundColor:funnelData.map(function(d){return d.color;}),
+                borderRadius:6,
+                borderSkipped:false
+            }]
+        },
+        options:{
+            indexAxis:'y',
+            responsive:true,
+            maintainAspectRatio:false,
+            layout:{padding:{left:10,right:10,top:5,bottom:5}},
+            plugins:{
+                legend:{display:false},
+                tooltip:{
+                    callbacks:{
+                        label:function(context){
+                            var value=context.parsed.x;
+                            var prevValue=context.dataIndex>0?funnelData[context.dataIndex-1].value:value;
+                            var conversion=prevValue>0?((value/prevValue)*100).toFixed(1)+'%':'100%';
+                            return [
+                                'Số lượng: '+value,
+                                'Tỷ lệ chuyển đổi: '+conversion
+                            ];
+                        }
+                    }
+                }
+            },
+            scales:{
+                x:{
+                    beginAtZero:true,
+                    grid:{color:'rgba(0,0,0,0.05)'},
+                    ticks:{font:{size:10}}
+                },
+                y:{
+                    grid:{display:false},
+                    ticks:{
+                        font:{size:11,weight:600},
+                        padding:8,
+                        callback:function(value,index){
+                            var label=this.getLabelForValue(value);
+                            var dataValue=funnelData[index].value;
+                            return label+' ('+dataValue+')';
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    var categoryCounts={};
+    assetStatsDB.forEach(function(asset){categoryCounts[asset.type]=(categoryCounts[asset.type]||0)+1;});
+    var sortedCategories=Object.entries(categoryCounts).sort(function(a,b){return b[1]-a[1];});
+    var categoryCtx=document.getElementById('categoryChart').getContext('2d');
+    if(assetCategoryChartInstance)assetCategoryChartInstance.destroy();
+    assetCategoryChartInstance=new Chart(categoryCtx,{type:'bar',data:{labels:sortedCategories.map(function(c){return c[0];}),datasets:[{label:'Số lượng',data:sortedCategories.map(function(c){return c[1];}),backgroundColor:'#B8872C',borderColor:'#B8872C',borderWidth:0,borderRadius:6,barThickness:14}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{left:5,right:10,top:5,bottom:5}},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(context){return context.parsed.x+' loại tài sản'}}}},scales:{x:{beginAtZero:true,grid:{display:true,color:'rgba(0,0,0,0.05)'},ticks:{font:{size:10},stepSize:1}},y:{grid:{display:false},ticks:{font:{size:10,weight:600},padding:8}}}}});
+
+    // Biểu đồ tổng số lượng theo thời gian
+    var periods=['2024-01','2024-04','2024-10','2025-04'];
+    var totalQuantities=periods.map(function(period){
+        return assetStatsDB.reduce(function(sum,asset){
+            var historyItem=asset.history.find(function(h){return h.date===period;});
+            return sum+(historyItem?historyItem.quantity:0);
+        },0);
+    });
+    
+    // Tính tổng chi phí theo thời gian
+    var totalCosts=periods.map(function(period){
+        return assetStatsDB.reduce(function(sum,asset){
+            var historyItem=asset.history.find(function(h){return h.date===period;});
+            return sum+(historyItem?historyItem.quantity*historyItem.price:0);
+        },0);
+    });
+    
+    // Biểu đồ kết hợp: Cột (số lượng) + Đường (chi phí)
+    var combinedCtx=document.getElementById('combinedChart').getContext('2d');
+    if(window.combinedChartInstance)window.combinedChartInstance.destroy();
+    window.combinedChartInstance=new Chart(combinedCtx,{
+        type:'bar',
+        data:{
+            labels:periods,
+            datasets:[
+                {
+                    type:'bar',
+                    label:'Số lượng tài sản',
+                    data:totalQuantities,
+                    backgroundColor:'rgba(59,130,246,0.7)',
+                    borderColor:'#2563eb',
+                    borderWidth:2,
+                    borderRadius:6,
+                    borderSkipped:false,
+                    yAxisID:'y',
+                    order:2
+                },
+                {
+                    type:'line',
+                    label:'Tổng chi phí (tỷ ₫)',
+                    data:totalCosts,
+                    borderColor:'#10b981',
+                    backgroundColor:'rgba(16,185,129,0.1)',
+                    tension:0.4,
+                    fill:false,
+                    borderWidth:3,
+                    pointRadius:5,
+                    pointHoverRadius:7,
+                    pointBackgroundColor:'#10b981',
+                    pointBorderColor:'#fff',
+                    pointBorderWidth:2,
+                    yAxisID:'y1',
+                    order:1
+                }
+            ]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            interaction:{mode:'index',intersect:false},
+            plugins:{
+                legend:{
+                    display:true,
+                    position:'top',
+                    labels:{
+                        boxWidth:12,
+                        font:{size:11},
+                        padding:10,
+                        usePointStyle:true
+                    }
+                },
+                tooltip:{
+                    mode:'index',
+                    intersect:false,
+                    callbacks:{
+                        label:function(context){
+                            var label=context.dataset.label||'';
+                            if(context.datasetIndex===0){
+                                return label+': '+context.parsed.y+' tài sản';
+                            }else{
+                                return label+': '+formatCurrencyStats(context.parsed.y);
+                            }
+                        }
+                    }
+                }
+            },
+            scales:{
+                y:{
+                    type:'linear',
+                    display:true,
+                    position:'left',
+                    beginAtZero:true,
+                    ticks:{
+                        stepSize:50,
+                        font:{size:10},
+                        color:'#2563eb'
+                    },
+                    grid:{
+                        color:'rgba(0,0,0,0.05)'
+                    },
+                    title:{
+                        display:true,
+                        text:'Số lượng',
+                        color:'#2563eb',
+                        font:{size:11,weight:'bold'}
+                    }
+                },
+                y1:{
+                    type:'linear',
+                    display:true,
+                    position:'right',
+                    beginAtZero:true,
+                    ticks:{
+                        callback:function(value){
+                            return(value/1000000000).toFixed(1)+'B';
+                        },
+                        font:{size:10},
+                        color:'#10b981'
+                    },
+                    grid:{
+                        drawOnChartArea:false
+                    },
+                    title:{
+                        display:true,
+                        text:'Chi phí (₫)',
+                        color:'#10b981',
+                        font:{size:11,weight:'bold'}
+                    }
+                },
+                x:{
+                    grid:{display:false}
+                }
+            }
+        }
+    });
+}
+
+function showAssetChartModal(assetId){
+    var asset=assetStatsDB.find(function(a){return a.id===assetId;});
+    if(!asset)return;
+    var modal=document.getElementById('assetChartModal');
+    document.getElementById('assetModalTitle').textContent='Chi Tiết: '+asset.name;
+    var currentQuantity=asset.history[asset.history.length-1].quantity;
+    
+    var ordersHtml='';
+    if(asset.orders&&asset.orders.length>0){
+        ordersHtml='<div style="margin-top:28px;"><div style="font-size:15px;font-weight:700;color:#0D2240;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;"><span>📋 Lịch Sử Đơn Hàng Mua</span><span style="font-size:12px;color:#64748b;font-weight:500;">Tổng: '+asset.orders.length+' đơn hàng</span></div><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:linear-gradient(135deg,#0D2240 0%,#1e3a5f 100%);color:#fff;"><th style="padding:14px 16px;text-align:left;font-weight:600;width:120px;">Ngày mua</th><th style="padding:14px 16px;text-align:left;font-weight:600;width:140px;">Số PO</th><th style="padding:14px 16px;text-align:right;font-weight:600;width:100px;">Số lượng</th><th style="padding:14px 16px;text-align:right;font-weight:600;width:150px;">Đơn giá</th><th style="padding:14px 16px;text-align:right;font-weight:600;width:150px;">Thành tiền</th><th style="padding:14px 16px;text-align:left;font-weight:600;">Nhà cung cấp</th><th style="padding:14px 16px;text-align:center;font-weight:600;width:120px;">Trạng thái</th></tr></thead><tbody>';
+        asset.orders.forEach(function(order,idx){
+            var rowBg=idx%2===0?'background:#fafbfc;':'background:#fff;';
+            var statusBadge=order.status==='Đã nhận'?'<span style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:#dcfce7;color:#166534;border-radius:6px;font-size:11px;font-weight:600;border:1px solid #bbf7d0;">✓ '+order.status+'</span>':'<span style="display:inline-flex;align-items:center;gap:4px;padding:6px 12px;background:#fef3c7;color:#92400e;border-radius:6px;font-size:11px;font-weight:600;border:1px solid #fde68a;">⏳ '+order.status+'</span>';
+            var amountColor=order.total>=100000000?'color:#B8872C;':'color:#0D2240;';
+            ordersHtml+='<tr style="'+rowBg+'border-bottom:1px solid #e2e8f0;transition:all 0.2s;" onmouseover="this.style.background=\'#f1f5f9\'" onmouseout="this.style.background=\''+(idx%2===0?'#fafbfc':'#fff')+'\'"><td style="padding:12px 16px;color:#475569;">'+order.date+'</td><td style="padding:12px 16px;"><strong style="color:#0D2240;font-family:monospace;">'+order.orderNo+'</strong></td><td style="padding:12px 16px;text-align:right;font-weight:600;color:#3b82f6;">'+order.qty+'</td><td style="padding:12px 16px;text-align:right;color:#64748b;">'+formatCurrencyStats(order.unitPrice)+'</td><td style="padding:12px 16px;text-align:right;font-weight:700;'+amountColor+'">'+formatCurrencyStats(order.total)+'</td><td style="padding:12px 16px;color:#475569;">'+order.supplier+'</td><td style="padding:12px 16px;text-align:center;">'+statusBadge+'</td></tr>';
+        });
+        var totalOrders=asset.orders.reduce(function(sum,o){return sum+o.total;},0);
+        var totalQty=asset.orders.reduce(function(sum,o){return sum+o.qty;},0);
+        var completedOrders=asset.orders.filter(function(o){return o.status==='Đã nhận';}).length;
+        ordersHtml+='<tr style="background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);font-weight:700;border-top:3px solid #B8872C;"><td colspan="2" style="padding:14px 16px;text-align:left;font-size:13px;color:#0D2240;">Đã hoàn thành: <span style="color:#16a34a;">'+completedOrders+'/'+asset.orders.length+' đơn</span></td><td style="padding:14px 16px;text-align:right;color:#3b82f6;font-size:14px;">'+totalQty+'</td><td style="padding:14px 16px;text-align:right;font-size:13px;color:#64748b;">Tổng giá trị:</td><td style="padding:14px 16px;text-align:right;color:#B8872C;font-size:16px;">'+formatCurrencyStats(totalOrders)+'</td><td colspan="2"></td></tr></tbody></table></div></div>';
+    }
+    
+    // Thông tin cơ bản (grid)
+    document.getElementById('assetModalInfoGrid').innerHTML=
+        '<div class="info-item"><div class="info-label">Mã tài sản</div><div class="info-value">'+asset.id+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Loại tài sản</div><div class="info-value">'+asset.type+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Nhà cung cấp</div><div class="info-value">'+asset.supplier+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Ngày mua</div><div class="info-value">'+asset.purchaseDate+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Vị trí</div><div class="info-value">'+asset.location+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Bảo hành</div><div class="info-value">'+asset.warranty+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Số lượng hiện tại</div><div class="info-value">'+currentQuantity+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Trạng thái</div><div class="info-value">'+statusBadgeStats(asset.status)+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Giá mua</div><div class="info-value">'+formatCurrencyStats(asset.price)+'</div></div>'
+        +'<div class="info-item"><div class="info-label">Giá trị sổ sách</div><div class="info-value">'+formatCurrencyStats(asset.book)+'</div></div>'
+        +'<div class="info-item" style="grid-column:1/-1;"><div class="info-label">Thông số kỹ thuật</div><div class="info-value" style="font-size:13px;color:#475569;font-weight:500;">'+asset.specs+'</div></div>';
+
+    // Bảng lịch sử + bảng linh kiện (full-width, ngoài grid)
+    document.getElementById('assetModalTables').innerHTML = ordersHtml + renderComponentTable(asset.id);
+    
+    if(assetQuantityChartInstance)assetQuantityChartInstance.destroy();
+    if(assetPriceChartInstance)assetPriceChartInstance.destroy();
+    if(window.orderProgressChartInstance)window.orderProgressChartInstance.destroy();
+    
+    var labels=asset.history.map(function(h){return h.date;});
+    var quantities=asset.history.map(function(h){return h.quantity;});
+    var prices=asset.history.map(function(h){return h.price;});
+    var quantityCtx=document.getElementById('assetQuantityChart').getContext('2d');
+    assetQuantityChartInstance=new Chart(quantityCtx,{type:'line',data:{labels:labels,datasets:[{label:'Số lượng',data:quantities,borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',tension:0.4,fill:true,borderWidth:3,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:5}}}}});
+    var priceCtx=document.getElementById('assetPriceChart').getContext('2d');
+    assetPriceChartInstance=new Chart(priceCtx,{type:'line',data:{labels:labels,datasets:[{label:'Đơn giá (VNĐ)',data:prices,borderColor:'#B8872C',backgroundColor:'rgba(184,135,44,0.1)',tension:0.4,fill:true,borderWidth:3,pointRadius:5,pointHoverRadius:7,pointBackgroundColor:'#B8872C'}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:false,ticks:{callback:function(value){return(value/1000000)+'M'}}}}}});
+    
+    // Biểu đồ tiến độ đơn hàng
+    if(asset.orders&&asset.orders.length>0){
+        var completedCount=asset.orders.filter(function(o){return o.status==='Đã nhận';}).length;
+        var pendingCount=asset.orders.length-completedCount;
+        var progressCtx=document.getElementById('orderProgressChart').getContext('2d');
+        window.orderProgressChartInstance=new Chart(progressCtx,{
+            type:'doughnut',
+            data:{
+                labels:['Đã nhận ('+completedCount+')','Đang xử lý ('+pendingCount+')'],
+                datasets:[{
+                    data:[completedCount,pendingCount],
+                    backgroundColor:['#10b981','#f59e0b'],
+                    borderColor:['#059669','#d97706'],
+                    borderWidth:2
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:true,
+                plugins:{
+                    legend:{
+                        position:'bottom',
+                        labels:{
+                            padding:12,
+                            font:{size:12},
+                            usePointStyle:true
+                        }
+                    },
+                    tooltip:{
+                        callbacks:{
+                            label:function(context){
+                                var percentage=(context.parsed/asset.orders.length*100).toFixed(1);
+                                return context.label+': '+percentage+'%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    modal.style.display='block';
+}
+
+function closeAssetModal(){
+    document.getElementById('assetChartModal').style.display='none';
+}
+
+window.addEventListener('click',function(event){
+    var modal=document.getElementById('assetChartModal');
+    if(event.target===modal){closeAssetModal();}
+});
+
+if(document.getElementById('totalAssets')){
+    calculateAssetStatistics();
+    renderAssetStatsTable();
+    renderAssetOverviewCharts();
+}
+</script></body></html>

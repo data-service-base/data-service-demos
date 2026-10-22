@@ -1,0 +1,23 @@
+{
+  "slug": "ahs-quy-luong",
+  "title": "Tổng quan quỹ lương & phiếu lương",
+  "type": "dashboard",
+  "industry": "BĐS - CĐT - Nhà thầu",
+  "department": "HR",
+  "description": "Tổng quan quỹ lương theo khối và phiếu lương nhân viên (2 tab).",
+  "tools": [
+    "HTML",
+    "Chart.js",
+    "SheetJS"
+  ],
+  "source": "https://github.com/tbinh-06/AHS-demodashboard",
+  "source_repo": "https://github.com/tbinh-06/AHS-demodashboard",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": [
+    "lương",
+    "phiếu lương"
+  ]
+}

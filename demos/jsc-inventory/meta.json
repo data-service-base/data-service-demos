@@ -1,0 +1,19 @@
+{
+  "slug": "jsc-inventory",
+  "title": "Báo cáo tồn kho cao su & QL hợp đồng",
+  "type": "dashboard",
+  "industry": "Cao su",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js"
+  ],
+  "source": "https://du-yt01.github.io/JSC_Inventory/",
+  "source_repo": "https://github.com/du-yt01/JSC_Inventory",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

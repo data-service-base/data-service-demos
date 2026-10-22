@@ -1,0 +1,20 @@
+{
+  "slug": "bds",
+  "title": "Báo cáo quản lý mục tiêu",
+  "type": "dashboard",
+  "industry": "BĐS - CĐT - Nhà thầu",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js",
+    "chartjs-plugin-datalabels"
+  ],
+  "source": "https://haiyenbase.github.io/bds/",
+  "source_repo": "https://github.com/haiyenbase/bds",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

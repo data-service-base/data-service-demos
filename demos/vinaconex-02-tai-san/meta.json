@@ -1,0 +1,19 @@
+{
+  "slug": "vinaconex-02-tai-san",
+  "title": "Báo cáo quản lý tài sản",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js"
+  ],
+  "source": "https://haiyenbase.github.io/Vinaconex_02_tai_san/",
+  "source_repo": "https://github.com/haiyenbase/Vinaconex_02_tai_san",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

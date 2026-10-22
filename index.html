@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kho demo Data Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1F4D; --ink2:#41557F; --mute:#7C8BAA; --line:#DCE5F3; --bg:#F3F6FB; --panel:#FFFFFF;
+  --brand:#1A56DB; --brand2:#0E3BA8; --tint:#E7EFFD; --ok:#0F9D6B;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#EAF1FF; --ink2:#B7C6E6; --mute:#8193B8; --line:#22325A; --bg:#0A1430; --panel:#101D42;
+  --brand:#5B9BFF; --brand2:#8CB8FF; --tint:#16295A; --ok:#3FD49B; color-scheme:dark;}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+.wrap{max-width:1360px;margin:0 auto;padding:28px 28px 60px}
+header{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:22px}
+header h1{margin:0;font:700 30px/1.15 "Be Vietnam Pro",sans-serif;letter-spacing:-.01em}
+header p{margin:6px 0 0;color:var(--ink2)}
+.count{margin-left:auto;color:var(--mute);font-weight:500}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start}
+aside{position:sticky;top:20px;display:flex;flex-direction:column;gap:22px}
+aside h2{margin:0 0 8px;font:600 13px/1.2 "Be Vietnam Pro",sans-serif;color:var(--mute)}
+.facet{display:flex;flex-direction:column;gap:2px}
+.facet button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border-radius:8px;color:var(--ink2)}
+.facet button:hover{background:var(--tint)}
+.facet button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.facet button:focus-visible,.card a:focus-visible,#q:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.facet em{font-style:normal;opacity:.7}
+.search{position:relative;margin-bottom:18px}
+#q{width:100%;padding:13px 16px 13px 44px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:16px}
+.search svg{position:absolute;left:15px;top:50%;width:18px;height:18px;margin-top:-9px;stroke:var(--mute);fill:none;stroke-width:2}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.card{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card .th{display:block;aspect-ratio:16/10;background:var(--tint);overflow:hidden;border-bottom:1px solid var(--line)}
+.card .th img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .35s}
+.card:hover .th img{transform:scale(1.03)}
+.card .bd{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{margin:0;font:600 16px/1.35 "Be Vietnam Pro",sans-serif}
+.card p{margin:0;color:var(--ink2);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--tint);color:var(--brand2)}
+.chip.type{background:transparent;border:1px solid var(--line);color:var(--ink2)}
+.acts{display:flex;gap:8px;margin-top:auto;padding-top:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:9px;font-weight:600;font-size:14px;text-decoration:none}
+.btn.p{background:var(--brand);color:#fff}
+.btn.s{border:1px solid var(--line);color:var(--ink2)}
+.btn.c{border:1px solid var(--line);color:var(--ink2);background:none;cursor:pointer;font:inherit;font-weight:600;font-size:14px}
+.empty{padding:60px 0;text-align:center;color:var(--mute)}
+.meta{font-size:12.5px;color:var(--mute)}
+@media (max-width:860px){.layout{grid-template-columns:1fr}aside{position:static;gap:12px}.facet{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px}.facet button{white-space:nowrap;border:1px solid var(--line)}}
+@media (prefers-reduced-motion:reduce){.card .th img{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1 id="title">Kho demo Data Service</h1><p id="team">Tìm báo cáo đã làm theo ngành, phòng ban hoặc tên, mở xem ngay hoặc lấy code làm khung.</p></div>
+    <span class="count" id="count"></span>
+  </header>
+  <div class="layout">
+    <aside>
+      <section><h2>Ngành</h2><div class="facet" id="f-industry"></div></section>
+      <section><h2>Phòng ban</h2><div class="facet" id="f-department"></div></section>
+      <section><h2>Loại</h2><div class="facet" id="f-type"></div></section>
+    </aside>
+    <main>
+      <div class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Tìm theo tên, mô tả, thẻ…" autocomplete="off"></div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden>Không có demo nào khớp bộ lọc.</div>
+    </main>
+  </div>
+</div>
+<script>
+const TYPE_VI = { dashboard: 'Dashboard', proposal: 'Proposal', deck: 'Deck', tool: 'Công cụ' };
+const state = { industry: '', department: '', type: '', q: '' };
+let DATA = { config: {}, items: [] };
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const fold = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/gi, 'd').toLowerCase();
+
+function facet(key, el) {
+  const counts = {};
+  DATA.items.forEach(i => { const v = i[key] || 'Khác'; counts[v] = (counts[v] || 0) + 1; });
+  const vals = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b, 'vi'));
+  el.innerHTML = [`<button aria-pressed="${!state[key]}" data-v="">Tất cả<em>${DATA.items.length}</em></button>`]
+    .concat(vals.map(v => `<button aria-pressed="${state[key] === v}" data-v="${esc(v)}">${esc(key === 'type' ? (TYPE_VI[v] || v) : v)}<em>${counts[v]}</em></button>`)).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; state[key] = b.dataset.v; render(); };
+}
+function codeLink(i) {
+  const r = DATA.config.repo; if (!r) return '';
+  return `${r.replace(/\/$/, '')}/tree/${DATA.config.repo_branch || 'main'}/${i.path}`;
+}
+function render() {
+  facet('industry', $('#f-industry')); facet('department', $('#f-department')); facet('type', $('#f-type'));
+  const q = fold(state.q);
+  const list = DATA.items.filter(i =>
+    (!state.industry || i.industry === state.industry) &&
+    (!state.department || i.department === state.department) &&
+    (!state.type || i.type === state.type) &&
+    (!q || fold([i.title, i.description, i.industry, i.department, (i.tags || []).join(' '), (i.tools || []).join(' ')].join(' ')).includes(q)));
+  $('#count').textContent = `${list.length} / ${DATA.items.length} demo`;
+  $('#empty').hidden = list.length > 0;
+  $('#grid').innerHTML = list.map(i => {
+    const code = codeLink(i);
+    return `<article class="card">
+      <a class="th" href="${esc(i.path)}" target="_blank" rel="noopener" aria-label="Mở ${esc(i.title)}">${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy">` : ''}</a>
+      <div class="bd">
+        <div class="chips"><span class="chip">${esc(i.industry)}</span><span class="chip">${esc(i.department)}</span><span class="chip type">${esc(TYPE_VI[i.type] || i.type)}</span></div>
+        <h3>${esc(i.title)}</h3>
+        ${i.description ? `<p>${esc(i.description)}</p>` : ''}
+        <div class="meta">${esc((i.tools || []).join(', '))}${i.added ? ` · thêm ${esc(i.added)}` : ''}${i.author ? ` · ${esc(i.author)}` : ''}</div>
+        <div class="acts">
+          <a class="btn p" href="${esc(i.path)}" target="_blank" rel="noopener">Mở demo</a>
+          <button class="btn c" data-link="${esc(i.path)}">Sao chép link</button>
+          ${code ? `<a class="btn s" href="${esc(code)}" target="_blank" rel="noopener">Xem code</a>` : ''}
+        </div>
+      </div></article>`;
+  }).join('');
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-link]'); if (!b) return;
+  const url = new URL(b.dataset.link, location.href).href;
+  try { await navigator.clipboard.writeText(url); b.textContent = 'Đã chép'; } catch (er) { prompt('Link demo:', url); }
+  setTimeout(() => { b.textContent = 'Sao chép link'; }, 1500);
+});
+$('#q').addEventListener('input', e => { state.q = e.target.value; render(); });
+fetch('catalog.json', { cache: 'no-store' }).then(r => r.json()).then(d => {
+  DATA = d; if (d.config.title) { $('#title').textContent = d.config.title; document.title = d.config.title; }
+  render();
+}).catch(() => { $('#grid').innerHTML = '<p class="empty">Chưa đọc được catalog.json. Chạy scripts/build_catalog.py rồi mở trang qua máy chủ (không mở trực tiếp file).</p>'; });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "slug": "hcem",
+  "title": "Báo cáo theo dõi doanh thu, chi phí",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js"
+  ],
+  "source": "https://haiyenbase.github.io/HCEM/",
+  "source_repo": "https://github.com/haiyenbase/HCEM",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

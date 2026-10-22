@@ -1,0 +1,19 @@
+{
+  "slug": "cao-su-siem-riep",
+  "title": "Báo cáo sản lượng cao su",
+  "type": "dashboard",
+  "industry": "Cao su",
+  "department": "All",
+  "description": "",
+  "tools": [
+    "HTML",
+    "Chart.js"
+  ],
+  "source": "https://haiyenbase.github.io/cao_su_siem_riep/",
+  "source_repo": "https://github.com/haiyenbase/cao_su_siem_riep",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}

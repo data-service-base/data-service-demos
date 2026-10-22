@@ -1,0 +1,20 @@
+{
+  "slug": "dashboard-finance",
+  "title": "Báo cáo Tài chính",
+  "type": "dashboard",
+  "industry": "General",
+  "department": "Supply Chain",
+  "description": "",
+  "tools": [
+    "HTML",
+    "ECharts",
+    "D3"
+  ],
+  "source": "https://du-yt01.github.io/dashboard_finance/",
+  "source_repo": "https://github.com/du-yt01/dashboard_finance",
+  "author": "",
+  "added": "2026-10-22",
+  "status": "demo",
+  "data": "demo",
+  "tags": []
+}
