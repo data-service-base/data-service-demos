@@ -816,27 +816,26 @@
    "thumb": ""
   },
   {
-   "slug": "mcp-claude-base",
-   "title": "Cách vận hành MCP — Claude dựng hệ thống trên Base",
-   "type": "deck",
-   "industry": "General",
-   "department": "All",
-   "description": "Hướng dẫn dùng MCP để Claude dựng quy trình trên Base, ví dụ ngành cao su.",
+   "slug": "cach-van-hanh-mcp",
+   "title": "Cách vận hành MCP",
+   "type": "dashboard",
+   "industry": "Chung",
+   "department": "Chung",
+   "description": "MCP",
    "tools": [
     "HTML"
    ],
-   "source": "https://tbinh-06.github.io/MCP_Caosu/",
-   "source_repo": "https://github.com/tbinh-06/MCP_Caosu",
+   "source": "",
+   "source_repo": "",
    "author": "Thanh Bình",
    "added": "2026-10-22",
+   "updated": "2026-10-22T10:30:25.279Z",
    "status": "demo",
    "data": "demo",
    "tags": [
-    "MCP",
-    "Claude",
-    "AI"
+    "MCP"
    ],
-   "path": "demos/mcp-claude-base/",
+   "path": "demos/cach-van-hanh-mcp/",
    "thumb": ""
   },
   {
@@ -1165,6 +1164,27 @@
    "tags": [],
    "path": "demos/dashboard-finance/",
    "thumb": "demos/dashboard-finance/thumb.jpg"
+  },
+  {
+   "slug": "base-data-service-bien-du-lieu-van-hanh-thanh-quyet-dinh-tan",
+   "title": "Base Data Service: Biến dữ liệu vận hành thành quyết định tăng trưởng",
+   "type": "proposal",
+   "industry": "General",
+   "department": "All",
+   "description": "Giới thiệu dịch vụ Data Service của Base.vn: tích hợp dữ liệu, kho dữ liệu, báo cáo quản trị, cảnh báo và hành động.",
+   "tools": [
+    "HTML"
+   ],
+   "source": "",
+   "source_repo": "",
+   "author": "thanh_binh",
+   "added": "2026-10-22",
+   "updated": "2026-10-22T10:34:12.090Z",
+   "status": "demo",
+   "data": "demo",
+   "tags": [],
+   "path": "demos/base-data-service-bien-du-lieu-van-hanh-thanh-quyet-dinh-tan/",
+   "thumb": ""
   },
   {
    "slug": "agentic-ai-openclaw",

@@ -3,7 +3,9 @@
 /ait-giai-phap-bao-cao  /demos/ait-giai-phap-bao-cao/  301
 /apa-kpi  /demos/apa-kpi/  301
 /asel-kinh-doanh-ky-thuat  /demos/asel-kinh-doanh-ky-thuat/  301
+/base-data-service-bien-du-lieu-van-hanh-thanh-quyet-dinh-tan  /demos/base-data-service-bien-du-lieu-van-hanh-thanh-quyet-dinh-tan/  301
 /bds  /demos/bds/  301
+/cach-van-hanh-mcp  /demos/cach-van-hanh-mcp/  301
 /cao-su-chu-se-eudr  /demos/cao-su-chu-se-eudr/  301
 /cao-su-karatie  /demos/cao-su-karatie/  301
 /cao-su-siem-riep  /demos/cao-su-siem-riep/  301
@@ -28,7 +30,6 @@
 /jsc-inventory  /demos/jsc-inventory/  301
 /khang-thinh-ket-cau-thep  /demos/khang-thinh-ket-cau-thep/  301
 /komex-van-hanh  /demos/komex-van-hanh/  301
-/mcp-claude-base  /demos/mcp-claude-base/  301
 /newshoes-kpi  /demos/newshoes-kpi/  301
 /nhau-tu-do-ca-bep  /demos/nhau-tu-do-ca-bep/  301
 /pces-van-hanh-don-hang  /demos/pces-van-hanh-don-hang/  301
